@@ -94,7 +94,7 @@ renderAppHeader('Escalas');
     </div>
 
     <div style="display:flex; justify-content:flex-end; gap: 10px; margin-bottom: 20px;">
-        <button onclick="openSheet('sheetReport')" class="btn" style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color: white; border: none; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4); padding: 0 16px; border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+        <button onclick="openSheet('sheetReport')" class="btn" style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color: white; border: none; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4); padding: 0 16px; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
             <i data-lucide="printer" style="width: 18px;"></i>
             <span>Relatório</span>
         </button>
@@ -590,7 +590,7 @@ renderAppFooter();
     .modern-input {
         background: var(--bg-primary);
         border: 1px solid var(--border-subtle);
-        border-radius: 12px;
+        border-radius: 8px;
         padding: 12px 15px;
         font-size: 0.95rem;
         transition: all 0.2s;
