@@ -271,7 +271,7 @@ renderAppHeader('Escalas');
                 </div>
 
                 <div style="margin-top: 24px;">
-                    <button type="button" onclick="goToStep(2)" class="btn-primary w-full">Escalar Equipe &rarr;</button>
+                    <button type="button" onclick="goToStep(2)" class="btn-primary w-full" style="height: 50px; font-size: 1rem;">Escalar Equipe &rarr;</button>
                 </div>
             </div>
 
@@ -326,7 +326,7 @@ renderAppHeader('Escalas');
                         </div>
                     </div>
 
-                    <button type="button" onclick="addMemberToScale()" class="btn btn-primary w-full" style="height: 44px; font-size: 0.95rem; background: var(--accent-interactive); font-weight: 700; box-shadow: var(--shadow-md);">
+                    <button type="button" onclick="addMemberToScale()" class="btn btn-primary w-full" style="height: 50px; font-size: 0.95rem; background: var(--accent-interactive); font-weight: 700; box-shadow: var(--shadow-md);">
                         <i data-lucide="plus" style="margin-right: 6px;"></i> ADICIONAR À LISTA
                     </button>
                 </div>
@@ -355,18 +355,18 @@ renderAppHeader('Escalas');
                 <!-- Hidden inputs container -->
                 <div id="hidden-inputs"></div>
 
-                <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
-                    <button type="button" onclick="goToStep(1)" class="btn btn-outline" style="border-color: #F59E0B; background-color: #FEF3C7; color: #D97706; font-weight: 600;">
+                <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button type="button" onclick="goToStep(1)" class="btn btn-outline" style="height: 50px; border-color: #F59E0B; background-color: #FEF3C7; color: #D97706; font-weight: 600;">
                         &larr; Voltar
                     </button>
-                    <button type="submit" class="btn-primary" style="background: var(--status-success);">
+                    <button type="submit" class="btn-primary" style="height: 50px; background: var(--status-success);">
                         Concluir e Salvar
                     </button>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 16px;">
-                <button type="button" class="btn-ghost" onclick="closeSheet('sheetNewScale')" style="background: #EF4444; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 0.85rem; width: 100%;">Cancelar Criação</button>
+                <button type="button" class="btn-ghost" onclick="closeSheet('sheetNewScale')" style="background: #EF4444; color: white; padding: 0 16px; height: 50px; border-radius: 8px; font-weight: 600; font-size: 1rem; width: 100%;">Cancelar Criação</button>
             </div>
         </form>
     </div>
