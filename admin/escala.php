@@ -20,15 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmt->execute([$date, $type, $description]);
         $newId = $pdo->lastInsertId();
 
-        // 2. Adicionar Membros Selecionados
+        // 2. Adicionar Membros e Capturar Nomes
+        $escaladosNames = [];
         if (!empty($selected_members)) {
             $stmtMember = $pdo->prepare("INSERT INTO scale_members (scale_id, user_id, instrument, confirmed) VALUES (?, ?, ?, 0)");
             foreach ($selected_members as $uid) {
-                // Definir instrumento padrão (fallback simples)
+                // Definir instrumento padrão
                 $userCat = 'Voz';
+                $userName = 'Membro';
                 foreach ($usersList as $u) {
                     if ($u['id'] == $uid) {
                         $cat = $u['category'];
+                        $userName = $u['name'];
                         if ($cat == 'violao') $userCat = 'Violão';
                         if ($cat == 'teclado') $userCat = 'Teclado';
                         if ($cat == 'bateria') $userCat = 'Bateria';
@@ -37,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     }
                 }
                 $stmtMember->execute([$newId, $uid, $userCat]);
+                $escaladosNames[] = $userName;
             }
         }
 
@@ -44,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $_SESSION['scale_created'] = [
             'type' => $type,
             'date' => date('d/m/Y', strtotime($date)),
-            'members_count' => count($selected_members),
+            'team' => $escaladosNames, // Array de nomes
             'notify' => $notify_members ? 1 : 0,
             'scale_id' => $newId
         ];
@@ -211,9 +215,9 @@ renderAppHeader('Escalas');
 
                 <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
                     <?php foreach ($usersList as $u): ?>
-                        <label style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 10px; cursor: pointer;">
+                        <label class="member-select-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s;">
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; border: 1px solid transparent;">
                                     <?= strtoupper(substr($u['name'], 0, 1)) ?>
                                 </div>
                                 <div>
@@ -221,7 +225,7 @@ renderAppHeader('Escalas');
                                     <div style="font-size: 0.75rem; opacity: 0.7;"><?= ucfirst(str_replace('_', ' ', $u['category'])) ?></div>
                                 </div>
                             </div>
-                            <input type="checkbox" name="members[]" value="<?= $u['id'] ?>" style="width: 18px; height: 18px; accent-color: var(--accent-interactive);">
+                            <input type="checkbox" name="members[]" value="<?= $u['id'] ?>" style="width: 20px; height: 20px; accent-color: var(--accent-interactive);" onchange="toggleMemberSelection(this)">
                         </label>
                     <?php endforeach; ?>
                 </div>
@@ -232,7 +236,7 @@ renderAppHeader('Escalas');
                         <input type="checkbox" name="notify_members" value="1" style="width: 20px; height: 20px; accent-color: var(--accent-interactive);">
                         <div>
                             <span style="display: block; font-weight: 600; color: var(--text-primary);">Solicitar confirmação?</span>
-                            <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Enviaremos um link para confirmação.</span>
+                            <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Os membros serão notificados via App.</span>
                         </div>
                     </label>
                 </div>
@@ -250,49 +254,57 @@ renderAppHeader('Escalas');
     </div>
 </div>
 
-<!-- SUCCESS MODAL (Rendered if Session exists) -->
+<!-- SUCCESS MODAL (Modern) -->
 <?php if (isset($_SESSION['scale_created'])):
     $info = $_SESSION['scale_created'];
     unset($_SESSION['scale_created']);
-
-    // Gerar link de WhatsApp se necessário (Exemplo Genérico)
-    $waText = "Olá equipe! Nova escala criada para " . $info['type'] . " dia " . $info['date'] . ". Confirme sua presença no App!";
-    $waLink = "https://wa.me/?text=" . urlencode($waText);
 ?>
-    <div id="modalSuccess" class="bottom-sheet-overlay active" style="align-items: center; justify-content: center; z-index: 9999;">
-        <div class="card" style="width: 90%; max-width: 400px; text-align: center; animation: slideUp 0.3s ease;">
-            <div style="width: 60px; height: 60px; background: var(--status-success); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                <i data-lucide="check" style="width: 32px; height: 32px;"></i>
-            </div>
-            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">Sucesso!</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                Escala para <strong><?= $info['type'] ?></strong> (<?= $info['date'] ?>) criada com sucesso.
-            </p>
+    <div id="modalSuccess" class="bottom-sheet-overlay active" style="align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px);">
+        <div class="card" style="width: 90%; max-width: 400px; text-align: center; animation: slideUp 0.3s ease; padding: 0; overflow: hidden; border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
 
-            <?php if ($info['members_count'] > 0): ?>
-                <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
-                    <strong><?= $info['members_count'] ?></strong> membro(s) escalado(s).
+            <!-- Header Success -->
+            <div style="background: var(--status-success); padding: 30px 20px; color: white;">
+                <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                    <i data-lucide="check" style="width: 32px; height: 32px; color: white;"></i>
                 </div>
-            <?php else: ?>
-                <div style="margin-bottom: 20px; font-size: 0.9rem; opacity: 0.8;">Nenhum membro escalado ainda.</div>
-            <?php endif; ?>
+                <h2 style="font-size: 1.6rem; font-weight: 800; margin: 0;">Sucesso!</h2>
+                <p style="opacity: 0.9; margin-top: 5px; font-size: 0.95rem;">Escala cadastrada.</p>
+            </div>
 
-            <?php if ($info['notify']): ?>
-                <a href="<?= $waLink ?>" target="_blank" class="btn btn-outline w-full" style="margin-bottom: 10px; border-color: #25D366; color: #25D366;">
-                    <i data-lucide="message-circle" style="width: 18px; margin-right: 8px;"></i> Enviar no WhatsApp
-                </a>
-            <?php endif; ?>
+            <!-- Body Details -->
+            <div style="padding: 25px 20px;">
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 4px;"><?= $info['type'] ?></h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; font-weight: 500;"><?= $info['date'] ?></p>
+                </div>
 
-            <button onclick="closeSuccessModal()" class="btn-primary w-full">OK, Entendi</button>
+                <!-- Team Summary -->
+                <?php if (!empty($info['team'])): ?>
+                    <div style="background: var(--bg-tertiary); border-radius: 12px; padding: 15px; text-align: left; margin-bottom: 20px; max-height: 150px; overflow-y: auto;">
+                        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: 700;">
+                            Equipe Escalada (<?= count($info['team']) ?>)
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            <?php foreach ($info['team'] as $name): ?>
+                                <span style="font-size: 0.85rem; background: var(--bg-primary); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border-subtle); color: var(--text-primary);">
+                                    <?= htmlspecialchars($name) ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($info['notify']): ?>
+                    <div style="display: flex; align-items: center; gap: 10px; background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
+                        <div style="background: var(--accent-interactive); width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;"></div>
+                        <p style="font-size: 0.85rem; color: var(--text-primary); margin: 0;">Notificação de confirmação enviada para o App dos membros.</p>
+                    </div>
+                <?php endif; ?>
+
+                <button onclick="closeSuccessModal()" class="btn-primary w-full" style="height: 50px; font-size: 1rem;">OK, Fechar</button>
+            </div>
         </div>
     </div>
-    <script>
-        function closeSuccessModal() {
-            document.getElementById('modalSuccess').classList.remove('active');
-            // Opcional: Redirecionar para gerir escala
-            // window.location.href = 'gestao_escala.php?id=<?= $info['scale_id'] ?>';
-        }
-    </script>
 <?php endif; ?>
 
 <script>
@@ -319,6 +331,19 @@ renderAppHeader('Escalas');
         } else {
             document.getElementById('step-indicator-1').style.background = 'var(--accent-interactive)';
             document.getElementById('step-indicator-2').style.background = 'var(--accent-interactive)';
+        }
+    }
+
+    function toggleMemberSelection(checkbox) {
+        const label = checkbox.closest('.member-select-item');
+        if (checkbox.checked) {
+            label.style.background = 'rgba(76, 175, 80, 0.15)'; // Green light
+            label.style.borderColor = 'var(--status-success)';
+            label.querySelector('.user-avatar').style.borderColor = 'var(--status-success)';
+        } else {
+            label.style.background = 'var(--bg-tertiary)';
+            label.style.borderColor = 'transparent';
+            label.querySelector('.user-avatar').style.borderColor = 'transparent';
         }
     }
 
