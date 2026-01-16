@@ -66,16 +66,16 @@ function renderAppHeader($title = 'Louvor PIB')
                         <div style="width: 100%; height: 100%; background: currentColor; display:flex; align-items:center; justify-content:center; color: var(--bg-secondary); font-size: 10px; font-weight: bold;"><?= $userInitials ?></div>
                     <?php endif; ?>
                 </div>
-                <span>Perfil</span>
+                <span>Config</span>
             </button>
         </nav>
 
         <!-- Bottom Sheets (Submenus) -->
 
-        <!-- Perfil Sheet -->
+        <!-- Perfil / Configurações Sheet -->
         <div id="sheet-perfil" class="bottom-sheet-overlay" onclick="closeSheet(this)">
             <div class="bottom-sheet-content">
-                <div class="sheet-header">Meu Perfil</div>
+                <div class="sheet-header">Configurações</div>
 
                 <div style="text-align: center; margin-bottom: 24px;">
                     <div style="width: 80px; height: 80px; margin: 0 auto 12px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent-interactive);">
@@ -89,10 +89,18 @@ function renderAppHeader($title = 'Louvor PIB')
                     <p style="color: var(--text-secondary); font-size: 0.9rem;"><?= htmlspecialchars($_SESSION['user_email'] ?? '') ?></p>
                 </div>
 
-                <div class="sheet-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="sheet-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <!-- Botão Perfil -->
                     <a href="perfil.php" class="sheet-item">
-                        <div class="emoji-icon">⚙️</div><span>Editar Perfil</span>
+                        <div class="emoji-icon">👤</div><span>Perfil</span>
                     </a>
+
+                    <!-- Botão Modo Noturno -->
+                    <div class="sheet-item" id="btn-theme-toggle">
+                        <div class="emoji-icon">🌙</div><span>Tema Escuro</span>
+                    </div>
+
+                    <!-- Botão Sair -->
                     <a href="../includes/auth.php?logout=true" class="sheet-item" style="border-color: var(--status-error); background: rgba(239, 68, 68, 0.05);">
                         <div class="emoji-icon">🚪</div><span style="color: var(--status-error);">Sair</span>
                     </a>
@@ -168,37 +176,30 @@ function renderAppHeader($title = 'Louvor PIB')
         <script>
             lucide.createIcons();
 
-            // Toggle Dropdown Profile
-            const userAvatar = document.querySelector('.user-avatar-sm');
-            const dropdown = document.querySelector('.dropdown-menu');
-            if (userAvatar && dropdown) {
-                userAvatar.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('active');
-                });
-                document.addEventListener('click', () => {
-                    dropdown.classList.remove('active');
-                });
-            }
-
             // Theme Toggle Logic
-            const themeBtn = document.getElementById('theme-toggle');
+            const themeBtn = document.getElementById('btn-theme-toggle');
             if (themeBtn) {
+                const icon = themeBtn.querySelector('.emoji-icon');
+                const text = themeBtn.querySelector('span');
+
                 // Load saved theme
                 if (localStorage.getItem('theme') === 'dark') {
                     document.body.classList.add('dark-mode');
+                    icon.textContent = '☀️';
+                    text.textContent = 'Tema Claro';
                 }
 
                 themeBtn.addEventListener('click', () => {
                     document.body.classList.toggle('dark-mode');
                     if (document.body.classList.contains('dark-mode')) {
                         localStorage.setItem('theme', 'dark');
-                        themeBtn.innerHTML = '<i data-lucide="sun"></i>';
+                        icon.textContent = '☀️';
+                        text.textContent = 'Tema Claro';
                     } else {
                         localStorage.setItem('theme', 'light');
-                        themeBtn.innerHTML = '<i data-lucide="moon"></i>';
+                        icon.textContent = '🌙';
+                        text.textContent = 'Tema Escuro';
                     }
-                    lucide.createIcons();
                 });
             }
 
