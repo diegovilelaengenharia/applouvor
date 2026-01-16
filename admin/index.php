@@ -56,15 +56,22 @@ checkAdmin();
                 <span class="menu-title">Devocionais</span>
             </div>
 
+            <!-- Leitura Bíblica (Exemplo de placeholder anterior) -->
             <div class="menu-card disabled-card">
                 <span class="menu-icon">📜</span>
                 <span class="menu-title">Leitura Bíblica</span>
             </div>
 
-            <div class="menu-card disabled-card">
+            <!-- Novos Botões -->
+            <a href="membros.php" class="menu-card">
+                <span class="menu-icon">👥</span>
+                <span class="menu-title">Membros Cadastrados</span>
+            </a>
+
+            <a href="perfil.php" class="menu-card">
                 <span class="menu-icon">⚙️</span>
                 <span class="menu-title">Configurações</span>
-            </div>
+            </a>
         </section>
 
     </div>
