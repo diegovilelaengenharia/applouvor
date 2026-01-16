@@ -243,7 +243,7 @@ renderAppHeader('Escalas');
             <div id="step-indicator-2" style="flex: 1; height: 4px; background: var(--border-subtle); border-radius: 2px;"></div>
         </div>
 
-        <form method="POST" id="formNewScale" style="overflow-y: auto;">
+        <form method="POST" id="formNewScale" style="overflow-y: auto;" onsubmit="handleSave(this)">
             <input type="hidden" name="action" value="create_scale">
 
             <!-- STEP 1: EVENTO -->
@@ -570,14 +570,20 @@ renderAppHeader('Escalas');
         }
     }
 
-    function closeSheet(id) {
-        const el = typeof id === 'string' ? document.getElementById(id) : id;
-        if (el) {
-            el.classList.remove('active');
-            setTimeout(() => {
-                if (!el.classList.contains('active')) el.style.display = 'none'; // Clean up
-            }, 300);
+    setTimeout(() => {
+        if (!el.classList.contains('active')) el.style.display = 'none'; // Clean up
+    }, 300);
+    }
+    }
+
+    function handleSave(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if (btn) {
+            btn.innerHTML = '<i class="loader"></i> Criando...';
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
         }
+        return true;
     }
 </script>
 

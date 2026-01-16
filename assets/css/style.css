@@ -16,7 +16,8 @@
     /* Azul vibrante */
 
     --text-primary: #1E293B;
-    --text-secondary: #64748B;
+    --text-secondary: #475569;
+    /* Darkened from #64748B for better readability */
     --text-muted: #94A3B8;
 
     --border-subtle: #E2E8F0;
@@ -684,4 +685,6 @@ ul {
 .btn-hero:active {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(0.96);
-}
+}. b t n - l o a d i n g  
+   o p a c i t y :   0 . 7 ;   p o i n t e r - e v e n t s :   n o n e ;   c u r s o r :   w a i t ;    
+ 

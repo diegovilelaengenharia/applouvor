@@ -124,7 +124,7 @@ renderAppHeader('Gerenciar Escala');
 
             <?php if ($is_editing): ?>
                 <!-- EDIT MODE: FORM -->
-                <form method="POST">
+                <form method="POST" onsubmit="handleSave(this)">
                     <input type="hidden" name="update_event" value="1">
 
                     <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; margin-bottom: 20px;">
@@ -510,8 +510,22 @@ renderAppHeader('Gerenciar Escala');
             userSelect.options[0].innerText = "Ninguém encontrado nesta função";
         }
     }
-</script>
+    if (count === 0) {
+        userSelect.options[0].innerText = "Ninguém encontrado nesta função";
+    }
+    }
 
+    function handleSave(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if (btn) {
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="loader"></i> Salvando...';
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+        }
+        return true;
+    }
+</script>
 <?php
 renderAppFooter();
 ?>
