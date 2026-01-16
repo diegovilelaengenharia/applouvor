@@ -93,7 +93,7 @@ renderAppHeader('Gerenciar Escala');
     <!-- HEADER NAV -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none; padding: 0 12px; height: 40px; border-radius: 12px; display: flex; align-items: center; gap: 6px; width: auto;">
+            <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none; padding: 0 12px; height: 40px; border-radius: 8px; display: flex; align-items: center; gap: 6px; width: auto;">
                 <i data-lucide="arrow-left" style="width: 18px;"></i> <span style="font-weight: 600; font-size: 0.9rem;">Voltar</span>
             </a>
             <h1 class="page-title" style="margin: 0; font-size: 1.1rem; font-weight: 700;">
@@ -109,7 +109,7 @@ renderAppHeader('Gerenciar Escala');
     </div>
 
     <!-- TABS MODERNAS -->
-    <div style="display: flex; gap: 5px; margin-bottom: 25px; background: var(--bg-tertiary); padding: 5px; border-radius: 14px;">
+    <div style="display: flex; gap: 5px; margin-bottom: 25px; background: var(--bg-tertiary); padding: 5px; border-radius: 8px;">
         <button onclick="showTab('evento')" id="btn-evento" class="tab-btn active">
             Configurar Evento
         </button>
@@ -359,7 +359,7 @@ renderAppHeader('Gerenciar Escala');
     .modern-input {
         background: var(--bg-primary);
         border: 1px solid var(--border-subtle);
-        border-radius: 12px;
+        border-radius: 8px;
         padding: 12px 15px;
         font-size: 0.95rem;
         transition: all 0.2s;
@@ -376,7 +376,7 @@ renderAppHeader('Gerenciar Escala');
     /* Modern Buttons */
     .modern-btn {
         height: 50px;
-        border-radius: 12px;
+        border-radius: 8px;
         font-weight: 600;
         letter-spacing: 0.3px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -393,7 +393,7 @@ renderAppHeader('Gerenciar Escala');
         color: #DC2626;
         border: 1px solid #FECACA;
         height: 50px;
-        border-radius: 12px;
+        border-radius: 8px;
         font-weight: 600;
     }
 
@@ -413,7 +413,7 @@ renderAppHeader('Gerenciar Escala');
         font-weight: 600;
         cursor: pointer;
         font-size: 0.9rem;
-        border-radius: 10px;
+        border-radius: 8px;
         transition: all 0.2s;
     }
 
