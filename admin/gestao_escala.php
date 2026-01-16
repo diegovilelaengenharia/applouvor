@@ -237,17 +237,35 @@ renderAppHeader('Gerenciar Escala');
                 <h3 style="margin-bottom: 15px; font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Adicionar Recurso</h3>
                 <form method="POST">
                     <input type="hidden" name="add_member" value="1">
-                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; margin-bottom: 15px;">
-                        <select name="user_id" class="form-select" required id="userSelect" onchange="updateInstrument()" style="background: var(--bg-secondary);">
-                            <option value="">Integrante...</option>
-                            <?php foreach ($users as $u): ?>
-                                <option value="<?= $u['id'] ?>" data-category="<?= $u['category'] ?>">
-                                    <?= htmlspecialchars($u['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <input type="text" name="instrument" id="instrumentInput" class="form-input" placeholder="Função" required style="background: var(--bg-secondary);">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-bottom: 15px;">
+                        <!-- 1. Select Function -->
+                        <div style="position: relative;">
+                            <select name="instrument" id="roleSelect" class="form-select" onchange="filterUsersByRole()" required style="background: var(--bg-secondary);">
+                                <option value="">Função...</option>
+                                <option value="Voz">Voz</option>
+                                <option value="Violão">Violão</option>
+                                <option value="Teclado">Teclado</option>
+                                <option value="Bateria">Bateria</option>
+                                <option value="Baixo">Baixo</option>
+                                <option value="Guitarra">Guitarra</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Select User (Filtered) -->
+                        <div style="position: relative;">
+                            <select name="user_id" id="userSelect" class="form-select" required style="background: var(--bg-secondary);">
+                                <option value="">Selecione primeiro a função...</option>
+                                <?php foreach ($users as $u): ?>
+                                    <option value="<?= $u['id'] ?>" data-role="<?= ucfirst(str_replace('_', ' ', $u['category'])) ?>" style="display:none;">
+                                        <?= htmlspecialchars($u['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
+
                     <button type="submit" class="btn btn-outline w-full" style="height: 48px; border-color: var(--accent-interactive); color: var(--accent-interactive); border-style: dashed;">
                         <i data-lucide="plus" style="width: 18px;"></i> Adicionar à Escala
                     </button>
@@ -260,23 +278,6 @@ renderAppHeader('Gerenciar Escala');
 </div>
 
 <style>
-    .tab-btn {
-        flex: 1;
-        padding: 12px;
-        background: transparent;
-        border: none;
-        color: var(--text-muted);
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        transition: all 0.2s;
-        border-radius: 8px;
-    }
-
     .tab-btn {
         flex: 1;
         padding: 8px;
@@ -313,27 +314,38 @@ renderAppHeader('Gerenciar Escala');
         document.getElementById('btn-' + tab).classList.add('active');
     }
 
-    function updateInstrument() {
-        const select = document.getElementById('userSelect');
-        const input = document.getElementById('instrumentInput');
-        const selectedOption = select.options[select.selectedIndex];
-        const nameText = selectedOption.text;
+    function filterUsersByRole() {
+        const roleSelect = document.getElementById('roleSelect');
+        const userSelect = document.getElementById('userSelect');
+        const selectedRole = roleSelect.value.toLowerCase();
 
-        if (selectedOption.value) {
-            let category = selectedOption.getAttribute('data-category') || '';
-            let finalInst = '';
+        // Reset user selection
+        userSelect.value = "";
 
-            // Smart Overrides
-            if (nameText.includes('Diego')) finalInst = 'Violão';
-            else if (nameText.includes('Thalyta')) finalInst = 'Voz';
-            else {
-                if (category.includes('voz')) finalInst = 'Voz';
-                else if (category.includes('violao')) finalInst = 'Violão';
-                else if (category.includes('teclado')) finalInst = 'Teclado';
-                else if (category.includes('bateria')) finalInst = 'Bateria';
-                else if (category) finalInst = category.charAt(0).toUpperCase() + category.slice(1);
+        const options = userSelect.getElementsByTagName('option');
+        let count = 0;
+
+        for (let i = 0; i < options.length; i++) {
+            const opt = options[i];
+
+            // Skip placeholder
+            if (opt.value === "") {
+                opt.innerText = selectedRole ? "Selecione o integrante..." : "Selecione primeiro a função...";
+                continue;
             }
-            input.value = finalInst;
+
+            const optRole = (opt.getAttribute('data-role') || '').toLowerCase();
+
+            // Logic: Show if role matches OR if role is empty (show all)
+            // But user specifically asked for "Select role THEN show users"
+            // So if no role selected, we might hide all or show all? Let's hide all to force workflow.
+
+            if (selectedRole && (optRole.includes(selectedRole) || selectedRole === 'outros')) {
+                opt.style.display = 'block';
+                count++;
+            } else {
+                opt.style.display = 'none';
+            }
         }
     }
 </script>
