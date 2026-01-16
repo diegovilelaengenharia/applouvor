@@ -14,82 +14,14 @@ renderAppHeader('Início');
         <p style="font-size: 0.95rem; color: var(--text-secondary);">O que você deseja fazer?</p>
     </div>
 
-    <!-- Grid de Navegação -->
-    <!-- Grid de Navegação -->
-    <div class="dashboard-grid">
-
-        <!-- Escalas -->
-        <a href="escala.php" class="card-btn">
-            <div class="icon-emoji">📅</div>
-            <span>Escalas</span>
-        </a>
-
-        <!-- Repertório (Geral) -->
-        <a href="repertorio.php" class="card-btn">
-            <div class="icon-emoji">🎼</div>
-            <span>Repertório Geral</span>
-        </a>
-
-        <!-- Repertório da Semana -->
-        <a href="escala.php" class="card-btn">
-            <div class="icon-emoji">🎸</div>
-            <span>Repertório da Semana</span>
-        </a>
-
-        <!-- Membros -->
-        <a href="membros.php" class="card-btn">
-            <div class="icon-emoji">👥</div>
-            <span>Membros</span>
-        </a>
-
-        <!-- Agenda Igreja -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">⛪</div>
-            <span>Agenda Igreja</span>
-        </a>
-
-        <!-- Oração -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">🙏</div>
-            <span>Oração</span>
-        </a>
-
-        <!-- Devocionais -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">📖</div>
-            <span>Devocionais</span>
-        </a>
-
-        <!-- Leitura Bíblica -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">📜</div>
-            <span>Leitura Bíblica</span>
-        </a>
-
-        <!-- Comunicação: Avisos -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">📣</div>
-            <span>Avisos</span>
-        </a>
-
-        <!-- Comunicação: Indisponibilidades -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">🚫</div>
-            <span>Indisponibilidades</span>
-        </a>
-
-        <!-- Comunicação: Aniversariantes -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">🎂</div>
-            <span>Aniversariantes</span>
-        </a>
-
-        <!-- Configurações -->
-        <a href="#" onclick="alert('Em breve')" class="card-btn">
-            <div class="icon-emoji">⚙️</div>
-            <span>Configurações</span>
-        </a>
-
+    <!-- Conteúdo Central Simplificado -->
+    <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+        <div style="margin-bottom: 20px; opacity: 0.5;">
+            <i data-lucide="construction" style="width: 64px; height: 64px;"></i>
+        </div>
+        <h2 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 10px;">Painel em Construção</h2>
+        <p>Utilize o menu inferior para navegar entre as opções de <strong>Gestão</strong>, <strong>Espiritualidade</strong> e <strong>Comunicação</strong>.</p>
+        <p style="margin-top: 20px; font-size: 0.85rem; opacity: 0.7;">Novidades em breve!</p>
     </div>
 
 </div>
