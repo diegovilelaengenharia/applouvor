@@ -208,47 +208,83 @@ renderAppHeader('Escalas');
                 </div>
             </div>
 
-            <!-- STEP 2: EQUIPE -->
+            <!-- STEP 2: EQUIPE TÉCNICA -->
             <div id="step-2" style="display: none;">
-                <h3 style="margin-bottom: 5px; font-size: 1.1rem;">Passo 2: Selecionar Equipe</h3>
-                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Selecione quem participará deste evento.</p>
+                <h3 style="margin-bottom: 5px; font-size: 1.1rem;">Passo 2: Montar Equipe</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px;">Adicione os integrantes por função.</p>
 
-                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
-                    <?php foreach ($usersList as $u): ?>
-                        <label class="member-select-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; border: 1px solid transparent;">
-                                    <?= strtoupper(substr($u['name'], 0, 1)) ?>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 600; font-size: 0.9rem;"><?= htmlspecialchars($u['name']) ?></div>
-                                    <div style="font-size: 0.75rem; opacity: 0.7;"><?= ucfirst(str_replace('_', ' ', $u['category'])) ?></div>
-                                </div>
-                            </div>
-                            <input type="checkbox" name="members[]" value="<?= $u['id'] ?>" style="width: 20px; height: 20px; accent-color: var(--accent-interactive);" onchange="toggleMemberSelection(this)">
-                        </label>
-                    <?php endforeach; ?>
-                </div>
+                <!-- AREA 1: ADD MEMBER FORM -->
+                <div style="background: var(--bg-tertiary); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px;">Adicionar Novo</div>
 
-                <!-- REQUEST CONFIRMATION CHECKBOX -->
-                <div style="margin-bottom: 20px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2);">
-                    <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                        <input type="checkbox" name="notify_members" value="1" style="width: 20px; height: 20px; accent-color: var(--accent-interactive);">
-                        <div>
-                            <span style="display: block; font-weight: 600; color: var(--text-primary);">Solicitar confirmação?</span>
-                            <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Os membros serão notificados via App.</span>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <!-- Role Select -->
+                        <div style="flex: 1;">
+                            <select id="roleFilter" class="form-select" onchange="filterUsersByRole()" style="font-size: 0.9rem; padding: 8px;">
+                                <option value="">Função...</option>
+                                <option value="Voz">Voz</option>
+                                <option value="Violão">Violão</option>
+                                <option value="Teclado">Teclado</option>
+                                <option value="Bateria">Bateria</option>
+                                <option value="Baixo">Baixo</option>
+                                <option value="Guitarra">Guitarra</option>
+                            </select>
                         </div>
-                    </label>
+
+                        <!-- User Select (Filtered) -->
+                        <div style="flex: 1.5;">
+                            <select id="userAdder" class="form-select" style="font-size: 0.9rem; padding: 8px;">
+                                <option value="">Selecione...</option>
+                                <?php foreach ($usersList as $u): ?>
+                                    <option value="<?= $u['id'] ?>" data-role="<?= ucfirst(str_replace('_', ' ', $u['category'])) ?>" data-avatar="<?= strtoupper(substr($u['name'], 0, 1)) ?>" data-name="<?= htmlspecialchars($u['name']) ?>">
+                                        <?= htmlspecialchars($u['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="addMemberToScale()" class="btn btn-primary w-full" style="height: 40px; font-size: 0.9rem;">
+                        <i data-lucide="plus"></i> Adicionar à Lista
+                    </button>
                 </div>
 
-                <div style="margin-top: 24px;">
-                    <button type="submit" class="btn-primary w-full" style="background: var(--status-success);">Concluir Criação</button>
-                    <button type="button" onclick="goToStep(1)" class="btn-ghost w-full" style="margin-top: 10px;">&larr; Voltar</button>
+                <!-- AREA 2: SELECTED MEMBERS LIST -->
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; display: flex; justify-content: space-between;">
+                        <span>Equipe Selecionada</span>
+                        <span id="count-display" style="color: var(--text-secondary);">0</span>
+                    </div>
+
+                    <div id="selected-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                        <!-- JS renders items here -->
+                        <div id="empty-state" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem; border: 1px dashed var(--border-subtle); border-radius: 8px;">
+                            Ninguém adicionado ainda.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFO: CONFIRMATION -->
+                <div style="display: flex; align-items: center; gap: 10px; background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                    <i data-lucide="info" style="width: 18px; color: var(--accent-interactive);"></i>
+                    <p style="font-size: 0.8rem; color: var(--text-primary); margin: 0;">Os membros serão notificados automaticamente via App.</p>
+                </div>
+
+                <!-- Hidden inputs container -->
+                <div id="hidden-inputs"></div>
+
+                <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
+                    <button type="button" onclick="goToStep(1)" class="btn btn-outline" style="border-color: var(--border-subtle); color: var(--text-primary);">
+                        &larr; Voltar
+                    </button>
+                    <button type="submit" class="btn-primary" style="background: var(--status-success);">
+                        Concluir e Salvar
+                    </button>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 16px;">
-                <button type="button" class="btn-ghost" onclick="closeSheet(document.getElementById('sheetNewScale'))">Cancelar</button>
+                <button type="button" class="btn-ghost" onclick="closeSheet('sheetNewScale')" style="color: var(--status-error); text-decoration: underline;">Cancelar Criação</button>
             </div>
         </form>
     </div>
@@ -260,7 +296,7 @@ renderAppHeader('Escalas');
     unset($_SESSION['scale_created']);
 ?>
     <div id="modalSuccess" class="bottom-sheet-overlay active" style="align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px);">
-        <div class="card" style="width: 90%; max-width: 400px; text-align: center; animation: slideUp 0.3s ease; padding: 0; overflow: hidden; border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+        <div class="card" style="background: var(--bg-secondary); width: 90%; max-width: 400px; text-align: center; animation: slideUp 0.3s ease; padding: 0; overflow: hidden; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
 
             <!-- Header Success -->
             <div style="background: var(--status-success); padding: 30px 20px; color: white;">
@@ -294,13 +330,6 @@ renderAppHeader('Escalas');
                     </div>
                 <?php endif; ?>
 
-                <?php if ($info['notify']): ?>
-                    <div style="display: flex; align-items: center; gap: 10px; background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
-                        <div style="background: var(--accent-interactive); width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;"></div>
-                        <p style="font-size: 0.85rem; color: var(--text-primary); margin: 0;">Notificação de confirmação enviada para o App dos membros.</p>
-                    </div>
-                <?php endif; ?>
-
                 <button onclick="closeSuccessModal()" class="btn-primary w-full" style="height: 50px; font-size: 1rem;">OK, Fechar</button>
             </div>
         </div>
@@ -309,10 +338,12 @@ renderAppHeader('Escalas');
 
 <script>
     function openWizard() {
-        // Reset to step 1
         goToStep(1);
-        // Clear inputs? Optional.
         openSheet('sheetNewScale');
+        // Clear logic if needed
+        document.getElementById('selected-list').innerHTML = '<div id="empty-state" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem; border: 1px dashed var(--border-subtle); border-radius: 8px;">Ninguém adicionado ainda.</div>';
+        document.getElementById('hidden-inputs').innerHTML = '';
+        document.getElementById('count-display').innerText = '0';
     }
 
     function goToStep(step) {
@@ -320,10 +351,6 @@ renderAppHeader('Escalas');
         document.getElementById('step-2').style.display = 'none';
 
         document.getElementById('step-' + step).style.display = 'block';
-
-        // Update indicators
-        const ind1 = document.getElementById('step-indicator-1');
-        const ind2 = document.getElementById('step-indicator-2');
 
         if (step === 1) {
             document.getElementById('step-indicator-1').style.background = 'var(--accent-interactive)';
@@ -334,16 +361,103 @@ renderAppHeader('Escalas');
         }
     }
 
-    function toggleMemberSelection(checkbox) {
-        const label = checkbox.closest('.member-select-item');
-        if (checkbox.checked) {
-            label.style.background = 'rgba(76, 175, 80, 0.15)'; // Green light
-            label.style.borderColor = 'var(--status-success)';
-            label.querySelector('.user-avatar').style.borderColor = 'var(--status-success)';
-        } else {
-            label.style.background = 'var(--bg-tertiary)';
-            label.style.borderColor = 'transparent';
-            label.querySelector('.user-avatar').style.borderColor = 'transparent';
+    // Role Filtering Logic
+    function filterUsersByRole() {
+        const role = document.getElementById('roleFilter').value.toLowerCase();
+        const select = document.getElementById('userAdder');
+        const options = select.getElementsByTagName('option');
+
+        for (let i = 0; i < options.length; i++) {
+            const opt = options[i];
+            const optRole = (opt.getAttribute('data-role') || '').toLowerCase();
+
+            if (role === '') {
+                opt.style.display = 'block'; // Show all
+            } else {
+                // Simple partial match logic
+                if (optRole.includes(role)) {
+                    opt.style.display = 'block';
+                } else {
+                    opt.style.display = 'none';
+                }
+            }
+        }
+        select.value = ""; // Reset selection
+    }
+
+    // Dynamic Add Logic
+    function addMemberToScale() {
+        const select = document.getElementById('userAdder');
+        const id = select.value;
+        const name = select.selectedOptions[0]?.getAttribute('data-name');
+        const role = select.selectedOptions[0]?.getAttribute('data-role');
+        const avatar = select.selectedOptions[0]?.getAttribute('data-avatar');
+
+        if (!id) return;
+
+        // Check duplicate
+        if (document.querySelector(`input[name="members[]"][value="${id}"]`)) {
+            alert('Membro já adicionado!');
+            return;
+        }
+
+        const list = document.getElementById('selected-list');
+        const emptyState = document.getElementById('empty-state');
+        if (emptyState) emptyState.remove();
+
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        item.style.padding = '10px';
+        item.style.background = 'var(--bg-primary)';
+        item.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; border: 1px solid var(--border-subtle);">
+                        ${avatar}
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">${name}</div>
+                        <div style="font-size: 0.75rem; opacity: 0.7;">${role}</div>
+                    </div>
+                </div>
+                <button type="button" onclick="removeMember(this, '${id}')" style="background: none; border: none; color: var(--status-error); cursor: pointer;">
+                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                </button>
+            </div>
+        `;
+
+        list.appendChild(item);
+        lucide.createIcons();
+
+        // Add Hidden Input
+        const inputDiv = document.getElementById('hidden-inputs');
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'members[]';
+        input.value = id;
+        inputDiv.appendChild(input);
+
+        // Update Counter
+        updateCount();
+    }
+
+    function removeMember(btn, id) {
+        btn.closest('.list-item').remove();
+        const input = document.querySelector(`input[name="members[]"][value="${id}"]`);
+        if (input) input.remove();
+        updateCount();
+    }
+
+    function updateCount() {
+        const count = document.querySelectorAll('#hidden-inputs input').length;
+        document.getElementById('count-display').innerText = count;
+    }
+
+    function closeSuccessModal() {
+        const modal = document.getElementById('modalSuccess');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.style.display = 'none'; // Force hide
         }
     }
 
@@ -353,19 +467,18 @@ renderAppHeader('Escalas');
         const sheet = document.getElementById(id);
         if (sheet) {
             sheet.classList.add('active');
+            sheet.style.display = 'flex'; // Ensure flex
             if (navigator.vibrate) navigator.vibrate(50);
         }
     }
 
-    function closeSheet(element) {
-        // Se passar ID string
-        if (typeof element === 'string') {
-            document.getElementById(element).classList.remove('active');
-            return;
-        }
-        // Se passar o proprio elemento overlay
-        if (element.classList.contains('bottom-sheet-overlay')) {
-            element.classList.remove('active');
+    function closeSheet(id) {
+        const el = typeof id === 'string' ? document.getElementById(id) : id;
+        if (el) {
+            el.classList.remove('active');
+            setTimeout(() => {
+                if (!el.classList.contains('active')) el.style.display = 'none'; // Clean up
+            }, 300);
         }
     }
 </script>
