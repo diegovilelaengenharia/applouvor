@@ -47,17 +47,19 @@ renderAppHeader('Escalas');
 
     <!-- Abas Próximas / Histórico (Simples via JS ou reload, aqui vamos mostrar seções) -->
 
-    <!-- HERO HEADER CARD -->
-    <div class="hero-card">
+    <!-- HERO HEADER CARD (Apenas Título) -->
+    <div class="hero-card" style="justify-content: center; text-align: center; padding: 30px 20px;">
         <div class="hero-content">
-            <h1>Escalas</h1>
-            <p>Próximos Cultos</p>
+            <h1 style="margin: 0; font-size: 1.8rem;">Escalas</h1>
+            <p style="opacity: 0.8; margin-top: 5px;">Próximos Cultos e Ensaios</p>
         </div>
-        <div class="hero-action">
-            <button onclick="openSheet('sheetNewScale')" class="btn-hero">
-                <i data-lucide="plus" style="width: 18px;"></i> Nova
-            </button>
-        </div>
+    </div>
+
+    <!-- Toolbar de Ações -->
+    <div style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
+        <button onclick="openSheet('sheetNewScale')" class="btn btn-primary" style="box-shadow: var(--shadow-md);">
+            <i data-lucide="plus" style="width: 18px;"></i> Nova Escala
+        </button>
     </div>
 
     <!-- Lista Próximas -->

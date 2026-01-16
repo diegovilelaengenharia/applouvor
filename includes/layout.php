@@ -75,23 +75,67 @@ function renderAppHeader($title = 'Louvor PIB')
         ?>
         </main>
 
-        <!-- Bottom Navigation (3 Categories) -->
+        <!-- Bottom Navigation (5 Categories) -->
         <nav class="bottom-nav-categories">
+            <a href="index.php" class="nav-cat-item">
+                <i data-lucide="home"></i>
+                <span>Início</span>
+            </a>
+
             <button class="nav-cat-item" onclick="openSheet('sheet-gestao')">
                 <i data-lucide="layout-grid"></i>
                 <span>Gestão</span>
             </button>
             <button class="nav-cat-item" onclick="openSheet('sheet-espiritualidade')">
                 <i data-lucide="heart-handshake"></i>
-                <span>Espiritualidade</span>
+                <span>Espirito</span>
             </button>
             <button class="nav-cat-item" onclick="openSheet('sheet-comunicacao')">
                 <i data-lucide="message-circle"></i>
-                <span>Comunicação</span>
+                <span>Comunica</span>
+            </button>
+
+            <button class="nav-cat-item" onclick="openSheet('sheet-perfil')">
+                <div class="user-avatar-xs" style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; border: 1px solid currentColor;">
+                    <?php if ($avatar): ?>
+                        <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 100%; background: currentColor; display:flex; align-items:center; justify-content:center; color: var(--bg-secondary); font-size: 10px; font-weight: bold;"><?= $userInitials ?></div>
+                    <?php endif; ?>
+                </div>
+                <span>Perfil</span>
             </button>
         </nav>
 
         <!-- Bottom Sheets (Submenus) -->
+
+        <!-- Perfil Sheet -->
+        <div id="sheet-perfil" class="bottom-sheet-overlay" onclick="closeSheet(this)">
+            <div class="bottom-sheet-content">
+                <div class="sheet-header">Meu Perfil</div>
+
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 12px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent-interactive);">
+                        <?php if ($avatar): ?>
+                            <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                        <?php else: ?>
+                            <div style="width: 100%; height: 100%; background: var(--bg-tertiary); display:flex; align-items:center; justify-content:center; font-size: 2rem; color: var(--text-secondary);"><?= $userInitials ?></div>
+                        <?php endif; ?>
+                    </div>
+                    <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 4px;"><?= htmlspecialchars($_SESSION['user_name']) ?></h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;"><?= htmlspecialchars($_SESSION['user_email'] ?? '') ?></p>
+                </div>
+
+                <div class="sheet-grid" style="grid-template-columns: 1fr 1fr;">
+                    <a href="perfil.php" class="sheet-item">
+                        <div class="emoji-icon">⚙️</div><span>Editar Perfil</span>
+                    </a>
+                    <a href="../includes/auth.php?logout=true" class="sheet-item" style="border-color: var(--status-error); background: rgba(239, 68, 68, 0.05);">
+                        <div class="emoji-icon">🚪</div><span style="color: var(--status-error);">Sair</span>
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <!-- Gestão -->
         <div id="sheet-gestao" class="bottom-sheet-overlay" onclick="closeSheet(this)">

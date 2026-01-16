@@ -222,7 +222,7 @@ ul {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border-subtle);
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(5, 1fr);
     z-index: 500;
     padding-bottom: env(safe-area-inset-bottom);
 }
