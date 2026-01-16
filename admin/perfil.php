@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 2. Alteração de Senha
-    if (isset($_POST['change_password'])) {
+    // 2. Alteração de Senha (Somente Admin)
+    if (isset($_POST['change_password']) && $_SESSION['user_role'] === 'admin') {
         $current_pass = $_POST['current_password'];
         $new_pass = $_POST['new_password'];
         $confirm_pass = $_POST['confirm_password'];
@@ -145,7 +145,9 @@ renderAppHeader('Meu Perfil');
     <!-- Tabs (Alternativa Clean) -->
     <div style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;">
         <button onclick="showTab('info')" id="btn-info" class="btn-outline active" style="flex: 1; justify-content: center; background: var(--bg-secondary);">Dados Pessoais</button>
-        <button onclick="showTab('security')" id="btn-security" class="btn-outline" style="flex: 1; justify-content: center;">Segurança</button>
+        <?php if ($_SESSION['user_role'] === 'admin'): ?>
+            <button onclick="showTab('security')" id="btn-security" class="btn-outline" style="flex: 1; justify-content: center;">Segurança</button>
+        <?php endif; ?>
     </div>
 
     <!-- Tab Info -->
