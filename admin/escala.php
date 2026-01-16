@@ -83,7 +83,7 @@ renderAppHeader('Escalas');
 <div class="container" style="padding-top: 20px; padding-bottom: 80px;">
 
     <!-- Header com Voltar -->
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 32px;">
         <a href="index.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none;">
             <i data-lucide="arrow-left"></i>
         </a>
@@ -93,7 +93,7 @@ renderAppHeader('Escalas');
         </div>
     </div>
 
-    <div style="display:flex; justify-content:flex-end; gap: 10px; margin-bottom: 20px;">
+    <div style="display:flex; justify-content:flex-end; gap: 16px; margin-bottom: 32px;">
         <button onclick="openSheet('sheetReport')" class="btn" style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color: white; border: none; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4); padding: 0 16px; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
             <i data-lucide="printer" style="width: 18px;"></i>
             <span>Relatório</span>
@@ -144,7 +144,7 @@ renderAppHeader('Escalas');
                 }
             ?>
                 <div class="list-item" onclick="window.location.href='gestao_escala.php?id=<?= $scale['id'] ?>'" style="cursor: pointer;">
-                    <div style="display:flex; align-items:center; gap: 15px; width:100%;">
+                    <div style="display:flex; align-items:center; gap: 16px; width:100%;">
                         <!-- Data Box -->
                         <div style="background: <?= $isToday ? 'var(--status-success)' : 'var(--bg-tertiary)' ?>; 
                                     color: <?= $isToday ? '#fff' : 'var(--text-primary)' ?>;
@@ -181,7 +181,7 @@ renderAppHeader('Escalas');
                     $dateObj = new DateTime($scale['event_date']);
                 ?>
                     <div class="list-item" onclick="window.location.href='gestao_escala.php?id=<?= $scale['id'] ?>'" style="cursor: pointer; border-color: var(--bg-tertiary); margin-bottom: 8px;">
-                        <div style="display:flex; align-items:center; gap: 15px; width:100%;">
+                        <div style="display:flex; align-items:center; gap: 16px; width:100%;">
                             <div style="width: 60px; text-align: center; color: var(--text-secondary); font-weight: 600;">
                                 <?= $dateObj->format('d/m') ?>
                             </div>

@@ -91,7 +91,7 @@ renderAppHeader('Gerenciar Escala');
 <div class="container" style="padding-top: 20px; padding-bottom: 80px;">
 
     <!-- HEADER NAV -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
         <div style="display: flex; align-items: center; gap: 10px;">
             <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none; padding: 0 12px; height: 40px; border-radius: 8px; display: flex; align-items: center; gap: 6px; width: auto;">
                 <i data-lucide="arrow-left" style="width: 18px;"></i> <span style="font-weight: 600; font-size: 0.9rem;">Voltar</span>
@@ -109,7 +109,7 @@ renderAppHeader('Gerenciar Escala');
     </div>
 
     <!-- TABS MODERNAS -->
-    <div style="display: flex; gap: 5px; margin-bottom: 25px; background: var(--bg-tertiary); padding: 5px; border-radius: 8px;">
+    <div style="display: flex; gap: 8px; margin-bottom: 32px; background: var(--bg-tertiary); padding: 6px; border-radius: 12px;">
         <button onclick="showTab('evento')" id="btn-evento" class="tab-btn active">
             Configurar Evento
         </button>
@@ -166,7 +166,7 @@ renderAppHeader('Gerenciar Escala');
 
             <?php else: ?>
                 <!-- VIEW MODE: TEXT -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
                     <div>
                         <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">DATA</div>
                         <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);"><?= date('d/m/Y', strtotime($scale['event_date'])) ?></div>
@@ -232,7 +232,7 @@ renderAppHeader('Gerenciar Escala');
                 }
                 ?>
 
-                <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 30px;">
+                <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px;">
                     <?php foreach ($groups as $groupName => $groupMembers): ?>
                         <?php if (!empty($groupMembers)): ?>
                             <div>
@@ -292,7 +292,7 @@ renderAppHeader('Gerenciar Escala');
                     <form method="POST">
                         <input type="hidden" name="add_member" value="1">
 
-                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <div style="display: flex; gap: 16px; margin-bottom: 16px;">
                             <div style="flex: 1;">
                                 <select name="instrument" id="roleSelect" class="form-select modern-input" onchange="filterUsersByRole()" required style="padding: 12px;">
                                     <option value="">Função...</option>
