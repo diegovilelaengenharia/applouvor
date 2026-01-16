@@ -66,6 +66,30 @@ renderAppHeader('Visão Geral');
             <span>Leitura Bíblica</span>
         </a>
 
+        <!-- Comunicação: Avisos -->
+        <a href="#" onclick="alert('Em breve')" class="card-btn">
+            <i data-lucide="newspaper" class="icon-lg" style="color: #64748B;"></i>
+            <span>Avisos</span>
+        </a>
+
+        <!-- Comunicação: Indisponibilidades -->
+        <a href="#" onclick="alert('Em breve')" class="card-btn">
+            <i data-lucide="user-x" class="icon-lg" style="color: #EF4444;"></i>
+            <span>Indisponibilidades</span>
+        </a>
+
+        <!-- Comunicação: Aniversariantes -->
+        <a href="#" onclick="alert('Em breve')" class="card-btn">
+            <i data-lucide="cake" class="icon-lg" style="color: #F87171;"></i>
+            <span>Aniversariantes</span>
+        </a>
+
+        <!-- Configurações -->
+        <a href="#" onclick="alert('Em breve')" class="card-btn">
+            <i data-lucide="settings" class="icon-lg" style="color: #475569;"></i>
+            <span>Configurações</span>
+        </a>
+
     </div>
 
 </div>
