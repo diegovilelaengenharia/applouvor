@@ -143,13 +143,39 @@ if (!empty($scaleIds)) {
                 border: 1px solid #ccc;
             }
         }
+
+        .btn-print {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn-print:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
 <body onload="window.print()">
 
-    <div class="no-print" style="margin-bottom: 20px; text-align: right;">
-        <button onclick="window.print()" style="padding: 10px 20px; cursor: pointer;">🖨️ Imprimir</button>
+    <div class="no-print" style="margin-bottom: 30px; text-align: right; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1; display:flex; align-items:center; justify-content:space-between;">
+        <div style="text-align: left; color: #64748b; font-size: 14px;">
+            <strong>Dica:</strong> Ajuste as margens na visualização de impressão se necessário.
+        </div>
+        <button onclick="window.print()" class="btn-print">
+            <span>🖨️ Imprimir agora</span>
+        </button>
     </div>
 
     <div class="header">

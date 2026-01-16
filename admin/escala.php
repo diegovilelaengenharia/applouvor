@@ -93,13 +93,13 @@ renderAppHeader('Escalas');
         </div>
     </div>
 
-    <!-- Toolbar de Ações -->
     <div style="display:flex; justify-content:flex-end; gap: 10px; margin-bottom: 20px;">
-        <button onclick="openSheet('sheetReport')" class="btn" style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);">
-            <i data-lucide="printer" style="width: 18px;"></i> Relatório
+        <button onclick="openSheet('sheetReport')" class="btn" style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color: white; border: none; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4); padding: 0 16px; border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="printer" style="width: 18px;"></i>
+            <span>Relatório</span>
         </button>
-        <button onclick="openWizard()" class="btn btn-primary" style="box-shadow: var(--shadow-md);">
-            <i data-lucide="plus" style="width: 18px;"></i> Nova Escala
+        <button onclick="openWizard()" class="btn btn-primary" style="box-shadow: var(--shadow-md); padding: 0 20px;">
+            <i data-lucide="plus" style="width: 18px; margin-right: 6px;"></i> Nova Escala
         </button>
     </div>
 
