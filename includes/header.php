@@ -9,10 +9,12 @@
         </div>
 
         <div class="user-info">
+            <button id="theme-toggle" class="btn-outline" style="border:none; font-size: 1.2rem; cursor: pointer; padding: 5px;">🌙</button>
             <div class="user-avatar">
                 <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
             </div>
             <a href="../includes/auth.php?logout=true" class="logout-link">Sair</a>
         </div>
     </div>
+    <script src="../assets/js/main.js"></script>
 </header>

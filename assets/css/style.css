@@ -2,31 +2,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    /* Cores Premium Dark */
-    --bg-color: #121212;
-    --card-bg: #1E1E1E;
-    --text-primary: #FFFFFF;
-    --text-secondary: #AAAAAA;
+    /* Cores Light (Padrão) */
+    --bg-color: #F4F6F8;
+    --card-bg: #FFFFFF;
+    --text-primary: #1C1C1E;
+    --text-secondary: #6B7280;
     --accent-color: #D4AF37;
     /* Dourado */
     --accent-hover: #B59326;
     --success-color: #2E7D32;
-    /* Verde sofisticado */
     --error-color: #C62828;
 
-    /* Cores Botões Vilela Style (se desejado futuramente, ajustável) */
     --btn-primary-bg: var(--accent-color);
-    --btn-primary-text: #000000;
+    --btn-primary-text: #FFFFFF;
 
     /* Sombra e Bordas */
     --border-radius: 16px;
-    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --input-bg: #2C2C2C;
-    --input-border: #3E3E3E;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --input-bg: #F9FAFB;
+    --input-border: #E5E7EB;
 
     /* Layout */
     --header-height: 70px;
     --safe-area-padding: 20px;
+}
+
+/* Dark Mode Overrides */
+body.dark-mode {
+    --bg-color: #121212;
+    --card-bg: #1E1E1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #AAAAAA;
+    --btn-primary-text: #000000;
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --input-bg: #2C2C2C;
+    --input-border: #3E3E3E;
 }
 
 * {
@@ -44,6 +54,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Tipografia */
