@@ -36,6 +36,14 @@ try {
         echo "<p style='color: orange'>⚠️ Coluna 'avatar' já existe ou erro: " . $e->getMessage() . "</p>";
     }
 
+    // 5. Configurar Permissões (Thalyta Admin)
+    try {
+        $pdo->exec("UPDATE users SET role = 'admin' WHERE name = 'Thalyta'");
+        echo "<p style='color: green'>✅ Permissão de Admin concedida para Thalyta.</p>";
+    } catch (PDOException $e) {
+        echo "<p style='color: red'>❌ Erro ao atualizar permissão: " . $e->getMessage() . "</p>";
+    }
+
     // Criar pasta de uploads se não existir
     $upload_dir = 'assets/uploads/';
     if (!is_dir($upload_dir)) {
