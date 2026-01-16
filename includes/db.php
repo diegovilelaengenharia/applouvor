@@ -1,9 +1,9 @@
 <?php
 // Configurações do Banco de Dados
 $host = 'localhost';
-$dbname = 'u604639433_louvor_pib'; // Nome sugerido para Hostinger
-$username = 'root'; // Alterar na hospedagem
-$password = ''; // Alterar na hospedagem
+$dbname = 'u884436813_applouvor';
+$username = 'u884436813_admin';
+$password = 'Diego@159753';
 
 // Para desenvolvimento local (se diferente da produção)
 // $host = 'localhost';
@@ -18,4 +18,3 @@ try {
 } catch (PDOException $e) {
     die("Erro na conexão com o banco de dados: " . $e->getMessage());
 }
-?>

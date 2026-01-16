@@ -1,6 +1,6 @@
 -- Criação do Banco de Dados
-CREATE DATABASE IF NOT EXISTS u604639433_louvor_pib;
-USE u604639433_louvor_pib;
+CREATE DATABASE IF NOT EXISTS u884436813_applouvor;
+USE u884436813_applouvor;
 
 -- Tabela de Usuários
 CREATE TABLE IF NOT EXISTS users (
