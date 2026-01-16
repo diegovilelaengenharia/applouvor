@@ -220,7 +220,7 @@ renderAppHeader('Escalas');
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <!-- Role Select -->
                         <div style="flex: 1;">
-                            <select id="roleFilter" class="form-select" onchange="filterUsersByRole()" style="font-size: 0.9rem; padding: 8px;">
+                            <select id="roleFilter" class="form-select modern-input" onchange="filterUsersByRole()" style="font-size: 0.9rem; padding: 12px;">
                                 <option value="">Função...</option>
                                 <option value="Voz">Voz</option>
                                 <option value="Violão">Violão</option>
@@ -228,15 +228,34 @@ renderAppHeader('Escalas');
                                 <option value="Bateria">Bateria</option>
                                 <option value="Baixo">Baixo</option>
                                 <option value="Guitarra">Guitarra</option>
+                                <option value="Mídia">Mídia</option>
+                                <option value="Som">Som</option>
+                                <option value="Outros">Outros</option>
                             </select>
                         </div>
 
                         <!-- User Select (Filtered) -->
                         <div style="flex: 1.5;">
-                            <select id="userAdder" class="form-select" style="font-size: 0.9rem; padding: 8px;">
+                            <select id="userAdder" class="form-select modern-input" style="font-size: 0.9rem; padding: 12px;">
                                 <option value="">Selecione...</option>
                                 <?php foreach ($usersList as $u): ?>
-                                    <option value="<?= $u['id'] ?>" data-role="<?= ucfirst(str_replace('_', ' ', $u['category'])) ?>" data-avatar="<?= strtoupper(substr($u['name'], 0, 1)) ?>" data-name="<?= htmlspecialchars($u['name']) ?>">
+                                    <?php
+                                    // Normalize logic mirrored from gestao_escala.php
+                                    $rawCat = mb_strtolower($u['category'], 'UTF-8');
+                                    $normalizedCat = $rawCat;
+                                    if (strpos($rawCat, 'voz') !== false) $normalizedCat = 'voz';
+                                    if (strpos($rawCat, 'violao') !== false) $normalizedCat = 'violão';
+                                    if (strpos($rawCat, 'teclado') !== false) $normalizedCat = 'teclado';
+                                    if (strpos($rawCat, 'bateria') !== false) $normalizedCat = 'bateria';
+                                    if (strpos($rawCat, 'baixo') !== false) $normalizedCat = 'baixo';
+                                    if (strpos($rawCat, 'guitarra') !== false) $normalizedCat = 'guitarra';
+                                    if (strpos($rawCat, 'midia') !== false) $normalizedCat = 'mídia';
+                                    if (strpos($rawCat, 'som') !== false) $normalizedCat = 'som';
+                                    ?>
+                                    <option value="<?= $u['id'] ?>"
+                                        data-role="<?= $normalizedCat ?>"
+                                        data-avatar="<?= strtoupper(substr($u['name'], 0, 1)) ?>"
+                                        data-name="<?= htmlspecialchars($u['name']) ?>">
                                         <?= htmlspecialchars($u['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -363,18 +382,21 @@ renderAppHeader('Escalas');
 
     // Role Filtering Logic
     function filterUsersByRole() {
-        const role = document.getElementById('roleFilter').value.toLowerCase();
+        const role = document.getElementById('roleFilter').value.toLowerCase().trim();
         const select = document.getElementById('userAdder');
         const options = select.getElementsByTagName('option');
 
+        select.value = ""; // Reset
+
         for (let i = 0; i < options.length; i++) {
             const opt = options[i];
-            const optRole = (opt.getAttribute('data-role') || '').toLowerCase();
+            if (opt.value === "") continue;
 
-            if (role === '') {
-                opt.style.display = 'block'; // Show all
+            const optRole = (opt.getAttribute('data-role') || '').toLowerCase().trim();
+
+            if (!role || role === 'outros') {
+                opt.style.display = 'block';
             } else {
-                // Simple partial match logic
                 if (optRole.includes(role)) {
                     opt.style.display = 'block';
                 } else {
@@ -382,7 +404,6 @@ renderAppHeader('Escalas');
                 }
             }
         }
-        select.value = ""; // Reset selection
     }
 
     // Dynamic Add Logic
@@ -486,3 +507,23 @@ renderAppHeader('Escalas');
 <?php
 renderAppFooter();
 ?>
+
+<style>
+    /* Shared Modern Styles */
+    .modern-input {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 12px 15px;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        width: 100%;
+        color: var(--text-primary);
+    }
+
+    .modern-input:focus {
+        border-color: var(--accent-interactive);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+</style>
