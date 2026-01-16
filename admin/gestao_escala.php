@@ -100,69 +100,55 @@ renderAppHeader('Gerenciar Escala');
     </div>
 
     <!-- TABS -->
-    <div style="display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
+    <div style="display: flex; gap: 0; margin-bottom: 20px; background: var(--bg-tertiary); padding: 4px; border-radius: 12px;">
         <button onclick="showTab('evento')" id="btn-evento" class="tab-btn active">
-            <i data-lucide="calendar-days" style="width: 18px;"></i> Dados do Evento
+            Configurar Evento
         </button>
         <button onclick="showTab('equipe')" id="btn-equipe" class="tab-btn">
-            <i data-lucide="users" style="width: 18px;"></i> Escala Técnica
+            Gerenciar Equipe
         </button>
     </div>
 
     <!-- TAB EVENTO -->
     <div id="tab-evento">
-        <div class="card" style="padding: 25px; border-top: 4px solid var(--accent-interactive);">
-            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--accent-interactive);">
-                <i data-lucide="settings-2" style="width: 20px;"></i>
-                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Configurações Operacionais</h3>
-            </div>
+        <div class="card" style="padding: 20px; border: none; box-shadow: none; background: transparent;">
 
             <form method="POST">
                 <input type="hidden" name="update_event" value="1">
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
-                    <div class="form-group">
-                        <label class="form-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Data Programada</label>
-                        <div style="position: relative;">
-                            <i data-lucide="calendar" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-secondary);"></i>
-                            <input type="date" name="date" class="form-input" value="<?= $scale['event_date'] ?>" required style="padding-left: 36px;">
-                        </div>
+                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" style="font-size: 0.75rem;">Data</label>
+                        <input type="date" name="date" class="form-input" value="<?= $scale['event_date'] ?>" required style="background: var(--bg-secondary);">
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Tipologia</label>
-                        <div style="position: relative;">
-                            <i data-lucide="tag" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-secondary);"></i>
-                            <select name="type" class="form-select" style="padding-left: 36px;">
-                                <option value="Culto de Domingo" <?= $scale['event_type'] == 'Culto de Domingo' ? 'selected' : '' ?>>Culto de Domingo</option>
-                                <option value="Ensaio" <?= $scale['event_type'] == 'Ensaio' ? 'selected' : '' ?>>Ensaio Técnico</option>
-                                <option value="Evento Jovens" <?= $scale['event_type'] == 'Evento Jovens' ? 'selected' : '' ?>>Evento Jovens</option>
-                                <option value="Evento Especial" <?= $scale['event_type'] == 'Evento Especial' ? 'selected' : '' ?>>Evento Especial</option>
-                            </select>
-                        </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" style="font-size: 0.75rem;">Tipo</label>
+                        <select name="type" class="form-select" style="background: var(--bg-secondary);">
+                            <option value="Culto de Domingo" <?= $scale['event_type'] == 'Culto de Domingo' ? 'selected' : '' ?>>Culto de Domingo</option>
+                            <option value="Ensaio" <?= $scale['event_type'] == 'Ensaio' ? 'selected' : '' ?>>Ensaio</option>
+                            <option value="Evento Jovens" <?= $scale['event_type'] == 'Evento Jovens' ? 'selected' : '' ?>>Evento Jovens</option>
+                            <option value="Evento Especial" <?= $scale['event_type'] == 'Evento Especial' ? 'selected' : '' ?>>Evento Especial</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Observações / Liturgia</label>
-                    <textarea name="description" class="form-input" rows="3" placeholder="Insira detalhes técnicos, roteiro ou observações..." style="resize: vertical;"><?= htmlspecialchars($scale['description'] ?? '') ?></textarea>
+                    <label class="form-label" style="font-size: 0.75rem;">Detalhes / Liturgia</label>
+                    <textarea name="description" class="form-input" rows="4" placeholder="Adicione observações..." style="resize: none; background: var(--bg-secondary);"><?= htmlspecialchars($scale['description'] ?? '') ?></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-full" style="justify-content: center; height: 48px; margin-top: 10px;">
-                    <i data-lucide="save"></i> Atualizar Registro
+                <button type="submit" class="btn btn-primary w-full" style="height: 48px; margin-top: 10px; margin-bottom: 30px;">
+                    Salvar Alterações
                 </button>
             </form>
 
-            <!-- Área de Perigo -->
-            <div style="margin-top: 40px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 12px; padding: 20px;">
-                <h4 style="color: #991B1B; font-size: 0.9rem; margin-top: 0; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="alert-triangle" style="width: 16px;"></i> Zona de Perigo
-                </h4>
-                <p style="font-size: 0.8rem; color: #B91C1C; margin-bottom: 15px;">A exclusão removerá permanentemente este registro e desvinculará todos os membros.</p>
-                <form method="POST" onsubmit="return confirm('ATENÇÃO: Confirma a exclusão definitiva deste evento?');">
+            <!-- Delete Section Compact -->
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+                <form method="POST" onsubmit="return confirm('ATENÇÃO: Deseja realmente excluir esta escala?');">
                     <input type="hidden" name="delete_scale" value="1">
-                    <button type="submit" class="btn w-full" style="background: white; color: #EF4444; border: 1px solid #EF4444; font-weight: 600;">
-                        Excluir Evento Definitivamente
+                    <button type="submit" class="btn w-full" style="background: transparent; border: 1px solid var(--status-error); color: var(--status-error); font-weight: 600;">
+                        <i data-lucide="trash-2" style="width: 18px; margin-right: 6px;"></i> Excluir Escala
                     </button>
                 </form>
             </div>
@@ -299,15 +285,27 @@ renderAppHeader('Gerenciar Escala');
         border-radius: 8px;
     }
 
-    .tab-btn:hover {
-        background: var(--bg-tertiary);
+    .tab-btn {
+        flex: 1;
+        padding: 8px;
+        background: transparent;
+        border: none;
         color: var(--text-secondary);
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+        color: var(--text-primary);
     }
 
     .tab-btn.active {
         background: var(--bg-secondary);
-        color: var(--accent-interactive);
-        box-shadow: var(--shadow-sm);
+        color: var(--text-primary);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 </style>
 
