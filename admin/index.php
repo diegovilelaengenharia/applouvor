@@ -16,7 +16,7 @@ renderAppHeader('Início');
 
     <!-- Conteúdo Central Simplificado -->
     <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
-        <div style="margin-bottom: 20px; opacity: 0.5;">
+        <div style="margin-bottom: 20px; opacity: 0.8;">
             <i data-lucide="construction" style="width: 64px; height: 64px;"></i>
         </div>
         <h2 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 10px;">Painel em Construção</h2>
