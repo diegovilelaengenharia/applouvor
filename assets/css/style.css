@@ -182,6 +182,24 @@ p {
     border-color: var(--accent-color);
 }
 
+/* Logo Toggle Logic */
+.brand-logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.brand-logo.dark-theme-only {
+    display: none;
+}
+
+body.dark-mode .brand-logo.light-theme-only {
+    display: none;
+}
+
+body.dark-mode .brand-logo.dark-theme-only {
+    display: inline-block;
+}
+
 /* Login Page Specifics */
 .login-page {
     display: flex;
@@ -189,18 +207,41 @@ p {
     justify-content: center;
     min-height: 100vh;
     padding: 20px;
+    background: radial-gradient(circle at top, #e0e0e0, var(--bg-color));
+    /* Ajuste para light mode default */
+    position: relative;
+}
+
+body.dark-mode .login-page {
     background: radial-gradient(circle at top, #1a1a1a, var(--bg-color));
+}
+
+.theme-toggle-fixed {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle-fixed:hover {
+    transform: scale(1.1);
 }
 
 .login-card {
     width: 100%;
     max-width: 400px;
     text-align: center;
-}
-
-.brand-logo {
-    max-width: 150px;
-    margin-bottom: 10px;
 }
 
 .brand-subtitle {
