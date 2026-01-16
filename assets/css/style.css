@@ -617,3 +617,70 @@ ul {
         transform: translateY(0);
     }
 }
+
+/* === HERO HEADER CARDS === */
+.hero-card {
+    background: var(--accent-blue);
+    color: white;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Background Decoration */
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-content h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: white;
+}
+
+.hero-content p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.hero-action {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-hero {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.btn-hero:active {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0.96);
+}
