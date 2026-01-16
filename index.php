@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         /* Estilos Exclusivos da Página de Login (Inline para garantir override) */
         body.login-page {
-            background: linear-gradient(135deg, #2C2C2C, #121212);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            /* Cloud / Silver Gradient */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -53,7 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             max-width: 360px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            /* Sombra mais suave para tema claro */
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         .brand-logo {
@@ -62,34 +65,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .login-header h2 {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            /* Mais espaço pois removemos o subtítulo */
             font-weight: 700;
         }
 
-        .login-header p {
-            font-size: 0.7rem;
-            color: #D4AF37;
-            /* Dourado Texto */
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
+        /* Subtítulo removido */
 
         .form-label {
             display: block;
             text-align: left;
             font-size: 0.8rem;
-            color: #666;
+            color: #555;
             margin-bottom: 5px;
+            font-weight: 500;
         }
 
         .form-input-login {
-            background: #F5F5F5;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            /* Mais arredondado */
             padding: 12px 15px;
             width: 100%;
             font-size: 1rem;
@@ -101,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .form-input-login:focus {
             border-color: #D4AF37;
             background: #fff;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
         .btn-gold {
@@ -108,16 +107,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #fff;
             width: 100%;
             padding: 14px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 600;
             border: none;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.2s;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(212, 175, 55, 0.25);
         }
 
         .btn-gold:hover {
             background-color: #B59326;
+            transform: translateY(-2px);
         }
 
         .custom-footer {
@@ -140,7 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-header">
             <img src="assets/images/logo-black.png" alt="Logo" class="brand-logo">
             <h2>Ministério de Louvor</h2>
-            <p>Primeira Igreja Batista em Oliveira</p>
         </div>
 
         <?php if ($error): ?>
