@@ -27,6 +27,15 @@ function renderAppHeader($title = 'Louvor PIB')
         <!-- Top Bar (Desktop & Mobile) -->
         <header class="app-header">
             <div class="header-brand">
+                <?php
+                $currentScript = basename($_SERVER['PHP_SELF']);
+                if ($currentScript !== 'index.php'):
+                ?>
+                    <a href="index.php" class="btn-icon" style="margin-right: 8px;">
+                        <i data-lucide="arrow-left"></i>
+                    </a>
+                <?php endif; ?>
+
                 <img src="../assets/images/logo-black.png" alt="Logo" style="height: 32px; width: auto; display: none;"> <!-- Oculto se não tiver logo -->
                 <span class="page-title"><?= htmlspecialchars($title) ?></span>
             </div>
