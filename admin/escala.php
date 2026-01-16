@@ -82,13 +82,9 @@ renderAppHeader('Escalas');
 
 <div class="container" style="padding-top: 20px; padding-bottom: 80px;">
 
-    <!-- Abas Próximas / Histórico (Simples via JS ou reload, aqui vamos mostrar seções) -->
-
-    <!-- Abas Próximas / Histórico (Simples via JS ou reload, aqui vamos mostrar seções) -->
-
     <!-- Header com Voltar -->
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
-        <a href="index.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary);">
+        <a href="index.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none;">
             <i data-lucide="arrow-left"></i>
         </a>
         <div>
@@ -222,15 +218,11 @@ renderAppHeader('Escalas');
                         <div style="flex: 1;">
                             <select id="roleFilter" class="form-select modern-input" onchange="filterUsersByRole()" style="font-size: 0.9rem; padding: 12px;">
                                 <option value="">Função...</option>
-                                <option value="Voz">Voz</option>
+                                <option value="Voz Feminina">Voz Feminina</option>
+                                <option value="Voz Masculina">Voz Masculina</option>
                                 <option value="Violão">Violão</option>
                                 <option value="Teclado">Teclado</option>
                                 <option value="Bateria">Bateria</option>
-                                <option value="Baixo">Baixo</option>
-                                <option value="Guitarra">Guitarra</option>
-                                <option value="Mídia">Mídia</option>
-                                <option value="Som">Som</option>
-                                <option value="Outros">Outros</option>
                             </select>
                         </div>
 
@@ -263,8 +255,8 @@ renderAppHeader('Escalas');
                         </div>
                     </div>
 
-                    <button type="button" onclick="addMemberToScale()" class="btn btn-primary w-full" style="height: 40px; font-size: 0.9rem;">
-                        <i data-lucide="plus"></i> Adicionar à Lista
+                    <button type="button" onclick="addMemberToScale()" class="btn btn-primary w-full" style="height: 44px; font-size: 0.95rem; background: var(--accent-interactive); font-weight: 700; box-shadow: var(--shadow-md);">
+                        <i data-lucide="plus" style="margin-right: 6px;"></i> ADICIONAR À LISTA
                     </button>
                 </div>
 
@@ -293,7 +285,7 @@ renderAppHeader('Escalas');
                 <div id="hidden-inputs"></div>
 
                 <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
-                    <button type="button" onclick="goToStep(1)" class="btn btn-outline" style="border-color: var(--border-subtle); color: var(--text-primary);">
+                    <button type="button" onclick="goToStep(1)" class="btn btn-outline" style="border-color: #F59E0B; background-color: #FEF3C7; color: #D97706; font-weight: 600;">
                         &larr; Voltar
                     </button>
                     <button type="submit" class="btn-primary" style="background: var(--status-success);">
@@ -303,7 +295,7 @@ renderAppHeader('Escalas');
             </div>
 
             <div style="text-align: center; margin-top: 16px;">
-                <button type="button" class="btn-ghost" onclick="closeSheet('sheetNewScale')" style="color: var(--status-error); text-decoration: underline;">Cancelar Criação</button>
+                <button type="button" class="btn-ghost" onclick="closeSheet('sheetNewScale')" style="background: #EF4444; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 0.85rem; width: 100%;">Cancelar Criação</button>
             </div>
         </form>
     </div>
@@ -322,8 +314,8 @@ renderAppHeader('Escalas');
                 <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
                     <i data-lucide="check" style="width: 32px; height: 32px; color: white;"></i>
                 </div>
-                <h2 style="font-size: 1.6rem; font-weight: 800; margin: 0;">Sucesso!</h2>
-                <p style="opacity: 0.9; margin-top: 5px; font-size: 0.95rem;">Escala cadastrada.</p>
+                <h2 style="font-size: 1.6rem; font-weight: 800; margin: 0;">Escala Criada!</h2>
+                <p style="opacity: 0.9; margin-top: 5px; font-size: 0.95rem;">O evento foi agendado com sucesso.</p>
             </div>
 
             <!-- Body Details -->
@@ -333,11 +325,16 @@ renderAppHeader('Escalas');
                     <p style="color: var(--text-secondary); font-size: 0.95rem; font-weight: 500;"><?= $info['date'] ?></p>
                 </div>
 
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;">
+                    Sua equipe já está visível no painel e os membros podem visualizar suas escalas pelo aplicativo. <br>
+                    <b>Bom trabalho!</b>
+                </p>
+
                 <!-- Team Summary -->
                 <?php if (!empty($info['team'])): ?>
                     <div style="background: var(--bg-tertiary); border-radius: 12px; padding: 15px; text-align: left; margin-bottom: 20px; max-height: 150px; overflow-y: auto;">
                         <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: 700;">
-                            Equipe Escalada (<?= count($info['team']) ?>)
+                            Integrantes (<?= count($info['team']) ?>)
                         </div>
                         <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                             <?php foreach ($info['team'] as $name): ?>
@@ -349,7 +346,7 @@ renderAppHeader('Escalas');
                     </div>
                 <?php endif; ?>
 
-                <button onclick="closeSuccessModal()" class="btn-primary w-full" style="height: 50px; font-size: 1rem;">OK, Fechar</button>
+                <button onclick="closeSuccessModal()" class="btn-primary w-full" style="height: 50px; font-size: 1rem;">Perfeito, Fechar</button>
             </div>
         </div>
     </div>
@@ -393,11 +390,20 @@ renderAppHeader('Escalas');
             if (opt.value === "") continue;
 
             const optRole = (opt.getAttribute('data-role') || '').toLowerCase().trim();
+            const optName = (opt.getAttribute('data-name') || '').toLowerCase(); // Placeholder if we need name filtering
 
-            if (!role || role === 'outros') {
+            // Special Logic for Gender if needed (Currently filtering by raw voice cat)
+            // If DB doesn't have gender, we just show all voices. 
+            // If user has specific gender logic, add here.
+
+            if (!role) {
                 opt.style.display = 'block';
             } else {
-                if (optRole.includes(role)) {
+                // Mapping display roles to data-roles
+                let searchRole = role;
+                if (role.includes('voz')) searchRole = 'voz';
+
+                if (optRole.includes(searchRole)) {
                     opt.style.display = 'block';
                 } else {
                     opt.style.display = 'none';
