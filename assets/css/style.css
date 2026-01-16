@@ -205,11 +205,12 @@ ul {
 
 /* Main Content */
 .app-content {
-    margin-top: var(--header-height);
+    margin-top: 0;
+    /* Header removido */
     margin-bottom: var(--bottom-nav-height);
-    padding: 20px 16px;
-    /* Margens laterais ajustadas para mobile */
-    min-height: calc(100vh - var(--header-height) - var(--bottom-nav-height));
+    padding: 24px 16px;
+    /* Padding superior aumentado para respiro */
+    min-height: calc(100vh - var(--bottom-nav-height));
 }
 
 /* Bottom Nav */

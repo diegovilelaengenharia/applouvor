@@ -24,46 +24,7 @@ function renderAppHeader($title = 'Louvor PIB')
     </head>
 
     <body>
-        <!-- Top Bar (Desktop & Mobile) -->
-        <header class="app-header">
-            <div class="header-brand">
-                <?php
-                $currentScript = basename($_SERVER['PHP_SELF']);
-                if ($currentScript !== 'index.php'):
-                ?>
-                    <a href="index.php" class="btn-icon" style="margin-right: 8px;">
-                        <i data-lucide="arrow-left"></i>
-                    </a>
-                <?php endif; ?>
-
-                <img src="../assets/images/logo-black.png" alt="Logo" style="height: 32px; width: auto; display: none;"> <!-- Oculto se não tiver logo -->
-                <span class="page-title"><?= htmlspecialchars($title) ?></span>
-            </div>
-
-            <div class="header-actions">
-                <button id="theme-toggle" class="btn-icon" title="Alternar Tema">
-                    <i data-lucide="moon"></i>
-                </button>
-
-                <div class="user-dropdown">
-                    <div class="user-avatar-sm">
-                        <?php if ($avatar): ?>
-                            <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" alt="Avatar">
-                        <?php else: ?>
-                            <div class="avatar-placeholder"><?= $userInitials ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-header">
-                            <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>
-                            <span><?= htmlspecialchars($_SESSION['user_email'] ?? '') ?></span>
-                        </div>
-                        <a href="perfil.php" class="dropdown-item"><i data-lucide="settings"></i> Configurações</a>
-                        <a href="../includes/auth.php?logout=true" class="dropdown-item text-danger"><i data-lucide="log-out"></i> Sair</a>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <!-- Top Bar REMOVIDA -->
 
         <!-- Main Content Wrapper -->
         <main class="app-content">
@@ -72,6 +33,8 @@ function renderAppHeader($title = 'Louvor PIB')
 
     function renderAppFooter()
     {
+        $avatar = $_SESSION['user_avatar'] ?? null;
+        $userInitials = substr($_SESSION['user_name'] ?? 'U', 0, 1);
         ?>
         </main>
 
