@@ -64,33 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 2. Alteração de Senha (Somente Admin)
-    if (isset($_POST['change_password']) && $_SESSION['user_role'] === 'admin') {
-        $current_pass = $_POST['current_password'];
-        $new_pass = $_POST['new_password'];
-        $confirm_pass = $_POST['confirm_password'];
-
-        if ($new_pass !== $confirm_pass) {
-            $error = "As novas senhas não coincidem.";
-        } else {
-            // Verificar senha atual
-            $stmt = $pdo->prepare("SELECT password FROM users WHERE id = ?");
-            $stmt->execute([$user_id]);
-            $stored_pass = $stmt->fetchColumn();
-
-            if (password_verify($current_pass, $stored_pass)) {
-                $new_hash = password_hash($new_pass, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
-                if ($stmt->execute([$new_hash, $user_id])) {
-                    $success = "Senha alterada com segurança!";
-                } else {
-                    $error = "Erro ao alterar senha.";
-                }
-            } else {
-                $error = "Senha atual incorreta.";
-            }
-        }
-    }
+    // 2. Alteração de Senha REMOVIDA
 }
 
 // Buscar Dados Atuais
@@ -142,15 +116,12 @@ renderAppHeader('Meu Perfil');
         </div>
     <?php endif; ?>
 
-    <!-- Tabs (Alternativa Clean) -->
-    <div style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;">
-        <button onclick="showTab('info')" id="btn-info" class="btn-outline active" style="flex: 1; justify-content: center; background: var(--bg-secondary);">Dados Pessoais</button>
-        <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <button onclick="showTab('security')" id="btn-security" class="btn-outline" style="flex: 1; justify-content: center;">Segurança</button>
-        <?php endif; ?>
+    <!-- Abas / Título da Seção -->
+    <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 1.1rem; color: var(--text-primary); border-left: 4px solid var(--accent-interactive); padding-left: 12px;">Dados Pessoais</h3>
     </div>
 
-    <!-- Tab Info -->
+    <!-- Form Dados Pessoais -->
     <div id="tab-info">
         <form method="POST" class="card-clean">
             <input type="hidden" name="update_profile" value="1">
@@ -197,54 +168,10 @@ renderAppHeader('Meu Perfil');
         </form>
     </div>
 
-    <!-- Tab Security -->
-    <div id="tab-security" style="display: none;">
-        <form method="POST" class="card-clean">
-            <input type="hidden" name="change_password" value="1">
-
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                <div style="padding: 12px; background: var(--bg-tertiary); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">
-                    <i data-lucide="shield-check" style="width: 16px; height: 16px; vertical-align: text-bottom;"></i> Recomenda-se usar uma senha forte.
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">Senha Atual</label>
-                    <input type="password" name="current_password" required
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-primary); color: var(--text-primary); outline: none;">
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">Nova Senha</label>
-                    <input type="password" name="new_password" required minlength="6"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-primary); color: var(--text-primary); outline: none;">
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">Confirmar Nova Senha</label>
-                    <input type="password" name="confirm_password" required minlength="6"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-primary); color: var(--text-primary); outline: none;">
-                </div>
-
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; background: var(--status-warning);">
-                    Alterar Senha
-                </button>
-            </div>
-        </form>
-    </div>
-
 </div>
 
 <script>
-    function showTab(tabName) {
-        document.getElementById('tab-info').style.display = 'none';
-        document.getElementById('tab-security').style.display = 'none';
-
-        document.getElementById('btn-info').style.background = 'transparent';
-        document.getElementById('btn-security').style.background = 'transparent';
-
-        document.getElementById('tab-' + tabName).style.display = 'block';
-        document.getElementById('btn-' + tabName).style.background = 'var(--bg-secondary)';
-    }
+    // Script de Tabs removido pois agora só existe uma seção
 </script>
 
 <?php
