@@ -131,31 +131,52 @@ renderAppHeader('Escalas');
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
         <div class="sheet-header">Nova Escala</div>
 
+        <!-- TABS MOCK -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+            <button onclick="toggleNewScaleTab('evento')" id="ns-btn-evento" class="tab-btn active" style="flex:1; padding-bottom:10px; border:none; border-bottom:2px solid var(--accent-interactive); background:transparent; font-weight:600; color:var(--text-primary);">Evento</button>
+            <button onclick="toggleNewScaleTab('equipe')" id="ns-btn-equipe" class="tab-btn" style="flex:1; padding-bottom:10px; border:none; border-bottom:2px solid transparent; background:transparent; font-weight:600; color:var(--text-secondary);">Equipe</button>
+        </div>
+
         <form method="POST">
             <input type="hidden" name="action" value="create_scale">
 
-            <div class="form-group">
-                <label class="form-label">Data do Evento</label>
-                <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
+            <!-- TAB EVENTO -->
+            <div id="ns-tab-evento">
+                <div class="form-group">
+                    <label class="form-label">Data do Evento</label>
+                    <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tipo de Culto</label>
+                    <select name="type" class="form-select">
+                        <option value="Culto de Domingo">Culto de Domingo</option>
+                        <option value="Ensaio">Ensaio</option>
+                        <option value="Evento Jovens">Evento Jovens</option>
+                        <option value="Evento Especial">Evento Especial</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descrição (Opcional)</label>
+                    <input type="text" name="description" class="form-input" placeholder="Ex: Ceia, Visitante Especial...">
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <button type="submit" class="btn-primary w-full">Criar e Montar Equipe</button>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Tipo de Culto</label>
-                <select name="type" class="form-select">
-                    <option value="Culto de Domingo">Culto de Domingo</option>
-                    <option value="Ensaio">Ensaio</option>
-                    <option value="Evento Jovens">Evento Jovens</option>
-                    <option value="Evento Especial">Evento Especial</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Descrição (Opcional)</label>
-                <input type="text" name="description" class="form-input" placeholder="Ex: Ceia, Visitante Especial...">
-            </div>
-
-            <div style="margin-top: 24px;">
-                <button type="submit" class="btn-primary w-full">Criar Escala</button>
+            <!-- TAB EQUIPE (Placeholder) -->
+            <div id="ns-tab-equipe" style="display: none; text-align: center; padding: 20px 0;">
+                <div style="background: var(--bg-tertiary); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                    <i data-lucide="users" style="width: 24px; height: 24px; color: var(--text-secondary);"></i>
+                </div>
+                <h3 style="font-size: 1rem; margin-bottom: 8px;">Primeiro, crie o evento</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    Você poderá adicionar músicos e montar a equipe assim que salvar as informações do evento.
+                </p>
+                <button type="button" onclick="toggleNewScaleTab('evento')" class="btn btn-outline">Voltar para Evento</button>
             </div>
 
             <div style="text-align: center; margin-top: 16px;">
@@ -166,6 +187,25 @@ renderAppHeader('Escalas');
 </div>
 
 <script>
+    function toggleNewScaleTab(tab) {
+        // Hide all
+        document.getElementById('ns-tab-evento').style.display = 'none';
+        document.getElementById('ns-tab-equipe').style.display = 'none';
+
+        // Reset buttons
+        document.getElementById('ns-btn-evento').style.color = 'var(--text-secondary)';
+        document.getElementById('ns-btn-evento').style.borderBottomColor = 'transparent';
+
+        document.getElementById('ns-btn-equipe').style.color = 'var(--text-secondary)';
+        document.getElementById('ns-btn-equipe').style.borderBottomColor = 'transparent';
+
+        // Show selected
+        document.getElementById('ns-tab-' + tab).style.display = 'block';
+        const btn = document.getElementById('ns-btn-' + tab);
+        btn.style.color = 'var(--text-primary)';
+        btn.style.borderBottomColor = 'var(--accent-interactive)';
+    }
+
     // Bottom Sheets Logic (Reused)
     function openSheet(id) {
         document.querySelectorAll('.bottom-sheet-overlay').forEach(el => el.classList.remove('active'));
