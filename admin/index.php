@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
 // Inicia o Shell
-renderAppHeader('Visão Geral');
+renderAppHeader('Início');
 ?>
 <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
 
