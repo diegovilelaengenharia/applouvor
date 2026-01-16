@@ -89,11 +89,11 @@ renderAppHeader('Gerenciar Escala');
 
 <div class="container" style="padding-top: 20px; padding-bottom: 80px;">
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-        <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); width: 40px; height: 40px; border-radius: 12px; transition: all 0.2s;">
-            <i data-lucide="arrow-left" style="width: 20px;"></i>
+        <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none; padding: 0 12px; height: 40px; border-radius: 12px; display: flex; align-items: center; gap: 6px; width: auto;">
+            <i data-lucide="arrow-left" style="width: 18px;"></i> <span style="font-weight: 600; font-size: 0.9rem;">Voltar</span>
         </a>
-        <h1 class="page-title" style="margin: 0; font-size: 1.2rem; font-weight: 700;">
-            <?= date('d/m', strtotime($scale['event_date'])) ?> - <?= htmlspecialchars($scale['event_type']) ?>
+        <h1 class="page-title" style="margin: 0; font-size: 1.1rem; font-weight: 700;">
+            <?= date('d/m', strtotime($scale['event_date'])) ?>
         </h1>
     </div>
 
@@ -205,32 +205,32 @@ renderAppHeader('Gerenciar Escala');
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 10px;">
                                     <?php foreach ($groupMembers as $member): ?>
-                                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-sm);">
+                                        <div class="list-item" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: var(--bg-primary); border-bottom: 1px solid var(--border-subtle);">
 
                                             <!-- User -->
-                                            <div style="display: flex; align-items: center; gap: 12px;">
-                                                <div class="user-avatar" style="width: 40px; height: 40px; font-size: 0.9rem; background: var(--gradient-primary); color: white; border: none; font-weight: 600;">
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; background: var(--gradient-primary); color: white; border: none; font-weight: 600; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                                     <?= strtoupper(substr($member['name'], 0, 1)) ?>
                                                 </div>
                                                 <div>
-                                                    <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><?= htmlspecialchars($member['instrument']) ?></div>
+                                                    <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                                    <div style="font-size: 0.75rem; opacity: 0.7; color: var(--text-secondary);"><?= htmlspecialchars($member['instrument']) ?></div>
                                                 </div>
                                             </div>
 
                                             <!-- Actions -->
-                                            <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
                                                 <?php if ($member['confirmed'] == 1): ?>
-                                                    <div title="Confirmado" style="background: #ECFDF5; padding: 6px; border-radius: 8px;">
+                                                    <div title="Confirmado">
                                                         <i data-lucide="check" style="width: 16px; color: #059669;"></i>
                                                     </div>
                                                 <?php else: ?>
-                                                    <div title="Pendente" style="background: #FFFBEB; padding: 6px; border-radius: 8px;">
+                                                    <div title="Pendente">
                                                         <i data-lucide="clock" style="width: 16px; color: #D97706;"></i>
                                                     </div>
                                                 <?php endif; ?>
 
-                                                <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover integrante?')" style="color: var(--status-error); padding: 6px; opacity: 0.8; transition: opacity 0.2s;">
+                                                <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover integrante?')" style="color: var(--status-error); padding: 4px; opacity: 0.8;">
                                                     <i data-lucide="trash-2" style="width: 18px;"></i>
                                                 </a>
                                             </div>
@@ -252,48 +252,48 @@ renderAppHeader('Gerenciar Escala');
                 <form method="POST">
                     <input type="hidden" name="add_member" value="1">
 
-                    <div style="margin-bottom: 12px;">
-                        <select name="instrument" id="roleSelect" class="form-select modern-input" onchange="filterUsersByRole()" required>
-                            <option value="">1º Selecione a Função...</option>
-                            <option value="Voz">Voz / Backing</option>
-                            <option value="Violão">Violão</option>
-                            <option value="Teclado">Teclado</option>
-                            <option value="Bateria">Bateria</option>
-                            <option value="Baixo">Baixo</option>
-                            <option value="Guitarra">Guitarra</option>
-                            <option value="Mídia">Mídia / Datashow</option>
-                            <option value="Som">Técnico de Som</option>
-                            <option value="Outros">Outros</option>
-                        </select>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <div style="flex: 1;">
+                            <select name="instrument" id="roleSelect" class="form-select modern-input" onchange="filterUsersByRole()" required style="padding: 12px;">
+                                <option value="">Função...</option>
+                                <option value="Voz">Voz</option>
+                                <option value="Violão">Violão</option>
+                                <option value="Teclado">Teclado</option>
+                                <option value="Bateria">Bateria</option>
+                                <option value="Baixo">Baixo</option>
+                                <option value="Guitarra">Guitarra</option>
+                                <option value="Mídia">Mídia</option>
+                                <option value="Som">Som</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+
+                        <div style="flex: 1.5;">
+                            <select name="user_id" id="userSelect" class="form-select modern-input" required disabled style="opacity: 0.7; padding: 12px;">
+                                <option value="">Selecione...</option>
+                                <?php foreach ($users as $u): ?>
+                                    <?php
+                                    $rawCat = mb_strtolower($u['category'], 'UTF-8');
+                                    $normalizedCat = $rawCat;
+                                    if (strpos($rawCat, 'voz') !== false) $normalizedCat = 'voz';
+                                    if (strpos($rawCat, 'violao') !== false) $normalizedCat = 'violão';
+                                    if (strpos($rawCat, 'teclado') !== false) $normalizedCat = 'teclado';
+                                    if (strpos($rawCat, 'bateria') !== false) $normalizedCat = 'bateria';
+                                    if (strpos($rawCat, 'baixo') !== false) $normalizedCat = 'baixo';
+                                    if (strpos($rawCat, 'guitarra') !== false) $normalizedCat = 'guitarra';
+                                    if (strpos($rawCat, 'midia') !== false) $normalizedCat = 'mídia';
+                                    if (strpos($rawCat, 'som') !== false) $normalizedCat = 'som';
+                                    ?>
+                                    <option value="<?= $u['id'] ?>" data-role="<?= $normalizedCat ?>" style="display:none;">
+                                        <?= htmlspecialchars($u['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <select name="user_id" id="userSelect" class="form-select modern-input" required disabled style="opacity: 0.7;">
-                            <option value="">Aguardando função...</option>
-                            <?php foreach ($users as $u): ?>
-                                <?php
-                                // Normalize category for data-role
-                                $rawCat = mb_strtolower($u['category'], 'UTF-8');
-                                $normalizedCat = $rawCat;
-                                // Map specific DB values to filter keys
-                                if (strpos($rawCat, 'voz') !== false) $normalizedCat = 'voz';
-                                if (strpos($rawCat, 'violao') !== false) $normalizedCat = 'violão';
-                                if (strpos($rawCat, 'teclado') !== false) $normalizedCat = 'teclado';
-                                if (strpos($rawCat, 'bateria') !== false) $normalizedCat = 'bateria';
-                                if (strpos($rawCat, 'baixo') !== false) $normalizedCat = 'baixo';
-                                if (strpos($rawCat, 'guitarra') !== false) $normalizedCat = 'guitarra';
-                                if (strpos($rawCat, 'midia') !== false) $normalizedCat = 'mídia';
-                                if (strpos($rawCat, 'som') !== false) $normalizedCat = 'som';
-                                ?>
-                                <option value="<?= $u['id'] ?>" data-role="<?= $normalizedCat ?>" style="display:none;">
-                                    <?= htmlspecialchars($u['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <button type="submit" id="btnAddMember" disabled class="btn btn-primary w-full modern-btn" style="opacity: 0.5;">
-                        Inserir na Escala <i data-lucide="arrow-right" style="width: 16px; margin-left: 6px;"></i>
+                    <button type="submit" id="btnAddMember" disabled class="btn btn-primary w-full modern-btn" style="opacity: 0.5; height: 40px; font-size: 0.9rem;">
+                        <i data-lucide="plus"></i> Adicionar à Escala
                     </button>
                 </form>
             </div>

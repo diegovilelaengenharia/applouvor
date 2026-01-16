@@ -49,13 +49,13 @@ function renderAppHeader($title = 'Louvor PIB')
                 <i data-lucide="layout-grid"></i>
                 <span>Gestão</span>
             </button>
-            <button class="nav-cat-item" onclick="openSheet('sheet-espiritualidade')">
-                <i data-lucide="heart-handshake"></i>
-                <span>Espirito</span>
+            <button class="nav-cat-item" onclick="alert('🚧 Módulo em Manutenção')">
+                <i data-lucide="heart-handshake" style="opacity: 0.5;"></i>
+                <span style="opacity: 0.5;">Espirito</span>
             </button>
-            <button class="nav-cat-item" onclick="openSheet('sheet-comunicacao')">
-                <i data-lucide="message-circle"></i>
-                <span>Comunica</span>
+            <button class="nav-cat-item" onclick="alert('🚧 Módulo em Manutenção')">
+                <i data-lucide="message-circle" style="opacity: 0.5;"></i>
+                <span style="opacity: 0.5;">Comunica</span>
             </button>
 
             <button class="nav-cat-item" onclick="openSheet('sheet-perfil')">
@@ -116,14 +116,14 @@ function renderAppHeader($title = 'Louvor PIB')
                     <a href="escala.php" class="sheet-item">
                         <div class="emoji-icon">📅</div><span>Escalas</span>
                     </a>
-                    <a href="repertorio.php" class="sheet-item">
-                        <div class="emoji-icon">🎼</div><span>Repertório</span>
+                    <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
+                        <div class="emoji-icon" style="filter: grayscale(1);">🎼</div><span style="color: var(--text-secondary);">Repertório</span>
                     </a>
-                    <a href="membros.php" class="sheet-item">
-                        <div class="emoji-icon">👥</div><span>Membros</span>
+                    <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
+                        <div class="emoji-icon" style="filter: grayscale(1);">👥</div><span style="color: var(--text-secondary);">Membros</span>
                     </a>
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">⛪</div><span>Agenda</span>
+                    <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
+                        <div class="emoji-icon" style="filter: grayscale(1);">⛪</div><span style="color: var(--text-secondary);">Agenda</span>
                     </a>
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
                         <a href="#" class="sheet-item">
