@@ -8,10 +8,10 @@ renderAppHeader('Início');
 ?>
 <div class="container" style="padding-top: 20px;">
 
-    <!-- Welcome Section Compact -->
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Olá, <?= htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]) ?> 👋</h1>
-        <p style="font-size: 0.95rem; color: var(--text-secondary);">O que você deseja fazer?</p>
+    <!-- Header Title -->
+    <div style="margin-bottom: 30px; text-align: center;">
+        <h1 style="font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--accent-interactive);">App Louvor</h1>
+        <p style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">PIB Oliveira</p>
     </div>
 
     <!-- Conteúdo Central Simplificado -->
