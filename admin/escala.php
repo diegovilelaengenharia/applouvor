@@ -3,18 +3,53 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
+// Buscar Usuários para o Wizard
+$usersList = $pdo->query("SELECT * FROM users ORDER BY name")->fetchAll();
+
 // Processar Nova Escala
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_scale') {
     $date = $_POST['date'];
     $type = $_POST['type'];
     $description = $_POST['description'];
+    $selected_members = $_POST['members'] ?? [];
+    $notify_members = isset($_POST['notify_members']);
 
     if ($date && $type) {
+        // 1. Criar Escala
         $stmt = $pdo->prepare("INSERT INTO scales (event_date, event_type, description) VALUES (?, ?, ?)");
         $stmt->execute([$date, $type, $description]);
-        // Redireciona para gerenciar a escala recém criada
         $newId = $pdo->lastInsertId();
-        header("Location: gestao_escala.php?id=$newId");
+
+        // 2. Adicionar Membros Selecionados
+        if (!empty($selected_members)) {
+            $stmtMember = $pdo->prepare("INSERT INTO scale_members (scale_id, user_id, instrument, confirmed) VALUES (?, ?, ?, 0)");
+            foreach ($selected_members as $uid) {
+                // Definir instrumento padrão (fallback simples)
+                $userCat = 'Voz';
+                foreach ($usersList as $u) {
+                    if ($u['id'] == $uid) {
+                        $cat = $u['category'];
+                        if ($cat == 'violao') $userCat = 'Violão';
+                        if ($cat == 'teclado') $userCat = 'Teclado';
+                        if ($cat == 'bateria') $userCat = 'Bateria';
+                        if ($cat == 'baixo') $userCat = 'Baixo';
+                        break;
+                    }
+                }
+                $stmtMember->execute([$newId, $uid, $userCat]);
+            }
+        }
+
+        // Definir dados para o Popup de Sucesso na Sessão
+        $_SESSION['scale_created'] = [
+            'type' => $type,
+            'date' => date('d/m/Y', strtotime($date)),
+            'members_count' => count($selected_members),
+            'notify' => $notify_members ? 1 : 0,
+            'scale_id' => $newId
+        ];
+
+        header("Location: escala.php");
         exit;
     }
 }
@@ -60,7 +95,7 @@ renderAppHeader('Escalas');
 
     <!-- Toolbar de Ações -->
     <div style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
-        <button onclick="openSheet('sheetNewScale')" class="btn btn-primary" style="box-shadow: var(--shadow-md);">
+        <button onclick="openWizard()" class="btn btn-primary" style="box-shadow: var(--shadow-md);">
             <i data-lucide="plus" style="width: 18px;"></i> Nova Escala
         </button>
     </div>
@@ -126,22 +161,24 @@ renderAppHeader('Escalas');
 
 </div>
 
-<!-- Bottom Sheet Nova Escala -->
+<!-- Bottom Sheet Nova Escala (WIZARD) -->
 <div id="sheetNewScale" class="bottom-sheet-overlay" onclick="closeSheet(this)">
-    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="max-height: 90vh; display: flex; flex-direction: column;">
         <div class="sheet-header">Nova Escala</div>
 
-        <!-- TABS MOCK -->
-        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
-            <button onclick="toggleNewScaleTab('evento')" id="ns-btn-evento" class="tab-btn active" style="flex:1; padding-bottom:10px; border:none; border-bottom:2px solid var(--accent-interactive); background:transparent; font-weight:600; color:var(--text-primary);">Evento</button>
-            <button onclick="toggleNewScaleTab('equipe')" id="ns-btn-equipe" class="tab-btn" style="flex:1; padding-bottom:10px; border:none; border-bottom:2px solid transparent; background:transparent; font-weight:600; color:var(--text-secondary);">Equipe</button>
+        <!-- Progress Steps -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div id="step-indicator-1" style="flex: 1; height: 4px; background: var(--accent-interactive); border-radius: 2px;"></div>
+            <div id="step-indicator-2" style="flex: 1; height: 4px; background: var(--border-subtle); border-radius: 2px;"></div>
         </div>
 
-        <form method="POST">
+        <form method="POST" id="formNewScale" style="overflow-y: auto;">
             <input type="hidden" name="action" value="create_scale">
 
-            <!-- TAB EVENTO -->
-            <div id="ns-tab-evento">
+            <!-- STEP 1: EVENTO -->
+            <div id="step-1">
+                <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Passo 1: Detalhes do Evento</h3>
+
                 <div class="form-group">
                     <label class="form-label">Data do Evento</label>
                     <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
@@ -163,20 +200,47 @@ renderAppHeader('Escalas');
                 </div>
 
                 <div style="margin-top: 24px;">
-                    <button type="submit" class="btn-primary w-full">Criar e Montar Equipe</button>
+                    <button type="button" onclick="goToStep(2)" class="btn-primary w-full">Escalar Equipe &rarr;</button>
                 </div>
             </div>
 
-            <!-- TAB EQUIPE (Placeholder) -->
-            <div id="ns-tab-equipe" style="display: none; text-align: center; padding: 20px 0;">
-                <div style="background: var(--bg-tertiary); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
-                    <i data-lucide="users" style="width: 24px; height: 24px; color: var(--text-secondary);"></i>
+            <!-- STEP 2: EQUIPE -->
+            <div id="step-2" style="display: none;">
+                <h3 style="margin-bottom: 5px; font-size: 1.1rem;">Passo 2: Selecionar Equipe</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Selecione quem participará deste evento.</p>
+
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+                    <?php foreach ($usersList as $u): ?>
+                        <label style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 10px; cursor: pointer;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                    <?= strtoupper(substr($u['name'], 0, 1)) ?>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.9rem;"><?= htmlspecialchars($u['name']) ?></div>
+                                    <div style="font-size: 0.75rem; opacity: 0.7;"><?= ucfirst(str_replace('_', ' ', $u['category'])) ?></div>
+                                </div>
+                            </div>
+                            <input type="checkbox" name="members[]" value="<?= $u['id'] ?>" style="width: 18px; height: 18px; accent-color: var(--accent-interactive);">
+                        </label>
+                    <?php endforeach; ?>
                 </div>
-                <h3 style="font-size: 1rem; margin-bottom: 8px;">Primeiro, crie o evento</h3>
-                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px;">
-                    Você poderá adicionar músicos e montar a equipe assim que salvar as informações do evento.
-                </p>
-                <button type="button" onclick="toggleNewScaleTab('evento')" class="btn btn-outline">Voltar para Evento</button>
+
+                <!-- REQUEST CONFIRMATION CHECKBOX -->
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2);">
+                    <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="notify_members" value="1" style="width: 20px; height: 20px; accent-color: var(--accent-interactive);">
+                        <div>
+                            <span style="display: block; font-weight: 600; color: var(--text-primary);">Solicitar confirmação?</span>
+                            <span style="display: block; font-size: 0.8rem; color: var(--text-secondary);">Enviaremos um link para confirmação.</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <button type="submit" class="btn-primary w-full" style="background: var(--status-success);">Concluir Criação</button>
+                    <button type="button" onclick="goToStep(1)" class="btn-ghost w-full" style="margin-top: 10px;">&larr; Voltar</button>
+                </div>
             </div>
 
             <div style="text-align: center; margin-top: 16px;">
@@ -186,24 +250,76 @@ renderAppHeader('Escalas');
     </div>
 </div>
 
+<!-- SUCCESS MODAL (Rendered if Session exists) -->
+<?php if (isset($_SESSION['scale_created'])):
+    $info = $_SESSION['scale_created'];
+    unset($_SESSION['scale_created']);
+
+    // Gerar link de WhatsApp se necessário (Exemplo Genérico)
+    $waText = "Olá equipe! Nova escala criada para " . $info['type'] . " dia " . $info['date'] . ". Confirme sua presença no App!";
+    $waLink = "https://wa.me/?text=" . urlencode($waText);
+?>
+    <div id="modalSuccess" class="bottom-sheet-overlay active" style="align-items: center; justify-content: center; z-index: 9999;">
+        <div class="card" style="width: 90%; max-width: 400px; text-align: center; animation: slideUp 0.3s ease;">
+            <div style="width: 60px; height: 60px; background: var(--status-success); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i data-lucide="check" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">Sucesso!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                Escala para <strong><?= $info['type'] ?></strong> (<?= $info['date'] ?>) criada com sucesso.
+            </p>
+
+            <?php if ($info['members_count'] > 0): ?>
+                <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
+                    <strong><?= $info['members_count'] ?></strong> membro(s) escalado(s).
+                </div>
+            <?php else: ?>
+                <div style="margin-bottom: 20px; font-size: 0.9rem; opacity: 0.8;">Nenhum membro escalado ainda.</div>
+            <?php endif; ?>
+
+            <?php if ($info['notify']): ?>
+                <a href="<?= $waLink ?>" target="_blank" class="btn btn-outline w-full" style="margin-bottom: 10px; border-color: #25D366; color: #25D366;">
+                    <i data-lucide="message-circle" style="width: 18px; margin-right: 8px;"></i> Enviar no WhatsApp
+                </a>
+            <?php endif; ?>
+
+            <button onclick="closeSuccessModal()" class="btn-primary w-full">OK, Entendi</button>
+        </div>
+    </div>
+    <script>
+        function closeSuccessModal() {
+            document.getElementById('modalSuccess').classList.remove('active');
+            // Opcional: Redirecionar para gerir escala
+            // window.location.href = 'gestao_escala.php?id=<?= $info['scale_id'] ?>';
+        }
+    </script>
+<?php endif; ?>
+
 <script>
-    function toggleNewScaleTab(tab) {
-        // Hide all
-        document.getElementById('ns-tab-evento').style.display = 'none';
-        document.getElementById('ns-tab-equipe').style.display = 'none';
+    function openWizard() {
+        // Reset to step 1
+        goToStep(1);
+        // Clear inputs? Optional.
+        openSheet('sheetNewScale');
+    }
 
-        // Reset buttons
-        document.getElementById('ns-btn-evento').style.color = 'var(--text-secondary)';
-        document.getElementById('ns-btn-evento').style.borderBottomColor = 'transparent';
+    function goToStep(step) {
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'none';
 
-        document.getElementById('ns-btn-equipe').style.color = 'var(--text-secondary)';
-        document.getElementById('ns-btn-equipe').style.borderBottomColor = 'transparent';
+        document.getElementById('step-' + step).style.display = 'block';
 
-        // Show selected
-        document.getElementById('ns-tab-' + tab).style.display = 'block';
-        const btn = document.getElementById('ns-btn-' + tab);
-        btn.style.color = 'var(--text-primary)';
-        btn.style.borderBottomColor = 'var(--accent-interactive)';
+        // Update indicators
+        const ind1 = document.getElementById('step-indicator-1');
+        const ind2 = document.getElementById('step-indicator-2');
+
+        if (step === 1) {
+            document.getElementById('step-indicator-1').style.background = 'var(--accent-interactive)';
+            document.getElementById('step-indicator-2').style.background = 'var(--border-subtle)';
+        } else {
+            document.getElementById('step-indicator-1').style.background = 'var(--accent-interactive)';
+            document.getElementById('step-indicator-2').style.background = 'var(--accent-interactive)';
+        }
     }
 
     // Bottom Sheets Logic (Reused)
