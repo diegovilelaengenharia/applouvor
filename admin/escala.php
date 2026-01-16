@@ -47,7 +47,7 @@ renderAppHeader('Escalas');
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
         <h2 style="font-size:1.2rem;">Próximos Cultos</h2>
-        <button onclick="openModal('modalNewScale')" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">+ Nova</button>
+        <button onclick="openSheet('sheetNewScale')" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">+ Nova</button>
     </div>
 
     <!-- Lista Próximas -->
@@ -111,74 +111,67 @@ renderAppHeader('Escalas');
 
 </div>
 
-<!-- Modal Nova Escala -->
-<div id="modalNewScale" class="modal-overlay">
-    <div class="modal-card">
-        <div class="modal-header">
-            <h3 class="modal-title">Nova Escala</h3>
-            <button class="modal-close" onclick="closeModal('modalNewScale')">
-                <i data-lucide="x"></i>
-            </button>
-        </div>
+<!-- Bottom Sheet Nova Escala -->
+<div id="sheetNewScale" class="bottom-sheet-overlay" onclick="closeSheet(this)">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+        <div class="sheet-header">Nova Escala</div>
 
         <form method="POST">
-            <div class="modal-body">
-                <input type="hidden" name="action" value="create_scale">
+            <input type="hidden" name="action" value="create_scale">
 
-                <div class="form-group">
-                    <label class="form-label">Data do Evento</label>
-                    <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Tipo de Culto</label>
-                    <select name="type" class="form-select">
-                        <option value="Culto de Domingo">Culto de Domingo</option>
-                        <option value="Ensaio">Ensaio</option>
-                        <option value="Evento Jovens">Evento Jovens</option>
-                        <option value="Evento Especial">Evento Especial</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Descrição (Opcional)</label>
-                    <input type="text" name="description" class="form-input" placeholder="Ex: Ceia, Visitante Especial...">
-                </div>
+            <div class="form-group">
+                <label class="form-label">Data do Evento</label>
+                <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-ghost" onclick="closeModal('modalNewScale')">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Criar Escala</button>
+            <div class="form-group">
+                <label class="form-label">Tipo de Culto</label>
+                <select name="type" class="form-select">
+                    <option value="Culto de Domingo">Culto de Domingo</option>
+                    <option value="Ensaio">Ensaio</option>
+                    <option value="Evento Jovens">Evento Jovens</option>
+                    <option value="Evento Especial">Evento Especial</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Descrição (Opcional)</label>
+                <input type="text" name="description" class="form-input" placeholder="Ex: Ceia, Visitante Especial...">
+            </div>
+
+            <div style="margin-top: 24px;">
+                <button type="submit" class="btn-primary w-full">Criar Escala</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 16px;">
+                <button type="button" class="btn-ghost" onclick="closeSheet(document.getElementById('sheetNewScale'))">Cancelar</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('active');
-            // Re-render icons if needed
-            if (window.lucide) lucide.createIcons();
+    // Bottom Sheets Logic (Reused)
+    function openSheet(id) {
+        document.querySelectorAll('.bottom-sheet-overlay').forEach(el => el.classList.remove('active'));
+        const sheet = document.getElementById(id);
+        if (sheet) {
+            sheet.classList.add('active');
+            if (navigator.vibrate) navigator.vibrate(50);
         }
     }
 
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('active');
+    function closeSheet(element) {
+        // Se passar ID string
+        if (typeof element === 'string') {
+            document.getElementById(element).classList.remove('active');
+            return;
+        }
+        // Se passar o proprio elemento overlay
+        if (element.classList.contains('bottom-sheet-overlay')) {
+            element.classList.remove('active');
         }
     }
-
-    // Close on click outside
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                overlay.classList.remove('active');
-            }
-        });
-    });
 </script>
 
 <?php

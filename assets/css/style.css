@@ -445,6 +445,39 @@ ul {
     color: #854D0E;
 }
 
+/* === FORMS (NEW) === */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: var(--accent-interactive);
+    background: var(--bg-secondary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
 /* Buttons */
 .btn-primary {
     background: var(--accent-blue);
@@ -483,6 +516,20 @@ ul {
 
 .btn-outline:active {
     background: var(--bg-tertiary);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 8px 16px;
+}
+
+.w-full {
+    width: 100%;
+    justify-content: center;
 }
 
 /* Dashboard Grid Mobile Optimized */
