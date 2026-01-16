@@ -58,7 +58,7 @@ function renderAppHeader($title = 'Louvor PIB')
                             <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>
                             <span><?= htmlspecialchars($_SESSION['user_email'] ?? '') ?></span>
                         </div>
-                        <a href="#" class="dropdown-item"><i data-lucide="settings"></i> Configurações</a>
+                        <a href="perfil.php" class="dropdown-item"><i data-lucide="settings"></i> Configurações</a>
                         <a href="../includes/auth.php?logout=true" class="dropdown-item text-danger"><i data-lucide="log-out"></i> Sair</a>
                     </div>
                 </div>
