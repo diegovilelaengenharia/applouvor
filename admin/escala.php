@@ -94,23 +94,54 @@ renderAppHeader('Escalas');
     </div>
 
     <!-- Toolbar de Ações -->
-    <div style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
+    <div style="display:flex; justify-content:flex-end; gap: 10px; margin-bottom: 20px;">
+        <button onclick="openSheet('sheetReport')" class="btn" style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);">
+            <i data-lucide="printer" style="width: 18px;"></i> Relatório
+        </button>
         <button onclick="openWizard()" class="btn btn-primary" style="box-shadow: var(--shadow-md);">
             <i data-lucide="plus" style="width: 18px;"></i> Nova Escala
         </button>
     </div>
 
-    <!-- Lista Próximas -->
+    <!-- Lista Próximas (Grouped by Month) -->
     <div class="list-group">
         <?php if (empty($upcoming)): ?>
             <div style="text-align: center; padding: 40px; color: var(--text-secondary); background: var(--bg-secondary); border-radius: 12px;">
                 <i data-lucide="calendar-off" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 10px;"></i>
-                <p>Nenhuma escala agendada.</p>
+                <p>Nenhuma escala futura agendada.</p>
             </div>
         <?php else: ?>
-            <?php foreach ($upcoming as $scale):
+            <?php
+            $currentMonth = '';
+            foreach ($upcoming as $scale):
                 $dateObj = new DateTime($scale['event_date']);
                 $isToday = $scale['event_date'] === $today;
+
+                // Month Group Header
+                $monthLabel = ucfirst(strftime('%B %Y', $dateObj->getTimestamp())); // Requires setlocale, using format for safety
+                // Fallback since strftime is deprecated in PHP 8.1+ but simple implementation for now:
+                $months = [
+                    '01' => 'Janeiro',
+                    '02' => 'Fevereiro',
+                    '03' => 'Março',
+                    '04' => 'Abril',
+                    '05' => 'Maio',
+                    '06' => 'Junho',
+                    '07' => 'Julho',
+                    '08' => 'Agosto',
+                    '09' => 'Setembro',
+                    '10' => 'Outubro',
+                    '11' => 'Novembro',
+                    '12' => 'Dezembro'
+                ];
+                $mNum = $dateObj->format('m');
+                $yNum = $dateObj->format('Y');
+                $monthLabel = $months[$mNum] . ' ' . $yNum;
+
+                if ($monthLabel !== $currentMonth) {
+                    $currentMonth = $monthLabel;
+                    echo "<div style='margin-top: 20px; margin-bottom: 10px; font-weight: 700; color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding-left: 5px;'>$currentMonth</div>";
+                }
             ?>
                 <div class="list-item" onclick="window.location.href='gestao_escala.php?id=<?= $scale['id'] ?>'" style="cursor: pointer;">
                     <div style="display:flex; align-items:center; gap: 15px; width:100%;">
@@ -138,26 +169,66 @@ renderAppHeader('Escalas');
         <?php endif; ?>
     </div>
 
-    <!-- Histórico (Collapsable ou Separado) -->
+    <!-- Histórico (Collapsable) -->
     <?php if (!empty($history)): ?>
-        <h3 style="font-size:1rem; color: var(--text-secondary); margin: 30px 0 15px; text-transform: uppercase; letter-spacing: 1px;">Histórico Recente</h3>
-        <div class="list-group" style="opacity: 0.8;">
-            <?php foreach (array_slice($history, 0, 5) as $scale):
-                $dateObj = new DateTime($scale['event_date']);
-            ?>
-                <div class="list-item" onclick="window.location.href='gestao_escala.php?id=<?= $scale['id'] ?>'" style="cursor: pointer; border-color: var(--bg-tertiary);">
-                    <div style="display:flex; align-items:center; gap: 15px; width:100%;">
-                        <div style="width: 60px; text-align: center; color: var(--text-secondary); font-weight: 600;">
-                            <?= $dateObj->format('d/m') ?>
-                        </div>
-                        <div style="flex:1;">
-                            <div style="font-size: 1rem; color: var(--text-secondary);"><?= htmlspecialchars($scale['event_type']) ?></div>
+        <div style="margin-top: 40px;">
+            <button onclick="toggleHistory()" style="background: none; border: none; font-size:1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 0;">
+                Histórico Recente <i data-lucide="chevron-down" id="hist-arrow" style="width: 16px; transition: transform 0.2s;"></i>
+            </button>
+
+            <div id="history-list" style="display: none; opacity: 0.8; margin-top: 15px;">
+                <?php foreach (array_slice($history, 0, 10) as $scale):
+                    $dateObj = new DateTime($scale['event_date']);
+                ?>
+                    <div class="list-item" onclick="window.location.href='gestao_escala.php?id=<?= $scale['id'] ?>'" style="cursor: pointer; border-color: var(--bg-tertiary); margin-bottom: 8px;">
+                        <div style="display:flex; align-items:center; gap: 15px; width:100%;">
+                            <div style="width: 60px; text-align: center; color: var(--text-secondary); font-weight: 600;">
+                                <?= $dateObj->format('d/m') ?>
+                            </div>
+                            <div style="flex:1;">
+                                <div style="font-size: 1rem; color: var(--text-secondary);"><?= htmlspecialchars($scale['event_type']) ?></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
+        <script>
+            function toggleHistory() {
+                const list = document.getElementById('history-list');
+                const arrow = document.getElementById('hist-arrow');
+                if (list.style.display === 'none') {
+                    list.style.display = 'block';
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    list.style.display = 'none';
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+        </script>
     <?php endif; ?>
+
+</div>
+
+<!-- Bottom Sheet Report -->
+<div id="sheetReport" class="bottom-sheet-overlay" onclick="closeSheet(this)">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+        <div class="sheet-header">Gerar Relatório</div>
+        <form action="relatorio_print.php" method="GET" target="_blank">
+            <div class="form-group">
+                <label class="form-label">Data Início</label>
+                <input type="date" name="start" class="form-input" value="<?= date('Y-m-01') ?>" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data Fim</label>
+                <input type="date" name="end" class="form-input" value="<?= date('Y-m-t') ?>" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-full" style="height: 50px;">
+                <i data-lucide="printer" style="width: 18px; margin-right: 8px;"></i> Gerar PDF / Imprimir
+            </button>
+        </form>
+    </div>
+</div>
 
 </div>
 
