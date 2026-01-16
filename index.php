@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* Estilos Exclusivos da Página de Login (Inline para garantir override) */
         body.login-page {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            /* Cloud / Silver Gradient */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -55,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             max-width: 360px;
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            /* Sombra mais suave para tema claro */
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
@@ -68,11 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1.2rem;
             color: #1a1a1a;
             margin-bottom: 30px;
-            /* Mais espaço pois removemos o subtítulo */
             font-weight: 700;
         }
-
-        /* Subtítulo removido */
 
         .form-label {
             display: block;
@@ -87,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: #F9FAFB;
             border: 1px solid #E5E7EB;
             border-radius: 12px;
-            /* Mais arredondado */
             padding: 12px 15px;
             width: 100%;
             font-size: 1rem;
@@ -114,6 +108,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1rem;
             transition: transform 0.2s, background 0.2s;
             box-shadow: 0 4px 6px rgba(212, 175, 55, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            /* Espaço entre texto e ícone */
         }
 
         .btn-gold:hover {
@@ -133,6 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 5px;
         }
     </style>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="login-page">
@@ -160,7 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" name="password" class="form-input-login" placeholder="••••" maxlength="4" required inputmode="numeric">
             </div>
 
-            <button type="submit" class="btn-gold">Entrar</button>
+            <button type="submit" class="btn-gold">
+                <span>Entrar</span>
+                <i data-lucide="log-in" style="width: 20px; height: 20px;"></i>
+            </button>
         </form>
 
         <div class="custom-footer">
@@ -169,6 +173,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>
