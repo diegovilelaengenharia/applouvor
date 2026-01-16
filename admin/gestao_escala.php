@@ -9,6 +9,7 @@ if (!isset($_GET['id'])) {
 }
 
 $scale_id = $_GET['id'];
+$is_editing = isset($_GET['edit']);
 
 // Buscar Dados da Escala
 $stmt = $pdo->prepare("SELECT * FROM scales WHERE id = ?");
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_event'])) {
 
     $stmt = $pdo->prepare("UPDATE scales SET event_date = ?, event_type = ?, description = ? WHERE id = ?");
     $stmt->execute([$date, $type, $description, $scale_id]);
-    header("Location: gestao_escala.php?id=$scale_id&tab=evento");
+    header("Location: gestao_escala.php?id=$scale_id&tab=evento&edit=1"); // Keep editing
     exit;
 }
 
@@ -55,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_member'])) {
         $stmt->execute([$scale_id, $user_id, $instrument]);
     }
 
-    header("Location: gestao_escala.php?id=$scale_id&tab=equipe");
+    header("Location: gestao_escala.php?id=$scale_id&tab=equipe&edit=1"); // Keep editing
     exit;
 }
 
@@ -64,7 +65,7 @@ if (isset($_GET['remove'])) {
     $member_id = $_GET['remove'];
     $stmt = $pdo->prepare("DELETE FROM scale_members WHERE id = ? AND scale_id = ?");
     $stmt->execute([$member_id, $scale_id]);
-    header("Location: gestao_escala.php?id=$scale_id&tab=equipe");
+    header("Location: gestao_escala.php?id=$scale_id&tab=equipe&edit=1"); // Keep editing
     exit;
 }
 
@@ -88,13 +89,23 @@ renderAppHeader('Gerenciar Escala');
 ?>
 
 <div class="container" style="padding-top: 20px; padding-bottom: 80px;">
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-        <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none; padding: 0 12px; height: 40px; border-radius: 12px; display: flex; align-items: center; gap: 6px; width: auto;">
-            <i data-lucide="arrow-left" style="width: 18px;"></i> <span style="font-weight: 600; font-size: 0.9rem;">Voltar</span>
-        </a>
-        <h1 class="page-title" style="margin: 0; font-size: 1.1rem; font-weight: 700;">
-            <?= date('d/m', strtotime($scale['event_date'])) ?>
-        </h1>
+
+    <!-- HEADER NAV -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="escala.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary); text-decoration: none; padding: 0 12px; height: 40px; border-radius: 12px; display: flex; align-items: center; gap: 6px; width: auto;">
+                <i data-lucide="arrow-left" style="width: 18px;"></i> <span style="font-weight: 600; font-size: 0.9rem;">Voltar</span>
+            </a>
+            <h1 class="page-title" style="margin: 0; font-size: 1.1rem; font-weight: 700;">
+                <?= date('d/m', strtotime($scale['event_date'])) ?>
+            </h1>
+        </div>
+
+        <?php if (!$is_editing): ?>
+            <a href="?id=<?= $scale_id ?>&edit=1&tab=<?= $_GET['tab'] ?? 'evento' ?>" class="btn-primary" style="height: 40px; padding: 0 16px; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="edit-2" style="width: 16px;"></i> Editar
+            </a>
+        <?php endif; ?>
     </div>
 
     <!-- TABS MODERNAS -->
@@ -111,45 +122,69 @@ renderAppHeader('Gerenciar Escala');
     <div id="tab-evento">
         <div class="card" style="padding: 24px; border: none; box-shadow: var(--shadow-sm); border-radius: 16px;">
 
-            <form method="POST">
-                <input type="hidden" name="update_event" value="1">
+            <?php if ($is_editing): ?>
+                <!-- EDIT MODE: FORM -->
+                <form method="POST">
+                    <input type="hidden" name="update_event" value="1">
 
-                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; margin-bottom: 20px;">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">DATA</label>
-                        <input type="date" name="date" class="form-input modern-input" value="<?= $scale['event_date'] ?>" required>
+                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; margin-bottom: 20px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">DATA</label>
+                            <input type="date" name="date" class="form-input modern-input" value="<?= $scale['event_date'] ?>" required>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">TIPO</label>
+                            <select name="type" class="form-select modern-input">
+                                <option value="Culto de Domingo" <?= $scale['event_type'] == 'Culto de Domingo' ? 'selected' : '' ?>>Culto de Domingo</option>
+                                <option value="Ensaio" <?= $scale['event_type'] == 'Ensaio' ? 'selected' : '' ?>>Ensaio</option>
+                                <option value="Evento Jovens" <?= $scale['event_type'] == 'Evento Jovens' ? 'selected' : '' ?>>Evento Jovens</option>
+                                <option value="Evento Especial" <?= $scale['event_type'] == 'Evento Especial' ? 'selected' : '' ?>>Evento Especial</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">TIPO</label>
-                        <select name="type" class="form-select modern-input">
-                            <option value="Culto de Domingo" <?= $scale['event_type'] == 'Culto de Domingo' ? 'selected' : '' ?>>Culto de Domingo</option>
-                            <option value="Ensaio" <?= $scale['event_type'] == 'Ensaio' ? 'selected' : '' ?>>Ensaio</option>
-                            <option value="Evento Jovens" <?= $scale['event_type'] == 'Evento Jovens' ? 'selected' : '' ?>>Evento Jovens</option>
-                            <option value="Evento Especial" <?= $scale['event_type'] == 'Evento Especial' ? 'selected' : '' ?>>Evento Especial</option>
-                        </select>
+                    <div class="form-group">
+                        <label class="form-label" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">DESCRIÇÃO / LITURGIA</label>
+                        <textarea name="description" class="form-input modern-input" rows="4" placeholder="Insira informações relevantes..." style="resize: none;"><?= htmlspecialchars($scale['description'] ?? '') ?></textarea>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">DESCRIÇÃO / LITURGIA</label>
-                    <textarea name="description" class="form-input modern-input" rows="4" placeholder="Insira informações relevantes..." style="resize: none;"><?= htmlspecialchars($scale['description'] ?? '') ?></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-full modern-btn" style="margin-top: 10px;">
-                    Salvar Alterações
-                </button>
-            </form>
-
-            <!-- Delete Section -->
-            <div style="margin-top: 20px; border-top: 1px dashed var(--border-subtle); padding-top: 20px;">
-                <form method="POST" onsubmit="return confirm('ATENÇÃO: Deseja realmente excluir esta escala?');">
-                    <input type="hidden" name="delete_scale" value="1">
-                    <button type="submit" class="btn w-full btn-danger-soft">
-                        <i data-lucide="trash-2" style="width: 18px; margin-right: 6px;"></i> Excluir Escala
+                    <button type="submit" class="btn btn-primary w-full modern-btn" style="margin-top: 10px;">
+                        Salvar Alterações
                     </button>
                 </form>
-            </div>
+
+                <!-- Delete Section -->
+                <div style="margin-top: 20px; border-top: 1px dashed var(--border-subtle); padding-top: 20px;">
+                    <form method="POST" onsubmit="return confirm('ATENÇÃO: Deseja realmente excluir esta escala?');">
+                        <input type="hidden" name="delete_scale" value="1">
+                        <button type="submit" class="btn w-full btn-danger-soft">
+                            <i data-lucide="trash-2" style="width: 18px; margin-right: 6px;"></i> Excluir Escala
+                        </button>
+                    </form>
+                </div>
+
+            <?php else: ?>
+                <!-- VIEW MODE: TEXT -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">DATA</div>
+                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);"><?= date('d/m/Y', strtotime($scale['event_date'])) ?></div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">TIPO</div>
+                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);"><?= htmlspecialchars($scale['event_type']) ?></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">DESCRIÇÃO / LITURGIA</div>
+                    <div style="background: var(--bg-tertiary); padding: 15px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; color: var(--text-primary);">
+                        <?= nl2br(htmlspecialchars($scale['description'] ?? 'Sem descrição.')) ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -175,7 +210,9 @@ renderAppHeader('Gerenciar Escala');
                         <i data-lucide="users" style="width: 24px; color: var(--text-muted);"></i>
                     </div>
                     <p style="color: var(--text-secondary); font-weight: 500;">Ninguém escalado ainda</p>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Adicione membros usando o formulário abaixo</p>
+                    <?php if ($is_editing): ?>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Adicione membros usando o formulário abaixo</p>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
                 <?php
@@ -218,7 +255,7 @@ renderAppHeader('Gerenciar Escala');
                                                 </div>
                                             </div>
 
-                                            <!-- Actions -->
+                                            <!-- Actions (Only in Edit) -->
                                             <div style="display: flex; align-items: center; gap: 8px;">
                                                 <?php if ($member['confirmed'] == 1): ?>
                                                     <div title="Confirmado">
@@ -230,9 +267,11 @@ renderAppHeader('Gerenciar Escala');
                                                     </div>
                                                 <?php endif; ?>
 
-                                                <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover integrante?')" style="color: var(--status-error); padding: 4px; opacity: 0.8;">
-                                                    <i data-lucide="trash-2" style="width: 18px;"></i>
-                                                </a>
+                                                <?php if ($is_editing): ?>
+                                                    <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>&edit=1&tab=equipe" onclick="return confirm('Remover integrante?')" style="color: var(--status-error); padding: 4px; opacity: 0.8;">
+                                                        <i data-lucide="trash-2" style="width: 18px;"></i>
+                                                    </a>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -243,70 +282,72 @@ renderAppHeader('Gerenciar Escala');
                 </div>
             <?php endif; ?>
 
-            <!-- Add Section Styled -->
-            <div style="background: var(--bg-tertiary); padding: 20px; border-radius: 14px;">
-                <h3 style="margin: 0 0 15px; font-size: 0.95rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="user-plus" style="width: 18px;"></i> Adicionar à Escala
-                </h3>
+            <?php if ($is_editing): ?>
+                <!-- Add Section Styled -->
+                <div style="background: var(--bg-tertiary); padding: 20px; border-radius: 14px;">
+                    <h3 style="margin: 0 0 15px; font-size: 0.95rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="user-plus" style="width: 18px;"></i> Adicionar à Escala
+                    </h3>
 
-                <form method="POST">
-                    <input type="hidden" name="add_member" value="1">
+                    <form method="POST">
+                        <input type="hidden" name="add_member" value="1">
 
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="flex: 1;">
-                            <select name="instrument" id="roleSelect" class="form-select modern-input" onchange="filterUsersByRole()" required style="padding: 12px;">
-                                <option value="">Função...</option>
-                                <option value="Voz">Voz</option>
-                                <option value="Violão">Violão</option>
-                                <option value="Teclado">Teclado</option>
-                                <option value="Bateria">Bateria</option>
-                                <option value="Baixo">Baixo</option>
-                                <option value="Guitarra">Guitarra</option>
-                                <option value="Mídia">Mídia</option>
-                                <option value="Som">Som</option>
-                                <option value="Outros">Outros</option>
-                            </select>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <div style="flex: 1;">
+                                <select name="instrument" id="roleSelect" class="form-select modern-input" onchange="filterUsersByRole()" required style="padding: 12px;">
+                                    <option value="">Função...</option>
+                                    <option value="Voz">Voz</option>
+                                    <option value="Violão">Violão</option>
+                                    <option value="Teclado">Teclado</option>
+                                    <option value="Bateria">Bateria</option>
+                                    <option value="Baixo">Baixo</option>
+                                    <option value="Guitarra">Guitarra</option>
+                                    <option value="Mídia">Mídia</option>
+                                    <option value="Som">Som</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+
+                            <div style="flex: 1.5;">
+                                <select name="user_id" id="userSelect" class="form-select modern-input" required disabled style="opacity: 0.7; padding: 12px;">
+                                    <option value="">Selecione...</option>
+                                    <?php foreach ($users as $u): ?>
+                                        <?php
+                                        $rawCat = mb_strtolower($u['category'], 'UTF-8');
+                                        $normalizedCat = $rawCat;
+                                        if (strpos($rawCat, 'voz') !== false) $normalizedCat = 'voz';
+                                        if (strpos($rawCat, 'violao') !== false) $normalizedCat = 'violão';
+                                        if (strpos($rawCat, 'teclado') !== false) $normalizedCat = 'teclado';
+                                        if (strpos($rawCat, 'bateria') !== false) $normalizedCat = 'bateria';
+                                        if (strpos($rawCat, 'baixo') !== false) $normalizedCat = 'baixo';
+                                        if (strpos($rawCat, 'guitarra') !== false) $normalizedCat = 'guitarra';
+                                        if (strpos($rawCat, 'midia') !== false) $normalizedCat = 'mídia';
+                                        if (strpos($rawCat, 'som') !== false) $normalizedCat = 'som';
+                                        ?>
+                                        <option value="<?= $u['id'] ?>" data-role="<?= $normalizedCat ?>" style="display:none;">
+                                            <?= htmlspecialchars($u['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
 
-                        <div style="flex: 1.5;">
-                            <select name="user_id" id="userSelect" class="form-select modern-input" required disabled style="opacity: 0.7; padding: 12px;">
-                                <option value="">Selecione...</option>
-                                <?php foreach ($users as $u): ?>
-                                    <?php
-                                    $rawCat = mb_strtolower($u['category'], 'UTF-8');
-                                    $normalizedCat = $rawCat;
-                                    if (strpos($rawCat, 'voz') !== false) $normalizedCat = 'voz';
-                                    if (strpos($rawCat, 'violao') !== false) $normalizedCat = 'violão';
-                                    if (strpos($rawCat, 'teclado') !== false) $normalizedCat = 'teclado';
-                                    if (strpos($rawCat, 'bateria') !== false) $normalizedCat = 'bateria';
-                                    if (strpos($rawCat, 'baixo') !== false) $normalizedCat = 'baixo';
-                                    if (strpos($rawCat, 'guitarra') !== false) $normalizedCat = 'guitarra';
-                                    if (strpos($rawCat, 'midia') !== false) $normalizedCat = 'mídia';
-                                    if (strpos($rawCat, 'som') !== false) $normalizedCat = 'som';
-                                    ?>
-                                    <option value="<?= $u['id'] ?>" data-role="<?= $normalizedCat ?>" style="display:none;">
-                                        <?= htmlspecialchars($u['name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
+                        <button type="submit" id="btnAddMember" disabled class="btn btn-primary w-full modern-btn" style="opacity: 0.5; height: 40px; font-size: 0.9rem;">
+                            <i data-lucide="plus"></i> Adicionar à Escala
+                        </button>
+                    </form>
+                </div>
 
-                    <button type="submit" id="btnAddMember" disabled class="btn btn-primary w-full modern-btn" style="opacity: 0.5; height: 40px; font-size: 0.9rem;">
-                        <i data-lucide="plus"></i> Adicionar à Escala
-                    </button>
-                </form>
-            </div>
-
-            <!-- Save/Finish Action -->
-            <div style="margin-top: 30px;">
-                <a href="escala.php" class="btn btn-primary w-full modern-btn" style="background: var(--status-success); border: none; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="check" style="width: 20px; margin-right: 8px;"></i> Salvar e Concluir
-                </a>
-                <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">
-                    <i data-lucide="info" style="width: 12px; vertical-align: middle;"></i> Alterações salvas automaticamente
-                </p>
-            </div>
+                <!-- Save/Finish Action -->
+                <div style="margin-top: 30px;">
+                    <a href="?id=<?= $scale_id ?>&tab=equipe" class="btn btn-primary w-full modern-btn" style="background: var(--status-success); border: none; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="check" style="width: 20px; margin-right: 8px;"></i> Salvar e Concluir
+                    </a>
+                    <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">
+                        <i data-lucide="info" style="width: 12px; vertical-align: middle;"></i> Alterações salvas automaticamente
+                    </p>
+                </div>
+            <?php endif; ?>
 
         </div>
     </div>
@@ -323,6 +364,7 @@ renderAppHeader('Gerenciar Escala');
         font-size: 0.95rem;
         transition: all 0.2s;
         width: 100%;
+        color: var(--text-primary);
     }
 
     .modern-input:focus {
