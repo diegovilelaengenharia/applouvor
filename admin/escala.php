@@ -47,7 +47,7 @@ renderAppHeader('Escalas');
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
         <h2 style="font-size:1.2rem;">Próximos Cultos</h2>
-        <button onclick="document.getElementById('modalNewScale').classList.add('visible')" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">+ Nova</button>
+        <button onclick="openModal('modalNewScale')" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">+ Nova</button>
     </div>
 
     <!-- Lista Próximas -->
@@ -112,58 +112,74 @@ renderAppHeader('Escalas');
 </div>
 
 <!-- Modal Nova Escala -->
-<div id="modalNewScale" class="sidebar-overlay" style="z-index: 300; display: none; align-items: flex-end; justify-content: center;">
-    <div class="card" style="width: 100%; max-width: 500px; margin: 0; border-radius: 24px 24px 0 0; animation: slideUp 0.3s ease-out;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-            <h3>Nova Escala</h3>
-            <button onclick="document.getElementById('modalNewScale').classList.remove('visible')" style="background:none; border:none; color:var(--text-secondary);"><i data-lucide="x"></i></button>
+<div id="modalNewScale" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 class="modal-title">Nova Escala</h3>
+            <button class="modal-close" onclick="closeModal('modalNewScale')">
+                <i data-lucide="x"></i>
+            </button>
         </div>
 
         <form method="POST">
-            <input type="hidden" name="action" value="create_scale">
+            <div class="modal-body">
+                <input type="hidden" name="action" value="create_scale">
 
-            <div class="form-group">
-                <label class="form-label">Data do Evento</label>
-                <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
+                <div class="form-group">
+                    <label class="form-label">Data do Evento</label>
+                    <input type="date" name="date" class="form-input" required value="<?= date('Y-m-d') ?>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tipo de Culto</label>
+                    <select name="type" class="form-select">
+                        <option value="Culto de Domingo">Culto de Domingo</option>
+                        <option value="Ensaio">Ensaio</option>
+                        <option value="Evento Jovens">Evento Jovens</option>
+                        <option value="Evento Especial">Evento Especial</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descrição (Opcional)</label>
+                    <input type="text" name="description" class="form-input" placeholder="Ex: Ceia, Visitante Especial...">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Tipo de Culto</label>
-                <select name="type" class="form-input">
-                    <option value="Culto de Domingo">Culto de Domingo</option>
-                    <option value="Ensaio">Ensaio</option>
-                    <option value="Evento Jovens">Evento Jovens</option>
-                    <option value="Evento Especial">Evento Especial</option>
-                </select>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" onclick="closeModal('modalNewScale')">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Criar Escala</button>
             </div>
-
-            <div class="form-group">
-                <label class="form-label">Descrição (Opcional)</label>
-                <input type="text" name="description" class="form-input" placeholder="Ex: Ceia, Visitante Especial...">
-            </div>
-
-            <button type="submit" class="btn btn-primary w-full" style="margin-top: 15px;">Criar Escala</button>
         </form>
     </div>
 </div>
 
-<style>
-    /* Reutiliza animação */
-    @keyframes slideUp {
-        from {
-            transform: translateY(100%);
-        }
-
-        to {
-            transform: translateY(0);
+<script>
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            // Re-render icons if needed
+            if (window.lucide) lucide.createIcons();
         }
     }
 
-    #modalNewScale.visible {
-        display: flex !important;
-        opacity: 1;
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+        }
     }
-</style>
+
+    // Close on click outside
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove('active');
+            }
+        });
+    });
+</script>
 
 <?php
 renderAppFooter();
