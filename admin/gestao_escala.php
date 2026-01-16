@@ -298,6 +298,16 @@ renderAppHeader('Gerenciar Escala');
                 </form>
             </div>
 
+            <!-- Save/Finish Action -->
+            <div style="margin-top: 30px;">
+                <a href="escala.php" class="btn btn-primary w-full modern-btn" style="background: var(--status-success); border: none; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="check" style="width: 20px; margin-right: 8px;"></i> Salvar e Concluir
+                </a>
+                <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">
+                    <i data-lucide="info" style="width: 12px; vertical-align: middle;"></i> Alterações salvas automaticamente
+                </p>
+            </div>
+
         </div>
     </div>
 
