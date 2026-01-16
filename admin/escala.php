@@ -47,11 +47,14 @@ renderAppHeader('Escalas');
 
     <!-- Abas Próximas / Histórico (Simples via JS ou reload, aqui vamos mostrar seções) -->
 
-    <!-- HERO HEADER CARD (Apenas Título) -->
-    <div class="hero-card" style="justify-content: center; text-align: center; padding: 30px 20px;">
-        <div class="hero-content">
-            <h1 style="margin: 0; font-size: 1.8rem;">Escalas</h1>
-            <p style="opacity: 0.8; margin-top: 5px;">Próximos Cultos e Ensaios</p>
+    <!-- Header com Voltar -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+        <a href="index.php" class="btn-icon" style="background: var(--bg-secondary); color: var(--text-primary);">
+            <i data-lucide="arrow-left"></i>
+        </a>
+        <div>
+            <h1 style="margin: 0; font-size: 1.5rem; font-weight: 700;">Escalas</h1>
+            <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">Próximos Cultos</p>
         </div>
     </div>
 
