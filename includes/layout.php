@@ -126,8 +126,8 @@ function renderAppHeader($title = 'Louvor PIB')
                         <div class="emoji-icon" style="filter: grayscale(1);">⛪</div><span style="color: var(--text-secondary);">Agenda</span>
                     </a>
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
-                        <a href="#" class="sheet-item">
-                            <div class="emoji-icon">🔒</div><span>Admin</span>
+                        <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
+                            <div class="emoji-icon" style="filter: grayscale(1);">🔒</div><span style="color: var(--text-secondary);">Admin</span>
                         </a>
                     <?php endif; ?>
                 </div>

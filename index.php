@@ -162,8 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <button type="submit" class="btn-gold">
-                <span>Entrar</span>
-                <i data-lucide="log-in" style="width: 20px; height: 20px;"></i>
+                Entrar
             </button>
         </form>
 
