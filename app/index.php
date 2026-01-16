@@ -34,6 +34,11 @@ checkLogin();
                 <span class="menu-title">Repertório da Semana</span>
             </a>
 
+            <a href="perfil.php" class="menu-card">
+                <span class="menu-icon">⚙️</span>
+                <span class="menu-title">Configurações</span>
+            </a>
+
             <!-- Funcionalidades Futuras -->
             <div class="menu-card disabled-card">
                 <span class="menu-icon">📂</span>

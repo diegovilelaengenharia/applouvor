@@ -10,9 +10,25 @@
 
         <div class="user-info">
             <button id="theme-toggle" class="btn-outline" style="border:none; font-size: 1.2rem; cursor: pointer; padding: 5px;">🌙</button>
-            <div class="user-avatar">
-                <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
+
+            <?php
+            // Buscar Avatar Atualizado
+            if (isset($pdo) && isset($_SESSION['user_id'])) {
+                $stmtAuth = $pdo->prepare("SELECT avatar FROM users WHERE id = ?");
+                $stmtAuth->execute([$_SESSION['user_id']]);
+                $userAuth = $stmtAuth->fetch();
+                $avatarUrl = $userAuth['avatar'] ?? null;
+            }
+            ?>
+
+            <div class="user-avatar" style="overflow: hidden; padding: 0;">
+                <?php if (!empty($avatarUrl)): ?>
+                    <img src="../assets/uploads/<?= htmlspecialchars($avatarUrl) ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                <?php else: ?>
+                    <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
+                <?php endif; ?>
             </div>
+
             <a href="../includes/auth.php?logout=true" class="logout-link">Sair</a>
         </div>
     </div>

@@ -10,6 +10,10 @@ CREATE TABLE IF NOT EXISTS users (
     role ENUM('admin', 'user') DEFAULT 'user',
     category ENUM('voz_feminina', 'voz_masculina', 'violao', 'teclado', 'bateria', 'baixo', 'guitarra', 'outros') NOT NULL,
     phone VARCHAR(20),
+    address_street VARCHAR(150),
+    address_number VARCHAR(20),
+    address_neighborhood VARCHAR(100),
+    avatar VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
