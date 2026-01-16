@@ -100,49 +100,70 @@ renderAppHeader('Gerenciar Escala');
     </div>
 
     <!-- TABS -->
-    <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
-        <button onclick="showTab('evento')" id="btn-evento" class="tab-btn active">Evento</button>
-        <button onclick="showTab('equipe')" id="btn-equipe" class="tab-btn">Equipe</button>
+    <div style="display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
+        <button onclick="showTab('evento')" id="btn-evento" class="tab-btn active">
+            <i data-lucide="calendar-days" style="width: 18px;"></i> Dados do Evento
+        </button>
+        <button onclick="showTab('equipe')" id="btn-equipe" class="tab-btn">
+            <i data-lucide="users" style="width: 18px;"></i> Escala Técnica
+        </button>
     </div>
 
     <!-- TAB EVENTO -->
     <div id="tab-evento">
-        <div class="card">
-            <h3>Detalhes do Evento</h3>
-            <form method="POST" style="margin-top: 15px;">
+        <div class="card" style="padding: 25px; border-top: 4px solid var(--accent-interactive);">
+            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--accent-interactive);">
+                <i data-lucide="settings-2" style="width: 20px;"></i>
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Configurações Operacionais</h3>
+            </div>
+
+            <form method="POST">
                 <input type="hidden" name="update_event" value="1">
 
-                <div class="form-group">
-                    <label class="form-label">Data</label>
-                    <input type="date" name="date" class="form-input" value="<?= $scale['event_date'] ?>" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label class="form-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Data Programada</label>
+                        <div style="position: relative;">
+                            <i data-lucide="calendar" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-secondary);"></i>
+                            <input type="date" name="date" class="form-input" value="<?= $scale['event_date'] ?>" required style="padding-left: 36px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Tipologia</label>
+                        <div style="position: relative;">
+                            <i data-lucide="tag" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-secondary);"></i>
+                            <select name="type" class="form-select" style="padding-left: 36px;">
+                                <option value="Culto de Domingo" <?= $scale['event_type'] == 'Culto de Domingo' ? 'selected' : '' ?>>Culto de Domingo</option>
+                                <option value="Ensaio" <?= $scale['event_type'] == 'Ensaio' ? 'selected' : '' ?>>Ensaio Técnico</option>
+                                <option value="Evento Jovens" <?= $scale['event_type'] == 'Evento Jovens' ? 'selected' : '' ?>>Evento Jovens</option>
+                                <option value="Evento Especial" <?= $scale['event_type'] == 'Evento Especial' ? 'selected' : '' ?>>Evento Especial</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Tipo</label>
-                    <select name="type" class="form-select">
-                        <option value="Culto de Domingo" <?= $scale['event_type'] == 'Culto de Domingo' ? 'selected' : '' ?>>Culto de Domingo</option>
-                        <option value="Ensaio" <?= $scale['event_type'] == 'Ensaio' ? 'selected' : '' ?>>Ensaio</option>
-                        <option value="Evento Jovens" <?= $scale['event_type'] == 'Evento Jovens' ? 'selected' : '' ?>>Evento Jovens</option>
-                        <option value="Evento Especial" <?= $scale['event_type'] == 'Evento Especial' ? 'selected' : '' ?>>Evento Especial</option>
-                    </select>
+                    <label class="form-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Observações / Liturgia</label>
+                    <textarea name="description" class="form-input" rows="3" placeholder="Insira detalhes técnicos, roteiro ou observações..." style="resize: vertical;"><?= htmlspecialchars($scale['description'] ?? '') ?></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Descrição</label>
-                    <input type="text" name="description" class="form-input" value="<?= htmlspecialchars($scale['description'] ?? '') ?>">
-                </div>
-
-                <button type="submit" class="btn btn-primary w-full" style="margin-top: 10px;">Salvar Alterações</button>
+                <button type="submit" class="btn btn-primary w-full" style="justify-content: center; height: 48px; margin-top: 10px;">
+                    <i data-lucide="save"></i> Atualizar Registro
+                </button>
             </form>
 
             <!-- Área de Perigo -->
-            <div style="margin-top: 40px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
-                <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza absoluta que deseja excluir esta escala? Esta ação não pode ser desfeita.');">
+            <div style="margin-top: 40px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 12px; padding: 20px;">
+                <h4 style="color: #991B1B; font-size: 0.9rem; margin-top: 0; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="alert-triangle" style="width: 16px;"></i> Zona de Perigo
+                </h4>
+                <p style="font-size: 0.8rem; color: #B91C1C; margin-bottom: 15px;">A exclusão removerá permanentemente este registro e desvinculará todos os membros.</p>
+                <form method="POST" onsubmit="return confirm('ATENÇÃO: Confirma a exclusão definitiva deste evento?');">
                     <input type="hidden" name="delete_scale" value="1">
-                    <button type="submit" class="btn w-full" style="background: #ef4444; color: white; border: none; font-weight: 600; padding: 12px; border-radius: 8px; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">
-                        <i data-lucide="trash-2" style="width: 18px; margin-right: 8px; vertical-align: middle;"></i> Excluir Escala
+                    <button type="submit" class="btn w-full" style="background: white; color: #EF4444; border: 1px solid #EF4444; font-weight: 600;">
+                        Excluir Evento Definitivamente
                     </button>
-                    <p style="text-align: center; font-size: 0.8rem; color: var(--status-error); margin-top: 8px; opacity: 0.8;">Cuidado: Isso apagará data e equipe.</p>
                 </form>
             </div>
         </div>
@@ -152,70 +173,73 @@ renderAppHeader('Gerenciar Escala');
     <div id="tab-equipe" style="display: none;">
 
         <!-- Lista de Escalados (Agrupada) -->
-        <div class="card" style="margin-bottom: 30px;">
-            <h3 style="margin-bottom: 20px;">Equipe Escalada</h3>
+        <div class="card" style="margin-bottom: 25px; border-top: 4px solid var(--accent-interactive);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Quadro Técnico</h3>
+                <span style="font-size: 0.8rem; background: var(--bg-tertiary); padding: 4px 10px; border-radius: 20px; color: var(--text-secondary);"><?= count($members) ?> integrantes</span>
+            </div>
 
             <?php if (empty($members)): ?>
-                <p style="opacity: 0.6;">Ninguém escalado ainda.</p>
+                <div style="text-align: center; padding: 30px; background: var(--bg-primary); border-radius: 12px; border: 1px dashed var(--border-subtle);">
+                    <i data-lucide="user-x" style="width: 32px; height: 32px; color: var(--text-muted); opacity: 0.5; margin-bottom: 10px;"></i>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Nenhum técnico ou músico escalado.</p>
+                </div>
             <?php else: ?>
                 <?php
-                // Agrupamento
-                $groups = ['Voz' => [], 'Banda' => [], 'Outros' => []];
+                // Agrupamento (Mantido lógica original mas melhorando visual)
+                $groups = ['Voz' => [], 'Instrumental' => [], 'Apoio/Outros' => []];
                 foreach ($members as $m) {
                     $cat = strtolower($m['category']);
                     $inst = strtolower($m['instrument']);
 
-                    if (strpos($cat, 'voz') !== false || strpos($inst, 'voz') !== false || strpos($inst, 'soprano') !== false || strpos($inst, 'contralto') !== false || strpos($inst, 'tenor') !== false) {
+                    if (strpos($cat, 'voz') !== false || strpos($inst, 'voz') !== false || strpos($inst, 'bck') !== false || strpos($inst, 'soprano') !== false) {
                         $groups['Voz'][] = $m;
                     } elseif (in_array($cat, ['violao', 'teclado', 'bateria', 'baixo', 'guitarra']) || in_array($inst, ['violão', 'teclado', 'bateria', 'baixo', 'guitarra'])) {
-                        $groups['Banda'][] = $m;
+                        $groups['Instrumental'][] = $m;
                     } else {
-                        $groups['Outros'][] = $m;
+                        $groups['Apoio/Outros'][] = $m;
                     }
                 }
                 ?>
 
                 <?php foreach ($groups as $groupName => $groupMembers): ?>
                     <?php if (!empty($groupMembers)): ?>
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="margin: 0 0 10px; color: var(--accent-interactive); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 5px; display: inline-block;"><?= $groupName ?></h4>
-                            <div class="list-group">
+                        <div style="margin-bottom: 24px;">
+                            <h4 style="margin: 0 0 12px; color: var(--accent-blue); background: var(--bg-tertiary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px;">
+                                <?= $groupName ?>
+                            </h4>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
                                 <?php foreach ($groupMembers as $member): ?>
-                                    <div class="list-item" style="padding: 10px 15px;">
-                                        <div class="flex items-center gap-4">
-                                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; background: var(--bg-primary); border: 2px solid var(--border-subtle);">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px; transition: all 0.2s;">
+
+                                        <!-- User Info -->
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div class="user-avatar" style="width: 40px; height: 40px; font-size: 0.95rem; background: white; border: 2px solid var(--border-subtle); color: var(--accent-interactive); box-shadow: var(--shadow-sm);">
                                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                                             </div>
                                             <div>
-                                                <div style="font-weight: 600; font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                                <div style="font-size: 0.8rem; color: var(--text-secondary);"><?= htmlspecialchars($member['instrument']) ?></div>
+                                                <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; line-height: 1.2;"><?= htmlspecialchars($member['name']) ?></div>
+                                                <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                                                    <span style="width: 6px; height: 6px; background: var(--accent-interactive); border-radius: 50%;"></span>
+                                                    <?= htmlspecialchars($member['instrument']) ?>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-3">
-                                            <?php
-                                            $statusClass = 'status-pending';
-                                            $statusText = 'Pendente'; // Default
-                                            // Lógica de Confirmação (Se implementada no banco como int 0,1,2)
-                                            if ($member['confirmed'] == 1) {
-                                                $statusClass = 'status-confirmed';
-                                                $statusText = 'Confirmado';
-                                            }
-                                            if ($member['confirmed'] == 2) {
-                                                $statusClass = 'status-refused';
-                                                $statusText = 'Recusou';
-                                            }
-                                            ?>
-                                            <!-- Icon Status -->
+
+                                        <!-- Actions -->
+                                        <div style="display: flex; align-items: center; gap: 8px;">
                                             <?php if ($member['confirmed'] == 1): ?>
-                                                <i data-lucide="check-circle" style="color: var(--status-success); width: 18px;"></i>
-                                            <?php elseif ($member['confirmed'] == 2): ?>
-                                                <i data-lucide="x-circle" style="color: var(--status-error); width: 18px;"></i>
+                                                <span title="Confirmado" style="display: flex; padding: 6px; background: #DCFCE7; color: #166534; border-radius: 50%;">
+                                                    <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                                                </span>
                                             <?php else: ?>
-                                                <i data-lucide="clock" style="color: var(--status-warning); width: 18px; opacity: 0.5;"></i>
+                                                <span title="Pendente" style="display: flex; padding: 6px; background: #FEF9C3; color: #854D0E; border-radius: 50%;">
+                                                    <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+                                                </span>
                                             <?php endif; ?>
 
-                                            <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover este membro?')" style="color: var(--text-muted); padding: 5px;">
-                                                <i data-lucide="trash-2" style="width: 16px;"></i>
+                                            <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover integrante?')" style="display: flex; padding: 8px; color: var(--text-muted); transition: color 0.2s;">
+                                                <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -229,15 +253,14 @@ renderAppHeader('Gerenciar Escala');
         </div>
 
         <!-- Adicionar Novo Membro -->
-        <div class="card">
-            <h3>Adicionar Integrante</h3>
-            <form method="POST" style="margin-top: 15px;">
+        <div class="card" style="border: 2px dashed var(--border-subtle); background: transparent;">
+            <h3 style="margin-bottom: 15px; font-size: 1rem; color: var(--text-secondary);">+ Adicionar Recurso Humano</h3>
+            <form method="POST">
                 <input type="hidden" name="add_member" value="1">
-                <div class="flex gap-4" style="flex-wrap: wrap;">
-                    <div style="flex: 2; min-width: 200px;">
-                        <label class="form-label">Músico</label>
-                        <select name="user_id" class="form-input" required id="userSelect" onchange="updateInstrument()">
-                            <option value="">Selecione...</option>
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <select name="user_id" class="form-select" required id="userSelect" onchange="updateInstrument()" style="height: 48px;">
+                            <option value="">Selecione o Integrante...</option>
                             <?php foreach ($users as $u): ?>
                                 <option value="<?= $u['id'] ?>" data-category="<?= $u['category'] ?>">
                                     <?= htmlspecialchars($u['name']) ?>
@@ -245,12 +268,13 @@ renderAppHeader('Gerenciar Escala');
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div style="flex: 1; min-width: 150px;">
-                        <label class="form-label">Instrumento/Função</label>
-                        <input type="text" name="instrument" id="instrumentInput" class="form-input" placeholder="Ex: Voz, Violão" required>
+                    <div>
+                        <input type="text" name="instrument" id="instrumentInput" class="form-input" placeholder="Função" required style="height: 48px;">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-full" style="margin-top: 20px;">Adicionar à Escala</button>
+                <button type="submit" class="btn btn-outline w-full" style="border-color: var(--accent-interactive); color: var(--accent-interactive);">
+                    <i data-lucide="plus-circle" style="width: 18px;"></i> Inserir na Escala
+                </button>
             </form>
         </div>
     </div>
@@ -259,19 +283,31 @@ renderAppHeader('Gerenciar Escala');
 
 <style>
     .tab-btn {
-        padding: 10px 20px;
+        flex: 1;
+        padding: 12px;
         background: transparent;
         border: none;
-        border-bottom: 2px solid transparent;
-        color: var(--text-secondary);
+        color: var(--text-muted);
         font-weight: 600;
         cursor: pointer;
-        font-size: 1rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s;
+        border-radius: 8px;
+    }
+
+    .tab-btn:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
     }
 
     .tab-btn.active {
+        background: var(--bg-secondary);
         color: var(--accent-interactive);
-        border-bottom-color: var(--accent-interactive);
+        box-shadow: var(--shadow-sm);
     }
 </style>
 
@@ -287,7 +323,6 @@ renderAppHeader('Gerenciar Escala');
         document.getElementById('btn-' + tab).classList.add('active');
     }
 
-
     function updateInstrument() {
         const select = document.getElementById('userSelect');
         const input = document.getElementById('instrumentInput');
@@ -298,21 +333,16 @@ renderAppHeader('Gerenciar Escala');
             let category = selectedOption.getAttribute('data-category') || '';
             let finalInst = '';
 
-            // 1. Smart Overrides (Pedidos Específicos)
-            if (nameText.includes('Diego')) {
-                finalInst = 'Violão';
-            } else if (nameText.includes('Thalyta')) {
-                finalInst = 'Voz';
-            }
-            // 2. Default Logic
+            // Smart Overrides
+            if (nameText.includes('Diego')) finalInst = 'Violão';
+            else if (nameText.includes('Thalyta')) finalInst = 'Voz';
             else {
-                if (category === 'voz_feminina' || category === 'voz_masculina') finalInst = 'Voz';
-                else if (category === 'violao') finalInst = 'Violão';
-                else if (category === 'teclado') finalInst = 'Teclado';
-                else if (category === 'bateria') finalInst = 'Bateria';
+                if (category.includes('voz')) finalInst = 'Voz';
+                else if (category.includes('violao')) finalInst = 'Violão';
+                else if (category.includes('teclado')) finalInst = 'Teclado';
+                else if (category.includes('bateria')) finalInst = 'Bateria';
                 else if (category) finalInst = category.charAt(0).toUpperCase() + category.slice(1);
             }
-
             input.value = finalInst;
         }
     }
