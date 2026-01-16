@@ -158,21 +158,22 @@ renderAppHeader('Gerenciar Escala');
     <!-- TAB EQUIPE -->
     <div id="tab-equipe" style="display: none;">
 
-        <!-- Lista de Escalados (Agrupada) -->
-        <div class="card" style="margin-bottom: 25px; border-top: 4px solid var(--accent-interactive);">
+        <div class="card" style="padding: 20px; border: none; box-shadow: none; background: transparent;">
+
+            <!-- Header Resumo -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Quadro Técnico</h3>
+                <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-primary);">Quadro Técnico</h3>
                 <span style="font-size: 0.8rem; background: var(--bg-tertiary); padding: 4px 10px; border-radius: 20px; color: var(--text-secondary);"><?= count($members) ?> integrantes</span>
             </div>
 
             <?php if (empty($members)): ?>
-                <div style="text-align: center; padding: 30px; background: var(--bg-primary); border-radius: 12px; border: 1px dashed var(--border-subtle);">
+                <div style="text-align: center; padding: 30px; background: var(--bg-primary); border-radius: 12px; border: 1px dashed var(--border-subtle); margin-bottom: 25px;">
                     <i data-lucide="user-x" style="width: 32px; height: 32px; color: var(--text-muted); opacity: 0.5; margin-bottom: 10px;"></i>
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">Nenhum técnico ou músico escalado.</p>
                 </div>
             <?php else: ?>
                 <?php
-                // Agrupamento (Mantido lógica original mas melhorando visual)
+                // Agrupamento
                 $groups = ['Voz' => [], 'Instrumental' => [], 'Apoio/Outros' => []];
                 foreach ($members as $m) {
                     $cat = strtolower($m['category']);
@@ -188,80 +189,71 @@ renderAppHeader('Gerenciar Escala');
                 }
                 ?>
 
-                <?php foreach ($groups as $groupName => $groupMembers): ?>
-                    <?php if (!empty($groupMembers)): ?>
-                        <div style="margin-bottom: 24px;">
-                            <h4 style="margin: 0 0 12px; color: var(--accent-blue); background: var(--bg-tertiary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px;">
-                                <?= $groupName ?>
-                            </h4>
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                <?php foreach ($groupMembers as $member): ?>
-                                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px; transition: all 0.2s;">
+                <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px;">
+                    <?php foreach ($groups as $groupName => $groupMembers): ?>
+                        <?php if (!empty($groupMembers)): ?>
+                            <div>
+                                <h4 style="margin: 0 0 10px; color: var(--text-secondary); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                                    <?= $groupName ?>
+                                </h4>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <?php foreach ($groupMembers as $member): ?>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px;">
 
-                                        <!-- User Info -->
-                                        <div style="display: flex; align-items: center; gap: 12px;">
-                                            <div class="user-avatar" style="width: 40px; height: 40px; font-size: 0.95rem; background: white; border: 2px solid var(--border-subtle); color: var(--accent-interactive); box-shadow: var(--shadow-sm);">
-                                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
-                                            </div>
-                                            <div>
-                                                <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; line-height: 1.2;"><?= htmlspecialchars($member['name']) ?></div>
-                                                <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                                                    <span style="width: 6px; height: 6px; background: var(--accent-interactive); border-radius: 50%;"></span>
-                                                    <?= htmlspecialchars($member['instrument']) ?>
+                                            <!-- User -->
+                                            <div style="display: flex; align-items: center; gap: 12px;">
+                                                <div class="user-avatar" style="width: 36px; height: 36px; font-size: 0.85rem; background: white; border: 1px solid var(--border-subtle);">
+                                                    <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                                    <div style="font-size: 0.75rem; color: var(--text-secondary);"><?= htmlspecialchars($member['instrument']) ?></div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Actions -->
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <?php if ($member['confirmed'] == 1): ?>
-                                                <span title="Confirmado" style="display: flex; padding: 6px; background: #DCFCE7; color: #166534; border-radius: 50%;">
-                                                    <i data-lucide="check" style="width: 14px; height: 14px;"></i>
-                                                </span>
-                                            <?php else: ?>
-                                                <span title="Pendente" style="display: flex; padding: 6px; background: #FEF9C3; color: #854D0E; border-radius: 50%;">
-                                                    <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
-                                                </span>
-                                            <?php endif; ?>
+                                            <!-- Actions -->
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <?php if ($member['confirmed'] == 1): ?>
+                                                    <i data-lucide="check-circle-2" style="width: 18px; color: var(--status-success);"></i>
+                                                <?php else: ?>
+                                                    <i data-lucide="clock" style="width: 18px; color: var(--status-warning);"></i>
+                                                <?php endif; ?>
 
-                                            <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover integrante?')" style="display: flex; padding: 8px; color: var(--text-muted); transition: color 0.2s;">
-                                                <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
-                                            </a>
+                                                <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover integrante?')" style="color: var(--text-muted); opacity: 0.6; transition: opacity 0.2s;">
+                                                    <i data-lucide="trash-2" style="width: 16px;"></i>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
-        </div>
 
-        <!-- Adicionar Novo Membro -->
-        <div class="card" style="border: 2px dashed var(--border-subtle); background: transparent;">
-            <h3 style="margin-bottom: 15px; font-size: 1rem; color: var(--text-secondary);">+ Adicionar Recurso Humano</h3>
-            <form method="POST">
-                <input type="hidden" name="add_member" value="1">
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <div>
-                        <select name="user_id" class="form-select" required id="userSelect" onchange="updateInstrument()" style="height: 48px;">
-                            <option value="">Selecione o Integrante...</option>
+            <!-- Adicionar Novo Membro - Clean -->
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+                <h3 style="margin-bottom: 15px; font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Adicionar Recurso</h3>
+                <form method="POST">
+                    <input type="hidden" name="add_member" value="1">
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; margin-bottom: 15px;">
+                        <select name="user_id" class="form-select" required id="userSelect" onchange="updateInstrument()" style="background: var(--bg-secondary);">
+                            <option value="">Integrante...</option>
                             <?php foreach ($users as $u): ?>
                                 <option value="<?= $u['id'] ?>" data-category="<?= $u['category'] ?>">
                                     <?= htmlspecialchars($u['name']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <input type="text" name="instrument" id="instrumentInput" class="form-input" placeholder="Função" required style="background: var(--bg-secondary);">
                     </div>
-                    <div>
-                        <input type="text" name="instrument" id="instrumentInput" class="form-input" placeholder="Função" required style="height: 48px;">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-outline w-full" style="border-color: var(--accent-interactive); color: var(--accent-interactive);">
-                    <i data-lucide="plus-circle" style="width: 18px;"></i> Inserir na Escala
-                </button>
-            </form>
+                    <button type="submit" class="btn btn-outline w-full" style="height: 48px; border-color: var(--accent-interactive); color: var(--accent-interactive); border-style: dashed;">
+                        <i data-lucide="plus" style="width: 18px;"></i> Adicionar à Escala
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 
