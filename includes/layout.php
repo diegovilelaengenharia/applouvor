@@ -29,7 +29,8 @@ function renderAppHeader($title = 'Louvor PIB')
 
         <!-- Sidebar (Drawer) -->
         <aside class="sidebar" id="appSidebar">
-            <div class="sidebar-header-card">
+            <!-- Header da Sidebar (Apenas Mobile) -->
+            <div class="sidebar-header-card mobile-only">
                 <div class="user-profile-mini">
                     <?php if ($avatar): ?>
                         <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" alt="Avatar">
@@ -40,7 +41,6 @@ function renderAppHeader($title = 'Louvor PIB')
                         <div style="font-weight:600; font-size:1rem;"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Usuário') ?></div>
                         <div style="font-size:0.8rem; opacity:0.8;"><?= htmlspecialchars($_SESSION['user_email'] ?? '') ?></div>
                     </div>
-                    <i data-lucide="chevron-right" style="margin-left:auto; width:20px;"></i>
                 </div>
             </div>
 
@@ -102,7 +102,8 @@ function renderAppHeader($title = 'Louvor PIB')
                 <?php endif; ?>
             </nav>
 
-            <div class="sidebar-footer">
+            <!-- Footer Sidebar (Apenas Mobile) -->
+            <div class="sidebar-footer mobile-only">
                 <a href="#" class="sidebar-link">
                     <i data-lucide="settings"></i> Configurações
                 </a>
@@ -114,6 +115,29 @@ function renderAppHeader($title = 'Louvor PIB')
                 </a>
             </div>
         </aside>
+
+        <!-- Widget Desktop Top-Right -->
+        <div class="user-widget-desktop desktop-only">
+            <div class="widget-profile">
+                <?php if ($avatar): ?>
+                    <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" alt="Avatar">
+                <?php else: ?>
+                    <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;"><?= $userInitials ?></div>
+                <?php endif; ?>
+                <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+            </div>
+            <div class="widget-actions">
+                <button id="theme-toggle-widget" title="Alternar Tema">
+                    <i data-lucide="moon" style="width:18px;"></i>
+                </button>
+                <a href="#" title="Configurações">
+                    <i data-lucide="settings" style="width:18px;"></i>
+                </a>
+                <a href="../includes/auth.php?logout=true" title="Sair" style="color: var(--status-error);">
+                    <i data-lucide="log-out" style="width:18px;"></i>
+                </a>
+            </div>
+        </div>
 
         <!-- Top Bar (Mobile Only) -->
         <header class="mobile-top-bar">
@@ -173,19 +197,33 @@ function renderAppHeader($title = 'Louvor PIB')
             const toggleBtn = document.getElementById('theme-toggle-sidebar');
             if (toggleBtn) {
                 toggleBtn.addEventListener('click', () => {
-                    document.body.classList.toggle('dark-mode');
-                    const isDark = document.body.classList.contains('dark-mode');
-                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                });
-            }
+                            document.body.classList.toggle('dark-mode');
+                            const isDark = document.body.classList.contains('dark-mode');
+                            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                            toggleBtn.addEventListener('click', () => {
+                                document.body.classList.toggle('dark-mode');
+                                const isDark = document.body.classList.contains('dark-mode');
+                                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                            });
+                        }
+
+                        // Binding para o Widget Desktop
+                        const toggleBtnWidget = document.getElementById('theme-toggle-widget');
+                        if (toggleBtnWidget) {
+                            toggleBtnWidget.addEventListener('click', () => {
+                                document.body.classList.toggle('dark-mode');
+                                const isDark = document.body.classList.contains('dark-mode');
+                                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                            });
+                        }
 
 
-            function toggleSidebar() {
-                const sidebar = document.getElementById('appSidebar');
-                const overlay = document.querySelector('.sidebar-overlay');
-                sidebar.classList.toggle('open');
-                overlay.classList.toggle('visible');
-            }
+                        function toggleSidebar() {
+                            const sidebar = document.getElementById('appSidebar');
+                            const overlay = document.querySelector('.sidebar-overlay');
+                            sidebar.classList.toggle('open');
+                            overlay.classList.toggle('visible');
+                        }
         </script>
     </body>
 
