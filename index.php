@@ -39,16 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body class="login-page">
 
-    <!-- Botão de Tema Flutuante -->
-    <button id="theme-toggle" class="theme-toggle-fixed" title="Alternar Tema">🌙</button>
+    <!-- Botão de Tema removido conforme solicitado -->
 
     <div class="login-card card">
         <div class="brand-header">
-            <!-- Logo para Modo Claro (aparece quando dark-mode NÃO está ativo) -->
-            <img src="assets/images/logo-black.png" alt="PIB Oliveira" class="brand-logo light-theme-only">
-
-            <!-- Logo para Modo Escuro (aparece quando dark-mode ESTÁ ativo) -->
-            <img src="assets/images/logo-white.png" alt="PIB Oliveira" class="brand-logo dark-theme-only">
+            <img src="assets/images/logo-black.png" alt="PIB Oliveira" class="brand-logo">
 
             <h2 style="margin-bottom: 5px;">Ministério de Louvor</h2>
             <p class="brand-subtitle">Primeira Igreja Batista em Oliveira</p>
@@ -80,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <script src="assets/js/main.js"></script>
+    <!-- Script removido para não aplicar tema aqui -->
 </body>
 
 </html>
