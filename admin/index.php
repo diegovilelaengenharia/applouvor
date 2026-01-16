@@ -6,13 +6,12 @@ require_once '../includes/layout.php';
 // Inicia o Shell
 renderAppHeader('Início');
 ?>
-<div class="container" style="padding-top: 40px; padding-bottom: 80px;">
+<div class="container" style="padding-top: 20px;">
 
-    <div style="text-align: center; margin-bottom: 40px;">
-        <div style="display:inline-block; height: 40px; border-left: 4px solid var(--status-warning); padding-left: 15px; margin-bottom: 10px;">
-            <h1 style="font-size: 2rem; margin: 0; line-height: 1;">Painel do Administrador</h1>
-        </div>
-        <p style="color: var(--text-secondary);">Bem-vindo, <?= htmlspecialchars($_SESSION['user_name']) ?>. O que vamos gerenciar hoje?</p>
+    <!-- Welcome Section Compact -->
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Olá, <?= htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]) ?> 👋</h1>
+        <p style="font-size: 0.95rem; color: var(--text-secondary);">O que você deseja fazer?</p>
     </div>
 
     <!-- Grid de Navegação -->
