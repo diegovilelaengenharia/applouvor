@@ -106,6 +106,10 @@ function renderAppHeader($title = 'Louvor PIB')
                     </a>
                 </div>
             </div>
+            <div style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: var(--text-muted); opacity: 0.7;">
+                App Louvor v1.0.0
+            </div>
+        </div>
         </div>
 
         <!-- Gestão -->
