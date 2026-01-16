@@ -144,10 +144,10 @@ renderAppHeader('Gerenciar Escala');
             </form>
 
             <!-- Delete Section Compact -->
-            <div style="border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+            <div style="margin-top: 15px;">
                 <form method="POST" onsubmit="return confirm('ATENÇÃO: Deseja realmente excluir esta escala?');">
                     <input type="hidden" name="delete_scale" value="1">
-                    <button type="submit" class="btn w-full" style="background: transparent; border: 1px solid var(--status-error); color: var(--status-error); font-weight: 600;">
+                    <button type="submit" class="btn w-full" style="background: var(--status-error); border: none; color: white; font-weight: 600; height: 48px;">
                         <i data-lucide="trash-2" style="width: 18px; margin-right: 6px;"></i> Excluir Escala
                     </button>
                 </form>
