@@ -137,9 +137,12 @@ renderAppHeader('Gerenciar Escala');
 
             <!-- Área de Perigo -->
             <div style="margin-top: 40px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
-                <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');">
+                <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza absoluta que deseja excluir esta escala? Esta ação não pode ser desfeita.');">
                     <input type="hidden" name="delete_scale" value="1">
-                    <button type="submit" class="btn w-full" style="background: var(--bg-secondary); color: var(--status-error); border: 1px solid var(--status-error);">Excluir Escala</button>
+                    <button type="submit" class="btn w-full" style="background: #ef4444; color: white; border: none; font-weight: 600; padding: 12px; border-radius: 8px; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">
+                        <i data-lucide="trash-2" style="width: 18px; margin-right: 8px; vertical-align: middle;"></i> Excluir Escala
+                    </button>
+                    <p style="text-align: center; font-size: 0.8rem; color: var(--status-error); margin-top: 8px; opacity: 0.8;">Cuidado: Isso apagará data e equipe.</p>
                 </form>
             </div>
         </div>
@@ -148,44 +151,80 @@ renderAppHeader('Gerenciar Escala');
     <!-- TAB EQUIPE -->
     <div id="tab-equipe" style="display: none;">
 
-        <!-- Lista de Escalados -->
+        <!-- Lista de Escalados (Agrupada) -->
         <div class="card" style="margin-bottom: 30px;">
             <h3 style="margin-bottom: 20px;">Equipe Escalada</h3>
 
             <?php if (empty($members)): ?>
                 <p style="opacity: 0.6;">Ninguém escalado ainda.</p>
             <?php else: ?>
-                <div class="list-group">
-                    <?php foreach ($members as $member): ?>
-                        <div class="list-item" style="padding: 10px 15px;">
-                            <div class="flex items-center gap-4">
-                                <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.8rem;">
-                                    <?= strtoupper(substr($member['name'], 0, 1)) ?>
-                                </div>
-                                <div>
-                                    <strong><?= htmlspecialchars($member['name']) ?></strong>
-                                    <span style="font-size: 0.8rem; opacity: 0.7;"> • <?= htmlspecialchars($member['instrument']) ?></span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <?php
-                                $statusClass = 'status-pending';
-                                $statusText = 'Pendente';
-                                if ($member['confirmed'] == 1) {
-                                    $statusClass = 'status-confirmed';
-                                    $statusText = 'Confirmado';
-                                }
-                                if ($member['confirmed'] == 2) {
-                                    $statusClass = 'status-refused';
-                                    $statusText = 'Recusou';
-                                }
-                                ?>
-                                <span class="status-badge <?= $statusClass ?>"><?= $statusText ?></span>
-                                <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" style="color: #ef5350; text-decoration: none; font-size: 1.2rem;">&times;</a>
+                <?php
+                // Agrupamento
+                $groups = ['Voz' => [], 'Banda' => [], 'Outros' => []];
+                foreach ($members as $m) {
+                    $cat = strtolower($m['category']);
+                    $inst = strtolower($m['instrument']);
+
+                    if (strpos($cat, 'voz') !== false || strpos($inst, 'voz') !== false || strpos($inst, 'soprano') !== false || strpos($inst, 'contralto') !== false || strpos($inst, 'tenor') !== false) {
+                        $groups['Voz'][] = $m;
+                    } elseif (in_array($cat, ['violao', 'teclado', 'bateria', 'baixo', 'guitarra']) || in_array($inst, ['violão', 'teclado', 'bateria', 'baixo', 'guitarra'])) {
+                        $groups['Banda'][] = $m;
+                    } else {
+                        $groups['Outros'][] = $m;
+                    }
+                }
+                ?>
+
+                <?php foreach ($groups as $groupName => $groupMembers): ?>
+                    <?php if (!empty($groupMembers)): ?>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="margin: 0 0 10px; color: var(--accent-interactive); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 5px; display: inline-block;"><?= $groupName ?></h4>
+                            <div class="list-group">
+                                <?php foreach ($groupMembers as $member): ?>
+                                    <div class="list-item" style="padding: 10px 15px;">
+                                        <div class="flex items-center gap-4">
+                                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.8rem; background: var(--bg-primary); border: 2px solid var(--border-subtle);">
+                                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600; font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                                <div style="font-size: 0.8rem; color: var(--text-secondary);"><?= htmlspecialchars($member['instrument']) ?></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <?php
+                                            $statusClass = 'status-pending';
+                                            $statusText = 'Pendente'; // Default
+                                            // Lógica de Confirmação (Se implementada no banco como int 0,1,2)
+                                            if ($member['confirmed'] == 1) {
+                                                $statusClass = 'status-confirmed';
+                                                $statusText = 'Confirmado';
+                                            }
+                                            if ($member['confirmed'] == 2) {
+                                                $statusClass = 'status-refused';
+                                                $statusText = 'Recusou';
+                                            }
+                                            ?>
+                                            <!-- Icon Status -->
+                                            <?php if ($member['confirmed'] == 1): ?>
+                                                <i data-lucide="check-circle" style="color: var(--status-success); width: 18px;"></i>
+                                            <?php elseif ($member['confirmed'] == 2): ?>
+                                                <i data-lucide="x-circle" style="color: var(--status-error); width: 18px;"></i>
+                                            <?php else: ?>
+                                                <i data-lucide="clock" style="color: var(--status-warning); width: 18px; opacity: 0.5;"></i>
+                                            <?php endif; ?>
+
+                                            <a href="?id=<?= $scale_id ?>&remove=<?= $member['id'] ?>" onclick="return confirm('Remover este membro?')" style="color: var(--text-muted); padding: 5px;">
+                                                <i data-lucide="trash-2" style="width: 16px;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
             <?php endif; ?>
         </div>
 
@@ -201,7 +240,7 @@ renderAppHeader('Gerenciar Escala');
                             <option value="">Selecione...</option>
                             <?php foreach ($users as $u): ?>
                                 <option value="<?= $u['id'] ?>" data-category="<?= $u['category'] ?>">
-                                    <?= htmlspecialchars($u['name']) ?> (<?= ucfirst(str_replace('_', ' ', $u['category'])) ?>)
+                                    <?= htmlspecialchars($u['name']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -253,16 +292,28 @@ renderAppHeader('Gerenciar Escala');
         const select = document.getElementById('userSelect');
         const input = document.getElementById('instrumentInput');
         const selectedOption = select.options[select.selectedIndex];
+        const nameText = selectedOption.text;
 
         if (selectedOption.value) {
-            let category = selectedOption.getAttribute('data-category');
-            // Formatar categoria para texto bonito
-            if (category === 'voz_feminina' || category === 'voz_masculina') category = 'Voz';
-            if (category === 'violao') category = 'Violão';
-            if (category === 'teclado') category = 'Teclado';
-            if (category === 'bateria') category = 'Bateria';
+            let category = selectedOption.getAttribute('data-category') || '';
+            let finalInst = '';
 
-            input.value = category.charAt(0).toUpperCase() + category.slice(1);
+            // 1. Smart Overrides (Pedidos Específicos)
+            if (nameText.includes('Diego')) {
+                finalInst = 'Violão';
+            } else if (nameText.includes('Thalyta')) {
+                finalInst = 'Voz';
+            }
+            // 2. Default Logic
+            else {
+                if (category === 'voz_feminina' || category === 'voz_masculina') finalInst = 'Voz';
+                else if (category === 'violao') finalInst = 'Violão';
+                else if (category === 'teclado') finalInst = 'Teclado';
+                else if (category === 'bateria') finalInst = 'Bateria';
+                else if (category) finalInst = category.charAt(0).toUpperCase() + category.slice(1);
+            }
+
+            input.value = finalInst;
         }
     }
 </script>
