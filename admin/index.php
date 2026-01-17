@@ -12,10 +12,10 @@ renderAppHeader('Início');
         <!-- Hero Section Admin -->
         <div class="hero-section fade-in-up" style="background: var(--gradient-hero);">
             <div class="hero-greeting">
-                Painel Administrativo 🎯
+                Gestão Louvor 🎯
             </div>
             <div class="hero-subtitle">
-                Gerencie o Ministério de Louvor com excelência
+                PIB Oliveira (MG)
             </div>
             <div class="hero-info">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
