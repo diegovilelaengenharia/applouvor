@@ -2,6 +2,9 @@
 // includes/layout.php
 // Este arquivo gerencia a estrutura principal (Shell) do App
 
+// Desabilitar cache
+require_once __DIR__ . '/no-cache.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -18,7 +21,7 @@ function renderAppHeader($title = 'Louvor PIB')
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title><?= htmlspecialchars($title) ?></title>
-        <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>">
+        <link rel="stylesheet" href="<?= asset('../assets/css/style.css') ?>">
         <!-- Ícones -->
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
