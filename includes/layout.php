@@ -49,13 +49,13 @@ function renderAppHeader($title = 'Louvor PIB')
                 <i data-lucide="layout-grid"></i>
                 <span>Gestão</span>
             </button>
-            <button class="nav-cat-item" onclick="alert('🚧 Módulo em Manutenção')">
-                <i data-lucide="heart-handshake" style="opacity: 0.5;"></i>
-                <span style="opacity: 0.5;">Espirito</span>
+            <button class="nav-cat-item" onclick="openSheet('sheet-espiritualidade')">
+                <i data-lucide="heart-handshake"></i>
+                <span>Espírito</span>
             </button>
-            <button class="nav-cat-item" onclick="alert('🚧 Módulo em Manutenção')">
-                <i data-lucide="message-circle" style="opacity: 0.5;"></i>
-                <span style="opacity: 0.5;">Comunica</span>
+            <button class="nav-cat-item" onclick="openSheet('sheet-comunicacao')">
+                <i data-lucide="message-circle"></i>
+                <span>Comunica</span>
             </button>
 
             <button class="nav-cat-item" onclick="openSheet('sheet-perfil')">

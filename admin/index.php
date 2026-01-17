@@ -10,26 +10,13 @@ renderAppHeader('Início');
 
     <!-- Header Title -->
     <div style="margin-bottom: 30px; text-align: center;">
-        <h1 style="font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--accent-interactive);">App Louvor</h1>
+        <h1 style="font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--accent-interactive);">App Louvor v1.1</h1>
         <p style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">PIB Oliveira</p>
     </div>
 
     <!-- Conteúdo Central -->
-    <div class="dashboard-grid">
-        <a href="escala.php" class="card-btn">
-            <span class="icon-emoji">📅</span>
-            <span>Escalas</span>
-        </a>
-
-        <a href="repertorio.php" class="card-btn">
-            <span class="icon-emoji">🎼</span>
-            <span>Repertório</span>
-        </a>
-
-        <a href="membros.php" class="card-btn">
-            <span class="icon-emoji">👥</span>
-            <span>Membros</span>
-        </a>
+    <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+        <p style="opacity: 0.7;">Selecione uma opção no menu abaixo para começar.</p>
     </div>
 
 </div>
