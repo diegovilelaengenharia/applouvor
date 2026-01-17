@@ -59,13 +59,7 @@ function renderAppHeader($title = 'Louvor PIB')
             </button>
 
             <button class="nav-cat-item ripple" onclick="openSheet('sheet-perfil')">
-                <div class="user-avatar-xs" style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; border: 1px solid currentColor;">
-                    <?php if ($avatar): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                    <?php else: ?>
-                        <div style="width: 100%; height: 100%; background: currentColor; display:flex; align-items:center; justify-content:center; color: var(--bg-secondary); font-size: 10px; font-weight: bold;"><?= $userInitials ?></div>
-                    <?php endif; ?>
-                </div>
+                <i data-lucide="settings"></i>
                 <span>Config</span>
             </button>
         </nav>
