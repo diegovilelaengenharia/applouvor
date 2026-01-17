@@ -5,9 +5,9 @@
 /* === QUICK ACCESS CARDS === */
 .quick-access-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 @media (min-width: 768px) {
@@ -20,15 +20,18 @@
 .quick-access-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border-subtle);
-    border-radius: 20px;
-    padding: 24px 16px;
+    border-radius: 16px;
+    padding: 16px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 8px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
     position: relative;
     overflow: hidden;
 }
@@ -60,9 +63,9 @@
 }
 
 .card-icon-wrapper {
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
     background: var(--gradient-soft);
     display: flex;
     align-items: center;
@@ -77,8 +80,8 @@
 }
 
 .card-icon-wrapper svg {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     color: var(--primary-green);
     transition: all 0.3s ease;
 }
