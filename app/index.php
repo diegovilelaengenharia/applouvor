@@ -38,19 +38,17 @@ checkLogin();
                 </div>
             </div>
 
-            <!-- Quick Access Cards -->
+            <!-- Gestão -->
             <div class="section-header fade-in-up-delay-1">
                 <h2 class="section-title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
+                        <layout-grid></layout-grid>
                     </svg>
-                    Acesso Rápido
+                    Gestão
                 </h2>
             </div>
 
             <div class="quick-access-grid fade-in-up-delay-2">
-                <!-- Minhas Escalas -->
                 <a href="escala.php" class="quick-access-card">
                     <div class="card-icon-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -60,11 +58,10 @@ checkLogin();
                             <line x1="3" y1="10" x2="21" y2="10"></line>
                         </svg>
                     </div>
-                    <h3 class="card-title">Minhas Escalas</h3>
-                    <p class="card-subtitle">Ver datas e confirmar</p>
+                    <h3 class="card-title">Escalas</h3>
+                    <p class="card-subtitle">Ver datas</p>
                 </a>
 
-                <!-- Repertório -->
                 <a href="repertorio.php" class="quick-access-card">
                     <div class="card-icon-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -74,10 +71,148 @@ checkLogin();
                         </svg>
                     </div>
                     <h3 class="card-title">Repertório</h3>
-                    <p class="card-subtitle">Músicas da semana</p>
+                    <p class="card-subtitle">Músicas</p>
                 </a>
 
-                <!-- Perfil -->
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Membros</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Agenda</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+            </div>
+
+            <!-- Espiritualidade -->
+            <div class="section-header fade-in-up-delay-2" style="margin-top: 32px;">
+                <h2 class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    Espiritualidade
+                </h2>
+            </div>
+
+            <div class="quick-access-grid fade-in-up-delay-3">
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Oração</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Devocionais</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Leitura</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+            </div>
+
+            <!-- Comunicação -->
+            <div class="section-header fade-in-up-delay-3" style="margin-top: 32px;">
+                <h2 class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Comunicação
+                </h2>
+            </div>
+
+            <div class="quick-access-grid fade-in-up-delay-3">
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Avisos</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Indisponível</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+
+                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+                    <div class="card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <path d="M8 14h.01"></path>
+                            <path d="M12 14h.01"></path>
+                            <path d="M16 14h.01"></path>
+                            <path d="M8 18h.01"></path>
+                            <path d="M12 18h.01"></path>
+                            <path d="M16 18h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Aniversários</h3>
+                    <p class="card-subtitle">Em breve</p>
+                </div>
+            </div>
+
+            <!-- Configurações -->
+            <div class="section-header" style="margin-top: 32px;">
+                <h2 class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6"></path>
+                    </svg>
+                    Configurações
+                </h2>
+            </div>
+
+            <div class="quick-access-grid">
                 <a href="perfil.php" class="quick-access-card">
                     <div class="card-icon-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -86,68 +221,8 @@ checkLogin();
                         </svg>
                     </div>
                     <h3 class="card-title">Meu Perfil</h3>
-                    <p class="card-subtitle">Configurações</p>
+                    <p class="card-subtitle">Editar dados</p>
                 </a>
-
-                <!-- Repertório Geral (Em breve) -->
-                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
-                    <div class="card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="card-title">Repertório Geral</h3>
-                    <p class="card-subtitle">Em breve</p>
-                </div>
-
-                <!-- Agenda Igreja (Em breve) -->
-                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
-                    <div class="card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                    </div>
-                    <h3 class="card-title">Agenda Igreja</h3>
-                    <p class="card-subtitle">Em breve</p>
-                </div>
-
-                <!-- Sugestões -->
-                <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
-                    <div class="card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                    </div>
-                    <h3 class="card-title">Sugestões</h3>
-                    <p class="card-subtitle">Em breve</p>
-                </div>
-            </div>
-
-            <!-- Próximas Escalas -->
-            <div class="section-header fade-in-up-delay-3" style="margin-top: 40px;">
-                <h2 class="section-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                    </svg>
-                    Próximas Escalas
-                </h2>
-                <a href="escala.php" class="section-action">Ver todas →</a>
-            </div>
-
-            <div class="fade-in-up-delay-3">
-                <div class="card-clean" style="text-align: center; padding: 40px 20px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px; color: var(--text-muted);">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    <p style="color: var(--text-secondary); margin-bottom: 8px;">Nenhuma escala confirmada</p>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Aguarde a próxima programação do líder</p>
-                </div>
             </div>
 
         </div>
