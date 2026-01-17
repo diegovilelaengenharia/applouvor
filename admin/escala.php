@@ -10,14 +10,14 @@ $usersList = $pdo->query("SELECT * FROM users ORDER BY name")->fetchAll();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_scale') {
     $date = $_POST['date'];
     $type = $_POST['type'];
-    $description = $_POST['description'];
+    $notes = $_POST['notes'];
     $selected_members = $_POST['members'] ?? [];
     $notify_members = isset($_POST['notify_members']);
 
     if ($date && $type) {
         // 1. Criar Escala
-        $stmt = $pdo->prepare("INSERT INTO scales (event_date, event_type, description) VALUES (?, ?, ?)");
-        $stmt->execute([$date, $type, $description]);
+        $stmt = $pdo->prepare("INSERT INTO scales (event_date, event_type, notes) VALUES (?, ?, ?)");
+        $stmt->execute([$date, $type, $notes]);
         $newId = $pdo->lastInsertId();
 
         // 2. Adicionar Membros e Capturar Nomes

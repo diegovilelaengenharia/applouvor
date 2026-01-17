@@ -1,87 +1,99 @@
 -- Criação do Banco de Dados
-CREATE DATABASE IF NOT EXISTS u884436813_applouvor;
-USE u884436813_applouvor;
+CREATE DATABASE IF NOT EXISTS pibo_louvor;
+USE pibo_louvor;
 
--- Tabela de Usuários
+-- ==========================================
+-- 1. TABELA DE USUÁRIOS (Membros)
+-- ==========================================
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    password VARCHAR(255) NOT NULL,
     role ENUM('admin', 'user') DEFAULT 'user',
-    category ENUM('voz_feminina', 'voz_masculina', 'violao', 'teclado', 'bateria', 'baixo', 'guitarra', 'outros') NOT NULL,
+    instrument VARCHAR(100), -- Ex: Voz, Violão, Bateria
     phone VARCHAR(20),
-    address_street VARCHAR(150),
-    address_number VARCHAR(20),
-    address_neighborhood VARCHAR(100),
-    avatar VARCHAR(255),
+    password VARCHAR(255) NOT NULL, -- Senha (4 últimos dígitos)
+    avatar_color VARCHAR(7) DEFAULT '#D4AF37', -- Cor para o avatar (iniciais)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de Escalas
-CREATE TABLE IF NOT EXISTS scales (
+-- ==========================================
+-- 2. TABELA DE MÚSICAS (Repertório Geral)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS songs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    artist VARCHAR(100),
+    bpm INT,
+    tone VARCHAR(10), -- Tom da música
+    link VARCHAR(255), -- Link do YouTube/CifraClub
+    category VARCHAR(50), -- Ex: Adoração, Celebração, Hino
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ==========================================
+-- 3. TABELA DE ESCALAS (Datas dos Cultos)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS schedules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     event_date DATE NOT NULL,
     event_type VARCHAR(50) DEFAULT 'Culto de Domingo',
-    description TEXT,
+    notes TEXT, -- Observações do líder
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de Membros da Escala (Quem toca no dia)
-CREATE TABLE IF NOT EXISTS scale_members (
+-- ==========================================
+-- 4. RELACIONAMENTO: QUEM TOCA NA ESCALA
+-- ==========================================
+CREATE TABLE IF NOT EXISTS schedule_users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    scale_id INT NOT NULL,
+    schedule_id INT NOT NULL,
     user_id INT NOT NULL,
-    instrument VARCHAR(50), -- O que vai tocar no dia (ex: Violão pode tocar Baixo)
-    confirmed TINYINT(1) DEFAULT 0, -- 0: Pendente, 1: Confirmado, 2: Recusado
-    FOREIGN KEY (scale_id) REFERENCES scales(id) ON DELETE CASCADE,
+    status ENUM('pending', 'confirmed', 'declined') DEFAULT 'pending',
+    FOREIGN KEY (schedule_id) REFERENCES schedules(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Tabela de Repertórios
-CREATE TABLE IF NOT EXISTS repertories (
+-- ==========================================
+-- 5. RELACIONAMENTO: MÚSICAS DO DIA
+-- ==========================================
+CREATE TABLE IF NOT EXISTS schedule_songs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    scale_id INT, -- Ligado a uma escala específica
-    planner_id INT, -- Quem montou (Líder)
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (scale_id) REFERENCES scales(id) ON DELETE SET NULL,
-    FOREIGN KEY (planner_id) REFERENCES users(id) ON DELETE SET NULL
+    schedule_id INT NOT NULL,
+    song_id INT NOT NULL,
+    presentation_order INT, -- Ordem no culto (1, 2, 3...)
+    FOREIGN KEY (schedule_id) REFERENCES schedules(id) ON DELETE CASCADE,
+    FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE
 );
 
--- Tabela de Músicas do Repertório
-CREATE TABLE IF NOT EXISTS songs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    repertory_id INT,
-    title VARCHAR(150) NOT NULL,
-    artist VARCHAR(100),
-    key_note VARCHAR(10), -- Tom da música
-    link_cifra VARCHAR(255),
-    link_youtube VARCHAR(255),
-    observation TEXT,
-    order_index INT DEFAULT 0,
-    FOREIGN KEY (repertory_id) REFERENCES repertories(id) ON DELETE CASCADE
-);
+-- ==========================================
+-- 🚀 POPULANDO OS DADOS (SEED)
+-- ==========================================
 
--- Inserção de Usuários Iniciais
--- Senhas são os 4 últimos dígitos do telefone
+-- Inserindo Membros e Senhas (4 últimos dígitos)
+INSERT INTO users (name, role, instrument, phone, password) VALUES
 -- Admin
-INSERT INTO users (name, password, role, category, phone) VALUES 
-('Diego', '9577', 'admin', 'violao', '35 98452 9577'); -- Também toca Bateria
+('Diego', 'admin', 'Violão/Bateria', '35 98452-9577', '9577'),
 
 -- Vozes Femininas
-INSERT INTO users (name, password, role, category, phone) VALUES 
-('Aline', '4903', 'user', 'voz_feminina', '37 98838-4903'),
-('Michelle', '1990', 'user', 'voz_feminina', '37 99145-1990'),
-('Raquel', '6691', 'user', 'voz_feminina', '35 99237-6691'),
-('Samara', '0252', 'user', 'voz_feminina', '37 9922-0252');
+('Aline', 'user', 'Voz (Fem)', '37 98838-4903', '4903'),
+('Michelle', 'user', 'Voz (Fem)', '37 99145-1990', '1990'),
+('Raquel', 'user', 'Voz (Fem)', '35 99237-6691', '6691'),
+('Samara', 'user', 'Voz (Fem)', '37 9922-0252', '0252'),
 
 -- Vozes Masculinas
-INSERT INTO users (name, password, role, category, phone) VALUES 
-('Wemerson', '5686', 'user', 'voz_masculina', '37 9988-5686'),
-('Weberth', '2158', 'user', 'voz_masculina', '37 9105-2158'),
-('Ananias', '1176', 'user', 'voz_masculina', '37 9959-1176'),
-('Márcio', '6713', 'user', 'voz_masculina', '31 9328-6713'); -- Também toca Violão
+('Wemerson', 'user', 'Voz (Masc)', '37 9988-5686', '5686'),
+('Weberth', 'user', 'Voz (Masc)', '37 9105-2158', '2158'),
+('Ananias', 'user', 'Voz (Masc)', '37 9959-1176', '1176'),
+('Márcio', 'user', 'Voz (Masc)/Violão', '31 9328-6713', '6713'),
 
--- Instrumentistas (que não estão acima)
-INSERT INTO users (name, password, role, category, phone) VALUES 
-('Thalyta', '3545', 'admin', 'voz_feminina', '14 98165-3545'),
-('Mariana', '5686', 'user', 'teclado', '37 9988-5686');
+-- Instrumentistas
+('Thalyta', 'user', 'Violão', '14 98165-3545', '3545'),
+('Mariana', 'user', 'Teclado', '37 9988-5686', '5686');
+
+-- Inserindo uma música de teste
+INSERT INTO songs (title, artist, tone, category) VALUES 
+('Bondade de Deus', 'Bethel Music', 'A', 'Adoração');
+
+-- Inserindo uma escala de teste (Domingo que vem)
+INSERT INTO schedules (event_date, notes) VALUES 
+(DATE_ADD(CURDATE(), INTERVAL (7 - DAYOFWEEK(CURDATE()) + 1) DAY), 'Culto de Ceia - Todos de branco');

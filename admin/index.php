@@ -10,7 +10,7 @@ renderAppHeader('Início');
 
     <!-- Header Title -->
     <div style="margin-bottom: 30px; text-align: center;">
-        <h1 style="font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--accent-interactive);">App Louvor v1.1</h1>
+        <h1 style="font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--accent-interactive);">App Louvor v1.2</h1>
         <p style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">PIB Oliveira</p>
     </div>
 

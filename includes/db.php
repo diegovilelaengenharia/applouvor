@@ -8,7 +8,7 @@ require_once 'config.php';
 // Detecta se está rodando localmente (XAMPP/localhost)
 if ($_SERVER['HTTP_HOST'] == 'localhost:8000' || $_SERVER['HTTP_HOST'] == 'localhost') {
     $host = 'localhost';
-    $dbname = 'louvor_pib_local'; // Vamos tentar conectar neste primeiro, se falhar o usuário precisará criar
+    $dbname = 'pibo_louvor'; // Atualizado para o novo nome do banco
     $username = 'root';
     $password = '';
 } else {

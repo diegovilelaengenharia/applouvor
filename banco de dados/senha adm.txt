@@ -1,5 +1,5 @@
 VilelaAdmin2025 (acessar site)
 
-banco de dados: u884436813_cliente
-usuariao: u884436813_vilela
+banco de dados: u884436813_applouvor
+usuariao: u884436813_admin
 senha: Diego@159753

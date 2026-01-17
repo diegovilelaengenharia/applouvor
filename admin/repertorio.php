@@ -5,20 +5,15 @@ require_once '../includes/layout.php';
 
 // Processar Adição de Nova Música
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_song') {
-    $stmt = $pdo->prepare("INSERT INTO library_songs (title, artist, version, key_note, bpm, category, link_lyrics, link_cifra, link_audio, link_video, observation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO songs (title, artist, tone, bpm, category, link) VALUES (?, ?, ?, ?, ?, ?)");
 
     $stmt->execute([
         $_POST['title'],
         $_POST['artist'],
-        $_POST['version'],
-        $_POST['key_note'],
+        $_POST['tone'],
         $_POST['bpm'] ?: null,
         $_POST['category'],
-        $_POST['link_lyrics'],
-        $_POST['link_cifra'],
-        $_POST['link_audio'],
-        $_POST['link_video'],
-        $_POST['observation']
+        $_POST['link']
     ]);
 
     header("Location: repertorio.php");
@@ -34,7 +29,7 @@ if ($search) {
     $params = ["%$search%", "%$search%"];
 }
 
-$stmt = $pdo->prepare("SELECT * FROM library_songs $where ORDER BY title ASC");
+$stmt = $pdo->prepare("SELECT * FROM songs $where ORDER BY title ASC");
 $stmt->execute($params);
 $songs = $stmt->fetchAll();
 
@@ -60,14 +55,11 @@ renderAppHeader('Repertório');
                         <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 4px;"><?= htmlspecialchars($song['title']) ?></h3>
                         <div style="font-size: 0.9rem; color: var(--text-secondary);">
                             <?= htmlspecialchars($song['artist']) ?>
-                            <?php if ($song['version']): ?>
-                                <span style="opacity:0.7;">(<?= htmlspecialchars($song['version']) ?>)</span>
-                            <?php endif; ?>
                         </div>
                     </div>
-                    <?php if ($song['key_note']): ?>
+                    <?php if ($song['tone']): ?>
                         <span class="status-badge" style="background:var(--bg-tertiary); color: var(--text-primary); border:1px solid var(--border-subtle);">
-                            <?= htmlspecialchars($song['key_note']) ?>
+                            <?= htmlspecialchars($song['tone']) ?>
                         </span>
                     <?php endif; ?>
                 </div>
@@ -85,11 +77,8 @@ renderAppHeader('Repertório');
 
                 <!-- Links / Badges -->
                 <div style="display:flex; gap: 8px; margin-top: 12px;">
-                    <?php if ($song['link_cifra']): ?>
-                        <a href="<?= htmlspecialchars($song['link_cifra']) ?>" target="_blank" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.75rem; height: auto;">Cifra</a>
-                    <?php endif; ?>
-                    <?php if ($song['link_video']): ?>
-                        <a href="<?= htmlspecialchars($song['link_video']) ?>" target="_blank" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.75rem; height: auto;">Vídeo</a>
+                    <?php if ($song['link']): ?>
+                        <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.75rem; height: auto;">Link</a>
                     <?php endif; ?>
                 </div>
 
@@ -121,21 +110,15 @@ renderAppHeader('Repertório');
                 <input type="text" name="title" class="form-input" required placeholder="Ex: Bondade de Deus">
             </div>
 
-            <div style="display:flex; gap: 10px;">
-                <div class="form-group" style="flex:1;">
-                    <label class="form-label">Artista</label>
-                    <input type="text" name="artist" class="form-input" placeholder="Ex: Isaías Saad">
-                </div>
-                <div class="form-group" style="flex:1;">
-                    <label class="form-label">Versão</label>
-                    <input type="text" name="version" class="form-input" placeholder="Ex: Ao Vivo">
-                </div>
+            <div class="form-group">
+                <label class="form-label">Artista</label>
+                <input type="text" name="artist" class="form-input" placeholder="Ex: Isaías Saad">
             </div>
 
             <div style="display:flex; gap: 10px;">
                 <div class="form-group" style="flex:1;">
                     <label class="form-label">Tom</label>
-                    <input type="text" name="key_note" class="form-input" placeholder="G">
+                    <input type="text" name="tone" class="form-input" placeholder="G">
                 </div>
                 <div class="form-group" style="flex:1;">
                     <label class="form-label">BPM</label>
@@ -154,24 +137,9 @@ renderAppHeader('Repertório');
                 </select>
             </div>
 
-            <h4 style="margin: 15px 0 10px; font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase;">Links</h4>
-
             <div class="form-group">
-                <input type="url" name="link_cifra" class="form-input" placeholder="Link CifraClub">
-            </div>
-            <div class="form-group">
-                <input type="url" name="link_video" class="form-input" placeholder="Link YouTube">
-            </div>
-            <div class="form-group">
-                <input type="url" name="link_lyrics" class="form-input" placeholder="Link Letras">
-            </div>
-            <div class="form-group">
-                <input type="url" name="link_audio" class="form-input" placeholder="Link Spotify/Audio">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Observações</label>
-                <textarea name="observation" class="form-input" rows="3" placeholder="Detalhes de arranjo, início, etc..."></textarea>
+                <label class="form-label">Link (YouTube/Cifra)</label>
+                <input type="url" name="link" class="form-input" placeholder="https://...">
             </div>
 
             <button type="submit" class="btn btn-primary w-full" style="margin-top: 15px;">Salvar Música</button>
