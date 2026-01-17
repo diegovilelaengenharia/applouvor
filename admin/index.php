@@ -12,7 +12,7 @@ renderAppHeader('Início');
         <!-- Hero Section Admin -->
         <div class="hero-section fade-in-up" style="background: var(--gradient-hero);">
             <div class="hero-greeting">
-                Gestão Louvor 🎯
+                Gestão Louvor
             </div>
             <div class="hero-subtitle">
                 PIB Oliveira (MG)

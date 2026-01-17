@@ -24,7 +24,7 @@ checkLogin();
             <!-- Hero Section -->
             <div class="hero-section fade-in-up">
                 <div class="hero-greeting">
-                    Gestão Louvor 🎵
+                    Gestão Louvor
                 </div>
                 <div class="hero-subtitle">
                     PIB Oliveira (MG)
@@ -34,7 +34,7 @@ checkLogin();
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <span>Olá, <?= $_SESSION['user_name'] ?>!</span>
+                    <span>Bem-vindo(a), <?= $_SESSION['user_name'] ?>!</span>
                 </div>
             </div>
 
