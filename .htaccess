@@ -1,0 +1,17 @@
+# Desabilitar cache para arquivos PHP, CSS e JS
+<FilesMatch "\.(php|css|js)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</FilesMatch>
+
+# Forçar revalidação de assets
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+FileETag None
+
+# Desabilitar cache do navegador
+<IfModule mod_expires.c>
+    ExpiresActive Off
+</IfModule>
