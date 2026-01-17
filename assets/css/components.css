@@ -72,14 +72,14 @@
 }
 
 .quick-access-card:hover .card-icon-wrapper {
-    background: var(--gradient-vibrant);
+    background: var(--gradient-primary);
     transform: scale(1.1) rotate(5deg);
 }
 
 .card-icon-wrapper svg {
     width: 32px;
     height: 32px;
-    color: var(--primary-blue);
+    color: var(--primary-green);
     transition: all 0.3s ease;
 }
 
@@ -164,7 +164,7 @@
 
 /* === MODERN BUTTONS === */
 .btn-gradient-primary {
-    background: var(--gradient-vibrant);
+    background: var(--gradient-primary);
     color: white;
     border: none;
     border-radius: 12px;
@@ -177,7 +177,7 @@
     justify-content: center;
     gap: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 8px 24px rgba(45, 122, 79, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -202,7 +202,7 @@
 
 .btn-gradient-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 12px 32px rgba(45, 122, 79, 0.4);
 }
 
 .btn-gradient-primary:active {
@@ -210,7 +210,7 @@
 }
 
 .btn-gradient-accent {
-    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+    background: var(--gradient-elegant);
     color: white;
     border: none;
     border-radius: 12px;
@@ -223,12 +223,12 @@
     justify-content: center;
     gap: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 8px 24px rgba(74, 85, 104, 0.3);
 }
 
 .btn-gradient-accent:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 12px 32px rgba(74, 85, 104, 0.4);
 }
 
 .btn-glass {

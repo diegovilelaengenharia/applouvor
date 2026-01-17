@@ -114,25 +114,60 @@ function renderAppHeader($title = 'Louvor PIB')
 
         <!-- Gestão -->
         <div id="sheet-gestao" class="bottom-sheet-overlay" onclick="closeSheet(this)">
-            <div class="bottom-sheet-content">
+            <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Gestão</div>
                 <div class="sheet-grid">
-                    <a href="escala.php" class="sheet-item ripple">
-                        <div class="emoji-icon">📅</div><span>Escalas</span>
+                    <a href="gestao_escala.php" class="sheet-item ripple">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <span>Escalas</span>
                     </a>
-                    <a href="repertorio.php" class="sheet-item ripple">
-                        <div class="emoji-icon">🎼</div><span>Repertório</span>
+                    <a href="gestao_repertorio.php" class="sheet-item ripple">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18V5l12-2v13"></path>
+                                <circle cx="6" cy="18" r="3"></circle>
+                                <circle cx="18" cy="16" r="3"></circle>
+                            </svg>
+                        </div>
+                        <span>Repertório</span>
                     </a>
                     <a href="membros.php" class="sheet-item ripple">
-                        <div class="emoji-icon">👥</div><span>Membros</span>
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <span>Membros</span>
                     </a>
-                    <a href="#" class="sheet-item" onclick="alert('🚧 Em breve: Agenda da Igreja')">
-                        <div class="emoji-icon" style="filter: grayscale(1); opacity: 0.5;">⛪</div><span style="color: var(--text-secondary); opacity: 0.5;">Agenda</span>
-                    </a>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <span>Agenda</span>
+                    </div>
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
-                        <a href="#" class="sheet-item" onclick="alert('🚧 Em breve: Painel Avançado')">
-                            <div class="emoji-icon" style="filter: grayscale(1); opacity: 0.5;">🔒</div><span style="color: var(--text-secondary); opacity: 0.5;">Admin</span>
-                        </a>
+                        <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                            <div class="sheet-icon-wrapper">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                            </div>
+                            <span>Admin</span>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -140,36 +175,82 @@ function renderAppHeader($title = 'Louvor PIB')
 
         <!-- Espiritualidade -->
         <div id="sheet-espiritualidade" class="bottom-sheet-overlay" onclick="closeSheet(this)">
-            <div class="bottom-sheet-content">
+            <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Espiritualidade</div>
                 <div class="sheet-grid">
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">🙏</div><span>Oração</span>
-                    </a>
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">📖</div><span>Devocionais</span>
-                    </a>
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">📜</div><span>Leitura</span>
-                    </a>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                        <span>Oração</span>
+                    </div>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </div>
+                        <span>Devocionais</span>
+                    </div>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                        </div>
+                        <span>Leitura</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Comunicação -->
         <div id="sheet-comunicacao" class="bottom-sheet-overlay" onclick="closeSheet(this)">
-            <div class="bottom-sheet-content">
+            <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Comunicação</div>
                 <div class="sheet-grid">
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">📣</div><span>Avisos</span>
-                    </a>
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">🚫</div><span>Indisponível</span>
-                    </a>
-                    <a href="#" class="sheet-item" onclick="alert('Em breve')">
-                        <div class="emoji-icon">🎂</div><span>Aniversários</span>
-                    </a>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <span>Avisos</span>
+                    </div>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                        </div>
+                        <span>Indisponível</span>
+                    </div>
+                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <div class="sheet-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                                <path d="M8 14h.01"></path>
+                                <path d="M12 14h.01"></path>
+                                <path d="M16 14h.01"></path>
+                                <path d="M8 18h.01"></path>
+                                <path d="M12 18h.01"></path>
+                                <path d="M16 18h.01"></path>
+                            </svg>
+                        </div>
+                        <span>Aniversários</span>
+                    </div>
                 </div>
             </div>
         </div>
