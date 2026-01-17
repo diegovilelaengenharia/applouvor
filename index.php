@@ -53,33 +53,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* Notas Musicais Flutuantes */
         .music-note {
             position: absolute;
-            font-size: 3rem;
-            opacity: 0.1;
+            opacity: 0.15;
             animation: float 20s infinite ease-in-out;
-            color: white;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .music-note svg {
+            fill: white;
+            stroke: white;
         }
 
         .music-note:nth-child(1) {
-            top: 10%;
-            left: 10%;
+            top: 5%;
+            left: 8%;
             animation-delay: 0s;
+            width: 120px;
         }
 
         .music-note:nth-child(2) {
-            top: 20%;
-            right: 15%;
-            animation-delay: 2s;
-            font-size: 2.5rem;
-        }
-
-        .music-note:nth-child(3) {
-            bottom: 30%;
-            left: 20%;
-            animation-delay: 4s;
-            font-size: 4rem;
-        }
-
-        .music-note:nth-child(4) {
             top: 60%;
             right: 10%;
             animation-delay: 6s;
@@ -280,13 +271,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="login-page">
-    <!-- Notas Musicais Decorativas -->
-    <div class="music-note">♪</div>
-    <div class="music-note">♫</div>
-    <div class="music-note">♪</div>
-    <div class="music-note">♬</div>
-    <div class="music-note">♫</div>
-    <div class="music-note">♪</div>
+    <!-- Elementos Musicais Decorativos SVG -->
+
+    <!-- Clave de Sol -->
+    <div class="music-note">
+        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50,10 Q60,20 55,35 Q50,50 45,65 Q40,80 42,95 Q44,110 50,115 Q56,120 60,115 Q64,110 62,100 Q60,90 55,85 Q50,80 45,85 Q40,90 42,100 Q44,110 50,115 M50,35 Q55,30 58,25 Q61,20 60,15 Q59,10 55,8 Q51,6 48,8 Q45,10 46,15 L50,115 Q52,125 48,135 Q44,145 38,145 Q32,145 30,140 Q28,135 30,130" stroke-width="2" fill="none" />
+            <circle cx="50" cy="95" r="8" fill="white" />
+        </svg>
+    </div>
+
+    <!-- Clave de Fá -->
+    <div class="music-note">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,30 Q20,35 20,45 Q20,55 30,60 Q40,65 50,60 Q60,55 60,45 Q60,35 50,30 Q40,25 30,30 M25,40 Q25,35 30,32 Q35,29 40,32 Q45,35 45,40 Q45,45 40,48 Q35,51 30,48 Q25,45 25,40" stroke-width="2" fill="none" />
+            <circle cx="70" cy="35" r="4" fill="white" />
+            <circle cx="70" cy="55" r="4" fill="white" />
+            <line x1="10" y1="30" x2="90" y2="30" stroke-width="1.5" />
+            <line x1="10" y1="40" x2="90" y2="40" stroke-width="1.5" />
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="1.5" />
+            <line x1="10" y1="60" x2="90" y2="60" stroke-width="1.5" />
+        </svg>
+    </div>
 
     <div class="login-card">
         <div class="login-header">
