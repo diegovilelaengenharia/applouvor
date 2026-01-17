@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         /* Estilos Exclusivos da Página de Login (Inline para garantir override) */
         body.login-page {
-            background: linear-gradient(-45deg, #1E3A8A, #2563EB, #3B82F6, #60A5FA);
+            background: linear-gradient(-45deg, #1E5A3A, #2D7A4F, #4A5568, #2D3748);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
             display: flex;
@@ -176,14 +176,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .form-input-login:focus {
-            border-color: #2563EB;
+            border-color: #2D7A4F;
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.1);
             transform: translateY(-2px);
         }
 
         .btn-gold {
-            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            background: linear-gradient(135deg, #2D7A4F 0%, #1E5A3A 100%);
             color: #fff;
             width: 100%;
             padding: 16px;
@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
             font-size: 1.05rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 8px 20px rgba(45, 122, 79, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
