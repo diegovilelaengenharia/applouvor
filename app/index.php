@@ -230,9 +230,142 @@ checkLogin();
 
     <?php include '../includes/bottom_nav.php'; ?>
 
+    <!-- Modal de Boas-vindas -->
+    <div id="welcomeModal" class="welcome-modal">
+        <div class="welcome-modal-content">
+            <div class="welcome-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+            </div>
+            <h2 class="welcome-title">Bem-vindo(a), <?= $_SESSION['user_name'] ?>!</h2>
+            <p class="welcome-message">
+                Que alegria ter você conosco! Sua dedicação em servir ao Reino de Deus através do louvor é uma bênção para nossa igreja.
+                Que o Senhor continue capacitando você com seus dons e talentos para glorificar Seu nome.
+            </p>
+            <p class="welcome-verse">"Cantai ao Senhor um cântico novo, porque ele tem feito maravilhas" - Salmos 98:1</p>
+            <button class="btn-gradient-primary" onclick="closeWelcomeModal()">Começar</button>
+        </div>
+    </div>
+
+    <style>
+        .welcome-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .welcome-modal.active {
+            display: flex;
+        }
+
+        .welcome-modal-content {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 40px 32px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .welcome-icon svg {
+            color: white;
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .welcome-message {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .welcome-verse {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--primary-green);
+            margin-bottom: 28px;
+            padding: 16px;
+            background: var(--gradient-soft);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
+
+        // Mostrar modal de boas-vindas apenas uma vez por sessão
+        function showWelcomeModal() {
+            const hasSeenWelcome = sessionStorage.getItem('hasSeenWelcome');
+            if (!hasSeenWelcome) {
+                setTimeout(() => {
+                    document.getElementById('welcomeModal').classList.add('active');
+                }, 500);
+            }
+        }
+
+        function closeWelcomeModal() {
+            document.getElementById('welcomeModal').classList.remove('active');
+            sessionStorage.setItem('hasSeenWelcome', 'true');
+        }
+
+        // Exibir modal ao carregar a página
+        window.addEventListener('load', showWelcomeModal);
     </script>
 
 </body>
