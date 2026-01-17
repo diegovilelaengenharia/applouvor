@@ -1,4 +1,8 @@
 <?php
+// includes/db.php
+
+require_once 'config.php';
+
 // Configurações do Banco de Dados
 
 // Detecta se está rodando localmente (XAMPP/localhost)

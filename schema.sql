@@ -83,5 +83,5 @@ INSERT INTO users (name, password, role, category, phone) VALUES
 
 -- Instrumentistas (que não estão acima)
 INSERT INTO users (name, password, role, category, phone) VALUES 
-('Thalyta', '3545', 'admin', 'violao', '14 98165-3545'),
+('Thalyta', '3545', 'admin', 'voz_feminina', '14 98165-3545'),
 ('Mariana', '5686', 'user', 'teclado', '37 9988-5686');

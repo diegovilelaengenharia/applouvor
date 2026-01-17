@@ -120,18 +120,18 @@ function renderAppHeader($title = 'Louvor PIB')
                     <a href="escala.php" class="sheet-item">
                         <div class="emoji-icon">📅</div><span>Escalas</span>
                     </a>
-                    <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
-                        <div class="emoji-icon" style="filter: grayscale(1);">🎼</div><span style="color: var(--text-secondary);">Repertório</span>
+                    <a href="repertorio.php" class="sheet-item">
+                        <div class="emoji-icon">🎼</div><span>Repertório</span>
                     </a>
-                    <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
-                        <div class="emoji-icon" style="filter: grayscale(1);">👥</div><span style="color: var(--text-secondary);">Membros</span>
+                    <a href="membros.php" class="sheet-item">
+                        <div class="emoji-icon">👥</div><span>Membros</span>
                     </a>
-                    <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
-                        <div class="emoji-icon" style="filter: grayscale(1);">⛪</div><span style="color: var(--text-secondary);">Agenda</span>
+                    <a href="#" class="sheet-item" onclick="alert('🚧 Em breve: Agenda da Igreja')">
+                        <div class="emoji-icon" style="filter: grayscale(1); opacity: 0.5;">⛪</div><span style="color: var(--text-secondary); opacity: 0.5;">Agenda</span>
                     </a>
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
-                        <a href="#" class="sheet-item" onclick="alert('🚧 Módulo em Manutenção')">
-                            <div class="emoji-icon" style="filter: grayscale(1);">🔒</div><span style="color: var(--text-secondary);">Admin</span>
+                        <a href="#" class="sheet-item" onclick="alert('🚧 Em breve: Painel Avançado')">
+                            <div class="emoji-icon" style="filter: grayscale(1); opacity: 0.5;">🔒</div><span style="color: var(--text-secondary); opacity: 0.5;">Admin</span>
                         </a>
                     <?php endif; ?>
                 </div>

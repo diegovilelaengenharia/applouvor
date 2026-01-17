@@ -71,9 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php include '../includes/header.php'; ?>
 
-    <div class="container">
-        <a href="membros.php" style="display: block; margin-top: 20px; color: var(--text-secondary); text-decoration: none;">&larr; Voltar para Lista</a>
-        <h1 class="page-title">Editar Membro: <?= htmlspecialchars($member['name']) ?></h1>
+    <div class="container" style="padding-top: 20px;">
+        <div style="margin-bottom: 20px;">
+            <a href="membros.php" class="btn-outline" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
+            </a>
+        </div>
+        <h1 class="page-title" style="margin-bottom: 30px;">Editar Membro: <?= htmlspecialchars($member['name']) ?></h1>
 
         <?php if ($success): ?>
             <div class="card" style="background-color: rgba(46, 125, 50, 0.1); border-color: var(--success-color); color: var(--success-color); margin-bottom: 20px;">

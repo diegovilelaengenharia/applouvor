@@ -14,14 +14,22 @@ renderAppHeader('Início');
         <p style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">PIB Oliveira</p>
     </div>
 
-    <!-- Conteúdo Central Simplificado -->
-    <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
-        <div style="margin-bottom: 20px; opacity: 0.8;">
-            <i data-lucide="construction" style="width: 64px; height: 64px;"></i>
-        </div>
-        <h2 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 10px;">Painel em Construção</h2>
-        <p>Utilize o menu inferior para navegar entre as opções de <strong>Gestão</strong>, <strong>Espiritualidade</strong> e <strong>Comunicação</strong>.</p>
-        <p style="margin-top: 20px; font-size: 0.85rem; opacity: 0.7;">Novidades em breve!</p>
+    <!-- Conteúdo Central -->
+    <div class="dashboard-grid">
+        <a href="escala.php" class="card-btn">
+            <span class="icon-emoji">📅</span>
+            <span>Escalas</span>
+        </a>
+
+        <a href="repertorio.php" class="card-btn">
+            <span class="icon-emoji">🎼</span>
+            <span>Repertório</span>
+        </a>
+
+        <a href="membros.php" class="card-btn">
+            <span class="icon-emoji">👥</span>
+            <span>Membros</span>
+        </a>
     </div>
 
 </div>
