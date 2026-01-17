@@ -38,7 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         /* Estilos Exclusivos da Página de Login (Inline para garantir override) */
         body.login-page {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(-45deg, #667eea, #764ba2, #8B5CF6, #EC4899);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -46,83 +48,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 20px;
         }
 
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .login-card {
-            background: #FFFFFF;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             padding: 40px 30px;
-            border-radius: 20px;
+            border-radius: 24px;
             width: 100%;
             max-width: 360px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         .brand-logo {
             width: 80px;
             margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
         }
 
         .login-header h2 {
-            font-size: 1.2rem;
-            color: #1a1a1a;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 30px;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .form-label {
             display: block;
             text-align: left;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #555;
-            margin-bottom: 5px;
-            font-weight: 500;
+            margin-bottom: 6px;
+            font-weight: 600;
         }
 
         .form-input-login {
             background: #F9FAFB;
-            border: 1px solid #E5E7EB;
+            border: 2px solid #E5E7EB;
             border-radius: 12px;
-            padding: 12px 15px;
+            padding: 14px 16px;
             width: 100%;
             font-size: 1rem;
             margin-bottom: 20px;
             outline: none;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .form-input-login:focus {
-            border-color: #D4AF37;
+            border-color: #8B5CF6;
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
         }
 
         .btn-gold {
-            background-color: #D4AF37;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border-radius: 12px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            transition: transform 0.2s, background 0.2s;
-            box-shadow: 0 4px 6px rgba(212, 175, 55, 0.25);
+            font-size: 1.05rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            /* Espaço entre texto e ícone */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gold::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-gold:hover::before {
+            left: 100%;
         }
 
         .btn-gold:hover {
-            background-color: #B59326;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-gold:active {
+            transform: translateY(-1px) scale(0.98);
         }
 
         .custom-footer {
             margin-top: 25px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #888;
         }
 
@@ -130,6 +172,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 0.7rem;
             color: #ccc;
             margin-top: 5px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            border: 1px solid #fca5a5;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
         }
     </style>
     <!-- Lucide Icons -->
@@ -145,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <?php if ($error): ?>
-            <div style="background: #FFEAEA; color: #D32F2F; padding: 10px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px;">
+            <div class="error-message">
                 <?= htmlspecialchars($error) ?>
             </div>
         <?php endif; ?>

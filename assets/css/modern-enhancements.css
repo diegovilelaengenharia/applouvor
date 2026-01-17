@@ -1,0 +1,288 @@
+﻿.btn-loading {
+    opacity: 0.7;
+    pointer-events: none;
+    cursor: wait;
+}
+
+/* === MODERN ENHANCEMENTS === */
+
+/* Card Buttons Modernos com Gradiente Sutil */
+.card-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.card-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-vibrant);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+}
+
+.card-btn:hover::before {
+    opacity: 0.05;
+}
+
+.card-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-float);
+    border-color: var(--primary-purple);
+}
+
+.card-btn:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.card-btn .icon-emoji,
+.card-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.card-btn .icon-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-btn:hover .icon-emoji {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Bottom Nav Moderna com Indicador */
+.bottom-nav-categories {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--bottom-nav-height);
+    background: var(--bg-secondary);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-subtle);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    z-index: 500;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-cat-item {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+.nav-cat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 40px;
+    height: 3px;
+    background: var(--gradient-vibrant);
+    border-radius: 0 0 3px 3px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-cat-item:hover::before,
+.nav-cat-item:active::before,
+.nav-cat-item.active::before {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.nav-cat-item:hover,
+.nav-cat-item:active,
+.nav-cat-item.active {
+    color: var(--primary-purple);
+}
+
+.nav-cat-item svg,
+.nav-cat-item i {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-cat-item:hover svg,
+.nav-cat-item:hover i,
+.nav-cat-item.active svg,
+.nav-cat-item.active i {
+    transform: scale(1.1);
+}
+
+/* Bottom Sheets com Glassmorphism */
+.bottom-sheet-overlay {
+    backdrop-filter: blur(8px);
+}
+
+.bottom-sheet-content {
+    background: var(--bg-secondary);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-elevated);
+}
+
+.sheet-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sheet-item:hover {
+    background: var(--bg-tertiary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.sheet-item:active {
+    transform: translateY(0) scale(0.96);
+}
+
+/* Botões Primários com Gradiente */
+.btn-primary,
+.btn-gold {
+    background: var(--gradient-primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-glow);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before,
+.btn-gold::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before,
+.btn-gold:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover,
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+}
+
+.btn-primary:active,
+.btn-gold:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Micro-animações */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Ripple Effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Acessibilidade - Reduzir animações */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

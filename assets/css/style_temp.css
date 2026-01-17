@@ -1,8 +1,6 @@
 ﻿/* Fontes */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Modern Enhancements */
-@import url('modern-enhancements.css');
 :root {
     /* --- Modern Vibrant Theme --- */
     --bg-primary: #F8FAFC;

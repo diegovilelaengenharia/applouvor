@@ -40,25 +40,25 @@ function renderAppHeader($title = 'Louvor PIB')
 
         <!-- Bottom Navigation (5 Categories) -->
         <nav class="bottom-nav-categories">
-            <a href="index.php" class="nav-cat-item">
+            <a href="index.php" class="nav-cat-item ripple" id="nav-home">
                 <i data-lucide="home"></i>
                 <span>Início</span>
             </a>
 
-            <button class="nav-cat-item" onclick="openSheet('sheet-gestao')">
+            <button class="nav-cat-item ripple" onclick="openSheet('sheet-gestao')">
                 <i data-lucide="layout-grid"></i>
                 <span>Gestão</span>
             </button>
-            <button class="nav-cat-item" onclick="openSheet('sheet-espiritualidade')">
+            <button class="nav-cat-item ripple" onclick="openSheet('sheet-espiritualidade')">
                 <i data-lucide="heart-handshake"></i>
                 <span>Espírito</span>
             </button>
-            <button class="nav-cat-item" onclick="openSheet('sheet-comunicacao')">
+            <button class="nav-cat-item ripple" onclick="openSheet('sheet-comunicacao')">
                 <i data-lucide="message-circle"></i>
                 <span>Comunica</span>
             </button>
 
-            <button class="nav-cat-item" onclick="openSheet('sheet-perfil')">
+            <button class="nav-cat-item ripple" onclick="openSheet('sheet-perfil')">
                 <div class="user-avatar-xs" style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; border: 1px solid currentColor;">
                     <?php if ($avatar): ?>
                         <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
@@ -91,17 +91,17 @@ function renderAppHeader($title = 'Louvor PIB')
 
                 <div class="sheet-grid" style="grid-template-columns: repeat(3, 1fr);">
                     <!-- Botão Perfil -->
-                    <a href="perfil.php" class="sheet-item">
+                    <a href="perfil.php" class="sheet-item ripple">
                         <div class="emoji-icon">👤</div><span>Perfil</span>
                     </a>
 
                     <!-- Botão Modo Noturno -->
-                    <div class="sheet-item" id="btn-theme-toggle">
+                    <div class="sheet-item ripple" id="btn-theme-toggle">
                         <div class="emoji-icon">🌙</div><span>Tema Escuro</span>
                     </div>
 
                     <!-- Botão Sair -->
-                    <a href="../includes/auth.php?logout=true" class="sheet-item" style="border-color: var(--status-error); background: rgba(239, 68, 68, 0.05);">
+                    <a href="../includes/auth.php?logout=true" class="sheet-item ripple" style="border-color: var(--status-error); background: rgba(239, 68, 68, 0.05);">
                         <div class="emoji-icon">🚪</div><span style="color: var(--status-error);">Sair</span>
                     </a>
                 </div>
@@ -117,13 +117,13 @@ function renderAppHeader($title = 'Louvor PIB')
             <div class="bottom-sheet-content">
                 <div class="sheet-header">Gestão</div>
                 <div class="sheet-grid">
-                    <a href="escala.php" class="sheet-item">
+                    <a href="escala.php" class="sheet-item ripple">
                         <div class="emoji-icon">📅</div><span>Escalas</span>
                     </a>
-                    <a href="repertorio.php" class="sheet-item">
+                    <a href="repertorio.php" class="sheet-item ripple">
                         <div class="emoji-icon">🎼</div><span>Repertório</span>
                     </a>
-                    <a href="membros.php" class="sheet-item">
+                    <a href="membros.php" class="sheet-item ripple">
                         <div class="emoji-icon">👥</div><span>Membros</span>
                     </a>
                     <a href="#" class="sheet-item" onclick="alert('🚧 Em breve: Agenda da Igreja')">
