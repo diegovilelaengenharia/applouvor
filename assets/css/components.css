@@ -117,53 +117,96 @@
     animation: pulse-glow 2s ease-in-out infinite;
 }
 
-/* === HERO SECTION === */
+/* === HERO SECTION - HEADER MODERNO COMPACTO === */
 .hero-section {
-    background: var(--gradient-vibrant);
-    border-radius: 24px;
-    padding: 32px 24px;
-    margin-bottom: 24px;
+    background: var(--gradient-primary);
+    border-radius: 0;
+    padding: 16px 20px;
+    margin: -20px -20px 24px -20px;
     color: white;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(45, 122, 79, 0.2);
 }
 
+/* Efeito de onda animada no fundo */
 .hero-section::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -10%;
-    width: 300px;
-    height: 300px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%);
+    animation: shimmer 3s infinite;
     pointer-events: none;
 }
 
+/* Padrão de linhas diagonais sutis */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.03) 10px,
+            rgba(255, 255, 255, 0.03) 20px);
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(50%);
+    }
+}
+
 .hero-greeting {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 8px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 2px;
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-    font-weight: 500;
+    font-size: 0.8rem;
+    opacity: 0.85;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-info {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
+    gap: 6px;
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 1;
 }
+
+.hero-info svg {
+    width: 16px;
+    height: 16px;
+}
+
 
 /* === MODERN BUTTONS === */
 .btn-gradient-primary {
