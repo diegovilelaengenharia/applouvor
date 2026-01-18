@@ -2,10 +2,11 @@
 require_once '../includes/auth.php';
 require_once '../includes/layout.php';
 
-// Apenas autenticação simples, já configurada no layout/auth
+// Check if it's admin or musician to include correct auth check if needed
+// For simplicity, just check login
 checkLogin();
 
-renderAppHeader('Escalas');
+renderAppHeader('Em Manutenção');
 ?>
 
 <div class="app-content">

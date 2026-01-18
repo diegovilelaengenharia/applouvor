@@ -72,7 +72,7 @@ function renderAppHeader($title = 'Louvor PIB')
 
         <!-- Bottom Sheets (Submenus) -->
 
-        <!-- Perfil / Configurações Sheet -->
+        <!-- 1. Perfil / Configurações Sheet -->
         <div id="sheet-perfil" class="bottom-sheet-overlay" onclick="closeSheet(this)">
             <div class="bottom-sheet-content">
                 <div class="sheet-header">Configurações</div>
@@ -105,19 +105,19 @@ function renderAppHeader($title = 'Louvor PIB')
                         <div class="emoji-icon">🚪</div><span style="color: var(--status-error);">Sair</span>
                     </a>
                 </div>
+
+                <div style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: var(--text-muted); opacity: 0.7;">
+                    App Louvor v1.0.0
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: var(--text-muted); opacity: 0.7;">
-                App Louvor v1.0.0
-            </div>
-        </div>
         </div>
 
-        <!-- Gestão -->
+        <!-- 2. Gestão Sheet -->
         <div id="sheet-gestao" class="bottom-sheet-overlay" onclick="closeSheet(this)">
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Gestão</div>
                 <div class="sheet-grid">
-                    <a href="gestao_escala.php" class="sheet-item ripple">
+                    <a href="escala.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -128,7 +128,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         </div>
                         <span>Escalas</span>
                     </a>
-                    <a href="gestao_repertorio.php" class="sheet-item ripple">
+                    <a href="repertorio.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 18V5l12-2v13"></path>
@@ -138,47 +138,39 @@ function renderAppHeader($title = 'Louvor PIB')
                         </div>
                         <span>Repertório</span>
                     </a>
-                    <a href="membros.php" class="sheet-item ripple">
-                        <div class="sheet-icon-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        </div>
-                        <span>Membros</span>
-                    </a>
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
-                        <div class="sheet-icon-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </div>
-                        <span>Agenda</span>
-                    </div>
+
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
-                        <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                        <a href="membros.php" class="sheet-item ripple">
                             <div class="sheet-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                 </svg>
                             </div>
-                            <span>Admin</span>
-                        </div>
+                            <span>Membros</span>
+                        </a>
+                        <a href="manutencao.php" class="sheet-item ripple">
+                            <div class="sheet-icon-wrapper">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <span>Agenda</span>
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
 
-        <!-- Espiritualidade -->
+        <!-- 3. Espiritualidade Sheet -->
         <div id="sheet-espiritualidade" class="bottom-sheet-overlay" onclick="closeSheet(this)">
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Espiritualidade</div>
                 <div class="sheet-grid">
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                    <a href="manutencao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
@@ -187,8 +179,8 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Oração</span>
-                    </div>
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                    </a>
+                    <a href="manutencao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -196,8 +188,8 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Devocionais</span>
-                    </div>
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                    </a>
+                    <a href="manutencao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -205,17 +197,17 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Leitura</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Comunicação -->
+        <!-- 4. Comunicação Sheet -->
         <div id="sheet-comunicacao" class="bottom-sheet-overlay" onclick="closeSheet(this)">
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Comunicação</div>
                 <div class="sheet-grid">
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                    <a href="manutencao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -224,8 +216,8 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Avisos</span>
-                    </div>
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                    </a>
+                    <a href="manutencao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -233,8 +225,8 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Indisponível</span>
-                    </div>
-                    <div class="sheet-item" style="opacity: 0.5; cursor: not-allowed;">
+                    </a>
+                    <a href="manutencao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -250,11 +242,10 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Aniversários</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
-
 
         <!-- Script Global -->
         <script src="../assets/js/main.js"></script>
@@ -290,12 +281,17 @@ function renderAppHeader($title = 'Louvor PIB')
 
             // Bottom Sheets Logic
             function openSheet(id) {
+                // Fechar todos
                 document.querySelectorAll('.bottom-sheet-overlay').forEach(el => el.classList.remove('active'));
+
+                // Abrir o solicitado
                 const sheet = document.getElementById(id);
                 if (sheet) {
                     sheet.classList.add('active');
                     // Add small vibration if mobile
                     if (navigator.vibrate) navigator.vibrate(50);
+                } else {
+                    console.error('Sheet not found:', id);
                 }
             }
 
