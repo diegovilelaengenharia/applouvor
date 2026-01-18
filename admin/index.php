@@ -81,7 +81,7 @@ renderAppHeader('Início');
             </a>
 
             <!-- Agenda (Em breve) -->
-            <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+            <div class="quick-access-card" onclick="alert('Em manutenção 🚧')" style="opacity: 0.6; cursor: not-allowed; filter: grayscale(1);">
                 <div class="card-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -89,11 +89,11 @@ renderAppHeader('Início');
                     </svg>
                 </div>
                 <h3 class="card-title">Agenda</h3>
-                <p class="card-subtitle">Em breve</p>
+                <p class="card-subtitle">Em manutenção</p>
             </div>
 
             <!-- Relatórios (Em breve) -->
-            <div class="quick-access-card" style="opacity: 0.5; cursor: not-allowed;">
+            <div class="quick-access-card" onclick="alert('Em manutenção 🚧')" style="opacity: 0.6; cursor: not-allowed; filter: grayscale(1);">
                 <div class="card-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="20" x2="18" y2="10"></line>
@@ -102,7 +102,7 @@ renderAppHeader('Início');
                     </svg>
                 </div>
                 <h3 class="card-title">Relatórios</h3>
-                <p class="card-subtitle">Em breve</p>
+                <p class="card-subtitle">Em manutenção</p>
             </div>
 
             <!-- Configurações -->

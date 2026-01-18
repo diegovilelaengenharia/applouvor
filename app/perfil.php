@@ -13,6 +13,7 @@ $user = $stmt->fetch();
 renderAppHeader('Configurações');
 ?>
 
+
 <div class="app-content">
     <div class="container">
 
@@ -197,25 +198,24 @@ renderAppHeader('Configurações');
     </div>
 </div>
 
+
 <?php renderAppFooter(); ?>
 
-<script src="https://unpkg.com/lucide@latest"></script>
 <script>
-    lucide.createIcons();
-
-    // Dark Mode Toggle
+    // Dark Mode Toggle Logic if specific to this page can stay, 
+    // but layout might handle it. Keeping specific logic for now just to be safe.
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        darkModeToggle.checked = true;
+        if (darkModeToggle) darkModeToggle.checked = true;
     }
 
-    darkModeToggle.addEventListener('change', () => {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-    });
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+            // Optionally update cookie for server-side
+            document.cookie = "theme=" + theme + "; path=/; max-age=31536000";
+        });
+    }
 </script>
-
-</body>
-
-</html>
