@@ -266,33 +266,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 transform: translateX(10px);
             }
         }
+
+        .btn-outline-gold {
+            background: transparent;
+            color: #2D7A4F;
+            border: 2px solid #2D7A4F;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-outline-gold:hover {
+            background: rgba(45, 122, 79, 0.1);
+        }
+
+        .ios-instruction {
+            margin-top: 15px;
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+            font-size: 0.85rem;
+            text-align: left;
+            color: #166534;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
     <meta name="theme-color" content="#2D7A4F">
     <link rel="manifest" href="manifest.json">
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => console.log('SW registrado com sucesso:', registration.scope))
-                    .catch(err => console.log('Falha ao registrar SW:', err));
-            });
-        }
-    </script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="login-page">
-    <!-- Elementos Musicais Decorativos SVG Sofisticados (Mantidos) -->
-    <!-- Clave de Sol Elaborada -->
-    <div class="music-note" style="top: 8%; left: 10%; width: 140px;">
-        <svg viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg">
-            <path d="M60,20 Q75,25 72,45 Q69,65 64,85 Q59,105 62,125 Q65,145 72,152 Q79,159 85,152 Q91,145 88,130 Q85,115 78,108 Q71,101 64,108 Q57,115 60,130 Q63,145 72,152 M72,45 Q78,38 82,30 Q86,22 84,15 Q82,8 76,5 Q70,2 65,5 Q60,8 62,15 L72,152 Q75,165 70,178 Q65,191 56,191 Q47,191 44,183 Q41,175 44,167" stroke="white" stroke-width="3" fill="none" opacity="0.2" />
-        </svg>
-    </div>
-    <!-- ... (Demais notas mantidas pelo contexto, não removidas logicamente pois estou atuando no head e footer, mas se precisar posso manter tudo acima) ... -->
-    <!-- (Nota: Como a substituição é por bloco, vou manter o head e o body até o card de login para garantir integridade, mas focarei nas changes) -->
-    <!-- Para a ferramenta replace_file_content funcionar corretamente com blocos grandes, vou focar apenas nas partes que mudam: HEAD e FOOTER -->
+    <!-- ... (Elementos Musicais Decorativos Mantidos - Omissão para brevidade do diff) ... -->
 
     <div class="login-card">
         <div class="login-header">
@@ -322,6 +351,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
+        <!-- Botões de Instalação PWA -->
+        <div id="pwa-install-area" style="display: none;">
+            <button id="btnInstallAndroid" class="btn-outline-gold">
+                <i data-lucide="download" style="width: 18px;"></i> Instalar Aplicativo
+            </button>
+        </div>
+
+        <div id="pwa-ios-area" style="display: none;">
+            <button id="btnInstallIOS" class="btn-outline-gold" onclick="toggleIOSHelp()">
+                <i data-lucide="share" style="width: 18px;"></i> Instalar no iPhone
+            </button>
+            <div id="iosHelp" class="ios-instruction">
+                <p style="font-weight: 700; margin-bottom: 8px;">Para instalar:</p>
+                <ol style="padding-left: 20px; margin: 0; line-height: 1.5;">
+                    <li>Toque no botão <strong>Compartilhar</strong> <i data-lucide="share" style="width: 12px; display: inline;"></i> abaixo.</li>
+                    <li>Role para cima e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+                </ol>
+            </div>
+        </div>
+
         <div class="custom-footer">
             <p>Esqueceu a senha? Fale com o líder.</p>
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
@@ -331,12 +380,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Suporte: (35) 98452-9577
                 </a>
             </div>
-            <p class="version" style="margin-top: 10px;">v2.0.0 © 2026</p>
+            <p class="version" style="margin-top: 10px;">v2.1.0 © 2026</p>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
+
+        // PWA Logic
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+
+        // Android Install
+        let deferredPrompt;
+        const installArea = document.getElementById('pwa-install-area');
+        const btnAndroid = document.getElementById('btnInstallAndroid');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installArea.style.display = 'block';
+        });
+
+        btnAndroid.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const {
+                    outcome
+                } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installArea.style.display = 'none';
+            }
+        });
+
+        // iOS Detection
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+        if (isIos && !isStandalone) {
+            document.getElementById('pwa-ios-area').style.display = 'block';
+        }
+
+        function toggleIOSHelp() {
+            const help = document.getElementById('iosHelp');
+            help.style.display = help.style.display === 'none' || help.style.display === '' ? 'block' : 'none';
+        }
     </script>
 </body>
 
