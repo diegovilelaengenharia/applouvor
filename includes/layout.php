@@ -57,7 +57,7 @@ function renderAppHeader($title = 'Louvor PIB')
             position: sticky; 
             top: 0; 
             z-index: 400; 
-            background: var(--gradient-primary); 
+            background: var(--header-bg); 
             padding: 0 16px; 
             height: 60px; 
             display: flex; 
