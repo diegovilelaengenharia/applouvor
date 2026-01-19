@@ -503,6 +503,44 @@ ul {
     line-height: 1.2;
 }
 
+/* === Category Specific Sheet Icons === */
+
+/* Gestão - Soft Green/Gold */
+#sheet-gestao .sheet-icon-wrapper {
+    background: #F0FDF4;
+    /* Green 50 */
+    border: 1px solid #BBF7D0;
+}
+
+#sheet-gestao .sheet-icon-wrapper svg {
+    color: #15803D;
+    /* Green 700 */
+}
+
+/* Espírito - Soft Blue */
+#sheet-espiritualidade .sheet-icon-wrapper {
+    background: #EFF6FF;
+    /* Blue 50 */
+    border: 1px solid #BFDBFE;
+}
+
+#sheet-espiritualidade .sheet-icon-wrapper svg {
+    color: #1D4ED8;
+    /* Blue 700 */
+}
+
+/* Comunica - Soft Red */
+#sheet-comunicacao .sheet-icon-wrapper {
+    background: #FEF2F2;
+    /* Red 50 */
+    border: 1px solid #FECACA;
+}
+
+#sheet-comunicacao .sheet-icon-wrapper svg {
+    color: #B91C1C;
+    /* Red 700 */
+}
+
 /* === CLEAN & MODERN UI COMPONENTS === */
 
 /* Cards General */
