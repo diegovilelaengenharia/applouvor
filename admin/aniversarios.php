@@ -9,7 +9,7 @@ renderAppHeader('Aniversários');
 
 <!-- Hero Header -->
 <div style="
-    background: var(--gradient-purple); 
+    background: var(--gradient-red); 
     margin: -24px -16px 32px -16px; 
     padding: 32px 24px 64px 24px; 
     border-radius: 0 0 32px 32px; 
