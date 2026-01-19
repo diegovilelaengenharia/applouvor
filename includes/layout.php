@@ -48,7 +48,72 @@ function renderAppHeader($title = 'Louvor PIB')
     </head>
 
     <body>
-        <!-- Top Bar REMOVIDA -->
+        <!-- Header Profissional -->
+        <?php
+        $currentPage = basename($_SERVER['PHP_SELF']);
+        if ($currentPage !== 'index.php'):
+        ?>
+            <header style="
+            position: sticky; 
+            top: 0; 
+            z-index: 400; 
+            background: var(--gradient-primary); 
+            padding: 0 16px; 
+            height: 60px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            box-shadow: 0 4px 12px rgba(45, 122, 79, 0.2);
+            color: white;
+        ">
+                <!-- Left: Back Button -->
+                <a href="index.php" class="ripple" style="
+                width: 36px; 
+                height: 36px; 
+                border-radius: 10px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                color: white; 
+                background: rgba(255,255,255,0.2); 
+                text-decoration: none;
+                backdrop-filter: blur(4px);
+            ">
+                    <i data-lucide="arrow-left" style="width: 20px;"></i>
+                </a>
+
+                <!-- Center: Page Title -->
+                <h1 style="
+                font-size: 1.1rem; 
+                font-weight: 700; 
+                margin: 0; 
+                letter-spacing: -0.01em; 
+                text-transform: capitalize;
+            "><?= htmlspecialchars($title) ?></h1>
+
+                <!-- Right: User Avatar -->
+                <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+                width: 36px; 
+                height: 36px; 
+                border-radius: 50%; 
+                background: rgba(255,255,255,0.2); 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                overflow: hidden; 
+                border: 2px solid rgba(255,255,255,0.3);
+                cursor: pointer;
+            ">
+                    <?php if (!empty($_SESSION['user_avatar'])): ?>
+                        <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php else: ?>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                            <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+            </header>
+        <?php endif; ?>
 
         <!-- Main Content Wrapper -->
         <main class="app-content">
@@ -82,50 +147,108 @@ function renderAppHeader($title = 'Louvor PIB')
                 <span>Comunica</span>
             </button>
 
-            <button class="nav-cat-item ripple" onclick="openSheet('sheet-perfil')">
-                <i data-lucide="settings"></i>
-                <span>Config</span>
-            </button>
+
         </nav>
 
         <!-- Bottom Sheets (Submenus) -->
 
-        <!-- 1. Perfil / Configurações Sheet -->
-        <div id="sheet-perfil" class="bottom-sheet-overlay" onclick="closeSheet(this)">
-            <div class="bottom-sheet-content">
-                <div class="sheet-header">Configurações</div>
+        <!-- 1. Perfil / Configurações Dropdown -->
+        <div id="sheet-perfil" class="profile-dropdown-overlay" onclick="closeSheet(this)">
+            <div class="profile-dropdown-content" onclick="event.stopPropagation()">
+                <!-- Styles for this dropdown specifically -->
+                <style>
+                    .profile-dropdown-overlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 2000;
+                        display: none;
+                    }
 
-                <div style="text-align: center; margin-bottom: 24px;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 12px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent-interactive);">
-                        <?php if ($avatar): ?>
-                            <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    .profile-dropdown-overlay.active {
+                        display: block;
+                    }
+
+                    .profile-dropdown-content {
+                        position: absolute;
+                        top: 70px;
+                        right: 20px;
+                        width: 260px;
+                        background: var(--bg-secondary);
+                        border: 1px solid var(--border-subtle);
+                        border-radius: 16px;
+                        padding: 16px;
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                        transform-origin: top right;
+                        animation: scaleIn 0.2s ease;
+                    }
+
+                    @keyframes scaleIn {
+                        from {
+                            opacity: 0;
+                            transform: scale(0.95);
+                        }
+
+                        to {
+                            opacity: 1;
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+
+                <!-- Profile Header Compact -->
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background: var(--bg-tertiary); border: 2px solid var(--border-subtle); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        <?php if (!empty($_SESSION['user_avatar'])): ?>
+                            <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
                         <?php else: ?>
-                            <div style="width: 100%; height: 100%; background: var(--bg-tertiary); display:flex; align-items:center; justify-content:center; font-size: 2rem; color: var(--text-secondary);"><?= $userInitials ?></div>
+                            <span style="font-size: 1.2rem; font-weight: 800; color: var(--text-secondary);"><?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?></span>
                         <?php endif; ?>
                     </div>
-                    <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 4px;"><?= htmlspecialchars($_SESSION['user_name']) ?></h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;"><?= htmlspecialchars($_SESSION['user_email'] ?? '') ?></p>
+                    <div style="overflow: hidden;">
+                        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Visitante') ?></h3>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; text-transform: capitalize;"><?= htmlspecialchars($_SESSION['user_role'] ?? 'Membro') ?></p>
+                    </div>
                 </div>
 
-                <div class="sheet-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <!-- Botão Perfil -->
-                    <a href="perfil.php" class="sheet-item ripple">
-                        <div class="emoji-icon">👤</div><span>Perfil</span>
+                <!-- Menu Options Compact -->
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+
+                    <!-- Meus Dados -->
+                    <a href="perfil.php" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: transparent; color: var(--text-primary); text-decoration: none; transition: background 0.1s;">
+                        <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
+                            <i data-lucide="user-pen" style="width: 16px;"></i>
+                        </div>
+                        <span style="flex: 1; font-weight: 500; font-size: 0.9rem;">Meus Dados</span>
                     </a>
 
-                    <!-- Botão Modo Noturno -->
-                    <div class="sheet-item ripple" id="btn-theme-toggle">
-                        <div class="emoji-icon">🌙</div><span>Tema Escuro</span>
+                    <!-- Trocar Foto -->
+                    <a href="perfil.php" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: transparent; color: var(--text-primary); text-decoration: none; transition: background 0.1s;">
+                        <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
+                            <i data-lucide="camera" style="width: 16px;"></i>
+                        </div>
+                        <span style="flex: 1; font-weight: 500; font-size: 0.9rem;">Trocar Foto</span>
+                    </a>
+
+                    <!-- Tema Escuro -->
+                    <div id="btn-theme-toggle" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: transparent; color: var(--text-primary); cursor: pointer; transition: background 0.1s;">
+                        <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
+                            <i data-lucide="moon" style="width: 16px;"></i>
+                        </div>
+                        <span style="flex: 1; font-weight: 500; font-size: 0.9rem;">Aparência</span>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); background: var(--bg-tertiary); padding: 2px 8px; border-radius: 10px;">Mudar</div>
                     </div>
 
-                    <!-- Botão Sair -->
-                    <a href="../includes/auth.php?logout=true" class="sheet-item ripple" style="border-color: var(--status-error); background: rgba(239, 68, 68, 0.05);">
-                        <div class="emoji-icon">🚪</div><span style="color: var(--status-error);">Sair</span>
-                    </a>
-                </div>
+                    <div style="height: 1px; background: var(--border-subtle); margin: 6px 0;"></div>
 
-                <div style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: var(--text-muted); opacity: 0.7;">
-                    App Louvor v1.0.0
+                    <!-- Sair -->
+                    <a href="../includes/auth.php?logout=true" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; color: var(--status-error); text-decoration: none; font-weight: 600; transition: background 0.1s;">
+                        <i data-lucide="log-out" style="width: 16px;"></i>
+                        <span style="font-size: 0.9rem;">Sair</span>
+                    </a>
+
                 </div>
             </div>
         </div>
@@ -135,14 +258,14 @@ function renderAppHeader($title = 'Louvor PIB')
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Gestão</div>
                 <div class="sheet-grid">
-                    <a href="exportar.php" class="sheet-item ripple">
+                    <a href="lider.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                             </svg>
                         </div>
-                        <span>Admin</span>
+                        <span>Líder</span>
                     </a>
 
                     <a href="escala.php" class="sheet-item ripple">
@@ -167,7 +290,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         <span>Repertório</span>
                     </a>
 
-                    <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="membros.php" class="sheet-item ripple">
                             <div class="sheet-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -289,20 +412,20 @@ function renderAppHeader($title = 'Louvor PIB')
                 // Load saved theme
                 if (localStorage.getItem('theme') === 'dark') {
                     document.body.classList.add('dark-mode');
-                    icon.textContent = '☀️';
-                    text.textContent = 'Tema Claro';
+                    if (icon) icon.textContent = '☀️';
+                    if (text) text.textContent = 'Tema Claro';
                 }
 
                 themeBtn.addEventListener('click', () => {
                     document.body.classList.toggle('dark-mode');
                     if (document.body.classList.contains('dark-mode')) {
                         localStorage.setItem('theme', 'dark');
-                        icon.textContent = '☀️';
-                        text.textContent = 'Tema Claro';
+                        if (icon) icon.textContent = '☀️';
+                        if (text) text.textContent = 'Tema Claro';
                     } else {
                         localStorage.setItem('theme', 'light');
-                        icon.textContent = '🌙';
-                        text.textContent = 'Tema Escuro';
+                        if (icon) icon.textContent = '🌙';
+                        if (text) text.textContent = 'Tema Escuro';
                     }
                 });
             }
@@ -311,6 +434,7 @@ function renderAppHeader($title = 'Louvor PIB')
             function openSheet(id) {
                 // Fechar todos
                 document.querySelectorAll('.bottom-sheet-overlay').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.profile-dropdown-overlay').forEach(el => el.classList.remove('active'));
 
                 // Abrir o solicitado
                 const sheet = document.getElementById(id);
@@ -324,7 +448,7 @@ function renderAppHeader($title = 'Louvor PIB')
             }
 
             function closeSheet(element) {
-                if (element.classList.contains('bottom-sheet-overlay')) {
+                if (element.classList.contains('bottom-sheet-overlay') || element.classList.contains('profile-dropdown-overlay')) {
                     element.classList.remove('active');
                 }
             }

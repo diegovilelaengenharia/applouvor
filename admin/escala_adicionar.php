@@ -150,6 +150,37 @@ renderAppHeader('Nova Escala');
         transform: scale(1.3);
         accent-color: var(--accent-interactive);
     }
+
+    /* Search Bar Style */
+    .search-bar {
+        position: relative;
+        margin-bottom: 16px;
+    }
+
+    .search-bar i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        width: 18px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 12px 12px 12px 40px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 1rem;
+    }
+
+    .search-bar input:focus {
+        border-color: var(--accent-interactive);
+        outline: none;
+        background: var(--bg-secondary);
+    }
 </style>
 
 <div class="wizard-container">
@@ -226,8 +257,9 @@ renderAppHeader('Nova Escala');
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 20px;">
-                <a href="escala.php" class="btn-outline ripple" style="flex: 1; justify-content: center; text-decoration: none;">Cancelar</a>
-                <button type="button" onclick="nextStep(2)" class="btn-primary ripple" style="flex: 2; justify-content: center;">
+                <!-- Updated Button Colors as requested -->
+                <a href="escala.php" class="btn-outline ripple" style="flex: 1; justify-content: center; text-decoration: none; background: #F59E0B !important; color: white; border-color: #F59E0B;">Cancelar</a>
+                <button type="button" onclick="nextStep(2)" class="btn-primary ripple" style="flex: 2; justify-content: center; background: #10B981 !important; border-color: #10B981; color: white;">
                     Próximo <i data-lucide="arrow-right" style="width: 18px;"></i>
                 </button>
             </div>
@@ -237,9 +269,16 @@ renderAppHeader('Nova Escala');
         <div class="step-content" id="step-2">
             <div class="card-clean" style="padding: 24px;">
                 <h3 style="margin-bottom: 16px; font-size: 1.1rem;">Selecione os membros</h3>
-                <div style="max-height: 400px; overflow-y: auto;">
+
+                <!-- Search Members -->
+                <div class="search-bar">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="searchMembers" placeholder="Buscar membro..." onkeyup="filterList('member-list', this.value)">
+                </div>
+
+                <div id="member-list" style="max-height: 400px; overflow-y: auto;">
                     <?php foreach ($allUsers as $user): ?>
-                        <label class="member-select-item">
+                        <label class="member-select-item" data-name="<?= strtolower($user['name']) ?>">
                             <input type="checkbox" name="members[]" value="<?= $user['id'] ?>">
                             <div style="flex: 1;">
                                 <div style="font-weight: 700; color: var(--text-primary);"><?= htmlspecialchars($user['name']) ?></div>
@@ -251,11 +290,11 @@ renderAppHeader('Nova Escala');
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 20px;">
-                <button type="button" onclick="prevStep(1)" class="btn-outline ripple" style="flex: 1; justify-content: center;">
+                <button type="button" onclick="prevStep(1)" class="btn-outline ripple" style="flex: 1; justify-content: center; background: #F59E0B !important; border-color: #F59E0B; color: white;">
                     <i data-lucide="arrow-left" style="width: 18px;"></i> Voltar
                 </button>
-                <button type="button" onclick="nextStep(3)" class="btn-outline ripple" style="flex: 1; justify-content: center;">Pular</button>
-                <button type="button" onclick="nextStep(3)" class="btn-primary ripple" style="flex: 2; justify-content: center;">
+                <button type="button" onclick="nextStep(3)" class="btn-outline ripple" style="flex: 1; justify-content: center; background: #6B7280; border-color: #6B7280; color: white;">Pular</button>
+                <button type="button" onclick="nextStep(3)" class="btn-primary ripple" style="flex: 2; justify-content: center; background: #10B981 !important; border-color: #10B981; color: white;">
                     Próximo <i data-lucide="arrow-right" style="width: 18px;"></i>
                 </button>
             </div>
@@ -264,7 +303,19 @@ renderAppHeader('Nova Escala');
         <!-- ETAPA 3: Músicas -->
         <div class="step-content" id="step-3">
             <div class="card-clean" style="padding: 24px;">
-                <h3 style="margin-bottom: 16px; font-size: 1.1rem;">Selecione as músicas</h3>
+                <h3 style="margin-bottom: 16px; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <span>Selecione as músicas</span>
+                    <a href="repertorio_adicionar.php" target="_blank" class="btn-sm btn-outline" style="font-size: 0.8rem; padding: 6px 12px;">
+                        <i data-lucide="plus" style="width: 14px;"></i> Nova
+                    </a>
+                </h3>
+
+                <!-- Search Songs -->
+                <div class="search-bar">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="searchSongs" placeholder="Buscar música..." onkeyup="filterList('song-list', this.value)">
+                </div>
+
                 <?php if (empty($allSongs)): ?>
                     <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
                         <i data-lucide="music" style="width: 48px; height: 48px; margin-bottom: 12px; color: var(--text-muted);"></i>
@@ -272,9 +323,9 @@ renderAppHeader('Nova Escala');
                         <p style="font-size: 0.9rem;">Você pode adicionar depois.</p>
                     </div>
                 <?php else: ?>
-                    <div style="max-height: 400px; overflow-y: auto;">
+                    <div id="song-list" style="max-height: 400px; overflow-y: auto;">
                         <?php foreach ($allSongs as $song): ?>
-                            <label class="song-select-item">
+                            <label class="song-select-item" data-name="<?= strtolower($song['title'] . ' ' . $song['artist']) ?>">
                                 <input type="checkbox" name="songs[]" value="<?= $song['id'] ?>">
                                 <div style="flex: 1;">
                                     <div style="font-weight: 700; color: var(--text-primary);"><?= htmlspecialchars($song['title']) ?></div>
@@ -292,10 +343,10 @@ renderAppHeader('Nova Escala');
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 20px;">
-                <button type="button" onclick="prevStep(2)" class="btn-outline ripple" style="flex: 1; justify-content: center;">
+                <button type="button" onclick="prevStep(2)" class="btn-outline ripple" style="flex: 1; justify-content: center; background: #F59E0B !important; border-color: #F59E0B; color: white;">
                     <i data-lucide="arrow-left" style="width: 18px;"></i> Voltar
                 </button>
-                <button type="submit" class="btn-primary ripple" style="flex: 2; justify-content: center; box-shadow: var(--shadow-glow);">
+                <button type="submit" class="btn-primary ripple" style="flex: 2; justify-content: center; box-shadow: var(--shadow-glow); background: #10B981 !important; border-color: #10B981; color: white;">
                     <i data-lucide="check"></i> Finalizar Escala
                 </button>
             </div>
@@ -379,6 +430,21 @@ renderAppHeader('Nova Escala');
         document.getElementById('step-' + currentStep).classList.add('active');
         document.getElementById('step-indicator-' + currentStep).classList.add('active');
         document.getElementById('step-indicator-' + currentStep).classList.remove('completed');
+    }
+
+    // Filter List Function
+    function filterList(listId, searchTerm) {
+        const term = searchTerm.toLowerCase();
+        const items = document.querySelectorAll(`#${listId} label`);
+
+        items.forEach(item => {
+            const name = item.getAttribute('data-name');
+            if (name.includes(term)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     }
 
     // Adicionar classe 'selected' aos itens marcados

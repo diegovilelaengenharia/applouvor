@@ -79,7 +79,7 @@
     backdrop-filter: blur(20px);
     border-top: 1px solid var(--border-subtle);
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     z-index: 500;
     padding-bottom: env(safe-area-inset-bottom);
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
@@ -259,7 +259,7 @@
     animation: float 3s ease-in-out infinite;
 }
 
-/* Ripple Effect */
+/* Ripple Effect - Optimized for Speed */
 .ripple {
     position: relative;
     overflow: hidden;
@@ -275,12 +275,15 @@
     border-radius: 50%;
     background: rgba(139, 92, 246, 0.3);
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition: width 0.3s, height 0.3s;
+    /* Reduced from 0.6s */
 }
 
 .ripple:active::after {
     width: 300px;
     height: 300px;
+    transition: 0s;
+    /* Instant expansion on click */
 }
 
 /* Acessibilidade - Reduzir animações */

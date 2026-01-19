@@ -1,0 +1,111 @@
+<?php
+// admin/lider.php
+// Painel de Liderança (Separado do Index)
+
+require_once '../includes/auth.php';
+require_once '../includes/db.php';
+require_once '../includes/layout.php';
+
+renderAppHeader('Painel Líder');
+?>
+
+<div class="container fade-in-up">
+
+    <!-- Conteúdo da Página -->
+    <div style="margin-top: 24px;">
+        <!-- Título Opcional, já que tem no Header Global -->
+        <!-- <h2 style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 16px;">Ferramentas de Liderança</h2> -->
+    </div>
+
+    <style>
+        .wide-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 20px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wide-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-interactive);
+        }
+
+        .wide-action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .wide-btn-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .wide-action-btn:hover .wide-btn-icon {
+            background: var(--gradient-primary);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .wide-btn-content {
+            flex: 1;
+        }
+
+        .wide-btn-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .wide-btn-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .wide-btn-arrow {
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .wide-action-btn:hover .wide-btn-arrow {
+            transform: translateX(4px);
+            color: var(--accent-interactive);
+        }
+    </style>
+
+    <!-- Lista Vertical de Funcionalidades -->
+    <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px;">
+
+        <!-- Exportar Dados (Por enquanto só este) -->
+        <a href="exportar.php" class="wide-action-btn ripple">
+            <div class="wide-btn-icon" style="background: rgba(45, 122, 79, 0.1); color: var(--accent-interactive);">
+                <i data-lucide="database"></i>
+            </div>
+            <div class="wide-btn-content">
+                <div class="wide-btn-title">Exportar Dados</div>
+                <div class="wide-btn-desc">Baixar planilhas e relatórios</div>
+            </div>
+            <i data-lucide="chevron-right" class="wide-btn-arrow"></i>
+        </a>
+
+    </div>
+
+</div>
+
+<?php renderAppFooter(); ?>

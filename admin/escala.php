@@ -236,7 +236,7 @@ renderAppHeader('Escalas');
         </button>
 
         <!-- Botão Adicionar -->
-        <a href="escala_adicionar.php" class="btn-primary ripple" style="text-decoration: none; border-radius: 12px; padding: 10px 20px; font-size: 0.9rem; box-shadow: var(--shadow-glow);">
+        <a href="escala_adicionar.php" class="btn-primary ripple" style="text-decoration: none; border-radius: 12px; padding: 10px 20px; font-size: 0.9rem; box-shadow: var(--shadow-glow); background: #10B981 !important; color: white;">
             <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
             <span>Adicionar</span>
         </a>
@@ -339,17 +339,31 @@ renderAppHeader('Escalas');
         <!-- VIEW: TIMELINE (DEFAULT) -->
     <?php else: ?>
         <div class="schedules-list" style="display: flex; flex-direction: column; gap: 12px;">
-            <?php foreach ($schedules as $schedule):
+            <?php
+            $count = 0;
+            foreach ($schedules as $schedule):
                 $date = new DateTime($schedule['event_date']);
                 $dayNumber = $date->format('d');
                 $monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
                 $weekDay = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')];
                 $colorClass = stripos($schedule['event_type'], 'Domingo') !== false ? '#F59E0B' : (stripos($schedule['event_type'], 'Ensaio') !== false ? '#3B82F6' : 'var(--text-primary)');
+
+                // Logic for hiding items > 5 (Applied to ALL tabs now)
+                $isHidden = ($count >= 5);
+                $displayStyle = $isHidden ? 'display: none;' : 'display: flex;';
+                $extraClass = $isHidden ? 'hidden-item' : '';
             ?>
-                <div class="schedule-card-wrapper" style="position: relative;">
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="card-clean ripple schedule-card-link" style="padding: 0; display: flex; text-decoration: none; overflow: hidden; border: 1px solid var(--border-subtle); transition: all 0.2s;">
+                <div class="schedule-card-wrapper <?= $extraClass ?>" style="position: relative; <?= $displayStyle ?>">
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="card-clean ripple schedule-card-link" style="padding: 0; display: flex; text-decoration: none; overflow: hidden; border: 1px solid var(--border-subtle); transition: all 0.2s; width: 100%;">
                         <!-- Coluna Data -->
-                        <div style="background: var(--bg-tertiary); min-width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; border-right: 1px solid var(--border-subtle);">
+                        <?php
+                        $today = new DateTime('today');
+                        $isUpcoming = $date >= $today;
+                        // Se for passado, usa amarelo. Se for futuro/hoje, verde.
+                        $borderColor = $isUpcoming ? '#10B981' : '#F59E0B';
+                        $borderStyle = "border-left: 4px solid $borderColor;";
+                        ?>
+                        <div style="background: var(--bg-tertiary); min-width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; border-right: 1px solid var(--border-subtle); <?= $borderStyle ?>">
                             <span style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); line-height: 1;"><?= $dayNumber ?></span>
                             <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-top: 4px;"><?= $monthShort ?></span>
                         </div>
@@ -378,7 +392,43 @@ renderAppHeader('Escalas');
                         </div>
                     </a>
                 </div>
-            <?php endforeach; ?>
+            <?php
+                $count++;
+            endforeach;
+
+            if ($count > 5):
+                $btnText = ($tab === 'history') ? 'escalas anteriores' : 'escalas futuras';
+            ?>
+                <button onclick="showHiddenItems()" id="btnShowMore" class="ripple" style="
+                    width: 100%; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    gap: 10px; 
+                    padding: 16px; 
+                    margin-top: 16px; 
+                    background: var(--bg-secondary); 
+                    border: 1px solid var(--border-subtle); 
+                    border-radius: 16px; 
+                    color: var(--text-primary); 
+                    font-weight: 700; 
+                    font-size: 0.95rem;
+                    cursor: pointer; 
+                    transition: all 0.2s;
+                    box-shadow: var(--shadow-sm);
+                ">
+                    <span style="color: var(--primary-green);">Ver mais <?= $count - 5 ?> <?= $btnText ?></span>
+                    <i data-lucide="chevron-down" style="width: 18px; color: var(--primary-green);"></i>
+                </button>
+                <script>
+                    function showHiddenItems() {
+                        document.querySelectorAll('.hidden-item').forEach(el => {
+                            el.style.display = 'flex';
+                        });
+                        document.getElementById('btnShowMore').style.display = 'none';
+                    }
+                </script>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
@@ -395,10 +445,14 @@ renderAppHeader('Escalas');
 
             <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
                 <!-- Toggle: Apenas que eu participo -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-tertiary); border-radius: 12px;">
+                <?php
+                $isMyFilterActive = isset($_GET['filter_my']) && $_GET['filter_my'] == '1';
+                $rowStyle = $isMyFilterActive ? 'background: #FEF3C7; border: 1px solid #F59E0B; color: #92400E;' : 'background: var(--bg-tertiary); border: 1px solid transparent;';
+                ?>
+                <div id="filterMyRow" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 12px; transition: all 0.2s; <?= $rowStyle ?>">
                     <span style="font-weight: 600;">Apenas que eu participo</span>
                     <label class="switch">
-                        <input type="checkbox" name="filter_my" value="1" <?= isset($_GET['filter_my']) && $_GET['filter_my'] == '1' ? 'checked' : '' ?>>
+                        <input type="checkbox" name="filter_my" value="1" <?= $isMyFilterActive ? 'checked' : '' ?> onchange="toggleMyRowStyle(this)">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -457,6 +511,19 @@ renderAppHeader('Escalas');
     function openFilters() {
         closeAllSheets();
         document.getElementById('filtersModal').classList.add('active');
+    }
+
+    function toggleMyRowStyle(checkbox) {
+        const row = document.getElementById('filterMyRow');
+        if (checkbox.checked) {
+            row.style.background = '#FEF3C7';
+            row.style.border = '1px solid #F59E0B';
+            row.style.color = '#92400E';
+        } else {
+            row.style.background = 'var(--bg-tertiary)';
+            row.style.border = '1px solid transparent';
+            row.style.color = 'inherit';
+        }
     }
 
     function closeAllSheets() {

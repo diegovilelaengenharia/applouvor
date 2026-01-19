@@ -100,7 +100,7 @@ renderAppHeader('Meu Perfil');
             </div>
 
             <h2 style="font-size: 1.25rem; margin-bottom: 4px;"><?= htmlspecialchars($user['name']) ?></h2>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;"><?= htmlspecialchars($user['email']) ?></p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;"><?= htmlspecialchars($user['email'] ?? '') ?></p>
         </form>
     </div>
 
@@ -135,13 +135,13 @@ renderAppHeader('Meu Perfil');
 
                 <div>
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">E-mail</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required
+                    <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required
                         style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-primary); color: var(--text-primary); outline: none;">
                 </div>
 
                 <div>
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">Telefone / WhatsApp</label>
-                    <input type="text" value="<?= htmlspecialchars($user['phone']) ?>" disabled
+                    <input type="text" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" disabled
                         style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-tertiary); color: var(--text-muted); cursor: not-allowed;">
                 </div>
 
