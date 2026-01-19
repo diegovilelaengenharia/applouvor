@@ -245,10 +245,10 @@ renderAppHeader('Escalas');
 
 <!-- Navegação de Abas -->
 <div style="background: var(--bg-tertiary); padding: 4px; border-radius: 16px; display: flex; margin-bottom: 24px;">
-    <a href="?tab=next" class="ripple" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; <?= $tab === 'next' ? 'background: var(--bg-secondary); color: var(--text-primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+    <a href="?tab=next" class="ripple" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; <?= $tab === 'next' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
         Próximas
     </a>
-    <a href="?tab=history" class="ripple" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; <?= $tab === 'history' ? 'background: var(--bg-secondary); color: var(--text-primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+    <a href="?tab=history" class="ripple" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; <?= $tab === 'history' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
         Anteriores
     </a>
 </div>
