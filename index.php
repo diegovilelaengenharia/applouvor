@@ -33,6 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Louvor PIB - Login</title>
+
+    <!-- PWA Fullscreen & Mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+
     <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
     <link rel="icon" type="image/png" href="assets/images/logo-white.png">
 

@@ -10,6 +10,21 @@
 /* Animations */
 @import url('animations.css');
 
+/* PWA Fullscreen Adjustments */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overscroll-behavior-y: none; /* Previne efeito elástico */
+    -webkit-tap-highlight-color: transparent; /* Remove highlight azul ao toque */
+}
+
+/* Ajuste para entalhe do iPhone (Safe Area) */
+body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
 :root {
     /* --- Paleta Tradicional e Sóbria --- */
     --bg-primary: #EDF2F7;

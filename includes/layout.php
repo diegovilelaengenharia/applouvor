@@ -23,6 +23,13 @@ function renderAppHeader($title = 'Louvor PIB')
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
         <meta http-equiv="Pragma" content="no-cache">
         <meta http-equiv="Expires" content="0">
+
+        <!-- PWA Fullscreen & Mobile -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="Louvor PIB">
+
         <title><?= htmlspecialchars($title) ?></title>
         <link rel="stylesheet" href="<?= asset('../assets/css/style.css') ?>">
         <!-- PWA Support -->
