@@ -51,23 +51,75 @@ renderAppHeader('Pasta');
     }
 </style>
 
-<!-- Header com Voltar -->
-<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-    <a href="repertorio.php?tab=pastas" class="btn-icon ripple">
-        <i data-lucide="arrow-left"></i>
-    </a>
-    <h1 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0; flex: 1;">Pasta</h1>
-</div>
+<!-- Hero Header -->
+<div style="
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <!-- Navigation Row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <a href="repertorio.php?tab=pastas" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            background: rgba(255,255,255,0.2); 
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        ">
+            <i data-lucide="arrow-left" style="width: 20px;"></i>
+        </a>
 
-<!-- Header da Categoria -->
-<div class="category-header">
-    <div class="category-icon-large">
-        <i data-lucide="folder" style="width: 48px; height: 48px;"></i>
+        <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: rgba(255,255,255,0.2); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+        ">
+            <?php if (!empty($_SESSION['user_avatar'])): ?>
+                <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+            <?php else: ?>
+                <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                    <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                </span>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class="category-name"><?= htmlspecialchars($category) ?></div>
-    <div class="category-count">
-        <i data-lucide="music" style="width: 16px; display: inline;"></i>
-        <?= count($songs) ?> música<?= count($songs) > 1 ? 's' : '' ?>
+
+    <!-- Category Info in Hero -->
+    <div style="text-align: center;">
+        <div style="
+            width: 80px; 
+            height: 80px; 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 20px; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 16px;
+            backdrop-filter: blur(4px);
+        ">
+            <i data-lucide="folder" style="width: 40px; height: 40px; color: white;"></i>
+        </div>
+        <h1 style="color: white; margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($category) ?></h1>
+        <p style="color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 500; font-size: 1rem;">
+            <i data-lucide="music" style="width: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
+            <?= count($songs) ?> música<?= count($songs) > 1 ? 's' : '' ?>
+        </p>
     </div>
 </div>
 

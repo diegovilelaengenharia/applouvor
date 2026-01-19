@@ -183,14 +183,64 @@ renderAppHeader('Nova Escala');
     }
 </style>
 
-<div class="wizard-container">
-    <!-- Header -->
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-        <a href="escala.php" class="btn-icon ripple">
-            <i data-lucide="x"></i>
+<!-- Hero Header -->
+<div style="
+    background: var(--gradient-green); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <!-- Navigation Row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <a href="escala.php" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            background: rgba(255,255,255,0.2); 
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        ">
+            <i data-lucide="x" style="width: 20px;"></i>
         </a>
-        <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">Nova Escala</h1>
+
+        <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: rgba(255,255,255,0.2); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+        ">
+            <?php if (!empty($_SESSION['user_avatar'])): ?>
+                <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+            <?php else: ?>
+                <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                    <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                </span>
+            <?php endif; ?>
+        </div>
     </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Nova Escala</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+        </div>
+    </div>
+</div>
+
+<div class="wizard-container">
 
     <!-- Wizard Steps -->
     <div class="wizard-steps">

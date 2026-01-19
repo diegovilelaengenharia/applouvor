@@ -64,26 +64,98 @@ renderAppHeader('Artista');
     }
 </style>
 
-<!-- Header com Voltar -->
-<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-    <a href="repertorio.php?tab=artistas" class="btn-icon ripple">
-        <i data-lucide="arrow-left"></i>
-    </a>
-    <h1 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0; flex: 1;">Artista</h1>
-    <button class="btn-icon ripple" onclick="openEditModal()">
-        <i data-lucide="edit-2"></i>
-    </button>
-</div>
+<!-- Hero Header -->
+<div style="
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <!-- Navigation Row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <a href="repertorio.php?tab=artistas" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            background: rgba(255,255,255,0.2); 
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        ">
+            <i data-lucide="arrow-left" style="width: 20px;"></i>
+        </a>
 
-<!-- Header do Artista -->
-<div class="artist-header">
-    <div class="artist-avatar-large">
-        <?= strtoupper(substr($artistName, 0, 1)) ?>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <!-- Edit Button -->
+            <button onclick="openEditModal()" class="ripple" style="
+                width: 40px; 
+                height: 40px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                color: white; 
+                background: rgba(255,255,255,0.2); 
+                border: none;
+                cursor: pointer;
+                backdrop-filter: blur(4px);
+            ">
+                <i data-lucide="edit-2" style="width: 20px;"></i>
+            </button>
+
+            <!-- User Avatar -->
+            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+                width: 40px; 
+                height: 40px; 
+                border-radius: 50%; 
+                background: rgba(255,255,255,0.2); 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                overflow: hidden; 
+                cursor: pointer;
+                border: 2px solid rgba(255,255,255,0.3);
+            ">
+                <?php if (!empty($_SESSION['user_avatar'])): ?>
+                    <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                <?php else: ?>
+                    <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                        <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
-    <div class="artist-name"><?= htmlspecialchars($artistName) ?></div>
-    <div class="artist-count">
-        <i data-lucide="music" style="width: 16px; display: inline;"></i>
-        <?= count($songs) ?> música<?= count($songs) > 1 ? 's' : '' ?>
+
+    <!-- Artist Info in Hero -->
+    <div style="text-align: center;">
+        <div style="
+            width: 80px; 
+            height: 80px; 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 50%; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 16px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            backdrop-filter: blur(4px);
+        ">
+            <?= strtoupper(substr($artistName, 0, 1)) ?>
+        </div>
+        <h1 style="color: white; margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($artistName) ?></h1>
+        <p style="color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 500; font-size: 1rem;">
+            <i data-lucide="music" style="width: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
+            <?= count($songs) ?> música<?= count($songs) > 1 ? 's' : '' ?>
+        </p>
     </div>
 </div>
 

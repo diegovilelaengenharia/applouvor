@@ -198,10 +198,65 @@ renderAppHeader('Detalhes da Escala');
     }
 </style>
 
-<!-- Header já removido a favor do Global, mas o Título do Evento deve aparecer no Card de Detalhes -->
+<!-- Hero Header -->
+<div style="
+    background: var(--gradient-green); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <!-- Navigation Row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <a href="escala.php" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            background: rgba(255,255,255,0.2); 
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        ">
+            <i data-lucide="arrow-left" style="width: 20px;"></i>
+        </a>
+
+        <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: rgba(255,255,255,0.2); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+        ">
+            <?php if (!empty($_SESSION['user_avatar'])): ?>
+                <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+            <?php else: ?>
+                <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                    <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                </span>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Detalhes da Escala</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+        </div>
+    </div>
+</div>
 
 <!-- Navegação por Abas -->
-<div class="tabs-nav" style="margin-top: 20px;">
+<div class="tabs-nav" style="margin-top: -30px; position: relative; z-index: 10; padding: 6px; background: var(--bg-tertiary); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
     <button class="tab-btn <?= $activeTab === 'detalhes' ? 'active' : '' ?>" onclick="openTab('detalhes')">Detalhes</button>
     <button class="tab-btn <?= $activeTab === 'equipe' ? 'active' : '' ?>" onclick="openTab('equipe')">Equipe</button>
     <button class="tab-btn <?= $activeTab === 'repertorio' ? 'active' : '' ?>" onclick="openTab('repertorio')">Músicas</button>
@@ -373,21 +428,56 @@ renderAppHeader('Detalhes da Escala');
         <button onclick="openModal('modalMembers')" class="btn-primary ripple w-full" style="margin-bottom: 16px;">
             <i data-lucide="plus"></i> Gerenciar Equipe
         </button>
-        <div class="card-clean" style="padding: 0; overflow: hidden;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($currentMembers as $member): ?>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border-subtle);">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div class="table-avatar"><?= strtoupper(substr($member['name'], 0, 1)) ?></div>
-                        <div>
-                            <div style="font-weight: 700; color: var(--text-primary);"><?= htmlspecialchars($member['name']) ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary);"><?= htmlspecialchars($member['instrument'] ?: 'Voz') ?></div>
+                <div style="
+                    background: var(--bg-secondary);
+                    border: 1px solid var(--border-subtle);
+                    border-left: 4px solid #10B981;
+                    border-radius: 12px;
+                    padding: 16px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    box-shadow: var(--shadow-sm);
+                    transition: all 0.2s;
+                ">
+                    <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
+                        <div style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 800;
+                            font-size: 1.1rem;
+                            color: #047857;
+                            flex-shrink: 0;
+                        "><?= strtoupper(substr($member['name'], 0, 1)) ?></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 2px;"><?= htmlspecialchars($member['name']) ?></div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;"><?= htmlspecialchars($member['instrument'] ?: 'Voz') ?></div>
                         </div>
                     </div>
                     <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
                         <input type="hidden" name="action" value="remove_member">
                         <input type="hidden" name="user_id" value="<?= $member['id'] ?>">
                         <input type="hidden" name="current_tab" value="equipe">
-                        <button type="submit" class="btn-icon" style="color: var(--status-error);"><i data-lucide="trash-2" style="width: 18px;"></i></button>
+                        <button type="submit" class="ripple" style="
+                            background: transparent;
+                            border: none;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: var(--status-error);
+                            cursor: pointer;
+                            transition: all 0.2s;
+                        "><i data-lucide="trash-2" style="width: 20px;"></i></button>
                     </form>
                 </div>
             <?php endforeach; ?>
@@ -412,15 +502,38 @@ renderAppHeader('Detalhes da Escala');
         <button onclick="openModal('modalSongs')" class="btn-primary ripple w-full" style="margin-bottom: 16px;">
             <i data-lucide="plus"></i> Adicionar Música
         </button>
-        <div class="card-clean" style="padding: 0; overflow: hidden;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($currentSongs as $index => $song): ?>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border-subtle);">
-                    <div style="display: flex; align-items: center; gap: 16px;">
-                        <span style="font-size: 1.2rem; font-weight: 700; color: var(--text-muted); width: 24px; text-align: center;"><?= $index + 1 ?></span>
-                        <div>
-                            <div style="font-weight: 700; color: var(--text-primary);"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
-                                <?= htmlspecialchars($song['artist']) ?> • <span style="font-weight: 700; color: var(--accent-interactive);"><?= htmlspecialchars($song['tone']) ?></span>
+                <div style="
+                    background: var(--bg-secondary);
+                    border: 1px solid var(--border-subtle);
+                    border-left: 4px solid #3B82F6;
+                    border-radius: 12px;
+                    padding: 16px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    box-shadow: var(--shadow-sm);
+                    transition: all 0.2s;
+                ">
+                    <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
+                        <div style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 800;
+                            font-size: 1.1rem;
+                            color: #1D4ED8;
+                            flex-shrink: 0;
+                        "><?= $index + 1 ?></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 2px;"><?= htmlspecialchars($song['title']) ?></div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+                                <?= htmlspecialchars($song['artist']) ?> • <span style="font-weight: 700; color: #3B82F6;"><?= htmlspecialchars($song['tone']) ?></span>
                             </div>
                         </div>
                     </div>
@@ -428,7 +541,19 @@ renderAppHeader('Detalhes da Escala');
                         <input type="hidden" name="action" value="remove_song">
                         <input type="hidden" name="song_id" value="<?= $song['id'] ?>">
                         <input type="hidden" name="current_tab" value="repertorio">
-                        <button type="submit" class="btn-icon" style="color: var(--status-error);"><i data-lucide="trash-2" style="width: 18px;"></i></button>
+                        <button type="submit" class="ripple" style="
+                            background: transparent;
+                            border: none;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: var(--status-error);
+                            cursor: pointer;
+                            transition: all 0.2s;
+                        "><i data-lucide="trash-2" style="width: 20px;"></i></button>
                     </form>
                 </div>
             <?php endforeach; ?>

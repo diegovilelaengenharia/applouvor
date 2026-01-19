@@ -48,72 +48,7 @@ function renderAppHeader($title = 'Louvor PIB')
     </head>
 
     <body>
-        <!-- Header Profissional -->
-        <?php
-        $currentPage = basename($_SERVER['PHP_SELF']);
-        if ($currentPage !== 'index.php'):
-        ?>
-            <header style="
-            position: sticky; 
-            top: 0; 
-            z-index: 400; 
-            background: var(--header-bg); 
-            padding: 0 16px; 
-            height: 60px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            box-shadow: 0 4px 12px rgba(45, 122, 79, 0.2);
-            color: white;
-        ">
-                <!-- Left: Back Button -->
-                <a href="index.php" class="ripple" style="
-                width: 36px; 
-                height: 36px; 
-                border-radius: 10px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                color: white; 
-                background: rgba(255,255,255,0.2); 
-                text-decoration: none;
-                backdrop-filter: blur(4px);
-            ">
-                    <i data-lucide="arrow-left" style="width: 20px;"></i>
-                </a>
-
-                <!-- Center: Page Title -->
-                <h1 style="
-                font-size: 1.1rem; 
-                font-weight: 700; 
-                margin: 0; 
-                letter-spacing: -0.01em; 
-                text-transform: capitalize;
-            "><?= htmlspecialchars($title) ?></h1>
-
-                <!-- Right: User Avatar -->
-                <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 36px; 
-                height: 36px; 
-                border-radius: 50%; 
-                background: rgba(255,255,255,0.2); 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                overflow: hidden; 
-                border: 2px solid rgba(255,255,255,0.3);
-                cursor: pointer;
-            ">
-                    <?php if (!empty($_SESSION['user_avatar'])): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                    <?php else: ?>
-                        <span style="font-weight: 700; font-size: 0.9rem; color: white;">
-                            <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                        </span>
-                    <?php endif; ?>
-                </div>
-            </header>
-        <?php endif; ?>
+        <!-- Header removido conforme solicitado -->
 
         <!-- Main Content Wrapper -->
         <main class="app-content">
