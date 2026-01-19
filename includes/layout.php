@@ -55,6 +55,88 @@ function renderAppHeader($title = 'Louvor PIB')
         <?php
     }
 
+    /**
+     * Renderiza um cabeçalho Hero padronizado
+     * 
+     * @param string $title Título principal do cabeçalho
+     * @param string $subtitle Subtítulo (padrão: "Louvor PIB Oliveira")
+     * @param string $backUrl URL do botão voltar (padrão: "index.php")
+     * @param string $backIcon Ícone do botão voltar (padrão: "arrow-left")
+     * @param bool $showProfile Se deve mostrar o avatar de perfil (padrão: true)
+     * @param string $extraButton HTML extra para botões adicionais (opcional)
+     */
+    function renderHeroHeader($title, $subtitle = 'Louvor PIB Oliveira', $backUrl = 'index.php', $backIcon = 'arrow-left', $showProfile = true, $extraButton = '')
+    {
+        $avatar = $_SESSION['user_avatar'] ?? null;
+        $userInitials = substr($_SESSION['user_name'] ?? 'U', 0, 1);
+        ?>
+            <!-- Hero Header -->
+            <div style="
+        background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
+        margin: -24px -16px 32px -16px; 
+        padding: 32px 24px 64px 24px; 
+        border-radius: 0 0 32px 32px; 
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: visible;
+    ">
+                <!-- Navigation Row -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <a href="<?= $backUrl ?>" class="ripple" style="
+                padding: 10px 20px;
+                border-radius: 50px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                gap: 8px;
+                color: #047857; 
+                background: white; 
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 0.9rem;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            ">
+                        <i data-lucide="<?= $backIcon ?>" style="width: 16px;"></i> Voltar
+                    </a>
+
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <?= $extraButton ?>
+
+                        <?php if ($showProfile): ?>
+                            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+                        width: 40px; 
+                        height: 40px; 
+                        border-radius: 50%; 
+                        background: rgba(255,255,255,0.2); 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        overflow: hidden; 
+                        cursor: pointer;
+                        border: 2px solid rgba(255,255,255,0.3);
+                    ">
+                                <?php if (!empty($avatar)): ?>
+                                    <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                <?php else: ?>
+                                    <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                                        <?= $userInitials ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($title) ?></h1>
+                        <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;"><?= htmlspecialchars($subtitle) ?></p>
+                    </div>
+                </div>
+            </div>
+        <?php
+    }
+
     function renderAppFooter()
     {
         $avatar = $_SESSION['user_avatar'] ?? null;
