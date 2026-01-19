@@ -25,6 +25,17 @@ function renderAppHeader($title = 'Louvor PIB')
         <meta http-equiv="Expires" content="0">
         <title><?= htmlspecialchars($title) ?></title>
         <link rel="stylesheet" href="<?= asset('../assets/css/style.css') ?>">
+        <!-- PWA Support -->
+        <meta name="theme-color" content="#2D7A4F">
+        <link rel="manifest" href="../manifest.json">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('../sw.js');
+                });
+            }
+        </script>
+
         <!-- Ícones -->
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
