@@ -54,6 +54,11 @@ body {
     --gradient-dark: linear-gradient(135deg, #2D3748 0%, #1A202C 100%);
     --gradient-hero: linear-gradient(135deg, #2D7A4F 0%, #2C5282 50%, #2D3748 100%);
 
+    /* New Theme Gradients */
+    --gradient-yellow: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    --gradient-blue: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+    --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+
     /* Glassmorphism */
     --glass-bg: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);

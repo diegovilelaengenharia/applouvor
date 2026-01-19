@@ -302,7 +302,7 @@ function renderAppHeader($title = 'Louvor PIB')
                             </div>
                             <span>Membros</span>
                         </a>
-                        <a href="manutencao.php" class="sheet-item ripple">
+                        <a href="agenda.php" class="sheet-item ripple">
                             <div class="sheet-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
@@ -321,7 +321,7 @@ function renderAppHeader($title = 'Louvor PIB')
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Espiritualidade</div>
                 <div class="sheet-grid">
-                    <a href="manutencao.php" class="sheet-item ripple">
+                    <a href="oracao.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
@@ -331,7 +331,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         </div>
                         <span>Oração</span>
                     </a>
-                    <a href="manutencao.php" class="sheet-item ripple">
+                    <a href="devocionais.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -340,7 +340,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         </div>
                         <span>Devocionais</span>
                     </a>
-                    <a href="manutencao.php" class="sheet-item ripple">
+                    <a href="leitura.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -358,7 +358,7 @@ function renderAppHeader($title = 'Louvor PIB')
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Comunicação</div>
                 <div class="sheet-grid">
-                    <a href="manutencao.php" class="sheet-item ripple">
+                    <a href="avisos.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -368,7 +368,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         </div>
                         <span>Avisos</span>
                     </a>
-                    <a href="manutencao.php" class="sheet-item ripple">
+                    <a href="indisponibilidade.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -377,7 +377,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         </div>
                         <span>Indisponível</span>
                     </a>
-                    <a href="manutencao.php" class="sheet-item ripple">
+                    <a href="aniversarios.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>

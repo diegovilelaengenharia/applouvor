@@ -211,7 +211,7 @@ renderAppHeader('Repertório');
 
 <!-- Hero Search Section -->
 <div style="
-    background: var(--gradient-primary); 
+    background: var(--gradient-yellow); 
     margin: -24px -16px 32px -16px; 
     padding: 32px 24px 64px 24px; 
     border-radius: 0 0 32px 32px; 

@@ -9,13 +9,27 @@ require_once '../includes/layout.php';
 renderAppHeader('Painel Líder');
 ?>
 
-<div class="container fade-in-up">
-
-    <!-- Conteúdo da Página -->
-    <div style="margin-top: 24px;">
-        <!-- Título Opcional, já que tem no Header Global -->
-        <!-- <h2 style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 16px;">Ferramentas de Liderança</h2> -->
+<!-- Hero Header -->
+<div style="
+    background: var(--gradient-yellow); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Painel Líder</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+        </div>
     </div>
+</div>
+
+<div class="container fade-in-up" style="margin-top: 0;">
+    <!-- Spacer for the hero separation -->
+    <div style="height: 10px;"></div>
 
     <style>
         .wide-action-btn {
