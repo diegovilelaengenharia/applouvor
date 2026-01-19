@@ -32,83 +32,75 @@ body {
 }
 
 :root {
-    /* --- Paleta Profissional e Tradicional --- */
-    --bg-primary: #F3F4F6;
+    /* --- Paleta Suave e Moderna (Lighter) --- */
+    --bg-primary: #F9FAFB;
     --bg-secondary: #FFFFFF;
-    --bg-tertiary: #E5E7EB;
+    --bg-tertiary: #F3F4F6;
 
-    /* Cores Institucionais Sóbrias */
-    --primary-green: #2F5233;
-    /* Verde Tradicional Escuro */
-    --primary-green-light: #4A7A50;
-    --primary-green-dark: #1B3322;
+    /* Cores Principais - Suaves */
+    --primary-green: #059669;
+    /* Emerald 600 */
+    --primary-green-light: #34D399;
+    --primary-green-dark: #047857;
 
-    --primary-gray: #4B5563;
-    --primary-gray-light: #6B7280;
-    --primary-gray-dark: #1F2937;
+    --primary-gray: #6B7280;
+    --primary-gray-light: #9CA3AF;
+    --primary-gray-dark: #374151;
 
-    --primary-blue: #1E3A8A;
-    /* Azul Marinho Profundo */
-    --primary-blue-light: #1E40AF;
+    --primary-blue: #2563EB;
+    /* Royal Blue Suave */
+    --primary-blue-light: #60A5FA;
 
-    /* Header Background */
+    /* Header Background - Mantendo Profissional */
     --header-bg: #1F2937;
-    /* Cinza Escuro Solicitado */
 
-    /* Gradientes - Sutis e Tradicionais */
-    --gradient-primary: linear-gradient(135deg, #2F5233 0%, #1B3322 100%);
-    --gradient-elegant: linear-gradient(135deg, #374151 0%, #1F2937 100%);
+    /* Gradientes - Suaves e Claros */
+    --gradient-primary: linear-gradient(135deg, #34D399 0%, #059669 100%);
+    --gradient-elegant: linear-gradient(135deg, #4B5563 0%, #1F2937 100%);
     --gradient-soft: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
-    --gradient-dark: linear-gradient(135deg, #1F2937 0%, #111827 100%);
-    --gradient-hero: linear-gradient(135deg, #2F5233 0%, #1B3322 100%);
+    --gradient-dark: linear-gradient(135deg, #374151 0%, #111827 100%);
+    --gradient-hero: linear-gradient(135deg, #34D399 0%, #059669 100%);
 
-    /* Theme Gradients - Tons Sóbrios */
-    /* Gestão (Antes Amarelo/Verde -> Agora Verde Sóbrio) */
-    --gradient-green: linear-gradient(135deg, #2F5233 0%, #1B3322 100%);
-    /* Espírito (Azul -> Azul Marinho) */
-    --gradient-blue: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
-    /* Comunica (Vermelho -> Vinho/Burgundy) */
-    --gradient-red: linear-gradient(135deg, #991B1B 0%, #7F1D1D 100%);
-    /* Mantendo Yellow caso precise, mas agora Ouro Velho */
-    --gradient-yellow: linear-gradient(135deg, #B45309 0%, #78350f 100%);
-    --gradient-purple: linear-gradient(135deg, #581C87 0%, #3B0764 100%);
+    /* Theme Gradients - Tons Pastéis/Suaves */
+    --gradient-green: linear-gradient(135deg, #34D399 0%, #059669 100%);
+    --gradient-blue: linear-gradient(135deg, #60A5FA 0%, #2563EB 100%);
+    --gradient-red: linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+    --gradient-yellow: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+    --gradient-purple: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
 
-    /* Glassmorphism Sutil */
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.5);
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.6);
     --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
 
-    --accent-primary: #2F5233;
-    --accent-interactive: #B45309;
-    /* Toque Dourado/Bronze para interações */
+    --accent-primary: #059669;
+    --accent-interactive: #D97706;
+    /* Amber para destaque */
 
-    --text-primary: #111827;
-    /* Cinza Quase Preto */
+    --text-primary: #1F2937;
     --text-secondary: #4B5563;
     --text-muted: #9CA3AF;
 
     --border-subtle: #E5E7EB;
     --border-focus: var(--primary-green);
 
-    --status-success: #065F46;
-    --status-warning: #92400E;
-    --status-error: #991B1B;
-    --status-info: #1E3A8A;
+    --status-success: #059669;
+    --status-warning: #D97706;
+    --status-error: #EF4444;
+    --status-info: #2563EB;
 
     /* Spacing & Layout */
     --header-height: 60px;
     --bottom-nav-height: 80px;
     --border-radius-lg: 16px;
-    /* Reduzido para ser mais tradicional */
     --border-radius-md: 8px;
 
-    /* Shadows Suaves */
+    /* Shadows Muito Suaves */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
     --shadow-glow: none;
-    /* Removendo brilhos neon */
-    --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
 }
 
 /* Dark Mode */
@@ -354,8 +346,9 @@ ul {
 
 .nav-cat-item:nth-child(4) svg,
 .nav-cat-item:nth-child(4) i {
-    background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);
-    color: #6366F1;
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    color: #EF4444;
+    /* Red */
 }
 
 .nav-cat-item:nth-child(5) svg,
