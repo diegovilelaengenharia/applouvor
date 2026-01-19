@@ -209,36 +209,95 @@ renderAppHeader('Repertório');
 </style>
 </style>
 
-<!-- Header -->
-<div class="repertorio-header">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <h1 class="repertorio-title" style="margin: 0;">Repertório</h1>
-        <button class="btn-icon ripple" onclick="openOptionsMenu()" style="background: rgba(255,255,255,0.1);">
-            <i data-lucide="more-vertical" style="color: var(--text-primary);"></i>
+<!-- Hero Search Section -->
+<div style="
+    background: var(--gradient-primary); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Repertório</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+        </div>
+        <button class="ripple" onclick="openOptionsMenu()" style="
+            background: rgba(255,255,255,0.2); 
+            border: none; 
+            width: 44px; 
+            height: 44px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: white;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+        ">
+            <i data-lucide="more-vertical" style="width: 20px;"></i>
         </button>
     </div>
-    <p class="repertorio-subtitle">Louvor PIB Oliveira</p>
-</div>
 
+    <!-- Floating Search Bar -->
+    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
+        <form method="GET" style="margin: 0;">
+            <input type="hidden" name="tab" value="<?= $tab ?>">
+            <div style="
+                background: var(--bg-secondary); 
+                border-radius: 16px; 
+                padding: 6px; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                display: flex; 
+                align-items: center;
+                border: 1px solid rgba(0,0,0,0.05);
+            ">
+                <div style="
+                    width: 44px; 
+                    height: 44px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    color: var(--primary-green);
+                ">
+                    <i data-lucide="search" style="width: 22px;"></i>
+                </div>
 
-<!-- Barra de Busca Sempre Visível -->
-<div style="margin-bottom: 20px;">
-    <form method="GET" style="position: relative;">
-        <input type="hidden" name="tab" value="<?= $tab ?>">
-        <input
-            type="text"
-            name="search"
-            class="form-input"
-            placeholder="🔍 Digite para buscar músicas ou artistas..."
-            value="<?= $_GET['search'] ?? '' ?>"
-            style="padding-right: 100px;">
-        <?php if (!empty($_GET['search'])): ?>
-            <a href="?tab=<?= $tab ?>" style="position: absolute; right: 60px; top: 50%; transform: translateY(-50%); color: var(--text-muted); text-decoration: none; font-size: 1.2rem;">×</a>
-        <?php endif; ?>
-        <button type="submit" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: var(--accent-interactive); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">
-            Buscar
-        </button>
-    </form>
+                <input
+                    type="text"
+                    name="search"
+                    value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
+                    placeholder="Buscar músicas, artistas..."
+                    style="
+                        border: none; 
+                        background: transparent; 
+                        padding: 12px 0; 
+                        width: 100%; 
+                        font-size: 1rem; 
+                        color: var(--text-primary);
+                        outline: none;
+                        font-weight: 500;
+                    ">
+
+                <?php if (!empty($_GET['search'])): ?>
+                    <a href="?tab=<?= $tab ?>" style="
+                        width: 40px; 
+                        height: 40px; 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        color: var(--text-muted); 
+                        text-decoration: none;
+                        cursor: pointer;
+                    ">
+                        <i data-lucide="x" style="width: 18px;"></i>
+                    </a>
+                <?php endif; ?>
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- Navegação de Abas -->
