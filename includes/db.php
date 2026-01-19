@@ -5,19 +5,22 @@ require_once 'config.php';
 
 // Configurações do Banco de Dados
 
+// FORÇANDO USO DO BANCO REMOTO (Hostinger)
 // Detecta se está rodando localmente (XAMPP/localhost)
+/*
 if ($_SERVER['HTTP_HOST'] == 'localhost:8000' || $_SERVER['HTTP_HOST'] == 'localhost') {
     $host = 'localhost';
     $dbname = 'pibo_louvor'; // Atualizado para o novo nome do banco
     $username = 'root';
     $password = '';
 } else {
-    // Produção (Hostinger)
-    $host = 'localhost';
-    $dbname = 'u884436813_applouvor';
-    $username = 'u884436813_admin';
-    $password = 'Diego@159753';
-}
+*/
+// Produção (Hostinger) - SEMPRE ATIVO AGORA
+$host = 'srv1074.hstgr.io';
+$dbname = 'u884436813_applouvor';
+$username = 'u884436813_admin';
+$password = 'Diego@159753';
+// }
 
 try {
     // Tenta conectar

@@ -1,6 +1,4 @@
--- Criação do Banco de Dados
-CREATE DATABASE IF NOT EXISTS pibo_louvor;
-USE pibo_louvor;
+-- Script para criar tabelas no Hostinger (sem CREATE DATABASE)
 
 -- ==========================================
 -- 1. TABELA DE USUÁRIOS (Membros)
@@ -11,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     role ENUM('admin', 'user') DEFAULT 'user',
     instrument VARCHAR(100), -- Ex: Voz, Violão, Bateria
     phone VARCHAR(20),
-    password VARCHAR(255) NOT NULL, -- Senha (4 últimos dígitos)
+    password VARCHAR(255) NOT NULL, -- Senha
     avatar_color VARCHAR(7) DEFAULT '#D4AF37', -- Cor para o avatar (iniciais)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -60,13 +58,13 @@ CREATE TABLE IF NOT EXISTS schedule_songs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     schedule_id INT NOT NULL,
     song_id INT NOT NULL,
-    presentation_order INT, -- Ordem no culto (1, 2, 3...)
+    order_index INT, -- Ordem no culto (1, 2, 3...)
     FOREIGN KEY (schedule_id) REFERENCES schedules(id) ON DELETE CASCADE,
     FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE
 );
 
 -- ==========================================
--- 🚀 POPULANDO OS DADOS (SEED)
+-- DADOS INICIAIS
 -- ==========================================
 
 -- Inserindo Usuário Admin Padrão

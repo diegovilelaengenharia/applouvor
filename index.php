@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div style="text-align:left;">
                 <label class="form-label">Senha (4 dígitos)</label>
-                <input type="password" name="password" class="form-input-login" placeholder="••••" maxlength="4" required inputmode="numeric">
+                <input type="password" name="password" class="form-input-login" placeholder="Sua senha" required>
             </div>
 
             <button type="submit" class="btn-gold">
