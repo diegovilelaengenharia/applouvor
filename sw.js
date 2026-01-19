@@ -1,4 +1,4 @@
-const CACHE_NAME = 'louvor-pib-v2';
+const CACHE_NAME = 'louvor-pib-v3';
 const urlsToCache = [
   '/',
   '/index.php',
