@@ -40,8 +40,8 @@ renderAppHeader('Início');
         <!-- Navigation Row (Right Aligned) -->
         <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 24px;">
             <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 40px; 
-                height: 40px; 
+                width: 52px; 
+                height: 52px; 
                 border-radius: 50%; 
                 background: rgba(255,255,255,0.2); 
                 display: flex; 
