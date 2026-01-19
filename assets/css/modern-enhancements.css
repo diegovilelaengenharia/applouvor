@@ -45,7 +45,7 @@
 .card-btn:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-float);
-    border-color: var(--primary-purple);
+    border-color: var(--primary-green);
 }
 
 .card-btn:active {
@@ -122,7 +122,7 @@
 .nav-cat-item:hover,
 .nav-cat-item:active,
 .nav-cat-item.active {
-    color: var(--primary-blue);
+    color: var(--primary-green);
 }
 
 .nav-cat-item svg,
