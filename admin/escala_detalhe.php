@@ -372,40 +372,44 @@ renderAppHeader('Detalhes da Escala');
             gap: 16px;
         ">
             <button onclick="openEditModal()" class="ripple" style="
-                flex: 1;
-                background: #F59E0B; 
+                flex: 0 0 auto;
+                width: 60px;
+                background: #FFC107; 
                 color: white; 
                 border: none; 
                 border-radius: 16px; 
                 padding: 16px; 
-                font-size: 1rem;
                 font-weight: 700; 
+                cursor: pointer; 
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
-                gap: 10px; 
-                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+                box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
                 transition: transform 0.2s;
              ">
-                <i data-lucide="edit-3" style="width: 20px;"></i> Editar Informações
+                <i data-lucide="edit-3" style="width: 24px;"></i>
             </button>
 
-            <form method="POST" onsubmit="return confirm('Excluir esta escala?')" style="margin: 0;">
+            <form method="POST" onsubmit="return confirm('Excluir esta escala?')" style="margin: 0; flex: 1;">
                 <input type="hidden" name="action" value="delete_schedule">
                 <button type="submit" class="ripple" style="
-                    background: var(--bg-primary);
-                    color: var(--status-error);
-                    border: 2px solid rgba(239, 68, 68, 0.1); 
-                    width: 56px; 
-                    height: 56px; 
+                    width: 100%;
+                    background: #DC3545;
+                    color: white;
+                    border: none; 
+                    padding: 18px; 
                     border-radius: 16px; 
                     display: flex; 
                     align-items: center; 
                     justify-content: center; 
+                    gap: 10px;
                     cursor: pointer;
+                    font-weight: 700;
+                    font-size: 1.05rem;
+                    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
                     transition: all 0.2s;
                 ">
-                    <i data-lucide="trash-2" style="width: 24px;"></i>
+                    <i data-lucide="trash-2" style="width: 22px;"></i> Excluir Escala
                 </button>
             </form>
         </div>
