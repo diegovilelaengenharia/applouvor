@@ -214,68 +214,150 @@ renderAppHeader('Detalhes da Escala');
     $d = new DateTime($schedule['event_date']);
     $dayNum = $d->format('d');
     $monthStr = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][(int)$d->format('m') - 1];
-    $timeStr = '19:00';
+    $timeStr = '19:00'; // Poderia vir do banco se tivesse campo hora
 
     // Agrupar equipe por instrumento
     $teamGrouped = [];
     foreach ($currentMembers as $m) {
-        $inst = $m['instrument'] ?: 'Voz'; // Default
+        $inst = $m['instrument'] ?: 'Voz';
         $teamGrouped[$inst][] = $m;
     }
     ksort($teamGrouped);
     ?>
 
-    <div class="card-clean" style="padding: 0; overflow: hidden; border-radius: 20px; box-shadow: var(--shadow-md);">
+    <div class="card-clean" style="padding: 0; overflow: hidden; border-radius: 24px; box-shadow: var(--shadow-lg); border: none; background: var(--bg-secondary);">
 
-        <!-- Top Banner / Header -->
-        <div style="background: var(--bg-secondary); padding: 24px; border-bottom: 1px solid var(--border-subtle);">
-            <div style="display: flex; gap: 16px; align-items: flex-start;">
-                <!-- Date Badge -->
-                <div style="background: white; border: 2px solid var(--primary-green); border-radius: 16px; padding: 10px; min-width: 70px; text-align: center; box-shadow: var(--shadow-sm); flex-shrink: 0;">
-                    <span style="display: block; font-size: 0.8rem; font-weight: 800; color: var(--primary-green); text-transform: uppercase;"><?= $monthStr ?></span>
-                    <span style="display: block; font-size: 1.8rem; font-weight: 800; color: var(--text-primary); line-height: 1; margin-top: 2px;"><?= $dayNum ?></span>
+        <!-- Modern Header Region -->
+        <div style="background: linear-gradient(to bottom, var(--bg-secondary) 0%, var(--bg-primary) 100%); padding: 32px 24px 28px; border-bottom: 1px solid var(--border-subtle);">
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+                <!-- Modern Date Badge -->
+                <div style="
+                    background: var(--bg-secondary); 
+                    border: 1px solid var(--border-subtle);
+                    border-radius: 18px; 
+                    padding: 8px 0; 
+                    width: 76px;
+                    text-align: center; 
+                    box-shadow: var(--shadow-md); 
+                    flex-shrink: 0;
+                    display: flex; flex-direction: column; justify-content: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary-green);"></div>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-green); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;"><?= $monthStr ?></span>
+                    <span style="font-size: 2rem; font-weight: 900; color: var(--text-primary); line-height: 1; letter-spacing: -1px; margin-bottom: 4px;"><?= $dayNum ?></span>
                 </div>
 
-                <div>
-                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-interactive); letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px;"><?= $dayName ?> • <?= $timeStr ?></span>
-                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); line-height: 1.2; margin: 0;"><?= htmlspecialchars($schedule['event_type']) ?></h2>
+                <div style="flex: 1; padding-top: 2px;">
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span style="
+                            font-size: 0.7rem; 
+                            font-weight: 700; 
+                            color: var(--primary-green); 
+                            background: rgba(16, 185, 129, 0.1); 
+                            padding: 4px 10px; 
+                            border-radius: 50px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            display: flex; align-items: center; gap: 4px;
+                        ">
+                            <i data-lucide="calendar" style="width: 12px;"></i> <?= $dayName ?>
+                        </span>
+                        <span style="
+                            font-size: 0.7rem; 
+                            font-weight: 700; 
+                            color: var(--text-secondary); 
+                            background: var(--bg-tertiary); 
+                            padding: 4px 10px; 
+                            border-radius: 50px;
+                            display: flex; align-items: center; gap: 4px;
+                        ">
+                            <i data-lucide="clock" style="width: 12px;"></i> <?= $timeStr ?>
+                        </span>
+                    </div>
+                    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); line-height: 1.2; margin: 0; letter-spacing: -0.5px;">
+                        <?= htmlspecialchars($schedule['event_type']) ?>
+                    </h2>
                 </div>
             </div>
 
-            <!-- Observations -->
+            <!-- Observations Stylized -->
             <?php if (!empty($schedule['notes'])): ?>
-                <div style="margin-top: 20px; background: #FEF9C3; border: 1px solid #FEF08A; padding: 12px 16px; border-radius: 12px; color: #854D0E; font-size: 0.95rem; line-height: 1.5; display: flex; gap: 10px;">
-                    <i data-lucide="info" style="width: 18px; flex-shrink: 0; margin-top: 2px;"></i>
-                    <div><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+                <div style="margin-top: 24px; position: relative;">
+                    <div style="
+                        background: rgba(250, 204, 21, 0.1); 
+                        border-left: 3px solid #FACC15; 
+                        padding: 16px; 
+                        border-radius: 0 12px 12px 0; 
+                        color: var(--text-primary);
+                        font-size: 0.95rem; 
+                        line-height: 1.6;
+                        display: flex; gap: 12px;
+                    ">
+                        <i data-lucide="info" style="color: #EAB308; width: 20px; flex-shrink: 0; margin-top: 2px;"></i>
+                        <div style="color: var(--text-secondary);">
+                            <span style="font-weight: 700; color: #EAB308; display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase;">Observações</span>
+                            <?= nl2br(htmlspecialchars($schedule['notes'])) ?>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
 
         <div style="padding: 24px;">
 
-            <!-- Equipe Grouped -->
-            <div style="margin-bottom: 32px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <i data-lucide="users" style="width: 20px; color: var(--primary-green);"></i> Equipe
+            <!-- Equipe Modern Grid -->
+            <div style="margin-bottom: 36px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+                        <span style="width: 32px; height: 32px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="users" style="width: 18px; color: var(--primary-green);"></i>
+                        </span>
+                        Equipe
                     </h3>
-                    <button onclick="openTab('equipe')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-interactive); background: none; border: none;">Gerenciar</button>
+                    <button onclick="openTab('equipe')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-interactive); background: none; border: none; cursor: pointer;">Gerenciar</button>
                 </div>
 
                 <?php if (empty($teamGrouped)): ?>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Ninguém escalado.</p>
+                    <div style="text-align: center; padding: 20px; border: 1px dashed var(--border-subtle); border-radius: 12px; color: var(--text-muted);">
+                        Ninguém escalado ainda.
+                    </div>
                 <?php else: ?>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
                         <?php foreach ($teamGrouped as $instrument => $members): ?>
                             <div>
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: block;"><?= htmlspecialchars($instrument) ?></label>
-                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <h4 style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px 4px;">
+                                    <?= htmlspecialchars($instrument) ?>
+                                </h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;">
                                     <?php foreach ($members as $m): ?>
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <div style="width: 24px; height: 24px; background: var(--bg-tertiary); border-radius: 50%; color: var(--text-primary); font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+                                        <div style="
+                                            background: var(--bg-primary); 
+                                            border: 1px solid var(--border-subtle); 
+                                            padding: 10px 12px; 
+                                            border-radius: 12px; 
+                                            display: flex; 
+                                            align-items: center; 
+                                            gap: 10px;
+                                            box-shadow: var(--shadow-sm);
+                                            transition: transform 0.2s;
+                                        " class="ripple">
+                                            <div style="
+                                                width: 32px; height: 32px; 
+                                                background: var(--bg-tertiary); 
+                                                border-radius: 50%; 
+                                                color: var(--text-primary); 
+                                                font-size: 0.8rem; 
+                                                font-weight: 700; 
+                                                display: flex; align-items: center; justify-content: center;
+                                                border: 2px solid var(--bg-secondary);
+                                            ">
                                                 <?= strtoupper(substr($m['name'], 0, 1)) ?>
                                             </div>
-                                            <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-primary);"><?= htmlspecialchars(explode(' ', $m['name'])[0]) ?></span>
+                                            <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <?= htmlspecialchars(explode(' ', $m['name'])[0]) ?>
+                                            </span>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
@@ -285,28 +367,61 @@ renderAppHeader('Detalhes da Escala');
                 <?php endif; ?>
             </div>
 
-            <!-- Músicas -->
+            <!-- Músicas Modern List -->
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <i data-lucide="music" style="width: 20px; color: var(--primary-green);"></i> Músicas
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+                        <span style="width: 32px; height: 32px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="music" style="width: 18px; color: var(--primary-blue);"></i>
+                        </span>
+                        Repertório
                     </h3>
-                    <button onclick="openTab('repertorio')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-interactive); background: none; border: none;">Ver todas</button>
+                    <button onclick="openTab('repertorio')" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-interactive); background: none; border: none; cursor: pointer;">Ver todas</button>
                 </div>
 
                 <?php if (empty($currentSongs)): ?>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nenhuma música.</p>
+                    <div style="text-align: center; padding: 20px; border: 1px dashed var(--border-subtle); border-radius: 12px; color: var(--text-muted);">
+                        Nenhuma música selecionada.
+                    </div>
                 <?php else: ?>
-                    <div style="background: var(--bg-tertiary); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                    <div style="display: flex; flex-direction: column; gap: 0;">
                         <?php foreach ($currentSongs as $index => $s): ?>
-                            <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-subtle);">
-                                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); width: 20px;"><?= $index + 1 ?></span>
+                            <div style="
+                                display: flex; 
+                                align-items: center; 
+                                padding: 14px 0; 
+                                border-bottom: 1px solid var(--border-subtle); 
+                                gap: 16px;
+                            ">
+                                <span style="
+                                    font-size: 0.9rem; 
+                                    font-weight: 700; 
+                                    color: var(--text-secondary); 
+                                    width: 24px; 
+                                    text-align: center;
+                                    opacity: 0.6;
+                                "><?= $index + 1 ?></span>
+
                                 <div style="flex: 1;">
-                                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);"><?= htmlspecialchars($s['title']) ?></div>
-                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><?= htmlspecialchars($s['artist']) ?></div>
+                                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 2px;">
+                                        <?= htmlspecialchars($s['title']) ?>
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        <?= htmlspecialchars($s['artist']) ?>
+                                    </div>
                                 </div>
+
                                 <?php if ($s['tone']): ?>
-                                    <span style="background: var(--bg-primary); padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--text-primary); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);"><?= htmlspecialchars($s['tone']) ?></span>
+                                    <span style="
+                                        background: var(--bg-tertiary); 
+                                        padding: 4px 10px; 
+                                        border-radius: 8px; 
+                                        font-size: 0.85rem; 
+                                        font-weight: 700; 
+                                        color: var(--text-primary);
+                                        min-width: 32px;
+                                        text-align: center;
+                                    "><?= htmlspecialchars($s['tone']) ?></span>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
@@ -316,41 +431,49 @@ renderAppHeader('Detalhes da Escala');
 
         </div>
 
-        <!-- Botões de Ação -->
-        <div style="padding: 20px 24px; background: var(--bg-secondary); border-top: 1px solid var(--border-subtle); display: flex; gap: 12px;">
-            <!-- Botão Amarelo Solicitado -->
+        <!-- Botões de Ação Modernos -->
+        <div style="
+            padding: 24px; 
+            background: var(--bg-secondary); 
+            border-top: 1px solid var(--border-subtle); 
+            display: flex; 
+            gap: 16px;
+        ">
             <button onclick="openEditModal()" class="ripple" style="
                 flex: 1;
                 background: #F59E0B; 
                 color: white; 
                 border: none; 
-                border-radius: 12px; 
-                padding: 14px; 
-                font-weight: 600; 
+                border-radius: 16px; 
+                padding: 16px; 
+                font-size: 1rem;
+                font-weight: 700; 
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
-                gap: 8px; 
-                box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
+                gap: 10px; 
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+                transition: transform 0.2s;
              ">
-                <i data-lucide="edit-3" style="width: 18px;"></i> Editar Informações
+                <i data-lucide="edit-3" style="width: 20px;"></i> Editar Informações
             </button>
 
             <form method="POST" onsubmit="return confirm('Excluir esta escala?')" style="margin: 0;">
                 <input type="hidden" name="action" value="delete_schedule">
                 <button type="submit" class="ripple" style="
-                    background: #FEE2E2; 
-                    color: #DC2626; 
-                    border: none; 
-                    width: 50px; 
-                    height: 50px; 
-                    border-radius: 12px; 
+                    background: var(--bg-primary);
+                    color: var(--status-error);
+                    border: 2px solid rgba(239, 68, 68, 0.1); 
+                    width: 56px; 
+                    height: 56px; 
+                    border-radius: 16px; 
                     display: flex; 
                     align-items: center; 
                     justify-content: center; 
                     cursor: pointer;
+                    transition: all 0.2s;
                 ">
-                    <i data-lucide="trash-2" style="width: 20px;"></i>
+                    <i data-lucide="trash-2" style="width: 24px;"></i>
                 </button>
             </form>
         </div>
