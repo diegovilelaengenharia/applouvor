@@ -198,59 +198,105 @@ renderAppHeader('Escalas');
     }
 </style>
 
-<!-- Header e Ações -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
-    <div style="display: flex; flex-direction: column;">
-        <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">Escalas</h1>
-        <span style="font-size: 0.8rem; color: var(--text-secondary);">Louvor PIB Oliveira</span>
+<!-- Hero Header -->
+<div style="
+    background: var(--gradient-primary); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Escalas</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <!-- Add Button -->
+            <a href="escala_adicionar.php" class="ripple" style="
+                background: rgba(255,255,255,0.2); 
+                border: none; 
+                width: 44px; 
+                height: 44px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                backdrop-filter: blur(4px);
+                cursor: pointer;
+            ">
+                <i data-lucide="plus" style="width: 20px;"></i>
+            </a>
+            <!-- Filter Button -->
+            <button onclick="openFilters()" class="ripple" style="
+                background: rgba(255,255,255,0.2); 
+                border: none; 
+                width: 44px; 
+                height: 44px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                backdrop-filter: blur(4px);
+                cursor: pointer;
+            ">
+                <i data-lucide="filter" style="width: 20px;"></i>
+            </button>
+            <!-- View Button -->
+            <button onclick="toggleViewMenu()" class="ripple" style="
+                background: rgba(255,255,255,0.2); 
+                border: none; 
+                width: 44px; 
+                height: 44px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                backdrop-filter: blur(4px);
+                cursor: pointer;
+                position: relative;
+            ">
+                <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>" style="width: 20px;"></i>
+                <!-- Dropdown Menu -->
+                <div id="viewMenu" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-lg); width: 200px; z-index: 100; margin-top: 8px; overflow: hidden;">
+                    <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
+                        <i data-lucide="align-left" style="width: 18px; color: var(--text-secondary);"></i> Linha do Tempo
+                    </a>
+                    <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
+                        <i data-lucide="list" style="width: 18px; color: var(--text-secondary);"></i> Lista Compacta
+                    </a>
+                    <a href="?view=calendar" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
+                        <i data-lucide="calendar" style="width: 18px; color: var(--text-secondary);"></i> Calendário
+                    </a>
+                </div>
+            </button>
+        </div>
     </div>
 
-    <div style="display: flex; gap: 8px;">
-        <!-- Botão Visualização -->
-        <button onclick="toggleViewMenu()" class="btn-icon ripple" style="position: relative;">
-            <?php if ($viewMode == 'calendar'): ?>
-                <i data-lucide="calendar"></i>
-            <?php elseif ($viewMode == 'list'): ?>
-                <i data-lucide="list"></i>
-            <?php else: ?>
-                <i data-lucide="align-left"></i>
-            <?php endif; ?>
-
-            <!-- Menu Dropdown de Views -->
-            <div id="viewMenu" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-lg); width: 200px; z-index: 100; margin-top: 8px; overflow: hidden;">
-                <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
-                    <i data-lucide="align-left" style="width: 18px;"></i> Linha do Tempo
-                </a>
-                <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
-                    <i data-lucide="list" style="width: 18px;"></i> Lista Compacta
-                </a>
-                <a href="?view=calendar" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
-                    <i data-lucide="calendar" style="width: 18px;"></i> Calendário
-                </a>
-            </div>
-        </button>
-
-        <!-- Botão Filtro -->
-        <button onclick="openFilters()" class="btn-icon ripple" style="<?= isset($_GET['filter_my']) || !empty($_GET['filter_member']) ? 'color: var(--primary-color); background: rgba(45, 122, 79, 0.1);' : '' ?>">
-            <i data-lucide="filter"></i>
-        </button>
-
-        <!-- Botão Adicionar -->
-        <a href="escala_adicionar.php" class="btn-primary ripple" style="text-decoration: none; border-radius: 12px; padding: 10px 20px; font-size: 0.9rem; box-shadow: var(--shadow-glow); background: #10B981 !important; color: white;">
-            <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
-            <span>Adicionar</span>
-        </a>
+    <!-- Floating Tabs -->
+    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
+        <div style="
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            padding: 6px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            display: flex; 
+            align-items: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        ">
+            <a href="?tab=next" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $tab === 'next' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+                Próximas
+            </a>
+            <a href="?tab=history" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $tab === 'history' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+                Anteriores
+            </a>
+        </div>
     </div>
-</div>
-
-<!-- Navegação de Abas -->
-<div style="background: var(--bg-tertiary); padding: 4px; border-radius: 16px; display: flex; margin-bottom: 24px;">
-    <a href="?tab=next" class="ripple" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; <?= $tab === 'next' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
-        Próximas
-    </a>
-    <a href="?tab=history" class="ripple" style="flex: 1; text-align: center; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; <?= $tab === 'history' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
-        Anteriores
-    </a>
 </div>
 
 <?php if (empty($schedules)): ?>

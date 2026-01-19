@@ -115,13 +115,101 @@ renderAppHeader('Membros');
     }
 </style>
 
-<!-- Header -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">Membros</h1>
-    <button onclick="openAddModal()" class="btn-primary ripple">
-        <i data-lucide="plus"></i> Adicionar
-    </button>
+<!-- Hero Header -->
+<div style="
+    background: var(--gradient-primary); 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Membros</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+        </div>
+        <div style="width: 44px;"></div> <!-- Spacer -->
+    </div>
+
+    <!-- Floating Toolbar -->
+    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
+        <div style="
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            padding: 6px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            display: flex; 
+            align-items: center;
+            border: 1px solid rgba(0,0,0,0.05);
+            gap: 8px;
+        ">
+            <div style="
+                width: 44px; 
+                height: 44px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                color: var(--primary-green);
+                flex-shrink: 0;
+            ">
+                <i data-lucide="search" style="width: 22px;"></i>
+            </div>
+
+            <input
+                type="text"
+                id="memberSearch"
+                placeholder="Buscar membros..."
+                onkeyup="filterMembers()"
+                style="
+                    border: none; 
+                    background: transparent; 
+                    padding: 12px 0; 
+                    flex: 1; 
+                    font-size: 1rem; 
+                    color: var(--text-primary);
+                    outline: none;
+                    font-weight: 500;
+                    min-width: 0;
+                ">
+
+            <button onclick="openAddModal()" class="ripple" style="
+                background: var(--accent-interactive); 
+                color: white; 
+                border: none; 
+                padding: 10px 16px; 
+                border-radius: 12px; 
+                font-weight: 700; 
+                font-size: 0.9rem; 
+                display: flex; 
+                align-items: center; 
+                gap: 6px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(45, 122, 79, 0.2);
+            ">
+                <i data-lucide="plus" style="width: 18px;"></i> <span style="display: none; @media(min-width: 360px) { display: inline; }">Novo</span>
+            </button>
+        </div>
+    </div>
 </div>
+
+<script>
+    function filterMembers() {
+        const input = document.getElementById('memberSearch');
+        const filter = input.value.toLowerCase();
+        const cards = document.getElementsByClassName('member-card');
+
+        for (let i = 0; i < cards.length; i++) {
+            const name = cards[i].querySelector('.member-name').textContent || cards[i].querySelector('.member-name').innerText;
+            if (name.toLowerCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
 
 <!-- Lista de Membros -->
 <?php foreach ($users as $user): ?>
