@@ -10,6 +10,10 @@
 /* Animations */
 @import url('animations.css');
 
+/* Dashboard */
+@import url('dashboard.css');
+
+
 /* PWA Fullscreen Adjustments */
 html {
     height: auto;

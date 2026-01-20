@@ -3,16 +3,11 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Inicia o Shell do Admin
-
 // Temporary Avatar Fix (Auto-Execute v3)
 if (isset($_SESSION['user_id']) && ($_SESSION['user_name'] == 'Diego' || $_SESSION['user_id'] == 1)) {
-    // Force update for current user session immediately
     if (empty($_SESSION['user_avatar'])) {
         $_SESSION['user_avatar'] = 'diego_avatar.jpg';
     }
-
-    // Also try to persist to DB if not done
     if (!isset($_SESSION['avatar_persist_v3'])) {
         try {
             $stmt = $pdo->prepare("UPDATE users SET avatar = 'diego_avatar.jpg' WHERE id = ?");
@@ -23,8 +18,68 @@ if (isset($_SESSION['user_id']) && ($_SESSION['user_name'] == 'Diego' || $_SESSI
     }
 }
 
+// ==========================================
+// BUSCAR PRÓXIMA ESCALA DO USUÁRIO
+// ==========================================
+$nextSchedule = null;
+$scheduleSongs = [];
+
+try {
+    $stmt = $pdo->prepare("
+        SELECT s.*, 
+               GROUP_CONCAT(DISTINCT u.name ORDER BY u.name SEPARATOR ', ') as team_members,
+               COUNT(DISTINCT ss.song_id) as song_count
+        FROM schedules s
+        JOIN schedule_users su ON s.id = su.schedule_id
+        LEFT JOIN schedule_users su2 ON s.id = su2.schedule_id
+        LEFT JOIN users u ON su2.user_id = u.id
+        LEFT JOIN schedule_songs ss ON s.id = ss.schedule_id
+        WHERE su.user_id = ? 
+          AND s.event_date >= CURDATE()
+        GROUP BY s.id
+        ORDER BY s.event_date ASC, s.event_time ASC
+        LIMIT 1
+    ");
+    $stmt->execute([$_SESSION['user_id']]);
+    $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Buscar músicas da escala
+    if ($nextSchedule) {
+        $stmt = $pdo->prepare("
+            SELECT sg.title, sg.artist, ss.position
+            FROM schedule_songs ss
+            JOIN songs sg ON ss.song_id = sg.id
+            WHERE ss.schedule_id = ?
+            ORDER BY ss.position ASC
+        ");
+        $stmt->execute([$nextSchedule['id']]);
+        $scheduleSongs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch (Exception $e) {
+    // Silently fail if tables don't exist yet
+}
+
+// ==========================================
+// BUSCAR ÚLTIMOS AVISOS
+// ==========================================
+$recentAvisos = [];
+
+try {
+    $stmt = $pdo->query("
+        SELECT a.*, u.name as author_name
+        FROM avisos a
+        JOIN users u ON a.created_by = u.id
+        ORDER BY a.created_at DESC
+        LIMIT 3
+    ");
+    $recentAvisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Silently fail if table doesn't exist yet
+}
+
 renderAppHeader('Início');
 ?>
+
 <div class="container">
 
     <!-- Hero Section Admin -->
@@ -93,9 +148,145 @@ renderAppHeader('Início');
         </div>
     </div>
 
-    <!-- Grid de Navegação (Vazio por enquanto - apenas Hero e Bottom Bar) -->
-    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: -20px; padding-bottom: 80px; align-items: center; justify-content: center; min-height: 200px; color: var(--text-muted); font-size: 0.9rem;">
-        <p>Selecione uma opção no menu inferior</p>
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+
+        <!-- Card: Próxima Escala -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                <div class="dashboard-card-title">
+                    <div class="dashboard-card-icon" style="background: linear-gradient(135deg, #047857 0%, #065f46 100%);">
+                        <i data-lucide="calendar" style="width: 20px; color: white;"></i>
+                    </div>
+                    Próxima Escala
+                </div>
+            </div>
+
+            <?php if ($nextSchedule): ?>
+                <!-- Event Info -->
+                <div class="event-info">
+                    <div class="event-date-box">
+                        <div class="event-day"><?= date('d', strtotime($nextSchedule['event_date'])) ?></div>
+                        <div class="event-month"><?= strftime('%b', strtotime($nextSchedule['event_date'])) ?></div>
+                    </div>
+                    <div class="event-details">
+                        <h4 class="event-type"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
+                        <div class="event-time">
+                            <i data-lucide="clock" style="width: 14px;"></i>
+                            <?= date('H:i', strtotime($nextSchedule['event_time'] ?? '19:00:00')) ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Músicas -->
+                <?php if (!empty($scheduleSongs)): ?>
+                    <div style="margin-top: 16px;">
+                        <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
+                            Músicas (<?= count($scheduleSongs) ?>)
+                        </div>
+                        <ul class="song-list">
+                            <?php
+                            $displaySongs = array_slice($scheduleSongs, 0, 3);
+                            foreach ($displaySongs as $index => $song):
+                            ?>
+                                <li class="song-item">
+                                    <div class="song-number"><?= $index + 1 ?></div>
+                                    <div class="song-info">
+                                        <h5 class="song-title"><?= htmlspecialchars($song['title']) ?></h5>
+                                        <?php if ($song['artist']): ?>
+                                            <p class="song-artist"><?= htmlspecialchars($song['artist']) ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php if (count($scheduleSongs) > 3): ?>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
+                                + <?= count($scheduleSongs) - 3 ?> música(s)
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Team Members -->
+                <?php if ($nextSchedule['team_members']): ?>
+                    <div class="team-members">
+                        <span class="team-label">Equipe:</span>
+                        <span class="team-names"><?= htmlspecialchars($nextSchedule['team_members']) ?></span>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Action Button -->
+                <a href="escala_detalhe.php?id=<?= $nextSchedule['id'] ?>" class="card-action-btn">
+                    <i data-lucide="arrow-right" style="width: 16px;"></i>
+                    Ver Detalhes
+                </a>
+
+            <?php else: ?>
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i data-lucide="calendar-x" style="width: 30px; color: var(--text-muted);"></i>
+                    </div>
+                    <h4 class="empty-state-title">Nenhuma escala próxima</h4>
+                    <p class="empty-state-text">Você não está escalado nos próximos eventos</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- Card: Avisos -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                <div class="dashboard-card-title">
+                    <div class="dashboard-card-icon" style="background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);">
+                        <i data-lucide="bell" style="width: 20px; color: white;"></i>
+                    </div>
+                    Avisos
+                </div>
+                <a href="avisos.php" class="card-link">
+                    Ver todos
+                    <i data-lucide="chevron-right" style="width: 16px;"></i>
+                </a>
+            </div>
+
+            <?php if (!empty($recentAvisos)): ?>
+                <?php foreach ($recentAvisos as $aviso): ?>
+                    <div class="aviso-item <?= $aviso['priority'] ?>">
+                        <div class="aviso-header">
+                            <h5 class="aviso-title"><?= htmlspecialchars($aviso['title']) ?></h5>
+                            <span class="priority-badge priority-<?= $aviso['priority'] ?>">
+                                <?php
+                                $priorityLabels = [
+                                    'urgent' => '🔴 Urgente',
+                                    'important' => '🟡 Importante',
+                                    'info' => '🔵 Info'
+                                ];
+                                echo $priorityLabels[$aviso['priority']] ?? 'Info';
+                                ?>
+                            </span>
+                        </div>
+                        <p class="aviso-message"><?= nl2br(htmlspecialchars($aviso['message'])) ?></p>
+                        <div class="aviso-meta">
+                            <i data-lucide="user" style="width: 12px;"></i>
+                            <?= htmlspecialchars($aviso['author_name']) ?>
+                            <span>•</span>
+                            <i data-lucide="clock" style="width: 12px;"></i>
+                            <?= date('d/m/Y', strtotime($aviso['created_at'])) ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i data-lucide="bell-off" style="width: 30px; color: var(--text-muted);"></i>
+                    </div>
+                    <h4 class="empty-state-title">Nenhum aviso</h4>
+                    <p class="empty-state-text">Não há avisos no momento</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
     </div>
 
 </div>
