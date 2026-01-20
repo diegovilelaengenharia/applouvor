@@ -409,6 +409,7 @@ renderAppHeader('Início');
                                 line-height: 1.4;
                                 display: -webkit-box;
                                 -webkit-line-clamp: 2;
+                                line-clamp: 2;
                                 -webkit-box-orient: vertical;
                                 overflow: hidden;
                             "><?= htmlspecialchars(mb_substr(strip_tags($aviso['message']), 0, 80)) ?><?= mb_strlen(strip_tags($aviso['message'])) > 80 ? '...' : '' ?></p>
