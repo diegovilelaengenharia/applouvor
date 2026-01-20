@@ -177,6 +177,11 @@ function renderAppHeader($title = 'Louvor PIB')
         position: relative;
         overflow: visible;
     ">
+                <!-- Global Navigation Buttons -->
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+                    <?php renderGlobalNavButtons(); ?>
+                </div>
+
                 <!-- Navigation Row -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                     <a href="<?= $backUrl ?>" class="ripple" style="
