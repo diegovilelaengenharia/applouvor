@@ -62,6 +62,8 @@ try {
         SELECT a.*, u.name as author_name
         FROM avisos a
         JOIN users u ON a.created_by = u.id
+        WHERE a.archived_at IS NULL
+          AND (a.priority = 'urgent' OR a.priority = 'important')
         ORDER BY a.created_at DESC
         LIMIT 3
     ");
@@ -306,7 +308,172 @@ renderAppHeader('Início');
             lucide.createIcons();
         }
     }
+
+    // Welcome Popup
+    function showWelcomePopup() {
+        const popup = document.getElementById('welcome-popup');
+        if (popup && !sessionStorage.getItem('welcomeShown')) {
+            setTimeout(() => {
+                popup.classList.add('active');
+                sessionStorage.setItem('welcomeShown', 'true');
+            }, 500);
+        }
+    }
+
+    function closeWelcomePopup() {
+        document.getElementById('welcome-popup').classList.remove('active');
+    }
+
+    // Show popup on page load
+    window.addEventListener('DOMContentLoaded', showWelcomePopup);
 </script>
+
+<!-- Welcome Popup -->
+<?php if (!empty($recentAvisos)): ?>
+    <div id="welcome-popup" class="bottom-sheet-overlay" onclick="closeWelcomePopup()">
+        <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="max-height: 80vh; overflow-y: auto;">
+            <!-- Header -->
+            <div style="
+            text-align: center;
+            padding: 32px 24px 24px;
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            margin: -24px -24px 24px;
+            border-radius: 24px 24px 0 0;
+            color: white;
+        ">
+                <div style="
+                width: 80px;
+                height: 80px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px;
+                font-size: 3rem;
+            ">
+                    📢
+                </div>
+                <h2 style="margin: 0 0 8px; font-size: 1.5rem; font-weight: 800;">Avisos Importantes!</h2>
+                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Confira as atualizações mais recentes</p>
+            </div>
+
+            <!-- Avisos List -->
+            <div style="padding: 0 24px 24px;">
+                <?php foreach ($recentAvisos as $index => $aviso):
+                    // Priority colors
+                    $priorityColors = [
+                        'urgent' => ['bg' => '#FEE2E2', 'border' => '#EF4444', 'text' => '#B91C1C', 'icon' => '🔴'],
+                        'important' => ['bg' => '#FEF3C7', 'border' => '#F59E0B', 'text' => '#B45309', 'icon' => '🟡'],
+                        'info' => ['bg' => '#DBEAFE', 'border' => '#3B82F6', 'text' => '#1E40AF', 'icon' => '🔵']
+                    ];
+                    $priority = $priorityColors[$aviso['priority']] ?? $priorityColors['info'];
+
+                    // Type labels
+                    $typeLabels = [
+                        'general' => ['icon' => '📢', 'label' => 'Geral'],
+                        'event' => ['icon' => '🎉', 'label' => 'Evento'],
+                        'music' => ['icon' => '🎵', 'label' => 'Música'],
+                        'spiritual' => ['icon' => '🙏', 'label' => 'Espiritual'],
+                        'urgent' => ['icon' => '🚨', 'label' => 'Urgente']
+                    ];
+                    $type = $typeLabels[$aviso['type']] ?? $typeLabels['general'];
+                ?>
+                    <div style="
+                    background: <?= $priority['bg'] ?>;
+                    border: 2px solid <?= $priority['border'] ?>;
+                    border-radius: 16px;
+                    padding: 16px;
+                    margin-bottom: <?= $index < count($recentAvisos) - 1 ? '12px' : '0' ?>;
+                ">
+                        <!-- Priority Badge -->
+                        <div style="
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                        padding: 4px 10px;
+                        background: white;
+                        border-radius: 12px;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        color: <?= $priority['text'] ?>;
+                        margin-bottom: 12px;
+                    ">
+                            <?= $priority['icon'] ?> <?= ucfirst($aviso['priority']) ?>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 style="
+                        margin: 0 0 8px;
+                        font-size: 1.1rem;
+                        font-weight: 700;
+                        color: <?= $priority['text'] ?>;
+                    ">
+                            <?= $type['icon'] ?> <?= htmlspecialchars($aviso['title']) ?>
+                        </h3>
+
+                        <!-- Message Preview -->
+                        <p style="
+                        margin: 0 0 12px;
+                        font-size: 0.9rem;
+                        color: <?= $priority['text'] ?>;
+                        line-height: 1.5;
+                        opacity: 0.9;
+                    ">
+                            <?= htmlspecialchars(mb_substr(strip_tags($aviso['message']), 0, 100)) ?><?= mb_strlen(strip_tags($aviso['message'])) > 100 ? '...' : '' ?>
+                        </p>
+
+                        <!-- Author & Date -->
+                        <div style="
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        font-size: 0.75rem;
+                        color: <?= $priority['text'] ?>;
+                        opacity: 0.7;
+                    ">
+                            <i data-lucide="user" style="width: 12px;"></i>
+                            <span><?= htmlspecialchars($aviso['author_name']) ?></span>
+                            <span>•</span>
+                            <i data-lucide="calendar" style="width: 12px;"></i>
+                            <span><?= date('d/m/Y', strtotime($aviso['created_at'])) ?></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <a href="avisos.php" class="btn-primary ripple" style="
+                    flex: 1;
+                    justify-content: center;
+                    text-decoration: none;
+                    padding: 14px;
+                ">
+                        <i data-lucide="bell" style="width: 18px;"></i>
+                        Ver Todos os Avisos
+                    </a>
+                    <button onclick="closeWelcomePopup()" class="ripple" style="
+                    flex: 1;
+                    padding: 14px;
+                    background: var(--bg-tertiary);
+                    border: 1px solid var(--border-subtle);
+                    border-radius: 12px;
+                    color: var(--text-primary);
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                ">
+                        <i data-lucide="x" style="width: 18px;"></i>
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <?php
 renderAppFooter();

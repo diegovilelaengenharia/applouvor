@@ -351,6 +351,26 @@ renderAppHeader('Avisos');
             <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Quadro de Avisos</h1>
             <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Atualizações do Ministério</p>
         </div>
+        <?php if ($_SESSION['user_role'] === 'admin'): ?>
+            <button onclick="openModal('modal-create')" class="ripple" style="
+                background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
+                border: none;
+                padding: 12px 24px;
+                border-radius: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                color: white;
+                font-weight: 700;
+                font-size: 0.95rem;
+                cursor: pointer;
+                box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
+                transition: all 0.3s ease;
+            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <i data-lucide="plus" style="width: 20px;"></i> Novo Aviso
+            </button>
+        <?php endif; ?>
     </div>
 
     <!-- Floating Search Bar -->
@@ -551,42 +571,6 @@ renderAppHeader('Avisos');
                 <div class="notice-content">
                     <div class="notice-header">
                         <h3 class="notice-title"><?= htmlspecialchars($aviso['title']) ?></h3>
-                        <?php if ($_SESSION['user_role'] === 'admin' || $_SESSION['user_id'] == $aviso['created_by']): ?>
-                            <div style="position: relative;">
-                                <button class="btn-icon ripple" onclick="toggleMenu(this, 'menu-<?= $aviso['id'] ?>')" style="width: 32px; height: 32px;">
-                                    <i data-lucide="more-vertical" style="width: 16px;"></i>
-                                </button>
-                                <div id="menu-<?= $aviso['id'] ?>" class="dropdown-menu" style="right: 0; min-width: 160px;">
-                                    <button onclick='openEditModal(<?= json_encode($aviso) ?>)' class="dropdown-item">
-                                        <i data-lucide="edit-2" style="width: 14px;"></i> Editar
-                                    </button>
-                                    <?php if (!$showArchived): ?>
-                                        <form method="POST" onsubmit="return confirm('Arquivar este aviso?')">
-                                            <input type="hidden" name="action" value="archive">
-                                            <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                            <button type="submit" class="dropdown-item">
-                                                <i data-lucide="archive" style="width: 14px;"></i> Arquivar
-                                            </button>
-                                        </form>
-                                    <?php else: ?>
-                                        <form method="POST" onsubmit="return confirm('Desarquivar este aviso?')">
-                                            <input type="hidden" name="action" value="unarchive">
-                                            <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                            <button type="submit" class="dropdown-item">
-                                                <i data-lucide="archive-restore" style="width: 14px;"></i> Desarquivar
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <form method="POST" onsubmit="return confirm('Excluir este aviso permanentemente?')">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        <?php endif; ?>
                     </div>
 
                     <div class="notice-badges">
@@ -617,6 +601,95 @@ renderAppHeader('Avisos');
                             <span>•</span>
                             <span><?= date('d/m/Y às H:i', strtotime($aviso['created_at'])) ?></span>
                         </div>
+
+                        <?php if ($_SESSION['user_role'] === 'admin' || $_SESSION['user_id'] == $aviso['created_by']): ?>
+                            <div style="display: flex; gap: 8px;">
+                                <!-- Editar (Amarelo) -->
+                                <button onclick='openEditModal(<?= json_encode($aviso) ?>)' class="ripple" style="
+                                    padding: 6px 12px;
+                                    border-radius: 8px;
+                                    background: #FFC107;
+                                    color: white;
+                                    border: none;
+                                    font-size: 0.75rem;
+                                    font-weight: 600;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 4px;
+                                    transition: all 0.2s;
+                                " onmouseover="this.style.background='#FFB300'" onmouseout="this.style.background='#FFC107'">
+                                    <i data-lucide="edit-2" style="width: 12px;"></i> Editar
+                                </button>
+
+                                <!-- Arquivar/Desarquivar (Azul) -->
+                                <?php if (!$showArchived): ?>
+                                    <form method="POST" onsubmit="return confirm('Arquivar este aviso?')" style="margin: 0;">
+                                        <input type="hidden" name="action" value="archive">
+                                        <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                        <button type="submit" class="ripple" style="
+                                            padding: 6px 12px;
+                                            border-radius: 8px;
+                                            background: #2196F3;
+                                            color: white;
+                                            border: none;
+                                            font-size: 0.75rem;
+                                            font-weight: 600;
+                                            cursor: pointer;
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+                                            transition: all 0.2s;
+                                        " onmouseover="this.style.background='#1976D2'" onmouseout="this.style.background='#2196F3'">
+                                            <i data-lucide="archive" style="width: 12px;"></i> Arquivar
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <form method="POST" onsubmit="return confirm('Desarquivar este aviso?')" style="margin: 0;">
+                                        <input type="hidden" name="action" value="unarchive">
+                                        <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                        <button type="submit" class="ripple" style="
+                                            padding: 6px 12px;
+                                            border-radius: 8px;
+                                            background: #2196F3;
+                                            color: white;
+                                            border: none;
+                                            font-size: 0.75rem;
+                                            font-weight: 600;
+                                            cursor: pointer;
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+                                            transition: all 0.2s;
+                                        " onmouseover="this.style.background='#1976D2'" onmouseout="this.style.background='#2196F3'">
+                                            <i data-lucide="archive-restore" style="width: 12px;"></i> Desarquivar
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+
+                                <!-- Deletar (Vermelho) -->
+                                <form method="POST" onsubmit="return confirm('Excluir este aviso permanentemente?')" style="margin: 0;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                    <button type="submit" class="ripple" style="
+                                        padding: 6px 12px;
+                                        border-radius: 8px;
+                                        background: #EF4444;
+                                        color: white;
+                                        border: none;
+                                        font-size: 0.75rem;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 4px;
+                                        transition: all 0.2s;
+                                    " onmouseover="this.style.background='#DC2626'" onmouseout="this.style.background='#EF4444'">
+                                        <i data-lucide="trash-2" style="width: 12px;"></i> Deletar
+                                    </button>
+                                </form>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -646,24 +719,7 @@ renderAppHeader('Avisos');
     </div>
 <?php endif; ?>
 
-<!-- Floating Action Button -->
-<?php if ($_SESSION['user_role'] === 'admin'): ?>
-    <button onclick="openModal('modal-create')" class="btn-primary ripple" style="
-        position: fixed; 
-        bottom: calc(var(--bottom-nav-height) + 20px); 
-        right: 20px; 
-        width: 56px; 
-        height: 56px; 
-        border-radius: 50%; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        box-shadow: 0 8px 24px rgba(45, 122, 79, 0.4); 
-        z-index: 500;
-    ">
-        <i data-lucide="plus" style="width: 24px; height: 24px;"></i>
-    </button>
-<?php endif; ?>
+
 
 <!-- Modal: Criar Aviso -->
 <div id="modal-create" class="bottom-sheet-overlay" onclick="closeModal('modal-create')">
