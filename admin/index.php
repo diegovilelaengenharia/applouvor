@@ -87,70 +87,6 @@ renderAppHeader('Início');
         position: relative;
         overflow: visible;
     ">
-        <!-- Navigation Row (Right Aligned) -->
-        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 24px; gap: 12px;">
-            <!-- Botão WhatsApp -->
-            <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #0D6EFD 0%, #0B5ED7 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-                box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-                transition: all 0.3s ease;
-                position: relative;
-                z-index: 10;
-            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                </svg>
-            </a>
-
-
-            <!-- Botão Avisos (Novo) -->
-            <a href="avisos.php" class="ripple" style="
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-                box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-                transition: all 0.3s ease;
-                position: relative;
-                z-index: 10;
-            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                <i data-lucide="bell" style="color: white; width: 22px; height: 22px;"></i>
-            </a>
-
-            <!-- Avatar do Usuário -->
-            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 52px; 
-                height: 52px; 
-                border-radius: 50%; 
-                background: rgba(255,255,255,0.2); 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                overflow: hidden; 
-                cursor: pointer;
-                border: 2px solid rgba(255,255,255,0.3);
-            ">
-                <?php if (!empty($_SESSION['user_avatar'])): ?>
-                    <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                <?php else: ?>
-                    <span style="font-weight: 700; font-size: 0.9rem; color: white;">
-                        <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-        </div>
-
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
                 <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Gestão Louvor</h1>
@@ -328,148 +264,187 @@ renderAppHeader('Início');
     window.addEventListener('DOMContentLoaded', showWelcomePopup);
 </script>
 
-<!-- Welcome Popup -->
+<!-- Welcome Popup (Subtle & Modern) -->
 <?php if (!empty($recentAvisos)): ?>
-    <div id="welcome-popup" class="bottom-sheet-overlay" onclick="closeWelcomePopup()">
-        <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="max-height: 80vh; overflow-y: auto;">
-            <!-- Header -->
-            <div style="
-            text-align: center;
-            padding: 32px 24px 24px;
-            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
-            margin: -24px -24px 24px;
-            border-radius: 24px 24px 0 0;
-            color: white;
-        ">
-                <div style="
-                width: 80px;
-                height: 80px;
-                background: rgba(255,255,255,0.2);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 16px;
-                font-size: 3rem;
-            ">
-                    📢
-                </div>
-                <h2 style="margin: 0 0 8px; font-size: 1.5rem; font-weight: 800;">Avisos Importantes!</h2>
-                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Confira as atualizações mais recentes</p>
-            </div>
+    <style>
+        @keyframes subtleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
 
-            <!-- Avisos List -->
-            <div style="padding: 0 24px 24px;">
-                <?php foreach ($recentAvisos as $index => $aviso):
-                    // Priority colors
-                    $priorityColors = [
-                        'urgent' => ['bg' => '#FEE2E2', 'border' => '#EF4444', 'text' => '#B91C1C', 'icon' => '🔴'],
-                        'important' => ['bg' => '#FEF3C7', 'border' => '#F59E0B', 'text' => '#B45309', 'icon' => '🟡'],
-                        'info' => ['bg' => '#DBEAFE', 'border' => '#3B82F6', 'text' => '#1E40AF', 'icon' => '🔵']
-                    ];
-                    $priority = $priorityColors[$aviso['priority']] ?? $priorityColors['info'];
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-                    // Type labels
-                    $typeLabels = [
-                        'general' => ['icon' => '📢', 'label' => 'Geral'],
-                        'event' => ['icon' => '🎉', 'label' => 'Evento'],
-                        'music' => ['icon' => '🎵', 'label' => 'Música'],
-                        'spiritual' => ['icon' => '🙏', 'label' => 'Espiritual'],
-                        'urgent' => ['icon' => '🚨', 'label' => 'Urgente']
-                    ];
-                    $type = $typeLabels[$aviso['type']] ?? $typeLabels['general'];
-                ?>
-                    <div style="
-                    background: <?= $priority['bg'] ?>;
-                    border: 2px solid <?= $priority['border'] ?>;
-                    border-radius: 16px;
-                    padding: 16px;
-                    margin-bottom: <?= $index < count($recentAvisos) - 1 ? '12px' : '0' ?>;
-                ">
-                        <!-- Priority Badge -->
+        .welcome-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 80px;
+            animation: subtleFadeIn 0.3s ease;
+        }
+
+        .welcome-popup-overlay.active {
+            display: flex;
+        }
+
+        .welcome-popup-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            max-width: 420px;
+            width: calc(100% - 40px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: subtleFadeIn 0.4s ease 0.1s both;
+            overflow: hidden;
+        }
+
+        .notice-mini-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .notice-mini-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
+
+    <div id="welcome-popup" class="welcome-popup-overlay" onclick="if(event.target === this) closeWelcomePopup()">
+        <div class="welcome-popup-card">
+            <!-- Minimalist Header -->
+            <div style="padding: 24px 24px 16px; border-bottom: 1px solid var(--border-subtle);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 4px;
-                        padding: 4px 10px;
-                        background: white;
+                        width: 40px;
+                        height: 40px;
+                        background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
                         border-radius: 12px;
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        color: <?= $priority['text'] ?>;
-                        margin-bottom: 12px;
-                    ">
-                            <?= $priority['icon'] ?> <?= ucfirst($aviso['priority']) ?>
-                        </div>
-
-                        <!-- Title -->
-                        <h3 style="
-                        margin: 0 0 8px;
-                        font-size: 1.1rem;
-                        font-weight: 700;
-                        color: <?= $priority['text'] ?>;
-                    ">
-                            <?= $type['icon'] ?> <?= htmlspecialchars($aviso['title']) ?>
-                        </h3>
-
-                        <!-- Message Preview -->
-                        <p style="
-                        margin: 0 0 12px;
-                        font-size: 0.9rem;
-                        color: <?= $priority['text'] ?>;
-                        line-height: 1.5;
-                        opacity: 0.9;
-                    ">
-                            <?= htmlspecialchars(mb_substr(strip_tags($aviso['message']), 0, 100)) ?><?= mb_strlen(strip_tags($aviso['message'])) > 100 ? '...' : '' ?>
-                        </p>
-
-                        <!-- Author & Date -->
-                        <div style="
                         display: flex;
                         align-items: center;
-                        gap: 8px;
-                        font-size: 0.75rem;
-                        color: <?= $priority['text'] ?>;
-                        opacity: 0.7;
+                        justify-content: center;
+                        font-size: 1.5rem;
                     ">
-                            <i data-lucide="user" style="width: 12px;"></i>
-                            <span><?= htmlspecialchars($aviso['author_name']) ?></span>
-                            <span>•</span>
-                            <i data-lucide="calendar" style="width: 12px;"></i>
-                            <span><?= date('d/m/Y', strtotime($aviso['created_at'])) ?></span>
+                            📢
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">Avisos Importantes</h3>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);"><?= count($recentAvisos) ?> atualização(s) recente(s)</p>
                         </div>
                     </div>
-                <?php endforeach; ?>
-
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <a href="avisos.php" class="btn-primary ripple" style="
-                    flex: 1;
-                    justify-content: center;
-                    text-decoration: none;
-                    padding: 14px;
-                ">
-                        <i data-lucide="bell" style="width: 18px;"></i>
-                        Ver Todos os Avisos
-                    </a>
-                    <button onclick="closeWelcomePopup()" class="ripple" style="
-                    flex: 1;
-                    padding: 14px;
-                    background: var(--bg-tertiary);
-                    border: 1px solid var(--border-subtle);
-                    border-radius: 12px;
-                    color: var(--text-primary);
-                    font-weight: 600;
-                    cursor: pointer;
+                    <button onclick="closeWelcomePopup()" style="
+                    background: transparent;
+                    border: none;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 8px;
-                ">
+                    cursor: pointer;
+                    color: var(--text-muted);
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='var(--bg-tertiary)'" onmouseout="this.style.background='transparent'">
                         <i data-lucide="x" style="width: 18px;"></i>
-                        Fechar
                     </button>
                 </div>
+            </div>
+
+            <!-- Notices List (Compact) -->
+            <div style="padding: 16px 24px; max-height: 400px; overflow-y: auto;">
+                <?php foreach ($recentAvisos as $aviso):
+                    // Priority colors
+                    $priorityColors = [
+                        'urgent' => '#EF4444',
+                        'important' => '#F59E0B',
+                        'info' => '#3B82F6'
+                    ];
+                    $borderColor = $priorityColors[$aviso['priority']] ?? '#3B82F6';
+
+                    // Type emojis
+                    $typeEmojis = [
+                        'general' => '📢',
+                        'event' => '🎉',
+                        'music' => '🎵',
+                        'spiritual' => '🙏',
+                        'urgent' => '🚨'
+                    ];
+                    $emoji = $typeEmojis[$aviso['type']] ?? '📢';
+                ?>
+                    <div class="notice-mini-card" style="border-left-color: <?= $borderColor ?>;" onclick="window.location.href='avisos.php'">
+                        <div style="display: flex; align-items: flex-start; gap: 10px;">
+                            <span style="font-size: 1.2rem; flex-shrink: 0;"><?= $emoji ?></span>
+                            <div style="flex: 1; min-width: 0;">
+                                <h4 style="
+                                margin: 0 0 4px;
+                                font-size: 0.9rem;
+                                font-weight: 600;
+                                color: var(--text-primary);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            "><?= htmlspecialchars($aviso['title']) ?></h4>
+                                <p style="
+                                margin: 0 0 6px;
+                                font-size: 0.8rem;
+                                color: var(--text-secondary);
+                                line-height: 1.4;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 2;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                            "><?= htmlspecialchars(mb_substr(strip_tags($aviso['message']), 0, 80)) ?><?= mb_strlen(strip_tags($aviso['message'])) > 80 ? '...' : '' ?></p>
+                                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted);">
+                                    <span><?= htmlspecialchars($aviso['author_name']) ?></span>
+                                    <span>•</span>
+                                    <span><?= date('d/m', strtotime($aviso['created_at'])) ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Footer Actions -->
+            <div style="padding: 16px 24px; border-top: 1px solid var(--border-subtle); display: flex; gap: 12px;">
+                <a href="avisos.php" class="btn-primary ripple" style="
+                flex: 1;
+                justify-content: center;
+                text-decoration: none;
+                padding: 12px;
+                font-size: 0.9rem;
+            ">
+                    Ver Todos
+                </a>
+                <button onclick="closeWelcomePopup()" class="ripple" style="
+                flex: 1;
+                padding: 12px;
+                background: var(--bg-tertiary);
+                border: 1px solid var(--border-subtle);
+                border-radius: 12px;
+                color: var(--text-primary);
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 0.9rem;
+            ">
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -478,3 +453,4 @@ renderAppHeader('Início');
 <?php
 renderAppFooter();
 ?>
+```
