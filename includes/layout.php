@@ -216,8 +216,8 @@ function renderAppHeader($title = 'Louvor PIB')
                 </style>
 
                 <!-- Profile Header Compact -->
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
-                    <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background: var(--bg-tertiary); border: 2px solid var(--border-subtle); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--bg-tertiary); border: 2px solid var(--border-subtle); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
                         <?php if (!empty($_SESSION['user_avatar'])): ?>
                             <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
                         <?php else: ?>
@@ -225,47 +225,77 @@ function renderAppHeader($title = 'Louvor PIB')
                         <?php endif; ?>
                     </div>
                     <div style="overflow: hidden;">
-                        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Visitante') ?></h3>
-                        <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; text-transform: capitalize;"><?= htmlspecialchars($_SESSION['user_role'] ?? 'Membro') ?></p>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Visitante') ?></h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; text-transform: capitalize;"><?= htmlspecialchars($_SESSION['user_role'] ?? 'Membro') ?></p>
                     </div>
                 </div>
 
                 <!-- Menu Options Compact -->
-                <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+
+                    <?php
+                    // Botão Painel Líder (Restrito)
+                    $allowedAdmins = ['Diego', 'Thalyta', 'diego', 'thalyta'];
+                    $userName = $_SESSION['user_name'] ?? '';
+                    $isAdminUser = false;
+                    foreach ($allowedAdmins as $admin) {
+                        if (stripos($userName, $admin) !== false) {
+                            $isAdminUser = true;
+                            break;
+                        }
+                    }
+
+                    if ($isAdminUser):
+                    ?>
+                        <a href="lider.php" class="ripple" style="
+                            display: flex; align-items: center; gap: 12px; 
+                            padding: 14px; 
+                            border-radius: 12px; 
+                            background: rgba(220, 53, 69, 0.08); 
+                            color: #DC3545; 
+                            text-decoration: none; 
+                            transition: background 0.1s;
+                            margin-bottom: 8px;
+                            border: 1px solid rgba(220, 53, 69, 0.1);
+                        ">
+                            <i data-lucide="shield-check" style="width: 20px;"></i>
+                            <span style="flex: 1; font-weight: 700; font-size: 0.95rem;">Painel Líder</span>
+                            <i data-lucide="chevron-right" style="width: 16px; opacity: 0.6;"></i>
+                        </a>
+                    <?php endif; ?>
 
                     <!-- Meus Dados -->
-                    <a href="perfil.php" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: transparent; color: var(--text-primary); text-decoration: none; transition: background 0.1s;">
-                        <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
-                            <i data-lucide="user-pen" style="width: 16px;"></i>
+                    <a href="perfil.php" class="ripple" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); text-decoration: none; transition: background 0.1s;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
+                            <i data-lucide="user" style="width: 18px;"></i>
                         </div>
-                        <span style="flex: 1; font-weight: 500; font-size: 0.9rem;">Meus Dados</span>
+                        <span style="flex: 1; font-weight: 500; font-size: 0.95rem;">Meus Dados</span>
                     </a>
 
                     <!-- Trocar Foto -->
-                    <a href="perfil.php" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: transparent; color: var(--text-primary); text-decoration: none; transition: background 0.1s;">
-                        <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
-                            <i data-lucide="camera" style="width: 16px;"></i>
+                    <a href="perfil.php" class="ripple" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); text-decoration: none; transition: background 0.1s;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
+                            <i data-lucide="camera" style="width: 18px;"></i>
                         </div>
-                        <span style="flex: 1; font-weight: 500; font-size: 0.9rem;">Trocar Foto</span>
+                        <span style="flex: 1; font-weight: 500; font-size: 0.95rem;">Trocar Foto</span>
                     </a>
 
                     <!-- Tema Escuro -->
-                    <div id="btn-theme-toggle" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: transparent; color: var(--text-primary); cursor: pointer; transition: background 0.1s;">
-                        <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
-                            <i data-lucide="moon" style="width: 16px;"></i>
+                    <div id="btn-theme-toggle" class="ripple" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); cursor: pointer; transition: background 0.1s;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-primary);">
+                            <i data-lucide="moon" style="width: 18px;"></i>
                         </div>
-                        <span style="flex: 1; font-weight: 500; font-size: 0.9rem;">Aparência</span>
-                        <div style="font-size: 0.7rem; color: var(--text-muted); background: var(--bg-tertiary); padding: 2px 8px; border-radius: 10px;">Mudar</div>
+                        <span style="flex: 1; font-weight: 500; font-size: 0.95rem;">Aparência</span>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); background: var(--bg-tertiary); padding: 4px 10px; border-radius: 20px; font-weight: 600;">Mudar</div>
                     </div>
 
-                    <div style="height: 1px; background: var(--border-subtle); margin: 6px 0;"></div>
+                    <div style="height: 1px; background: var(--border-subtle); margin: 12px 0;"></div>
 
                     <!-- Sair -->
-                    <a href="../includes/auth.php?logout=true" class="ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; color: var(--status-error); text-decoration: none; font-weight: 600; transition: background 0.1s;">
-                        <i data-lucide="log-out" style="width: 16px;"></i>
-                        <span style="font-size: 0.9rem;">Sair</span>
+                    <a href="../includes/auth.php?logout=true" class="ripple" style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 10px; color: var(--status-error); text-decoration: none; font-weight: 600; transition: background 0.1s;">
+                        <i data-lucide="log-out" style="width: 18px;"></i>
+                        Sair
                     </a>
-
                 </div>
             </div>
         </div>

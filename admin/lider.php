@@ -147,6 +147,18 @@ renderAppHeader('Painel Líder');
     <!-- Lista Vertical de Funcionalidades -->
     <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px;">
 
+        <!-- Gestão de Avisos -->
+        <a href="avisos.php?from=lider" class="wide-action-btn ripple">
+            <div class="wide-btn-icon" style="background: rgba(255, 193, 7, 0.1); color: #D97706;">
+                <i data-lucide="bell-ring"></i>
+            </div>
+            <div class="wide-btn-content">
+                <div class="wide-btn-title">Gestão de Avisos</div>
+                <div class="wide-btn-desc">Criar, editar e gerenciar notificações</div>
+            </div>
+            <i data-lucide="chevron-right" class="wide-btn-arrow"></i>
+        </a>
+
         <!-- Exportar Dados (Por enquanto só este) -->
         <a href="exportar.php" class="wide-action-btn ripple">
             <div class="wide-btn-icon" style="background: rgba(45, 122, 79, 0.1); color: var(--accent-interactive);">
