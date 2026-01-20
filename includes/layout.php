@@ -50,6 +50,7 @@ function renderAppHeader($title = 'Louvor PIB')
 
         <title><?= htmlspecialchars($title) ?></title>
         <link rel="stylesheet" href="<?= asset('../assets/css/style.css') ?>">
+        <link rel="stylesheet" href="<?= asset('../assets/css/design-system.css') ?>">
         <!-- PWA Support -->
         <meta name="theme-color" content="#2D7A4F">
         <link rel="manifest" href="../manifest.json">
@@ -99,53 +100,54 @@ function renderAppHeader($title = 'Louvor PIB')
         }
         ?>
             <div style="display: flex; gap: 8px; align-items: center;">
-                <!-- WhatsApp -->
-                <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
-                width: 40px; height: 40px; border-radius: 50%;
-                background: rgba(255,255,255,0.2);
+                <!-- WhatsApp Button -->
+                <a href="https://wa.me/5535984529577" target="_blank" class="ripple" style="
+                width: 36px; height: 36px; border-radius: 50%;
+                background: rgba(255,255,255,0.15);
                 display: flex; align-items: center; justify-content: center;
-                text-decoration: none; border: 2px solid rgba(255,255,255,0.3);
+                text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
                 transition: all 0.3s ease;
-            " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                    </svg>
+            ">
+                    <i data-lucide="message-circle" style="width: 18px; height: 18px; color: white;"></i>
                 </a>
 
                 <!-- Sininho -->
-                <button onclick="openSheet('sheet-avisos')" class="ripple" style="
-                width: 40px; height: 40px; border-radius: 50%;
-                background: rgba(255,255,255,0.2);
+                <div onclick="openSheet('sheet-avisos')" class="ripple" style="
+                width: 36px; height: 36px; border-radius: 50%;
+                background: rgba(255,255,255,0.15);
                 display: flex; align-items: center; justify-content: center;
-                border: none; cursor: pointer; position: relative;
-                border: 2px solid rgba(255,255,255,0.3);
+                border: 1px solid rgba(255,255,255,0.25);
+                cursor: pointer; position: relative;
                 transition: all 0.3s ease;
-            " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+            ">
                     <i data-lucide="bell" style="color: white; width: 18px; height: 18px;"></i>
                     <?php if ($notificationCount > 0): ?>
                         <span style="
-                        position: absolute; top: -2px; right: -2px;
+                        position: absolute; top: -3px; right: -3px;
                         background: #EF4444; color: white;
-                        font-size: 0.65rem; font-weight: 700;
-                        padding: 2px 5px; border-radius: 10px;
-                        min-width: 16px; text-align: center;
-                    "><?= $notificationCount ?></span>
+                        font-size: 0.6rem; font-weight: 700;
+                        padding: 0 4px; border-radius: 10px;
+                        min-width: 16px; height: 16px;
+                        display: flex; align-items: center; justify-content: center;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                        border: 2px solid #047857;
+                    "><?= $notificationCount > 9 ? '9+' : $notificationCount ?></span>
                     <?php endif; ?>
-                </button>
+                </div>
 
                 <!-- Avatar -->
                 <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 40px; height: 40px; border-radius: 50%;
-                background: rgba(255,255,255,0.2);
+                width: 36px; height: 36px; border-radius: 50%;
+                background: rgba(255,255,255,0.15);
                 display: flex; align-items: center; justify-content: center;
                 overflow: hidden; cursor: pointer;
-                border: 2px solid rgba(255,255,255,0.3);
+                border: 1px solid rgba(255,255,255,0.25);
                 transition: all 0.3s ease;
-            " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+            ">
                     <?php if (!empty($avatar)): ?>
                         <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
                     <?php else: ?>
-                        <span style="font-weight: 700; font-size: 0.9rem; color: white;"><?= $userInitials ?></span>
+                        <span style="font-weight: 700; font-size: 0.85rem; color: white;"><?= $userInitials ?></span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -154,87 +156,51 @@ function renderAppHeader($title = 'Louvor PIB')
 
     /**
      * Renderiza um cabeçalho Hero padronizado
-     * 
-     * @param string $title Título principal do cabeçalho
-     * @param string $subtitle Subtítulo (padrão: "Louvor PIB Oliveira")
-     * @param string $backUrl URL do botão voltar (padrão: "index.php")
-     * @param string $backIcon Ícone do botão voltar (padrão: "arrow-left")
-     * @param bool $showProfile Se deve mostrar o avatar de perfil (padrão: true)
-     * @param string $extraButton HTML extra para botões adicionais (opcional)
      */
     function renderHeroHeader($title, $subtitle = 'Louvor PIB Oliveira', $backUrl = 'index.php', $backIcon = 'arrow-left', $showProfile = true, $extraButton = '')
     {
-        $avatar = $_SESSION['user_avatar'] ?? null;
-        $userInitials = substr($_SESSION['user_name'] ?? 'U', 0, 1);
         ?>
-            <!-- Hero Header -->
+            <!-- Hero Header Otimizado -->
             <div style="
-        background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-        margin: -24px -16px 32px -16px; 
-        padding: 20px 20px 40px 20px; 
-        border-radius: 0 0 24px 24px; 
-        box-shadow: var(--shadow-md);
-        position: relative;
-        overflow: visible;
-    ">
-                <!-- Global Navigation Buttons -->
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
+            margin: -24px -16px 24px -16px; 
+            padding: 16px 20px 32px 20px; 
+            border-radius: 0 0 24px 24px; 
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        ">
+                <!-- Top Navigation Bar -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <!-- Left: Back Button -->
+                    <a href="<?= $backUrl ?>" class="ripple" style="
+                    width: 36px; height: 36px; border-radius: 50%;
+                    background: rgba(255,255,255,0.15);
+                    display: flex; align-items: center; justify-content: center;
+                    text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
+                    color: white;
+                    transition: all 0.3s ease;
+                ">
+                        <i data-lucide="<?= $backIcon ?>" style="width: 18px; height: 18px;"></i>
+                    </a>
+
+                    <!-- Right: Global Actions -->
                     <?php renderGlobalNavButtons(); ?>
                 </div>
 
-                <!-- Navigation Row -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <a href="<?= $backUrl ?>" class="ripple" style="
-                padding: 10px 20px;
-                border-radius: 50px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                gap: 8px;
-                color: #047857; 
-                background: white; 
-                text-decoration: none;
-                font-weight: 700;
-                font-size: 0.9rem;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            ">
-                        <i data-lucide="<?= $backIcon ?>" style="width: 16px;"></i> Voltar
-                    </a>
+                <!-- Title Area -->
+                <div>
+                    <h1 style="color: white; margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($title) ?></h1>
+                    <?php if ($subtitle): ?>
+                        <p style="color: rgba(255,255,255,0.85); margin: 4px 0 0 0; font-weight: 500; font-size: 0.85rem;"><?= htmlspecialchars($subtitle) ?></p>
+                    <?php endif; ?>
+                </div>
 
-                    <div style="display: flex; gap: 12px; align-items: center;">
+                <!-- Extra Buttons Area (if any) -->
+                <?php if ($extraButton): ?>
+                    <div style="margin-top: 16px;">
                         <?= $extraButton ?>
-
-                        <?php if ($showProfile): ?>
-                            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                        width: 40px; 
-                        height: 40px; 
-                        border-radius: 50%; 
-                        background: rgba(255,255,255,0.2); 
-                        display: flex; 
-                        align-items: center; 
-                        justify-content: center; 
-                        overflow: hidden; 
-                        cursor: pointer;
-                        border: 2px solid rgba(255,255,255,0.3);
-                    ">
-                                <?php if (!empty($avatar)): ?>
-                                    <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                <?php else: ?>
-                                    <span style="font-weight: 700; font-size: 0.9rem; color: white;">
-                                        <?= $userInitials ?>
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-                        <?php endif; ?>
                     </div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div>
-                        <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($title) ?></h1>
-                        <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;"><?= htmlspecialchars($subtitle) ?></p>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         <?php
     }
@@ -550,6 +516,7 @@ function renderAppHeader($title = 'Louvor PIB')
                         gap: 8px;
                         padding: 14px 24px;
                         text-decoration: none;
+                        width: 100%;
                     ">
                         <i data-lucide="bell" style="width: 18px;"></i>
                         Ver Avisos
