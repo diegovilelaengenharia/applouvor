@@ -240,7 +240,7 @@ renderAppHeader('Escalas');
         <div style="display: flex; gap: 8px;">
             <!-- Add Button -->
             <a href="escala_adicionar.php" class="ripple" style="
-                background: #F59E0B; 
+                background: #D97706; 
                 border: none; 
                 width: 44px; 
                 height: 44px; 
@@ -251,7 +251,7 @@ renderAppHeader('Escalas');
                 color: white;
                 backdrop-filter: blur(4px);
                 cursor: pointer;
-                box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+                box-shadow: 0 1px 3px rgba(217, 119, 6, 0.15);
             ">
                 <i data-lucide="plus" style="width: 20px;"></i>
             </a>

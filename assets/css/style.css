@@ -1498,68 +1498,68 @@ body.dark-mode .compact-title {
 
 /* === ACTION BUTTON COLOR SYSTEM === */
 
-/* Gold - Add/Create Actions */
+/* Gold - Add/Create Actions - Tom mais suave */
 .btn-action-add {
-    background: #F59E0B !important;
+    background: #D97706 !important;
     color: white !important;
-    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.15);
     border: none;
 }
 
 .btn-action-add:hover {
-    background: #D97706 !important;
-    box-shadow: 0 3px 8px rgba(245, 158, 11, 0.25);
+    background: #B45309 !important;
+    box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2);
 }
 
 .btn-action-add:active {
     transform: scale(0.98);
 }
 
-/* Green - Save/Apply/Confirm Actions */
+/* Green - Save/Apply/Confirm Actions - Tom mais suave */
 .btn-action-save {
-    background: #059669 !important;
+    background: #047857 !important;
     color: white !important;
-    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.2);
+    box-shadow: 0 1px 3px rgba(4, 120, 87, 0.15);
     border: none;
 }
 
 .btn-action-save:hover {
-    background: #047857 !important;
-    box-shadow: 0 3px 8px rgba(5, 150, 105, 0.25);
+    background: #065f46 !important;
+    box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);
 }
 
 .btn-action-save:active {
     transform: scale(0.98);
 }
 
-/* Yellow - Cancel/Back Actions */
+/* Yellow - Cancel/Back Actions - Tom mais suave */
 .btn-action-cancel {
-    background: #EAB308 !important;
+    background: #CA8A04 !important;
     color: white !important;
-    box-shadow: 0 2px 6px rgba(234, 179, 8, 0.2);
+    box-shadow: 0 1px 3px rgba(202, 138, 4, 0.15);
     border: none;
 }
 
 .btn-action-cancel:hover {
-    background: #CA8A04 !important;
-    box-shadow: 0 3px 8px rgba(234, 179, 8, 0.25);
+    background: #A16207 !important;
+    box-shadow: 0 2px 4px rgba(202, 138, 4, 0.2);
 }
 
 .btn-action-cancel:active {
     transform: scale(0.98);
 }
 
-/* Red - Delete/Remove Actions */
+/* Red - Delete/Remove Actions - Tom mais suave */
 .btn-action-delete {
-    background: #DC2626 !important;
+    background: #B91C1C !important;
     color: white !important;
-    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+    box-shadow: 0 1px 3px rgba(185, 28, 28, 0.15);
     border: none;
 }
 
 .btn-action-delete:hover {
-    background: #B91C1C !important;
-    box-shadow: 0 3px 8px rgba(220, 38, 38, 0.25);
+    background: #991B1B !important;
+    box-shadow: 0 2px 4px rgba(185, 28, 28, 0.2);
 }
 
 .btn-action-delete:active {
