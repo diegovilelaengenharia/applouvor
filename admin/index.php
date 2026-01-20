@@ -25,6 +25,7 @@ $nextSchedule = null;
 $scheduleSongs = [];
 
 try {
+    // Query simplificada sem event_time (pode não existir)
     $stmt = $pdo->prepare("
         SELECT s.*, 
                GROUP_CONCAT(DISTINCT u.name ORDER BY u.name SEPARATOR ', ') as team_members,
@@ -37,11 +38,15 @@ try {
         WHERE su.user_id = ? 
           AND s.event_date >= CURDATE()
         GROUP BY s.id
-        ORDER BY s.event_date ASC, s.event_time ASC
+        ORDER BY s.event_date ASC
         LIMIT 1
     ");
     $stmt->execute([$_SESSION['user_id']]);
     $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Debug: Log para verificar
+    error_log("User ID: " . $_SESSION['user_id']);
+    error_log("Next Schedule: " . print_r($nextSchedule, true));
 
     // Buscar músicas da escala
     if ($nextSchedule) {
@@ -56,7 +61,8 @@ try {
         $scheduleSongs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } catch (Exception $e) {
-    // Silently fail if tables don't exist yet
+    // Log error for debugging
+    error_log("Error fetching schedule: " . $e->getMessage());
 }
 
 // ==========================================
@@ -163,63 +169,97 @@ renderAppHeader('Início');
             </div>
 
             <?php if ($nextSchedule): ?>
-                <!-- Event Info -->
+                <!-- Event Info Compacto -->
                 <div class="event-info">
                     <div class="event-date-box">
                         <div class="event-day"><?= date('d', strtotime($nextSchedule['event_date'])) ?></div>
-                        <div class="event-month"><?= strftime('%b', strtotime($nextSchedule['event_date'])) ?></div>
+                        <div class="event-month"><?= date('M', strtotime($nextSchedule['event_date'])) ?></div>
                     </div>
                     <div class="event-details">
                         <h4 class="event-type"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
                         <div class="event-time">
-                            <i data-lucide="clock" style="width: 14px;"></i>
-                            <?= date('H:i', strtotime($nextSchedule['event_time'] ?? '19:00:00')) ?>
+                            <i data-lucide="calendar" style="width: 14px;"></i>
+                            <?= date('d/m/Y', strtotime($nextSchedule['event_date'])) ?>
                         </div>
                     </div>
                 </div>
 
-                <!-- Músicas -->
-                <?php if (!empty($scheduleSongs)): ?>
-                    <div style="margin-top: 16px;">
-                        <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
-                            Músicas (<?= count($scheduleSongs) ?>)
-                        </div>
-                        <ul class="song-list">
-                            <?php
-                            $displaySongs = array_slice($scheduleSongs, 0, 3);
-                            foreach ($displaySongs as $index => $song):
-                            ?>
-                                <li class="song-item">
-                                    <div class="song-number"><?= $index + 1 ?></div>
-                                    <div class="song-info">
-                                        <h5 class="song-title"><?= htmlspecialchars($song['title']) ?></h5>
-                                        <?php if ($song['artist']): ?>
-                                            <p class="song-artist"><?= htmlspecialchars($song['artist']) ?></p>
-                                        <?php endif; ?>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <?php if (count($scheduleSongs) > 3): ?>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
-                                + <?= count($scheduleSongs) - 3 ?> música(s)
-                            </p>
+                <!-- Resumo Compacto -->
+                <div style="margin-top: 16px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">
+                            <i data-lucide="music" style="width: 14px; display: inline;"></i>
+                            <?= count($scheduleSongs) ?> música(s)
+                        </span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">
+                            <i data-lucide="users" style="width: 14px; display: inline;"></i>
+                            <?= $nextSchedule['song_count'] ?? 0 ?> pessoas
+                        </span>
+                    </div>
+
+                    <!-- Detalhes Expandíveis -->
+                    <div id="schedule-details" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+                        <!-- Músicas -->
+                        <?php if (!empty($scheduleSongs)): ?>
+                            <div style="margin-bottom: 12px;">
+                                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
+                                    Músicas
+                                </div>
+                                <ul class="song-list">
+                                    <?php foreach ($scheduleSongs as $index => $song): ?>
+                                        <li class="song-item">
+                                            <div class="song-number"><?= $index + 1 ?></div>
+                                            <div class="song-info">
+                                                <h5 class="song-title"><?= htmlspecialchars($song['title']) ?></h5>
+                                                <?php if ($song['artist']): ?>
+                                                    <p class="song-artist"><?= htmlspecialchars($song['artist']) ?></p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Team Members -->
+                        <?php if ($nextSchedule['team_members']): ?>
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
+                                    Equipe
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--text-primary); margin: 0;">
+                                    <?= htmlspecialchars($nextSchedule['team_members']) ?>
+                                </p>
+                            </div>
                         <?php endif; ?>
                     </div>
-                <?php endif; ?>
 
-                <!-- Team Members -->
-                <?php if ($nextSchedule['team_members']): ?>
-                    <div class="team-members">
-                        <span class="team-label">Equipe:</span>
-                        <span class="team-names"><?= htmlspecialchars($nextSchedule['team_members']) ?></span>
-                    </div>
-                <?php endif; ?>
+                    <!-- Botão Saiba Mais -->
+                    <button onclick="toggleScheduleDetails()" id="toggle-btn" class="ripple" style="
+                        width: 100%;
+                        padding: 8px;
+                        background: transparent;
+                        border: 1px solid var(--border-subtle);
+                        border-radius: 8px;
+                        color: var(--text-primary);
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-top: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 4px;
+                    ">
+                        <i data-lucide="chevron-down" style="width: 16px;" id="toggle-icon"></i>
+                        <span id="toggle-text">Saiba Mais</span>
+                    </button>
+                </div>
 
                 <!-- Action Button -->
                 <a href="escala_detalhe.php?id=<?= $nextSchedule['id'] ?>" class="card-action-btn">
                     <i data-lucide="arrow-right" style="width: 16px;"></i>
-                    Ver Detalhes
+                    Ver Detalhes Completos
                 </a>
 
             <?php else: ?>
@@ -290,6 +330,29 @@ renderAppHeader('Início');
     </div>
 
 </div>
+
+<script>
+    function toggleScheduleDetails() {
+        const details = document.getElementById('schedule-details');
+        const icon = document.getElementById('toggle-icon');
+        const text = document.getElementById('toggle-text');
+
+        if (details.style.display === 'none') {
+            details.style.display = 'block';
+            icon.setAttribute('data-lucide', 'chevron-up');
+            text.textContent = 'Mostrar Menos';
+        } else {
+            details.style.display = 'none';
+            icon.setAttribute('data-lucide', 'chevron-down');
+            text.textContent = 'Saiba Mais';
+        }
+
+        // Reinicializar ícones Lucide
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+</script>
 
 <?php
 renderAppFooter();
