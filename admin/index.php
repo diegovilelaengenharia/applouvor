@@ -81,24 +81,21 @@ renderAppHeader('Início');
     <div style="
         background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
         margin: -24px -16px 32px -16px; 
-        padding: 32px 24px 64px 24px; 
-        border-radius: 0 0 32px 32px; 
+        padding: 20px 20px 40px 20px; 
+        border-radius: 0 0 24px 24px; 
         box-shadow: var(--shadow-md);
         position: relative;
         overflow: visible;
     ">
         <!-- Navigation Buttons (Top Right) -->
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
             <?php renderGlobalNavButtons(); ?>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-                <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Gestão Louvor</h1>
-                <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Painel de Liderança</p>
-                <div style="margin-top: 12px; font-size: 0.9rem; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; display: inline-block;">
-                    Bem-vindo, <?= $_SESSION['user_name'] ?? 'Visitante' ?>!
-                </div>
+            <div style="flex: 1; min-width: 0;">
+                <h1 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;">Gestão Louvor</h1>
+                <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.875rem;">Painel de Liderança</p>
             </div>
         </div>
     </div>

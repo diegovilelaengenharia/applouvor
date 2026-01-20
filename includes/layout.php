@@ -171,14 +171,14 @@ function renderAppHeader($title = 'Louvor PIB')
             <div style="
         background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
         margin: -24px -16px 32px -16px; 
-        padding: 32px 24px 64px 24px; 
-        border-radius: 0 0 32px 32px; 
+        padding: 20px 20px 40px 20px; 
+        border-radius: 0 0 24px 24px; 
         box-shadow: var(--shadow-md);
         position: relative;
         overflow: visible;
     ">
                 <!-- Global Navigation Buttons -->
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
                     <?php renderGlobalNavButtons(); ?>
                 </div>
 
