@@ -5,7 +5,7 @@ require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
 // ==========================================
-// PROCESSAR AÇÕES (CREATE, UPDATE, DELETE)
+// PROCESSAR AÇÕES (CREATE, UPDATE, DELETE, ARCHIVE)
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ");
                 $stmt->execute([
                     $_POST['title'],
-                    $_POST['message'],
+                    $_POST['message'], // Agora suporta HTML do Quill
                     $_POST['priority'],
                     $_POST['type'] ?? 'general',
                     $_SESSION['user_id']
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ");
                 $stmt->execute([
                     $_POST['title'],
-                    $_POST['message'],
+                    $_POST['message'], // HTML do Quill
                     $_POST['priority'],
                     $_POST['type'] ?? 'general',
                     $_POST['id']
@@ -71,8 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ==========================================
-// BUSCAR TODOS OS AVISOS
+// BUSCAR AVISOS
 // ==========================================
+$search = $_GET['search'] ?? '';
 $filterPriority = $_GET['priority'] ?? 'all';
 $filterType = $_GET['type'] ?? 'all';
 $showArchived = isset($_GET['archived']) && $_GET['archived'] === '1';
@@ -84,6 +85,8 @@ $sql = "
     WHERE 1=1
 ";
 
+$params = [];
+
 // Filter by archived status
 if ($showArchived) {
     $sql .= " AND a.archived_at IS NOT NULL";
@@ -91,30 +94,175 @@ if ($showArchived) {
     $sql .= " AND a.archived_at IS NULL";
 }
 
+// Filter by search
+if (!empty($search)) {
+    $sql .= " AND (a.title LIKE ? OR a.message LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
+
 // Filter by priority
 if ($filterPriority !== 'all') {
-    $sql .= " AND a.priority = :priority";
+    $sql .= " AND a.priority = ?";
+    $params[] = $filterPriority;
 }
 
 // Filter by type
 if ($filterType !== 'all') {
-    $sql .= " AND a.type = :type";
+    $sql .= " AND a.type = ?";
+    $params[] = $filterType;
 }
 
 $sql .= " ORDER BY a.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
-if ($filterPriority !== 'all') {
-    $stmt->bindParam(':priority', $filterPriority);
-}
-if ($filterType !== 'all') {
-    $stmt->bindParam(':type', $filterType);
-}
-$stmt->execute();
+$stmt->execute($params);
 $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Count avisos
+$countActive = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NULL")->fetchColumn();
+$countArchived = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NOT NULL")->fetchColumn();
 
 renderAppHeader('Avisos');
 ?>
+
+<!-- Quill.js CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<style>
+    /* Quill Editor Styles */
+    .ql-container {
+        font-size: 0.95rem;
+        min-height: 200px;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+
+    .ql-toolbar {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        background: var(--bg-tertiary);
+    }
+
+    .ql-editor {
+        min-height: 200px;
+    }
+
+    /* Notice Card Styles */
+    .notice-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-subtle);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        transition: all 0.2s;
+        display: flex;
+    }
+
+    .notice-card:hover {
+        border-color: var(--accent-interactive);
+        box-shadow: var(--shadow-md);
+    }
+
+    .notice-type-bar {
+        width: 6px;
+        flex-shrink: 0;
+    }
+
+    .notice-content {
+        flex: 1;
+        padding: 16px;
+    }
+
+    .notice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+
+    .notice-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .notice-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+
+    .notice-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid;
+    }
+
+    .notice-preview {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .notice-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-subtle);
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .notice-author {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .author-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--bg-tertiary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-subtle);
+        font-size: 0.75rem;
+    }
+
+    /* Maintenance Modal */
+    .maintenance-modal {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .maintenance-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--bg-tertiary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--primary-green);
+    }
+</style>
 
 <!-- Hero Header -->
 <div style="
@@ -128,15 +276,7 @@ renderAppHeader('Avisos');
 ">
     <!-- Navigation Row -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <?php
-        $backLink = 'index.php';
-        $backText = 'Voltar';
-        if (isset($_GET['from']) && $_GET['from'] === 'lider') {
-            $backLink = 'lider.php';
-            $backText = 'Painel Líder';
-        }
-        ?>
-        <a href="<?= $backLink ?>" class="ripple" style="
+        <a href="index.php" class="ripple" style="
             padding: 10px 20px;
             border-radius: 50px; 
             display: flex; 
@@ -150,28 +290,60 @@ renderAppHeader('Avisos');
             font-size: 0.9rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         ">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> <?= $backText ?>
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
         </a>
 
-        <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <button onclick="openModal('modal-create')" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: white; 
-            background: rgba(255,255,255,0.2); 
-            border: 1px solid rgba(255,255,255,0.3);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-        ">
-                <i data-lucide="plus" style="width: 16px;"></i> Novo
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <!-- Notification Bell (Maintenance) -->
+            <button onclick="showMaintenanceModal()" class="ripple" style="
+                background: rgba(255,255,255,0.2); 
+                border: none; 
+                width: 44px; 
+                height: 44px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                backdrop-filter: blur(4px);
+                cursor: pointer;
+                position: relative;
+            ">
+                <i data-lucide="bell" style="width: 20px;"></i>
+                <span style="
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    width: 8px;
+                    height: 8px;
+                    background: #F59E0B;
+                    border-radius: 50%;
+                    border: 2px solid rgba(255,255,255,0.3);
+                "></span>
             </button>
-        <?php endif; ?>
+
+            <!-- User Avatar -->
+            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+                width: 40px; 
+                height: 40px; 
+                border-radius: 50%; 
+                background: rgba(255,255,255,0.2); 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                overflow: hidden; 
+                cursor: pointer;
+                border: 2px solid rgba(255,255,255,0.3);
+            ">
+                <?php if (!empty($_SESSION['user_avatar'])): ?>
+                    <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                <?php else: ?>
+                    <span style="font-weight: 700; font-size: 0.9rem; color: white;">
+                        <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -180,198 +352,205 @@ renderAppHeader('Avisos');
             <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Atualizações do Ministério</p>
         </div>
     </div>
+
+    <!-- Floating Search Bar -->
+    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
+        <form method="GET" style="margin: 0;">
+            <input type="hidden" name="archived" value="<?= $showArchived ? '1' : '0' ?>">
+            <?php if ($filterType !== 'all'): ?>
+                <input type="hidden" name="type" value="<?= $filterType ?>">
+            <?php endif; ?>
+            <?php if ($filterPriority !== 'all'): ?>
+                <input type="hidden" name="priority" value="<?= $filterPriority ?>">
+            <?php endif; ?>
+            <div style="
+                background: var(--bg-secondary); 
+                border-radius: 16px; 
+                padding: 6px; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                display: flex; 
+                align-items: center;
+                border: 1px solid rgba(0,0,0,0.05);
+            ">
+                <div style="
+                    width: 44px; 
+                    height: 44px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    color: var(--primary-green);
+                ">
+                    <i data-lucide="search" style="width: 22px;"></i>
+                </div>
+
+                <input
+                    type="text"
+                    name="search"
+                    value="<?= htmlspecialchars($search) ?>"
+                    placeholder="Buscar avisos..."
+                    style="
+                        border: none; 
+                        background: transparent; 
+                        padding: 12px 0; 
+                        width: 100%; 
+                        font-size: 1rem; 
+                        color: var(--text-primary);
+                        outline: none;
+                        font-weight: 500;
+                    ">
+
+                <?php if (!empty($search)): ?>
+                    <a href="?archived=<?= $showArchived ? '1' : '0' ?>" style="
+                        width: 40px; 
+                        height: 40px; 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        color: var(--text-muted); 
+                        text-decoration: none;
+                        cursor: pointer;
+                    ">
+                        <i data-lucide="x" style="width: 18px;"></i>
+                    </a>
+                <?php endif; ?>
+            </div>
+        </form>
+    </div>
 </div>
 
-<div class="container fade-in-up">
+<!-- Tabs: Ativos / Arquivados -->
+<div style="background: var(--bg-tertiary); padding: 6px; border-radius: 16px; display: flex; margin-bottom: 20px;">
+    <a href="avisos.php" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= !$showArchived ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+        📌 Ativos (<?= $countActive ?>)
+    </a>
+    <a href="avisos.php?archived=1" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $showArchived ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+        📦 Arquivados (<?= $countArchived ?>)
+    </a>
+</div>
 
-    <!-- Tabs: Ativos / Arquivados -->
-    <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--border-subtle); padding-bottom: 0;">
-        <a href="avisos.php" class="ripple" style="
-            padding: 12px 20px;
-            border-bottom: 3px solid <?= !$showArchived ? 'var(--primary-green)' : 'transparent' ?>;
-            color: <?= !$showArchived ? 'var(--primary-green)' : 'var(--text-secondary)' ?>;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: -2px;
-        ">
-            📌 Ativos
-        </a>
-        <a href="avisos.php?archived=1" class="ripple" style="
-            padding: 12px 20px;
-            border-bottom: 3px solid <?= $showArchived ? 'var(--primary-green)' : 'transparent' ?>;
-            color: <?= $showArchived ? 'var(--primary-green)' : 'var(--text-secondary)' ?>;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: -2px;
-        ">
-            📦 Arquivados
-        </a>
-    </div>
+<!-- Filtros de Tipo -->
+<div style="display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px;">
+    <a href="avisos.php?type=all<?= $showArchived ? '&archived=1' : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="ripple" style="
+        white-space: nowrap;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: <?= $filterType === 'all' ? 'var(--bg-secondary)' : 'transparent' ?>;
+        border: 1px solid <?= $filterType === 'all' ? 'var(--border-focus)' : 'var(--border-subtle)' ?>;
+        color: var(--text-primary);
+        box-shadow: <?= $filterType === 'all' ? 'var(--shadow-sm)' : 'none' ?>;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+    ">
+        Todos
+    </a>
+    <a href="avisos.php?type=general<?= $showArchived ? '&archived=1' : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="ripple" style="
+        white-space: nowrap;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: <?= $filterType === 'general' ? '#F3F4F6' : 'transparent' ?>;
+        border: 1px solid <?= $filterType === 'general' ? '#6B7280' : 'var(--border-subtle)' ?>;
+        color: <?= $filterType === 'general' ? '#374151' : '#6B7280' ?>;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+    ">
+        📢 Geral
+    </a>
+    <a href="avisos.php?type=event<?= $showArchived ? '&archived=1' : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="ripple" style="
+        white-space: nowrap;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: <?= $filterType === 'event' ? '#FEF3C7' : 'transparent' ?>;
+        border: 1px solid <?= $filterType === 'event' ? '#F59E0B' : 'var(--border-subtle)' ?>;
+        color: <?= $filterType === 'event' ? '#B45309' : '#F59E0B' ?>;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+    ">
+        🎉 Evento
+    </a>
+    <a href="avisos.php?type=music<?= $showArchived ? '&archived=1' : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="ripple" style="
+        white-space: nowrap;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: <?= $filterType === 'music' ? '#FCE7F3' : 'transparent' ?>;
+        border: 1px solid <?= $filterType === 'music' ? '#EC4899' : 'var(--border-subtle)' ?>;
+        color: <?= $filterType === 'music' ? '#BE185D' : '#EC4899' ?>;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+    ">
+        🎵 Música
+    </a>
+    <a href="avisos.php?type=spiritual<?= $showArchived ? '&archived=1' : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="ripple" style="
+        white-space: nowrap;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: <?= $filterType === 'spiritual' ? '#E0E7FF' : 'transparent' ?>;
+        border: 1px solid <?= $filterType === 'spiritual' ? '#6366F1' : 'var(--border-subtle)' ?>;
+        color: <?= $filterType === 'spiritual' ? '#4338CA' : '#6366F1' ?>;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+    ">
+        🙏 Espiritual
+    </a>
+    <a href="avisos.php?type=urgent<?= $showArchived ? '&archived=1' : '' ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="ripple" style="
+        white-space: nowrap;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: <?= $filterType === 'urgent' ? '#FEE2E2' : 'transparent' ?>;
+        border: 1px solid <?= $filterType === 'urgent' ? '#EF4444' : 'var(--border-subtle)' ?>;
+        color: <?= $filterType === 'urgent' ? '#B91C1C' : '#EF4444' ?>;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+    ">
+        🚨 Urgente
+    </a>
+</div>
 
-    <!-- Filtros de Tipo -->
-    <div style="display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px;">
-        <a href="avisos.php?type=all<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'all' ? 'var(--bg-secondary)' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'all' ? 'var(--border-focus)' : 'var(--border-subtle)' ?>;
-            color: var(--text-primary);
-            box-shadow: <?= $filterType === 'all' ? 'var(--shadow-sm)' : 'none' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            Todos
-        </a>
-        <a href="avisos.php?type=general<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'general' ? '#F3F4F6' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'general' ? '#6B7280' : 'var(--border-subtle)' ?>;
-            color: <?= $filterType === 'general' ? '#374151' : '#6B7280' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            📢 Geral
-        </a>
-        <a href="avisos.php?type=event<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'event' ? '#FEF3C7' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'event' ? '#F59E0B' : 'var(--border-subtle)' ?>;
-            color: <?= $filterType === 'event' ? '#B45309' : '#F59E0B' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🎉 Evento
-        </a>
-        <a href="avisos.php?type=schedule<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'schedule' ? '#DBEAFE' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'schedule' ? '#3B82F6' : 'var(--border-subtle)' ?>;
-            color: <?= $filterType === 'schedule' ? '#1E40AF' : '#3B82F6' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            📅 Escala
-        </a>
-        <a href="avisos.php?type=music<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'music' ? '#FCE7F3' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'music' ? '#EC4899' : 'var(--border-subtle)' ?>;
-            color: <?= $filterType === 'music' ? '#BE185D' : '#EC4899' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🎵 Música
-        </a>
-        <a href="avisos.php?type=spiritual<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'spiritual' ? '#E0E7FF' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'spiritual' ? '#6366F1' : 'var(--border-subtle)' ?>;
-            color: <?= $filterType === 'spiritual' ? '#4338CA' : '#6366F1' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🙏 Espiritual
-        </a>
-        <a href="avisos.php?type=urgent<?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterType === 'urgent' ? '#FEE2E2' : 'transparent' ?>;
-            border: 1px solid <?= $filterType === 'urgent' ? '#EF4444' : 'var(--border-subtle)' ?>;
-            color: <?= $filterType === 'urgent' ? '#B91C1C' : '#EF4444' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🚨 Urgente
-        </a>
-    </div>
+<!-- Lista de Avisos -->
+<?php if (!empty($avisos)): ?>
+    <div style="display: flex; flex-direction: column;">
+        <?php foreach ($avisos as $aviso):
+            // Type colors
+            $typeColors = [
+                'general' => '#6B7280',
+                'event' => '#F59E0B',
+                'music' => '#EC4899',
+                'spiritual' => '#6366F1',
+                'urgent' => '#EF4444'
+            ];
+            $typeColor = $typeColors[$aviso['type']] ?? '#6B7280';
 
-    <!-- Filtros de Prioridade -->
-    <div style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;">
-        <a href="avisos.php?priority=all<?= $filterType !== 'all' ? '&type=' . $filterType : '' ?><?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterPriority === 'all' ? 'var(--bg-secondary)' : 'transparent' ?>;
-            border: 1px solid <?= $filterPriority === 'all' ? 'var(--border-focus)' : 'var(--border-subtle)' ?>;
-            color: var(--text-primary);
-            box-shadow: <?= $filterPriority === 'all' ? 'var(--shadow-sm)' : 'none' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            Todos
-        </a>
-        <a href="avisos.php?priority=urgent<?= $filterType !== 'all' ? '&type=' . $filterType : '' ?><?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterPriority === 'urgent' ? '#FEF2F2' : 'transparent' ?>;
-            border: 1px solid <?= $filterPriority === 'urgent' ? '#EF4444' : 'var(--border-subtle)' ?>;
-            color: <?= $filterPriority === 'urgent' ? '#B91C1C' : '#EF4444' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🔴 Urgente
-        </a>
-        <a href="avisos.php?priority=important<?= $filterType !== 'all' ? '&type=' . $filterType : '' ?><?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterPriority === 'important' ? '#FFFBEB' : 'transparent' ?>;
-            border: 1px solid <?= $filterPriority === 'important' ? '#F59E0B' : 'var(--border-subtle)' ?>;
-            color: <?= $filterPriority === 'important' ? '#B45309' : '#F59E0B' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🟡 Importante
-        </a>
-        <a href="avisos.php?priority=info<?= $filterType !== 'all' ? '&type=' . $filterType : '' ?><?= $showArchived ? '&archived=1' : '' ?>" class="ripple" style="
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: <?= $filterPriority === 'info' ? '#EFF6FF' : 'transparent' ?>;
-            border: 1px solid <?= $filterPriority === 'info' ? '#3B82F6' : 'var(--border-subtle)' ?>;
-            color: <?= $filterPriority === 'info' ? '#1D4ED8' : '#3B82F6' ?>;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        ">
-            🔵 Info
-        </a>
-    </div>
+            // Type labels
+            $typeLabels = [
+                'general' => ['icon' => '📢', 'label' => 'Geral'],
+                'event' => ['icon' => '🎉', 'label' => 'Evento'],
+                'music' => ['icon' => '🎵', 'label' => 'Música'],
+                'spiritual' => ['icon' => '🙏', 'label' => 'Espiritual'],
+                'urgent' => ['icon' => '🚨', 'label' => 'Urgente']
+            ];
+            $type = $typeLabels[$aviso['type']] ?? $typeLabels['general'];
 
-    <!-- Lista de Avisos -->
-    <?php if (!empty($avisos)): ?>
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-            <?php foreach ($avisos as $aviso): ?>
-                <div class="aviso-card <?= $aviso['priority'] ?>">
-                    <div class="aviso-header">
-                        <h5 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); line-height: 1.4;">
-                            <?= htmlspecialchars($aviso['title']) ?>
-                        </h5>
+            // Priority labels
+            $priorityLabels = [
+                'urgent' => '🔴 Urgente',
+                'important' => '🟡 Importante',
+                'info' => '🔵 Info'
+            ];
+
+            // Preview text (strip HTML tags and limit to 150 chars)
+            $preview = strip_tags($aviso['message']);
+            $preview = mb_substr($preview, 0, 150) . (mb_strlen($preview) > 150 ? '...' : '');
+        ?>
+            <div class="notice-card">
+                <div class="notice-type-bar" style="background: <?= $typeColor ?>;"></div>
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <h3 class="notice-title"><?= htmlspecialchars($aviso['title']) ?></h3>
                         <?php if ($_SESSION['user_role'] === 'admin' || $_SESSION['user_id'] == $aviso['created_by']): ?>
                             <div style="position: relative;">
                                 <button class="btn-icon ripple" onclick="toggleMenu(this, 'menu-<?= $aviso['id'] ?>')" style="width: 32px; height: 32px;">
@@ -410,121 +589,94 @@ renderAppHeader('Avisos');
                         <?php endif; ?>
                     </div>
 
-                    <!-- Type & Priority Badges -->
-                    <div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-                        <?php
-                        // Type badge
-                        $typeLabels = [
-                            'general' => ['icon' => '📢', 'label' => 'Geral', 'color' => '#6B7280'],
-                            'event' => ['icon' => '🎉', 'label' => 'Evento', 'color' => '#F59E0B'],
-                            'schedule' => ['icon' => '📅', 'label' => 'Escala', 'color' => '#3B82F6'],
-                            'music' => ['icon' => '🎵', 'label' => 'Música', 'color' => '#EC4899'],
-                            'spiritual' => ['icon' => '🙏', 'label' => 'Espiritual', 'color' => '#6366F1'],
-                            'urgent' => ['icon' => '🚨', 'label' => 'Urgente', 'color' => '#EF4444']
-                        ];
-                        $type = $typeLabels[$aviso['type']] ?? $typeLabels['general'];
-                        ?>
-                        <span style="
-                            background: <?= $type['color'] ?>15; 
-                            border: 1px solid <?= $type['color'] ?>;
-                            padding: 4px 10px;
-                            border-radius: 12px;
-                            font-size: 0.75rem;
-                            font-weight: 600;
-                            color: <?= $type['color'] ?>;
+                    <div class="notice-badges">
+                        <span class="notice-badge" style="
+                            background: <?= $typeColor ?>15; 
+                            border-color: <?= $typeColor ?>;
+                            color: <?= $typeColor ?>;
                         ">
                             <?= $type['icon'] ?> <?= $type['label'] ?>
                         </span>
-
-                        <?php
-                        // Priority badge
-                        $priorityLabels = [
-                            'urgent' => '🔴 Urgente',
-                            'important' => '🟡 Importante',
-                            'info' => '🔵 Info'
-                        ];
-                        ?>
-                        <span class="badge-pill priority-<?= $aviso['priority'] ?>" style="
+                        <span class="notice-badge" style="
                             background: var(--bg-tertiary); 
-                            border: 1px solid var(--border-subtle);
-                            padding: 4px 10px;
-                            border-radius: 12px;
-                            font-size: 0.75rem;
+                            border-color: var(--border-subtle);
                             color: var(--text-secondary);
                         ">
                             <?= $priorityLabels[$aviso['priority']] ?? 'Info' ?>
                         </span>
                     </div>
 
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;">
-                        <?= nl2br(htmlspecialchars($aviso['message'])) ?>
-                    </p>
+                    <div class="notice-preview"><?= htmlspecialchars($preview) ?></div>
 
-                    <div style="
-                    display: flex; 
-                    align-items: center; 
-                    gap: 12px; 
-                    padding-top: 12px; 
-                    border-top: 1px solid var(--border-subtle);
-                    font-size: 0.85rem;
-                    color: var(--text-muted);
-                ">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <div style="
-                            width: 24px; height: 24px; 
-                            border-radius: 50%; 
-                            background: var(--bg-tertiary);
-                            display: flex; align-items: center; justify-content: center;
-                            font-weight: 700; color: var(--text-secondary);
-                            border: 1px solid var(--border-subtle);
-                        ">
+                    <div class="notice-footer">
+                        <div class="notice-author">
+                            <div class="author-avatar">
                                 <?= substr($aviso['author_name'], 0, 1) ?>
                             </div>
                             <span style="font-weight: 600; color: var(--text-secondary);"><?= htmlspecialchars($aviso['author_name']) ?></span>
+                            <span>•</span>
+                            <span><?= date('d/m/Y às H:i', strtotime($aviso['created_at'])) ?></span>
                         </div>
-                        <span>•</span>
-                        <div><?= date('d/m/Y \à\s H:i', strtotime($aviso['created_at'])) ?></div>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <!-- Empty State Moderno -->
-        <div style="
-            text-align: center; 
-            padding: 60px 20px; 
-            background: var(--bg-secondary); 
-            border-radius: 20px; 
-            border: 2px dashed var(--border-subtle);
-        ">
-            <div style="
-                width: 64px; height: 64px; 
-                background: var(--bg-tertiary); 
-                border-radius: 50%; 
-                display: flex; align-items: center; justify-content: center;
-                margin: 0 auto 16px;
-                color: var(--text-muted);
-            ">
-                <i data-lucide="bell" style="width: 32px; height: 32px;"></i>
             </div>
-            <h3 style="margin-bottom: 8px; color: var(--text-primary);">Tudo tranquilo por aqui</h3>
-            <p style="color: var(--text-secondary);">Nenhum aviso encontrado no momento.</p>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <!-- Empty State -->
+    <div style="
+        text-align: center; 
+        padding: 60px 20px; 
+        background: var(--bg-secondary); 
+        border-radius: 20px; 
+        border: 2px dashed var(--border-subtle);
+    ">
+        <div style="
+            width: 64px; height: 64px; 
+            background: var(--bg-tertiary); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--text-muted);
+        ">
+            <i data-lucide="bell" style="width: 32px; height: 32px;"></i>
         </div>
-    <?php endif; ?>
+        <h3 style="margin-bottom: 8px; color: var(--text-primary);">Tudo tranquilo por aqui</h3>
+        <p style="color: var(--text-secondary);">Nenhum aviso encontrado no momento.</p>
+    </div>
+<?php endif; ?>
 
-</div>
+<!-- Floating Action Button -->
+<?php if ($_SESSION['user_role'] === 'admin'): ?>
+    <button onclick="openModal('modal-create')" class="btn-primary ripple" style="
+        position: fixed; 
+        bottom: calc(var(--bottom-nav-height) + 20px); 
+        right: 20px; 
+        width: 56px; 
+        height: 56px; 
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: 0 8px 24px rgba(45, 122, 79, 0.4); 
+        z-index: 500;
+    ">
+        <i data-lucide="plus" style="width: 24px; height: 24px;"></i>
+    </button>
+<?php endif; ?>
 
 <!-- Modal: Criar Aviso -->
-<div id="modal-create" class="modal-overlay" onclick="closeModal('modal-create')">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-primary);">Novo Aviso</h3>
-            <button onclick="closeModal('modal-create')" class="btn-icon ripple">
-                <i data-lucide="x" style="width: 20px;"></i>
+<div id="modal-create" class="bottom-sheet-overlay" onclick="closeModal('modal-create')">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="max-height: 90vh; overflow-y: auto;">
+        <div class="sheet-header">
+            <button onclick="closeModal('modal-create')" class="btn-icon ripple" style="position: absolute; left: 16px; top: 16px;">
+                <i data-lucide="x"></i>
             </button>
+            Novo Aviso
         </div>
-        <form method="POST" style="padding: 24px;">
+        <form method="POST" style="padding: 24px;" onsubmit="return submitCreateForm()">
             <input type="hidden" name="action" value="create">
+            <input type="hidden" name="message" id="create-message-hidden">
 
             <div class="form-group">
                 <label class="form-label">Título</label>
@@ -533,22 +685,14 @@ renderAppHeader('Avisos');
 
             <div class="form-group">
                 <label class="form-label">Mensagem</label>
-                <textarea name="message" class="form-input" rows="5" placeholder="Digite os detalhes..." required style="resize: vertical;"></textarea>
+                <div id="editor-create"></div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Tipo</label>
-                <select name="type" class="form-select" style="
-                    padding: 12px;
-                    border-radius: 12px;
-                    border: 1px solid var(--border-subtle);
-                    background: var(--bg-primary);
-                    color: var(--text-primary);
-                    font-size: 0.95rem;
-                ">
+                <select name="type" class="form-select">
                     <option value="general">📢 Geral</option>
                     <option value="event">🎉 Evento</option>
-                    <option value="schedule">📅 Escala</option>
                     <option value="music">🎵 Música</option>
                     <option value="spiritual">🙏 Espiritual</option>
                     <option value="urgent">🚨 Urgente</option>
@@ -557,50 +701,11 @@ renderAppHeader('Avisos');
 
             <div class="form-group">
                 <label class="form-label">Prioridade</label>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                    <label style="cursor: pointer;">
-                        <input type="radio" name="priority" value="info" checked style="display: none;" onchange="updatePriorityUI(this)">
-                        <div class="priority-option selected" style="
-                            text-align: center;
-                            padding: 10px;
-                            border-radius: 12px;
-                            border: 2px solid #3B82F6;
-                            background: #EFF6FF;
-                            color: #3B82F6;
-                            font-weight: 600;
-                            font-size: 0.9rem;
-                            transition: all 0.2s;
-                        ">🔵 Info</div>
-                    </label>
-                    <label style="cursor: pointer;">
-                        <input type="radio" name="priority" value="important" style="display: none;" onchange="updatePriorityUI(this)">
-                        <div class="priority-option" style="
-                            text-align: center;
-                            padding: 10px;
-                            border-radius: 12px;
-                            border: 1px solid var(--border-subtle);
-                            background: var(--bg-primary);
-                            color: var(--text-secondary);
-                            font-weight: 600;
-                            font-size: 0.9rem;
-                            transition: all 0.2s;
-                        ">🟡 Importante</div>
-                    </label>
-                    <label style="cursor: pointer;">
-                        <input type="radio" name="priority" value="urgent" style="display: none;" onchange="updatePriorityUI(this)">
-                        <div class="priority-option" style="
-                            text-align: center;
-                            padding: 10px;
-                            border-radius: 12px;
-                            border: 1px solid var(--border-subtle);
-                            background: var(--bg-primary);
-                            color: var(--text-secondary);
-                            font-weight: 600;
-                            font-size: 0.9rem;
-                            transition: all 0.2s;
-                        ">🔴 Urgente</div>
-                    </label>
-                </div>
+                <select name="priority" class="form-select">
+                    <option value="info">🔵 Informativo</option>
+                    <option value="important">🟡 Importante</option>
+                    <option value="urgent">🔴 Urgente</option>
+                </select>
             </div>
 
             <div style="margin-top: 32px;">
@@ -613,17 +718,18 @@ renderAppHeader('Avisos');
 </div>
 
 <!-- Modal: Editar Aviso -->
-<div id="modal-edit" class="modal-overlay" onclick="closeModal('modal-edit')">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-primary);">Editar Aviso</h3>
-            <button onclick="closeModal('modal-edit')" class="btn-icon ripple">
-                <i data-lucide="x" style="width: 20px;"></i>
+<div id="modal-edit" class="bottom-sheet-overlay" onclick="closeModal('modal-edit')">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="max-height: 90vh; overflow-y: auto;">
+        <div class="sheet-header">
+            <button onclick="closeModal('modal-edit')" class="btn-icon ripple" style="position: absolute; left: 16px; top: 16px;">
+                <i data-lucide="x"></i>
             </button>
+            Editar Aviso
         </div>
-        <form method="POST" style="padding: 24px;">
+        <form method="POST" style="padding: 24px;" onsubmit="return submitEditForm()">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" id="edit-id">
+            <input type="hidden" name="message" id="edit-message-hidden">
 
             <div class="form-group">
                 <label class="form-label">Título</label>
@@ -632,22 +738,14 @@ renderAppHeader('Avisos');
 
             <div class="form-group">
                 <label class="form-label">Mensagem</label>
-                <textarea name="message" id="edit-message" class="form-input" rows="5" required style="resize: vertical;"></textarea>
+                <div id="editor-edit"></div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Tipo</label>
-                <select name="type" id="edit-type" class="form-select" style="
-                    padding: 12px;
-                    border-radius: 12px;
-                    border: 1px solid var(--border-subtle);
-                    background: var(--bg-primary);
-                    color: var(--text-primary);
-                    font-size: 0.95rem;
-                ">
+                <select name="type" id="edit-type" class="form-select">
                     <option value="general">📢 Geral</option>
                     <option value="event">🎉 Evento</option>
-                    <option value="schedule">📅 Escala</option>
                     <option value="music">🎵 Música</option>
                     <option value="spiritual">🙏 Espiritual</option>
                     <option value="urgent">🚨 Urgente</option>
@@ -672,26 +770,104 @@ renderAppHeader('Avisos');
     </div>
 </div>
 
+<!-- Modal: Manutenção (Notification Bell) -->
+<div id="modal-maintenance" class="bottom-sheet-overlay" onclick="closeModal('modal-maintenance')">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+        <div class="maintenance-modal">
+            <div class="maintenance-icon">
+                <i data-lucide="wrench" style="width: 40px; height: 40px;"></i>
+            </div>
+            <h3 style="margin-bottom: 12px; color: var(--text-primary);">Funcionalidade em Desenvolvimento</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 300px; margin-left: auto; margin-right: auto;">
+                O sistema de notificações está sendo implementado e estará disponível em breve!
+            </p>
+            <button onclick="closeModal('modal-maintenance')" class="btn-primary ripple" style="justify-content: center;">
+                Entendi
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Quill.js Script -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
 <script>
+    // Initialize Quill editors
+    const quillCreate = new Quill('#editor-create', {
+        theme: 'snow',
+        placeholder: 'Digite a mensagem do aviso...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{
+                    'list': 'ordered'
+                }, {
+                    'list': 'bullet'
+                }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+
+    const quillEdit = new Quill('#editor-edit', {
+        theme: 'snow',
+        placeholder: 'Digite a mensagem do aviso...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{
+                    'list': 'ordered'
+                }, {
+                    'list': 'bullet'
+                }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+
+    // Submit handlers
+    function submitCreateForm() {
+        const html = quillCreate.root.innerHTML;
+        document.getElementById('create-message-hidden').value = html;
+        return true;
+    }
+
+    function submitEditForm() {
+        const html = quillEdit.root.innerHTML;
+        document.getElementById('edit-message-hidden').value = html;
+        return true;
+    }
+
+    // Modal functions
     function openModal(modalId) {
         document.getElementById(modalId).classList.add('active');
+        lucide.createIcons();
     }
 
     function closeModal(modalId) {
         document.getElementById(modalId).classList.remove('active');
     }
 
+    function showMaintenanceModal() {
+        openModal('modal-maintenance');
+    }
+
     function openEditModal(aviso) {
         document.getElementById('edit-id').value = aviso.id;
         document.getElementById('edit-title').value = aviso.title;
-        document.getElementById('edit-message').value = aviso.message;
-        document.getElementById('edit-priority').value = aviso.priority;
         document.getElementById('edit-type').value = aviso.type || 'general';
+        document.getElementById('edit-priority').value = aviso.priority;
+
+        // Set Quill content
+        quillEdit.root.innerHTML = aviso.message;
+
         openModal('modal-edit');
     }
 
     function toggleMenu(btn, menuId) {
-        // Fechar outros menus
+        // Close other menus
         document.querySelectorAll('.dropdown-menu').forEach(el => {
             if (el.id !== menuId) el.classList.remove('active');
         });
@@ -701,46 +877,25 @@ renderAppHeader('Avisos');
         event.stopPropagation();
     }
 
-    // Fechar menus ao clicar fora
+    // Close menus when clicking outside
     document.addEventListener('click', () => {
         document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('active'));
     });
 
-    // Auto-Open Modal from URL
-    window.addEventListener('load', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('action_modal') === 'create') {
-            openModal('modal-create');
-            // Clean URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    });
+    // Real-time search
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const value = this.value.trim();
 
-    // Priority Selection UI (Radio logic visual fix)
-    function updatePriorityUI(radio) {
-        // Reset all
-        document.querySelectorAll('.priority-option').forEach(el => {
-            el.style.border = '1px solid var(--border-subtle)';
-            el.style.background = 'var(--bg-primary)';
-            el.style.color = 'var(--text-secondary)';
+            searchTimeout = setTimeout(() => {
+                if (value.length >= 2 || value.length === 0) {
+                    this.form.submit();
+                }
+            }, 500);
         });
-
-        // Set active
-        const active = radio.nextElementSibling;
-        const val = radio.value;
-        if (val === 'info') {
-            active.style.borderColor = '#3B82F6';
-            active.style.background = '#EFF6FF';
-            active.style.color = '#3B82F6';
-        } else if (val === 'important') {
-            active.style.borderColor = '#F59E0B';
-            active.style.background = '#FFFBEB';
-            active.style.color = '#B45309';
-        } else if (val === 'urgent') {
-            active.style.borderColor = '#EF4444';
-            active.style.background = '#FEF2F2';
-            active.style.color = '#B91C1C';
-        }
     }
 </script>
 
