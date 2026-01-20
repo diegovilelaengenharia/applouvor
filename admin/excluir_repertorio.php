@@ -52,7 +52,7 @@ renderAppHeader('Excluir Repertório');
             <a href="repertorio.php" class="btn-outline ripple" style="flex: 1; justify-content: center; text-decoration: none;">
                 Cancelar
             </a>
-            <button type="submit" class="btn-primary ripple" style="flex: 1; justify-content: center; background: var(--status-error);">
+            <button type="submit" class="btn-action-delete ripple" style="flex: 1; justify-content: center;">
                 Confirmar Exclusão
             </button>
         </div>

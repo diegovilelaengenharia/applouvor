@@ -1,0 +1,138 @@
+/* === SIMPLE LIST VIEW (CLEAN & MINIMAL) === */
+.list-card-simple {
+    background: #F9FAFB;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #D1D5DB;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+body.dark-mode .list-card-simple {
+    background: #18181B;
+    border-color: #374151;
+}
+
+.list-card-simple:active {
+    transform: scale(0.98);
+    background: #F3F4F6;
+    /* Um tom mais escuro ao clicar */
+}
+
+body.dark-mode .list-card-simple:active {
+    background: #27272A;
+}
+
+/* Left accent strip */
+.list-card-simple::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-green);
+}
+
+/* Date Column (Left) - Simple style */
+.list-date-simple {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 48px;
+    padding-left: 8px;
+}
+
+.list-day-simple {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+body.dark-mode .list-day-simple {
+    color: white;
+}
+
+.list-month-simple {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* Content Column */
+.list-content-simple {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.list-meta-simple {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #F59E0B;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.list-title-simple {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+body.dark-mode .list-title-simple {
+    color: #F4F4F5;
+}
+
+.list-sub-simple {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Arrow */
+.list-arrow-simple {
+    color: var(--text-muted);
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+}
+
+/* === COLOR VARIANTS FOR EVENT TYPES === */
+/* Culto Tema Especial - Verde */
+.list-card-simple.event-special::before {
+    background: #059669;
+}
+
+/* Culto Domingo Manhã - Azul */
+.list-card-simple.event-morning::before {
+    background: #2563EB;
+}
+
+/* Culto Domingo Noite - Roxo */
+.list-card-simple.event-night::before {
+    background: #7C3AED;
+}
+
+/* Ensaio - Laranja */
+.list-card-simple.event-rehearsal::before {
+    background: #F59E0B;
+}
+
+/* Evento Especial - Rosa */
+.list-card-simple.event-other::before {
+    background: #EC4899;
+}

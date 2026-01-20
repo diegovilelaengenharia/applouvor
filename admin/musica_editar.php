@@ -266,7 +266,7 @@ renderAppHeader('Editar Música');
         <a href="musica_detalhe.php?id=<?= $id ?>" class="btn-outline ripple" style="flex: 1; justify-content: center; text-decoration: none;">
             Cancelar
         </a>
-        <button type="submit" class="btn-primary ripple" style="flex: 2; justify-content: center;">
+        <button type="submit" class="btn-action-save ripple" style="flex: 2; justify-content: center;">
             <i data-lucide="save"></i> Salvar Alterações
         </button>
     </div>

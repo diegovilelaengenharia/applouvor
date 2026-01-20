@@ -426,12 +426,12 @@ renderAppHeader('Detalhes da Escala');
             </div>
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Equipe Vazia</h3>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Adicione instrumentistas.</p>
-            <button onclick="openModal('modalMembers')" class="btn-primary ripple">
+            <button onclick="openModal('modalMembers')" class="btn-action-add ripple">
                 <i data-lucide="plus" style="width: 18px;"></i> Adicionar Membro
             </button>
         </div>
     <?php else: ?>
-        <button onclick="openModal('modalMembers')" class="btn-primary ripple w-full" style="margin-bottom: 16px;">
+        <button onclick="openModal('modalMembers')" class="btn-action-add ripple w-full" style="margin-bottom: 16px;">
             <i data-lucide="plus"></i> Gerenciar Equipe
         </button>
         <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -500,12 +500,12 @@ renderAppHeader('Detalhes da Escala');
             </div>
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Repertório Vazio</h3>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Selecione as músicas.</p>
-            <button onclick="openModal('modalSongs')" class="btn-primary ripple">
+            <button onclick="openModal('modalSongs')" class="btn-action-add ripple">
                 <i data-lucide="plus" style="width: 18px;"></i> Adicionar Música
             </button>
         </div>
     <?php else: ?>
-        <button onclick="openModal('modalSongs')" class="btn-primary ripple w-full" style="margin-bottom: 16px;">
+        <button onclick="openModal('modalSongs')" class="btn-action-add ripple w-full" style="margin-bottom: 16px;">
             <i data-lucide="plus"></i> Adicionar Música
         </button>
         <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -594,7 +594,7 @@ renderAppHeader('Detalhes da Escala');
             </div>
             <div style="display: flex; gap: 12px; margin-top: 24px;">
                 <button type="button" onclick="closeSheet('modalMembers')" class="btn-outline ripple" style="flex: 1; justify-content: center;">Cancelar</button>
-                <button type="submit" class="btn-primary ripple" style="flex: 1; justify-content: center;">Salvar</button>
+                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">Salvar</button>
             </div>
         </form>
     </div>
@@ -627,7 +627,7 @@ renderAppHeader('Detalhes da Escala');
             </div>
             <div style="display: flex; gap: 12px; margin-top: 24px;">
                 <button type="button" onclick="closeSheet('modalSongs')" class="btn-outline ripple" style="flex: 1; justify-content: center;">Cancelar</button>
-                <button type="submit" class="btn-primary ripple" style="flex: 1; justify-content: center;">Salvar</button>
+                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">Salvar</button>
             </div>
         </form>
     </div>
@@ -662,7 +662,7 @@ renderAppHeader('Detalhes da Escala');
 
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeSheet('modalEditSchedule')" class="btn-outline ripple" style="flex: 1; justify-content: center;">Cancelar</button>
-                <button type="submit" class="btn-primary ripple" style="flex: 1; justify-content: center;">Salvar</button>
+                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">Salvar</button>
             </div>
         </form>
     </div>

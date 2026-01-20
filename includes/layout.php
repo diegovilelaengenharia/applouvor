@@ -76,80 +76,131 @@ function renderAppHeader($title = 'Louvor PIB')
     /**
      * Renderiza os botões de navegação global (WhatsApp, Sininho, Avatar)
      */
+    /**
+     * Renderiza os botões de navegação global (WhatsApp, Sininho, Avatar)
+     */
     function renderGlobalNavButtons()
     {
         global $pdo;
-        $avatar = $_SESSION['user_avatar'] ?? null;
-        $userInitials = substr($_SESSION['user_name'] ?? 'U', 0, 1);
-
-        // Buscar contagem de avisos não lidos
-        $notificationCount = 0;
-        try {
-            if (isset($pdo)) {
-                $stmt = $pdo->query("
-                    SELECT COUNT(*) 
-                    FROM avisos 
-                    WHERE archived_at IS NULL 
-                      AND (priority = 'urgent' OR priority = 'important')
-                      AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-                ");
-                $notificationCount = $stmt->fetchColumn();
-            }
-        } catch (Exception $e) {
-            // Silently fail
-        }
         ?>
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <!-- WhatsApp Button -->
-                <a href="https://wa.me/5535984529577" target="_blank" class="ripple" style="
-                width: 36px; height: 36px; border-radius: 50%;
-                background: rgba(255,255,255,0.15);
-                display: flex; align-items: center; justify-content: center;
-                text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
-                transition: all 0.3s ease;
+            <div style="display: flex; gap: 12px; align-items: center;">
+
+                <!-- 1. Notifications Button (Swapped & Styled) -->
+                <?php
+                // Count unread notifications (active urgent or important)
+                $unreadCount = 0;
+                try {
+                    if (isset($pdo)) {
+                        $countStmt = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NULL AND (priority = 'urgent' OR priority = 'important')");
+                        $unreadCount = $countStmt->fetchColumn();
+                    }
+                } catch (Exception $e) {
+                }
+                ?>
+                <button class="ripple" onclick="openSheet('sheet-avisos')" style="
+                width: 44px; 
+                height: 44px;
+                background: transparent;
+                border: none;
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                position: relative;
+                cursor: pointer;
             ">
-                    <i data-lucide="message-circle" style="width: 18px; height: 18px; color: white;"></i>
+                    <i data-lucide="bell" style="width: 28px; height: 28px;"></i>
+
+                    <?php if ($unreadCount > 0): ?>
+                        <!-- Badge with Count -->
+                        <span style="
+                        position: absolute;
+                        top: 2px;
+                        right: 2px;
+                        min-width: 18px;
+                        height: 18px;
+                        padding: 0 5px;
+                        background: #EF4444;
+                        color: white;
+                        font-size: 0.7rem;
+                        font-weight: 700;
+                        border-radius: 10px;
+                        border: 2px solid #047857; /* Matches header bg for cutout effect */
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                            <?= $unreadCount > 9 ? '9+' : $unreadCount ?>
+                        </span>
+                    <?php endif; ?>
+                </button>
+
+                <!-- 2. WhatsApp Button (Swapped) -->
+                <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
+                width: 44px; 
+                height: 44px; 
+                border-radius: 14px;
+                background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+                border: 1px solid rgba(255,255,255,0.2);
+                text-decoration: none;
+                position: relative;
+                overflow: hidden;
+            ">
+                    <i data-lucide="message-circle" style="width: 22px; height: 22px;"></i>
                 </a>
 
-                <!-- Sininho -->
-                <div onclick="openSheet('sheet-avisos')" class="ripple" style="
-                width: 36px; height: 36px; border-radius: 50%;
-                background: rgba(255,255,255,0.15);
-                display: flex; align-items: center; justify-content: center;
-                border: 1px solid rgba(255,255,255,0.25);
-                cursor: pointer; position: relative;
-                transition: all 0.3s ease;
+                <!-- 3. Avatar Button -->
+                <button onclick="openSheet('sheet-perfil')" class="ripple" style="
+                width: 44px; 
+                height: 44px; 
+                border-radius: 14px;
+                padding: 2px;
+                background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+                border: 1px solid rgba(255,255,255,0.3);
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
             ">
-                    <i data-lucide="bell" style="color: white; width: 18px; height: 18px;"></i>
-                    <?php if ($notificationCount > 0): ?>
-                        <span style="
-                        position: absolute; top: -3px; right: -3px;
-                        background: #EF4444; color: white;
-                        font-size: 0.6rem; font-weight: 700;
-                        padding: 0 4px; border-radius: 10px;
-                        min-width: 16px; height: 16px;
-                        display: flex; align-items: center; justify-content: center;
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-                        border: 2px solid #047857;
-                    "><?= $notificationCount > 9 ? '9+' : $notificationCount ?></span>
-                    <?php endif; ?>
-                </div>
+                    <?php
+                    $displayAvatar = $_SESSION['user_avatar'] ?? '';
+                    // Specific fix for Diego
+                    if (($_SESSION['user_name'] ?? '') === 'Diego') {
+                        if (file_exists('../assets/uploads/diego_avatar.jpg')) {
+                            $displayAvatar = 'diego_avatar.jpg';
+                        }
+                    }
+                    ?>
 
-                <!-- Avatar -->
-                <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 36px; height: 36px; border-radius: 50%;
-                background: rgba(255,255,255,0.15);
-                display: flex; align-items: center; justify-content: center;
-                overflow: hidden; cursor: pointer;
-                border: 1px solid rgba(255,255,255,0.25);
-                transition: all 0.3s ease;
-            ">
-                    <?php if (!empty($avatar)): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php if (!empty($displayAvatar)): ?>
+                        <img src="../assets/uploads/<?= htmlspecialchars($displayAvatar) ?>" style="
+                        width: 100%; 
+                        height: 100%; 
+                        border-radius: 12px; 
+                        object-fit: cover;
+                    ">
                     <?php else: ?>
-                        <span style="font-weight: 700; font-size: 0.85rem; color: white;"><?= $userInitials ?></span>
+                        <div style="
+                        width: 100%; 
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: rgba(255,255,255,0.2);
+                        border-radius: 12px;
+                    ">
+                            <span style="font-weight: 700; font-size: 1rem; color: white;">
+                                <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                            </span>
+                        </div>
                     <?php endif; ?>
-                </div>
+                </button>
             </div>
         <?php
     }

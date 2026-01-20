@@ -227,25 +227,8 @@ renderAppHeader('Escalas');
             <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
         </a>
 
-        <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-            width: 40px; 
-            height: 40px; 
-            border-radius: 50%; 
-            background: rgba(255,255,255,0.2); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            overflow: hidden; 
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.3);
-        ">
-            <?php if (!empty($_SESSION['user_avatar'])): ?>
-                <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-            <?php else: ?>
-                <span style="font-weight: 700; font-size: 0.9rem; color: white;">
-                    <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                </span>
-            <?php endif; ?>
+        <div style="display: flex; align-items: center;">
+            <?php renderGlobalNavButtons(); ?>
         </div>
     </div>
 
@@ -257,7 +240,7 @@ renderAppHeader('Escalas');
         <div style="display: flex; gap: 8px;">
             <!-- Add Button -->
             <a href="escala_adicionar.php" class="ripple" style="
-                background: rgba(255,255,255,0.2); 
+                background: #F59E0B; 
                 border: none; 
                 width: 44px; 
                 height: 44px; 
@@ -268,6 +251,7 @@ renderAppHeader('Escalas');
                 color: white;
                 backdrop-filter: blur(4px);
                 cursor: pointer;
+                box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
             ">
                 <i data-lucide="plus" style="width: 20px;"></i>
             </a>
@@ -288,34 +272,34 @@ renderAppHeader('Escalas');
                 <i data-lucide="filter" style="width: 20px;"></i>
             </button>
             <!-- View Button -->
-            <button onclick="toggleViewMenu()" class="ripple" style="
-                background: rgba(255,255,255,0.2); 
-                border: none; 
-                width: 44px; 
-                height: 44px; 
-                border-radius: 12px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                color: white;
-                backdrop-filter: blur(4px);
-                cursor: pointer;
-                position: relative;
-            ">
-                <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>" style="width: 20px;"></i>
+            <!-- View Button Wrapper -->
+            <div style="position: relative;">
+                <button id="btnViewToggle" onclick="toggleViewMenu()" class="ripple" style="
+                    background: rgba(255,255,255,0.2); 
+                    border: none; 
+                    width: 44px; 
+                    height: 44px; 
+                    border-radius: 12px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                    color: white;
+                    backdrop-filter: blur(4px);
+                    cursor: pointer;
+                ">
+                    <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>" style="width: 20px;"></i>
+                </button>
+
                 <!-- Dropdown Menu -->
-                <div id="viewMenu" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-lg); width: 200px; z-index: 100; margin-top: 8px; overflow: hidden;">
+                <div id="viewMenu" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-lg); width: 200px; z-index: 600; margin-top: 8px; overflow: hidden;">
                     <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
                         <i data-lucide="align-left" style="width: 18px; color: var(--text-secondary);"></i> Linha do Tempo
                     </a>
                     <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
                         <i data-lucide="list" style="width: 18px; color: var(--text-secondary);"></i> Lista Compacta
                     </a>
-                    <a href="?view=calendar" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
-                        <i data-lucide="calendar" style="width: 18px; color: var(--text-secondary);"></i> Calendário
-                    </a>
                 </div>
-            </button>
+            </div>
         </div>
     </div>
 
@@ -355,69 +339,39 @@ renderAppHeader('Escalas');
     </div>
 <?php else: ?>
 
-    <!-- VIEW: CALENDAR -->
-    <?php if ($viewMode === 'calendar'):
-        $currentMonth = $_GET['month'] ?? date('n');
-        $currentYear = $_GET['year'] ?? date('Y');
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);
-        $firstDayOfWeek = date('w', strtotime("$currentYear-$currentMonth-01"));
-
-        // Map schedules by date
-        $eventsByDate = [];
-        foreach ($schedules as $s) {
-            $eventsByDate[$s['event_date']][] = $s;
-        }
-    ?>
-        <div class="calendar-header">
-            <div>DOM</div>
-            <div>SEG</div>
-            <div>TER</div>
-            <div>QUA</div>
-            <div>QUI</div>
-            <div>SEX</div>
-            <div>SÁB</div>
-        </div>
-        <div class="calendar-grid">
-            <!-- Empty slots before 1st day -->
-            <?php for ($i = 0; $i < $firstDayOfWeek; $i++): ?><div class="calendar-day empty"></div><?php endfor; ?>
-
-            <!-- Days -->
-            <?php for ($day = 1; $day <= $daysInMonth; $day++):
-                $dateStr = sprintf('%04d-%02d-%02d', $currentYear, $currentMonth, $day);
-                $isToday = $dateStr === date('Y-m-d');
-                $hasEvents = isset($eventsByDate[$dateStr]);
-            ?>
-                <div class="calendar-day <?= $isToday ? 'today' : '' ?>" onclick="window.location.href='?view=list&tab=next'">
-                    <div class="calendar-number"><?= $day ?></div>
-                    <?php if ($hasEvents): ?>
-                        <div style="display: flex; flex-wrap: wrap; gap: 2px;">
-                            <?php foreach ($eventsByDate[$dateStr] as $evt): ?>
-                                <div class="event-dot" title="<?= htmlspecialchars($evt['event_type']) ?>"></div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endfor; ?>
-        </div>
-
-        <!-- VIEW: LIST -->
-    <?php elseif ($viewMode === 'list'): ?>
-        <div style="display: flex; flex-direction: column; background: var(--bg-tertiary); border-radius: 12px; overflow: hidden;">
+    <!-- VIEW: LIST (COMPACT) -->
+    <?php if ($viewMode === 'list'): ?>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($schedules as $schedule):
                 $date = new DateTime($schedule['event_date']);
-                // Status based on date
-                $isPast = $date < new DateTime('today');
+                $monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
+                $dayNumber = $date->format('d');
+                $weekDay = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'][$date->format('w')];
             ?>
-                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="list-row ripple" style="text-decoration: none; color: inherit;">
-                    <div style="font-weight: 700; width: 40px; text-align: center; color: var(--text-secondary);">
-                        <?= $date->format('d') ?>
+                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="compact-card ripple" style="text-decoration: none;">
+                    <!-- Left Strip handled by CSS or border -->
+
+                    <!-- Date Column -->
+                    <div class="compact-date-col">
+                        <span class="compact-day"><?= $dayNumber ?></span>
+                        <span class="compact-month"><?= $monthShort ?></span>
                     </div>
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600; color: var(--text-primary);"><?= htmlspecialchars($schedule['event_type']) ?></div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);"><?= $date->format('d/m/Y') ?> • 19:00</div>
+
+                    <!-- Divider -->
+                    <div class="compact-divider"></div>
+
+                    <!-- Content -->
+                    <div class="compact-info-col">
+                        <div class="compact-meta"><?= $weekDay ?> • 19:00</div>
+                        <div class="compact-title"><?= htmlspecialchars($schedule['event_type']) ?></div>
+                        <div class="compact-sub">
+                            <i data-lucide="users" style="width: 14px; height: 14px;"></i> Escala
+                        </div>
                     </div>
-                    <div>
-                        <i data-lucide="chevron-right" style="color: var(--text-muted); width: 16px;"></i>
+
+                    <!-- Arrow -->
+                    <div class="compact-arrow">
+                        <i data-lucide="chevron-right"></i>
                     </div>
                 </a>
             <?php endforeach; ?>
@@ -425,97 +379,84 @@ renderAppHeader('Escalas');
 
         <!-- VIEW: TIMELINE (DEFAULT) -->
     <?php else: ?>
-        <div class="schedules-list" style="display: flex; flex-direction: column; gap: 12px;">
-            <?php
-            $count = 0;
-            foreach ($schedules as $schedule):
+        <div class="timeline-wrapper">
+            <?php foreach ($schedules as $schedule):
                 $date = new DateTime($schedule['event_date']);
                 $dayNumber = $date->format('d');
-                $monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
-                $weekDay = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')];
-                $colorClass = stripos($schedule['event_type'], 'Domingo') !== false ? '#F59E0B' : (stripos($schedule['event_type'], 'Ensaio') !== false ? '#3B82F6' : 'var(--text-primary)');
+                $monthShort = ['OUT', 'NOV', 'DEZ', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET'][$date->format('n') - 1]; // Simplified month array for demo logic check index if needed
+                // PHP DateTime 'n' is 1-12. Using standard approach:
+                $ptMonths = [1 => 'JAN', 2 => 'FEV', 3 => 'MAR', 4 => 'ABR', 5 => 'MAI', 6 => 'JUN', 7 => 'JUL', 8 => 'AGO', 9 => 'SET', 10 => 'OUT', 11 => 'NOV', 12 => 'DEZ'];
+                $monthLabel = $ptMonths[$date->format('n')];
 
-                // Logic for hiding items > 5 (Applied to ALL tabs now)
-                $isHidden = ($count >= 5);
-                $displayStyle = $isHidden ? 'display: none;' : 'display: flex;';
-                $extraClass = $isHidden ? 'hidden-item' : '';
+                $weekDay = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')];
+
+                // Calculate time relative today
+                $today = new DateTime('today');
+                $interval = $today->diff($date);
+                $timeAgo = $interval->format('%a') . ' dias';
+                if ($date < $today) {
+                    $timeLabel = $interval->days . ' dias atrás';
+                } elseif ($date == $today) {
+                    $timeLabel = 'Hoje';
+                } else {
+                    $timeLabel = 'Em ' . $interval->days . ' dias';
+                }
             ?>
-                <div class="schedule-card-wrapper <?= $extraClass ?>" style="position: relative; <?= $displayStyle ?>">
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="card-clean ripple schedule-card-link" style="padding: 0; display: flex; text-decoration: none; overflow: hidden; border: 1px solid var(--border-subtle); transition: all 0.2s; width: 100%;">
-                        <!-- Coluna Data -->
-                        <?php
-                        $today = new DateTime('today');
-                        $isUpcoming = $date >= $today;
-                        // Se for passado, usa amarelo. Se for futuro/hoje, verde.
-                        $borderColor = $isUpcoming ? '#10B981' : '#F59E0B';
-                        $borderStyle = "border-left: 4px solid $borderColor;";
-                        ?>
-                        <div style="background: var(--bg-tertiary); min-width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; border-right: 1px solid var(--border-subtle); <?= $borderStyle ?>">
-                            <span style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); line-height: 1;"><?= $dayNumber ?></span>
-                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-top: 4px;"><?= $monthShort ?></span>
+                <div class="timeline-item">
+                    <!-- Date Column -->
+                    <div class="timeline-date">
+                        <div class="timeline-day"><?= $dayNumber ?></div>
+                        <div class="timeline-month"><?= $monthLabel ?></div>
+                    </div>
+
+                    <!-- Card -->
+                    <!-- Card -->
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="event-card ripple" style="text-decoration: none;">
+
+                        <!-- 1. Header: Title -->
+                        <div class="event-header">
+                            <div class="event-title"><?= htmlspecialchars($schedule['event_type']) ?></div>
                         </div>
 
-                        <!-- Conteúdo -->
-                        <div style="flex: 1; padding: 16px; display: flex; flex-direction: column; justify-content: center;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-                                <span style="font-size: 0.8rem; font-weight: 600; color: <?= $colorClass ?>; text-transform: uppercase;">
-                                    <?= $weekDay ?> • 19:00
-                                </span>
+                        <!-- 2. Info: Date & Time -->
+                        <div class="event-info-row">
+                            <div class="info-item">
+                                <i data-lucide="clock" class="icon-sm text-orange"></i>
+                                <span class="<?= $date < $today ? 'text-muted' : 'text-highlight' ?>"><?= $timeLabel ?></span>
                             </div>
-                            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
-                                <?= htmlspecialchars($schedule['event_type']) ?>
-                            </h3>
-                            <div style="display: flex; gap: 16px; margin-top: auto;">
-                                <div style="display: flex; align-items: center; gap: 4px; color: var(--text-secondary); font-size: 0.8rem;">
-                                    <i data-lucide="users" style="width: 14px; height: 14px;"></i>
-                                    <span>Escala</span>
+                            <div class="info-item">
+                                <i data-lucide="calendar" class="icon-sm text-blue"></i>
+                                <span><?= $weekDay ?> • 19:00</span>
+                            </div>
+                        </div>
+
+                        <!-- 3. Tags -->
+                        <div class="event-tags">
+                            <span class="tag tag-green">Culto</span>
+                            <span class="tag tag-purple">Louvor</span>
+                        </div>
+
+                        <!-- 4. Footer: Avatars & Stats -->
+                        <div class="event-footer">
+                            <div class="avatar-stack">
+                                <!-- Placeholder Avatars for "Team Preview" -->
+                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=A&background=2563EB&color=fff');"></div>
+                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=B&background=059669&color=fff');"></div>
+                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=C&background=db2777&color=fff');"></div>
+                            </div>
+
+                            <div class="footer-right">
+                                <div class="stat-pill" title="Músicas">
+                                    <i data-lucide="music" class="icon-xs"></i> 5
+                                </div>
+                                <div class="stat-pill" title="Confirmados">
+                                    <i data-lucide="thumbs-up" class="icon-xs"></i> 3/5
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Chevron Icon -->
-                        <div style="padding-right: 16px; display: flex; align-items: center; color: var(--text-muted);">
-                            <i data-lucide="chevron-right"></i>
-                        </div>
                     </a>
                 </div>
-            <?php
-                $count++;
-            endforeach;
-
-            if ($count > 5):
-                $btnText = ($tab === 'history') ? 'escalas anteriores' : 'escalas futuras';
-            ?>
-                <button onclick="showHiddenItems()" id="btnShowMore" class="ripple" style="
-                    width: 100%; 
-                    display: flex; 
-                    align-items: center; 
-                    justify-content: center; 
-                    gap: 10px; 
-                    padding: 16px; 
-                    margin-top: 16px; 
-                    background: var(--bg-secondary); 
-                    border: 1px solid var(--border-subtle); 
-                    border-radius: 16px; 
-                    color: var(--text-primary); 
-                    font-weight: 700; 
-                    font-size: 0.95rem;
-                    cursor: pointer; 
-                    transition: all 0.2s;
-                    box-shadow: var(--shadow-sm);
-                ">
-                    <span style="color: var(--primary-green);">Ver mais <?= $count - 5 ?> <?= $btnText ?></span>
-                    <i data-lucide="chevron-down" style="width: 18px; color: var(--primary-green);"></i>
-                </button>
-                <script>
-                    function showHiddenItems() {
-                        document.querySelectorAll('.hidden-item').forEach(el => {
-                            el.style.display = 'flex';
-                        });
-                        document.getElementById('btnShowMore').style.display = 'none';
-                    }
-                </script>
-            <?php endif; ?>
+            <?php endforeach; ?>
         </div>
     <?php endif; ?>
 
@@ -575,7 +516,7 @@ renderAppHeader('Escalas');
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary ripple" style="width: 100%; justify-content: center;">Aplicar Filtros</button>
+            <button type="submit" class="btn-action-save ripple" style="width: 100%; justify-content: center;">Aplicar Filtros</button>
         </form>
     </div>
 </div>

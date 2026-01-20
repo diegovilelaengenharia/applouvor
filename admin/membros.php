@@ -319,7 +319,7 @@ renderAppHeader('Membros');
 
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeModal('modalAdd')" class="btn-outline ripple" style="flex: 1;">Cancelar</button>
-                <button type="submit" class="btn-primary ripple" style="flex: 1;">Salvar</button>
+                <button type="submit" class="btn-action-save ripple" style="flex: 1;">Salvar</button>
             </div>
         </form>
     </div>
@@ -363,7 +363,7 @@ renderAppHeader('Membros');
 
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeModal('modalEdit')" class="btn-outline ripple" style="flex: 1;">Cancelar</button>
-                <button type="submit" class="btn-primary ripple" style="flex: 1;">Atualizar</button>
+                <button type="submit" class="btn-action-save ripple" style="flex: 1;">Atualizar</button>
             </div>
         </form>
     </div>

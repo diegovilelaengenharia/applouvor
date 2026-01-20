@@ -161,7 +161,7 @@ renderAppHeader('Meu Perfil');
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                <button type="submit" class="btn-action-save" style="width: 100%; justify-content: center; margin-top: 10px;">
                     Salvar Dados
                 </button>
             </div>

@@ -418,7 +418,7 @@ renderAppHeader('Repertório');
 <?php endif; ?>
 
 <!-- Botão Flutuante para Adicionar -->
-<a href="musica_adicionar.php" class="btn-primary ripple" style="position: fixed; bottom: calc(var(--bottom-nav-height) + 20px); right: 20px; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(45, 122, 79, 0.4); z-index: 500;">
+<a href="musica_adicionar.php" class="btn-action-add ripple" style="position: fixed; bottom: calc(var(--bottom-nav-height) + 20px); right: 20px; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 500;">
     <i data-lucide="plus" style="width: 24px; height: 24px;"></i>
 </a>
 

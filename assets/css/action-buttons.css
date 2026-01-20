@@ -1,0 +1,92 @@
+/* === ACTION BUTTON COLOR SYSTEM === */
+
+/* Gold - Add/Create Actions */
+.btn-action-add {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    border: none;
+}
+
+.btn-action-add:hover {
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%) !important;
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+.btn-action-add:active {
+    transform: scale(0.96);
+}
+
+/* Green - Save/Apply/Confirm Actions */
+.btn-action-save {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    border: none;
+}
+
+.btn-action-save:hover {
+    background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+}
+
+.btn-action-save:active {
+    transform: scale(0.96);
+}
+
+/* Yellow - Cancel/Back Actions */
+.btn-action-cancel {
+    background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
+    border: none;
+}
+
+.btn-action-cancel:hover {
+    background: linear-gradient(135deg, #CA8A04 0%, #A16207 100%) !important;
+    box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4);
+}
+
+.btn-action-cancel:active {
+    transform: scale(0.96);
+}
+
+/* Red - Delete/Remove Actions */
+.btn-action-delete {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    border: none;
+}
+
+.btn-action-delete:hover {
+    background: linear-gradient(135deg, #B91C1C 0%, #991B1B 100%) !important;
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+.btn-action-delete:active {
+    transform: scale(0.96);
+}
+
+/* Icon-only button variants */
+.btn-icon-add,
+.btn-icon-save,
+.btn-icon-cancel,
+.btn-icon-delete {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .btn-action-add,
+body.dark-mode .btn-action-save,
+body.dark-mode .btn-action-cancel,
+body.dark-mode .btn-action-delete {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}

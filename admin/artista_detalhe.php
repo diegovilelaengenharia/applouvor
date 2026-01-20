@@ -205,7 +205,7 @@ renderAppHeader('Artista');
                 <button type="button" onclick="closeSheet('modalEditArtist')" class="btn-outline ripple" style="flex: 1; justify-content: center;">
                     Cancelar
                 </button>
-                <button type="submit" class="btn-primary ripple" style="flex: 1; justify-content: center;">
+                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">
                     Salvar
                 </button>
             </div>

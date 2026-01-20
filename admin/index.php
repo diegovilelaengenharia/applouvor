@@ -5,52 +5,7 @@ require_once '../includes/layout.php';
 
 
 
-// ==========================================
-// BUSCAR PRÓXIMA ESCALA DO USUÁRIO
-// ==========================================
-$nextSchedule = null;
-$scheduleSongs = [];
 
-try {
-    // Query simplificada sem event_time (pode não existir)
-    $stmt = $pdo->prepare("
-        SELECT s.*, 
-               GROUP_CONCAT(DISTINCT u.name ORDER BY u.name SEPARATOR ', ') as team_members,
-               COUNT(DISTINCT ss.song_id) as song_count
-        FROM schedules s
-        JOIN schedule_users su ON s.id = su.schedule_id
-        LEFT JOIN schedule_users su2 ON s.id = su2.schedule_id
-        LEFT JOIN users u ON su2.user_id = u.id
-        LEFT JOIN schedule_songs ss ON s.id = ss.schedule_id
-        WHERE su.user_id = ? 
-          AND s.event_date >= CURDATE()
-        GROUP BY s.id
-        ORDER BY s.event_date ASC
-        LIMIT 1
-    ");
-    $stmt->execute([$_SESSION['user_id']]);
-    $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Debug: Log para verificar
-    error_log("User ID: " . $_SESSION['user_id']);
-    error_log("Next Schedule: " . print_r($nextSchedule, true));
-
-    // Buscar músicas da escala
-    if ($nextSchedule) {
-        $stmt = $pdo->prepare("
-            SELECT sg.title, sg.artist, ss.position
-            FROM schedule_songs ss
-            JOIN songs sg ON ss.song_id = sg.id
-            WHERE ss.schedule_id = ?
-            ORDER BY ss.position ASC
-        ");
-        $stmt->execute([$nextSchedule['id']]);
-        $scheduleSongs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-} catch (Exception $e) {
-    // Log error for debugging
-    error_log("Error fetching schedule: " . $e->getMessage());
-}
 
 // ==========================================
 // BUSCAR ÚLTIMOS AVISOS
@@ -88,8 +43,126 @@ renderAppHeader('Início');
         overflow: visible;
     ">
         <!-- Navigation Buttons (Top Right) -->
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
-            <?php renderGlobalNavButtons(); ?>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px; gap: 12px; align-items: center;">
+
+            <!-- 1. WhatsApp (Pulse Effect) -->
+            <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
+                width: 44px; 
+                height: 44px; 
+                border-radius: 14px;
+                background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+                border: 1px solid rgba(255,255,255,0.2);
+                text-decoration: none;
+                position: relative;
+                overflow: hidden;
+            ">
+                <i data-lucide="message-circle" style="width: 22px; height: 22px;"></i>
+            </a>
+
+            <!-- 2. Notifications (Glassmorphism) -->
+            <?php
+            // Count unread notifications (active urgent or important)
+            $unreadCount = 0;
+            try {
+                $countStmt = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NULL AND (priority = 'urgent' OR priority = 'important')");
+                $unreadCount = $countStmt->fetchColumn();
+            } catch (Exception $e) {
+            }
+            ?>
+            <button class="ripple" style="
+                width: 44px; 
+                height: 44px; 
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(255,255,255,0.2);
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                position: relative;
+            ">
+                <i data-lucide="bell" style="width: 22px; height: 22px;"></i>
+
+                <?php if ($unreadCount > 0): ?>
+                    <!-- Badge with Count -->
+                    <span style="
+                        position: absolute;
+                        top: -5px;
+                        right: -5px;
+                        min-width: 18px;
+                        height: 18px;
+                        padding: 0 5px;
+                        background: #EF4444;
+                        color: white;
+                        font-size: 0.7rem;
+                        font-weight: 700;
+                        border-radius: 10px;
+                        border: 2px solid #047857; /* Matches header bg for cutout effect */
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        <?= $unreadCount > 9 ? '9+' : $unreadCount ?>
+                    </span>
+                <?php endif; ?>
+            </button>
+
+            <!-- 3. Avatar (Profile) -->
+            <button onclick="openSheet('sheet-perfil')" class="ripple" style="
+                width: 44px; 
+                height: 44px; 
+                border-radius: 14px;
+                padding: 2px;
+                background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+                border: 1px solid rgba(255,255,255,0.3);
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            ">
+                <?php
+                $displayAvatar = $_SESSION['user_avatar'] ?? '';
+
+                // Specific fix for Diego
+                if (($_SESSION['user_name'] ?? '') === 'Diego') {
+                    // Check if specific file exists (assuming we know it's diego_avatar.jpg based on file list)
+                    if (file_exists('../assets/uploads/diego_avatar.jpg')) {
+                        $displayAvatar = 'diego_avatar.jpg';
+                    }
+                }
+                ?>
+
+                <?php if (!empty($displayAvatar)): ?>
+                    <img src="../assets/uploads/<?= htmlspecialchars($displayAvatar) ?>" style="
+                        width: 100%; 
+                        height: 100%; 
+                        border-radius: 12px; 
+                        object-fit: cover;
+                    ">
+                <?php else: ?>
+                    <div style="
+                        width: 100%; 
+                        height: 100%; 
+                        background: rgba(255,255,255,0.9);
+                        border-radius: 12px;
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center;
+                        color: #047857;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                    ">
+                        <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
+                    </div>
+                <?php endif; ?>
+            </button>
+
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -103,122 +176,7 @@ renderAppHeader('Início');
     <!-- Dashboard Grid -->
     <div class="dashboard-grid">
 
-        <!-- Card: Próxima Escala -->
-        <div class="dashboard-card">
-            <div class="dashboard-card-header">
-                <div class="dashboard-card-title">
-                    <div class="dashboard-card-icon" style="background: linear-gradient(135deg, #047857 0%, #065f46 100%);">
-                        <i data-lucide="calendar" style="width: 20px; color: white;"></i>
-                    </div>
-                    Próxima Escala
-                </div>
-            </div>
 
-            <?php if ($nextSchedule): ?>
-                <!-- Event Info Compacto -->
-                <div class="event-info">
-                    <div class="event-date-box">
-                        <div class="event-day"><?= date('d', strtotime($nextSchedule['event_date'])) ?></div>
-                        <div class="event-month"><?= date('M', strtotime($nextSchedule['event_date'])) ?></div>
-                    </div>
-                    <div class="event-details">
-                        <h4 class="event-type"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
-                        <div class="event-time">
-                            <i data-lucide="calendar" style="width: 14px;"></i>
-                            <?= date('d/m/Y', strtotime($nextSchedule['event_date'])) ?>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resumo Compacto -->
-                <div style="margin-top: 16px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">
-                            <i data-lucide="music" style="width: 14px; display: inline;"></i>
-                            <?= count($scheduleSongs) ?> música(s)
-                        </span>
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">
-                            <i data-lucide="users" style="width: 14px; display: inline;"></i>
-                            <?= $nextSchedule['song_count'] ?? 0 ?> pessoas
-                        </span>
-                    </div>
-
-                    <!-- Detalhes Expandíveis -->
-                    <div id="schedule-details" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
-                        <!-- Músicas -->
-                        <?php if (!empty($scheduleSongs)): ?>
-                            <div style="margin-bottom: 12px;">
-                                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
-                                    Músicas
-                                </div>
-                                <ul class="song-list">
-                                    <?php foreach ($scheduleSongs as $index => $song): ?>
-                                        <li class="song-item">
-                                            <div class="song-number"><?= $index + 1 ?></div>
-                                            <div class="song-info">
-                                                <h5 class="song-title"><?= htmlspecialchars($song['title']) ?></h5>
-                                                <?php if ($song['artist']): ?>
-                                                    <p class="song-artist"><?= htmlspecialchars($song['artist']) ?></p>
-                                                <?php endif; ?>
-                                            </div>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Team Members -->
-                        <?php if ($nextSchedule['team_members']): ?>
-                            <div>
-                                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
-                                    Equipe
-                                </div>
-                                <p style="font-size: 0.85rem; color: var(--text-primary); margin: 0;">
-                                    <?= htmlspecialchars($nextSchedule['team_members']) ?>
-                                </p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- Botão Saiba Mais -->
-                    <button onclick="toggleScheduleDetails()" id="toggle-btn" class="ripple" style="
-                        width: 100%;
-                        padding: 8px;
-                        background: transparent;
-                        border: 1px solid var(--border-subtle);
-                        border-radius: 8px;
-                        color: var(--text-primary);
-                        font-size: 0.8rem;
-                        font-weight: 600;
-                        cursor: pointer;
-                        margin-top: 12px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 4px;
-                    ">
-                        <i data-lucide="chevron-down" style="width: 16px;" id="toggle-icon"></i>
-                        <span id="toggle-text">Saiba Mais</span>
-                    </button>
-                </div>
-
-                <!-- Action Button -->
-                <a href="escala_detalhe.php?id=<?= $nextSchedule['id'] ?>" class="card-action-btn">
-                    <i data-lucide="arrow-right" style="width: 16px;"></i>
-                    Ver Detalhes Completos
-                </a>
-
-            <?php else: ?>
-                <!-- Empty State -->
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i data-lucide="calendar-x" style="width: 30px;"></i>
-                    </div>
-                    <h4 class="empty-state-title">Nenhuma escala próxima</h4>
-                    <p class="empty-state-text">Você não está escalado nos próximos eventos</p>
-                </div>
-            <?php endif; ?>
-        </div>
 
 
     </div>

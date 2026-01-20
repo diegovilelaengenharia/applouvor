@@ -771,7 +771,7 @@ renderAppHeader('Avisos');
             </div>
 
             <div style="margin-top: 32px;">
-                <button type="submit" class="btn-primary ripple w-full" style="justify-content: center;">
+                <button type="submit" class="btn-action-save ripple w-full" style="justify-content: center;">
                     <i data-lucide="send"></i> Publicar Aviso
                 </button>
             </div>
@@ -824,7 +824,7 @@ renderAppHeader('Avisos');
             </div>
 
             <div style="margin-top: 32px;">
-                <button type="submit" class="btn-primary ripple w-full" style="justify-content: center; background: var(--primary-gray-dark);">
+                <button type="submit" class="btn-action-save ripple w-full" style="justify-content: center;">
                     <i data-lucide="save"></i> Salvar Alterações
                 </button>
             </div>

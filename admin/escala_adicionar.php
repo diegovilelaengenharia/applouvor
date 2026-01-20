@@ -311,7 +311,7 @@ renderAppHeader('Nova Escala');
             <div style="display: flex; gap: 12px; margin-top: 20px;">
                 <!-- Updated Button Colors as requested -->
                 <a href="escala.php" class="btn-outline ripple" style="flex: 1; justify-content: center; text-decoration: none; background: #F59E0B !important; color: white; border-color: #F59E0B;">Cancelar</a>
-                <button type="button" onclick="nextStep(2)" class="btn-primary ripple" style="flex: 2; justify-content: center; background: #10B981 !important; border-color: #10B981; color: white;">
+                <button type="button" onclick="nextStep(2)" class="btn-action-save ripple" style="flex: 2; justify-content: center;">
                     Próximo <i data-lucide="arrow-right" style="width: 18px;"></i>
                 </button>
             </div>
@@ -346,7 +346,7 @@ renderAppHeader('Nova Escala');
                     <i data-lucide="arrow-left" style="width: 18px;"></i> Voltar
                 </button>
                 <button type="button" onclick="nextStep(3)" class="btn-outline ripple" style="flex: 1; justify-content: center; background: #6B7280; border-color: #6B7280; color: white;">Pular</button>
-                <button type="button" onclick="nextStep(3)" class="btn-primary ripple" style="flex: 2; justify-content: center; background: #10B981 !important; border-color: #10B981; color: white;">
+                <button type="button" onclick="nextStep(3)" class="btn-action-save ripple" style="flex: 2; justify-content: center;">
                     Próximo <i data-lucide="arrow-right" style="width: 18px;"></i>
                 </button>
             </div>
@@ -398,7 +398,7 @@ renderAppHeader('Nova Escala');
                 <button type="button" onclick="prevStep(2)" class="btn-outline ripple" style="flex: 1; justify-content: center; background: #F59E0B !important; border-color: #F59E0B; color: white;">
                     <i data-lucide="arrow-left" style="width: 18px;"></i> Voltar
                 </button>
-                <button type="submit" class="btn-primary ripple" style="flex: 2; justify-content: center; box-shadow: var(--shadow-glow); background: #10B981 !important; border-color: #10B981; color: white;">
+                <button type="submit" class="btn-action-save ripple" style="flex: 2; justify-content: center; box-shadow: var(--shadow-glow);">
                     <i data-lucide="check"></i> Finalizar Escala
                 </button>
             </div>
