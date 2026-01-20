@@ -66,170 +66,89 @@ function renderAppHeader($title = 'Louvor PIB')
     </head>
 
     <body>
-        <!-- Global Navigation Buttons (Fixed Top Right) -->
-        <div style="
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        ">
-            <!-- WhatsApp Button -->
-            <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #0D6EFD 0%, #0B5ED7 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-                box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                </svg>
-            </a>
-
-            <!-- Notification Bell (Maintenance Mode) -->
-            <button onclick="showMaintenanceModal()" class="ripple" style="
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: none;
-                box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-                transition: all 0.3s ease;
-                cursor: pointer;
-                position: relative;
-            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                <i data-lucide="bell" style="color: white; width: 22px; height: 22px;"></i>
-                <?php if ($notificationCount > 0): ?>
-                    <span style="
-                        position: absolute;
-                        top: -4px;
-                        right: -4px;
-                        background: #EF4444;
-                        color: white;
-                        font-size: 0.7rem;
-                        font-weight: 700;
-                        padding: 2px 6px;
-                        border-radius: 10px;
-                        min-width: 20px;
-                        text-align: center;
-                        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-                    "><?= $notificationCount ?></span>
-                <?php else: ?>
-                    <span style="
-                        position: absolute;
-                        top: 8px;
-                        right: 8px;
-                        width: 8px;
-                        height: 8px;
-                        background: #F59E0B;
-                        border-radius: 50%;
-                        border: 2px solid rgba(255,255,255,0.3);
-                    "></span>
-                <?php endif; ?>
-            </button>
-
-            <!-- User Avatar -->
-            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #047857 0%, #065f46 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
-                cursor: pointer;
-                border: 2px solid rgba(255,255,255,0.3);
-                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                <?php if (!empty($avatar)): ?>
-                    <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                <?php else: ?>
-                    <span style="font-weight: 700; font-size: 1.1rem; color: white;">
-                        <?= $userInitials ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Maintenance Modal (Global) -->
-        <div id="maintenance-modal-global" class="bottom-sheet-overlay" onclick="closeMaintenanceModal()">
-            <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="max-width: 400px; margin: 0 auto;">
-                <div style="text-align: center; padding: 40px 20px;">
-                    <div style="
-                        width: 80px;
-                        height: 80px;
-                        background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        margin: 0 auto 20px;
-                        font-size: 3rem;
-                    ">
-                        🔧
-                    </div>
-                    <h3 style="margin: 0 0 12px; font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">Funcionalidade em Desenvolvimento</h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6;">
-                        O sistema de notificações está sendo implementado e estará disponível em breve! Por enquanto, acesse o <strong>Quadro de Avisos</strong> para ver as atualizações.
-                    </p>
-                    <div style="display: flex; gap: 12px;">
-                        <a href="avisos.php" class="btn-primary ripple" style="
-                            flex: 1;
-                            justify-content: center;
-                            text-decoration: none;
-                            padding: 14px;
-                        ">
-                            <i data-lucide="bell" style="width: 18px;"></i>
-                            Ver Avisos
-                        </a>
-                        <button onclick="closeMaintenanceModal()" class="ripple" style="
-                            flex: 1;
-                            padding: 14px;
-                            background: var(--bg-tertiary);
-                            border: 1px solid var(--border-subtle);
-                            border-radius: 12px;
-                            color: var(--text-primary);
-                            font-weight: 600;
-                            cursor: pointer;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            gap: 8px;
-                        ">
-                            <i data-lucide="x" style="width: 18px;"></i>
-                            Fechar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function showMaintenanceModal() {
-                document.getElementById('maintenance-modal-global').classList.add('active');
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-            }
-
-            function closeMaintenanceModal() {
-                document.getElementById('maintenance-modal-global').classList.remove('active');
-            }
-        </script>
 
         <!-- Main Content Wrapper -->
         <main class="app-content">
+        <?php
+    }
+
+    /**
+     * Renderiza os botões de navegação global (WhatsApp, Sininho, Avatar)
+     */
+    function renderGlobalNavButtons()
+    {
+        global $pdo;
+        $avatar = $_SESSION['user_avatar'] ?? null;
+        $userInitials = substr($_SESSION['user_name'] ?? 'U', 0, 1);
+
+        // Buscar contagem de avisos não lidos
+        $notificationCount = 0;
+        try {
+            if (isset($pdo)) {
+                $stmt = $pdo->query("
+                    SELECT COUNT(*) 
+                    FROM avisos 
+                    WHERE archived_at IS NULL 
+                      AND (priority = 'urgent' OR priority = 'important')
+                      AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                ");
+                $notificationCount = $stmt->fetchColumn();
+            }
+        } catch (Exception $e) {
+            // Silently fail
+        }
+        ?>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <!-- WhatsApp -->
+                <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
+                width: 40px; height: 40px; border-radius: 50%;
+                background: rgba(255,255,255,0.2);
+                display: flex; align-items: center; justify-content: center;
+                text-decoration: none; border: 2px solid rgba(255,255,255,0.3);
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                    </svg>
+                </a>
+
+                <!-- Sininho -->
+                <button onclick="openSheet('sheet-avisos')" class="ripple" style="
+                width: 40px; height: 40px; border-radius: 50%;
+                background: rgba(255,255,255,0.2);
+                display: flex; align-items: center; justify-content: center;
+                border: none; cursor: pointer; position: relative;
+                border: 2px solid rgba(255,255,255,0.3);
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    <i data-lucide="bell" style="color: white; width: 18px; height: 18px;"></i>
+                    <?php if ($notificationCount > 0): ?>
+                        <span style="
+                        position: absolute; top: -2px; right: -2px;
+                        background: #EF4444; color: white;
+                        font-size: 0.65rem; font-weight: 700;
+                        padding: 2px 5px; border-radius: 10px;
+                        min-width: 16px; text-align: center;
+                    "><?= $notificationCount ?></span>
+                    <?php endif; ?>
+                </button>
+
+                <!-- Avatar -->
+                <div onclick="openSheet('sheet-perfil')" class="ripple" style="
+                width: 40px; height: 40px; border-radius: 50%;
+                background: rgba(255,255,255,0.2);
+                display: flex; align-items: center; justify-content: center;
+                overflow: hidden; cursor: pointer;
+                border: 2px solid rgba(255,255,255,0.3);
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    <?php if (!empty($avatar)): ?>
+                        <img src="../assets/uploads/<?= htmlspecialchars($avatar) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php else: ?>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: white;"><?= $userInitials ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
         <?php
     }
 
@@ -483,16 +402,6 @@ function renderAppHeader($title = 'Louvor PIB')
             <div class="bottom-sheet-content" onclick="event.stopPropagation()">
                 <div class="sheet-header">Gestão</div>
                 <div class="sheet-grid">
-                    <a href="lider.php" class="sheet-item ripple">
-                        <div class="sheet-icon-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="3"></circle>
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                            </svg>
-                        </div>
-                        <span>Líder</span>
-                    </a>
-
                     <a href="escala.php" class="sheet-item ripple">
                         <div class="sheet-icon-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -618,6 +527,27 @@ function renderAppHeader($title = 'Louvor PIB')
                             </svg>
                         </div>
                         <span>Aniversários</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Avisos Sheet (from bell button) -->
+        <div id="sheet-avisos" class="bottom-sheet-overlay" onclick="closeSheet(this)">
+            <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+                <div class="sheet-header">Avisos</div>
+                <div style="padding: 20px; text-align: center;">
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Acesse o quadro de avisos para ver todas as atualizações do ministério.</p>
+                    <a href="avisos.php" class="btn-primary ripple" style="
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        padding: 14px 24px;
+                        text-decoration: none;
+                    ">
+                        <i data-lucide="bell" style="width: 18px;"></i>
+                        Ver Avisos
                     </a>
                 </div>
             </div>

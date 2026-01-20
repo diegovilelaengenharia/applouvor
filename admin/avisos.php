@@ -274,6 +274,10 @@ renderAppHeader('Avisos');
     position: relative;
     overflow: visible;
 ">
+    <!-- Navigation Buttons (Top Right) -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <?php renderGlobalNavButtons(); ?>
+    </div>
     <!-- Navigation Row -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <a href="index.php" class="ripple" style="
@@ -346,13 +350,13 @@ renderAppHeader('Avisos');
         </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
+    <div id="avisos-hero-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+        <div style="flex: 1; min-width: 0;">
             <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Quadro de Avisos</h1>
             <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Atualizações do Ministério</p>
         </div>
         <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <button onclick="openModal('modal-create')" class="ripple" style="
+            <button id="btn-create-aviso" onclick="openModal('modal-create')" class="ripple" style="
                 background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
                 border: none;
                 padding: 12px 24px;
@@ -367,8 +371,9 @@ renderAppHeader('Avisos');
                 cursor: pointer;
                 box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
                 transition: all 0.3s ease;
+                flex-shrink: 0;
             " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                <i data-lucide="plus" style="width: 20px;"></i> Novo Aviso
+                <i data-lucide="plus" style="width: 20px;"></i> <span class="btn-text">Novo Aviso</span>
             </button>
         <?php endif; ?>
     </div>

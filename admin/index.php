@@ -87,6 +87,11 @@ renderAppHeader('Início');
         position: relative;
         overflow: visible;
     ">
+        <!-- Navigation Buttons (Top Right) -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+            <?php renderGlobalNavButtons(); ?>
+        </div>
+
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
                 <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Gestão Louvor</h1>
