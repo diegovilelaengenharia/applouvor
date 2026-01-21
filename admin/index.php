@@ -222,6 +222,15 @@ renderAppHeader('Início');
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 32px;">
 
+        <!-- Minhas Escalas (Agora o 1º) -->
+        <a href="escalas.php?mine=1" class="interact-card bg-gradient-info" style="border-radius: 20px; padding: 20px; text-decoration: none;">
+            <div class="icon-circle" style="color: #2563eb;">
+                <i data-lucide="calendar-check" style="width: 24px;"></i>
+            </div>
+            <div class="card-label">Minha Agenda</div>
+            <div class="card-value">Ver tudo</div>
+        </a>
+
         <!-- Avisos -->
         <a href="avisos.php" class="interact-card bg-gradient-warning" style="border-radius: 20px; padding: 20px; text-decoration: none;">
             <div class="icon-circle" style="color: #d97706;">
@@ -244,56 +253,213 @@ renderAppHeader('Início');
             </div>
         </a>
 
-        <!-- Minhas Escalas -->
-        <a href="escalas.php?mine=1" class="interact-card bg-gradient-info" style="border-radius: 20px; padding: 20px; text-decoration: none;">
-            <div class="icon-circle" style="color: #2563eb;">
-                <i data-lucide="calendar-check" style="width: 24px;"></i>
-            </div>
-            <div class="card-label">Minha Agenda</div>
-            <div class="card-value">Ver tudo</div>
-        </a>
-
     </div>
 
-    <!-- 3. ACTIONS: Botões Rápidos e Limpos -->
-    <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 16px; letter-spacing: 0.5px; text-transform: uppercase;">Acesso Rápido</h3>
+    <!-- 3. ACTIONS: Customizável -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin: 0; letter-spacing: 0.5px; text-transform: uppercase;">Acesso Rápido</h3>
+        <button onclick="openSheet('quickAccessSheet')" class="ripple" style="
+            background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #64748b; cursor: pointer;
+        ">
+            <i data-lucide="settings-2" style="width: 16px;"></i>
+        </button>
+    </div>
 
     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <?php
+        // Buscar Preferências
+        $stmtPrefs = $pdo->prepare("SELECT dashboard_prefs FROM users WHERE id = ?");
+        $stmtPrefs->execute([$userId]);
+        $userPrefsJson = $stmtPrefs->fetchColumn();
+        $userPrefs = json_decode($userPrefsJson ?? '', true);
 
-        <a href="repertorio.php" class="ripple" style="
-            flex: 1; min-width: 140px;
-            background: white; border: 1px solid #e2e8f0;
-            padding: 16px; border-radius: 16px;
-            text-decoration: none; color: #475569;
-            display: flex; align-items: center; gap: 12px;
-            font-weight: 600; font-size: 0.95rem;
-            transition: all 0.2s;
-        " onmouseover="this.style.borderColor='#cbd5e1'" onmouseout="this.style.borderColor='#e2e8f0'">
-            <div style="background: #f1f5f9; padding: 8px; border-radius: 10px;">
-                <i data-lucide="music-2" style="width: 20px; color: #64748b;"></i>
-            </div>
-            Repertório
-        </a>
+        // Default Items se não houver prefs
+        if (!$userPrefs || !isset($userPrefs['quick_access'])) {
+            $quickAccessItems = ['repertorio', 'ausencia'];
+        } else {
+            $quickAccessItems = $userPrefs['quick_access'];
+        }
 
-        <a href="indisponibilidade.php" class="ripple" style="
-            flex: 1; min-width: 140px;
-            background: white; border: 1px solid #e2e8f0;
-            padding: 16px; border-radius: 16px;
-            text-decoration: none; color: #475569;
-            display: flex; align-items: center; gap: 12px;
-            font-weight: 600; font-size: 0.95rem;
-            transition: all 0.2s;
-        " onmouseover="this.style.borderColor='#cbd5e1'" onmouseout="this.style.borderColor='#e2e8f0'">
-            <div style="background: #fff1f2; padding: 8px; border-radius: 10px;">
-                <i data-lucide="calendar-off" style="width: 20px; color: #be123c;"></i>
-            </div>
-            Avisar Ausência
-        </a>
+        // Definição de todos os itens disponíveis
+        $allItems = [
+            'repertorio' => [
+                'label' => 'Repertório',
+                'icon' => 'music-2',
+                'color' => '#64748b',
+                'bg' => '#f1f5f9',
+                'url' => 'repertorio.php'
+            ],
+            'ausencia' => [
+                'label' => 'Avisar Ausência',
+                'icon' => 'calendar-off',
+                'color' => '#be123c',
+                'bg' => '#fff1f2',
+                'url' => 'indisponibilidade.php'
+            ],
+            'escalas' => [
+                'label' => 'Escalas',
+                'icon' => 'calendar',
+                'color' => '#059669',
+                'bg' => '#ecfdf5',
+                'url' => 'escalas.php'
+            ],
+            'membros' => [
+                'label' => 'Membros',
+                'icon' => 'users',
+                'color' => '#4f46e5',
+                'bg' => '#eef2ff',
+                'url' => 'membros.php'
+            ],
+            'perfil' => [
+                'label' => 'Meu Perfil',
+                'icon' => 'user',
+                'color' => '#d97706',
+                'bg' => '#fffbeb',
+                'url' => 'perfil.php'
+            ]
+        ];
+        ?>
+
+        <?php foreach ($quickAccessItems as $key):
+            if (isset($allItems[$key])):
+                $item = $allItems[$key];
+        ?>
+                <a href="<?= $item['url'] ?>" class="ripple" style="
+                flex: 1; min-width: 140px;
+                background: white; border: 1px solid #e2e8f0;
+                padding: 16px; border-radius: 16px;
+                text-decoration: none; color: #475569;
+                display: flex; align-items: center; gap: 12px;
+                font-weight: 600; font-size: 0.95rem;
+                transition: all 0.2s;
+            ">
+                    <div style="background: <?= $item['bg'] ?>; padding: 8px; border-radius: 10px;">
+                        <i data-lucide="<?= $item['icon'] ?>" style="width: 20px; color: <?= $item['color'] ?>;"></i>
+                    </div>
+                    <?= $item['label'] ?>
+                </a>
+        <?php endif;
+        endforeach; ?>
+
+        <!-- Botão Adicionar se estiver vazio -->
+        <?php if (empty($quickAccessItems)): ?>
+            <button onclick="openSheet('quickAccessSheet')" style="
+                flex: 1; min-width: 140px; padding: 16px; border: 1px dashed #cbd5e1; 
+                background: transparent; color: #94a3b8; border-radius: 16px; font-weight: 600; cursor: pointer;
+            ">
+                + Personalizar
+            </button>
+        <?php endif; ?>
 
     </div>
 
 </div>
 
 <div style="height: 60px;"></div>
+
+<!-- SHEET CONFIGURAÇÃO -->
+<div id="quickAccessSheet" style="
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000;
+">
+    <div onclick="closeSheet('quickAccessSheet')" style="
+        position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+    "></div>
+
+    <div style="
+        position: absolute; bottom: 0; left: 0; width: 100%;
+        background: white; border-radius: 20px 20px 0 0;
+        padding: 24px; padding-bottom: 40px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        animation: slideUp 0.3s ease-out;
+    ">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Personalizar Atalhos</h3>
+            <button onclick="closeSheet('quickAccessSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: #64748b;">
+                <i data-lucide="x" style="width: 24px;"></i>
+            </button>
+        </div>
+
+        <form id="formQuickAccess">
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+                <?php foreach ($allItems as $key => $item):
+                    $isChecked = in_array($key, $quickAccessItems);
+                ?>
+                    <label style="
+                        display: flex; align-items: center; justify-content: space-between;
+                        padding: 12px 16px; background: #f8fafc; border-radius: 12px;
+                        border: 1px solid #e2e8f0; cursor: pointer;
+                    ">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="background: <?= $item['bg'] ?>; padding: 6px; border-radius: 8px;">
+                                <i data-lucide="<?= $item['icon'] ?>" style="width: 18px; color: <?= $item['color'] ?>;"></i>
+                            </div>
+                            <span style="font-weight: 600; color: #334155;"><?= $item['label'] ?></span>
+                        </div>
+                        <input type="checkbox" name="quick_access[]" value="<?= $key ?>" <?= $isChecked ? 'checked' : '' ?>
+                            style="width: 18px; height: 18px; accent-color: #166534;">
+                    </label>
+                <?php endforeach; ?>
+            </div>
+
+            <button type="button" onclick="saveQuickAccess()" style="
+                width: 100%; padding: 14px; border: none; background: #166534; 
+                color: white; font-weight: 700; border-radius: 12px; font-size: 1rem;
+                cursor: pointer;
+            ">
+                Salvar Alterações
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openSheet(id) {
+        document.getElementById(id).style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSheet(id) {
+        document.getElementById(id).style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function saveQuickAccess() {
+        const form = document.getElementById('formQuickAccess');
+        const formData = new FormData(form);
+        const selected = [];
+
+        for (const entry of formData.entries()) {
+            selected.push(entry[1]);
+        }
+
+        // AJAX Save
+        fetch('ajax_save_dashboard.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    quick_access: selected
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Erro ao salvar: ' + (data.error || 'Desconhecido'));
+                }
+            })
+            .catch(err => alert('Erro de conexão'));
+    }
+
+    // Animation
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+`;
+    document.head.appendChild(styleSheet);
+</script>
 
 <?php renderAppFooter(); ?>
