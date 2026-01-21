@@ -8,7 +8,6 @@ $search = $_GET['q'] ?? '';
 $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório');
-?>
 
 renderPageHeader('Repertório');
 ?>
