@@ -115,6 +115,7 @@ renderAppHeader('Membros');
     }
 </style>
 
+<?php
 // Botão Adicionar (Ação Direita)
 $addButton = '
 <button onclick="openAddModal()" class="ripple" style="

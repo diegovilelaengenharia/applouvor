@@ -72,11 +72,80 @@ renderPageHeader('Repertório');
         </div>
     <?php endif; ?>
 
-    <!-- Implementar Pastas e Artistas conforme necessário, seguindo o padrão acima -->
-    <?php if ($tab === 'pastas'): ?>
-        <div style="text-align: center; color: #94a3b8; padding: 40px;">
-            <i data-lucide="folder-open" style="width: 48px; height: 48px; margin-bottom: 16px;"></i>
-            <p>Visualização de Pastas em desenvolvimento.</p>
+    <!-- Conteúdo: Pastas -->
+    <?php if ($tab === 'pastas'):
+        // Lógica de Pastas (Exemplo: Por Categoria, ou tabela de pastas se existir)
+        // Como não temos tabela de pastas explícita, vamos agrupar por Categoria das músicas
+        try {
+            $sql = "SELECT category as name, COUNT(*) as count FROM songs WHERE category IS NOT NULL AND category != '' GROUP BY category ORDER BY category ASC";
+            $stmt = $pdo->query($sql);
+            $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $folders = [];
+        }
+    ?>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <?php foreach ($folders as $folder): ?>
+                <a href="repertorio.php?tab=musicas&q=category:<?= urlencode($folder['name']) ?>" class="ripple" style="
+                background: white; border-radius: 16px; padding: 16px; text-decoration: none; border: 1px solid #f1f5f9;
+                display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: all 0.2s;
+            ">
+                    <div style="
+                    width: 48px; height: 48px; background: #dcfce7; border-radius: 12px; color: #166534;
+                    display: flex; align-items: center; justify-content: center;
+                ">
+                        <i data-lucide="folder" style="width: 24px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem; margin-bottom: 4px;"><?= htmlspecialchars($folder['name']) ?></div>
+                        <div style="font-size: 0.8rem; color: #64748b;"><?= $folder['count'] ?> músicas</div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+            <?php if (empty($folders)): ?>
+                <div style="grid-column: span 2; text-align: center; padding: 40px; color: #94a3b8;">
+                    <p>Nenhuma categoria encontrada.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Conteúdo: Artistas -->
+    <?php if ($tab === 'artistas'):
+        try {
+            $sql = "SELECT artist as name, COUNT(*) as count FROM songs WHERE artist IS NOT NULL AND artist != '' GROUP BY artist ORDER BY artist ASC";
+            $stmt = $pdo->query($sql);
+            $artists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $artists = [];
+        }
+    ?>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <?php foreach ($artists as $artist): ?>
+                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="ripple" style="
+                display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; border-radius: 12px; background: white; border: 1px solid white; transition: background 0.2s;
+            ">
+                    <!-- Avatar do Artista -->
+                    <div style="
+                    width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; 
+                    background-image: url('https://ui-avatars.com/api/?name=<?= urlencode($artist['name']) ?>&background=random&color=fff&size=96');
+                    background-size: cover;
+                "></div>
+
+                    <div style="flex: 1;">
+                        <div style="font-weight: 700; color: #1e293b; font-size: 1rem;"><?= htmlspecialchars($artist['name']) ?></div>
+                        <div style="color: #64748b; font-size: 0.85rem;"><?= $artist['count'] ?> músicas</div>
+                    </div>
+
+                    <i data-lucide="chevron-right" style="width: 20px; color: #cbd5e1;"></i>
+                </a>
+                <div style="height: 1px; background: #f1f5f9; margin: 0 12px;"></div>
+            <?php endforeach; ?>
+            <?php if (empty($artists)): ?>
+                <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                    <p>Nenhum artista encontrado.</p>
+                </div>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 </div>

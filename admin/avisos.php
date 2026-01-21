@@ -265,6 +265,29 @@ renderAppHeader('Avisos');
     }
 </style>
 
+<?php
+// Botão de Criar (Apenas Admin)
+$actionButton = null;
+if ($_SESSION['user_role'] === 'admin') {
+    $actionButton = '
+    <button onclick="openModal(\'modal-create\')" class="ripple" style="
+        background: #fef3c7; 
+        color: #d97706; 
+        border: none; 
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        font-weight: 700; 
+        font-size: 0.9rem; 
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+    ">
+        <i data-lucide="plus" style="width: 20px;"></i>
+    </button>';
+}
+
+renderPageHeader('Quadro de Avisos', 'Atualizações do Ministério', $actionButton);
+?>
+
 <!-- Floating Search Bar -->
 <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
     <form method="GET" style="margin: 0;">
