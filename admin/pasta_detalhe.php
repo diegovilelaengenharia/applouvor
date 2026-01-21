@@ -3,137 +3,159 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-if (!isset($_GET['category'])) {
+if (!isset($_GET['id'])) {
     header('Location: repertorio.php?tab=pastas');
     exit;
 }
 
-$category = urldecode($_GET['category']);
+$tagId = $_GET['id'];
 
-// Buscar músicas da categoria
-$stmt = $pdo->prepare("SELECT * FROM songs WHERE category = ? ORDER BY title ASC");
-$stmt->execute([$category]);
-$songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// 1. Buscar Detalhes da Tag
+$stmtTag = $pdo->prepare("SELECT * FROM tags WHERE id = ?");
+$stmtTag->execute([$tagId]);
+$tag = $stmtTag->fetch(PDO::FETCH_ASSOC);
 
-renderAppHeader('Pasta');
+if (!$tag) {
+    echo "Pasta não encontrada.";
+    exit;
+}
+
+// 2. Buscar Músicas dessa Tag
+$stmtSongs = $pdo->prepare("
+    SELECT s.* 
+    FROM songs s
+    JOIN song_tags st ON s.id = st.song_id
+    WHERE st.tag_id = ?
+    ORDER BY s.title ASC
+");
+$stmtSongs->execute([$tagId]);
+$songs = $stmtSongs->fetchAll(PDO::FETCH_ASSOC);
+
+renderAppHeader($tag['name']);
 ?>
 
 <style>
-    .category-header {
-        text-align: center;
-        padding: 32px 16px;
-        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    .song-card {
+        background: white;
+        border: 1px solid var(--border-subtle);
         border-radius: 16px;
-        margin-bottom: 24px;
-        color: white;
+        padding: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        transition: transform 0.2s;
     }
 
-    .category-icon-large {
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 20px;
+    .song-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .song-icon {
+        width: 48px;
+        height: 48px;
+        background: #f1f5f9;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 16px;
-    }
-
-    .category-name {
-        font-size: 1.8rem;
-        font-weight: 800;
-        margin-bottom: 8px;
-    }
-
-    .category-count {
-        font-size: 1rem;
-        opacity: 0.9;
+        color: #64748b;
     }
 </style>
 
-<!-- Hero Header -->
+<!-- Hero da Pasta -->
 <div style="
-    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); 
+    background: <?= $tag['color'] ?: '#047857' ?>; 
     margin: -24px -16px 32px -16px; 
     padding: 32px 24px 64px 24px; 
     border-radius: 0 0 32px 32px; 
     box-shadow: var(--shadow-md);
+    color: white;
+    text-align: center;
     position: relative;
-    overflow: visible;
 ">
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <a href="repertorio.php?tab=pastas" class="ripple" style="
-            width: 40px; 
-            height: 40px; 
-            border-radius: 12px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: white; 
-            background: rgba(255,255,255,0.2); 
-            text-decoration: none;
-            backdrop-filter: blur(4px);
-        ">
-            <i data-lucide="arrow-left" style="width: 20px;"></i>
+    <!-- Nav -->
+    <div style="position: absolute; top: 24px; left: 24px;">
+        <a href="repertorio.php?tab=pastas" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600; background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 20px;">
+            <i data-lucide="arrow-left" style="width: 18px;"></i> Voltar
         </a>
-
-        <div style="display: flex; align-items: center;">`r`n            <?php renderGlobalNavButtons(); ?>`r`n        </div>
     </div>
 
-    <!-- Category Info in Hero -->
-    <div style="text-align: center;">
-        <div style="
-            width: 80px; 
-            height: 80px; 
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 20px; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-bottom: 16px;
-            backdrop-filter: blur(4px);
-        ">
-            <i data-lucide="folder" style="width: 40px; height: 40px; color: white;"></i>
-        </div>
-        <h1 style="color: white; margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($category) ?></h1>
-        <p style="color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 500; font-size: 1rem;">
-            <i data-lucide="music" style="width: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
-            <?= count($songs) ?> música<?= count($songs) > 1 ? 's' : '' ?>
-        </p>
+    <!-- Icone Grande -->
+    <div style="
+        width: 80px; 
+        height: 80px; 
+        background: rgba(255,255,255,0.2); 
+        border-radius: 24px; 
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center; 
+        margin-bottom: 16px;
+        backdrop-filter: blur(4px);
+    ">
+        <i data-lucide="folder-open" style="width: 40px; height: 40px; color: white;"></i>
     </div>
+
+    <h1 style="margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -1px;"><?= htmlspecialchars($tag['name']) ?></h1>
+    <p style="margin-top: 8px; font-size: 1rem; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <?= htmlspecialchars($tag['description']) ?: count($songs) . ' músicas classificadas' ?>
+    </p>
 </div>
 
 <!-- Lista de Músicas -->
-<div style="margin-bottom: 16px;">
-    <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
-        Músicas
-    </h3>
+<div style="margin-top: -40px; position: relative; padding: 0 16px;">
+    <?php if (empty($songs)): ?>
+        <div style="background: white; border-radius: 20px; padding: 40px; text-align: center; box-shadow: var(--shadow-sm);">
+            <div style="background: #f1f5f9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i data-lucide="music" style="width: 32px; color: #94a3b8;"></i>
+            </div>
+            <h3 style="color: #334155; font-size: 1.1rem; margin-bottom: 8px;">Pasta Vazia</h3>
+            <p style="color: #64748b; font-size: 0.95rem;">Nenhuma música foi marcada com esta classificação ainda.</p>
+            <a href="repertorio.php" style="display: inline-block; margin-top: 16px; color: <?= $tag['color'] ?: '#047857' ?>; font-weight: 700;">Ir para Repertório</a>
+        </div>
+    <?php else: ?>
+        <h3 style="margin-bottom: 16px; font-size: 0.9rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Músicas nesta pasta (<?= count($songs) ?>)</h3>
+
+        <?php foreach ($songs as $song): ?>
+            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="song-card ripple">
+                <div class="song-icon">
+                    <i data-lucide="music" style="width: 24px;"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 700; color: var(--text-primary); font-size: 1rem; margin-bottom: 2px;">
+                        <?= htmlspecialchars($song['title']) ?>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        <?= htmlspecialchars($song['artist']) ?>
+                        <?php if ($song['tone']): ?> • <strong style="color: var(--primary-green);"><?= $song['tone'] ?></strong><?php endif; ?>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" style="width: 20px; color: var(--text-muted);"></i>
+            </a>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
 
-<?php foreach ($songs as $song): ?>
-    <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="song-card ripple" style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: all 0.2s;">
-        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #2D7A4F 0%, #1a4d2e 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-            <i data-lucide="music" style="width: 24px; height: 24px; color: white;"></i>
-        </div>
-        <div style="flex: 1; min-width: 0;">
-            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                <?= htmlspecialchars($song['title']) ?>
-            </div>
-            <div style="font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                <?= htmlspecialchars($song['artist']) ?>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted);">
-                <?php if ($song['tone']): ?>
-                    <span>Tom: <strong><?= htmlspecialchars($song['tone']) ?></strong></span>
-                <?php endif; ?>
-                <?php if ($song['bpm']): ?>
-                    <span>• BPM: <?= $song['bpm'] ?></span>
-                <?php endif; ?>
-            </div>
-        </div>
-        <i data-lucide="chevron-right" style="width: 20px; color: var(--text-muted);"></i>
-    </a>
-<?php endforeach; ?>
+<!-- Botão Editar Pasta (Flutuante) -->
+<a href="classificacoes.php" class="ripple" style="
+    position: fixed; 
+    bottom: 24px; 
+    right: 24px; 
+    width: 56px; 
+    height: 56px; 
+    border-radius: 50%; 
+    background: <?= $tag['color'] ?: '#047857' ?>; 
+    color: white; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 100;
+">
+    <i data-lucide="settings" style="width: 24px;"></i>
+</a>
 
 <?php renderAppFooter(); ?>
