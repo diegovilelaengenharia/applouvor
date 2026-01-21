@@ -4,7 +4,7 @@
     "description": "App de Gestão do Ministério de Louvor PIB Oliveira",
     "start_url": "./index.php",
     "scope": ".",
-    "display": "standalone",
+    "display": "minimal-ui",
     "orientation": "portrait",
     "background_color": "#F3F4F6",
     "theme_color": "#2D7A4F",

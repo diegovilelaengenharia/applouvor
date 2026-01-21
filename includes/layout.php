@@ -25,6 +25,14 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+        <!-- Open Graph / WhatsApp Sharing -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="App Louvor PIB Oliveira">
+        <meta property="og:description" content="Gestão de escalas, repertório e ministério de louvor da PIB Oliveira.">
+        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando possível -->
+        <meta property="og:url" content="https://app.piboliveira.com.br/">
+        <meta name="theme-color" content="#2D7A4F">
+
         <!-- Ícones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
