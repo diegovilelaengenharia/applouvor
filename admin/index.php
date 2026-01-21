@@ -4,240 +4,273 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Configurações do Usuário
 $userId = $_SESSION['user_id'] ?? 1;
 
-// 1. BUSCAR AVISOS (Recentes)
-$recentAvisos = [];
+// --- DADOS REAIS ---
+// 1. Avisos (Apenas alertas não lidos/recentes)
+$avisos = [];
 try {
-    $stmtA = $pdo->query("
-        SELECT a.*, u.name as author_name
-        FROM avisos a
-        LEFT JOIN users u ON a.created_by = u.id
-        WHERE a.archived_at IS NULL
-        ORDER BY a.is_pinned DESC, a.created_at DESC
-        LIMIT 3
+    // Busca apenas urgentes ou importantes recentes
+    $stmt = $pdo->query("
+        SELECT count(*) as total, 
+        (SELECT title FROM avisos WHERE archived_at IS NULL ORDER BY is_pinned DESC, created_at DESC LIMIT 1) as last_title
+        FROM avisos WHERE archived_at IS NULL
     ");
-    $recentAvisos = $stmtA->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) { /* Silêncio se tabela não existir */
+    $avisosData = $stmt->fetch(PDO::FETCH_ASSOC);
+    $totalAvisos = $avisosData['total'] ?? 0;
+    $ultimoAviso = $avisosData['last_title'] ?? 'Nenhum aviso novo';
+} catch (Exception $e) {
+    $totalAvisos = 0;
+    $ultimoAviso = '';
 }
 
-// 2. BUSCAR MINHAS ESCALAS (Futuras)
-$mySchedules = [];
+// 2. Minha Próxima Escala
+$nextSchedule = null;
 try {
-    $stmtS = $pdo->prepare("
+    $stmt = $pdo->prepare("
         SELECT s.* 
         FROM schedules s
         JOIN schedule_users su ON s.id = su.schedule_id
         WHERE su.user_id = ? AND s.event_date >= CURDATE()
         ORDER BY s.event_date ASC
-        LIMIT 5
+        LIMIT 1
     ");
-    $stmtS->execute([$userId]);
-    $mySchedules = $stmtS->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) { /* Silêncio */
+    $stmt->execute([$userId]);
+    $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
 }
 
-// 3. BUSCAR ANIVERSARIANTES DO MÊS
-$birthdays = [];
+// 3. Aniversariantes (Quantidade no mês)
+$niverCount = 0;
 try {
-    // Busca usuários que fazem aniversário no mês atual
-    // birth_date deve ser DATE ou VARCHAR YYYY-MM-DD
-    $stmtB = $pdo->prepare("
-        SELECT name, photo, birth_date, DAY(birth_date) as day
-        FROM users 
-        WHERE MONTH(birth_date) = MONTH(CURRENT_DATE())
-        ORDER BY DAY(birth_date) ASC
-    ");
-    $stmtB->execute();
-    $birthdays = $stmtB->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) { /* Silêncio */
+    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE())");
+    $niverCount = $stmt->fetchColumn();
+} catch (Exception $e) {
 }
 
 renderAppHeader('Início');
 ?>
 
-<!-- Hero Section Minimalista -->
-<div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 24px -16px; 
-    padding: 32px 24px 48px 24px; 
-    border-radius: 0 0 32px 32px; 
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    position: relative;
-">
-    <div style="display: flex; justify-content: space-between; align-items: start;">
-        <div>
-            <h1 style="color: white; margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">LouveApp</h1>
-            <p style="color: rgba(255,255,255,0.8); margin: 4px 0 0 0; font-size: 0.9rem;">Visão Geral</p>
-        </div>
+<!-- Estilos Específicos para Harmonia -->
+<style>
+    .dashboard-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        border: 1px solid #f1f5f9;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+        overflow: hidden;
+    }
 
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        border-color: #e2e8f0;
+    }
+
+    .card-icon-bg {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        font-size: 1.2rem;
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .card-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1.3;
+    }
+
+    .card-subtext {
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .status-indicator {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        color: #1e293b;
+        font-weight: 800;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+
+<!-- Hero Simples e Saudação -->
+<div style="padding: 24px 20px 32px 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h1 style="margin: 0; font-size: 1.5rem; color: #1e293b; font-weight: 800;">Olá, <?= explode(' ', $_SESSION['user_name'] ?? 'Membro')[0] ?>! 👋</h1>
+            <p style="margin: 4px 0 0 0; color: #64748b; font-size: 0.9rem;">Bem-vindo ao LouveApp</p>
+        </div>
         <?php renderGlobalNavButtons(); ?>
     </div>
-</div>
 
-<div style="max-width: 800px; margin: -30px auto 0 auto; padding: 0 16px; position: relative; z-index: 10;">
-
-    <!-- SEÇÃO 1: AVISOS -->
-    <div style="background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); padding: 20px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="margin: 0; font-size: 1rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="bell" style="width: 18px; color: #f59e0b;"></i> Avisos
-            </h3>
-            <a href="avisos.php" style="font-size: 0.8rem; color: #059669; text-decoration: none; font-weight: 600;">Ver todos</a>
-        </div>
-
-        <?php if (empty($recentAvisos)): ?>
-            <div style="text-align: center; padding: 20px 0; color: #94a3b8; font-size: 0.9rem; background: #f8fafc; border-radius: 12px;">
-                <i data-lucide="inbox" style="width: 24px; margin-bottom: 8px; opacity: 0.5;"></i>
-                <br>Nenhum aviso no momento.
+    <!-- Banner Principal (Se tiver escala) -->
+    <?php if ($nextSchedule):
+        $date = new DateTime($nextSchedule['event_date']);
+        $isToday = $date->format('Y-m-d') === date('Y-m-d');
+    ?>
+        <a href="escalas.php?mine=1" class="ripple" style="
+            display: block;
+            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(4, 120, 87, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 32px;
+        ">
+            <div style="position: absolute; right: -20px; bottom: -20px; opacity: 0.1;">
+                <i data-lucide="mic-2" style="width: 120px; height: 120px;"></i>
             </div>
-        <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <?php foreach ($recentAvisos as $aviso):
-                    $priorityColor = ($aviso['priority'] == 'urgent') ? '#fee2e2' : (($aviso['priority'] == 'important') ? '#fef3c7' : '#f1f5f9');
-                    $iconColor = ($aviso['priority'] == 'urgent') ? '#ef4444' : (($aviso['priority'] == 'important') ? '#d97706' : '#64748b');
-                ?>
-                    <div style="
-                        background: <?= $priorityColor ?>; 
-                        border-radius: 12px; 
-                        padding: 16px; 
-                        display: flex; 
-                        gap: 12px;
-                        transition: transform 0.2s;
-                    " class="ripple">
-                        <div style="min-width: 24px; color: <?= $iconColor ?>;">
-                            <i data-lucide="<?= ($aviso['type'] == 'event') ? 'calendar' : 'info' ?>" style="width: 20px;"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem; margin-bottom: 4px;">
-                                <?= htmlspecialchars($aviso['title']) ?>
-                            </div>
-                            <div style="color: #475569; font-size: 0.85rem; line-height: 1.4;">
-                                <?= mb_strimwidth(strip_tags($aviso['message']), 0, 100, '...') ?>
-                            </div>
-                            <div style="margin-top: 8px; font-size: 0.75rem; color: #64748b; font-weight: 500;">
-                                <?= date('d/m', strtotime($aviso['created_at'])) ?> • <?= htmlspecialchars($aviso['author_name']) ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+
+            <div style="position: relative; z-index: 1;">
+                <div style="display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; backdrop-filter: blur(4px);">
+                    <?= $isToday ? 'É HOJE!' : 'PRÓXIMA ESCALA' ?>
+                </div>
+                <h2 style="margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 700;"><?= htmlspecialchars($nextSchedule['event_type']) ?></h2>
+                <div style="display: flex; align-items: center; gap: 8px; opacity: 0.9; font-size: 0.95rem;">
+                    <i data-lucide="calendar" style="width: 16px;"></i>
+                    <span><?= $date->format('d/m') ?> (<?= ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][$date->format('w')] ?>)</span>
+                    <span>•</span>
+                    <i data-lucide="clock" style="width: 16px;"></i>
+                    <span>19:00</span>
+                </div>
             </div>
-        <?php endif; ?>
+        </a>
+    <?php endif; ?>
+
+    <!-- Grid de Sinalizações -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+
+        <!-- Avisos (Card Harmônico) -->
+        <a href="avisos.php" class="dashboard-card ripple">
+            <?php if ($totalAvisos > 0): ?>
+                <div class="status-indicator" style="background: #ef4444; box-shadow: 0 0 0 4px #fee2e2;"></div>
+            <?php endif; ?>
+
+            <div>
+                <div class="card-icon-bg" style="background: #fff7ed; color: #f59e0b;">
+                    <i data-lucide="bell" style="width: 24px;"></i>
+                </div>
+                <div class="card-title">Quadro de Avisos</div>
+                <div class="card-value" style="font-size: 1rem; font-weight: 600;">
+                    <?php if ($totalAvisos > 0): ?>
+                        <?= mb_strimwidth($ultimoAviso, 0, 25, '...') ?>
+                    <?php else: ?>
+                        Tudo tranquilo
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="card-subtext">
+                <?= $totalAvisos ?> comunicado<?= $totalAvisos != 1 ? 's' : '' ?>
+            </div>
+        </a>
+
+        <!-- Aniversariantes (Card Harmônico) -->
+        <a href="aniversarios.php" class="dashboard-card ripple">
+            <?php if ($niverCount > 0): ?>
+                <div class="status-indicator" style="background: #ec4899; box-shadow: 0 0 0 4px #fce7f3;"></div>
+            <?php endif; ?>
+
+            <div>
+                <div class="card-icon-bg" style="background: #fdf2f8; color: #db2777;">
+                    <i data-lucide="cake" style="width: 24px;"></i>
+                </div>
+                <div class="card-title">Aniversários</div>
+                <div class="card-value">
+                    <?= $niverCount > 0 ? "$niverCount celebrações" : "Ninguém este mês" ?>
+                </div>
+            </div>
+
+            <div class="card-subtext">
+                Em <?= strtolower(date('M')) ?>
+            </div>
+        </a>
+
+        <!-- Minhas Escalas (Se não tiver destaque acima ou para ver todas) -->
+        <a href="escalas.php?mine=1" class="dashboard-card ripple">
+            <div>
+                <div class="card-icon-bg" style="background: #eff6ff; color: #2563eb;">
+                    <i data-lucide="calendar-check" style="width: 24px;"></i>
+                </div>
+                <div class="card-title">Minha Agenda</div>
+                <div class="card-value">Ver escalas</div>
+            </div>
+            <div class="card-subtext">
+                Planejamento pessoal
+            </div>
+        </a>
+
     </div>
 
-    <!-- SEÇÃO 2: MINHAS ESCALAS -->
-    <div style="background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); padding: 20px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="margin: 0; font-size: 1rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="calendar" style="width: 18px; color: #2563eb;"></i> Minhas Escalas
-            </h3>
-            <a href="escalas.php?mine=1" style="font-size: 0.8rem; color: #2563eb; text-decoration: none; font-weight: 600;">Ver todas</a>
+    <!-- Quick Links / Atalhos Sutis -->
+    <div style="margin-top: 32px;">
+        <div class="section-title" style="font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Acesso Rápido</div>
+
+        <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">
+            <a href="repertorio.php" class="ripple" style="
+                flex: 0 0 auto;
+                background: white; border: 1px solid #e2e8f0; 
+                padding: 12px 20px; border-radius: 50px; 
+                color: #475569; text-decoration: none; font-weight: 600; font-size: 0.9rem;
+                display: flex; align-items: center; gap: 8px;
+            ">
+                <i data-lucide="music-2" style="width: 18px;"></i> Repertório
+            </a>
+            <a href="indisponibilidade.php" class="ripple" style="
+                flex: 0 0 auto;
+                background: white; border: 1px solid #e2e8f0; 
+                padding: 12px 20px; border-radius: 50px; 
+                color: #475569; text-decoration: none; font-weight: 600; font-size: 0.9rem;
+                display: flex; align-items: center; gap: 8px;
+            ">
+                <i data-lucide="calendar-off" style="width: 18px;"></i> Avisar Ausência
+            </a>
         </div>
-
-        <?php if (empty($mySchedules)): ?>
-            <div style="text-align: center; padding: 20px 0; color: #94a3b8; font-size: 0.9rem; background: #f8fafc; border-radius: 12px;">
-                <i data-lucide="calendar-off" style="width: 24px; margin-bottom: 8px; opacity: 0.5;"></i>
-                <br>Você não está escalado(a) em breve.
-            </div>
-        <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <?php foreach ($mySchedules as $schedule):
-                    $date = new DateTime($schedule['event_date']);
-                    $isToday = $date->format('Y-m-d') === date('Y-m-d');
-                ?>
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" style="text-decoration: none;">
-                        <div style="
-                            background: white; 
-                            border: 1px solid #e2e8f0; 
-                            border-radius: 12px; 
-                            padding: 12px; 
-                            display: flex; 
-                            align-items: center; 
-                            gap: 16px;
-                            transition: background 0.2s;
-                        " class="ripple">
-                            <div style="text-align: center; min-width: 45px;">
-                                <div style="font-weight: 800; font-size: 1.1rem; color: #1e293b; line-height: 1;"><?= $date->format('d') ?></div>
-                                <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;"><?= strtoupper($date->format('M')) ?></div>
-                            </div>
-                            <div style="width: 2px; height: 32px; background: <?= $isToday ? '#166534' : '#f1f5f9' ?>;"></div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600; color: #334155; font-size: 0.9rem;">
-                                    <?= htmlspecialchars($schedule['event_type']) ?>
-                                    <?php if ($isToday): ?>
-                                        <span style="background: #166534; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; margin-left: 6px;">HOJE</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div style="font-size: 0.75rem; color: #94a3b8;">
-                                    <?= ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')] ?>
-                                </div>
-                            </div>
-                            <i data-lucide="chevron-right" style="width: 16px; color: #cbd5e1;"></i>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- SEÇÃO 3: ANIVERSARIANTES -->
-    <div style="background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); padding: 20px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="margin: 0; font-size: 1rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="cake" style="width: 18px; color: #ec4899;"></i> Aniversariantes do Mês
-            </h3>
-            <a href="aniversarios.php" style="font-size: 0.8rem; color: #ec4899; text-decoration: none; font-weight: 600;">Ver todos</a>
-        </div>
-
-        <?php if (empty($birthdays)): ?>
-            <div style="text-align: center; padding: 20px 0; color: #94a3b8; font-size: 0.9rem; background: #f8fafc; border-radius: 12px;">
-                <i data-lucide="calendar-heart" style="width: 24px; margin-bottom: 8px; opacity: 0.5;"></i>
-                <br>Nenhum aniversariante encontrado.
-            </div>
-        <?php else: ?>
-            <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scroll-behavior: smooth;">
-                <?php foreach ($birthdays as $bday):
-                    $photo = $bday['photo'] ?: 'https://ui-avatars.com/api/?name=' . urlencode($bday['name']) . '&background=fce7f3&color=be185d';
-                    if (strpos($photo, 'http') === false && strpos($photo, 'assets') === false) {
-                        $photo = '../assets/img/' . $photo;
-                    }
-                ?>
-                    <div style="
-                        flex: 0 0 auto; 
-                        text-align: center; 
-                        width: 80px;
-                        background: #fff;
-                    ">
-                        <div style="position: relative; display: inline-block;">
-                            <img src="<?= htmlspecialchars($photo) ?>" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                            <div style="
-                                position: absolute; bottom: -4px; right: -4px; 
-                                background: #ec4899; color: white; 
-                                font-size: 0.65rem; font-weight: bold; 
-                                padding: 2px 6px; border-radius: 10px;
-                                border: 2px solid white;
-                            ">
-                                <?= $bday['day'] ?>
-                            </div>
-                        </div>
-                        <div style="
-                            font-size: 0.75rem; font-weight: 600; color: #334155; 
-                            margin-top: 6px; 
-                            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-                        ">
-                            <?= explode(' ', $bday['name'])[0] ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
     </div>
 
 </div>
 
-<!-- Ajuste para padding final -->
-<div style="height: 40px;"></div>
-
+<div style="height: 60px;"></div>
 <?php renderAppFooter(); ?>
-```
