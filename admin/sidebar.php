@@ -113,33 +113,25 @@ if (!empty($currentUser['avatar'])) {
         </a>
     </nav>
 
-    <!-- 3. Rodapé: Cartão de Usuário Profissional -->
+    <!-- 3. Rodapé: Cartão de Usuário Premium -->
     <div class="sidebar-footer">
-
-        <!-- Info do Usuário -->
-        <div class="user-card">
+        <div class="user-profile-row">
             <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto" class="user-avatar-sm">
+
             <div class="user-info-mini">
-                <div class="u-name" title="<?= htmlspecialchars($currentUser['name']) ?>"><?= htmlspecialchars($currentUser['name']) ?></div>
-                <div class="u-role"><?= htmlspecialchars($currentUser['phone']) ?></div>
+                <div class="u-name"><?= htmlspecialchars($currentUser['name']) ?></div>
+                <div class="u-role">Ver Perfil</div>
+            </div>
+
+            <div class="user-actions">
+                <a href="configuracoes.php" class="action-icon" title="Configurações">
+                    <i data-lucide="settings-2"></i>
+                </a>
+                <a href="../logout.php" class="action-icon danger" title="Sair">
+                    <i data-lucide="log-out"></i>
+                </a>
             </div>
         </div>
-
-        <!-- Ações Rápidas (Settings & Logout) -->
-        <div class="footer-actions">
-            <!-- Configurações -->
-            <a href="configuracoes.php" class="action-btn ripple" title="Configurações">
-                <i data-lucide="settings"></i>
-                <span class="btn-tooltip">Ajustes</span>
-            </a>
-
-            <!-- Sair -->
-            <a href="../logout.php" class="action-btn btn-danger ripple" title="Sair">
-                <i data-lucide="log-out"></i>
-                <span class="btn-tooltip">Sair</span>
-            </a>
-        </div>
-
     </div>
 </div>
 
@@ -149,30 +141,39 @@ if (!empty($currentUser['avatar'])) {
         padding: 16px;
         background: #f8fafc;
         border-top: 1px solid #e2e8f0;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
     }
 
-    .user-card {
+    .user-profile-row {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 4px 0;
+        background: white;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s;
+    }
+
+    .user-profile-row:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .user-avatar-sm {
         width: 36px;
         height: 36px;
-        border-radius: 50%;
+        border-radius: 10px;
+        /* Quadrado arredondado moderno */
         object-fit: cover;
-        border: 2px solid #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .user-info-mini {
         flex: 1;
         min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .u-name {
@@ -182,86 +183,79 @@ if (!empty($currentUser['avatar'])) {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        line-height: 1.2;
     }
 
     .u-role {
-        font-size: 0.75rem;
-        color: #64748b;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 0.7rem;
+        color: #94a3b8;
+        font-weight: 500;
     }
 
-    .footer-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
+    .user-actions {
+        display: flex;
+        gap: 4px;
     }
 
-    .action-btn {
+    .action-icon {
+        width: 28px;
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 36px;
-        border-radius: 8px;
+        border-radius: 6px;
         color: #64748b;
-        background: #fff;
-        border: 1px solid #e2e8f0;
         transition: all 0.2s;
-        cursor: pointer;
-        font-size: 0.85rem;
-        text-decoration: none;
-        position: relative;
-        overflow: visible;
+        background: transparent;
     }
 
-    .action-btn:hover {
+    .action-icon:hover {
         background: #f1f5f9;
         color: #3b82f6;
-        border-color: #cbd5e1;
     }
 
-    .action-btn.btn-danger:hover {
+    .action-icon.danger:hover {
         background: #fef2f2;
         color: #ef4444;
-        border-color: #fca5a5;
     }
 
-    .action-btn i {
-        width: 18px;
-        height: 18px;
-    }
-
-    .btn-tooltip {
-        display: none;
-        /* Tooltip simples se necessário, ou só icone */
+    .action-icon i {
+        width: 16px;
+        height: 16px;
     }
 
     /* Modo Recolhido */
     .sidebar.collapsed .sidebar-footer {
-        padding: 16px 8px;
-        align-items: center;
+        padding: 12px;
     }
 
-    .sidebar.collapsed .user-info-mini {
+    .sidebar.collapsed .user-profile-row {
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        justify-content: center;
+    }
+
+    .sidebar.collapsed .user-info-mini,
+    .sidebar.collapsed .user-actions {
         display: none;
     }
 
-    .sidebar.collapsed .footer-actions {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 8px;
+    .sidebar.collapsed .user-avatar-sm {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
     }
 
-    .sidebar.collapsed .user-card {
-        justify-content: center;
-        width: 100%;
-    }
-
-    /* Dark Mode Overrides para o Footer */
+    /* Dark Mode */
     body.dark-mode .sidebar-footer {
         background: #1e293b;
+        border-color: #334155;
+    }
+
+    body.dark-mode .user-profile-row {
+        background: #0f172a;
         border-color: #334155;
     }
 
@@ -269,23 +263,13 @@ if (!empty($currentUser['avatar'])) {
         color: #f1f5f9;
     }
 
-    body.dark-mode .u-role {
+    body.dark-mode .action-icon {
         color: #94a3b8;
     }
 
-    body.dark-mode .action-btn {
-        background: #334155;
-        border-color: #475569;
-        color: #cbd5e1;
-    }
-
-    body.dark-mode .action-btn:hover {
-        background: #475569;
+    body.dark-mode .action-icon:hover {
+        background: #1e293b;
         color: #fff;
-    }
-
-    body.dark-mode .user-avatar-sm {
-        border-color: #334155;
     }
 </style>
 
