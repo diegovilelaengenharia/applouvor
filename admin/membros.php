@@ -97,91 +97,72 @@ renderAppHeader('Membros');
 
         <?php foreach ($users as $user): ?>
             <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
-                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    
+                    <!-- Avatar Compacto -->
+                    <div style="
+                        width: 42px; height: 42px; border-radius: 50%; 
+                        background: <?= generateAvatarColor($user['name']) ?>; 
+                        color: white; display: flex; align-items: center; justify-content: center;
+                        font-weight: 700; font-size: 1rem; flex-shrink: 0;
+                        box-shadow: var(--shadow-sm);
+                    ">
+                        <?php if (!empty($user['avatar'])): ?>
+                            <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        <?php else: ?>
+                            <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                        <?php endif; ?>
+                    </div>
 
-                    <div style="display: flex; gap: 16px;">
-                        <!-- Avatar / Iniciais -->
-                        <div style="
-                            width: 56px; height: 56px; border-radius: 50%; 
-                            background: <?= generateAvatarColor($user['name']) ?>; 
-                            color: white; display: flex; align-items: center; justify-content: center;
-                            font-weight: 700; font-size: 1.2rem;
-                            box-shadow: var(--shadow-sm);
-                            border: 2px solid var(--bg-surface);
-                        ">
-                            <?php if (!empty($user['avatar'])): ?>
-                                <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                            <?php else: ?>
-                                <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                    <!-- Info (Nome e Função) -->
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <h3 class="member-name" style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <?= htmlspecialchars($user['name']) ?>
+                            </h3>
+                            <?php if ($user['role'] === 'admin'): ?>
+                                <span style="background: var(--primary-subtle); color: var(--primary); padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800;">ADM</span>
                             <?php endif; ?>
                         </div>
-
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <h3 class="member-name" style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">
-                                    <?= htmlspecialchars($user['name']) ?>
-                                </h3>
-                                <?php if ($user['role'] === 'admin'): ?>
-                                    <span style="background: var(--primary-subtle); color: var(--primary); padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;">ADMIN</span>
-                                <?php endif; ?>
-                            </div>
-
-                            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">
-                                <?= htmlspecialchars($user['instrument'] ?: 'Membro da Equipe') ?>
-                            </p>
-                        </div>
+                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <?= htmlspecialchars($user['instrument'] ?: 'Membro') ?>
+                        </p>
                     </div>
 
-                    <!-- Botão de Ações (Menu) -->
-                    <div style="position: relative;">
-                        <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="btn-icon ripple" style="color: var(--text-muted); padding: 4px;">
-                            <i data-lucide="more-vertical" style="width: 20px;"></i>
-                        </button>
-
-                        <!-- Dropdown -->
-                        <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
-                            display: none; position: absolute; right: 0; top: 32px; 
-                            background: var(--bg-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); 
-                            border: 1px solid var(--border-color); width: 140px; z-index: 10; overflow: hidden;
-                        ">
-                            <button onclick='openEditModal(<?= json_encode($user) ?>)' style="
-                                width: 100%; text-align: left; padding: 12px; background: var(--bg-surface); border: none; 
-                                color: var(--text-main); font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
-                                transition: background 0.2s;
-                            " onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='var(--bg-surface)'">
-                                <i data-lucide="edit-3" style="width: 16px;"></i> Editar
+                    <!-- Ações Rápidas (Compactas) -->
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
+                            <i data-lucide="message-circle" style="width: 16px;"></i>
+                        </a>
+                        <a href="tel:<?= $user['phone'] ?>" class="ripple icon-action" title="Ligar" style="color: var(--text-muted); background: var(--bg-body);">
+                            <i data-lucide="phone" style="width: 16px;"></i>
+                        </a>
+                        
+                        <!-- Menu Trigger -->
+                        <div style="position: relative;">
+                            <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
+                                <i data-lucide="more-vertical" style="width: 16px;"></i>
                             </button>
 
-                            <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                                <button type="submit" style="
-                                    width: 100%; text-align: left; padding: 12px; background: var(--bg-surface); border: none; 
-                                    color: #ef4444; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
-                                    border-top: 1px solid var(--border-color);
-                                    transition: background 0.2s;
-                                " onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='var(--bg-surface)'">
-                                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
+                            <!-- Dropdown (Mantido) -->
+                            <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
+                                display: none; position: absolute; right: 0; top: 32px; 
+                                background: var(--bg-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); 
+                                border: 1px solid var(--border-color); width: 140px; z-index: 10; overflow: hidden;
+                            ">
+                                <button onclick='openEditModal(<?= json_encode($user) ?>)' style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: var(--text-main); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <i data-lucide="edit-3" style="width: 14px;"></i> Editar
                                 </button>
-                            </form>
+                                <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                                    <button type="submit" style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer; border-top: 1px solid var(--border-color);">
+                                        <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-
-                </div>
-
-                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px;">
-                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple" style="
-                        flex: 1; padding: 8px; border-radius: 8px; background: var(--primary-subtle); color: var(--primary); 
-                        text-decoration: none; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;
-                    ">
-                        <i data-lucide="message-circle" style="width: 16px;"></i> WhatsApp
-                    </a>
-                    <a href="tel:<?= $user['phone'] ?>" class="ripple" style="
-                        width: 36px; height: 36px; border-radius: 8px; background: var(--bg-body); color: var(--text-muted); 
-                        display: flex; align-items: center; justify-content: center;
-                    ">
-                        <i data-lucide="phone" style="width: 16px;"></i>
-                    </a>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -260,10 +241,16 @@ renderAppHeader('Membros');
 </div>
 
 <style>
+    .member-grid {
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+        gap: 12px;
+    }
+
     .member-card {
         background: var(--bg-surface);
-        border-radius: var(--radius-lg);
-        padding: 20px;
+        border-radius: var(--radius-md);
+        padding: 12px 16px;
         border: 1px solid var(--border-color);
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
@@ -272,7 +259,24 @@ renderAppHeader('Membros');
     .member-card:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
-        border-color: var(--border-color);
+        border-color: var(--primary-light);
+    }
+
+    .icon-action {
+        width: 32px; 
+        height: 32px; 
+        border-radius: 8px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s;
+        text-decoration: none;
+    }
+    
+    .icon-action:hover {
+        filter: brightness(0.95);
     }
 
     .input-modern {

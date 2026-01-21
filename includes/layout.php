@@ -618,25 +618,25 @@ function renderAppHeader($title, $backUrl = null)
             </div>
             <div class="sheet-grid">
                 <a href="escalas.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #e0f2fe; color: #0284c7;">
+                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="calendar"></i>
                     </div>
                     Escalas
                 </a>
                 <a href="repertorio.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fdf4ff; color: #c026d3;">
+                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="music"></i>
                     </div>
                     Repertório
                 </a>
                 <a href="membros.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #f0fdf4; color: #16a34a;">
+                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="users"></i>
                     </div>
                     Membros
                 </a>
                 <a href="indisponibilidade.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fef2f2; color: #dc2626;">
+                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="calendar-x"></i>
                     </div>
                     Indisponibilidades
@@ -657,7 +657,7 @@ function renderAppHeader($title, $backUrl = null)
             </div>
             <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista única para destaque -->
                 <a href="devocionais.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
-                    <div class="sheet-btn-icon" style="background: #eef2ff; color: #4f46e5;">
+                    <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
                         <i data-lucide="book-open"></i>
                     </div>
                     <div>
@@ -666,7 +666,7 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                 </a>
                 <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
-                    <div class="sheet-btn-icon" style="background: #f5f3ff; color: #7c3aed;">
+                    <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
                         <i data-lucide="heart-handshake"></i>
                     </div>
                     <div>
@@ -675,7 +675,7 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                 </a>
                 <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
-                    <div class="sheet-btn-icon" style="background: #fffbeb; color: #d97706;">
+                    <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
                         <i data-lucide="scroll"></i>
                     </div>
                     <div>
@@ -699,13 +699,13 @@ function renderAppHeader($title, $backUrl = null)
             </div>
             <div class="sheet-grid">
                 <a href="avisos.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fff7ed; color: #f97316;">
+                    <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
                         <i data-lucide="bell"></i>
                     </div>
                     Avisos
                 </a>
                 <a href="aniversarios.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fdf2f8; color: #db2777;">
+                    <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
                         <i data-lucide="cake"></i>
                     </div>
                     Aniversários
@@ -718,22 +718,21 @@ function renderAppHeader($title, $backUrl = null)
         <div class="bottom-nav-container">
             <nav class="bottom-nav-bar">
                 
-                <!-- Botão GESTÃO -->
+                <!-- Botão HOME (Primeiro) -->
+                <a href="index.php" class="b-nav-item" onclick="closeAllSheets()">
+                     <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white;">
+                        <i data-lucide="home"></i>
+                    </div>
+                    <span style="font-weight: 600; color:var(--primary);">Início</span>
+                </a>
+
+                <!-- Botão GERAL (ex-Gestão) -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #059669;">
                     <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
                         <i data-lucide="layout-grid"></i>
                     </div>
-                    <span>Gestão</span>
+                    <span>Geral</span>
                 </button>
-
-                <!-- Botão HOME (Direto) -->
-                 <!-- Central Logo/Home Action -->
-                <a href="index.php" class="b-nav-item" onclick="closeAllSheets()">
-                     <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white; border-radius: 50%; width: 42px; height: 42px; box-shadow: 0 4px 10px rgba(4, 120, 87, 0.3); margin-top: -20px; border: 4px solid var(--bg-surface);">
-                        <i data-lucide="home"></i>
-                    </div>
-                    <span style="font-weight: 700; color:var(--primary);">Início</span>
-                </a>
 
                 <!-- Botão ESPÍRITO -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #4f46e5;">
