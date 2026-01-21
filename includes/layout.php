@@ -375,12 +375,48 @@ function renderAppHeader($title, $backUrl = null)
                 </button>
                 <div class="page-title"><?= htmlspecialchars($title) ?></div>
 
-                <!-- Ações do Header (opcional) -->
+                <!-- Ações do Header (opcional - Search) -->
                 <?php if (strpos($_SERVER['PHP_SELF'], 'repertorio.php') !== false): ?>
                     <div style="background: #ecfdf5; padding: 6px; border-radius: 8px;">
                         <i data-lucide="search" style="color: #047857; width: 20px;"></i>
                     </div>
                 <?php endif; ?>
+
+                <!-- Mobile Profile Avatar (New) -->
+                <div style="flex: 1; display: flex; justify-content: flex-end;">
+                     <div style="position: relative;">
+                         <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 36px; height: 36px; padding: 0; border: 1px solid var(--border-color); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
+                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                             <?php else: ?>
+                                 <i data-lucide="user" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                             <?php endif; ?>
+                         </button>
+                         
+                         <!-- Mobile Dropdown -->
+                         <div id="mobileProfileDropdown" style="
+                            display: none; position: absolute; top: 48px; right: 0; 
+                            background: var(--bg-surface); border-radius: 16px; 
+                            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
+                            min-width: 240px; z-index: 2000; border: 1px solid var(--border-color);
+                            overflow: hidden;
+                         ">
+                             <div style="padding: 16px; text-align: center; border-bottom: 1px solid var(--border-color);">
+                                <div style="font-weight: 600; color: var(--text-main);"><?= $_layoutUser['name'] ?></div>
+                                <a href="perfil.php" style="font-size: 0.8rem; color: var(--primary); text-decoration: none;">Ver perfil</a>
+                             </div>
+                             <div style="padding: 8px;">
+                                <a href="configuracoes.php" style="display: block; padding: 10px 12px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
+                                    <i data-lucide="settings" style="width: 18px;"></i> Configurações
+                                </a>
+                                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                                <a href="../logout.php" style="display: block; padding: 10px 12px; color: #ef4444; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
+                                    <i data-lucide="log-out" style="width: 18px;"></i> Sair
+                                </a>
+                             </div>
+                         </div>
+                     </div>
+                </div>
             </header>
 
         <?php
@@ -391,82 +427,361 @@ function renderAppHeader($title, $backUrl = null)
         ?>
         </div> <!-- Fim #app-content -->
 
-        <!-- Bottom Navigation (Mobile Only) -->
+        <!-- Bottom Navigation & Submenus (Mobile Only) -->
         <style>
-            .bottom-nav {
+            .bottom-nav-container {
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                background: var(--bg-surface);
-                border-top: 1px solid var(--border-color);
                 display: flex;
-                justify-content: space-around;
-                padding: 8px 4px 24px 4px;
-                /* Mais padding bottom por causa da area segura do iOS */
+                flex-direction: column;
                 z-index: 1000;
-                box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+                pointer-events: none; /* Permite clicar no conteúdo atrás quando menus estão fechados */
             }
 
-            .bottom-nav-item {
+            /* Main Bar */
+            .bottom-nav-bar {
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-top: 1px solid var(--border-color);
+                padding: 12px 16px 12px 16px; /* Reduced bottom padding */
+                padding-bottom: max(12px, env(safe-area-inset-bottom)); /* Respect notch but default to tight */
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                pointer-events: auto;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            }
+
+            /* Nav Items */
+            .b-nav-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 4px;
-                text-decoration: none;
+                gap: 6px;
+                background: none;
+                border: none;
                 color: var(--text-muted);
-                font-size: 0.7rem;
+                font-size: 0.75rem;
                 font-weight: 600;
-                padding: 8px;
-                border-radius: 8px;
-                flex: 1;
-                transition: color 0.2s;
+                cursor: pointer;
+                transition: transform 0.2s, color 0.2s;
+                padding: 4px 12px;
+                border-radius: 12px;
             }
 
-            .bottom-nav-item.active {
+            .b-nav-item.active {
                 color: var(--primary);
             }
+            
+            .b-nav-item:active {
+                transform: scale(0.95);
+            }
 
-            .bottom-nav-item i {
-                width: 24px;
-                height: 24px;
+            .b-nav-icon-wrapper {
+                position: relative;
+                width: 28px;
+                height: 28px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 10px;
+                transition: background 0.3s;
+            }
+
+            .b-nav-item.active .b-nav-icon-wrapper {
+                background: var(--primary-light);
+            }
+
+            .b-nav-item svg {
+                width: 22px;
+                height: 22px;
                 stroke-width: 2px;
             }
 
-            .bottom-nav-item.active i {
-                fill: rgba(4, 120, 87, 0.1);
-                /* Preenchimento sutil no ativo */
+            /* Bottom Sheet / Submenu */
+            .bottom-sheet {
+                position: fixed;
+                bottom: 0; /* Fixa no fundo */
+                left: 0;
+                right: 0;
+                background: var(--bg-surface);
+                border-radius: 24px 24px 0 0;
+                padding: 24px 20px 100px 20px; /* Padding bottom extra para não ficar escondido atrás da barra */
+                box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+                transform: translateY(110%);
+                transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+                pointer-events: auto;
+                z-index: 999; /* Fica atrás da barra de navegação (1000) mas na frente do conteúdo */
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .bottom-sheet.open {
+                transform: translateY(0);
+            }
+
+            /* Sheet Header */
+            .sheet-header {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 20px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .sheet-title {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: var(--text-main);
+            }
+
+            /* Sheet Grid */
+            .sheet-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .sheet-btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: var(--bg-body);
+                border: 1px solid var(--border-color);
+                border-radius: 16px;
+                padding: 16px;
+                text-decoration: none;
+                color: var(--text-main);
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: all 0.2s;
+            }
+
+            .sheet-btn:active {
+                transform: scale(0.98);
+                background: var(--border-color);
+            }
+
+            .sheet-btn-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 4px;
+            }
+
+            /* Overlay */
+            .bs-overlay {
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.4);
+                backdrop-filter: blur(4px);
+                z-index: 998;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s;
+                pointer-events: auto;
+            }
+
+            .bs-overlay.active {
+                opacity: 1;
+                visibility: visible;
             }
 
             @media (min-width: 1025px) {
-                .bottom-nav {
-                    display: none;
-                }
+                .bottom-nav-container { display: none; }
+                .bs-overlay { display: none; }
             }
         </style>
 
-        <nav class="bottom-nav">
-            <a href="index.php" class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
-                <i data-lucide="home"></i>
-                Início
-            </a>
-            <a href="escalas.php" class="bottom-nav-item <?= in_array(basename($_SERVER['PHP_SELF']), ['escalas.php', 'repertorio.php', 'membros.php']) ? 'active' : '' ?>">
-                <i data-lucide="calendar"></i>
-                Gestão
-            </a>
-            <a href="devocionais.php" class="bottom-nav-item <?= in_array(basename($_SERVER['PHP_SELF']), ['devocionais.php', 'oracao.php']) ? 'active' : '' ?>">
-                <i data-lucide="book-open"></i>
-                Espírito
-            </a>
-            <a href="avisos.php" class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
-                <i data-lucide="bell"></i>
-                Comunica
-            </a>
-            <a href="chat.php" class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'active' : '' ?>">
-                <i data-lucide="message-circle"></i>
-                Chat
-            </a>
-        </nav>
+        <!-- Overlay de Fundo -->
+        <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
+
+        <!-- 1. Sheet GESTÃO -->
+        <div id="sheet-gestao" class="bottom-sheet">
+            <div class="sheet-header">
+                <div style="background: #ecfdf5; padding: 10px; border-radius: 12px; color: #047857;">
+                    <i data-lucide="layout-grid"></i>
+                </div>
+                <div>
+                    <div class="sheet-title">Gestão</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administração do Ministério</div>
+                </div>
+            </div>
+            <div class="sheet-grid">
+                <a href="escalas.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #e0f2fe; color: #0284c7;">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    Escalas
+                </a>
+                <a href="repertorio.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #fdf4ff; color: #c026d3;">
+                        <i data-lucide="music"></i>
+                    </div>
+                    Repertório
+                </a>
+                <a href="membros.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #f0fdf4; color: #16a34a;">
+                        <i data-lucide="users"></i>
+                    </div>
+                    Membros
+                </a>
+                <a href="indisponibilidade.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #fef2f2; color: #dc2626;">
+                        <i data-lucide="calendar-x"></i>
+                    </div>
+                    Indisponibilidades
+                </a>
+            </div>
+        </div>
+
+        <!-- 2. Sheet ESPÍRITO -->
+        <div id="sheet-espirito" class="bottom-sheet">
+            <div class="sheet-header">
+                <div style="background: #eef2ff; padding: 10px; border-radius: 12px; color: #4338ca;">
+                    <i data-lucide="flame"></i>
+                </div>
+                <div>
+                    <div class="sheet-title">Espírito</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Vida Devocional</div>
+                </div>
+            </div>
+            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista única para destaque -->
+                <a href="devocionais.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
+                    <div class="sheet-btn-icon" style="background: #eef2ff; color: #4f46e5;">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <div>
+                        <div>Devocional</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexão diária</div>
+                    </div>
+                </a>
+                <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
+                    <div class="sheet-btn-icon" style="background: #f5f3ff; color: #7c3aed;">
+                        <i data-lucide="heart-handshake"></i>
+                    </div>
+                    <div>
+                        <div>Oração</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercessão e gratidão</div>
+                    </div>
+                </a>
+                <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
+                    <div class="sheet-btn-icon" style="background: #fffbeb; color: #d97706;">
+                        <i data-lucide="scroll"></i>
+                    </div>
+                    <div>
+                        <div>Leitura Bíblica</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Plano anual</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. Sheet COMUNICA -->
+        <div id="sheet-comunica" class="bottom-sheet">
+            <div class="sheet-header">
+                <div style="background: #fff7ed; padding: 10px; border-radius: 12px; color: #c2410c;">
+                    <i data-lucide="megaphone"></i>
+                </div>
+                <div>
+                    <div class="sheet-title">Comunica</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mural e Interações</div>
+                </div>
+            </div>
+            <div class="sheet-grid">
+                <a href="avisos.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #fff7ed; color: #f97316;">
+                        <i data-lucide="bell"></i>
+                    </div>
+                    Avisos
+                </a>
+                <a href="aniversarios.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #fdf2f8; color: #db2777;">
+                        <i data-lucide="cake"></i>
+                    </div>
+                    Aniversários
+                </a>
+            </div>
+        </div>
+
+
+        <!-- Barra de Navegação Fixa -->
+        <div class="bottom-nav-container">
+            <nav class="bottom-nav-bar">
+                
+                <!-- Botão GESTÃO -->
+                <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #059669;">
+                    <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
+                        <i data-lucide="layout-grid"></i>
+                    </div>
+                    <span>Gestão</span>
+                </button>
+
+                <!-- Botão HOME (Direto) -->
+                 <!-- Central Logo/Home Action -->
+                <a href="index.php" class="b-nav-item" onclick="closeAllSheets()">
+                     <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white; border-radius: 50%; width: 42px; height: 42px; box-shadow: 0 4px 10px rgba(4, 120, 87, 0.3); margin-top: -20px; border: 4px solid var(--bg-surface);">
+                        <i data-lucide="home"></i>
+                    </div>
+                    <span style="font-weight: 700; color:var(--primary);">Início</span>
+                </a>
+
+                <!-- Botão ESPÍRITO -->
+                <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #4f46e5;">
+                    <div class="b-nav-icon-wrapper" style="background: #eef2ff;">
+                        <i data-lucide="flame"></i>
+                    </div>
+                    <span>Espírito</span>
+                </button>
+
+                <!-- Botão COMUNICA -->
+                <button class="b-nav-item" onclick="toggleSheet('sheet-comunica', this)" style="color: #ea580c;">
+                    <div class="b-nav-icon-wrapper" style="background: #fff7ed;">
+                        <i data-lucide="megaphone"></i>
+                    </div>
+                    <span>Comunica</span>
+                </button>
+
+            </nav>
+        </div>
+
+        <script>
+            function toggleSheet(sheetId, btn) {
+                const sheet = document.getElementById(sheetId);
+                const overlay = document.getElementById('bs-overlay');
+                const isOpen = sheet.classList.contains('open');
+
+                // 1. Fechar todos primeiro
+                closeAllSheets();
+
+                // 2. Se não estava aberto, abrir o clicado
+                if (!isOpen) {
+                    sheet.classList.add('open');
+                    overlay.classList.add('active');
+                    
+                    // Highlight Active Button
+                    if(btn) btn.classList.add('active');
+                    
+                    // Haptic Feedback (Vibe)
+                    if (navigator.vibrate) navigator.vibrate(10);
+                }
+            }
+
+            function closeAllSheets() {
+                document.querySelectorAll('.bottom-sheet').forEach(el => el.classList.remove('open'));
+                document.getElementById('bs-overlay').classList.remove('active');
+                document.querySelectorAll('.b-nav-item').forEach(el => el.classList.remove('active'));
+            }
+        </script>
 
 
         <!-- Inicializar Ícones -->
@@ -564,7 +879,7 @@ function renderAppHeader($title, $backUrl = null)
         global $_layoutUser;
         $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
-    <header style="
+    <header class="desktop-only-header" style="
             background: var(--bg-surface); 
             padding: 16px; 
             margin: -20px -20px 24px -20px; 
@@ -575,6 +890,13 @@ function renderAppHeader($title, $backUrl = null)
             border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
         ">
+        <style>
+            @media (max-width: 1024px) {
+                .desktop-only-header {
+                    display: none !important;
+                }
+            }
+        </style>
 
         <div style="display: flex; align-items: center; gap: 4px;">
             <?php if (!$isHome): ?>
@@ -613,7 +935,7 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event)"
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')"
                     class="ripple" style="
                     width: 52px; height: 52px; padding: 0; 
                     border: 2px solid white; 
@@ -703,9 +1025,11 @@ function renderAppHeader($title, $backUrl = null)
             </div>
 
             <script>
-                function toggleProfileDropdown(e) {
+                function toggleProfileDropdown(e, dropdownId = 'headerProfileDropdown') {
                     e.stopPropagation();
-                    const dropdown = document.getElementById('headerProfileDropdown');
+                    const dropdown = document.getElementById(dropdownId);
+                    if (!dropdown) return;
+                    
                     const isVisible = dropdown.style.display === 'block';
 
                     // Fechar outros

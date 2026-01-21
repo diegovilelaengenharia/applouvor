@@ -352,26 +352,10 @@ try {
                 </a>
 
                 <!-- Configs -->
-                <a href="configuracoes.php" class="tool-card">
-                    <div style="background: #f8fafc; padding: 12px; border-radius: 50%; color: #64748b;">
-                        <i data-lucide="settings"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: #1e293b;">Ajustes</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Sistema</div>
-                    </div>
-                </a>
+
 
                 <!-- Boletim Estatístico -->
-                <a href="relatorio_gestao.php" class="tool-card">
-                    <div style="background: #fef3c7; padding: 12px; border-radius: 50%; color: #f59e0b;">
-                        <i data-lucide="bar-chart-3"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: #1e293b;">Boletim de Gestão</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Relatório Completo</div>
-                    </div>
-                </a>
+
             </div>
         </div>
 
