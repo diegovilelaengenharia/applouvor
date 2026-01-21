@@ -265,110 +265,17 @@ renderAppHeader('Avisos');
     }
 </style>
 
-<!-- Hero Header -->
-<div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 32px -16px; 
-    padding: 20px 20px 40px 20px; 
-    border-radius: 0 0 24px 24px; 
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: visible;
-">
-    <!-- Navigation Buttons (Top Right) -->
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
-        <?php renderGlobalNavButtons(); ?>
-    </div>
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <a href="index.php" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: #047857; 
-            background: white; 
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        ">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
-        </a>
-
-        <div style="display: flex; gap: 8px; align-items: center;">
-            <!-- Notification Bell (Maintenance) -->
-            <button onclick="showMaintenanceModal()" class="ripple" style="
-                background: rgba(255,255,255,0.2); 
-                border: none; 
-                width: 44px; 
-                height: 44px; 
-                border-radius: 12px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                color: white;
-                backdrop-filter: blur(4px);
-                cursor: pointer;
-                position: relative;
-            ">
-                <i data-lucide="bell" style="width: 20px;"></i>
-                <span style="
-                    position: absolute;
-                    top: 8px;
-                    right: 8px;
-                    width: 8px;
-                    height: 8px;
-                    background: #F59E0B;
-                    border-radius: 50%;
-                    border: 2px solid rgba(255,255,255,0.3);
-                "></span>
-            </button>
-
-            <!-- User Avatar -->
-            </div>`r`n    </div>
-
-    <div id="avisos-hero-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-        <div style="flex: 1; min-width: 0;">
-            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Quadro de Avisos</h1>
-            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Atualizações do Ministério</p>
-        </div>
-        <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <button id="btn-create-aviso" onclick="openModal('modal-create')" class="ripple" style="
-                background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
-                border: none;
-                padding: 12px 24px;
-                border-radius: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                color: white;
-                font-weight: 700;
-                font-size: 0.95rem;
-                cursor: pointer;
-                box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
-                transition: all 0.3s ease;
-                flex-shrink: 0;
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                <i data-lucide="plus" style="width: 20px;"></i> <span class="btn-text">Novo Aviso</span>
-            </button>
+<!-- Floating Search Bar -->
+<div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
+    <form method="GET" style="margin: 0;">
+        <input type="hidden" name="archived" value="<?= $showArchived ? '1' : '0' ?>">
+        <?php if ($filterType !== 'all'): ?>
+            <input type="hidden" name="type" value="<?= $filterType ?>">
         <?php endif; ?>
-    </div>
-
-    <!-- Floating Search Bar -->
-    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
-        <form method="GET" style="margin: 0;">
-            <input type="hidden" name="archived" value="<?= $showArchived ? '1' : '0' ?>">
-            <?php if ($filterType !== 'all'): ?>
-                <input type="hidden" name="type" value="<?= $filterType ?>">
-            <?php endif; ?>
-            <?php if ($filterPriority !== 'all'): ?>
-                <input type="hidden" name="priority" value="<?= $filterPriority ?>">
-            <?php endif; ?>
-            <div style="
+        <?php if ($filterPriority !== 'all'): ?>
+            <input type="hidden" name="priority" value="<?= $filterPriority ?>">
+        <?php endif; ?>
+        <div style="
                 background: var(--bg-secondary); 
                 border-radius: 16px; 
                 padding: 6px; 
@@ -377,7 +284,7 @@ renderAppHeader('Avisos');
                 align-items: center;
                 border: 1px solid rgba(0,0,0,0.05);
             ">
-                <div style="
+            <div style="
                     width: 44px; 
                     height: 44px; 
                     display: flex; 
@@ -385,15 +292,15 @@ renderAppHeader('Avisos');
                     justify-content: center; 
                     color: var(--primary-green);
                 ">
-                    <i data-lucide="search" style="width: 22px;"></i>
-                </div>
+                <i data-lucide="search" style="width: 22px;"></i>
+            </div>
 
-                <input
-                    type="text"
-                    name="search"
-                    value="<?= htmlspecialchars($search) ?>"
-                    placeholder="Buscar avisos..."
-                    style="
+            <input
+                type="text"
+                name="search"
+                value="<?= htmlspecialchars($search) ?>"
+                placeholder="Buscar avisos..."
+                style="
                         border: none; 
                         background: transparent; 
                         padding: 12px 0; 
@@ -404,8 +311,8 @@ renderAppHeader('Avisos');
                         font-weight: 500;
                     ">
 
-                <?php if (!empty($search)): ?>
-                    <a href="?archived=<?= $showArchived ? '1' : '0' ?>" style="
+            <?php if (!empty($search)): ?>
+                <a href="?archived=<?= $showArchived ? '1' : '0' ?>" style="
                         width: 40px; 
                         height: 40px; 
                         display: flex; 
@@ -415,12 +322,12 @@ renderAppHeader('Avisos');
                         text-decoration: none;
                         cursor: pointer;
                     ">
-                        <i data-lucide="x" style="width: 18px;"></i>
-                    </a>
-                <?php endif; ?>
-            </div>
-        </form>
-    </div>
+                    <i data-lucide="x" style="width: 18px;"></i>
+                </a>
+            <?php endif; ?>
+        </div>
+    </form>
+</div>
 </div>
 
 <!-- Tabs: Ativos / Arquivados -->

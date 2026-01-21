@@ -115,106 +115,48 @@ renderAppHeader('Membros');
     }
 </style>
 
-<!-- Hero Header -->
-<div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: visible;
+// Botão Adicionar (Ação Direita)
+$addButton = '
+<button onclick="openAddModal()" class="ripple" style="
+    background: #dcfce7; 
+    color: #166534; 
+    border: none; 
+    padding: 10px 16px; 
+    border-radius: 12px; 
+    font-weight: 700; 
+    font-size: 0.9rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
+    cursor: pointer;
 ">
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <a href="index.php" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: #047857; 
-            background: white; 
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        ">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
-        </a>
+    <i data-lucide="plus" style="width: 18px;"></i> <span style="display: none; @media(min-width: 360px) { display: inline; }">Novo</span>
+</button>';
 
-        <div style="display: flex; align-items: center;">
-            <?php renderGlobalNavButtons(); ?>
-        </div>
-    </div>
+renderPageHeader('Membros', 'Louvor PIB Oliveira', $addButton);
+?>
 
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Membros</h1>
-            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
-        </div>
-        <div style="width: 44px;"></div> <!-- Spacer -->
-    </div>
-
-    <!-- Floating Toolbar -->
-    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
-        <div style="
-            background: var(--bg-secondary); 
-            border-radius: 16px; 
-            padding: 6px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-            display: flex; 
-            align-items: center;
-            border: 1px solid rgba(0,0,0,0.05);
-            gap: 8px;
-        ">
-            <div style="
-                width: 44px; 
-                height: 44px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                color: var(--primary-green);
-                flex-shrink: 0;
-            ">
-                <i data-lucide="search" style="width: 22px;"></i>
-            </div>
-
-            <input
-                type="text"
-                id="memberSearch"
-                placeholder="Buscar membros..."
-                onkeyup="filterMembers()"
-                style="
-                    border: none; 
-                    background: transparent; 
-                    padding: 12px 0; 
-                    flex: 1; 
-                    font-size: 1rem; 
-                    color: var(--text-primary);
-                    outline: none;
-                    font-weight: 500;
-                    min-width: 0;
-                ">
-
-            <button onclick="openAddModal()" class="ripple" style="
-                background: var(--accent-interactive); 
-                color: white; 
-                border: none; 
-                padding: 10px 16px; 
+<!-- Barra de Busca (Reposicionada) -->
+<div style="margin-bottom: 24px;">
+    <div style="position: relative;">
+        <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 20px;"></i>
+        <input
+            type="text"
+            id="memberSearch"
+            placeholder="Buscar membros..."
+            onkeyup="filterMembers()"
+            style="
+                width: 100%; 
+                padding: 12px 12px 12px 48px; 
                 border-radius: 12px; 
-                font-weight: 700; 
-                font-size: 0.9rem; 
-                display: flex; 
-                align-items: center; 
-                gap: 6px;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(45, 122, 79, 0.2);
-            ">
-                <i data-lucide="plus" style="width: 18px;"></i> <span style="display: none; @media(min-width: 360px) { display: inline; }">Novo</span>
-            </button>
-        </div>
+                border: 1px solid #e2e8f0; 
+                font-size: 1rem; 
+                outline: none; 
+                transition: border 0.2s;
+                background: white;
+            "
+            onfocus="this.style.borderColor='#3b82f6'"
+            onblur="this.style.borderColor='#e2e8f0'">
     </div>
 </div>
 

@@ -10,18 +10,8 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 renderAppHeader('Repertório');
 ?>
 
-<!-- Header Clean -->
-<header style="
-    background: white; 
-    padding: 20px 24px; 
-    border-bottom: 1px solid #e2e8f0; 
-    margin: -16px -16px 24px -16px; 
-    text-align: center;
-    position: sticky; top: 0; z-index: 10;
-">
-    <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Repertório</h1>
-    <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #64748b;">Louvor PIB Oliveira</p>
-</header>
+renderPageHeader('Repertório');
+?>
 
 <!-- Tabs Navegação -->
 <div style="background: #f1f5f9; padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 600px; margin-left: auto; margin-right: auto;">
