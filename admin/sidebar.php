@@ -70,6 +70,10 @@ if (!empty($currentUser['photo'])) {
         <a href="index.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
             <i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Visão Geral</span>
         </a>
+
+        <div class="nav-divider"></div>
+        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
+
         <a href="escalas.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <i data-lucide="calendar-days"></i> <span class="sidebar-text">Escalas</span>
         </a>
@@ -79,20 +83,11 @@ if (!empty($currentUser['photo'])) {
         <a href="membros.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
             <i data-lucide="users"></i> <span class="sidebar-text">Membros</span>
         </a>
-
-        <div class="nav-divider"></div>
-
-        <a href="avisos.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
-            <i data-lucide="bell"></i> <span class="sidebar-text">Avisos</span>
-        </a>
         <a href="indisponibilidade.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
             <i data-lucide="calendar-off"></i> <span class="sidebar-text">Indisponibilidade</span>
         </a>
-        <a href="aniversarios.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
-            <i data-lucide="cake"></i> <span class="sidebar-text">Aniversários</span>
-        </a>
-        <div class="nav-divider"></div>
 
+        <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
 
         <a href="devocionais.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
@@ -103,6 +98,16 @@ if (!empty($currentUser['photo'])) {
         </a>
         <a href="leitura.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
             <i data-lucide="book-open"></i> <span class="sidebar-text">Leitura Bíblica</span>
+        </a>
+
+        <div class="nav-divider"></div>
+        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
+
+        <a href="avisos.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
+            <i data-lucide="bell"></i> <span class="sidebar-text">Avisos</span>
+        </a>
+        <a href="aniversarios.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
+            <i data-lucide="cake"></i> <span class="sidebar-text">Aniversários</span>
         </a>
     </nav>
 
