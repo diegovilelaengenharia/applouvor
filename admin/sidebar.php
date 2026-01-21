@@ -67,6 +67,13 @@ if (!empty($currentUser['avatar'])) {
 
     <!-- 2. Menu -->
     <nav class="sidebar-nav">
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+            <a href="lider.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'lider.php' ? 'active' : '' ?>" style="color: #d97706;">
+                <i data-lucide="crown"></i> <span class="sidebar-text">Líder</span>
+            </a>
+            <div class="nav-divider"></div>
+        <?php endif; ?>
+
         <a href="index.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
             <i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Visão Geral</span>
         </a>
