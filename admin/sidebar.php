@@ -41,17 +41,8 @@ if (!empty($currentUser['photo'])) {
     <!-- Cabeçalho Sidebar com Logo -->
     <div style="padding: 24px 20px; display: flex; align-items: center; justify-content: space-between;">
         <div class="logo-area" style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
-            <!-- Logo da Igreja (Usando Icon Church como placeholder visual bonito) -->
-            <div style="
-                width: 36px; height: 36px; 
-                background: #166534; 
-                border-radius: 8px; 
-                display: flex; align-items: center; justify-content: center;
-                color: white;
-                box-shadow: 0 2px 5px rgba(22, 101, 52, 0.2);
-            ">
-                <i data-lucide="church" style="width: 20px; height: 20px;"></i>
-            </div>
+            <!-- Logo Imagem -->
+            <img src="../assets/img/logo_pib_white.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
                 <span class="sidebar-text" style="color:#166534;">PIB Oliveira</span>
