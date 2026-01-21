@@ -10,7 +10,7 @@ try {
     $futureSchedules = $stmtFuture->fetchAll(PDO::FETCH_ASSOC);
 
     // Escalas Passadas (Histórico)
-    $stmtPast = $pdo->query("SELECT * FROM schedules WHERE event_date < CURDATE() ORDER BY event_date DESC LIMIT 10");
+    $stmtPast = $pdo->query("SELECT * FROM schedules WHERE event_date < CURDATE() ORDER BY event_date DESC LIMIT 20");
     $pastSchedules = $stmtPast->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Erro ao carregar escalas: " . $e->getMessage());
@@ -19,7 +19,7 @@ try {
 renderAppHeader('Escalas');
 ?>
 
-<!-- Header Clean (Desktop & Mobile) -->
+<!-- Header Clean -->
 <header style="
     background: white; 
     padding: 20px 24px; 
@@ -32,17 +32,15 @@ renderAppHeader('Escalas');
     top: 0;
     z-index: 10;
 ">
-    <div style="text-align: center; width: 100%;"> <!-- Centralizado estilo LouveApp -->
+    <div style="text-align: center; width: 100%;">
         <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Escalas</h1>
         <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #64748b;">Louvor PIB Oliveira</p>
     </div>
-
-    <!-- Filtros/Ações à direita (Desktop) ou Toolbar abaixo (Mobile) -->
 </header>
 
-<!-- Tabs Navegação (Estilo LouveApp - Verde) -->
-<div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; padding: 0 16px;">
-    <button class="ripple" style="
+<!-- Tabs Navegação (Funcionais) -->
+<div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; padding: 0 16px;">
+    <button id="btn-future" onclick="switchTab('future')" class="ripple" style="
         background: #dcfce7; 
         color: #166534; 
         border: none; 
@@ -51,8 +49,10 @@ renderAppHeader('Escalas');
         font-weight: 700; 
         font-size: 0.9rem;
         box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);
+        cursor: pointer;
+        transition: all 0.2s;
     ">Próximas</button>
-    <button class="ripple" style="
+    <button id="btn-past" onclick="switchTab('past')" class="ripple" style="
         background: transparent; 
         color: #64748b; 
         border: none; 
@@ -60,114 +60,125 @@ renderAppHeader('Escalas');
         border-radius: 20px; 
         font-weight: 600; 
         font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
     ">Anteriores</button>
 </div>
 
 <!-- Container Principal -->
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
 
-    <!-- Conteúdo Centralizado (Placeholder Empty State) -->
-    <?php if (empty($futureSchedules)): ?>
-        <div style="text-align: center; padding: 60px 20px;">
-            <div style="
-                background: #f1f5f9; 
-                width: 120px; height: 120px; 
-                border-radius: 50%; 
-                margin: 0 auto 24px auto; 
-                display: flex; align-items: center; justify-content: center;
-            ">
-                <i data-lucide="calendar" style="width: 48px; height: 48px; color: #94a3b8;"></i>
+    <!-- TAB: FUTURAS -->
+    <div id="tab-future">
+        <?php if (empty($futureSchedules)): ?>
+            <div style="text-align: center; padding: 60px 20px;">
+                <div style="
+                    background: #f1f5f9; 
+                    width: 120px; height: 120px; 
+                    border-radius: 50%; 
+                    margin: 0 auto 24px auto; 
+                    display: flex; align-items: center; justify-content: center;
+                ">
+                    <i data-lucide="calendar" style="width: 48px; height: 48px; color: #94a3b8;"></i>
+                </div>
+                <h3 style="color: #334155; margin-bottom: 8px;">Lista vazia.</h3>
+                <p style="color: #64748b; max-width: 300px; margin: 0 auto;">Para cadastrar uma escala, toque no botão (+).</p>
             </div>
-            <h3 style="color: #334155; margin-bottom: 8px;">Lista vazia.</h3>
-            <p style="color: #64748b; max-width: 300px; margin: 0 auto;">Para cadastrar uma escala, toque no botão (+).</p>
-        </div>
-    <?php else: ?>
-        <!-- Lista de Escalas (Mantendo o card bonito de antes) -->
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-            <?php foreach ($futureSchedules as $schedule):
-                $date = new DateTime($schedule['event_date']);
-                $isToday = $date->format('Y-m-d') === date('Y-m-d');
+        <?php else: ?>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 100px;">
+                <?php foreach ($futureSchedules as $schedule):
+                    $date = new DateTime($schedule['event_date']);
+                    $isToday = $date->format('Y-m-d') === date('Y-m-d');
 
-                // Buscar contagens
-                $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
-                $stmtCount->execute([$schedule['id']]);
-                $teamCount = $stmtCount->fetchColumn();
+                    // Contagens
+                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
+                    $stmtCount->execute([$schedule['id']]);
+                    $teamCount = $stmtCount->fetchColumn();
 
-                $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
-                $stmtSongs->execute([$schedule['id']]);
-                $songCount = $stmtSongs->fetchColumn();
-            ?>
-                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="display: block; text-decoration: none; color: inherit;">
-                    <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 20px;">
+                    $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
+                    $stmtSongs->execute([$schedule['id']]);
+                    $songCount = $stmtSongs->fetchColumn();
+                ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="display: block; text-decoration: none; color: inherit;">
+                        <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 20px;">
 
-                        <!-- Data Box -->
-                        <div style="text-align: center; min-width: 60px;">
-                            <div style="font-size: 1.5rem; font-weight: 800; color: #334155; line-height: 1;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-top: 4px;"><?= strtoupper($date->format('M')) ?></div>
+                            <!-- Data Box -->
+                            <div style="text-align: center; min-width: 60px;">
+                                <div style="font-size: 1.5rem; font-weight: 800; color: #334155; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-top: 4px;"><?= strtoupper($date->format('M')) ?></div>
+                            </div>
+
+                            <!-- Divider -->
+                            <div style="width: 1px; height: 40px; background: #e2e8f0;"></div>
+
+                            <!-- Info -->
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                                    <?php if ($isToday): ?>
+                                        <span style="background: #be123c; color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700;">HOJE</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div style="display: flex; gap: 12px; color: #64748b; font-size: 0.85rem;">
+                                    <span><?= $songCount ?> Músicas</span>
+                                    <span>•</span>
+                                    <span><?= $teamCount ?> Membros</span>
+                                </div>
+                            </div>
+
+                            <i data-lucide="chevron-right" style="color: #cbd5e1;"></i>
                         </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
-                        <!-- Linha Vertical -->
-                        <div style="width: 1px; height: 40px; background: #e2e8f0;"></div>
+    <!-- TAB: ANTERIORES -->
+    <div id="tab-past" style="display: none;">
+        <?php if (empty($pastSchedules)): ?>
+            <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                <i data-lucide="history" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                <p>Nenhum histórico encontrado.</p>
+            </div>
+        <?php else: ?>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 100px;">
+                <?php foreach ($pastSchedules as $schedule):
+                    $date = new DateTime($schedule['event_date']);
+                ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="display: block; text-decoration: none; color: inherit;">
+                        <div style="
+                        background: #f8fafc; 
+                        border-radius: 12px; 
+                        padding: 16px; 
+                        border: 1px solid #e2e8f0; 
+                        display: flex; 
+                        align-items: center; 
+                        gap: 16px;
+                    ">
+                            <!-- Data Box Small -->
+                            <div style="text-align: center; min-width: 50px;">
+                                <div style="font-size: 1.1rem; font-weight: 700; color: #64748b; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.65rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-top: 2px;"><?= strtoupper($date->format('M')) ?></div>
+                            </div>
 
-                        <!-- Info -->
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
-                            <div style="display: flex; gap: 12px; color: #64748b; font-size: 0.85rem;">
-                                <span><?= $songCount ?> Músicas</span>
-                                <span>•</span>
-                                <span><?= $teamCount ?> Membros</span>
+                            <!-- Divider -->
+                            <div style="width: 1px; height: 32px; background: #e2e8f0;"></div>
+
+                            <!-- Info -->
+                            <div style="flex: 1;">
+                                <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #475569;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                                <div style="font-size: 0.75rem; color: #94a3b8;">Realizado</div>
                             </div>
                         </div>
-
-                        <i data-lucide="chevron-right" style="color: #cbd5e1;"></i>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Seção Histórico (Restaurada) -->
-    <?php if (!empty($pastSchedules)): ?>
-        <h2 style="font-size: 0.9rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin: 32px 0 16px 0; letter-spacing: 0.05em;">Histórico Recente</h2>
-
-        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 80px;">
-            <?php foreach ($pastSchedules as $schedule):
-                $date = new DateTime($schedule['event_date']);
-            ?>
-                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="display: block; text-decoration: none; color: inherit;">
-                    <div style="
-                    background: #f8fafc; 
-                    border-radius: 12px; 
-                    padding: 16px; 
-                    border: 1px solid #e2e8f0; 
-                    display: flex; 
-                    align-items: center; 
-                    gap: 16px;
-                    opacity: 0.8;
-                ">
-                        <!-- Data Box Small -->
-                        <div style="text-align: center; min-width: 50px;">
-                            <div style="font-size: 1.1rem; font-weight: 700; color: #64748b; line-height: 1;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.65rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-top: 2px;"><?= strtoupper($date->format('M')) ?></div>
-                        </div>
-
-                        <!-- Divider -->
-                        <div style="width: 1px; height: 32px; background: #e2e8f0;"></div>
-
-                        <!-- Info -->
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #475569;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
-                            <div style="font-size: 0.75rem; color: #94a3b8;">Realizado</div>
-                        </div>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
-<!-- Floating Action Button Clean -->
+<!-- Floating Action Button -->
 <a href="escala_adicionar.php" class="ripple" style="
     position: fixed;
     bottom: 80px; /* Acima da Bottom Bar no mobile */
@@ -191,12 +202,35 @@ renderAppHeader('Escalas');
 
 <style>
     @media (min-width: 1025px) {
-
-        /* No desktop, o botão fica no canto inferior direito padrão */
         a[href="escala_adicionar.php"] {
             bottom: 32px;
         }
     }
 </style>
+
+<script>
+    function switchTab(tab) {
+        // Alternar visibilidade
+        document.getElementById('tab-future').style.display = tab === 'future' ? 'block' : 'none';
+        document.getElementById('tab-past').style.display = tab === 'past' ? 'block' : 'none';
+
+        // Atualizar Botões
+        const btnFuture = document.getElementById('btn-future');
+        const btnPast = document.getElementById('btn-past');
+
+        // Estilos
+        const activeStyle = "background: #dcfce7; color: #166534; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);";
+        const inactiveStyle = "background: transparent; color: #64748b; box-shadow: none;";
+
+        // Resetar classes/styles para garantir limpeza
+        btnFuture.style.cssText = tab === 'future' ?
+            "background: #dcfce7; color: #166534; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1); cursor: pointer; transition: all 0.2s;" :
+            "background: transparent; color: #64748b; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;";
+
+        btnPast.style.cssText = tab === 'past' ?
+            "background: #dcfce7; color: #166534; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1); cursor: pointer; transition: all 0.2s;" :
+            "background: transparent; color: #64748b; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;";
+    }
+</script>
 
 <?php renderAppFooter(); ?>
