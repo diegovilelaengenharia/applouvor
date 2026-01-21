@@ -31,99 +31,115 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 
 renderAppHeader('Detalhes da Música');
 ?>
+<style>
+    :root {
+        --bg-tertiary: #f8fafc;
+        --border-subtle: #e2e8f0;
+        --text-secondary: #64748b;
+        --text-primary: #1e293b;
+        --accent-interactive: #047857;
+        --bg-secondary: #f1f5f9;
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --text-muted: #94a3b8;
+    }
 
-}
+    .song-header {
+        text-align: center;
+        padding: 24px 16px;
+        background: linear-gradient(135deg, #2D7A4F 0%, #1a4d2e 100%);
+        border-radius: 16px;
+        margin-bottom: 24px;
+        color: white;
+    }
 
+    .info-section {
+        background: white;
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
 
-.info-section {
-background: white;
-border: 1px solid var(--border-subtle);
-border-radius: 20px;
-padding: 24px;
-margin-bottom: 32px;
-box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
+    .info-section-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+    }
 
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+    }
 
-.info-section-title {
-font-size: 0.85rem;
-font-weight: 700;
-color: var(--text-secondary);
-text-transform: uppercase;
-letter-spacing: 0.5px;
-margin-bottom: 12px;
-}
+    .info-item {
+        text-align: center;
+        padding: 12px;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+    }
 
-.info-grid {
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 12px;
-}
+    .info-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+    }
 
-.info-item {
-text-align: center;
-padding: 12px;
-background: var(--bg-tertiary);
-border-radius: 8px;
-}
+    .info-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--accent-interactive);
+    }
 
-.info-label {
-font-size: 0.75rem;
-color: var(--text-secondary);
-margin-bottom: 4px;
-}
+    .link-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px;
+        background: var(--bg-tertiary);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+    }
 
-.info-value {
-font-size: 1.1rem;
-font-weight: 700;
-color: var(--accent-interactive);
-}
+    .link-item:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent-interactive);
+    }
 
-.link-item {
-display: flex;
-align-items: center;
-gap: 12px;
-padding: 14px;
-background: var(--bg-tertiary);
-border-radius: 10px;
-margin-bottom: 8px;
-text-decoration: none;
-transition: all 0.2s;
-border: 1px solid transparent;
-}
+    .link-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
 
-.link-item:hover {
-background: var(--bg-secondary);
-border-color: var(--accent-interactive);
-}
+    .link-info {
+        flex: 1;
+    }
 
-.link-icon {
-width: 40px;
-height: 40px;
-border-radius: 8px;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-shrink: 0;
-}
+    .link-title {
+        font-weight: 700;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+    }
 
-.link-info {
-flex: 1;
-}
-
-.link-title {
-font-weight: 700;
-color: var(--text-primary);
-font-size: 0.95rem;
-}
-
-.link-url {
-font-size: 0.75rem;
-color: var(--text-muted);
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
+    .link-url {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 
 <!-- Hero Header -->
