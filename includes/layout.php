@@ -10,6 +10,7 @@ require_once 'db.php';
 
 function renderAppHeader($title, $backUrl = null)
 {
+    global $pdo; // Correção: Garante acesso ao banco de dados dentro da função
 ?>
     <!DOCTYPE html>
     <html lang="pt-BR">
