@@ -127,9 +127,9 @@ try {
     .filter-bar {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
-        margin-bottom: 24px;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
         box-shadow: var(--shadow-sm);
     }
 
@@ -137,17 +137,17 @@ try {
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
-        margin-bottom: 16px;
+        margin-bottom: 12px;
     }
 
     .filter-tab {
-        padding: 8px 16px;
+        padding: 6px 14px;
         border-radius: 20px;
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-muted);
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         cursor: pointer;
         text-decoration: none;
         transition: all 0.2s;
@@ -162,8 +162,8 @@ try {
     .custom-date-inputs {
         display: grid;
         grid-template-columns: 1fr 1fr auto;
-        gap: 12px;
-        margin-top: 12px;
+        gap: 10px;
+        margin-top: 10px;
     }
 
     .stat-hero {
@@ -177,70 +177,70 @@ try {
 
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-        margin-bottom: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
     }
 
     .kpi-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 14px;
         box-shadow: var(--shadow-sm);
         text-align: center;
     }
 
     .kpi-value {
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .kpi-label {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
         font-weight: 600;
     }
 
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 16px;
-        margin-bottom: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
     }
 
     .stat-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 16px;
         box-shadow: var(--shadow-sm);
     }
 
     .stat-title {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
         font-weight: 700;
         text-transform: uppercase;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .song-rank {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px;
+        gap: 10px;
+        padding: 10px;
         background: var(--bg-body);
-        border-radius: 12px;
-        margin-bottom: 8px;
+        border-radius: 10px;
+        margin-bottom: 6px;
     }
 
     .rank-number {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         background: var(--primary);
         color: white;
         border-radius: 50%;
@@ -248,7 +248,7 @@ try {
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         flex-shrink: 0;
     }
 
@@ -267,6 +267,10 @@ try {
     @media (max-width: 768px) {
         .custom-date-inputs {
             grid-template-columns: 1fr;
+        }
+
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 </style>
