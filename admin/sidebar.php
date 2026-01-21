@@ -194,6 +194,36 @@ if (!empty($currentUser['avatar'])) {
         flex-direction: column;
         z-index: 1000;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Invisible Scrollbar */
+    .sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 3px;
+    }
+
+    .sidebar:hover::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    /* Firefox */
+    .sidebar {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+    }
+
+    .sidebar:hover {
+        scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
     }
 
     /* Navegação Item */
