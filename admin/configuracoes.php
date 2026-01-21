@@ -13,64 +13,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
 
 <div style="max-width: 800px; margin: 0 auto; padding-bottom: 60px;">
 
-    <!-- 1. PERFIL DO USUÁRIO -->
-    <div class="settings-section">
-        <h3 class="settings-title">
-            <i data-lucide="user"></i> Dados Pessoais
-        </h3>
-        <div class="settings-card">
-            <form action="api/update_profile.php" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 20px;">
-                <!-- Foto e Nome -->
-                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                    <div style="position: relative;">
-                        <!-- Avatar Preview -->
-                        <img src="<?= $_SESSION['user_avatar'] ?? '../assets/img/default_avatar.png' ?>"
-                            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #f1f5f9;">
-                        <label for="upload-avatar" style="position: absolute; bottom: 0; right: 0; background: #3b82f6; color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid white;">
-                            <i data-lucide="camera" style="width: 14px;"></i>
-                        </label>
-                        <input type="file" id="upload-avatar" name="avatar" style="display: none;">
-                    </div>
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
-                        <div class="form-group">
-                            <label>Nome Completo</label>
-                            <input type="text" name="name" value="<?= htmlspecialchars($_SESSION['user_name'] ?? 'Usuário') ?>" class="form-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Telefone / WhatsApp</label>
-                        <input type="tel" name="phone" placeholder="(35) 99999-9999" class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label>Endereço</label>
-                        <input type="text" name="address" placeholder="Rua..." class="form-input">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Função Ministerial</label>
-                    <input type="text" value="<?= htmlspecialchars($_SESSION['user_role'] === 'admin' ? 'Líder / Admin' : 'Membro') ?>" disabled class="form-input disabled" style="background: var(--bg-body); color: var(--text-muted); border-color: var(--border-color);">
-                </div>
-
-                <button type="submit" class="btn-save ripple" style="
-                    background: var(--primary); 
-                    color: white; 
-                    border: none; 
-                    padding: 12px; 
-                    border-radius: var(--radius-md); 
-                    font-weight: 700;
-                    cursor: pointer;
-                    box-shadow: var(--shadow-sm);
-                ">Salvar Alterações</button>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- 2. APARÊNCIA (Dark Mode) -->
+    <!-- 1. APARÊNCIA (Dark Mode) -->
     <div class="settings-section">
         <h3 class="settings-title">
             <i data-lucide="palette"></i> Aparência
@@ -93,7 +36,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     </div>
 
 
-    <!-- 3. ACESSO RÁPIDO (Dashboard) -->
+    <!-- 2. ACESSO RÁPIDO (Dashboard) -->
     <div class="settings-section">
         <h3 class="settings-title">
             <i data-lucide="layout-grid"></i> Dashboard de Acesso
@@ -135,7 +78,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     </div>
 
 
-    <!-- 4. SOBRE O APP -->
+    <!-- 3. SOBRE O APP -->
     <div class="settings-section">
         <h3 class="settings-title">
             <i data-lucide="info"></i> Sobre
