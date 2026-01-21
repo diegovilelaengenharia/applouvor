@@ -143,11 +143,89 @@ renderAppHeader('Detalhes da Música');
 </style>
 
 <?php
-// Header com Botão Voltar (já incluído no layout, mas podemos personalizar se quiser)
-// Vamos usar o renderPageHeader padrão
-renderPageHeader('Detalhes da Música', $song['artist']);
+$actions = [
+    [
+        'label' => 'Editar Música',
+        'icon' => 'edit-3',
+        'link' => 'musica_editar.php?id=' . $id
+    ],
+    [
+        'label' => 'Excluir Música',
+// Menu de Ações (Dropdown)
+$menuActions = '
+<div style="position: relative;">
+    <button onclick="toggleMenu()" class="ripple" style="
+        width: 40px; height: 40px;
+        background: transparent;
+        border: none;
+        border-radius: 50%;
+        color: #64748b;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+    ">
+        <i data-lucide="more-vertical" style="width: 20px;"></i>
+    </button>
+    <div id="dropdown-menu" style="
+        display: none;
+        position: absolute;
+        top: 100%; right: 0;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+        min-width: 160px;
+        overflow: hidden;
+    ">
+        <a href="musica_editar.php?id=' . $id . '" class="ripple" style="
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        " onmouseover="this.style.backgroundColor=\'#f1f5f9\'" onmouseout="this.style.backgroundColor=\'transparent\'">
+            <i data-lucide="edit-3" style="width: 16px;"></i> Editar
+        </a>
+        <form method="POST" onsubmit="return confirm(\'Excluir música permanentemente?\')" style="margin: 0;">
+            <input type="hidden" name="action" value="delete_song">
+            <button type="submit" class="ripple" style="
+                width: 100%;
+                display: flex; align-items: center; gap: 10px;
+                padding: 12px 16px;
+                border: none;
+                background: transparent;
+                color: #ef4444;
+                font-size: 0.9rem;
+                font-weight: 500;
+                cursor: pointer;
+                text-align: left;
+            " onmouseover="this.style.backgroundColor=\'#fef2f2\'" onmouseout="this.style.backgroundColor=\'transparent\'">
+                <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
+            </button>
+        </form>
+    </div>
+</div>
+<script>
+function toggleMenu() {
+    const menu = document.getElementById(\'dropdown-menu\');
+    menu.style.display = menu.style.display === \'block\' ? \'none\' : \'block\';
+}
+// Fechar ao clicar fora
+document.addEventListener(\'click\', function(e) {
+    const menu = document.getElementById(\'dropdown-menu\');
+    const btn = document.querySelector(\'[onclick="toggleMenu()"]\');
+    if (menu.style.display === \'block\' && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.style.display = \'none\';
+    }
+});
+</script>
+';
 
-// Ícone Principal (separado do header agora, como destaque no topo do corpo)
+renderPageHeader('Detalhes da Música', $song['artist'], $menuActions);
+
+// Ícone Principal
 ?>
 <div style="text-align: center; margin-bottom: 24px;">
     <div style="
@@ -188,74 +266,30 @@ renderPageHeader('Detalhes da Música', $song['artist']);
 </div>
 
 <!-- Classificações -->
+<?php if (!empty($tags)): ?>
 <div class="info-section">
     <div class="info-section-title">Classificações</div>
-    <div style="padding: 8px 12px; background: rgba(45, 122, 79, 0.1); border-radius: 8px; display: inline-block;">
-        <span style="color: var(--accent-interactive); font-weight: 700;"><?= htmlspecialchars($song['category']) ?></span>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <?php foreach ($tags as $tag): 
+             $tagColor = $tag['color'] ?? '#047857';
+        ?>
+            <span style="
+                background: <?= $tagColor ?>15; 
+                color: <?= $tagColor ?>; 
+                padding: 6px 12px; 
+                border-radius: 20px; 
+                font-size: 0.8rem; 
+                font-weight: 700;
+                border: 1px solid <?= $tagColor ?>30;
+            "><?= htmlspecialchars($tag['name']) ?></span>
+        <?php endforeach; ?>
     </div>
 </div>
+<?php endif; ?>
 
 <!-- Referências -->
 <div class="info-section">
     <div class="info-section-title">Referências</div>
-
-    <?php if ($song['link_letra']): ?>
-        <a href="<?= htmlspecialchars($song['link_letra']) ?>" target="_blank" class="link-item ripple">
-            <div class="link-icon" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
-                <i data-lucide="file-text" style="width: 20px; color: white;"></i>
-            </div>
-            <div class="link-info">
-                <div class="link-title">Letra</div>
-                <div class="link-url"><?= htmlspecialchars($song['link_letra']) ?></div>
-            </div>
-            <i data-lucide="external-link" style="width: 18px; color: var(--text-muted);"></i>
-        </a>
-    <?php endif; ?>
-
-    <?php if ($song['link_cifra']): ?>
-        <a href="<?= htmlspecialchars($song['link_cifra']) ?>" target="_blank" class="link-item ripple">
-            <div class="link-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
-                <i data-lucide="music-2" style="width: 20px; color: white;"></i>
-            </div>
-            <div class="link-info">
-                <div class="link-title">Cifra</div>
-                <div class="link-url"><?= htmlspecialchars($song['link_cifra']) ?></div>
-            </div>
-            <i data-lucide="external-link" style="width: 18px; color: var(--text-muted);"></i>
-        </a>
-    <?php endif; ?>
-
-    <?php if ($song['link_audio']): ?>
-        <a href="<?= htmlspecialchars($song['link_audio']) ?>" target="_blank" class="link-item ripple">
-            <div class="link-icon" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
-                <i data-lucide="headphones" style="width: 20px; color: white;"></i>
-            </div>
-            <div class="link-info">
-                <div class="link-title">Áudio</div>
-                <div class="link-url"><?= htmlspecialchars($song['link_audio']) ?></div>
-            </div>
-            <i data-lucide="external-link" style="width: 18px; color: var(--text-muted);"></i>
-        </a>
-    <?php endif; ?>
-
-    <?php if ($song['link_video']): ?>
-        <a href="<?= htmlspecialchars($song['link_video']) ?>" target="_blank" class="link-item ripple">
-            <div class="link-icon" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
-                <i data-lucide="video" style="width: 20px; color: white;"></i>
-            </div>
-            <div class="link-info">
-                <div class="link-title">Vídeo</div>
-                <div class="link-url"><?= htmlspecialchars($song['link_video']) ?></div>
-            </div>
-            <i data-lucide="external-link" style="width: 18px; color: var(--text-muted);"></i>
-        </a>
-    <?php endif; ?>
-
-    <?php if (!$song['link_letra'] && !$song['link_cifra'] && !$song['link_audio'] && !$song['link_video']): ?>
-        <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
-            <i data-lucide="link-2" style="width: 32px; height: 32px; margin-bottom: 8px; color: var(--text-muted);"></i>
-            <p>Nenhuma referência cadastrada</p>
-        </div>
     <?php endif; ?>
 </div>
 
@@ -273,58 +307,5 @@ renderPageHeader('Detalhes da Música', $song['artist']);
     </div>
 <?php endif; ?>
 
-
-<!-- SEÇÃO DE GERENCIAMENTO -->
-<div style="background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-subtle); margin-top: 32px; margin-bottom: 40px;">
-    <h3 style="font-size: 0.85rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-        <i data-lucide="settings" style="width: 14px;"></i> Gerenciamento
-    </h3>
-
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <!-- Botão Editar -->
-        <a href="musica_editar.php?id=<?= $id ?>" class="ripple" style="
-            flex: 1;
-            background: #fbbf24;
-            color: #78350f;
-            padding: 16px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: none;
-        " onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">
-            <i data-lucide="edit-3" style="width: 20px;"></i> Editar Música
-        </a>
-
-        <!-- Botão Excluir -->
-        <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza que deseja excluir esta música?')" style="margin: 0; flex: 1;">
-            <input type="hidden" name="action" value="delete_song">
-            <button type="submit" class="ripple" style="
-                width: 100%;
-                background: #ef4444;
-                color: white;
-                padding: 16px;
-                border-radius: 12px;
-                font-weight: 700;
-                font-size: 1rem;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                transition: all 0.2s;
-                border: none;
-            " onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
-                <i data-lucide="trash-2" style="width: 20px;"></i> Excluir Música
-            </button>
-        </form>
-    </div>
-</div>
 
 <?php renderAppFooter(); ?>
