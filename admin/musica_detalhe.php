@@ -20,7 +20,21 @@ if (!$song) {
     exit;
 }
 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_song') {
+    try {
+        $stmt = $pdo->prepare("DELETE FROM songs WHERE id = ?");
+        $stmt->execute([$id]);
+        header("Location: repertorio.php");
+        exit;
+    } catch (PDOException $e) {
+        // Tratar erro de chave estrangeira se houver
+        echo "<script>alert('Erro ao excluir música. Ela pode estar em uso em alguma escala.');</script>";
+    }
+}
+
 renderAppHeader('Música');
+
 ?>
 
 <style>
@@ -55,13 +69,16 @@ renderAppHeader('Música');
         opacity: 0.9;
     }
 
+    
     .info-section {
-        background: var(--bg-secondary);
+        background: white;
         border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 16px;
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
+
 
     .info-section-title {
         font-size: 0.85rem;
@@ -175,20 +192,7 @@ renderAppHeader('Música');
 
         <div style="display: flex; gap: 12px; align-items: center;">
             <!-- Edit Button -->
-            <a href="musica_editar.php?id=<?= $id ?>" class="ripple" style="
-                width: 40px; 
-                height: 40px; 
-                border-radius: 12px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                color: white; 
-                background: rgba(255,255,255,0.2); 
-                text-decoration: none;
-                backdrop-filter: blur(4px);
-            ">
-                <i data-lucide="edit-2" style="width: 20px;"></i>
-            </a>
+            
 
             <?php renderGlobalNavButtons(); ?>
         </div>
@@ -319,5 +323,59 @@ renderAppHeader('Música');
         </div>
     </div>
 <?php endif; ?>
+
+
+<!-- SEÇÃO DE GERENCIAMENTO -->
+<div style="background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-subtle); margin-top: 32px; margin-bottom: 40px;">
+    <h3 style="font-size: 0.85rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="settings" style="width: 14px;"></i> Gerenciamento
+    </h3>
+    
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <!-- Botão Editar -->
+        <a href="musica_editar.php?id=<?= $id ?>" class="ripple" style="
+            flex: 1;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+        " onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">
+            <i data-lucide="edit-3" style="width: 20px;"></i> Editar Música
+        </a>
+
+        <!-- Botão Excluir -->
+        <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza que deseja excluir esta música?')" style="margin: 0; flex: 1;">
+            <input type="hidden" name="action" value="delete_song">
+            <button type="submit" class="ripple" style="
+                width: 100%;
+                background: #ef4444;
+                color: white;
+                padding: 16px;
+                border-radius: 12px;
+                font-weight: 700;
+                font-size: 1rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                transition: all 0.2s;
+                border: none;
+            " onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                <i data-lucide="trash-2" style="width: 20px;"></i> Excluir Música
+            </button>
+        </form>
+    </div>
+</div>
 
 <?php renderAppFooter(); ?>
