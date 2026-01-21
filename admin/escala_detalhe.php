@@ -273,7 +273,30 @@ renderAppHeader('Detalhes da Escala');
     <div style="background: var(--bg-secondary); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 1px solid var(--border-subtle);">
 
         <!-- Header com Data -->
-        <div style="background: linear-gradient(135deg, #047857 0%, #065f46 100%); padding: 24px; color: white;">
+        <div style="background: linear-gradient(135deg, #047857 0%, #065f46 100%); padding: 24px; color: white; position: relative;">
+            <!-- Menu de Três Pontinhos -->
+            <div style="position: absolute; top: 20px; right: 20px;">
+                <button onclick="toggleMenu()" class="ripple" style="background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.3)';" onmouseout="this.style.background='rgba(255,255,255,0.2)';">
+                    <i data-lucide="more-vertical" style="width: 20px; color: white;"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="actionMenu" style="display: none; position: absolute; top: 45px; right: 0; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); min-width: 180px; overflow: hidden; z-index: 1000; border: 1px solid var(--border-subtle);">
+                    <button onclick="openEditModal(); toggleMenu();" class="ripple" style="width: 100%; background: transparent; border: none; padding: 14px 18px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-primary); font-weight: 600; font-size: 0.9rem; transition: all 0.2s;" onmouseover="this.style.background='var(--bg-tertiary)';" onmouseout="this.style.background='transparent';">
+                        <i data-lucide="edit-3" style="width: 18px; color: #FFC107;"></i>
+                        Editar Escala
+                    </button>
+                    <div style="height: 1px; background: var(--border-subtle); margin: 0 12px;"></div>
+                    <form method="POST" onsubmit="return confirm('Excluir esta escala?')" style="margin: 0;">
+                        <input type="hidden" name="action" value="delete_schedule">
+                        <button type="submit" class="ripple" style="width: 100%; background: transparent; border: none; padding: 14px 18px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; color: #DC3545; font-weight: 600; font-size: 0.9rem; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                            <i data-lucide="trash-2" style="width: 18px;"></i>
+                            Excluir Escala
+                        </button>
+                    </form>
+                </div>
+            </div>
+
             <div style="display: flex; gap: 20px; align-items: flex-start;">
                 <!-- Badge de Data -->
                 <div style="background: white; border-radius: 16px; padding: 12px 16px; text-align: center; min-width: 80px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
@@ -394,294 +417,309 @@ renderAppHeader('Detalhes da Escala');
     </div>
 </div>
 
-<!-- CONTEÚDO: EQUIPE -->
+<!-- NOVO DESIGN: ABA EQUIPE -->
 <div id="equipe" class="tab-content <?= $activeTab === 'equipe' ? 'active' : '' ?>">
+    <?php
+    // Agrupar por tipo
+    $vozMembers = [];
+    $instrumentoMembers = [];
+
+    foreach ($currentMembers as $m) {
+        $inst = $m['instrument'] ?: 'Voz';
+        if (stripos($inst, 'voz') !== false && strlen($inst) <= 10) {
+            $vozMembers[] = $m;
+        } else {
+            $instrumentoMembers[] = $m;
+        }
+    }
+
+    $totalMembros = count($currentMembers);
+    ?>
+
     <?php if (empty($currentMembers)): ?>
-        <div class="empty-state">
-            <div style="background: var(--bg-tertiary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                <i data-lucide="users" style="color: var(--text-muted); width: 32px; height: 32px;"></i>
+        <!-- Empty State -->
+        <div style="text-align: center; padding: 60px 20px;">
+            <div style="background: var(--bg-tertiary); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i data-lucide="users" style="color: var(--text-muted); width: 40px; height: 40px;"></i>
             </div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Equipe Vazia</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Adicione instrumentistas.</p>
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Equipe Vazia</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">Adicione instrumentistas e vocalistas para esta escala.</p>
             <button onclick="openModal('modalMembers')" class="btn-action-add ripple">
-                <i data-lucide="plus" style="width: 18px;"></i> Adicionar Membro
+                <i data-lucide="plus" style="width: 18px;"></i> Adicionar Membros
             </button>
         </div>
     <?php else: ?>
-        <button onclick="openModal('modalMembers')" class="btn-action-add ripple w-full" style="margin-bottom: 16px;">
-            <i data-lucide="plus"></i> Gerenciar Equipe
-        </button>
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-            <?php foreach ($currentMembers as $member): ?>
-                <div style="
-                    background: var(--bg-secondary);
-                    border: 1px solid var(--border-subtle);
-                    border-left: 4px solid #10B981;
-                    border-radius: 12px;
-                    padding: 16px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    box-shadow: var(--shadow-sm);
-                    transition: all 0.2s;
-                ">
-                    <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
-                        <div style="
-                            width: 48px;
-                            height: 48px;
-                            border-radius: 50%;
-                            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-weight: 800;
-                            font-size: 1.1rem;
-                            color: #047857;
-                            flex-shrink: 0;
-                        "><?= strtoupper(substr($member['name'], 0, 1)) ?></div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 2px;"><?= htmlspecialchars($member['name']) ?></div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;"><?= htmlspecialchars($member['instrument'] ?: 'Voz') ?></div>
-                        </div>
-                    </div>
-                    <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
-                        <input type="hidden" name="action" value="remove_member">
-                        <input type="hidden" name="user_id" value="<?= $member['id'] ?>">
-                        <input type="hidden" name="current_tab" value="equipe">
-                        <button type="submit" class="ripple" style="
-                            background: transparent;
-                            border: none;
-                            width: 40px;
-                            height: 40px;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: var(--status-error);
-                            cursor: pointer;
-                            transition: all 0.2s;
-                        "><i data-lucide="trash-2" style="width: 20px;"></i></button>
-                    </form>
+
+        <!-- Header com Contador -->
+        <div style="background: var(--bg-secondary); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-subtle); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="users" style="width: 22px; color: #047857;"></i>
+                        Equipe Escalada
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 32px;"><?= $totalMembros ?> <?= $totalMembros == 1 ? 'membro' : 'membros' ?></p>
                 </div>
-            <?php endforeach; ?>
+                <button onclick="openModal('modalMembers')" class="ripple" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);">
+                    <i data-lucide="plus" style="width: 16px;"></i> Adicionar
+                </button>
+            </div>
         </div>
+
+        <!-- Vocalistas -->
+        <?php if (!empty($vozMembers)): ?>
+            <div style="margin-bottom: 24px;">
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="mic-2" style="width: 16px; color: #8b5cf6;"></i>
+                    Voz (<?= count($vozMembers) ?>)
+                </h4>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <?php foreach ($vozMembers as $member):
+                        $statusColors = [
+                            'confirmed' => ['bg' => '#d1fae5', 'text' => '#065f46', 'label' => 'Confirmado', 'icon' => 'check-circle'],
+                            'pending' => ['bg' => '#fef3c7', 'text' => '#92400e', 'label' => 'Pendente', 'icon' => 'clock'],
+                            'declined' => ['bg' => '#fee2e2', 'text' => '#991b1b', 'label' => 'Recusado', 'icon' => 'x-circle'],
+                        ];
+                        $status = $statusColors[$member['status']] ?? $statusColors['pending'];
+                    ?>
+                        <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#8b5cf6';" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
+                            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                                <!-- Avatar -->
+                                <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #5b21b6; flex-shrink: 0; border: 2px solid #a78bfa;">
+                                    <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                                </div>
+
+                                <!-- Info -->
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <?= htmlspecialchars($member['name']) ?>
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">
+                                        <?= htmlspecialchars($member['instrument'] ?: 'Voz') ?>
+                                    </div>
+                                </div>
+
+                                <!-- Status Badge -->
+                                <div style="background: <?= $status['bg'] ?>; color: <?= $status['text'] ?>; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+                                    <i data-lucide="<?= $status['icon'] ?>" style="width: 14px;"></i>
+                                    <span><?= $status['label'] ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Botão Remover -->
+                            <form method="POST" onsubmit="return confirm('Remover <?= htmlspecialchars($member['name']) ?>?');" style="margin: 0 0 0 12px;">
+                                <input type="hidden" name="action" value="remove_member">
+                                <input type="hidden" name="user_id" value="<?= $member['id'] ?>">
+                                <input type="hidden" name="current_tab" value="equipe">
+                                <button type="submit" class="ripple" style="background: transparent; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Instrumentistas -->
+        <?php if (!empty($instrumentoMembers)): ?>
+            <div>
+                <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="guitar" style="width: 16px; color: #f59e0b;"></i>
+                    Instrumentos (<?= count($instrumentoMembers) ?>)
+                </h4>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <?php foreach ($instrumentoMembers as $member):
+                        $statusColors = [
+                            'confirmed' => ['bg' => '#d1fae5', 'text' => '#065f46', 'label' => 'Confirmado', 'icon' => 'check-circle'],
+                            'pending' => ['bg' => '#fef3c7', 'text' => '#92400e', 'label' => 'Pendente', 'icon' => 'clock'],
+                            'declined' => ['bg' => '#fee2e2', 'text' => '#991b1b', 'label' => 'Recusado', 'icon' => 'x-circle'],
+                        ];
+                        $status = $statusColors[$member['status']] ?? $statusColors['pending'];
+
+                        // Cor do avatar baseada no instrumento
+                        $instColors = [
+                            'Violão' => ['bg' => '#fed7aa', 'border' => '#fb923c', 'text' => '#9a3412'],
+                            'Guitarra' => ['bg' => '#bfdbfe', 'border' => '#60a5fa', 'text' => '#1e40af'],
+                            'Bateria' => ['bg' => '#fecaca', 'border' => '#f87171', 'text' => '#991b1b'],
+                            'Teclado' => ['bg' => '#a7f3d0', 'border' => '#34d399', 'text' => '#065f46'],
+                            'Baixo' => ['bg' => '#e9d5ff', 'border' => '#c084fc', 'text' => '#6b21a8'],
+                        ];
+                        $instColor = $instColors[$member['instrument']] ?? ['bg' => '#fed7aa', 'border' => '#fb923c', 'text' => '#9a3412'];
+                    ?>
+                        <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#f59e0b';" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
+                            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                                <!-- Avatar -->
+                                <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, <?= $instColor['bg'] ?> 0%, <?= $instColor['bg'] ?> 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: <?= $instColor['text'] ?>; flex-shrink: 0; border: 2px solid <?= $instColor['border'] ?>;">
+                                    <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                                </div>
+
+                                <!-- Info -->
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <?= htmlspecialchars($member['name']) ?>
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">
+                                        <?= htmlspecialchars($member['instrument']) ?>
+                                    </div>
+                                </div>
+
+                                <!-- Status Badge -->
+                                <div style="background: <?= $status['bg'] ?>; color: <?= $status['text'] ?>; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+                                    <i data-lucide="<?= $status['icon'] ?>" style="width: 14px;"></i>
+                                    <span><?= $status['label'] ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Botão Remover -->
+                            <form method="POST" onsubmit="return confirm('Remover <?= htmlspecialchars($member['name']) ?>?');" style="margin: 0 0 0 12px;">
+                                <input type="hidden" name="action" value="remove_member">
+                                <input type="hidden" name="user_id" value="<?= $member['id'] ?>">
+                                <input type="hidden" name="current_tab" value="equipe">
+                                <button type="submit" class="ripple" style="background: transparent; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
     <?php endif; ?>
 </div>
 
-<!-- CONTEÚDO: REPERTÓRIO -->
+<!-- NOVO DESIGN: ABA MÚSICAS -->
 <div id="repertorio" class="tab-content <?= $activeTab === 'repertorio' ? 'active' : '' ?>">
+    <?php
+    $totalMusicas = count($currentSongs);
+    $duracaoTotal = $totalMusicas * 5; // 5 min por música (estimativa)
+    ?>
+
     <?php if (empty($currentSongs)): ?>
-        <div class="empty-state">
-            <div style="background: var(--bg-tertiary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                <i data-lucide="music" style="color: var(--text-muted); width: 32px; height: 32px;"></i>
+        <!-- Empty State -->
+        <div style="text-align: center; padding: 60px 20px;">
+            <div style="background: var(--bg-tertiary); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i data-lucide="music" style="color: var(--text-muted); width: 40px; height: 40px;"></i>
             </div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Repertório Vazio</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Selecione as músicas.</p>
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Repertório Vazio</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">Selecione as músicas para esta escala.</p>
             <button onclick="openModal('modalSongs')" class="btn-action-add ripple">
-                <i data-lucide="plus" style="width: 18px;"></i> Adicionar Música
+                <i data-lucide="plus" style="width: 18px;"></i> Adicionar Músicas
             </button>
         </div>
     <?php else: ?>
-        <button onclick="openModal('modalSongs')" class="btn-action-add ripple w-full" style="margin-bottom: 16px;">
-            <i data-lucide="plus"></i> Adicionar Música
-        </button>
+
+        <!-- Header com Contador e Duração -->
+        <div style="background: var(--bg-secondary); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-subtle); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="music-2" style="width: 22px; color: #3b82f6;"></i>
+                        Repertório
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 32px;">
+                        <?= $totalMusicas ?> <?= $totalMusicas == 1 ? 'música' : 'músicas' ?> • ~<?= $duracaoTotal ?>min
+                    </p>
+                </div>
+                <button onclick="openModal('modalSongs')" class="ripple" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);">
+                    <i data-lucide="plus" style="width: 16px;"></i> Adicionar
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista de Músicas -->
         <div style="display: flex; flex-direction: column; gap: 12px;">
-            <?php foreach ($currentSongs as $index => $song): ?>
-                <div style="
-                    background: var(--bg-secondary);
-                    border: 1px solid var(--border-subtle);
-                    border-left: 4px solid #3B82F6;
-                    border-radius: 12px;
-                    padding: 16px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    box-shadow: var(--shadow-sm);
-                    transition: all 0.2s;
-                ">
-                    <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
-                        <div style="
-                            width: 48px;
-                            height: 48px;
-                            border-radius: 50%;
-                            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-weight: 800;
-                            font-size: 1.1rem;
-                            color: #1D4ED8;
-                            flex-shrink: 0;
-                        "><?= $index + 1 ?></div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 2px;"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
-                                <?= htmlspecialchars($song['artist']) ?> • <span style="font-weight: 700; color: #3B82F6;"><?= htmlspecialchars($song['tone']) ?></span>
+            <?php foreach ($currentSongs as $index => $song):
+                $ordem = $index + 1;
+                $duracaoEstimada = 5; // minutos
+            ?>
+                <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-subtle); border-radius: 16px; overflow: hidden; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.1)'; this.style.borderColor='#3b82f6';" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
+
+                    <!-- Header da Música -->
+                    <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 14px 18px; border-bottom: 1px solid #93c5fd;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <!-- Número da Ordem -->
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: white; flex-shrink: 0; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);">
+                                <?= $ordem ?>
+                            </div>
+
+                            <!-- Título -->
+                            <div style="flex: 1; min-width: 0;">
+                                <h4 style="font-size: 1.05rem; font-weight: 800; color: #1e3a8a; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <?= htmlspecialchars($song['title']) ?>
+                                </h4>
                             </div>
                         </div>
                     </div>
-                    <form method="POST" onsubmit="return confirm('Remover música?');" style="margin: 0;">
-                        <input type="hidden" name="action" value="remove_song">
-                        <input type="hidden" name="song_id" value="<?= $song['id'] ?>">
-                        <input type="hidden" name="current_tab" value="repertorio">
-                        <button type="submit" class="ripple" style="
-                            background: transparent;
-                            border: none;
-                            width: 40px;
-                            height: 40px;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            color: var(--status-error);
-                            cursor: pointer;
-                            transition: all 0.2s;
-                        "><i data-lucide="trash-2" style="width: 20px;"></i></button>
-                    </form>
+
+                    <!-- Corpo da Música -->
+                    <div style="padding: 16px 18px;">
+                        <!-- Artista -->
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                            <i data-lucide="user" style="width: 16px; color: #6b7280;"></i>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;">
+                                <?= htmlspecialchars($song['artist'] ?: 'Artista não informado') ?>
+                            </span>
+                        </div>
+
+                        <!-- Informações -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
+                            <!-- Tom -->
+                            <?php if (!empty($song['tone'])): ?>
+                                <div style="background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px; border: 1px solid #fcd34d;">
+                                    <i data-lucide="music" style="width: 14px;"></i>
+                                    Tom: <?= htmlspecialchars($song['tone']) ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Duração -->
+                            <div style="background: #e0e7ff; color: #3730a3; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px; border: 1px solid #c7d2fe;">
+                                <i data-lucide="clock" style="width: 14px;"></i>
+                                ~<?= $duracaoEstimada ?>min
+                            </div>
+                        </div>
+
+                        <!-- Ações -->
+                        <div style="display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+                            <!-- Link Cifra -->
+                            <?php if (!empty($song['link'])): ?>
+                                <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" class="ripple" style="flex: 1; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#e5e7eb';" onmouseout="this.style.background='#f3f4f6';">
+                                    <i data-lucide="link" style="width: 16px;"></i>
+                                    Cifra
+                                </a>
+                            <?php endif; ?>
+
+                            <!-- Botão Ver Detalhes -->
+                            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="flex: 1; background: #3b82f6; color: white; border: none; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);" onmouseover="this.style.background='#2563eb';" onmouseout="this.style.background='#3b82f6';">
+                                <i data-lucide="eye" style="width: 16px;"></i>
+                                Ver Detalhes
+                            </a>
+
+                            <!-- Botão Remover -->
+                            <form method="POST" onsubmit="return confirm('Remover <?= htmlspecialchars($song['title']) ?>?');" style="margin: 0;">
+                                <input type="hidden" name="action" value="remove_song">
+                                <input type="hidden" name="song_id" value="<?= $song['id'] ?>">
+                                <input type="hidden" name="current_tab" value="repertorio">
+                                <button type="submit" class="ripple" style="background: transparent; border: 1px solid #fca5a5; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <!-- Dica de Reordenação -->
+        <div style="margin-top: 20px; padding: 14px; background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; border-radius: 0 10px 10px 0; display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="info" style="width: 18px; color: #3b82f6; flex-shrink: 0;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                <strong style="color: #1e40af;">Dica:</strong> As músicas são exibidas na ordem em que foram adicionadas.
+            </p>
+        </div>
+
     <?php endif; ?>
 </div>
-
-<!-- MODAL DE MEMBROS -->
-<div id="modalMembers" class="bottom-sheet-overlay">
-    <div class="bottom-sheet-content">
-        <div class="sheet-header">Adicionar à Equipe</div>
-        <form method="POST">
-            <input type="hidden" name="action" value="add_members">
-            <input type="hidden" name="current_tab" value="equipe">
-            <div class="checkbox-list">
-                <?php foreach ($allUsers as $user):
-                    // Pular se já estiver na escala
-                    $isAlreadyIn = false;
-                    foreach ($currentMembers as $cm) {
-                        if ($cm['id'] == $user['id']) $isAlreadyIn = true;
-                    }
-                    if ($isAlreadyIn) continue;
-                ?>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="users[]" value="<?= $user['id'] ?>">
-                        <div class="checkbox-info">
-                            <div class="checkbox-name"><?= htmlspecialchars($user['name']) ?></div>
-                            <div class="checkbox-sub"><?= htmlspecialchars($user['instrument'] ?: 'Sem inst.') ?></div>
-                        </div>
-                    </label>
-                <?php endforeach; ?>
-            </div>
-            <div style="display: flex; gap: 12px; margin-top: 24px;">
-                <button type="button" onclick="closeSheet('modalMembers')" class="btn-outline ripple" style="flex: 1; justify-content: center;">Cancelar</button>
-                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">Salvar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- MODAL DE MÚSICAS -->
-<div id="modalSongs" class="bottom-sheet-overlay">
-    <div class="bottom-sheet-content">
-        <div class="sheet-header">Adicionar Músicas</div>
-        <form method="POST">
-            <input type="hidden" name="action" value="add_songs">
-            <input type="hidden" name="current_tab" value="repertorio">
-            <div class="checkbox-list">
-                <?php foreach ($allSongs as $song):
-                    // Pular se já estiver na escala (opcional, mas comum para não repetir)
-                    $isAlreadyIn = false;
-                    foreach ($currentSongs as $cs) {
-                        if ($cs['id'] == $song['id']) $isAlreadyIn = true;
-                    }
-                    if ($isAlreadyIn) continue;
-                ?>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="songs[]" value="<?= $song['id'] ?>">
-                        <div class="checkbox-info">
-                            <div class="checkbox-name"><?= htmlspecialchars($song['title']) ?></div>
-                            <div class="checkbox-sub"><?= htmlspecialchars($song['artist']) ?></div>
-                        </div>
-                    </label>
-                <?php endforeach; ?>
-            </div>
-            <div style="display: flex; gap: 12px; margin-top: 24px;">
-                <button type="button" onclick="closeSheet('modalSongs')" class="btn-outline ripple" style="flex: 1; justify-content: center;">Cancelar</button>
-                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">Salvar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Modal de Edição -->
-<div id="modalEditSchedule" class="bottom-sheet-overlay">
-    <div class="bottom-sheet-content">
-        <div class="sheet-header">Editar Escala</div>
-        <form method="POST">
-            <input type="hidden" name="action" value="edit_schedule">
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Data do Evento</label>
-                <input type="date" name="event_date" class="form-input" value="<?= $schedule['event_date'] ?>" required>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Tipo de Evento</label>
-                <select name="event_type" class="form-input" required>
-                    <option value="Culto Domingo a Noite" <?= $schedule['event_type'] === 'Culto Domingo a Noite' ? 'selected' : '' ?>>Culto Domingo a Noite</option>
-                    <option value="Culto Tema Especial" <?= $schedule['event_type'] === 'Culto Tema Especial' ? 'selected' : '' ?>>Culto Tema Especial</option>
-                    <option value="Ensaio" <?= $schedule['event_type'] === 'Ensaio' ? 'selected' : '' ?>>Ensaio</option>
-                    <option value="Outro" <?= $schedule['event_type'] === 'Outro' ? 'selected' : '' ?>>Outro</option>
-                </select>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label">Observações</label>
-                <textarea name="notes" class="form-input" rows="4" style="resize: none;"><?= htmlspecialchars($schedule['notes']) ?></textarea>
-            </div>
-
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeSheet('modalEditSchedule')" class="btn-outline ripple" style="flex: 1; justify-content: center;">Cancelar</button>
-                <button type="submit" class="btn-action-save ripple" style="flex: 1; justify-content: center;">Salvar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-    function toggleActionsMenu() {
-        document.getElementById('actionsMenu').classList.toggle('active');
-    }
-
-    function openEditModal() {
-        document.getElementById('actionsMenu').classList.remove('active');
-        document.getElementById('modalEditSchedule').classList.add('active');
-    }
-
-    // Fechar menu ao clicar fora
-    document.addEventListener('click', function(e) {
-        const menu = document.getElementById('actionsMenu');
-        const btn = document.getElementById('actionsMenuBtn');
-        if (!menu.contains(e.target) && !btn.contains(e.target)) {
-            menu.classList.remove('active');
-        }
-    });
-
-    function openTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        // Simple logic to highlight button, works because onclick passes ID
-        const btns = document.querySelectorAll('.tab-btn');
-        btns.forEach(btn => {
-            if (btn.getAttribute('onclick').includes(tabId)) btn.classList.add('active');
-        });
-    }
-
-    function openModal(id) {
-        document.getElementById(id).classList.add('active');
-    }
-
-    function closeSheet(id) {
-        document.getElementById(id).classList.remove('active');
-    }
-</script>
-
-<?php renderAppFooter(); ?>

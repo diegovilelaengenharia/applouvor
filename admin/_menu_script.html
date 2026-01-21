@@ -1,0 +1,40 @@
+<script>
+// Função para toggle do menu de ações
+function toggleMenu() {
+    const menu = document.getElementById('actionMenu');
+    if (menu.style.display === 'none' || menu.style.display === '') {
+        menu.style.display = 'block';
+    } else {
+        menu.style.display = 'none';
+    }
+}
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('actionMenu');
+    const button = event.target.closest('button[onclick="toggleMenu()"]');
+    
+    if (!button && menu && !menu.contains(event.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+// Funções de tab (já existentes)
+function openTab(tabName) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+    
+    // Atualizar URL
+    const url = new URL(window.location);
+    url.searchParams.set('tab', tabName);
+    window.history.pushState({}, '', url);
+}
+
+lucide.createIcons();
+</script>
