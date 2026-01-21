@@ -142,6 +142,7 @@ renderAppHeader('Detalhes da Música');
     }
 </style>
 
+<?php
 // Header com Botão Voltar (já incluído no layout, mas podemos personalizar se quiser)
 // Vamos usar o renderPageHeader padrão
 renderPageHeader('Detalhes da Música', $song['artist']);
