@@ -471,18 +471,11 @@ try {
             <span class="action-label">Criar Aviso</span>
         </a>
 
-        <a href="boletim_estatistico.php" class="action-btn">
+        <a href="repertorio_stats.php" class="action-btn">
             <div class="action-icon" style="background: #fef2f2; color: #ef4444;">
                 <i data-lucide="bar-chart-2"></i>
             </div>
-            <span class="action-label">Relatórios</span>
-        </a>
-
-        <a href="configuracoes.php" class="action-btn">
-            <div class="action-icon" style="background: #f1f5f9; color: #64748b;">
-                <i data-lucide="settings"></i>
-            </div>
-            <span class="action-label">Configurações</span>
+            <span class="action-label">Estatísticas</span>
         </a>
     </div>
 
