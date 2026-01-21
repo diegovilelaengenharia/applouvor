@@ -66,56 +66,35 @@ if ($filterMine) $activeFilters++;
 if (!empty($filterType)) $activeFilters++;
 
 renderAppHeader('Escalas');
-?>
-
-<!-- Header Clean com Botão Filtro -->
-<header style="
-    background: white; 
-    padding: 20px 24px; 
-    border-bottom: 1px solid #e2e8f0; 
-    margin: -16px -16px 24px -16px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 20;
+// Botão Filtro para a ação direita
+$filterButton = '
+<button onclick="openSheet(\'filterSheet\')" class="ripple" style="
+    width: 40px; height: 40px; 
+    background: ' . ($activeFilters > 0 ? '#dcfce7' : 'transparent') . '; 
+    border: ' . ($activeFilters > 0 ? '1px solid #166534' : 'none') . '; 
+    color: ' . ($activeFilters > 0 ? '#166534' : '#64748b') . '; 
+    border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
 ">
-    <!-- Placeholder esquerda para balancear -->
-    <div style="width: 40px;"></div>
-
-    <div style="text-align: center;">
-        <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Escalas</h1>
-        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #64748b;">Louvor PIB Oliveira</p>
-    </div>
-
-    <!-- Botão Filtro -->
-    <button onclick="openSheet('filterSheet')" class="ripple" style="
-        width: 40px; height: 40px; 
-        background: <?= $activeFilters > 0 ? '#dcfce7' : 'transparent' ?>; 
-        border: <?= $activeFilters > 0 ? '1px solid #166534' : 'none' ?>; 
-        color: <?= $activeFilters > 0 ? '#166534' : '#64748b' ?>; 
-        border-radius: 50%; 
+    <i data-lucide="filter" style="width: 20px;"></i>
+    ' . ($activeFilters > 0 ? '
+    <span style="
+        position: absolute; top: -4px; right: -4px; 
+        background: #166534; color: white; 
+        font-size: 0.7rem; font-weight: 700; 
+        width: 18px; height: 18px; border-radius: 50%; 
         display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        position: relative;
-        overflow: visible; /* Garante que o badge não seja cortado */
-    ">
-        <i data-lucide="filter" style="width: 20px;"></i>
-        <?php if ($activeFilters > 0): ?>
-            <span style="
-                position: absolute; top: -4px; right: -4px; 
-                background: #166534; color: white; 
-                font-size: 0.7rem; font-weight: 700; 
-                width: 18px; height: 18px; border-radius: 50%; 
-                display: flex; align-items: center; justify-content: center;
-                border: 2px solid white;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-                z-index: 10;
-            "><?= $activeFilters ?></span>
-        <?php endif; ?>
-    </button>
-</header>
+        border: 2px solid white;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        z-index: 10;
+    ">' . $activeFilters . '</span>' : '') . '
+</button>';
+
+renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
+?>
 
 <!-- Controles Principais: Tabs + View Toggles -->
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px;">
