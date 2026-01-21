@@ -942,6 +942,9 @@ function renderAppHeader($title, $backUrl = null)
             });
         </script>
 
+        <!-- Main Script (Dark Mode & Global Logic) -->
+        <script src="/assets/js/main.js"></script>
+
         <!-- Gestures Script -->
         <script src="/assets/js/gestures.js"></script>
     </body>

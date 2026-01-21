@@ -70,6 +70,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
+        body.dark-mode {
+            --primary: #34d399;
+            /* Emerald 400 */
+            --primary-hover: #10b981;
+            /* Emerald 500 */
+            --bg-body: #0f172a;
+            /* Slate 900 */
+            --bg-surface: #1e293b;
+            /* Slate 800 */
+            --text-main: #f1f5f9;
+            /* Slate 100 */
+            --text-muted: #94a3b8;
+            /* Slate 400 */
+            --border: #334155;
+            /* Slate 700 */
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -324,6 +342,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
+        // Check saved theme and apply
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
         lucide.createIcons();
 
         // PWA Registration & Logic
