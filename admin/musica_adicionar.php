@@ -54,51 +54,129 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 renderAppHeader('Nova Música');
 ?>
 
+
 <style>
+    /* Modern Form Styles */
+    body {
+        background-color: #f8fafc !important; 
+    }
+
     .form-section {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 16px;
+        background: white;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
     }
 
     .form-section-title {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: var(--text-secondary);
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: #64748b;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 16px;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 12px;
     }
 
+    .form-group {
+        position: relative;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        color: #1e293b;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .form-input:focus {
+        background: white;
+        border-color: #047857;
+        box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1);
+        outline: none;
+    }
+    
+    .form-input::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
+    }
+
+    /* Input com Ícone Interno */
+    .input-icon-wrapper {
+        position: relative;
+    }
+    
+    .input-icon-wrapper i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        width: 18px;
+        transition: color 0.2s;
+        pointer-events: none;
+    }
+
+    .input-icon-wrapper input {
+        padding-left: 48px;
+    }
+
+    .input-icon-wrapper input:focus + i,
+    .input-icon-wrapper input:focus ~ i { /* Fallback */
+        color: #047857;
+    }
+    
+    /* Autocomplete */
     .autocomplete-suggestions {
         position: absolute;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-subtle);
-        border-radius: 8px;
-        max-height: 200px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        max-height: 250px;
         overflow-y: auto;
         z-index: 1000;
         width: 100%;
         display: none;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        margin-top: 4px;
     }
 
     .autocomplete-suggestion {
-        padding: 12px;
+        padding: 12px 16px;
         cursor: pointer;
-        border-bottom: 1px solid var(--border-subtle);
+        border-bottom: 1px solid #f1f5f9;
+        color: #475569;
+        font-weight: 500;
+        transition: background 0.1s;
     }
 
     .autocomplete-suggestion:hover {
-        background: var(--bg-tertiary);
-    }
-
-    .autocomplete-suggestion:last-child {
-        border-bottom: none;
+        background: #f0fdf4;
+        color: #047857;
     }
 </style>
+
 
 <!-- Hero Header -->
 <div style="
@@ -191,38 +269,49 @@ renderAppHeader('Nova Música');
         </div>
     </div>
 
+    
     <!-- Links/Referências -->
     <div class="form-section">
-        <div class="form-section-title">Referências</div>
+        <div class="form-section-title">Referências e Mídia</div>
 
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label">
-                <i data-lucide="file-text" style="width: 14px; display: inline;"></i> Link da Letra
-            </label>
-            <input type="url" name="link_letra" class="form-input" placeholder="https://www.letras.mus.br/...">
+        
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Link da Letra</label>
+            <div class="input-icon-wrapper">
+                <i data-lucide="file-text"></i>
+                <input type="url" name="link_letra" class="form-input" placeholder="https://www.letras.mus.br/...">
+            </div>
         </div>
-
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label">
-                <i data-lucide="music-2" style="width: 14px; display: inline;"></i> Link da Cifra
-            </label>
-            <input type="url" name="link_cifra" class="form-input" placeholder="https://www.cifraclub.com.br/...">
+    
+        
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Link da Cifra</label>
+            <div class="input-icon-wrapper">
+                <i data-lucide="music-2"></i>
+                <input type="url" name="link_cifra" class="form-input" placeholder="https://www.cifraclub.com.br/...">
+            </div>
         </div>
-
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label">
-                <i data-lucide="headphones" style="width: 14px; display: inline;"></i> Link do Áudio
-            </label>
-            <input type="url" name="link_audio" class="form-input" placeholder="https://www.deezer.com/...">
+    
+        
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Link do Áudio (Spotify/Deezer)</label>
+            <div class="input-icon-wrapper">
+                <i data-lucide="headphones"></i>
+                <input type="url" name="link_audio" class="form-input" placeholder="https://open.spotify.com/...">
+            </div>
         </div>
-
-        <div class="form-group">
-            <label class="form-label">
-                <i data-lucide="video" style="width: 14px; display: inline;"></i> Link do Vídeo (YouTube)
-            </label>
-            <input type="url" name="link_video" class="form-input" placeholder="https://youtu.be/...">
+    
+        
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Link do Vídeo (YouTube)</label>
+            <div class="input-icon-wrapper">
+                <i data-lucide="video"></i>
+                <input type="url" name="link_video" class="form-input" placeholder="https://youtu.be/...">
+            </div>
         </div>
+    
     </div>
+
 
     <!-- Campos Customizados -->
     <div class="form-section">
@@ -255,10 +344,10 @@ renderAppHeader('Nova Música');
 
     <!-- Botões -->
     <div style="display: flex; gap: 12px; margin-top: 24px; padding-bottom: 80px;">
-        <a href="repertorio.php" class="btn-outline ripple" style="flex: 1; justify-content: center; text-decoration: none;">
+        <a href="repertorio.php" class="ripple" style="background: white; color: #64748b; border: 1px solid #cbd5e1; padding: 16px; border-radius: 12px; font-weight: 600; font-size: 1rem; flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='white'">
             Cancelar
         </a>
-        <button type="submit" class="btn-action-save ripple" style="flex: 2; justify-content: center;">
+        <button type="submit" class="ripple" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25); flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;">
             <i data-lucide="plus"></i> Adicionar Música
         </button>
     </div>
