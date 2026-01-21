@@ -260,13 +260,13 @@ renderPageHeader('Detalhes da Música', $song['artist'], $menuActions);
 
 <!-- Classificações -->
 <?php if (!empty($tags)): ?>
-<div class="info-section">
-    <div class="info-section-title">Classificações</div>
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <?php foreach ($tags as $tag): 
-             $tagColor = $tag['color'] ?? '#047857';
-        ?>
-            <span style="
+    <div class="info-section">
+        <div class="info-section-title">Classificações</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <?php foreach ($tags as $tag):
+                $tagColor = $tag['color'] ?? '#047857';
+            ?>
+                <span style="
                 background: <?= $tagColor ?>15; 
                 color: <?= $tagColor ?>; 
                 padding: 6px 12px; 
@@ -275,15 +275,53 @@ renderPageHeader('Detalhes da Música', $song['artist'], $menuActions);
                 font-weight: 700;
                 border: 1px solid <?= $tagColor ?>30;
             "><?= htmlspecialchars($tag['name']) ?></span>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
     </div>
-</div>
 <?php endif; ?>
 
 <!-- Referências -->
 <div class="info-section">
     <div class="info-section-title">Referências</div>
-    <?php endif; ?>
+
+    <div class="ref-link">
+        <a href="<?= $song['lyrics_link'] ?: '#' ?>" target="_blank" class="ripple" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+            <div style="width: 40px; height: 40px; background: #fff7ed; border-radius: 10px; color: #f97316; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="file-text" style="width: 20px;"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #1e293b;">Letra</div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none;"><?= $song['lyrics_link'] ?: 'Não cadastrado' ?></div>
+            </div>
+            <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
+        </a>
+    </div>
+
+    <div class="ref-link">
+        <a href="<?= $song['chords_link'] ?: '#' ?>" target="_blank" class="ripple" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+            <div style="width: 40px; height: 40px; background: #ecfdf5; border-radius: 10px; color: #10b981; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="music" style="width: 20px;"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #1e293b;">Cifra</div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none;"><?= $song['chords_link'] ?: 'Não cadastrado' ?></div>
+            </div>
+            <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
+        </a>
+    </div>
+
+    <div class="ref-link">
+        <a href="<?= $song['youtube_link'] ?: '#' ?>" target="_blank" class="ripple" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+            <div style="width: 40px; height: 40px; background: #eff6ff; border-radius: 10px; color: #3b82f6; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="headphones" style="width: 20px;"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #1e293b;">Áudio</div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none;"><?= $song['youtube_link'] ?: 'Não cadastrado' ?></div>
+            </div>
+            <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
+        </a>
+    </div>
 </div>
 
 <?php if ($song['tags']): ?>
