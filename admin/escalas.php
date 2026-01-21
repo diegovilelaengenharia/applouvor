@@ -65,41 +65,7 @@ if ($filterMine) $activeFilters++;
 if (!empty($filterType)) $activeFilters++;
 
 renderAppHeader('Escalas');
-
-// Botão Filtro para a ação direita
-$filterButton = '';
-$badge = '';
-
-if ($activeFilters > 0) {
-    $badge = '<span style="
-        position: absolute; top: -4px; right: -4px; 
-        background: #166534; color: white; 
-        font-size: 0.7rem; font-weight: 700; 
-        width: 18px; height: 18px; border-radius: 50%; 
-        display: flex; align-items: center; justify-content: center;
-        border: 2px solid white;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        z-index: 10;
-    ">' . $activeFilters . '</span>';
-}
-
-$filterButton = '
-<button onclick="openSheet(\'filterSheet\')" class="ripple" style="
-    width: 40px; height: 40px; 
-    background: ' . ($activeFilters > 0 ? '#dcfce7' : 'transparent') . '; 
-    border: ' . ($activeFilters > 0 ? '1px solid #166534' : 'none') . '; 
-    color: ' . ($activeFilters > 0 ? '#166534' : '#64748b') . '; 
-    border-radius: 50%; 
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    position: relative;
-    overflow: visible;
-">
-    <i data-lucide="filter" style="width: 20px;"></i>
-    ' . $badge . '
-</button>';
-
-renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
+renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 ?>
 
 <!-- Top Controls: Toggle & View Options -->
@@ -119,25 +85,52 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
             ">Anteriores</button>
     </div>
 
-    <!-- View Toggles (Real) -->
-    <div style="background: #e2e8f0; padding: 4px; border-radius: 12px; display: flex; gap: 4px;">
-        <button onclick="setView('timeline')" id="btn-view-timeline" title="Linha do Tempo" class="ripple" style="
-            border: none; background: white; color: #0f172a; 
-            width: 36px; height: 36px; border-radius: 8px; 
+    <!-- View Toggles (Real) & Filter -->
+    <div style="display: flex; gap: 8px;">
+        <!-- Filter Button -->
+        <button onclick="openSheet('filterSheet')" class="ripple" style="
+            width: 36px; height: 36px; 
+            background: <?= $activeFilters > 0 ? '#dcfce7' : '#white' ?>; 
+            border: <?= $activeFilters > 0 ? '1px solid #166534' : '1px solid #e2e8f0' ?>; 
+            color: <?= $activeFilters > 0 ? '#166534' : '#64748b' ?>; 
+            border-radius: 12px; 
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         ">
-            <i data-lucide="calendar-clock" style="width: 20px;"></i>
+            <i data-lucide="filter" style="width: 18px;"></i>
+            <?php if ($activeFilters > 0): ?>
+                <span style="
+                    position: absolute; top: -4px; right: -4px; 
+                    background: #166534; color: white; 
+                    font-size: 0.6rem; font-weight: 700; 
+                    width: 16px; height: 16px; border-radius: 50%; 
+                    display: flex; align-items: center; justify-content: center;
+                    border: 2px solid white;
+                "><?= $activeFilters ?></span>
+            <?php endif; ?>
         </button>
-        <button onclick="setView('list')" id="btn-view-list" title="Modo Lista" class="ripple" style="
-            border: none; background: transparent; color: #64748b; 
-            width: 36px; height: 36px; border-radius: 8px; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: none;
-        ">
-            <i data-lucide="list" style="width: 20px;"></i>
-        </button>
+
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 12px; display: flex; gap: 4px;">
+            <button onclick="setView('timeline')" id="btn-view-timeline" title="Linha do Tempo" class="ripple" style="
+                border: none; background: white; color: #0f172a; 
+                width: 36px; height: 36px; border-radius: 8px; 
+                display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
+            ">
+                <i data-lucide="calendar-clock" style="width: 20px;"></i>
+            </button>
+            <button onclick="setView('list')" id="btn-view-list" title="Modo Lista" class="ripple" style="
+                border: none; background: transparent; color: #64748b; 
+                width: 36px; height: 36px; border-radius: 8px; 
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer; transition: all 0.2s;
+                box-shadow: none;
+            ">
+                <i data-lucide="list" style="width: 20px;"></i>
+            </button>
+        </div>
     </div>
 </div>
 
