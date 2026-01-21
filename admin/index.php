@@ -190,43 +190,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     <?php endif; ?>
 
 
-    <!-- BOLETIM DE ESTATÍSTICAS -->
-    <div class="section-title">
-        <span>Boletim de Estatísticas</span>
-    </div>
 
-    <div class="stats-grid">
-        <?php
-        // Total de Membros
-        $totalMembros = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
-
-        // Total de Escalas
-        $totalEscalas = $pdo->query("SELECT COUNT(*) FROM schedules")->fetchColumn();
-
-        // Total de Músicas
-        $totalMusicas = $pdo->query("SELECT COUNT(*) FROM songs")->fetchColumn();
-        ?>
-
-        <div class="stat-card" style="border-color: #dbeafe; background: #eff6ff;">
-            <div class="stat-value" style="color: #2563eb;"><?= $totalMembros ?></div>
-            <div class="stat-label">Membros</div>
-        </div>
-
-        <div class="stat-card" style="border-color: #d1fae5; background: #ecfdf5;">
-            <div class="stat-value" style="color: #047857;"><?= $totalEscalas ?></div>
-            <div class="stat-label">Escalas</div>
-        </div>
-
-        <div class="stat-card" style="border-color: #fce7f3; background: #fdf2f8;">
-            <div class="stat-value" style="color: #db2777;"><?= $totalMusicas ?></div>
-            <div class="stat-label">Músicas</div>
-        </div>
-
-        <div class="stat-card" style="border-color: #ffedd5; background: #fff7ed;">
-            <div class="stat-value" style="color: #ea580c;"><?= $niverCount ?></div>
-            <div class="stat-label">Aniversários</div>
-        </div>
-    </div>
 
 
     <!-- MINHAS ESCALAS -->
@@ -303,10 +267,10 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     <!-- MAIS TOCADAS -->
     <div class="section-title">
         <span>Mais tocadas</span>
-        <a href="repertorio.php" class="section-action">Ver tudo</a>
+        <button onclick="openModal('modal-top-louvores')" class="section-action" style="background: none; border: none; cursor: pointer; color: #2563eb; font-size: 0.85rem; font-weight: 600;">Ver tudo</button>
     </div>
 
-    <div class="feed-card" style="background: #eff6ff; border: 1px solid #dbeafe;">
+    <div onclick="openModal('modal-top-louvores')" class="feed-card" style="background: #eff6ff; border: 1px solid #dbeafe; cursor: pointer;">
         <div class="feed-icon" style="background: #dbeafe; color: #2563eb;">
             <i data-lucide="music"></i>
         </div>
@@ -319,9 +283,133 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         <div style="margin-left: auto; color: #2563eb;">
             <i data-lucide="chevron-right" style="width: 20px;"></i>
         </div>
-        </a>
-
-
     </div>
+
+    <!-- Top Louvores Modal -->
+    <div id="modal-top-louvores" class="modal-overlay">
+        <div class="modal-container fade-in-up" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Top Louvores 🎵</h3>
+                <button class="modal-close" onclick="closeModal('modal-top-louvores')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+                <button onclick="switchTab('tab-month')" class="tab-btn active" id="btn-tab-month" style="flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.2s;">
+                    Mês
+                </button>
+                <button onclick="switchTab('tab-semester')" class="tab-btn" id="btn-tab-semester" style="flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.2s;">
+                    Semestre
+                </button>
+                <button onclick="switchTab('tab-year')" class="tab-btn" id="btn-tab-year" style="flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.2s;">
+                    Ano
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+
+                <!-- Tab Content: Mês -->
+                <div id="tab-month" class="tab-content">
+                    <?php if (empty($topMonth)): ?>
+                        <div class="empty-state">Sem dados para este mês.</div>
+                    <?php else: ?>
+                        <?php foreach ($topMonth as $index => $song): ?>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 24px; height: 24px; background: #eff6ff; color: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+                                        <?= $index + 1 ?>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($song['title']) ?></div>
+                                        <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($song['artist']) ?></div>
+                                    </div>
+                                </div>
+                                <div style="font-weight: 700; color: #3b82f6; font-size: 0.9rem;">
+                                    <?= $song['play_count'] ?>x
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Tab Content: Semestre -->
+                <div id="tab-semester" class="tab-content" style="display: none;">
+                    <?php if (empty($topSemester)): ?>
+                        <div class="empty-state">Sem dados para o semestre.</div>
+                    <?php else: ?>
+                        <?php foreach ($topSemester as $index => $song): ?>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 24px; height: 24px; background: #f0fdf4; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+                                        <?= $index + 1 ?>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($song['title']) ?></div>
+                                        <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($song['artist']) ?></div>
+                                    </div>
+                                </div>
+                                <div style="font-weight: 700; color: #16a34a; font-size: 0.9rem;">
+                                    <?= $song['play_count'] ?>x
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Tab Content: Ano -->
+                <div id="tab-year" class="tab-content" style="display: none;">
+                    <?php if (empty($topYear)): ?>
+                        <div class="empty-state">Sem dados para o ano.</div>
+                    <?php else: ?>
+                        <?php foreach ($topYear as $index => $song): ?>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 24px; height: 24px; background: #fff7ed; color: #c2410c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+                                        <?= $index + 1 ?>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($song['title']) ?></div>
+                                        <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($song['artist']) ?></div>
+                                    </div>
+                                </div>
+                                <div style="font-weight: 700; color: #c2410c; font-size: 0.9rem;">
+                                    <?= $song['play_count'] ?>x
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+                el.style.background = 'transparent';
+                el.style.color = '#64748b';
+            });
+
+            // Show selected content
+            document.getElementById(tabId).style.display = 'block';
+
+            // Activate selected button
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.add('active');
+            btn.style.background = '#f1f5f9';
+            btn.style.color = '#1e293b';
+        }
+
+        // Set default tab style logic in CSS or inline above
+        document.querySelector('.tab-btn.active').style.background = '#f1f5f9';
+        document.querySelector('.tab-btn.active').style.color = '#1e293b';
+    </script>
 
     <?php renderAppFooter(); ?>
