@@ -45,59 +45,7 @@ renderAppHeader('Início');
         <!-- Navigation Buttons (Top Right) -->
         <div style="display: flex; justify-content: flex-end; margin-bottom: 12px; gap: 12px; align-items: center;">
 
-            <!-- 1. WhatsApp (Pulse Effect) -->
-            <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="ripple" style="
-                width: 44px; 
-                height: 44px; 
-                border-radius: 14px;
-                background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                color: white;
-                box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-                border: 1px solid rgba(255,255,255,0.2);
-                text-decoration: none;
-                position: relative;
-                overflow: hidden;
-            ">
-                <i data-lucide="message-circle" style="width: 22px; height: 22px;"></i>
-            </a>
-
-            <!-- 2. Notifications (Glassmorphism) -->
-            <?php
-            // Count unread notifications (active urgent or important)
-            $unreadCount = 0;
-            try {
-                $countStmt = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NULL AND (priority = 'urgent' OR priority = 'important')");
-                $unreadCount = $countStmt->fetchColumn();
-            } catch (Exception $e) {
-            }
-            ?>
-            <button class="ripple" style="
-                width: 44px; 
-                height: 44px; 
-                border-radius: 14px;
-                background: rgba(255, 255, 255, 0.15);
-                backdrop-filter: blur(8px);
-                border: 1px solid rgba(255,255,255,0.2);
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                color: white;
-                position: relative;
-            ">
-                <i data-lucide="bell" style="width: 22px; height: 22px;"></i>
-
-                <?php if ($unreadCount > 0): ?>
-                    <!-- Badge with Count -->
-                    <span style="
-                        position: absolute;
-                        top: -5px;
-                        right: -5px;
-                        min-width: 18px;
-                        height: 18px;
-                        padding: 0 5px;
+            <?php renderGlobalNavButtons(); ?>
                         background: #EF4444;
                         color: white;
                         font-size: 0.7rem;
