@@ -1,19 +1,13 @@
 <?php
 // admin/musica_adicionar.php
+require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
+checkLogin();
+
 // Buscar todas as tags
 $allTags = $pdo->query("SELECT * FROM tags ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
-
-// Se for editar, buscar tags já selecionadas
-$selectedTagIds = [];
-if (isset($id)) {
-    $stmtTags = $pdo->prepare("SELECT tag_id FROM song_tags WHERE song_id = ?");
-    $stmtTags->execute([$id]);
-    $selectedTagIds = $stmtTags->fetchAll(PDO::FETCH_COLUMN);
-}
-
 
 // Buscar artistas únicos para autocomplete
 $artists = $pdo->query("SELECT DISTINCT artist FROM songs ORDER BY artist ASC")->fetchAll(PDO::FETCH_COLUMN);
@@ -34,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $customFieldsJson = !empty($customFields) ? json_encode($customFields) : null;
 
-    
+
     // Pegar nome da primeira tag para preencher category (legacy)
     $categoryLegacy = 'Outros';
     if (!empty($_POST['selected_tags'])) {
@@ -83,304 +77,202 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtTag->execute([$newId, $tagId]);
         }
     }
-    
+
     header("Location: musica_detalhe.php?id=$newId");
     exit;
 }
 
-renderAppHeader('Nova Música');
+renderAppHeader('Adicionar Música');
 ?>
 
+<div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
 
-<style>
-    /* Modern Form Styles & Tag Selector */
-    body { background-color: #f8fafc !important; }
-    .form-section { background: white; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); transition: all 0.3s ease; }
-    .form-section:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-    .form-section-title { font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
-    .form-label { font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px; display: block; }
-    .form-input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; }
-    .form-input:focus { background: white; border-color: #047857; box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1); outline: none; }
-    
-    /* Tag Selector */
-    .tag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-    .tag-option { position: relative; cursor: pointer; }
-    .tag-option input { display: none; }
-    .tag-pill { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 12px; background: #f1f5f9; border: 2px solid transparent; font-weight: 600; color: #64748b; transition: all 0.2s; text-align: center; font-size: 0.9rem; }
-    .tag-option input:checked + .tag-pill { background: #ecfdf5; border-color: var(--tag-color, #047857); color: var(--tag-color, #047857); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .tag-pill::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--tag-color, #ccc); opacity: 0.5; }
-    .tag-option input:checked + .tag-pill::before { opacity: 1; box-shadow: 0 0 0 2px white; }
-    
-    /* Input Icon */
-    .input-icon-wrapper { position: relative; }
-    .input-icon-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; pointer-events: none; }
-    .input-icon-wrapper input { padding-left: 48px; }
-    
-    /* Autocomplete */
-    .autocomplete-suggestions { position: absolute; background: white; border: 1px solid #e2e8f0; border-radius: 12px; max-height: 250px; overflow-y: auto; z-index: 1000; width: 100%; display: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-top: 4px; }
-    .autocomplete-suggestion { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #475569; }
-    .autocomplete-suggestion:hover { background: #f0fdf4; color: #047857; }
-</style>
-
-
-<!-- Hero Header -->
-<div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: visible;
-">
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <!-- Cabeçalho Simples -->
+    <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Nova Música</h1>
+            <p style="color: #64748b; margin-top: 4px;">Preencha os dados da canção</p>
+        </div>
         <a href="repertorio.php" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: #047857; 
-            background: white; 
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; 
+            display: flex; align-items: center; justify-content: center; color: #64748b;
         ">
             <i data-lucide="x" style="width: 20px;"></i>
         </a>
-
-        <div style="display: flex; align-items: center;">
-            <?php renderGlobalNavButtons(); ?>
-        </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Nova Música</h1>
-            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+    <!-- Formulário -->
+    <form method="POST">
+
+        <!-- Cartão Principal -->
+        <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Título</label>
+                <input type="text" name="title" required placeholder="Ex: Grande é o Senhor" autofocus
+                    style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s;"
+                    onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)'"
+                    onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+            </div>
+
+            <div style="margin-bottom: 20px; position: relative;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Artista</label>
+                <div style="position: relative;">
+                    <i data-lucide="mic-2" style="position: absolute; left: 12px; top: 12px; color: #94a3b8; width: 18px;"></i>
+                    <input type="text" name="artist" id="artistInput" required placeholder="Ex: Adhemar de Campos" autocomplete="off"
+                        style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s;"
+                        onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)'"
+                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                </div>
+                <div id="artistSuggestions" style="
+                    position: absolute; width: 100%; background: white; border: 1px solid #e2e8f0; 
+                    border-radius: 12px; margin-top: 4px; z-index: 100; max-height: 200px; overflow-y: auto; display: none;
+                    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+                "></div>
+            </div>
+
+            <!-- Grid de Detalhes -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Tom</label>
+                    <input type="text" name="tone" placeholder="Ex: G"
+                        style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; text-transform: uppercase;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">BPM</label>
+                    <input type="number" name="bpm" placeholder="120"
+                        style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Duração</label>
+                    <input type="text" name="duration" placeholder="0:00"
+                        style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                </div>
+            </div>
+
         </div>
-    </div>
-</div>
 
-<form method="POST">
-    <!-- Informações Básicas -->
-    <div class="form-section">
-        <div class="form-section-title">Informações Básicas</div>
+        <!-- Tags / Classificações -->
+        <div style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin: 0;">Classificação</h3>
+                <a href="classificacoes.php" target="_blank" style="font-size: 0.8rem; color: #2563eb; font-weight: 600; text-decoration: none;">Gerenciar Tags</a>
+            </div>
 
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label">Título da Música *</label>
-            <input type="text" name="title" class="form-input" placeholder="Ex: Grande é o Senhor" required autofocus>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 16px; position: relative;">
-            <label class="form-label">Artista *</label>
-            <input type="text" name="artist" id="artistInput" class="form-input" placeholder="Digite ou selecione um artista" required autocomplete="off">
-            <div id="artistSuggestions" class="autocomplete-suggestions"></div>
-        </div>
-
-        
-        <div class="form-group">
-            <label class="form-label">Classificações (Selecione uma ou mais)</label>
-            <div class="tag-grid">
-                <?php foreach ($allTags as $tag): 
-                    $isChecked = in_array($tag['id'], $selectedTagIds); 
-                ?>
-                    <label class="tag-option">
-                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?>>
-                        <span class="tag-pill" style="--tag-color: <?= $tag['color'] ?: '#047857' ?>">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <?php foreach ($allTags as $tag): ?>
+                    <label style="cursor: pointer;">
+                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" style="display: none;" onchange="toggleTag(this)">
+                        <span class="tag-pill" style="
+                            display: inline-block; padding: 8px 16px; border-radius: 20px; 
+                            background: #f1f5f9; color: #64748b; font-size: 0.9rem; font-weight: 600;
+                            border: 1px solid transparent; transition: all 0.2s;
+                        ">
                             <?= htmlspecialchars($tag['name']) ?>
                         </span>
                     </label>
                 <?php endforeach; ?>
             </div>
-            <div style="margin-top: 10px; text-align: right;">
-                <a href="classificacoes.php" target="_blank" style="font-size: 0.85rem; color: #047857; font-weight: 600; text-decoration: none;">+ Gerenciar Classificações</a>
-            </div>
         </div>
 
-    </div>
+        <!-- Links Úteis (Collapsible ou Grid) -->
+        <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 12px;">Links & Referências</h3>
+        <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 24px;">
 
-    <!-- Detalhes Musicais -->
-    <div class="form-section">
-        <div class="form-section-title">Detalhes Musicais</div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-            <div class="form-group">
-                <label class="form-label">Tom</label>
-                <input type="text" name="tone" class="form-input" placeholder="Ex: G, Am, C#">
+            <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="music-2" style="color: #f97316; width: 20px;"></i>
+                <input type="url" name="link_cifra" placeholder="Link da Cifra (CifraClub...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
+            </div>
+            <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="youtube" style="color: #ef4444; width: 20px;"></i>
+                <input type="url" name="link_video" placeholder="Link do Vídeo (YouTube...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
+            </div>
+            <div style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="headphones" style="color: #10b981; width: 20px;"></i>
+                <input type="url" name="link_audio" placeholder="Link do Áudio (Spotify...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
             </div>
 
-            <div class="form-group">
-                <label class="form-label">BPM</label>
-                <input type="number" name="bpm" class="form-input" placeholder="120">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Duração</label>
-                <input type="text" name="duration" class="form-input" placeholder="3:45">
-            </div>
         </div>
-    </div>
 
-    
-    <!-- Links/Referências -->
-    <div class="form-section">
-        <div class="form-section-title">Referências e Mídia</div>
-
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label class="form-label">Link da Letra</label>
-            <div class="input-icon-wrapper">
-                <i data-lucide="file-text"></i>
-                <input type="url" name="link_letra" class="form-input" placeholder="https://www.letras.mus.br/...">
-            </div>
+        <!-- Observações -->
+        <div style="margin-bottom: 32px;">
+            <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Observações</label>
+            <textarea name="notes" rows="3" placeholder="Detalhes sobre arranjo, versão, etc..."
+                style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; resize: vertical;"></textarea>
         </div>
-    
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label class="form-label">Link da Cifra</label>
-            <div class="input-icon-wrapper">
-                <i data-lucide="music-2"></i>
-                <input type="url" name="link_cifra" class="form-input" placeholder="https://www.cifraclub.com.br/...">
-            </div>
-        </div>
-    
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label class="form-label">Link do Áudio (Spotify/Deezer)</label>
-            <div class="input-icon-wrapper">
-                <i data-lucide="headphones"></i>
-                <input type="url" name="link_audio" class="form-input" placeholder="https://open.spotify.com/...">
-            </div>
-        </div>
-    
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label class="form-label">Link do Vídeo (YouTube)</label>
-            <div class="input-icon-wrapper">
-                <i data-lucide="video"></i>
-                <input type="url" name="link_video" class="form-input" placeholder="https://youtu.be/...">
-            </div>
-        </div>
-    
-    </div>
 
-
-    <!-- Campos Customizados -->
-    <div class="form-section">
-        <div class="form-section-title">Campos Adicionais</div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
-            Adicione links personalizados como Google Drive, Partitura, Playback, etc.
-        </p>
-
-        <div id="customFieldsContainer"></div>
-
-        <button type="button" onclick="addCustomField()" class="btn-outline ripple" style="width: 100%; justify-content: center; margin-top: 12px;">
-            <i data-lucide="plus"></i> Adicionar Campo
+        <!-- Botão Salvar -->
+        <button type="submit" class="ripple" style="
+            width: 100%; border: none; 
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); 
+            color: white; padding: 16px; border-radius: 16px; 
+            font-size: 1.1rem; font-weight: 700; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+            cursor: pointer;
+        ">
+            <i data-lucide="check-circle" style="width: 20px;"></i>
+            Salvar Música
         </button>
-    </div>
 
-    <!-- Tags e Observações -->
-    <div class="form-section">
-        <div class="form-section-title">Tags e Observações</div>
+    </form>
 
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label">Tags (separadas por vírgula)</label>
-            <input type="text" name="tags" class="form-input" placeholder="Repertório 2025, Favorita, Natal">
-        </div>
-
-        <div class="form-group">
-            <label class="form-label">Observações</label>
-            <textarea name="notes" class="form-input" rows="4" style="resize: vertical;" placeholder="Alguma observação sobre a música..."></textarea>
-        </div>
-    </div>
-
-    <!-- Botões -->
-    <div style="display: flex; gap: 12px; margin-top: 24px; padding-bottom: 80px;">
-        <a href="repertorio.php" class="ripple" style="background: white; color: #64748b; border: 1px solid #cbd5e1; padding: 16px; border-radius: 12px; font-weight: 600; font-size: 1rem; flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='white'">
-            Cancelar
-        </a>
-        <button type="submit" class="ripple" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25); flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;">
-            <i data-lucide="plus"></i> Adicionar Música
-        </button>
-    </div>
-</form>
+    <div style="height: 60px;"></div>
+</div>
 
 <script>
-    // Autocomplete de artistas
+    // Toggle Visual Tag
+    function toggleTag(input) {
+        const pill = input.nextElementSibling;
+        if (input.checked) {
+            pill.style.background = '#dcfce7';
+            pill.style.color = '#166534';
+            pill.style.borderColor = '#bbf7d0';
+        } else {
+            pill.style.background = '#f1f5f9';
+            pill.style.color = '#64748b';
+            pill.style.borderColor = 'transparent';
+        }
+    }
+
+    // Autocomplete Logic
     const artists = <?= json_encode($artists) ?>;
-    const artistInput = document.getElementById('artistInput');
-    const artistSuggestions = document.getElementById('artistSuggestions');
+    const input = document.getElementById('artistInput');
+    const suggestions = document.getElementById('artistSuggestions');
 
-    artistInput.addEventListener('input', function() {
-        const value = this.value.toLowerCase();
-        artistSuggestions.innerHTML = '';
-
-        if (value.length < 2) {
-            artistSuggestions.style.display = 'none';
+    input.addEventListener('input', function() {
+        const val = this.value.toLowerCase();
+        suggestions.innerHTML = '';
+        if (val.length < 2) {
+            suggestions.style.display = 'none';
             return;
         }
 
-        const filtered = artists.filter(artist => artist.toLowerCase().includes(value));
-
+        const filtered = artists.filter(a => a.toLowerCase().includes(val));
         if (filtered.length > 0) {
+            suggestions.style.display = 'block';
             filtered.forEach(artist => {
                 const div = document.createElement('div');
-                div.className = 'autocomplete-suggestion';
                 div.textContent = artist;
-                div.onclick = function() {
-                    artistInput.value = artist;
-                    artistSuggestions.style.display = 'none';
-                };
-                artistSuggestions.appendChild(div);
+                div.style.padding = '12px';
+                div.style.cursor = 'pointer';
+                div.style.borderBottom = '1px solid #f1f5f9';
+                div.onmouseover = () => div.style.background = '#f8fafc';
+                div.onmouseout = () => div.style.background = 'white';
+                div.onclick = () => {
+                    input.value = artist;
+                    suggestions.style.display = 'none';
+                }
+                suggestions.appendChild(div);
             });
-            artistSuggestions.style.display = 'block';
         } else {
-            artistSuggestions.style.display = 'none';
+            suggestions.style.display = 'none';
         }
     });
 
-    // Fechar sugestões ao clicar fora
-    document.addEventListener('click', function(e) {
-        if (!artistInput.contains(e.target)) {
-            artistSuggestions.style.display = 'none';
-        }
+    document.addEventListener('click', e => {
+        if (!input.contains(e.target)) suggestions.style.display = 'none';
     });
-
-    // Campos customizados
-    let customFieldCount = 0;
-
-    function addCustomField() {
-        customFieldCount++;
-        const container = document.getElementById('customFieldsContainer');
-        const fieldHtml = `
-        <div class="custom-field-item" id="custom-field-${customFieldCount}" style="background: var(--bg-tertiary); padding: 16px; border-radius: 8px; margin-bottom: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span style="font-weight: 600; color: var(--text-primary);">Campo #${customFieldCount}</span>
-                <button type="button" onclick="removeCustomField(${customFieldCount})" class="btn-icon ripple" style="background: var(--status-error); color: white;">
-                    <i data-lucide="trash-2" style="width: 16px;"></i>
-                </button>
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-                <label class="form-label">Nome do Campo</label>
-                <input type="text" name="custom_field_name[]" class="form-input" placeholder="Ex: Google Drive, Partitura, Playback">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Link</label>
-                <input type="url" name="custom_field_link[]" class="form-input" placeholder="https://...">
-            </div>
-        </div>
-    `;
-        container.insertAdjacentHTML('beforeend', fieldHtml);
-        lucide.createIcons();
-    }
-
-    function removeCustomField(id) {
-        document.getElementById(`custom-field-${id}`).remove();
-    }
 </script>
 
 <?php renderAppFooter(); ?>
