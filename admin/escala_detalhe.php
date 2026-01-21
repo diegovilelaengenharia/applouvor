@@ -396,7 +396,7 @@ renderAppHeader('Detalhes da Escala');
             </div>
             <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Equipe Vazia</h3>
             <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">Adicione instrumentistas e vocalistas para esta escala.</p>
-            <button onclick="openModal('modalMembers')" class="btn-action-add ripple">
+            <button onclick="openModal('modalMembers')" class="ripple" style="background: #047857; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);">
                 <i data-lucide="plus" style="width: 18px;"></i> Adicionar Membros
             </button>
         </div>
@@ -576,7 +576,7 @@ renderAppHeader('Detalhes da Escala');
             </div>
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Repertório Vazio</h3>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Selecione as músicas.</p>
-            <button onclick="openModal('modalSongs')" class="btn-action-add ripple">
+            <button onclick="openModal('modalSongs')" class="ripple" style="background: #047857; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);">
                 <i data-lucide="plus" style="width: 18px;"></i> Adicionar Música
             </button>
         </div>
