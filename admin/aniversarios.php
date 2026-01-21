@@ -1,57 +1,50 @@
 <?php
 // admin/aniversarios.php
-require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-renderAppHeader('Aniversários');
+// Busca aniversariantes (supondo que exista birth_date ou similar, se não tiver, placeholder)
+// Verificar se coluna birth_date existe, senão usar placeholder
+try {
+    $stmt = $pdo->query("SELECT *, MONTH(birth_date) as mes, DAY(birth_date) as dia FROM users WHERE birth_date IS NOT NULL ORDER BY mes ASC, dia ASC");
+    $aniversariantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $aniversariantes = [];
+}
 
-// Render optimized hero header
-renderHeroHeader('Aniversários', 'Louvor PIB Oliveira');
+renderAppHeader('Aniversariantes');
 ?>
 
-<!-- Main Content -->
-<div class="container fade-in-up">
-    <!-- Empty State - Ready for Implementation -->
-    <div style="text-align: center; padding: 60px 20px;">
-        <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-            <i data-lucide="cake" style="color: #D97706; width: 48px; height: 48px;"></i>
-        </div>
-        <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 1.25rem; font-weight: 700;">Aniversariantes do Mês</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto;">
-            Celebre os aniversários dos membros do ministério de louvor.
-        </p>
-
-        <!-- Placeholder Cards -->
-        <div style="display: grid; gap: 16px; max-width: 600px; margin: 0 auto; text-align: left;">
-            <!-- Example Birthday Card -->
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-sm);">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                    <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-                        🎂
-                    </div>
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0 0 4px; font-size: 1rem; font-weight: 600; color: var(--text-primary);">Nome do Membro</h4>
-                        <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary);">
-                            <i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
-                            25 de Janeiro
-                        </p>
-                    </div>
-                    <div style="background: var(--warning-light); color: var(--warning-dark); padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700;">
-                        HOJE
-                    </div>
-                </div>
-            </div>
-
-            <!-- Coming Soon Note -->
-            <div style="background: var(--info-light); border: 1px solid var(--info); border-radius: 12px; padding: 16px; text-align: center;">
-                <p style="margin: 0; color: var(--info-dark); font-size: 0.875rem; font-weight: 500;">
-                    <i data-lucide="info" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                    Funcionalidade em desenvolvimento
-                </p>
-            </div>
-        </div>
+<div style="text-align: center; margin-top: 40px;">
+    <div style="background: #fefce8; width: 80px; height: 80px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; border: 4px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <i data-lucide="cake" style="width: 40px; height: 40px; color: #ca8a04;"></i>
     </div>
+
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: #334155; margin-bottom: 8px;">Parabéns para Você! 🎂</h2>
+    <p style="color: #64748b; max-width: 300px; margin: 0 auto 32px;">Aqui está a lista de quem celebra mais um ano de vida em nossa equipe.</p>
 </div>
+
+<?php if (empty($aniversariantes)): ?>
+    <div style="background: white; padding: 24px; border-radius: 16px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <p style="color: #94a3b8;">Nenhuma data cadastrada ainda.</p>
+        <a href="membros.php" style="color: #047857; font-weight: 600; text-decoration: none; display: block; margin-top: 12px;">Gerenciar Membros</a>
+    </div>
+<?php else: ?>
+    <div style="display: grid; gap: 12px;">
+        <?php foreach ($aniversariantes as $niver): ?>
+            <div style="background: white; padding: 16px; border-radius: 16px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                <div style="background: #f1f5f9; width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span style="font-weight: 800; color: #334155; font-size: 1.1rem; line-height: 1;"><?= $niver['dia'] ?></span>
+                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #64748b;"><?= date('M', mktime(0, 0, 0, $niver['mes'], 10)) ?></span>
+                </div>
+                <div>
+                    <div style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($niver['name']) ?></div>
+                    <div style="font-size: 0.85rem; color: #64748b;"><?= htmlspecialchars($niver['instrument']) ?></div>
+                </div>
+                <i data-lucide="party-popper" style="margin-left: auto; color: #ca8a04; width: 20px;"></i>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
 
 <?php renderAppFooter(); ?>
