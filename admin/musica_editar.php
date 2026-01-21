@@ -374,46 +374,12 @@ renderAppHeader('Editar Música');
         justify-content: center;
     }
 
-    /* Link Preview Cards */
-    .link-preview {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
+    .custom-field-item {
         background: var(--bg-body);
         border: 1px solid var(--border-color);
-        border-radius: 10px;
-        margin-bottom: 8px;
-    }
-
-    .link-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .link-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .link-label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        margin-bottom: 2px;
-    }
-
-    .link-url {
-        font-size: 0.8rem;
-        color: var(--text-main);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
     }
 
     @media (max-width: 768px) {
@@ -473,10 +439,14 @@ renderAppHeader('Editar Música');
 
                     <div class="form-group">
                         <label class="form-label">&nbsp;</label>
-                        <button type="button" onclick="openLinksModal()" class="btn-action btn-secondary" style="width: 100%;">
-                            <i data-lucide="link" style="width: 16px;"></i>
-                            Links
-                        </button>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" onclick="openLinksModal()" class="btn-action btn-secondary" style="flex: 1;" title="Links e Streaming">
+                                <i data-lucide="link" style="width: 16px;"></i>
+                            </button>
+                            <button type="button" onclick="openExtrasModal()" class="btn-action btn-secondary" style="flex: 1;" title="Campos Extras">
+                                <i data-lucide="plus-circle" style="width: 16px;"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -493,12 +463,12 @@ renderAppHeader('Editar Música');
                 </button>
             </div>
 
-            <div class="tag-pills">
+            <div class="tag-pills" id="tagsSelectionContainer">
                 <?php foreach ($allTags as $tag):
                     $isChecked = in_array($tag['id'], $selectedTagIds);
                 ?>
                     <label class="tag-pill-compact" style="<?= $isChecked ? 'background: var(--primary-subtle); border-color: var(--primary); color: var(--primary);' : '' ?>">
-                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?> onchange="this.parentElement.style.background = this.checked ? 'var(--primary-subtle)' : 'var(--bg-body)'; this.parentElement.style.borderColor = this.checked ? 'var(--primary)' : 'transparent'; this.parentElement.style.color = this.checked ? 'var(--primary)' : 'var(--text-muted)';">
+                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?> onchange="updateTagStyle(this)">
                         <span class="tag-dot" style="background: <?= $tag['color'] ?: '#047857' ?>;"></span>
                         <?= htmlspecialchars($tag['name']) ?>
                     </label>
@@ -527,6 +497,14 @@ renderAppHeader('Editar Música');
                 <i data-lucide="save" style="width: 18px;"></i>
                 Salvar Alterações
             </button>
+        </div>
+
+        <!-- Hidden Inputs para Campos Extras -->
+        <div id="hiddenCustomFields">
+            <?php foreach ($customFields as $index => $field): ?>
+                <input type="hidden" name="custom_field_name[]" value="<?= htmlspecialchars($field['name']) ?>">
+                <input type="hidden" name="custom_field_link[]" value="<?= htmlspecialchars($field['link']) ?>">
+            <?php endforeach; ?>
         </div>
     </form>
 </div>
@@ -599,9 +577,37 @@ renderAppHeader('Editar Música');
     </div>
 </div>
 
-<!-- Modal: Gestão de Tags (simplificado) -->
-<div id="tagManagerModal" class="modal-overlay">
+<!-- Modal: Campos Extras -->
+<div id="extrasModal" class="modal-overlay">
     <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Campos Adicionais</h3>
+            <button type="button" onclick="closeExtrasModal()" class="btn-close">
+                <i data-lucide="x" style="width: 18px;"></i>
+            </button>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+            Adicione links personalizados como Google Drive, Partitura, Playback, etc.
+        </p>
+
+        <div id="customFieldsList">
+            <!-- Renderizado via JS -->
+        </div>
+
+        <button type="button" onclick="addCustomFieldUI()" class="btn-action btn-secondary" style="width: 100%; margin-top: 12px; margin-bottom: 24px;">
+            <i data-lucide="plus" style="width: 18px;"></i> Adicionar Campo
+        </button>
+
+        <button type="button" onclick="syncCustomFields()" class="btn-action btn-primary" style="width: 100%;">
+            Concluído
+        </button>
+    </div>
+</div>
+
+<!-- Modal: Gestão de Tags Completa -->
+<div id="tagManagerModal" class="modal-overlay">
+    <div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
         <div class="modal-header">
             <h3 class="modal-title">Gerenciar Classificações</h3>
             <button type="button" onclick="closeTagManager()" class="btn-close">
@@ -609,19 +615,129 @@ renderAppHeader('Editar Música');
             </button>
         </div>
 
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
-            Para gerenciar classificações completas, acesse a página dedicada.
-        </p>
+        <!-- Lista de Tags -->
+        <div id="tagsList" style="flex: 1; overflow-y: auto; margin-bottom: 24px; min-height: 150px;">
+            <?php foreach ($allTags as $tag): ?>
+                <div class="tag-card-item" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border: 1px solid var(--border-color);">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: '#047857' ?>;">
+                        <i data-lucide="folder" style="width: 20px;"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main);"><?= htmlspecialchars($tag['name']) ?></div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
+                    </div>
+                    <div style="display: flex; gap: 4px;">
+                        <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="btn-close" style="width: 32px; height: 32px;">
+                            <i data-lucide="edit-2" style="width: 16px;"></i>
+                        </button>
+                        <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="btn-close" style="width: 32px; height: 32px; color: #ef4444;">
+                            <i data-lucide="trash-2" style="width: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
-        <a href="classificacoes.php" class="btn-action btn-primary" style="width: 100%; text-decoration: none;">
-            <i data-lucide="folder-plus" style="width: 18px;"></i>
-            Abrir Gestão Completa
-        </a>
+        <!-- Formulário de Nova/Editor -->
+        <div style="background: var(--bg-body); border-radius: 16px; padding: 16px;">
+            <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px;" id="tagFormTitle">Nova Classificação</h4>
+
+            <input type="hidden" id="editingTagId" value="">
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <input type="text" id="tagNameInput" class="form-input" placeholder="Nome da Pasta (Ex: Adoração)">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <textarea id="tagDescInput" class="form-input" rows="2" placeholder="Descrição (Opcional)"></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label">Cor</label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <?php
+                    $colors = ['#047857', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#6366F1'];
+                    foreach ($colors as $c): ?>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">
+                            <div class="color-circle" style="width: 28px; height: 28px; background: <?= $c ?>; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s;"></div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <button type="button" onclick="saveTagInline()" class="btn-action btn-primary" style="width: 100%;">
+                <span id="saveButtonText">Criar Classificação</span>
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Modal de Links
+    // Inicializar dados de campos customizados
+    let customFieldsData = <?= json_encode($customFields) ?>;
+
+    // Atualizar UI de campos customizados
+    function renderCustomFields() {
+        const list = document.getElementById('customFieldsList');
+        list.innerHTML = '';
+
+        customFieldsData.forEach((field, index) => {
+            const item = document.createElement('div');
+            item.className = 'custom-field-item';
+            item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-muted);">Campo #${index + 1}</span>
+                    <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="width: 28px; height: 28px; background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                        <i data-lucide="trash-2" style="width: 14px;"></i>
+                    </button>
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input" placeholder="Nome (Ex: Partitura)">
+                </div>
+                <div class="form-group">
+                    <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input" placeholder="Link (https://...)">
+                </div>
+            `;
+            list.appendChild(item);
+        });
+
+        // Atualizar inputs hidden no form principal
+        const hiddenContainer = document.getElementById('hiddenCustomFields');
+        hiddenContainer.innerHTML = '';
+        customFieldsData.forEach(field => {
+            hiddenContainer.innerHTML += `
+                <input type="hidden" name="custom_field_name[]" value="${field.name}">
+                <input type="hidden" name="custom_field_link[]" value="${field.link}">
+            `;
+        });
+
+        lucide.createIcons();
+    }
+
+    function addCustomFieldUI() {
+        customFieldsData.push({
+            name: '',
+            link: ''
+        });
+        renderCustomFields();
+    }
+
+    function removeCustomFieldData(index) {
+        customFieldsData.splice(index, 1);
+        renderCustomFields();
+    }
+
+    function updateCustomFieldData(index, key, value) {
+        customFieldsData[index][key] = value;
+    }
+
+    function syncCustomFields() {
+        renderCustomFields(); // Garante que hidden inputs estejam atualizados
+        closeExtrasModal();
+    }
+
+    // Modal Functions
     function openLinksModal() {
         document.getElementById('linksModal').classList.add('active');
         lucide.createIcons();
@@ -631,7 +747,16 @@ renderAppHeader('Editar Música');
         document.getElementById('linksModal').classList.remove('active');
     }
 
-    // Modal de Tags
+    function openExtrasModal() {
+        renderCustomFields();
+        document.getElementById('extrasModal').classList.add('active');
+        lucide.createIcons();
+    }
+
+    function closeExtrasModal() {
+        document.getElementById('extrasModal').classList.remove('active');
+    }
+
     function openTagManager() {
         document.getElementById('tagManagerModal').classList.add('active');
         lucide.createIcons();
@@ -639,6 +764,101 @@ renderAppHeader('Editar Música');
 
     function closeTagManager() {
         document.getElementById('tagManagerModal').classList.remove('active');
+    }
+
+    // Tag Selection Styles
+    function updateTagStyle(checkbox) {
+        const label = checkbox.parentElement;
+        if (checkbox.checked) {
+            label.style.background = 'var(--primary-subtle)';
+            label.style.borderColor = 'var(--primary)';
+            label.style.color = 'var(--primary)';
+        } else {
+            label.style.background = 'var(--bg-body)';
+            label.style.borderColor = 'transparent';
+            label.style.color = 'var(--text-muted)';
+        }
+    }
+
+    // Tag Management CRUD (Dummy Implementation for UI - Needs Backend Endpoint)
+    // Para funcionar realmente inline, precisaria de um endpoint API.
+    // Como estamos simplificando, vou fazer submeter para classificacoes.php e recarregar ou implementar ajax real se tiver endpoint.
+    // Vou implementar uma chamada fetch para classificacoes.php mas como ela retorna HTML, teria que adaptar.
+    // Melhor abordagem: Simular a UI e recarregar a página ao fechar se houve alteração, OU implementar AJAX real se eu crar um endpoint JSON.
+    // VOU CRIAR A LOGICA AJAX ASSUMINDO QUE POSSO CRIAR UM ENDPOINT SIMPLES OU USAR O PROPRIO classificacoes.php COM PARAMETRO JSON.
+
+    // Vou usar a lógica de submissão via form hidden para criar tags, mas idealmente seria AJAX.
+    // Por enquanto, vou deixar o script AJAX preparado para um futuro endpoint 'api/tags.php'.
+
+    // SIMULAÇÃO VISUAL DE SELEÇÃO DE COR
+    function selectTagColor(radio) {
+        document.querySelectorAll('.color-circle').forEach(c => {
+            c.style.transform = 'scale(1)';
+            c.style.borderColor = 'transparent';
+        });
+        if (radio.checked) {
+            radio.nextElementSibling.style.transform = 'scale(1.2)';
+            radio.nextElementSibling.style.borderColor = 'var(--text-main)';
+        }
+    }
+
+    function editTagInline(tag) {
+        document.getElementById('editingTagId').value = tag.id;
+        document.getElementById('tagNameInput').value = tag.name;
+        document.getElementById('tagDescInput').value = tag.description;
+        document.getElementById('tagFormTitle').textContent = 'Editar Classificação';
+        document.getElementById('saveButtonText').textContent = 'Salvar Alterações';
+
+        // Selecionar cor
+        const radios = document.getElementsByName('tagColor');
+        radios.forEach(r => {
+            if (r.value === tag.color) {
+                r.checked = true;
+                selectTagColor(r);
+            }
+        });
+    }
+
+    function saveTagInline() {
+        // Como não tenho endpoint API JSON pronto, vou fazer um submit tradicional para classificacoes.php
+        // POST para classificacoes.php com action=create/update
+
+        const id = document.getElementById('editingTagId').value;
+        const name = document.getElementById('tagNameInput').value;
+        const desc = document.getElementById('tagDescInput').value;
+        const color = document.querySelector('input[name="tagColor"]:checked')?.value || '#047857';
+
+        if (!name) return alert('Nome obrigatório');
+
+        const formData = new FormData();
+        formData.append('action', id ? 'update' : 'create');
+        if (id) formData.append('id', id);
+        formData.append('name', name);
+        formData.append('description', desc);
+        formData.append('color', color);
+
+        fetch('classificacoes.php', {
+            method: 'POST',
+            body: formData
+        }).then(() => {
+            // Recarregar página para atualizar lista (solução simples e robusta)
+            location.reload();
+        });
+    }
+
+    function deleteTagInline(id) {
+        if (!confirm('Excluir esta tag?')) return;
+
+        const formData = new FormData();
+        formData.append('action', 'delete');
+        formData.append('id', id);
+
+        fetch('classificacoes.php', {
+            method: 'POST',
+            body: formData
+        }).then(() => {
+            location.reload();
+        });
     }
 
     // Fechar modais ao clicar fora
@@ -650,8 +870,8 @@ renderAppHeader('Editar Música');
         });
     });
 
-    // Inicializar ícones
     lucide.createIcons();
+    renderCustomFields(); // Inicializar campos extras
 </script>
 
 <?php renderAppFooter(); ?>
