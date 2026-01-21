@@ -386,7 +386,7 @@ function renderAppHeader($title, $backUrl = null)
 
                     <!-- Mobile Profile Avatar -->
                     <div style="position: relative;">
-                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 36px; height: 36px; padding: 0; border: 1px solid var(--border-color); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 40px; height: 40px; padding: 0; border: 2px solid white; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25), 0 2px 8px rgba(34, 197, 94, 0.2); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;">
                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                             <?php else: ?>
