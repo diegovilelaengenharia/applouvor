@@ -187,6 +187,10 @@ renderAppHeader('Adicionar Música');
                 <input type="url" name="link_cifra" placeholder="Link da Cifra (CifraClub...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
             </div>
             <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="file-text" style="color: #f59e0b; width: 20px;"></i>
+                <input type="url" name="link_letra" placeholder="Link da Letra (Letras.mus.br...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
+            </div>
+            <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
                 <i data-lucide="youtube" style="color: #ef4444; width: 20px;"></i>
                 <input type="url" name="link_video" placeholder="Link do Vídeo (YouTube...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
             </div>
