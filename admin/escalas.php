@@ -163,7 +163,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
 
-                    // Buscar participantes e avatares
+                    // Buscar participantes (Top 5)
                     $stmtUsers = $pdo->prepare("
                             SELECT u.name, u.photo, u.avatar_color 
                             FROM schedule_users su 
@@ -174,11 +174,29 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                     $stmtUsers->execute([$schedule['id']]);
                     $participants = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
 
-                    // Contar total e extra
+                    // Contar total participantes
                     $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
                     $stmtCount->execute([$schedule['id']]);
                     $totalParticipants = $stmtCount->fetchColumn();
                     $extraCount = max(0, $totalParticipants - 5);
+
+                    // Buscar Músicas (Top 3)
+                    $stmtSongs = $pdo->prepare("
+                        SELECT s.title 
+                        FROM schedule_songs ss
+                        JOIN songs s ON ss.song_id = s.id
+                        WHERE ss.schedule_id = ?
+                        ORDER BY ss.order_index ASC
+                        LIMIT 3
+                    ");
+                    $stmtSongs->execute([$schedule['id']]);
+                    $songs = $stmtSongs->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Contar total músicas
+                    $stmtSongCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
+                    $stmtSongCount->execute([$schedule['id']]);
+                    $totalSongs = $stmtSongCount->fetchColumn();
+                    $extraSongs = max(0, $totalSongs - 3);
                 ?>
                     <div class="timeline-row" style="display: flex; gap: 24px;">
                         <!-- Coluna Data -->
@@ -188,75 +206,128 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                             <div style="font-size: 0.7rem; color: #cbd5e1; margin-top: 4px;"><?= $date->format('D') ?></div>
                         </div>
 
-                        <!-- Card Evento -->
+                        <!-- Card Evento Rico -->
                         <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
                                 flex: 1; 
                                 background: white; 
                                 border-radius: 16px; 
                                 border: 1px solid #e2e8f0; 
-                                padding: 20px; 
+                                padding: 0; /* Padding controlado internamente */
                                 text-decoration: none; 
                                 color: inherit;
                                 box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
                                 transition: all 0.2s;
                                 position: relative;
+                                overflow: hidden;
                             ">
-                            <?php if ($isToday): ?>
-                                <div style="position: absolute; top: 16px; right: 16px; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">
-                                    HOJE
-                                </div>
-                            <?php endif; ?>
 
-                            <h3 style="margin: 0 0 4px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
-                            <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;">
-                                <?= $date->format('H:i') ?> • Louvor PIB
+                            <!-- Header do Card -->
+                            <div style="padding: 20px 20px 16px 20px; border-bottom: 1px solid #f1f5f9;">
+                                <?php if ($isToday): ?>
+                                    <div style="float: right; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-left: 12px;">
+                                        HOJE
+                                    </div>
+                                <?php endif; ?>
+
+                                <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                                <div style="display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: #64748b;">
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="clock" style="width: 14px; color: #94a3b8;"></i>
+                                        <?= $date->format('H:i') ?>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="map-pin" style="width: 14px; color: #94a3b8;"></i>
+                                        PIB Oliveira
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Avatars Stack -->
-                            <div style="display: flex; align-items: center;">
-                                <div style="display: flex; padding-left: 8px;">
-                                    <?php if (empty($participants)): ?>
-                                        <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Nenhum participante</span>
-                                    <?php else: ?>
-                                        <?php foreach ($participants as $i => $p):
-                                            $zIndex = 10 - $i;
-                                            $photo = $p['photo'] ? (strpos($p['photo'], 'path') !== false ? '../assets/img/' . $p['photo'] : '../assets/img/' . $p['photo']) : null;
-                                            if ($p['photo'] && !file_exists('../assets/img/' . $p['photo'])) $photo = null;
-                                        ?>
-                                            <div style="
-                                                    width: 32px; height: 32px; 
-                                                    border-radius: 50%; 
-                                                    border: 2px solid white; 
-                                                    background: <?= $p['avatar_color'] ?: '#cbd5e1' ?>;
-                                                    margin-left: -8px; 
-                                                    z-index: <?= $zIndex ?>;
-                                                    display: flex; align-items: center; justify-content: center;
-                                                    color: white; font-size: 0.7rem; font-weight: 700;
-                                                    overflow: hidden;
-                                                ">
-                                                <?php if ($p['photo']): ?>
-                                                    <img src="../assets/img/<?= htmlspecialchars($p['photo']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                <?php else: ?>
-                                                    <?= strtoupper(substr($p['name'], 0, 1)) ?>
+                            <!-- Corpo do Card: Infos Resumidas -->
+                            <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+
+                                <!-- Seção Músicas -->
+                                <?php if (!empty($songs)): ?>
+                                    <div style="display: flex; gap: 12px;">
+                                        <div style="padding-top: 2px;">
+                                            <i data-lucide="music" style="width: 16px; color: #64748b;"></i>
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Repertório</div>
+                                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                                <?php foreach ($songs as $s): ?>
+                                                    <span style="font-size: 0.85rem; color: #334155; background: #f8fafc; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                                        <?= htmlspecialchars($s['title']) ?>
+                                                    </span>
+                                                <?php endforeach; ?>
+                                                <?php if ($extraSongs > 0): ?>
+                                                    <span style="font-size: 0.8rem; color: #64748b; padding: 2px 4px;">+<?= $extraSongs ?></span>
                                                 <?php endif; ?>
                                             </div>
-                                        <?php endforeach; ?>
-                                        <?php if ($extraCount > 0): ?>
-                                            <div style="
-                                                    width: 32px; height: 32px; 
-                                                    border-radius: 50%; 
-                                                    border: 2px solid white; 
-                                                    background: #f1f5f9; 
-                                                    margin-left: -8px; 
-                                                    z-index: 0;
-                                                    display: flex; align-items: center; justify-content: center;
-                                                    color: #64748b; font-size: 0.7rem; font-weight: 700;
-                                                ">
-                                                +<?= $extraCount ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <!-- Seção Equipe -->
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <div>
+                                        <i data-lucide="users" style="width: 16px; color: #64748b;"></i>
+                                    </div>
+                                    <div style="flex: 1; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center;">
+                                            <div style="display: flex; padding-left: 8px;">
+                                                <?php if (empty($participants)): ?>
+                                                    <span style="font-size: 0.85rem; color: #94a3b8; font-style: italic;">Nenhum participante definido</span>
+                                                <?php else: ?>
+                                                    <?php foreach ($participants as $i => $p):
+                                                        $zIndex = 10 - $i;
+                                                        // Foto ou Initials
+                                                        $hasPhoto = $p['photo'] && file_exists(__DIR__ . '/../assets/img/' . $p['photo']); // Check absoluto simples ou relativo melhorado
+                                                        // Fallback visual no front se path quebrar
+                                                        $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
+                                                    ?>
+                                                        <div style="
+                                                                width: 28px; height: 28px; 
+                                                                border-radius: 50%; 
+                                                                border: 2px solid white; 
+                                                                background: <?= $p['avatar_color'] ?: '#cbd5e1' ?>;
+                                                                margin-left: -8px; 
+                                                                z-index: <?= $zIndex ?>;
+                                                                display: flex; align-items: center; justify-content: center;
+                                                                color: white; font-size: 0.65rem; font-weight: 700;
+                                                                overflow: hidden;
+                                                            ">
+                                                            <?php if ($photoUrl): ?>
+                                                                <img src="<?= htmlspecialchars($photoUrl) ?>" onerror="this.style.display='none'; this.parentElement.innerText='<?= strtoupper(substr($p['name'], 0, 1)) ?>'" style="width: 100%; height: 100%; object-fit: cover;">
+                                                            <?php else: ?>
+                                                                <?= strtoupper(substr($p['name'], 0, 1)) ?>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    <?php endforeach; ?>
+
+                                                    <?php if ($extraCount > 0): ?>
+                                                        <div style="
+                                                                width: 28px; height: 28px; 
+                                                                border-radius: 50%; 
+                                                                border: 2px solid white; 
+                                                                background: #f1f5f9; 
+                                                                margin-left: -8px; 
+                                                                z-index: 0;
+                                                                display: flex; align-items: center; justify-content: center;
+                                                                color: #64748b; font-size: 0.65rem; font-weight: 700;
+                                                            ">
+                                                            +<?= $extraCount ?>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                    <div style="margin-left: 12px; font-size: 0.85rem; color: #64748b;">
+                                                        <span style="font-weight: 600; color: #334155;"><?= $totalParticipants ?></span> na equipe
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </a>
                     </div>
