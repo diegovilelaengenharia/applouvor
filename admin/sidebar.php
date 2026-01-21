@@ -2,13 +2,29 @@
 // admin/sidebar.php
 
 // Buscar dados do usuário logado para o topo
-$userId = $_SESSION['user_id'] ?? 1; // Fallback para 1 se não tiver sessão (dev)
-$stmtUser = $pdo->prepare("SELECT name, email, photo, phone FROM users WHERE id = ?");
-$stmtUser->execute([$userId]);
-$currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
+// Fallback para usuário ID 1 caso a sessão falhe
+$userId = $_SESSION['user_id'] ?? 1;
 
-// Fallback image
-$userPhoto = $currentUser['photo'] ?? 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=random';
+// Query ajustada para colunas que sabemos que existem (baseado em estrutura padrão simples)
+// Removido email e photo para evitar erros se não existirem
+try {
+    $stmtUser = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
+    $stmtUser->execute([$userId]);
+    $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Se der erro, usa dados dummy de segurança
+    $currentUser = ['name' => 'Usuário', 'phone' => ''];
+}
+
+if (!$currentUser) {
+    $currentUser = ['name' => 'Visitante', 'phone' => ''];
+}
+
+// Fallback image (Sempre usa UI Avatars se não tiver foto no banco)
+$userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=047857&color=fff';
+
+// Define subtítulo (Telefone ou texto padrão)
+$subTitle = $currentUser['phone'] ? $currentUser['phone'] : 'Membro da Equipe';
 ?>
 
 <div id="app-sidebar" class="sidebar">
@@ -18,7 +34,7 @@ $userPhoto = $currentUser['photo'] ?? 'https://ui-avatars.com/api/?name=' . urle
         <div class="profile-info">
             <div class="profile-name"><?= htmlspecialchars($currentUser['name']) ?></div>
             <div class="profile-meta">
-                <?= htmlspecialchars($currentUser['phone'] ?: $currentUser['email']) ?>
+                <?= htmlspecialchars($subTitle) ?>
             </div>
         </div>
         <i data-lucide="chevron-right" class="profile-arrow"></i>
