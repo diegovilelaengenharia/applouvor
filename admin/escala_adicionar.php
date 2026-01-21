@@ -53,16 +53,16 @@ renderAppHeader('Nova Escala');
     <a href="escalas.php" class="ripple" style="
         width: 40px; height: 40px; 
         display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; color: #64748b; 
+        text-decoration: none; color: var(--text-muted); 
         border-radius: 50%;
         transition: background 0.2s;
-    " onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+    " onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
         <i data-lucide="x"></i>
     </a>
 
     <div style="text-align: center;">
-        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">Nova Escala</h1>
-        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Passo <span id="step-count">1</span> de 3</p>
+        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">Nova Escala</h1>
+        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">Passo <span id="step-count">1</span> de 3</p>
     </div>
 
     <div style="width: 40px;"></div> <!-- Spacer para centralizar -->
@@ -140,11 +140,11 @@ renderAppHeader('Nova Escala');
 
     /* Cards e Inputs */
     .form-section {
-        background: white;
+        background: var(--bg-surface);
         border-radius: 16px;
         padding: 24px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
         margin-bottom: 24px;
         display: none;
         /* Oculto por padrão */
@@ -365,15 +365,15 @@ renderAppHeader('Nova Escala');
         <!-- Navegação Bottom -->
         <div class="actions-bar">
             <button type="button" id="btn-back" onclick="changeStep(-1)" style="
-                flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: white; color: #475569; font-weight: 600; cursor: pointer; display: none;
+                flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: var(--text-muted); font-weight: 600; cursor: pointer; display: none;
             ">Voltar</button>
 
             <button type="button" id="btn-next" onclick="changeStep(1)" style="
-                flex: 2; padding: 12px; border: none; border-radius: 10px; background: #166534; color: white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(22, 101, 52, 0.2);
+                flex: 2; padding: 12px; border: none; border-radius: 10px; background: var(--primary); color: white; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-md);
             ">Próximo</button>
 
             <button type="submit" id="btn-finish" style="
-                flex: 2; padding: 12px; border: none; border-radius: 10px; background: #1e293b; color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+                flex: 2; padding: 12px; border: none; border-radius: 10px; background: var(--primary-dark); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: var(--shadow-md);
             ">Finalizar</button>
         </div>
 

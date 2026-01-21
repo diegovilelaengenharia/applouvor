@@ -57,13 +57,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $customFieldsJson = !empty($newCustomFields) ? json_encode($newCustomFields) : null;
 
-    
+
     // Pegar nome da primeira tag para preencher category (legacy)
     $categoryLegacy = 'Outros';
     if (!empty($_POST['selected_tags'])) {
         $firstTagId = $_POST['selected_tags'][0];
         foreach ($allTags as $t) {
-            if ($t['id'] == $firstTagId) { $categoryLegacy = $t['name']; break; }
+            if ($t['id'] == $firstTagId) {
+                $categoryLegacy = $t['name'];
+                break;
+            }
         }
     } else {
         $categoryLegacy = $song['category']; // Manter anterior se não mudar
@@ -96,14 +99,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Atualizar Tags Relacionadas
     $pdo->prepare("DELETE FROM song_tags WHERE song_id = ?")->execute([$id]);
-    
+
     if (!empty($_POST['selected_tags'])) {
         $stmtTag = $pdo->prepare("INSERT INTO song_tags (song_id, tag_id) VALUES (?, ?)");
         foreach ($_POST['selected_tags'] as $tagId) {
             $stmtTag->execute([$id, $tagId]);
         }
     }
-    
+
 
     header("Location: musica_detalhe.php?id=$id");
     exit;
@@ -114,32 +117,161 @@ renderAppHeader('Editar Música');
 
 <style>
     /* Modern Form Styles & Tag Selector */
-    body { background-color: #f8fafc !important; }
-    .form-section { background: white; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); transition: all 0.3s ease; }
-    .form-section:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-    .form-section-title { font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
-    .form-label { font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px; display: block; }
-    .form-input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; }
-    .form-input:focus { background: white; border-color: #047857; box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1); outline: none; }
-    
+    /* Modern Form Styles & Tag Selector */
+    body {
+        background-color: var(--bg-body) !important;
+    }
+
+    .form-section {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 32px;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+        box-shadow: var(--shadow-xl);
+    }
+
+    .form-section-title {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid var(--bg-body);
+        padding-bottom: 12px;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .form-input:focus {
+        background: var(--bg-surface);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-light);
+        outline: none;
+    }
+
     /* Tag Selector */
-    .tag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-    .tag-option { position: relative; cursor: pointer; }
-    .tag-option input { display: none; }
-    .tag-pill { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 12px; background: #f1f5f9; border: 2px solid transparent; font-weight: 600; color: #64748b; transition: all 0.2s; text-align: center; font-size: 0.9rem; }
-    .tag-option input:checked + .tag-pill { background: #ecfdf5; border-color: var(--tag-color, #047857); color: var(--tag-color, #047857); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .tag-pill::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--tag-color, #ccc); opacity: 0.5; }
-    .tag-option input:checked + .tag-pill::before { opacity: 1; box-shadow: 0 0 0 2px white; }
-    
+    .tag-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+    }
+
+    .tag-option {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .tag-option input {
+        display: none;
+    }
+
+    .tag-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 12px;
+        background: var(--bg-body);
+        border: 2px solid transparent;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: all 0.2s;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .tag-option input:checked+.tag-pill {
+        background: var(--primary-subtle);
+        border-color: var(--primary);
+        color: var(--primary);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .tag-pill::before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--tag-color, #ccc);
+        opacity: 0.5;
+    }
+
+    .tag-option input:checked+.tag-pill::before {
+        opacity: 1;
+        box-shadow: 0 0 0 2px var(--bg-surface);
+    }
+
     /* Input Icon */
-    .input-icon-wrapper { position: relative; }
-    .input-icon-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; pointer-events: none; }
-    .input-icon-wrapper input { padding-left: 48px; }
-    
+    .input-icon-wrapper {
+        position: relative;
+    }
+
+    .input-icon-wrapper i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        width: 18px;
+        pointer-events: none;
+    }
+
+    .input-icon-wrapper input {
+        padding-left: 48px;
+    }
+
     /* Autocomplete */
-    .autocomplete-suggestions { position: absolute; background: white; border: 1px solid #e2e8f0; border-radius: 12px; max-height: 250px; overflow-y: auto; z-index: 1000; width: 100%; display: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-top: 4px; }
-    .autocomplete-suggestion { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #475569; }
-    .autocomplete-suggestion:hover { background: #f0fdf4; color: #047857; }
+    .autocomplete-suggestions {
+        position: absolute;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 1000;
+        width: 100%;
+        display: none;
+        box-shadow: var(--shadow-xl);
+        margin-top: 4px;
+    }
+
+    .autocomplete-suggestion {
+        padding: 12px 16px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-main);
+    }
+
+    .autocomplete-suggestion:hover {
+        background: var(--primary-subtle);
+        color: var(--primary);
+    }
 </style>
 
 <!-- Header -->
@@ -166,12 +298,12 @@ renderAppHeader('Editar Música');
             <div id="artistSuggestions" class="autocomplete-suggestions"></div>
         </div>
 
-        
+
         <div class="form-group">
             <label class="form-label">Classificações (Selecione uma ou mais)</label>
             <div class="tag-grid">
-                <?php foreach ($allTags as $tag): 
-                    $isChecked = in_array($tag['id'], $selectedTagIds); 
+                <?php foreach ($allTags as $tag):
+                    $isChecked = in_array($tag['id'], $selectedTagIds);
                 ?>
                     <label class="tag-option">
                         <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?>>
@@ -210,11 +342,11 @@ renderAppHeader('Editar Música');
         </div>
     </div>
 
-    
+
     <!-- Links/Referências -->
     <div class="form-section">
         <div class="form-section-title">Referências e Mídia</div>
-        
+
         <div class="form-group" style="margin-bottom: 20px;">
             <label class="form-label">Link da Letra</label>
             <div class="input-icon-wrapper">
@@ -222,7 +354,7 @@ renderAppHeader('Editar Música');
                 <input type="url" name="link_letra" class="form-input" value="<?= htmlspecialchars($song['link_letra']) ?>" placeholder="https://...">
             </div>
         </div>
-        
+
         <div class="form-group" style="margin-bottom: 20px;">
             <label class="form-label">Link da Cifra</label>
             <div class="input-icon-wrapper">
@@ -230,7 +362,7 @@ renderAppHeader('Editar Música');
                 <input type="url" name="link_cifra" class="form-input" value="<?= htmlspecialchars($song['link_cifra']) ?>" placeholder="https://...">
             </div>
         </div>
-        
+
         <div class="form-group" style="margin-bottom: 20px;">
             <label class="form-label">Link do Áudio</label>
             <div class="input-icon-wrapper">
@@ -238,7 +370,7 @@ renderAppHeader('Editar Música');
                 <input type="url" name="link_audio" class="form-input" value="<?= htmlspecialchars($song['link_audio']) ?>" placeholder="https://...">
             </div>
         </div>
-        
+
         <div class="form-group" style="margin-bottom: 20px;">
             <label class="form-label">Link do Vídeo</label>
             <div class="input-icon-wrapper">
@@ -299,10 +431,10 @@ renderAppHeader('Editar Música');
 
     <!-- Botões -->
     <div style="display: flex; gap: 12px; margin-top: 24px; padding-bottom: 80px;">
-        <a href="musica_detalhe.php?id=<?= $id ?>" class="ripple" style="background: white; color: #64748b; border: 1px solid #cbd5e1; padding: 16px; border-radius: 12px; font-weight: 600; flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+        <a href="musica_detalhe.php?id=<?= $id ?>" class="ripple" style="background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color); padding: 16px; border-radius: 12px; font-weight: 600; flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none;">
             Cancelar
         </a>
-        <button type="submit" class="ripple" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;">
+        <button type="submit" class="ripple" style="background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1rem; box-shadow: var(--shadow-md); flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s; cursor: pointer;">
             <i data-lucide="save"></i> Salvar Alterações
         </button>
     </div>

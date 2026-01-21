@@ -88,14 +88,16 @@ renderAppHeader('Adicionar Música');
 <div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
 
     <!-- Cabeçalho Simples -->
+    <!-- Cabeçalho Simples -->
     <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Nova Música</h1>
-            <p style="color: #64748b; margin-top: 4px;">Preencha os dados da canção</p>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Nova Música</h1>
+            <p style="color: var(--text-muted); margin-top: 4px;">Preencha os dados da canção</p>
         </div>
         <a href="repertorio.php" class="ripple" style="
-            width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; 
-            display: flex; align-items: center; justify-content: center; color: #64748b;
+            width: 40px; height: 40px; border-radius: 50%; background: var(--bg-surface); 
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+            border: 1px solid var(--border-color);
         ">
             <i data-lucide="x" style="width: 20px;"></i>
         </a>
@@ -105,24 +107,25 @@ renderAppHeader('Adicionar Música');
     <form method="POST">
 
         <!-- Cartão Principal -->
-        <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+        <!-- Cartão Principal -->
+        <div style="background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-color); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
 
             <div style="margin-bottom: 20px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Título</label>
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Título</label>
                 <input type="text" name="title" required placeholder="Ex: Grande é o Senhor" autofocus
-                    style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s;"
-                    onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)'"
-                    onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                    style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s; background: var(--bg-body); color: var(--text-main);"
+                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 3px var(--primary-light)'"
+                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'">
             </div>
 
             <div style="margin-bottom: 20px; position: relative;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Artista</label>
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Artista</label>
                 <div style="position: relative;">
-                    <i data-lucide="mic-2" style="position: absolute; left: 12px; top: 12px; color: #94a3b8; width: 18px;"></i>
+                    <i data-lucide="mic-2" style="position: absolute; left: 12px; top: 12px; color: var(--text-muted); width: 18px;"></i>
                     <input type="text" name="artist" id="artistInput" required placeholder="Ex: Adhemar de Campos" autocomplete="off"
-                        style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s;"
-                        onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)'"
-                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                        style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s; background: var(--bg-body); color: var(--text-main);"
+                        onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 3px var(--primary-light)'"
+                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'">
                 </div>
                 <div id="artistSuggestions" style="
                     position: absolute; width: 100%; background: white; border: 1px solid #e2e8f0; 

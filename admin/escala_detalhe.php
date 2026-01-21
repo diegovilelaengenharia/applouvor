@@ -107,10 +107,11 @@ renderAppHeader('Detalhes da Escala');
 ?>
 
 <!-- Header Clean (Estilo LouveApp) -->
+<!-- Header Clean (Estilo LouveApp) -->
 <header style="
-    background: white; 
+    background: var(--bg-surface); 
     padding: 20px 24px; 
-    border-bottom: 1px solid #e2e8f0; 
+    border-bottom: 1px solid var(--border-color); 
     margin: -16px -16px 24px -16px; 
     display: flex; 
     align-items: center; 
@@ -120,16 +121,16 @@ renderAppHeader('Detalhes da Escala');
     <a href="escalas.php" class="ripple" style="
         width: 40px; height: 40px; 
         display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; color: #64748b; 
+        text-decoration: none; color: var(--text-muted); 
         border-radius: 50%;
         transition: background 0.2s;
-    " onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+    " onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
         <i data-lucide="arrow-left"></i>
     </a>
 
     <div style="text-align: center;">
-        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">
+        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
             <?= $diaSemana ?>, <?= $date->format('d/m') ?>
         </p>
     </div>
@@ -139,7 +140,7 @@ renderAppHeader('Detalhes da Escala');
         <button onclick="toggleOptionsMenu()" id="menuBtn" class="ripple" style="
             width: 40px; height: 40px; 
             background: transparent; border: none; 
-            color: #64748b; cursor: pointer;
+            color: var(--text-muted); cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%;
         ">
@@ -148,15 +149,15 @@ renderAppHeader('Detalhes da Escala');
         <!-- Dropdown Menu -->
         <div id="optionsMenu" style="
             display: none; position: absolute; top: 48px; right: 0; 
-            background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
-            min-width: 160px; z-index: 50; overflow: hidden; border: 1px solid #e2e8f0;
+            background: var(--bg-surface); border-radius: 12px; box-shadow: var(--shadow-xl); 
+            min-width: 160px; z-index: 50; overflow: hidden; border: 1px solid var(--border-color);
         ">
-            <button onclick="openModal('modalEditSchedule'); toggleOptionsMenu()" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <button onclick="openModal('modalEditSchedule'); toggleOptionsMenu()" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="edit-2" style="width: 16px;"></i> Editar
             </button>
             <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');" style="margin: 0;">
                 <input type="hidden" name="action" value="delete_schedule">
-                <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 8px; border-top: 1px solid #f1f5f9;">
+                <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border-color);">
                     <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
                 </button>
             </form>
@@ -167,10 +168,11 @@ renderAppHeader('Detalhes da Escala');
 <div style="max-width: 900px; margin: 0 auto; padding: 0 16px;">
 
     <!-- Resumo (Cards Coloridos Compactos) -->
+    <!-- Resumo (Cards Coloridos Compactos) -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
-        <div style="background: #eff6ff; padding: 16px; border-radius: 12px; text-align: center;">
-            <div style="font-size: 1.5rem; font-weight: 800; color: #3b82f6;"><?= count($team) ?></div>
-            <div style="font-size: 0.8rem; font-weight: 600; color: #1e40af; opacity: 0.8;">Membros</div>
+        <div style="background: var(--primary-subtle); padding: 16px; border-radius: 12px; text-align: center;">
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary);"><?= count($team) ?></div>
+            <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark); opacity: 0.8;">Membros</div>
         </div>
         <div style="background: #fdf2f8; padding: 16px; border-radius: 12px; text-align: center;">
             <div style="font-size: 1.5rem; font-weight: 800; color: #ec4899;"><?= count($songs) ?></div>
@@ -181,27 +183,27 @@ renderAppHeader('Detalhes da Escala');
     <!-- Seção: Equipe -->
     <div style="margin-bottom: 32px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h2 style="font-size: 1rem; font-weight: 700; color: #334155; margin: 0;">Equipe Escalada</h2>
-            <button onclick="openModal('modalMembers')" style="color: #166534; font-weight: 600; background: none; border: none; font-size: 0.9rem; cursor: pointer;">
+            <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0;">Equipe Escalada</h2>
+            <button onclick="openModal('modalMembers')" style="color: var(--primary); font-weight: 600; background: none; border: none; font-size: 0.9rem; cursor: pointer;">
                 + Adicionar
             </button>
         </div>
 
         <?php if (empty($team)): ?>
-            <div style="text-align: center; padding: 32px; background: white; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                <p style="color: #94a3b8; font-size: 0.9rem;">Nenhum membro escalado.</p>
+            <div style="text-align: center; padding: 32px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Nenhum membro escalado.</p>
             </div>
         <?php else: ?>
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <?php foreach ($team as $member): ?>
-                    <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); justify-content: space-between;">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="width: 36px; height: 36px; background: #dcfce7; color: #166534; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
+                            <div style="width: 36px; height: 36px; background: var(--primary-subtle); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
                             <div>
-                                <div style="font-weight: 600; color: #1e293b; font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
+                                <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
                             </div>
                         </div>
                         <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
@@ -220,26 +222,26 @@ renderAppHeader('Detalhes da Escala');
     <!-- Seção: Repertório -->
     <div style="margin-bottom: 100px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h2 style="font-size: 1rem; font-weight: 700; color: #334155; margin: 0;">Repertório</h2>
-            <button onclick="openModal('modalSongs')" style="color: #166534; font-weight: 600; background: none; border: none; font-size: 0.9rem; cursor: pointer;">
+            <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0;">Repertório</h2>
+            <button onclick="openModal('modalSongs')" style="color: var(--primary); font-weight: 600; background: none; border: none; font-size: 0.9rem; cursor: pointer;">
                 + Músicas
             </button>
         </div>
 
         <?php if (empty($songs)): ?>
-            <div style="text-align: center; padding: 32px; background: white; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                <p style="color: #94a3b8; font-size: 0.9rem;">Nenhuma música selecionada.</p>
+            <div style="text-align: center; padding: 32px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Nenhuma música selecionada.</p>
             </div>
         <?php else: ?>
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <?php foreach ($songs as $song): ?>
-                    <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
-                        <div style="width: 32px; height: 32px; background: #e2e8f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: 700; font-size: 0.8rem;">
+                    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <div style="width: 32px; height: 32px; background: var(--bg-body); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700; font-size: 0.8rem;">
                             <?= $song['order_index'] ?? ($song['position'] + 1) ?>
                         </div>
                         <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #1e293b; font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($song['artist']) ?> • Tom: <span style="color: #d97706; font-weight: 600;"><?= $song['key_semitone'] ?? $song['tone'] ?></span></div>
+                            <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?> • Tom: <span style="color: #d97706; font-weight: 600;"><?= $song['key_semitone'] ?? $song['tone'] ?></span></div>
                         </div>
 
                         <form method="POST" onsubmit="return confirm('Remover música?');" style="margin: 0;">

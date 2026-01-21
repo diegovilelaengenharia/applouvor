@@ -20,26 +20,26 @@ renderAppHeader('Aniversariantes');
         <i data-lucide="cake" style="width: 40px; height: 40px; color: #ca8a04;"></i>
     </div>
 
-    <h2 style="font-size: 1.5rem; font-weight: 800; color: #334155; margin-bottom: 8px;">Parabéns para Você! 🎂</h2>
-    <p style="color: #64748b; max-width: 300px; margin: 0 auto 32px;">Aqui está a lista de quem celebra mais um ano de vida em nossa equipe.</p>
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Parabéns para Você! 🎂</h2>
+    <p style="color: var(--text-muted); max-width: 300px; margin: 0 auto 32px;">Aqui está a lista de quem celebra mais um ano de vida em nossa equipe.</p>
 </div>
 
 <?php if (empty($aniversariantes)): ?>
-    <div style="background: white; padding: 24px; border-radius: 16px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-        <p style="color: #94a3b8;">Nenhuma data cadastrada ainda.</p>
-        <a href="membros.php" style="color: #047857; font-weight: 600; text-decoration: none; display: block; margin-top: 12px;">Gerenciar Membros</a>
+    <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+        <p style="color: var(--text-muted);">Nenhuma data cadastrada ainda.</p>
+        <a href="membros.php" style="color: var(--primary); font-weight: 600; text-decoration: none; display: block; margin-top: 12px;">Gerenciar Membros</a>
     </div>
 <?php else: ?>
     <div style="display: grid; gap: 12px;">
         <?php foreach ($aniversariantes as $niver): ?>
-            <div style="background: white; padding: 16px; border-radius: 16px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                <div style="background: #f1f5f9; width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-weight: 800; color: #334155; font-size: 1.1rem; line-height: 1;"><?= $niver['dia'] ?></span>
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #64748b;"><?= date('M', mktime(0, 0, 0, $niver['mes'], 10)) ?></span>
+            <div style="background: var(--bg-surface); padding: 16px; border-radius: 16px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+                <div style="background: var(--bg-body); width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span style="font-weight: 800; color: var(--text-main); font-size: 1.1rem; line-height: 1;"><?= $niver['dia'] ?></span>
+                    <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted);"><?= date('M', mktime(0, 0, 0, $niver['mes'], 10)) ?></span>
                 </div>
                 <div>
-                    <div style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($niver['name']) ?></div>
-                    <div style="font-size: 0.85rem; color: #64748b;"><?= htmlspecialchars($niver['instrument']) ?></div>
+                    <div style="font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($niver['name']) ?></div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);"><?= htmlspecialchars($niver['instrument']) ?></div>
                 </div>
                 <i data-lucide="party-popper" style="margin-left: auto; color: #ca8a04; width: 20px;"></i>
             </div>

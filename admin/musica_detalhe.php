@@ -32,16 +32,8 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 renderAppHeader('Detalhes da Música');
 ?>
 <style>
-    :root {
-        --bg-tertiary: #f8fafc;
-        --border-subtle: #e2e8f0;
-        --text-secondary: #64748b;
-        --text-primary: #1e293b;
-        --accent-interactive: #047857;
-        --bg-secondary: #f1f5f9;
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        --text-muted: #94a3b8;
-    }
+    /* Variáveis locais removidas em favor do Global Layout */
+
 
     .song-header {
         text-align: center;
@@ -53,18 +45,18 @@ renderAppHeader('Detalhes da Música');
     }
 
     .info-section {
-        background: white;
-        border: 1px solid var(--border-subtle);
-        border-radius: 20px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
         padding: 24px;
         margin-bottom: 32px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-sm);
     }
 
     .info-section-title {
         font-size: 0.85rem;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 12px;
@@ -79,20 +71,20 @@ renderAppHeader('Detalhes da Música');
     .info-item {
         text-align: center;
         padding: 12px;
-        background: var(--bg-tertiary);
+        background: var(--bg-body);
         border-radius: 8px;
     }
 
     .info-label {
         font-size: 0.75rem;
-        color: var(--text-secondary);
+        color: var(--text-muted);
         margin-bottom: 4px;
     }
 
     .info-value {
         font-size: 1.1rem;
         font-weight: 700;
-        color: var(--accent-interactive);
+        color: var(--primary);
     }
 
     .link-item {
@@ -100,7 +92,7 @@ renderAppHeader('Detalhes da Música');
         align-items: center;
         gap: 12px;
         padding: 14px;
-        background: var(--bg-tertiary);
+        background: var(--bg-body);
         border-radius: 10px;
         margin-bottom: 8px;
         text-decoration: none;
@@ -109,8 +101,8 @@ renderAppHeader('Detalhes da Música');
     }
 
     .link-item:hover {
-        background: var(--bg-secondary);
-        border-color: var(--accent-interactive);
+        background: var(--bg-surface);
+        border-color: var(--primary);
     }
 
     .link-icon {
@@ -129,7 +121,7 @@ renderAppHeader('Detalhes da Música');
 
     .link-title {
         font-weight: 700;
-        color: var(--text-primary);
+        color: var(--text-main);
         font-size: 0.95rem;
     }
 
@@ -162,10 +154,10 @@ $menuActions = '
         display: none;
         position: absolute;
         top: 100%; right: 0;
-        background: white;
-        border: 1px solid #e2e8f0;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-xl);
         z-index: 50;
         min-width: 160px;
         overflow: hidden;
