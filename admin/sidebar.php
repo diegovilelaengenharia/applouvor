@@ -60,16 +60,6 @@ if (!empty($currentUser['avatar'])) {
         <i data-lucide="chevron-left"></i>
     </div>
 
-    <!-- 1. Perfil -->
-    <a href="perfil.php" class="sidebar-profile ripple">
-        <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto" class="profile-img" style="object-fit: cover;">
-        <div class="profile-info sidebar-text">
-            <div class="profile-name"><?= htmlspecialchars($currentUser['name']) ?></div>
-            <div class="profile-meta"><?= htmlspecialchars($currentUser['phone']) ?></div>
-        </div>
-        <i data-lucide="chevron-right" class="profile-arrow sidebar-text" style="width: 16px; color: #cbd5e1;"></i>
-    </a>
-
     <!-- 2. Menu -->
     <nav class="sidebar-nav">
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -123,19 +113,181 @@ if (!empty($currentUser['avatar'])) {
         </a>
     </nav>
 
-    <!-- 3. Rodapé -->
+    <!-- 3. Rodapé: Cartão de Usuário Profissional -->
     <div class="sidebar-footer">
-        <a href="configuracoes.php" class="nav-item">
-            <i data-lucide="settings"></i> <span class="sidebar-text">Configurações</span>
-        </a>
-        <div class="nav-item" onclick="toggleThemeMode()" style="cursor: pointer;">
-            <i data-lucide="moon"></i> <span class="sidebar-text">Modo Escuro</span>
+
+        <!-- Info do Usuário -->
+        <div class="user-card">
+            <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto" class="user-avatar-sm">
+            <div class="user-info-mini">
+                <div class="u-name" title="<?= htmlspecialchars($currentUser['name']) ?>"><?= htmlspecialchars($currentUser['name']) ?></div>
+                <div class="u-role"><?= htmlspecialchars($currentUser['phone']) ?></div>
+            </div>
         </div>
-        <a href="../logout.php" class="nav-item logout-item">
-            <i data-lucide="log-out"></i> <span class="sidebar-text">Sair</span>
-        </a>
+
+        <!-- Ações Rápidas (Settings & Logout) -->
+        <div class="footer-actions">
+            <!-- Configurações -->
+            <a href="configuracoes.php" class="action-btn ripple" title="Configurações">
+                <i data-lucide="settings"></i>
+                <span class="btn-tooltip">Ajustes</span>
+            </a>
+
+            <!-- Sair -->
+            <a href="../logout.php" class="action-btn btn-danger ripple" title="Sair">
+                <i data-lucide="log-out"></i>
+                <span class="btn-tooltip">Sair</span>
+            </a>
+        </div>
+
     </div>
 </div>
+
+<style>
+    /* CSS Extra para o Footer Redesenhado */
+    .sidebar-footer {
+        padding: 16px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .user-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 4px 0;
+    }
+
+    .user-avatar-sm {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-info-mini {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .u-name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #1e293b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .u-role {
+        font-size: 0.75rem;
+        color: #64748b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .footer-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        border-radius: 8px;
+        color: #64748b;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+        cursor: pointer;
+        font-size: 0.85rem;
+        text-decoration: none;
+        position: relative;
+        overflow: visible;
+    }
+
+    .action-btn:hover {
+        background: #f1f5f9;
+        color: #3b82f6;
+        border-color: #cbd5e1;
+    }
+
+    .action-btn.btn-danger:hover {
+        background: #fef2f2;
+        color: #ef4444;
+        border-color: #fca5a5;
+    }
+
+    .action-btn i {
+        width: 18px;
+        height: 18px;
+    }
+
+    .btn-tooltip {
+        display: none;
+        /* Tooltip simples se necessário, ou só icone */
+    }
+
+    /* Modo Recolhido */
+    .sidebar.collapsed .sidebar-footer {
+        padding: 16px 8px;
+        align-items: center;
+    }
+
+    .sidebar.collapsed .user-info-mini {
+        display: none;
+    }
+
+    .sidebar.collapsed .footer-actions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .sidebar.collapsed .user-card {
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Dark Mode Overrides para o Footer */
+    body.dark-mode .sidebar-footer {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    body.dark-mode .u-name {
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .u-role {
+        color: #94a3b8;
+    }
+
+    body.dark-mode .action-btn {
+        background: #334155;
+        border-color: #475569;
+        color: #cbd5e1;
+    }
+
+    body.dark-mode .action-btn:hover {
+        background: #475569;
+        color: #fff;
+    }
+
+    body.dark-mode .user-avatar-sm {
+        border-color: #334155;
+    }
+</style>
 
 <!-- Overlay Mobile -->
 <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebarMobile()"></div>
