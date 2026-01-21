@@ -22,11 +22,42 @@ if ($user['role'] !== 'admin') {
 }
 
 // ==========================================
+// FILTRO DE PERÍODO
+// ==========================================
+
+$periodo = $_GET['periodo'] ?? 'semestral';
+$periodo_sql = '';
+$periodo_label = '';
+$periodo_meses = 6;
+
+switch ($periodo) {
+    case 'mensal':
+        $periodo_sql = "AND s.event_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)";
+        $periodo_label = "Último Mês";
+        $periodo_meses = 1;
+        break;
+    case 'semestral':
+        $periodo_sql = "AND s.event_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)";
+        $periodo_label = "Últimos 6 Meses";
+        $periodo_meses = 6;
+        break;
+    case 'anual':
+        $periodo_sql = "AND s.event_date >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)";
+        $periodo_label = "Último Ano";
+        $periodo_meses = 12;
+        break;
+    default:
+        $periodo_sql = "";
+        $periodo_label = "Todo o Período";
+        $periodo_meses = 999;
+}
+
+// ==========================================
 // MÉTRICAS GERAIS DO MINISTÉRIO
 // ==========================================
 
-// Total de escalas
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM schedules");
+// Total de escalas no período
+$stmt = $pdo->query("SELECT COUNT(*) as total FROM schedules s WHERE 1=1 $periodo_sql");
 $total_escalas = $stmt->fetch()['total'];
 
 // Total de membros ativos
@@ -42,23 +73,28 @@ $stmt = $pdo->query("
     SELECT AVG(participantes) as media 
     FROM (
         SELECT COUNT(*) as participantes 
-        FROM schedule_users 
-        GROUP BY schedule_id
+        FROM schedule_users su
+        JOIN schedules s ON su.schedule_id = s.id
+        WHERE 1=1 $periodo_sql
+        GROUP BY su.schedule_id
     ) as subquery
 ");
 $media_participacoes = round($stmt->fetch()['media'] ?? 0, 1);
 
-// Taxa de presença geral
+// Taxa de presença geral no período
 $stmt = $pdo->query("
     SELECT 
-        (COUNT(DISTINCT su.user_id, su.schedule_id) * 100.0 / 
-        (COUNT(DISTINCT s.id) * COUNT(DISTINCT u.id))) as taxa
+        COUNT(DISTINCT su.user_id, su.schedule_id) as participacoes_reais,
+        COUNT(DISTINCT s.id) * COUNT(DISTINCT u.id) as participacoes_possiveis
     FROM schedules s
     CROSS JOIN users u
     LEFT JOIN schedule_users su ON s.id = su.schedule_id AND u.id = su.user_id
-    WHERE u.role != 'admin'
+    WHERE u.role != 'admin' $periodo_sql
 ");
-$taxa_presenca = round($stmt->fetch()['taxa'] ?? 0, 1);
+$presenca_data = $stmt->fetch();
+$taxa_presenca = $presenca_data['participacoes_possiveis'] > 0
+    ? round(($presenca_data['participacoes_reais'] / $presenca_data['participacoes_possiveis']) * 100, 1)
+    : 0;
 
 // ==========================================
 // ESTATÍSTICAS POR MEMBRO
@@ -70,13 +106,13 @@ $stmt = $pdo->query("
         u.name,
         u.instrument,
         COUNT(DISTINCT su.schedule_id) as total_participacoes,
-        ROUND(COUNT(DISTINCT su.schedule_id) * 100.0 / NULLIF((SELECT COUNT(*) FROM schedules), 0), 1) as taxa_presenca,
+        ROUND(COUNT(DISTINCT su.schedule_id) * 100.0 / NULLIF((SELECT COUNT(*) FROM schedules s WHERE 1=1 $periodo_sql), 0), 1) as taxa_presenca,
         MAX(s.event_date) as ultima_participacao,
         MIN(s.event_date) as primeira_participacao,
         DATEDIFF(CURDATE(), MAX(s.event_date)) as dias_sem_tocar
     FROM users u
     LEFT JOIN schedule_users su ON u.id = su.user_id
-    LEFT JOIN schedules s ON su.schedule_id = s.id
+    LEFT JOIN schedules s ON su.schedule_id = s.id AND 1=1 $periodo_sql
     WHERE u.role != 'admin'
     GROUP BY u.id, u.name, u.instrument
     ORDER BY total_participacoes DESC
@@ -95,6 +131,8 @@ $stmt = $pdo->query("
         COUNT(*) as vezes_tocada
     FROM schedule_songs ss
     JOIN songs s ON ss.song_id = s.id
+    JOIN schedules sch ON ss.schedule_id = sch.id
+    WHERE 1=1 $periodo_sql
     GROUP BY s.id, s.title, s.artist, s.category
     ORDER BY vezes_tocada DESC
     LIMIT 10
@@ -102,7 +140,7 @@ $stmt = $pdo->query("
 $top_musicas = $stmt->fetchAll();
 
 // ==========================================
-// PARTICIPAÇÕES POR MÊS (ÚLTIMOS 6 MESES)
+// PARTICIPAÇÕES POR MÊS
 // ==========================================
 
 $stmt = $pdo->query("
@@ -113,7 +151,7 @@ $stmt = $pdo->query("
         COUNT(DISTINCT su.user_id) as total_participantes
     FROM schedules s
     LEFT JOIN schedule_users su ON s.id = su.schedule_id
-    WHERE s.event_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+    WHERE s.event_date >= DATE_SUB(CURDATE(), INTERVAL $periodo_meses MONTH)
     GROUP BY mes, mes_formatado
     ORDER BY mes DESC
 ");
@@ -132,7 +170,8 @@ $stmt = $pdo->query("
     JOIN schedule_users su2 ON su1.schedule_id = su2.schedule_id AND su1.user_id < su2.user_id
     JOIN users u1 ON su1.user_id = u1.id
     JOIN users u2 ON su2.user_id = u2.id
-    WHERE u1.role != 'admin' AND u2.role != 'admin'
+    JOIN schedules s ON su1.schedule_id = s.id
+    WHERE u1.role != 'admin' AND u2.role != 'admin' $periodo_sql
     GROUP BY u1.id, u2.id, u1.name, u2.name
     ORDER BY escalas_juntos DESC
     LIMIT 10
@@ -193,6 +232,55 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             font-size: 14px;
         }
 
+        .period-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .period-selector h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .period-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .period-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .period-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .period-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+        }
+
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -206,6 +294,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border-left: 4px solid #667eea;
+            position: relative;
         }
 
         .metric-card.success {
@@ -237,6 +326,60 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .metric-help {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: help;
+            position: relative;
+        }
+
+        .metric-help:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 400;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-help:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #1f2937;
+            z-index: 1000;
+        }
+
+        .metric-desc {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 8px;
+            line-height: 1.4;
+            font-weight: 400;
         }
 
         .metric-icon {
@@ -255,7 +398,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             font-size: 20px;
             font-weight: 700;
             color: #1f2937;
-            margin: 40px 0 20px 0;
+            margin: 40px 0 10px 0;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -263,6 +406,13 @@ $distribuicao_instrumentos = $stmt->fetchAll();
 
         .section-title i {
             color: #667eea;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 0 0 20px 34px;
+            line-height: 1.5;
         }
 
         .table-container {
@@ -412,12 +562,20 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             .stats-table td {
                 padding: 10px;
             }
+
+            .period-buttons {
+                flex-direction: column;
+            }
+
+            .period-btn {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 
 <body>
-    <?php renderMobileNav(); ?>
 
     <div class="stats-container">
         <!-- Header -->
@@ -427,7 +585,26 @@ $distribuicao_instrumentos = $stmt->fetchAll();
                 Voltar
             </a>
             <h1>📊 Boletim Estatístico do Ministério</h1>
-            <p>Análise completa de desempenho e participação</p>
+            <p>Análise completa de desempenho e participação - <?= $periodo_label ?></p>
+        </div>
+
+        <!-- Seletor de Período -->
+        <div class="period-selector">
+            <h3>
+                <i data-lucide="calendar-range" style="width: 18px; color: #667eea;"></i>
+                Selecione o Período de Análise
+            </h3>
+            <div class="period-buttons">
+                <a href="?periodo=mensal" class="period-btn <?= $periodo === 'mensal' ? 'active' : '' ?>">
+                    📅 Último Mês
+                </a>
+                <a href="?periodo=semestral" class="period-btn <?= $periodo === 'semestral' ? 'active' : '' ?>">
+                    📊 Últimos 6 Meses
+                </a>
+                <a href="?periodo=anual" class="period-btn <?= $periodo === 'anual' ? 'active' : '' ?>">
+                    📈 Último Ano
+                </a>
+            </div>
         </div>
 
         <!-- Métricas Principais -->
@@ -436,40 +613,60 @@ $distribuicao_instrumentos = $stmt->fetchAll();
                 <div class="metric-icon">
                     <i data-lucide="calendar" style="width: 20px;"></i>
                 </div>
-                <div class="metric-label">Total de Escalas</div>
+                <div class="metric-label">
+                    Total de Escalas
+                    <span class="metric-help" data-tooltip="Número total de escalas/cultos realizados">?</span>
+                </div>
                 <div class="metric-value"><?= $total_escalas ?></div>
+                <div class="metric-desc">Escalas realizadas no período selecionado</div>
             </div>
 
             <div class="metric-card success">
                 <div class="metric-icon">
                     <i data-lucide="users" style="width: 20px;"></i>
                 </div>
-                <div class="metric-label">Membros Ativos</div>
+                <div class="metric-label">
+                    Membros Ativos
+                    <span class="metric-help" data-tooltip="Total de membros cadastrados na equipe">?</span>
+                </div>
                 <div class="metric-value"><?= $total_membros ?></div>
+                <div class="metric-desc">Membros cadastrados no ministério</div>
             </div>
 
             <div class="metric-card purple">
                 <div class="metric-icon">
                     <i data-lucide="music" style="width: 20px;"></i>
                 </div>
-                <div class="metric-label">Músicas no Repertório</div>
+                <div class="metric-label">
+                    Músicas no Repertório
+                    <span class="metric-help" data-tooltip="Total de músicas cadastradas no sistema">?</span>
+                </div>
                 <div class="metric-value"><?= $total_musicas ?></div>
+                <div class="metric-desc">Músicas disponíveis para escalas</div>
             </div>
 
             <div class="metric-card warning">
                 <div class="metric-icon">
                     <i data-lucide="trending-up" style="width: 20px;"></i>
                 </div>
-                <div class="metric-label">Média por Escala</div>
+                <div class="metric-label">
+                    Média por Escala
+                    <span class="metric-help" data-tooltip="Média de pessoas que participam de cada escala">?</span>
+                </div>
                 <div class="metric-value"><?= $media_participacoes ?></div>
+                <div class="metric-desc">Participantes médios por culto</div>
             </div>
 
             <div class="metric-card">
                 <div class="metric-icon">
                     <i data-lucide="percent" style="width: 20px;"></i>
                 </div>
-                <div class="metric-label">Taxa de Presença</div>
+                <div class="metric-label">
+                    Taxa de Presença
+                    <span class="metric-help" data-tooltip="Percentual de participação geral da equipe">?</span>
+                </div>
                 <div class="metric-value"><?= $taxa_presenca ?>%</div>
+                <div class="metric-desc">Engajamento geral do ministério</div>
             </div>
         </div>
 
@@ -478,6 +675,12 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             <i data-lucide="trophy" style="width: 24px;"></i>
             Ranking de Participação
         </h2>
+        <p class="section-desc">
+            Classificação dos membros por número de participações. Status:
+            <span class="badge success">Ativo</span> (tocou nos últimos 7 dias),
+            <span class="badge warning">Regular</span> (últimos 30 dias),
+            <span class="badge danger">Inativo</span> (mais de 30 dias).
+        </p>
         <div class="table-container">
             <table class="stats-table">
                 <thead>
@@ -539,6 +742,9 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             <i data-lucide="music-2" style="width: 24px;"></i>
             Top 10 Músicas Mais Tocadas
         </h2>
+        <p class="section-desc">
+            Músicas mais executadas no período. Útil para identificar favoritas e planejar repertórios variados.
+        </p>
         <div class="table-container">
             <table class="stats-table">
                 <thead>
@@ -578,8 +784,11 @@ $distribuicao_instrumentos = $stmt->fetchAll();
         <!-- Participações por Mês -->
         <h2 class="section-title">
             <i data-lucide="bar-chart-3" style="width: 24px;"></i>
-            Participações por Mês (Últimos 6 Meses)
+            Participações por Mês
         </h2>
+        <p class="section-desc">
+            Evolução temporal das escalas. Mostra quantas escalas foram realizadas e quantos membros únicos participaram em cada mês.
+        </p>
         <div class="table-container">
             <table class="stats-table">
                 <thead>
@@ -610,6 +819,9 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             <i data-lucide="users-2" style="width: 24px;"></i>
             Duplas Mais Frequentes
         </h2>
+        <p class="section-desc">
+            Membros que mais tocam juntos. A "sinergia" indica o percentual de escalas em que a dupla atuou em conjunto.
+        </p>
         <div class="table-container">
             <table class="stats-table">
                 <thead>
@@ -624,7 +836,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
                     <?php
                     $pos = 1;
                     foreach ($parceiros_frequentes as $dupla):
-                        $sinergia_pct = round(($dupla['escalas_juntos'] / $total_escalas) * 100, 1);
+                        $sinergia_pct = $total_escalas > 0 ? round(($dupla['escalas_juntos'] / $total_escalas) * 100, 1) : 0;
                     ?>
                         <tr>
                             <td><?= $pos ?></td>
@@ -651,6 +863,9 @@ $distribuicao_instrumentos = $stmt->fetchAll();
             <i data-lucide="guitar" style="width: 24px;"></i>
             Distribuição por Instrumento
         </h2>
+        <p class="section-desc">
+            Composição da equipe por instrumento. Ajuda a identificar áreas que precisam de reforço ou estão bem equilibradas.
+        </p>
         <div class="table-container">
             <table class="stats-table">
                 <thead>
