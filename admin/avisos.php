@@ -328,28 +328,7 @@ renderAppHeader('Avisos');
             </button>
 
             <!-- User Avatar -->
-            <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 40px; 
-                height: 40px; 
-                border-radius: 50%; 
-                background: rgba(255,255,255,0.2); 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                overflow: hidden; 
-                cursor: pointer;
-                border: 2px solid rgba(255,255,255,0.3);
-            ">
-                <?php if (!empty($_SESSION['user_avatar'])): ?>
-                    <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                <?php else: ?>
-                    <span style="font-weight: 700; font-size: 0.9rem; color: white;">
-                        <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
+            </div>`r`n    </div>
 
     <div id="avisos-hero-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
         <div style="flex: 1; min-width: 0;">
