@@ -125,15 +125,15 @@ try {
 
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
-        margin-bottom: 32px;
+        margin-bottom: 24px;
     }
 
     .kpi-card {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
-        padding: 20px;
+        padding: 16px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow-sm);
         transition: all 0.2s;
@@ -281,15 +281,15 @@ try {
         background: #fffbeb;
         border: 1px solid #fde68a;
         border-radius: var(--radius-lg);
-        padding: 20px;
-        margin-bottom: 32px;
+        padding: 16px;
+        margin-bottom: 24px;
     }
 
     .alert-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px;
+        padding: 10px;
         background: white;
         border-radius: 8px;
         margin-bottom: 8px;
