@@ -86,7 +86,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             ">Anteriores</button>
     </div>
 
-    <!-- Right Controls: View Toggle & Filter -->
+    <!-- Right Controls: View Toggle & Filter & Stats -->
     <div style="display: flex; gap: 12px; align-items: center;">
 
         <!-- View Switcher -->
@@ -156,6 +156,26 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             <?php endif; ?>
         </button>
 
+        <!-- Stats Button -->
+        <a href="escalas_stats.php" class="ripple" style="
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+            border: none; 
+            color: white; 
+            border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+            transition: all 0.2s;
+        " title="Estatísticas de Escalas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" x2="12" y1="20" y2="10"></line>
+                <line x1="18" x2="18" y1="20" y2="4"></line>
+                <line x1="6" x2="6" y1="20" y2="16"></line>
+            </svg>
+        </a>
+
     </div>
 </div>
 
@@ -180,7 +200,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 <?php foreach ($futureSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
-                    
+
                     // Definir Tema de Cor (Moderate Palette)
                     $type = mb_strtolower($schedule['event_type']);
                     if (strpos($type, 'domingo') !== false) {
@@ -223,7 +243,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $totalParticipants = $stmtCount->fetchColumn();
                     $extraCount = max(0, $totalParticipants - 5);
                 ?>
-                    
+
                     <!-- Card de Evento Compacto -->
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
                             display: block;
@@ -237,9 +257,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             transition: all 0.2s;
                             position: relative;
                         ">
-                        
+
                         <div style="display: flex; gap: 14px; align-items: flex-start;">
-                            
+
                             <!-- Data Box (Lateral Esquerda) -->
                             <div style="
                                 background: <?= $isToday ? 'var(--primary-subtle)' : 'var(--bg-body)' ?>; 
@@ -261,12 +281,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         <span style="font-size: 0.65rem; color: white; background: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700;">HOJE</span>
                                     <?php endif; ?>
                                 </div>
-                                
+
                                 <div style="display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center; gap: 4px;">
                                         <i data-lucide="clock" style="width: 14px;"></i> <?= $date->format('H:i') ?>
                                     </div>
-                                    <?php if($totalParticipants > 0): ?>
+                                    <?php if ($totalParticipants > 0): ?>
                                         <div style="display: flex; align-items: center; gap: 4px;">
                                             <i data-lucide="users" style="width: 14px;"></i> <?= $totalParticipants ?>
                                         </div>
@@ -303,7 +323,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 <?php endif; ?>
 
                             </div>
-                            
+
                             <!-- Icon Setta -->
                             <div style="align-self: center; color: var(--border-color);">
                                 <i data-lucide="chevron-right" style="width: 20px;"></i>
