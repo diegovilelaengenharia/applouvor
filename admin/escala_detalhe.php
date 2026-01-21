@@ -206,6 +206,38 @@ renderAppHeader('Detalhes da Escala');
 <!-- CONTEÚDO: DETALHES -->
 <!-- NOVO DESIGN: ABA DETALHES -->
 <div id="detalhes">
+
+    <?php
+    // --- GERAR LINK DO WHATSAPP ---
+    $waText = "*ESCALA LOUVOR PIB* 🎸🎤\n";
+    $waText .= "🗓 " . $dayName . ", " . $formattedDate . "\n";
+    $waText .= "⏰ " . $timeStr . " • " . $schedule['event_type'] . "\n\n";
+
+    $waText .= "*👥 EQUIPE:*\n";
+    if (empty($currentMembers)) {
+        $waText .= "(Ninguém escalado ainda)\n";
+    } else {
+        foreach ($currentMembers as $m) {
+            $waText .= "▪ " . $m['name'] . " (" . ($m['instrument'] ?: 'Voz') . ")\n";
+        }
+    }
+
+    $waText .= "\n*🎵 REPERTÓRIO:*\n";
+    if (empty($currentSongs)) {
+        $waText .= "(Nenhuma música selecionada)\n";
+    } else {
+        foreach ($currentSongs as $i => $s) {
+            $waText .= ($i+1) . ". " . $s['title'] . " - " . $s['artist'] . " (" . $s['tone'] . ")\n";
+        }
+    }
+
+    if (!empty($schedule['notes'])) {
+        $waText .= "\n⚠ *Obs:* " . $schedule['notes'] . "\n";
+    }
+
+    $waLink = "https://wa.me/?text=" . urlencode($waText);
+    ?>
+
     <?php
     $d = new DateTime($schedule['event_date']);
     $dayNum = $d->format('d');
@@ -251,6 +283,23 @@ renderAppHeader('Detalhes da Escala');
         </a>
 
         <div style="display: flex; align-items: center;">
+            
+            <a href="<?= $waLink ?>" target="_blank" class="ripple" style="
+                background: #25D366; 
+                color: white; 
+                width: 40px; 
+                height: 40px; 
+                border-radius: 50%; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                margin-right: 12px;
+                box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+                transition: transform 0.2s;
+            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i data-lucide="share-2" style="width: 20px;"></i>
+            </a>
+
             <?php renderGlobalNavButtons(); ?>
 
     
