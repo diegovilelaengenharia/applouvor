@@ -642,6 +642,60 @@ renderAppHeader('Detalhes da Escala');
 </div>
 
 <!-- MODAL DE MEMBROS -->
+
+<!-- SEÇÃO DE GERENCIAMENTO (FINAL DA PÁGINA) -->
+<div style="margin-top: 48px; margin-bottom: 40px; border-top: 1px solid var(--border-subtle); padding-top: 32px;">
+    <h3 style="font-size: 0.85rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="settings" style="width: 14px;"></i> Gerenciamento
+    </h3>
+    
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Botão Editar -->
+        <button onclick="openEditModal()" class="ripple" style="
+            width: 100%;
+            background: white;
+            border: 1px solid #fbbf24;
+            color: #d97706;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(251, 191, 36, 0.1);
+        " onmouseover="this.style.background='#fffbeb'" onmouseout="this.style.background='white'">
+            <i data-lucide="edit-3" style="width: 20px;"></i> Editar Detalhes da Escala
+        </button>
+
+        <!-- Botão Excluir -->
+        <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.')" style="margin: 0;">
+            <input type="hidden" name="action" value="delete_schedule">
+            <button type="submit" class="ripple" style="
+                width: 100%;
+                background: white;
+                border: 1px solid #fecaca;
+                color: #dc2626;
+                padding: 16px;
+                border-radius: 12px;
+                font-weight: 700;
+                font-size: 1rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                transition: all 0.2s;
+            " onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+                <i data-lucide="trash-2" style="width: 20px;"></i> Excluir Escala
+            </button>
+        </form>
+    </div>
+</div>
+
 <div id="modalMembers" class="bottom-sheet-overlay">
     <div class="bottom-sheet-content">
         <div class="sheet-header" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; margin-bottom: 16px;">
