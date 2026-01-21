@@ -647,41 +647,6 @@ renderAppHeader('Editar Música');
                 </div>
             </div>
 
-            <!-- Streaming Inline -->
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px dashed var(--border-color);">
-                <label class="form-label" style="margin-bottom: 12px; color: var(--card-color); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Plataformas de Streaming</label>
-                <div class="form-grid form-grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Spotify</label>
-                        <div class="input-icon-wrapper">
-                            <i data-lucide="music"></i>
-                            <input type="url" name="link_spotify" class="form-input" value="<?= htmlspecialchars($song['link_spotify'] ?? '') ?>" placeholder="https://open.spotify.com/...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">YouTube</label>
-                        <div class="input-icon-wrapper">
-                            <i data-lucide="play-circle"></i>
-                            <input type="url" name="link_youtube" class="form-input" value="<?= htmlspecialchars($song['link_youtube'] ?? '') ?>" placeholder="https://youtube.com/...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Apple Music</label>
-                        <div class="input-icon-wrapper">
-                            <i data-lucide="music"></i>
-                            <input type="url" name="link_apple_music" class="form-input" value="<?= htmlspecialchars($song['link_apple_music'] ?? '') ?>" placeholder="https://music.apple.com/...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Deezer</label>
-                        <div class="input-icon-wrapper">
-                            <i data-lucide="music"></i>
-                            <input type="url" name="link_deezer" class="form-input" value="<?= htmlspecialchars($song['link_deezer'] ?? '') ?>" placeholder="https://deezer.com/...">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Campos Extras -->
             <div style="border-top: 1px dashed var(--border-color); margin-top: 24px; padding-top: 24px;">
                 <label class="form-label" style="margin-bottom: 12px; color: var(--text-main);">Outras Referências</label>
