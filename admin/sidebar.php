@@ -50,9 +50,14 @@ if (!empty($currentUser['avatar'])) {
             </div>
         </div>
 
-        <button onclick="toggleSidebarDesktop()" class="btn-toggle-desktop ripple">
-            <i data-lucide="chevrons-left-right" style="width: 20px; height: 20px;"></i>
+        <button onclick="toggleSidebarDesktop()" class="btn-toggle-desktop ripple" title="Recolher Menu">
+            <i data-lucide="panel-left-close"></i>
         </button>
+    </div>
+
+    <!-- Botão de Recolher (Aparece quando expandido, estilo de aba lateral) -->
+    <div class="sidebar-collapser" onclick="toggleSidebarDesktop()">
+        <i data-lucide="chevron-left"></i>
     </div>
 
     <!-- 1. Perfil -->
@@ -354,79 +359,67 @@ if (!empty($currentUser['avatar'])) {
         color: #dc2626;
     }
 
-    /* Botão Trocar Tamanho */
+    /* Botão Toggle no Header da Sidebar */
     .btn-toggle-desktop {
-        background: transparent;
+        background: #f1f5f9;
         border: none;
         cursor: pointer;
-        color: #94a3b8;
+        color: #64748b;
         padding: 8px;
         border-radius: 8px;
         transition: all 0.2s;
         display: none;
+        /* Controlado via media query */
     }
 
     .btn-toggle-desktop:hover {
-        background: #f1f5f9;
+        background: #e2e8f0;
+        color: #1e293b;
+    }
+
+    /* Faixa de Recolhimento (Borda clicável) */
+    .sidebar-collapser {
+        position: absolute;
+        top: 50%;
+        right: -12px;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 48px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-left: none;
+        border-radius: 0 12px 12px 0;
+        display: none;
+        /* Desktop only */
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
+        z-index: 1001;
+        color: #94a3b8;
+    }
+
+    .sidebar-collapser:hover {
         color: var(--brand-green);
+        background: #f0fdf4;
     }
 
     @media (min-width: 1025px) {
         .btn-toggle-desktop {
             display: flex;
-            align-items: center;
-            justify-content: center;
         }
-    }
 
-    /* --- ESTADO RECOLHIDO (COLLAPSED) --- */
-    /* Agora controlado pela classe .collapsed */
-    .sidebar.collapsed {
-        width: var(--sidebar-collapsed-width);
-    }
+        /* .sidebar-collapser { display: flex; }  <-- Se quiser usar estilo flutuante fora da barra */
 
-    .sidebar.collapsed .sidebar-text {
-        opacity: 0;
-        visibility: hidden;
-        width: 0;
-    }
+        .sidebar.collapsed .sidebar-collapser i {
+            transform: rotate(180deg);
+        }
 
-    .sidebar.collapsed .logo-area span {
-        display: none;
-    }
-
-    .sidebar.collapsed .profile-arrow {
-        display: none;
-    }
-
-    .sidebar.collapsed .sidebar-profile {
-        padding: 8px;
-        justify-content: center;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    .sidebar.collapsed .profile-img {
-        margin: 0;
-        width: 40px;
-        height: 40px;
-    }
-
-    .sidebar.collapsed .profile-info {
-        display: none;
-    }
-
-    .sidebar.collapsed .nav-item {
-        justify-content: center;
-        padding: 14px 0;
-    }
-
-    .sidebar.collapsed .nav-item i {
-        margin: 0;
-    }
-
-    .sidebar.collapsed .btn-toggle-desktop i {
-        transform: rotate(180deg);
+        /* Ajuste do ícone quando recolhido */
+        .sidebar.collapsed .btn-toggle-desktop i {
+            transform: rotate(180deg);
+            /* Vira o icone */
+        }
     }
 
     /* --- MOBILE --- */
@@ -447,6 +440,10 @@ if (!empty($currentUser['avatar'])) {
         }
 
         .btn-toggle-desktop {
+            display: none;
+        }
+
+        .sidebar-collapser {
             display: none;
         }
 

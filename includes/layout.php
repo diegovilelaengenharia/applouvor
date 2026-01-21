@@ -245,7 +245,20 @@ function renderAppHeader($title, $backUrl = null)
         ">
         <!-- Spacer para centralizar o título corretamente, compensando o botão da direita -->
         <div style="width: 40px;">
-            <!-- Em mobile, o botão de menu já está na barra superior do layout, mas aqui podemos colocar um voltar se necessário -->
+            <!-- Botão Voltar Profissional -->
+            <button onclick="history.back()" class="ripple" style="
+                background: transparent; 
+                border: 1px solid #e2e8f0; 
+                width: 40px; height: 40px; 
+                border-radius: 12px; 
+                display: flex; align-items: center; justify-content: center; 
+                cursor: pointer; 
+                color: #64748b;
+                transition: all 0.2s;
+            " onmouseover="this.style.background='#f1f5f9'; this.style.color='#1e293b'"
+                onmouseout="this.style.background='transparent'; this.style.color='#64748b'">
+                <i data-lucide="arrow-left" style="width: 20px;"></i>
+            </button>
         </div>
 
         <div style="text-align: center;">
