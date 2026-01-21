@@ -420,7 +420,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 <p>Nenhum histórico recente.</p>
             </div>
         <?php else: ?>
-            <div class="timeline-container" style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 100px;">
+            <div id="view-timeline-past" class="timeline-container" style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 100px;">
                 <?php foreach ($pastSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
 
@@ -534,6 +534,87 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- VIEW: LIST PAST (NOVIDADE) -->
+            <div id="view-list-past" style="display: none; flex-direction: column; gap: 8px; padding-bottom: 100px;">
+                <?php foreach ($pastSchedules as $schedule):
+                    $date = new DateTime($schedule['event_date']);
+
+                    // Definir Tema de Cor (Mesma lógica)
+                    $type = mb_strtolower($schedule['event_type']);
+                    if (strpos($type, 'domingo') !== false) {
+                        $themeColor = '#059669';
+                        $themeLight = '#ecfdf5';
+                    } elseif (strpos($type, 'ensaio') !== false) {
+                        $themeColor = '#d97706';
+                        $themeLight = '#fffbeb';
+                    } elseif (strpos($type, 'jovem') !== false) {
+                        $themeColor = '#7c3aed';
+                        $themeLight = '#f5f3ff';
+                    } elseif (strpos($type, 'especial') !== false) {
+                        $themeColor = '#db2777';
+                        $themeLight = '#fdf2f8';
+                    } else {
+                        $themeColor = '#2563eb';
+                        $themeLight = '#eff6ff';
+                    }
+
+                    // Contagens
+                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
+                    $stmtCount->execute([$schedule['id']]);
+                    $teamCount = $stmtCount->fetchColumn();
+
+                    $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
+                    $stmtSongs->execute([$schedule['id']]);
+                    $songCount = $stmtSongs->fetchColumn();
+                ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="
+                        display: flex; align-items: center; justify-content: space-between;
+                        padding: 16px 20px; 
+                        background: white; 
+                        border-radius: 12px; 
+                        border: 1px solid #e2e8f0;
+                        border-left: 4px solid <?= $themeColor ?>;
+                        text-decoration: none; color: inherit; transition: all 0.2s;
+                        filter: grayscale(1) opacity(0.7); /* Estilo Passado */
+                    ">
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <!-- Date Badge Temático -->
+                            <div style="
+                                background: <?= $themeLight ?>; 
+                                color: <?= $themeColor ?>;
+                                padding: 8px 12px; border-radius: 8px; text-align: center; min-width: 54px;
+                            ">
+                                <div style="font-weight: 700; font-size: 1.2rem; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.65rem; text-transform: uppercase; font-weight: 600;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                            </div>
+
+                            <div>
+                                <h3 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 700; color: #1e293b; text-decoration: line-through #cbd5e1;">
+                                    <?= htmlspecialchars($schedule['event_type']) ?>
+                                </h3>
+                                <div style="font-size: 0.8rem; color: #64748b; display: flex; align-items: center; gap: 8px;">
+                                    <span><?= $date->format('H:i') ?></span>
+                                    <span style="width: 3px; height: 3px; background: #cbd5e1; border-radius: 50%;"></span>
+                                    <span><?= $teamCount ?> na equipe</span>
+                                    <span style="font-size:0.7rem; background:#f1f5f9; padding:2px 6px; border-radius:4px;">REALIZADO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="
+                            width: 32px; height: 32px; 
+                            background: <?= $themeLight ?>; 
+                            border-radius: 50%; 
+                            display: flex; align-items: center; justify-content: center;
+                            color: <?= $themeColor ?>;
+                        ">
+                            <i data-lucide="chevron-right" style="width: 18px;"></i>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
         <?php endif; ?>
     </div>
 </div>
@@ -664,17 +745,27 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
     // View Toggle (Timeline vs List)
     function setView(view) {
+        // Future Views
         const timeline = document.getElementById('view-timeline');
         const list = document.getElementById('view-list');
+
+        // Past Views
+        const timelinePast = document.getElementById('view-timeline-past');
+        const listPast = document.getElementById('view-list-past');
+
         const btnTimeline = document.getElementById('btn-view-timeline');
         const btnList = document.getElementById('btn-view-list');
 
-        // Salvar preferência se quiser (opcional)
         // localStorage.setItem('escalasView', view);
 
         if (view === 'timeline') {
+            // Show Timelines
             if (timeline) timeline.style.display = 'flex';
+            if (timelinePast) timelinePast.style.display = 'flex';
+
+            // Hide Lists
             if (list) list.style.display = 'none';
+            if (listPast) listPast.style.display = 'none';
 
             if (btnTimeline) {
                 btnTimeline.style.background = 'white';
@@ -687,8 +778,13 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 btnList.style.boxShadow = 'none';
             }
         } else {
+            // Hide Timelines
             if (timeline) timeline.style.display = 'none';
+            if (timelinePast) timelinePast.style.display = 'none';
+
+            // Show Lists
             if (list) list.style.display = 'flex';
+            if (listPast) listPast.style.display = 'flex';
 
             if (btnTimeline) {
                 btnTimeline.style.background = 'transparent';
