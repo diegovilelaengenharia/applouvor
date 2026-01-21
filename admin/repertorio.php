@@ -42,15 +42,50 @@ renderPageHeader('Repertório');
     </form>
 
     <?php if ($tab === 'musicas'):
+        $tagId = $_GET['tag_id'] ?? null;
         try {
-            $sql = "SELECT * FROM songs WHERE title LIKE :q OR artist LIKE :q ORDER BY title ASC LIMIT 50";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['q' => "%$search%"]);
+            if ($tagId) {
+                // Busca por Tag
+                $sql = "
+                    SELECT s.* 
+                    FROM songs s 
+                    JOIN song_tags st ON s.id = st.song_id 
+                    WHERE st.tag_id = :tagId 
+                    ORDER BY s.title ASC 
+                    LIMIT 50";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['tagId' => $tagId]);
+            } else {
+                // Busca Normal
+                $sql = "SELECT * FROM songs WHERE title LIKE :q OR artist LIKE :q ORDER BY title ASC LIMIT 50";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['q' => "%$search%"]);
+            }
             $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             $songs = [];
         }
     ?>
+
+        <?php if ($tagId):
+            // Mostrar qual tag está filtrada
+            // Precisamos buscar o nome da tag
+            $stmtTag = $pdo->prepare("SELECT name, color FROM tags WHERE id = ?");
+            $stmtTag->execute([$tagId]);
+            $currentTag = $stmtTag->fetch(PDO::FETCH_ASSOC);
+        ?>
+            <?php if ($currentTag): ?>
+                <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; background: <?= $currentTag['color'] ?>15; padding: 12px 16px; border-radius: 12px; border: 1px solid <?= $currentTag['color'] ?>30;">
+                    <div style="display: flex; align-items: center; gap: 8px; color: <?= $currentTag['color'] ?>; font-weight: 700;">
+                        <i data-lucide="folder-open" style="width: 20px;"></i>
+                        Pasta: <?= htmlspecialchars($currentTag['name']) ?>
+                    </div>
+                    <a href="repertorio.php?tab=musicas" style="color: <?= $currentTag['color'] ?>; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                        <i data-lucide="x" style="width: 16px;"></i> Limpar
+                    </a>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($songs as $song): ?>
                 <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; border-radius: 12px; background: white; border: 1px solid white; transition: background 0.2s;">
@@ -72,39 +107,106 @@ renderPageHeader('Repertório');
         </div>
     <?php endif; ?>
 
-    <!-- Conteúdo: Pastas -->
+    <!-- Conteúdo: Pastas (Tags) -->
     <?php if ($tab === 'pastas'):
-        // Lógica de Pastas (Exemplo: Por Categoria, ou tabela de pastas se existir)
-        // Como não temos tabela de pastas explícita, vamos agrupar por Categoria das músicas
         try {
-            $sql = "SELECT category as name, COUNT(*) as count FROM songs WHERE category IS NOT NULL AND category != '' GROUP BY category ORDER BY category ASC";
+            // Busca tags com contagem de músicas
+            $sql = "
+                SELECT t.*, COUNT(st.song_id) as count 
+                FROM tags t 
+                LEFT JOIN song_tags st ON t.id = st.tag_id 
+                GROUP BY t.id 
+                ORDER BY t.name ASC
+            ";
             $stmt = $pdo->query($sql);
-            $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            $folders = [];
+            $tags = [];
         }
     ?>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <?php foreach ($folders as $folder): ?>
-                <a href="repertorio.php?tab=musicas&q=category:<?= urlencode($folder['name']) ?>" class="ripple" style="
-                background: white; border-radius: 16px; padding: 16px; text-decoration: none; border: 1px solid #f1f5f9;
-                display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: all 0.2s;
-            ">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
+            <?php foreach ($tags as $tag):
+                // Cor de fundo mais suave baseada na cor da tag
+                $bgHex = $tag['color'] ?? '#047857';
+                // Converter hex para rgb para usar opacidade se necessário, ou usar direto
+            ?>
+                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="ripple" style="
+                background: white; 
+                border-radius: 20px; 
+                padding: 20px; 
+                text-decoration: none; 
+                border: 1px solid #f1f5f9;
+                display: flex; 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 12px; 
+                transition: transform 0.2s, box-shadow 0.2s;
+                position: relative;
+                overflow: hidden;
+            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 20px -10px rgba(0,0,0,0.1)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+
+                    <!-- Barra de cor lateral -->
                     <div style="
-                    width: 48px; height: 48px; background: #dcfce7; border-radius: 12px; color: #166534;
+                    position: absolute; left: 0; top: 0; bottom: 0; width: 6px; 
+                    background: <?= $bgHex ?>;
+                "></div>
+
+                    <div style="
+                    width: 44px; height: 44px; 
+                    background: <?= $bgHex ?>20; /* 20% opacidade */
+                    border-radius: 12px; 
+                    color: <?= $bgHex ?>;
                     display: flex; align-items: center; justify-content: center;
                 ">
-                        <i data-lucide="folder" style="width: 24px;"></i>
+                        <i data-lucide="folder-heart" style="width: 24px;"></i>
                     </div>
-                    <div>
-                        <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem; margin-bottom: 4px;"><?= htmlspecialchars($folder['name']) ?></div>
-                        <div style="font-size: 0.8rem; color: #64748b;"><?= $folder['count'] ?> músicas</div>
+
+                    <div style="width: 100%;">
+                        <div style="font-weight: 800; color: #1e293b; font-size: 1rem; margin-bottom: 4px; line-height: 1.2;">
+                            <?= htmlspecialchars($tag['name']) ?>
+                        </div>
+                        <?php if (!empty($tag['description'])): ?>
+                            <div style="font-size: 0.75rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px;">
+                                <?= htmlspecialchars($tag['description']) ?>
+                            </div>
+                        <?php endif; ?>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: #64748b; background: #f8fafc; padding: 4px 10px; border-radius: 20px; display: inline-block;">
+                            <?= $tag['count'] ?> músicas
+                        </div>
                     </div>
                 </a>
             <?php endforeach; ?>
-            <?php if (empty($folders)): ?>
-                <div style="grid-column: span 2; text-align: center; padding: 40px; color: #94a3b8;">
-                    <p>Nenhuma categoria encontrada.</p>
+
+            <!-- Botão para gerenciar tags -->
+            <a href="classificacoes.php" class="ripple" style="
+            background: #f8fafc; 
+            border-radius: 20px; 
+            padding: 20px; 
+            text-decoration: none; 
+            border: 2px dashed #cbd5e1;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            color: #94a3b8;
+            transition: all 0.2s;
+        ">
+                <div style="
+                width: 44px; height: 44px; 
+                background: #e2e8f0; 
+                border-radius: 50%; 
+                display: flex; align-items: center; justify-content: center;
+            ">
+                    <i data-lucide="plus" style="width: 24px;"></i>
+                </div>
+                <div style="font-weight: 600; font-size: 0.9rem;">Nova Pasta</div>
+            </a>
+
+            <?php if (empty($tags)): ?>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
+                    <p>Nenhuma pasta encontrada.</p>
                 </div>
             <?php endif; ?>
         </div>
