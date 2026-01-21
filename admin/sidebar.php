@@ -17,19 +17,20 @@ if (!$currentUser) {
 if (!$currentUser['phone']) $currentUser['phone'] = 'Membro da Equipe';
 
 // Avatar
-$userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=eff6ff&color=047857';
-
+$userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=dcfce7&color=166534';
 ?>
 
 <div id="app-sidebar" class="sidebar">
     <!-- Cabeçalho Sidebar com Toggle -->
-    <div style="padding: 16px; display: flex; align-items: center; justify-content: space-between;">
-        <div class="logo-area" style="font-weight: 800; color: #047857; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="music" style="width: 24px;"></i>
+    <div style="padding: 20px 16px; display: flex; align-items: center; justify-content: space-between;">
+        <div class="logo-area" style="font-weight: 800; color: #166534; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;">
+            <div style="background: #dcfce7; padding: 6px; border-radius: 8px;">
+                <i data-lucide="music" style="width: 20px; height: 20px; color: #15803d;"></i>
+            </div>
             <span class="sidebar-text">App Louvor</span>
         </div>
-        <button onclick="toggleSidebarDesktop()" class="btn-toggle-desktop">
-            <i data-lucide="panel-left-close"></i>
+        <button onclick="toggleSidebarDesktop()" class="btn-toggle-desktop ripple">
+            <i data-lucide="chevrons-left-right" style="width: 20px; height: 20px;"></i>
         </button>
     </div>
 
@@ -92,23 +93,24 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
 <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebarMobile()"></div>
 
 <style>
-    /* Variáveis CLARAS */
+    /* Variáveis CLARAS + VERDES */
     :root {
         --sidebar-width: 280px;
-        --sidebar-collapsed-width: 80px;
+        --sidebar-collapsed-width: 88px;
+        /* Um pouco mais larga recolhida */
         --sidebar-bg: #ffffff;
         --sidebar-text: #475569;
-        --sidebar-accent-bg: #ecfdf5;
-        /* Verde claro */
-        --sidebar-accent-text: #047857;
-        /* Verde Vilela */
         --sidebar-hover: #f1f5f9;
         --sidebar-border: #e2e8f0;
+
+        /* Tema Verde */
+        --brand-green: #166534;
+        --brand-green-light: #dcfce7;
+        --brand-border: #22c55e;
     }
 
     body {
         background-color: #f8fafc;
-        /* Fundo do app cinza claro */
     }
 
     /* Sidebar Base */
@@ -123,9 +125,8 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
         display: flex;
         flex-direction: column;
         z-index: 1000;
-        transition: width 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow-x: hidden;
-        /* Esconde texto ao recolher */
     }
 
     /* Perfil */
@@ -142,10 +143,19 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
         transition: all 0.2s;
     }
 
+    .sidebar-profile:hover {
+        border-color: var(--brand-border);
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.1);
+    }
+
     .profile-img {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--brand-green);
+        /* Borda Verde */
     }
 
     .profile-info {
@@ -178,36 +188,53 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
         flex-direction: column;
         gap: 4px;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .nav-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px;
-        border-radius: 8px;
+        padding: 12px 14px;
+        border-radius: 10px;
         color: var(--sidebar-text);
         text-decoration: none;
         font-weight: 600;
         font-size: 0.9rem;
         transition: all 0.2s;
         white-space: nowrap;
+        position: relative;
     }
 
     .nav-item:hover {
-        background: var(--sidebar-hover);
-        color: #1e293b;
+        background: #f0fdf4;
+        color: var(--brand-green);
     }
 
     .nav-item.active {
-        background: var(--sidebar-accent-bg);
-        color: var(--sidebar-accent-text);
+        background: var(--brand-green-light);
+        color: var(--brand-green);
+    }
+
+    .nav-item.active:before {
+        /* Indicador lateral */
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 10%;
+        bottom: 10%;
+        width: 4px;
+        background: var(--brand-green);
+        border-radius: 0 4px 4px 0;
+        display: none;
+        /* Opcional, removi para ficar mais clean */
     }
 
     .nav-item i {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         flex-shrink: 0;
+        transition: color 0.2s;
     }
 
     .nav-divider {
@@ -219,6 +246,7 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
     .sidebar-footer {
         padding: 16px 12px;
         border-top: 1px solid var(--sidebar-border);
+        background: #fcfcfc;
     }
 
     .logout-item {
@@ -236,23 +264,35 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
         border: none;
         cursor: pointer;
         color: #94a3b8;
+        padding: 8px;
+        border-radius: 8px;
+        transition: all 0.2s;
         display: none;
-        /* Só aparece no desktop via JS ou media query */
+    }
+
+    .btn-toggle-desktop:hover {
+        background: #f1f5f9;
+        color: var(--brand-green);
     }
 
     @media (min-width: 1025px) {
         .btn-toggle-desktop {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 
     /* --- ESTADO RECOLHIDO (COLLAPSED) --- */
+    /* Agora controlado pela classe .collapsed */
     .sidebar.collapsed {
         width: var(--sidebar-collapsed-width);
     }
 
     .sidebar.collapsed .sidebar-text {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
     }
 
     .sidebar.collapsed .logo-area span {
@@ -266,19 +306,31 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
     .sidebar.collapsed .sidebar-profile {
         padding: 8px;
         justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
     .sidebar.collapsed .profile-img {
         margin: 0;
+        width: 40px;
+        height: 40px;
+    }
+
+    .sidebar.collapsed .profile-info {
+        display: none;
     }
 
     .sidebar.collapsed .nav-item {
         justify-content: center;
-        padding: 16px 0;
+        padding: 14px 0;
     }
 
     .sidebar.collapsed .nav-item i {
         margin: 0;
+    }
+
+    .sidebar.collapsed .btn-toggle-desktop i {
+        transform: rotate(180deg);
     }
 
     /* --- MOBILE --- */
@@ -288,7 +340,6 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
             width: 280px;
         }
 
-        /* Sempre 280px no mobile quando aberta */
         .sidebar.open {
             transform: translateX(0);
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
@@ -303,15 +354,13 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
             display: none;
         }
 
-        /* Sem toggle no mobile */
+        .sidebar-profile {
+            margin-top: 24px;
+        }
     }
-
-    /* --- AJUSTE DO CONTEÚDO PRINCIPAL --- */
-    /* Isso deve ser aplicado ao #app-content no layout.php, mas podemos forçar aqui via JS ou CSS global se possível */
 </style>
 
 <script>
-    // Gerenciamento de Estado (Salvar preferência)
     const sidebar = document.getElementById('app-sidebar');
     const content = document.getElementById('app-content');
 
@@ -319,41 +368,37 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
         return window.innerWidth > 1024;
     }
 
-    // Toggle Desktop (Expandir/Recolher)
     function toggleSidebarDesktop() {
         if (!isDesktop()) return;
 
         sidebar.classList.toggle('collapsed');
         const isCollapsed = sidebar.classList.contains('collapsed');
 
-        // Ajustar margem do conteúdo
         if (content) {
-            content.style.marginLeft = isCollapsed ? '80px' : '280px';
+            content.style.marginLeft = isCollapsed ? '88px' : '280px';
         }
-
-        // Salvar estado (opcional, localStorage)
         localStorage.setItem('sidebarCollapsed', isCollapsed);
     }
 
-    // Toggle Mobile (Abrir/Fechar Offcanvas)
     function toggleSidebarMobile() {
         sidebar.classList.toggle('open');
         document.getElementById('sidebar-overlay').classList.toggle('active');
     }
 
-    // Inicialização
     document.addEventListener('DOMContentLoaded', () => {
         if (isDesktop()) {
+            // Padrão: EXPANDIDO (false) se não houver registro
             const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
             if (savedCollapsed) {
                 sidebar.classList.add('collapsed');
-                if (content) content.style.marginLeft = '80px';
+                if (content) content.style.marginLeft = '88px';
             } else {
+                sidebar.classList.remove('collapsed');
                 if (content) content.style.marginLeft = '280px';
             }
         }
     });
 
-    // Fallback para função antiga chamada no header mobile
     window.toggleSidebar = toggleSidebarMobile;
 </script>
