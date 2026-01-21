@@ -55,7 +55,15 @@ function renderAppHeader($title, $backUrl = null)
             #app-content {
                 padding: 16px;
                 min-height: 100vh;
-                transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                /* Margin-left é controlado via JS na sidebar.php para desktop */
+            }
+
+            @media (min-width: 1025px) {
+
+                /* Margem inicial padrão para evitar FOUC (Flash of Unstyled Content) */
+                #app-content {
+                    margin-left: 280px;
+                }
             }
 
             /* Header Mobile */
