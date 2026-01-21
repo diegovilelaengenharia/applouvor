@@ -115,10 +115,30 @@ renderAppHeader('Classificações');
 </style>
 
 <!-- Hero Simplificado -->
-<div style="margin-bottom: 24px;">
-    <h1 style="font-size: 1.8rem; font-weight: 800; color: white;">Gestão de Tags</h1>
-    <p style="color: rgba(255,255,255,0.8);">Crie pastas para organizar o repertório.</p>
+
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: white;">Gestão de Tags</h1>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 4px;">Crie pastas para organizar o repertório.</p>
+    </div>
+    <button onclick="openModal()" class="ripple" style="
+        background: white; 
+        color: #047857; 
+        border: none; 
+        padding: 10px 20px; 
+        border-radius: 12px; 
+        font-weight: 700; 
+        font-size: 0.9rem; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        cursor: pointer;
+    ">
+        <i data-lucide="plus" style="width: 18px;"></i> Nova
+    </button>
 </div>
+
 
 <div class="tag-list">
     <?php foreach ($tags as $tag): ?>
