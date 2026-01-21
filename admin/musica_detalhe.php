@@ -143,7 +143,7 @@ renderAppHeader('Detalhes da Música');
 </style>
 
 <?php
-<?php
+
 // Menu de Ações (Dropdown)
 $menuActions = '
 <div style="position: relative;">
