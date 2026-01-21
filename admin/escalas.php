@@ -156,6 +156,25 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
 
+                    // Definir Tema de Cor baseado no Tipo
+                    $type = mb_strtolower($schedule['event_type']);
+                    if (strpos($type, 'domingo') !== false) {
+                        $themeColor = '#059669'; // Emerald 600
+                        $themeLight = '#ecfdf5'; // Emerald 50
+                    } elseif (strpos($type, 'ensaio') !== false) {
+                        $themeColor = '#d97706'; // Amber 600
+                        $themeLight = '#fffbeb'; // Amber 50
+                    } elseif (strpos($type, 'jovem') !== false) {
+                        $themeColor = '#7c3aed'; // Violet 600
+                        $themeLight = '#f5f3ff'; // Violet 50
+                    } elseif (strpos($type, 'especial') !== false) {
+                        $themeColor = '#db2777'; // Pink 600
+                        $themeLight = '#fdf2f8'; // Pink 50
+                    } else {
+                        $themeColor = '#2563eb'; // Blue 600
+                        $themeLight = '#eff6ff'; // Blue 50
+                    }
+
                     // Buscar participantes (Top 5)
                     $stmtUsers = $pdo->prepare("
                             SELECT u.name, u.photo, u.avatar_color 
@@ -192,9 +211,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $extraSongs = max(0, $totalSongs - 3);
                 ?>
                     <div class="timeline-row" style="display: flex; gap: 24px;">
-                        <!-- Coluna Data -->
+                        <!-- Coluna Data Colorida -->
                         <div class="timeline-date" style="text-align: right; min-width: 60px; padding-top: 8px;">
-                            <div style="font-size: 1.8rem; font-weight: 300; color: #334155; line-height: 1;"><?= $date->format('d') ?></div>
+                            <div style="font-size: 1.8rem; font-weight: 700; color: <?= $themeColor ?>; line-height: 1;"><?= $date->format('d') ?></div>
                             <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                             <div style="font-size: 0.7rem; color: #cbd5e1; margin-top: 4px;"><?= $date->format('D') ?></div>
                         </div>
@@ -204,8 +223,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 flex: 1; 
                                 background: white; 
                                 border-radius: 16px; 
-                                border: 1px solid #e2e8f0; 
-                                padding: 0; /* Padding controlado internamente */
+                                border: 1px solid #e2e8f0;
+                                border-left: 5px solid <?= $themeColor ?>;
+                                padding: 0; 
                                 text-decoration: none; 
                                 color: inherit;
                                 box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
@@ -215,22 +235,24 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             ">
 
                             <!-- Header do Card -->
-                            <div style="padding: 20px 20px 16px 20px; border-bottom: 1px solid #f1f5f9;">
+                            <div style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9; background: linear-gradient(to right, <?= $themeLight ?>30, transparent);">
                                 <?php if ($isToday): ?>
-                                    <div style="float: right; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-left: 12px;">
+                                    <div style="float: right; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-left: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
                                         HOJE
                                     </div>
                                 <?php endif; ?>
 
-                                <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                                <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">
+                                    <?= htmlspecialchars($schedule['event_type']) ?>
+                                </h3>
                                 <div style="display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: #64748b;">
                                     <div style="display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="clock" style="width: 14px; color: #94a3b8;"></i>
-                                        <?= $date->format('H:i') ?>
+                                        <i data-lucide="clock" style="width: 14px; color: <?= $themeColor ?>;"></i>
+                                        <span style="font-weight: 500;"><?= $date->format('H:i') ?></span>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="map-pin" style="width: 14px; color: #94a3b8;"></i>
-                                        PIB Oliveira
+                                        <i data-lucide="map-pin" style="width: 14px; color: <?= $themeColor ?>;"></i>
+                                        <span>PIB Oliveira</span>
                                     </div>
                                 </div>
                             </div>
@@ -242,18 +264,26 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 <?php if (!empty($songs)): ?>
                                     <div style="display: flex; gap: 12px;">
                                         <div style="padding-top: 2px;">
-                                            <i data-lucide="music" style="width: 16px; color: #64748b;"></i>
+                                            <i data-lucide="music" style="width: 16px; color: <?= $themeColor ?>;"></i>
                                         </div>
                                         <div style="flex: 1;">
-                                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Repertório</div>
+                                            <div style="font-size: 0.75rem; font-weight: 800; color: <?= $themeColor ?>; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">Repertório</div>
                                             <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                                 <?php foreach ($songs as $s): ?>
-                                                    <span style="font-size: 0.85rem; color: #334155; background: #f8fafc; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                                    <span style="
+                                                        font-size: 0.85rem; 
+                                                        color: #334155; 
+                                                        background: <?= $themeLight ?>; 
+                                                        padding: 4px 10px; 
+                                                        border-radius: 6px; 
+                                                        border: 1px solid <?= $themeColor ?>20;
+                                                        font-weight: 500;
+                                                    ">
                                                         <?= htmlspecialchars($s['title']) ?>
                                                     </span>
                                                 <?php endforeach; ?>
                                                 <?php if ($extraSongs > 0): ?>
-                                                    <span style="font-size: 0.8rem; color: #64748b; padding: 2px 4px;">+<?= $extraSongs ?></span>
+                                                    <span style="font-size: 0.8rem; color: #64748b; padding: 2px 4px; align-self: center;">+<?= $extraSongs ?></span>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
