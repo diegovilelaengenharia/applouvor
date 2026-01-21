@@ -124,33 +124,33 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
     <!-- Feedback -->
     <?php if ($success): ?>
-        <div style="background: #DCFCE7; color: #166534; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 500; display: flex; align-items: center; gap: 12px; border: 1px solid #bbf7d0;">
+        <div style="background: var(--primary-subtle); color: var(--primary); padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--primary-light);">
             <i data-lucide="check-circle" style="width: 20px;"></i>
             <?= $success ?>
         </div>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <div style="background: #FEF2F2; color: #991B1B; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 500; display: flex; align-items: center; gap: 12px; border: 1px solid #fecaca;">
+        <div style="background: #FEF2F2; color: #DC2626; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid #FECACA;">
             <i data-lucide="alert-circle" style="width: 20px;"></i>
             <?= $error ?>
         </div>
     <?php endif; ?>
 
     <!-- INSTRUÇÕES / COMO FUNCIONA -->
-    <div style="background: linear-gradient(to right, #eff6ff, #f8fafc); border-left: 4px solid #3b82f6; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.05);">
-        <h4 style="margin: 0 0 10px 0; color: #1e40af; display: flex; align-items: center; gap: 8px; font-size: 1rem;">
-            <div style="background: #dbeafe; padding: 6px; border-radius: 8px; display: flex;">
-                <i data-lucide="info" style="width: 18px; color: #2563eb;"></i>
+    <div style="background: var(--bg-surface); border-left: 4px solid var(--primary); border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+        <h4 style="margin: 0 0 10px 0; color: var(--primary); display: flex; align-items: center; gap: 8px; font-size: 1rem;">
+            <div style="background: var(--primary-subtle); padding: 6px; border-radius: 8px; display: flex;">
+                <i data-lucide="info" style="width: 18px; color: var(--primary);"></i>
             </div>
             Como funciona?
         </h4>
-        <p style="margin: 0; font-size: 0.9rem; color: #334155; line-height: 1.6;">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
             Vai viajar ou tem um compromisso? Avise aqui.
             <br>
             <span style="display: inline-block; margin-top: 6px;">
-                <strong style="color: #2563eb;">1.</strong> Escolha o período. &nbsp;
-                <strong style="color: #2563eb;">2.</strong> <span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">Obrigatório:</span> Indique quem vai te substituir.
+                <strong style="color: var(--primary);">1.</strong> Escolha o período. &nbsp;
+                <strong style="color: var(--primary);">2.</strong> <span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">Obrigatório:</span> Indique quem vai te substituir.
             </span>
         </p>
     </div>
@@ -158,9 +158,9 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
     <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
 
         <!-- FORMULÁRIO -->
-        <div id="formCard" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
-            <h3 id="formTitle" style="margin-top: 0; display: flex; align-items: center; gap: 10px; color: #1e293b;">
-                <i data-lucide="calendar-plus" style="color: #166534;"></i>
+        <div id="formCard" style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+            <h3 id="formTitle" style="margin-top: 0; display: flex; align-items: center; gap: 10px; color: var(--text-main);">
+                <i data-lucide="calendar-plus" style="color: var(--primary);"></i>
                 Nova Indisponibilidade
             </h3>
 
@@ -170,29 +170,29 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                     <div>
-                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Data Início</label>
-                        <input type="date" name="start_date" id="startDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#166534'" onblur="this.style.borderColor='#cbd5e1'">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Data Início</label>
+                        <input type="date" name="start_date" id="startDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main);" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Data Fim (Opcional)</label>
-                        <input type="date" name="end_date" id="endDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#166534'" onblur="this.style.borderColor='#cbd5e1'">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Data Fim (Opcional)</label>
+                        <input type="date" name="end_date" id="endDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main);" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
                     </div>
                 </div>
 
                 <div style="margin-bottom: 16px;">
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Motivo</label>
-                    <input type="text" name="reason" id="reason" placeholder="Ex: Viagem, Trabalho, Saúde..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#166534'" onblur="this.style.borderColor='#cbd5e1'">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Motivo</label>
+                    <input type="text" name="reason" id="reason" placeholder="Ex: Viagem, Trabalho, Saúde..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main);" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
                 </div>
 
                 <div style="margin-bottom: 24px;">
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
                         Substituto Sugerido <span style="color: #ef4444; margin-left: 2px;">*</span>
                     </label>
                     <div style="position: relative;">
                         <input type="text" list="users_datalist" id="replacementSearch" placeholder="Digite para buscar..." required
                             onchange="updateReplacementId(this)"
-                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;"
-                            onfocus="this.style.borderColor='#166534'" onblur="this.style.borderColor='#cbd5e1'">
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main);"
+                            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
 
                         <input type="hidden" name="replacement_id" id="replacement_id_input">
 

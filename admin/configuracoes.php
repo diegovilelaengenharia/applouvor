@@ -52,10 +52,19 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
 
                 <div class="form-group">
                     <label>Função Ministerial</label>
-                    <input type="text" value="<?= htmlspecialchars($_SESSION['user_role'] === 'admin' ? 'Líder / Admin' : 'Membro') ?>" disabled class="form-input disabled">
+                    <input type="text" value="<?= htmlspecialchars($_SESSION['user_role'] === 'admin' ? 'Líder / Admin' : 'Membro') ?>" disabled class="form-input disabled" style="background: var(--bg-body); color: var(--text-muted); border-color: var(--border-color);">
                 </div>
 
-                <button type="submit" class="btn-save ripple">Salvar Alterações</button>
+                <button type="submit" class="btn-save ripple" style="
+                    background: var(--primary); 
+                    color: white; 
+                    border: none; 
+                    padding: 12px; 
+                    border-radius: var(--radius-md); 
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: var(--shadow-sm);
+                ">Salvar Alterações</button>
             </form>
         </div>
     </div>
@@ -159,7 +168,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     .settings-title {
         font-size: 0.95rem;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 12px;
@@ -174,11 +183,11 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .settings-card {
-        background: white;
-        border-radius: 16px;
-        border: 1px solid #e2e8f0;
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
         padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        box-shadow: var(--shadow-sm);
     }
 
     .form-group {
@@ -191,28 +200,22 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     .form-group label {
         font-size: 0.85rem;
         font-weight: 600;
-        color: var(--text-secondary);
+        color: var(--text-muted);
     }
 
     .form-input {
         padding: 10px 12px;
         border-radius: 8px;
-        border: 1px solid #cbd5e1;
-        font-size: 0.95rem;
-        font-family: inherit;
-        color: var(--text-primary);
-        background: #f8fafc;
-    }
-
-    .form-input:focus {
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-main);
         outline: none;
-        border-color: #3b82f6;
-        background: white;
+        transition: all 0.2s;
     }
 
     .form-input.disabled {
-        background: #f1f5f9;
-        color: #94a3b8;
+        background: var(--bg-body);
+        color: var(--text-muted);
         cursor: not-allowed;
     }
 
@@ -223,20 +226,24 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .btn-save {
-        background: #0f172a;
+        background: var(--primary);
         color: white;
         border: none;
         padding: 12px;
-        border-radius: 10px;
-        font-weight: 600;
+        border-radius: var(--radius-md);
+        font-weight: 700;
         cursor: pointer;
         margin-top: 8px;
         text-align: center;
         font-size: 0.95rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s;
     }
 
     .btn-save:hover {
-        background: #1e293b;
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
     }
 
     .btn-outline {
@@ -245,18 +252,19 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         gap: 8px;
         padding: 10px 20px;
         border-radius: 50px;
-        border: 1px solid #e2e8f0;
-        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
         text-decoration: none;
         font-weight: 600;
         font-size: 0.9rem;
         transition: all 0.2s;
+        background: transparent;
     }
 
     .btn-outline:hover {
-        background: #f8fafc;
-        color: var(--text-primary);
-        border-color: #cbd5e1;
+        background: var(--bg-surface);
+        color: var(--text-main);
+        border-color: var(--primary);
     }
 
     /* Toggle Switch Styles */
@@ -265,12 +273,12 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         justify-content: space-between;
         align-items: center;
         padding: 8px 0;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--border-color);
     }
 
     .switch-row.petite {
         padding: 12px 0;
-        border-bottom: 1px solid #f8fafc;
+        border-bottom: 1px solid var(--bg-body);
     }
 
     .switch-row:last-child {
@@ -287,18 +295,18 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .icon-box.purple {
-        background: #f5f3ff;
-        color: #7c3aed;
+        background: var(--bg-body);
+        color: var(--text-main);
     }
 
     .switch-label {
         font-weight: 600;
-        color: var(--text-primary);
+        color: var(--text-main);
     }
 
     .switch-desc {
         font-size: 0.8rem;
-        color: var(--text-secondary);
+        color: var(--text-muted);
     }
 
     .toggle-switch {
@@ -326,8 +334,11 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #cbd5e1;
+        background-color: var(--text-muted);
+        /* Inactive */
         transition: .4s;
+        border-radius: 34px;
+        opacity: 0.3;
     }
 
     .slider:before {
@@ -349,7 +360,8 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     input:checked+.slider {
-        background-color: #3b82f6;
+        background-color: var(--primary);
+        opacity: 1;
     }
 
     input:checked+.slider:before {

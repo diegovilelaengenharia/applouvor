@@ -79,11 +79,11 @@ try {
     }
 
     .stat-card {
-        background: white;
-        border-radius: 16px;
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
         padding: 16px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
         display: flex;
         align-items: center;
         gap: 12px;
@@ -94,8 +94,8 @@ try {
 
     .stat-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        border-color: #cbd5e1;
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-light);
     }
 
     .stat-icon {
@@ -112,7 +112,7 @@ try {
         font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: #64748b;
+        color: var(--text-muted);
         font-weight: 700;
         margin-bottom: 12px;
         margin-top: 24px;
@@ -187,9 +187,9 @@ try {
     }
 
     .tool-card {
-        background: linear-gradient(to bottom right, #ffffff, #f8fafc);
-        border: 1px solid #eff6ff;
-        border-radius: 16px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
         padding: 20px;
         display: flex;
         flex-direction: column;
