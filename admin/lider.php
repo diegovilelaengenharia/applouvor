@@ -115,12 +115,12 @@ renderAppHeader('Painel Líder');
         </a>
 
         <!-- Boletim Estatístico -->
-        <a href="#" onclick="alert('Funcionalidade sendo implementada!')" class="ripple" style="
+        <a href="boletim_estatistico.php" class="ripple" style="
             display: flex; align-items: center; gap: 16px; 
             background: white; padding: 20px; border-radius: 16px; 
             border: 1px solid #e2e8f0; text-decoration: none; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-            transition: all 0.2s; opacity: 0.8;
+            transition: all 0.2s;
         " onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-2px)'"
             onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'">
 

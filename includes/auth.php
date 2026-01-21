@@ -32,6 +32,11 @@ function login($name, $password, $pdo)
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_avatar'] = $user['avatar'] ?? null;
+
+        // Atualizar estatísticas de login
+        $stmtUpdate = $pdo->prepare("UPDATE users SET last_login = NOW(), login_count = login_count + 1 WHERE id = ?");
+        $stmtUpdate->execute([$user['id']]);
+
         return true;
     }
     return false;
