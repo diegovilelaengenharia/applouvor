@@ -478,13 +478,17 @@ renderAppHeader('Escalas');
         if (view === 'cards') {
             if (listCards) listCards.style.display = 'flex';
             if (listCompact) listCompact.style.display = 'none';
-            btnCards.setAttribute('style', activeViewStyle);
-            btnCompact.setAttribute('style', inactiveViewStyle);
+            btnCards.style.background = 'white';
+            btnCards.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
+            btnCompact.style.background = 'transparent';
+            btnCompact.style.boxShadow = 'none';
         } else {
             if (listCards) listCards.style.display = 'none';
-            if (listCompact) listCompact.style.display = 'flex';
-            btnCards.setAttribute('style', inactiveViewStyle);
-            btnCompact.setAttribute('style', activeViewStyle);
+            if (listCompact) listCompact.style.display = 'flex'; // Garante Flex
+            btnCards.style.background = 'transparent';
+            btnCards.style.boxShadow = 'none';
+            btnCompact.style.background = 'white';
+            btnCompact.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
         }
     }
 
