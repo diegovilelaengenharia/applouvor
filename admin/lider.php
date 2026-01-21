@@ -128,6 +128,30 @@ renderAppHeader('Painel Líder');
     <!-- Lista Vertical de Funcionalidades -->
     <div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px;">
 
+        <!-- Gestão de Membros -->
+        <a href="membros.php" class="wide-action-btn ripple">
+            <div class="wide-btn-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                <i data-lucide="users"></i>
+            </div>
+            <div class="wide-btn-content">
+                <div class="wide-btn-title">Gestão de Membros</div>
+                <div class="wide-btn-desc">Gerenciar equipe e instrumentos</div>
+            </div>
+            <i data-lucide="chevron-right" class="wide-btn-arrow"></i>
+        </a>
+
+        <!-- Agenda -->
+        <a href="agenda.php" class="wide-action-btn ripple">
+            <div class="wide-btn-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                <i data-lucide="calendar-days"></i>
+            </div>
+            <div class="wide-btn-content">
+                <div class="wide-btn-title">Agenda</div>
+                <div class="wide-btn-desc">Visualizar calendário de escalas</div>
+            </div>
+            <i data-lucide="chevron-right" class="wide-btn-arrow"></i>
+        </a>
+
         <!-- Gestão de Avisos -->
         <a href="avisos.php?from=lider" class="wide-action-btn ripple">
             <div class="wide-btn-icon" style="background: rgba(255, 193, 7, 0.1); color: #D97706;">
