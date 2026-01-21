@@ -370,7 +370,7 @@ renderAppHeader('Detalhes da Escala');
 
 <!-- CONTEÚDO: EQUIPE -->
 <!-- NOVO DESIGN: ABA EQUIPE -->
-<div id="equipe">
+<div id="equipe" style="background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-subtle); margin-top: 32px;">
     <?php
     // Agrupar por tipo
     $vozMembers = [];
@@ -403,7 +403,7 @@ renderAppHeader('Detalhes da Escala');
     <?php else: ?>
 
         
-<div style="display: flex; justify-content: space-between; align-items: flex-end; margin: 32px 0 16px 0; padding: 0 4px;">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin: 0 0 16px 0; padding: 0 4px;">
     <div>
         <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
             <i data-lucide="users" style="width: 20px; color: #047857;"></i>
@@ -546,7 +546,7 @@ renderAppHeader('Detalhes da Escala');
 
 <!-- CONTEÚDO: REPERTÓRIO -->
 
-<div id="repertorio" style="margin-top: 32px;">
+<div id="repertorio" style="background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-subtle); margin-top: 32px;">
     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;">
         <div>
             <h3 style="font-size: 1.1rem; font-weight: 800; color: #1f2937; margin: 0; letter-spacing: -0.02em;">Repertório Musical</h3>
