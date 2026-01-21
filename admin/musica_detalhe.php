@@ -164,7 +164,7 @@ renderPageHeader('Detalhes da Música', $song['artist']);
     <h1 style="color: #1e293b; margin: 16px 0 4px 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
     <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 1rem;"><?= htmlspecialchars($song['artist']) ?></p>
 </div>
-<?php
+
 
 <!-- Versão -->
 <div class="info-section">
