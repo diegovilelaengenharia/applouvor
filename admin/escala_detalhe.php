@@ -436,26 +436,25 @@ renderAppHeader('Detalhes da Escala');
         </div>
     <?php else: ?>
 
-        <!-- Header com Contador -->
-        <div style="background: var(--bg-secondary); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-subtle); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <div>
-                    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
-                        <i data-lucide="users" style="width: 22px; color: #047857;"></i>
-                        Equipe Escalada
-                    </h3>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 32px;"><?= $totalMembros ?> <?= $totalMembros == 1 ? 'membro' : 'membros' ?></p>
-                </div>
-                <button onclick="openModal('modalMembers')" class="ripple" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);">
-                    <i data-lucide="plus" style="width: 16px;"></i> Adicionar
-                </button>
-            </div>
-        </div>
+        
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin: 32px 0 16px 0; padding: 0 4px;">
+    <div>
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="users" style="width: 20px; color: #047857;"></i>
+            Equipe Escalada
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 30px;"><?= $totalMembros ?> participantes confirmados</p>
+    </div>
+    <button onclick="openModal('modalMembers')" class="ripple" style="background: rgba(16, 185, 129, 0.1); color: #047857; border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+        <i data-lucide="plus" style="width: 14px;"></i> Adicionar
+    </button>
+</div>
+
 
         <!-- Vocalistas -->
         <?php if (!empty($vozMembers)): ?>
             <div style="margin-bottom: 24px;">
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <h4 style="font-size: 0.8rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 12px 4px; display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="mic-2" style="width: 16px; color: #8b5cf6;"></i>
                     Voz (<?= count($vozMembers) ?>)
                 </h4>
@@ -469,7 +468,7 @@ renderAppHeader('Detalhes da Escala');
                         ];
                         $status = $statusColors[$member['status']] ?? $statusColors['pending'];
                     ?>
-                        <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#8b5cf6';" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
+                        <div style="background: white; border: 1px solid rgba(0,0,0,0.05); border-radius: 16px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 8px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#8b5cf6';" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
                             <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
                                 <!-- Avatar -->
                                 <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #5b21b6; flex-shrink: 0; border: 2px solid #a78bfa;">
@@ -511,7 +510,7 @@ renderAppHeader('Detalhes da Escala');
         <!-- Instrumentistas -->
         <?php if (!empty($instrumentoMembers)): ?>
             <div>
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <h4 style="font-size: 0.8rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 12px 4px; display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="guitar" style="width: 16px; color: #f59e0b;"></i>
                     Instrumentos (<?= count($instrumentoMembers) ?>)
                 </h4>
@@ -535,7 +534,7 @@ renderAppHeader('Detalhes da Escala');
                         ];
                         $instColor = $instColors[$member['instrument']] ?? ['bg' => '#fed7aa', 'border' => '#fb923c', 'text' => '#9a3412'];
                     ?>
-                        <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#f59e0b';" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
+                        <div style="background: white; border: 1px solid rgba(0,0,0,0.05); border-radius: 16px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 8px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#f59e0b';" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; this.style.borderColor='var(--border-subtle)';">
                             <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
                                 <!-- Avatar -->
                                 <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, <?= $instColor['bg'] ?> 0%, <?= $instColor['bg'] ?> 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: <?= $instColor['text'] ?>; flex-shrink: 0; border: 2px solid <?= $instColor['border'] ?>;">
@@ -615,7 +614,7 @@ renderAppHeader('Detalhes da Escala');
                             width: 48px;
                             height: 48px;
                             border-radius: 50%;
-                            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+                            background: #f1f5f9; color: #64748b;
                             display: flex;
                             align-items: center;
                             justify-content: center;
