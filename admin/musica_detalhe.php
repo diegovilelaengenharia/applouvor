@@ -143,14 +143,7 @@ renderAppHeader('Detalhes da Música');
 </style>
 
 <?php
-$actions = [
-    [
-        'label' => 'Editar Música',
-        'icon' => 'edit-3',
-        'link' => 'musica_editar.php?id=' . $id
-    ],
-    [
-        'label' => 'Excluir Música',
+<?php
 // Menu de Ações (Dropdown)
 $menuActions = '
 <div style="position: relative;">
