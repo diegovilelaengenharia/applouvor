@@ -38,31 +38,66 @@ renderAppHeader('Escalas');
     </div>
 </header>
 
-<!-- Tabs Navegação (Funcionais) -->
-<div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; padding: 0 16px;">
-    <button id="btn-future" onclick="switchTab('future')" class="ripple" style="
-        background: #dcfce7; 
-        color: #166534; 
-        border: none; 
-        padding: 8px 32px; 
-        border-radius: 20px; 
-        font-weight: 700; 
-        font-size: 0.9rem;
-        box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);
-        cursor: pointer;
-        transition: all 0.2s;
-    ">Próximas</button>
-    <button id="btn-past" onclick="switchTab('past')" class="ripple" style="
-        background: transparent; 
-        color: #64748b; 
-        border: none; 
-        padding: 8px 32px; 
-        border-radius: 20px; 
-        font-weight: 600; 
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.2s;
-    ">Anteriores</button>
+<!-- Controles Principais: Tabs + View Toggles -->
+<div style="max-width: 800px; margin: 0 auto; padding: 0 16px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px;">
+
+    <!-- Central Tabs -->
+    <div style="display: flex; justify-content: center; gap: 8px;">
+        <button id="btn-future" onclick="switchTab('future')" class="ripple" style="
+            background: #dcfce7; 
+            color: #166534; 
+            border: none; 
+            padding: 8px 32px; 
+            border-radius: 20px; 
+            font-weight: 700; 
+            font-size: 0.9rem;
+            box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        ">Próximas</button>
+        <button id="btn-past" onclick="switchTab('past')" class="ripple" style="
+            background: transparent; 
+            color: #64748b; 
+            border: none; 
+            padding: 8px 32px; 
+            border-radius: 20px; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        ">Anteriores</button>
+    </div>
+
+    <!-- View Toggles (Alinhado à direita, visível apenas na Tab Future) -->
+    <div id="view-controls" style="display: flex; justify-content: flex-end; width: 100%;">
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: flex; gap: 4px;">
+            <button onclick="switchView('cards')" id="btn-view-cards" title="Visualização Cards" style="
+                border: none; 
+                background: white; 
+                color: #0f172a; 
+                width: 32px; height: 32px; 
+                border-radius: 8px; 
+                cursor: pointer; 
+                display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+                transition: all 0.2s;
+            ">
+                <i data-lucide="layout-grid" style="width: 18px;"></i>
+            </button>
+            <button onclick="switchView('compact')" id="btn-view-compact" title="Visualização Lista Compacta" style="
+                border: none; 
+                background: transparent; 
+                color: #64748b; 
+                width: 32px; height: 32px; 
+                border-radius: 8px; 
+                cursor: pointer; 
+                display: flex; align-items: center; justify-content: center;
+                transition: all 0.2s;
+            ">
+                <i data-lucide="list" style="width: 18px;"></i>
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Container Principal -->
@@ -85,7 +120,9 @@ renderAppHeader('Escalas');
                 <p style="color: #64748b; max-width: 300px; margin: 0 auto;">Para cadastrar uma escala, toque no botão (+).</p>
             </div>
         <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 100px;">
+
+            <!-- LISTA CARDS (Padrão) -->
+            <div id="list-cards" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 100px;">
                 <?php foreach ($futureSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
@@ -131,6 +168,52 @@ renderAppHeader('Escalas');
                     </a>
                 <?php endforeach; ?>
             </div>
+
+            <!-- LISTA COMPACTA (Oculta por padrão) -->
+            <div id="list-compact" style="display: none; flex-direction: column; margin-bottom: 100px;">
+                <?php foreach ($futureSchedules as $schedule):
+                    $date = new DateTime($schedule['event_date']);
+                    $isToday = $date->format('Y-m-d') === date('Y-m-d');
+
+                    // Contagens Compactas
+                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
+                    $stmtCount->execute([$schedule['id']]);
+                    $teamCount = $stmtCount->fetchColumn();
+                ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="
+                    display: flex; align-items: center; gap: 16px; 
+                    padding: 16px; 
+                    background: white; 
+                    border-bottom: 1px solid #e2e8f0;
+                    text-decoration: none; color: inherit;
+                ">
+                        <!-- Data Small -->
+                        <div style="text-align: center; width: 40px; flex-shrink: 0;">
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #475569;"><?= $date->format('d') ?></div>
+                            <div style="font-size: 0.7rem; font-weight: 600; color: #94a3b8; text-transform: uppercase;"><?= strtoupper($date->format('M')) ?></div>
+                        </div>
+
+                        <!-- Linha Vertical -->
+                        <div style="width: 2px; height: 32px; background: <?= $isToday ? '#166534' : '#e2e8f0' ?>; border-radius: 2px;"></div>
+
+                        <!-- Conteúdo Minimalista -->
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #1e293b; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+                                <?= htmlspecialchars($schedule['event_type']) ?>
+                                <?php if ($isToday): ?>
+                                    <span style="background: #dcfce7; color: #166534; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">HOJE</span>
+                                <?php endif; ?>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #64748b;">
+                                <?= ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')] ?> • <?= $teamCount ?> escalados
+                            </div>
+                        </div>
+
+                        <i data-lucide="chevron-right" style="color: #cbd5e1; width: 16px;"></i>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
         <?php endif; ?>
     </div>
 
@@ -181,9 +264,9 @@ renderAppHeader('Escalas');
 <!-- Floating Action Button -->
 <a href="escala_adicionar.php" class="ripple" style="
     position: fixed;
-    bottom: 80px; /* Acima da Bottom Bar no mobile */
+    bottom: 80px; 
     right: 24px;
-    background: #166534; /* Verde Escuro */
+    background: #166534; 
     color: white;
     padding: 12px 24px;
     border-radius: 30px;
@@ -210,26 +293,59 @@ renderAppHeader('Escalas');
 
 <script>
     function switchTab(tab) {
-        // Alternar visibilidade
+        // Alternar visibilidade das Tabs
         document.getElementById('tab-future').style.display = tab === 'future' ? 'block' : 'none';
         document.getElementById('tab-past').style.display = tab === 'past' ? 'block' : 'none';
 
-        // Atualizar Botões
+        // Alternar visibilidade dos Controles de View (Só aparecem no Future)
+        const viewControls = document.getElementById('view-controls');
+        if (tab === 'future') {
+            viewControls.style.visibility = 'visible';
+        } else {
+            viewControls.style.visibility = 'hidden';
+        }
+
+        // Atualizar Botões de Tab
         const btnFuture = document.getElementById('btn-future');
         const btnPast = document.getElementById('btn-past');
 
-        // Estilos
-        const activeStyle = "background: #dcfce7; color: #166534; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);";
-        const inactiveStyle = "background: transparent; color: #64748b; box-shadow: none;";
+        // Estilos Tab (Ativo/Inativo)
+        const activeTabStyle = "background: #dcfce7; color: #166534; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);";
+        const inactiveTabStyle = "background: transparent; color: #64748b; box-shadow: none;";
 
-        // Resetar classes/styles para garantir limpeza
-        btnFuture.style.cssText = tab === 'future' ?
-            "background: #dcfce7; color: #166534; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1); cursor: pointer; transition: all 0.2s;" :
-            "background: transparent; color: #64748b; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;";
+        if (tab === 'future') {
+            btnFuture.style.cssText += activeTabStyle;
+            btnPast.style.cssText += inactiveTabStyle;
+        } else {
+            btnFuture.style.cssText += inactiveTabStyle;
+            btnPast.style.cssText += activeTabStyle;
+        }
+    }
 
-        btnPast.style.cssText = tab === 'past' ?
-            "background: #dcfce7; color: #166534; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1); cursor: pointer; transition: all 0.2s;" :
-            "background: transparent; color: #64748b; border: none; padding: 8px 32px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;";
+    function switchView(view) {
+        const listCards = document.getElementById('list-cards');
+        const listCompact = document.getElementById('list-compact');
+
+        const btnCards = document.getElementById('btn-view-cards');
+        const btnCompact = document.getElementById('btn-view-compact');
+
+        // Estilos View Toggle
+        const activeViewStyle = "border: none; background: white; color: #0f172a; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: all 0.2s;";
+        const inactiveViewStyle = "border: none; background: transparent; color: #64748b; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;";
+
+        if (view === 'cards') {
+            if (listCards) listCards.style.display = 'flex';
+            if (listCompact) listCompact.style.display = 'none';
+
+            btnCards.setAttribute('style', activeViewStyle);
+            btnCompact.setAttribute('style', inactiveViewStyle);
+        } else {
+            if (listCards) listCards.style.display = 'none';
+            if (listCompact) listCompact.style.display = 'flex';
+
+            btnCards.setAttribute('style', inactiveViewStyle);
+            btnCompact.setAttribute('style', activeViewStyle);
+        }
     }
 </script>
 
