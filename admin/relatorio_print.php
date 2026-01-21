@@ -8,33 +8,33 @@ checkAdmin();
 $start_date = $_GET['start'] ?? date('Y-m-01');
 $end_date = $_GET['end'] ?? date('Y-m-t', strtotime('+1 month'));
 
-// Fetch Scales in Range
+// Fetch Schedules in Range
 $stmt = $pdo->prepare("
-    SELECT * FROM scales 
+    SELECT * FROM schedules 
     WHERE event_date BETWEEN ? AND ? 
     ORDER BY event_date ASC
 ");
 $stmt->execute([$start_date, $end_date]);
-$scales = $stmt->fetchAll();
+$schedules = $stmt->fetchAll();
 
-// Fetch Members for these scales
-$scaleIds = array_column($scales, 'id');
+// Fetch Members for these schedules
+$scheduleIds = array_column($schedules, 'id');
 $membersMap = [];
 
-if (!empty($scaleIds)) {
-    $inQuery = implode(',', array_fill(0, count($scaleIds), '?'));
+if (!empty($scheduleIds)) {
+    $inQuery = implode(',', array_fill(0, count($scheduleIds), '?'));
     $stmtMembers = $pdo->prepare("
-        SELECT sm.*, u.name 
-        FROM scale_members sm
-        JOIN users u ON sm.user_id = u.id
-        WHERE sm.scale_id IN ($inQuery)
-        ORDER BY FIELD(u.category, 'Voz', 'Teclado', 'Violão', 'Guitarra', 'Baixo', 'Bateria', 'Outros'), u.name
+        SELECT su.*, u.name, u.instrument 
+        FROM schedule_users su
+        JOIN users u ON su.user_id = u.id
+        WHERE su.schedule_id IN ($inQuery)
+        ORDER BY FIELD(u.instrument, 'Voz', 'Teclado', 'Violão', 'Guitarra', 'Baixo', 'Bateria', 'Outros'), u.name
     ");
-    $stmtMembers->execute($scaleIds);
+    $stmtMembers->execute($scheduleIds);
     $allMembers = $stmtMembers->fetchAll();
 
     foreach ($allMembers as $m) {
-        $membersMap[$m['scale_id']][] = $m;
+        $membersMap[$m['schedule_id']][] = $m;
     }
 }
 ?>
@@ -184,24 +184,24 @@ if (!empty($scaleIds)) {
         <p>Ministério de Louvor PIB Oliveira</p>
     </div>
 
-    <?php if (empty($scales)): ?>
+    <?php if (empty($schedules)): ?>
         <p style="text-align: center; color: #666;">Nenhuma escala encontrada neste período.</p>
     <?php else: ?>
-        <?php foreach ($scales as $scale):
-            $team = $membersMap[$scale['id']] ?? [];
+        <?php foreach ($schedules as $schedule):
+            $team = $membersMap[$schedule['id']] ?? [];
         ?>
             <div class="scale-item">
                 <div class="scale-header">
                     <div class="scale-date">
-                        <?= date('d/m/Y', strtotime($scale['event_date'])) ?>
-                        <span style="font-weight: normal; margin-left: 10px; font-size: 14px; color: #555;">(<?= strftime('%A', strtotime($scale['event_date'])) ?>)</span>
+                        <?= date('d/m/Y', strtotime($schedule['event_date'])) ?>
+                        <span style="font-weight: normal; margin-left: 10px; font-size: 14px; color: #555;">(<?= strftime('%A', strtotime($schedule['event_date'])) ?>)</span>
                     </div>
-                    <div class="scale-type"><?= htmlspecialchars($scale['event_type']) ?></div>
+                    <div class="scale-type"><?= htmlspecialchars($schedule['event_type']) ?></div>
                 </div>
                 <div class="scale-body">
-                    <?php if (!empty($scale['description'])): ?>
+                    <?php if (!empty($schedule['notes'])): ?>
                         <div style="margin-bottom: 10px; font-style: italic; color: #666; font-size: 13px;">
-                            <?= htmlspecialchars($scale['description']) ?>
+                            <?= htmlspecialchars($schedule['notes']) ?>
                         </div>
                     <?php endif; ?>
 

@@ -401,14 +401,14 @@ try {
                     </div>
                 </a>
 
-                <!-- Relatório de Escalas -->
-                <a href="relatorio_print.php" target="_blank" class="tool-card">
+                <!-- Boletim Estatístico -->
+                <a href="boletim_estatistico.php" class="tool-card">
                     <div style="background: #fef3c7; padding: 12px; border-radius: 50%; color: #f59e0b;">
-                        <i data-lucide="printer"></i>
+                        <i data-lucide="bar-chart-3"></i>
                     </div>
                     <div>
-                        <div style="font-weight: 700; color: #1e293b;">Relatório</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Imprimir Escalas</div>
+                        <div style="font-weight: 700; color: #1e293b;">Boletim</div>
+                        <div style="font-size: 0.8rem; color: #64748b;">Estatísticas</div>
                     </div>
                 </a>
             </div>
