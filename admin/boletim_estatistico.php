@@ -100,30 +100,32 @@ $taxa_presenca = $presenca_data['participacoes_possiveis'] > 0
 // ESTATÍSTICAS POR MEMBRO
 // ==========================================
 
-$stmt = $pdo->query("
+$periodo_sql_subquery = str_replace('s.', 'schedules.', $periodo_sql);
+$stmt = $pdo->prepare("
     SELECT 
         u.id,
         u.name,
         u.instrument,
         COUNT(DISTINCT su.schedule_id) as total_participacoes,
-        ROUND(COUNT(DISTINCT su.schedule_id) * 100.0 / NULLIF((SELECT COUNT(*) FROM schedules s WHERE 1=1 $periodo_sql), 0), 1) as taxa_presenca,
+        ROUND(COUNT(DISTINCT su.schedule_id) * 100.0 / NULLIF((SELECT COUNT(*) FROM schedules WHERE 1=1 " . $periodo_sql_subquery . "), 0), 1) as taxa_presenca,
         MAX(s.event_date) as ultima_participacao,
         MIN(s.event_date) as primeira_participacao,
         DATEDIFF(CURDATE(), MAX(s.event_date)) as dias_sem_tocar
     FROM users u
     LEFT JOIN schedule_users su ON u.id = su.user_id
-    LEFT JOIN schedules s ON su.schedule_id = s.id AND 1=1 $periodo_sql
+    LEFT JOIN schedules s ON su.schedule_id = s.id " . $periodo_sql . "
     WHERE u.role != 'admin'
     GROUP BY u.id, u.name, u.instrument
     ORDER BY total_participacoes DESC
 ");
+$stmt->execute();
 $membros_stats = $stmt->fetchAll();
 
 // ==========================================
 // TOP 10 MÚSICAS MAIS TOCADAS
 // ==========================================
 
-$stmt = $pdo->query("
+$stmt = $pdo->prepare("
     SELECT 
         s.title,
         s.artist,
@@ -132,11 +134,12 @@ $stmt = $pdo->query("
     FROM schedule_songs ss
     JOIN songs s ON ss.song_id = s.id
     JOIN schedules sch ON ss.schedule_id = sch.id
-    WHERE 1=1 $periodo_sql
+    WHERE 1=1 " . str_replace('s.event_date', 'sch.event_date', $periodo_sql) . "
     GROUP BY s.id, s.title, s.artist, s.category
     ORDER BY vezes_tocada DESC
     LIMIT 10
 ");
+$stmt->execute();
 $top_musicas = $stmt->fetchAll();
 
 // ==========================================
@@ -161,7 +164,7 @@ $escalas_por_mes = $stmt->fetchAll();
 // PARCEIROS MAIS FREQUENTES (DUPLAS)
 // ==========================================
 
-$stmt = $pdo->query("
+$stmt = $pdo->prepare("
     SELECT 
         u1.name as membro1,
         u2.name as membro2,
@@ -171,11 +174,12 @@ $stmt = $pdo->query("
     JOIN users u1 ON su1.user_id = u1.id
     JOIN users u2 ON su2.user_id = u2.id
     JOIN schedules s ON su1.schedule_id = s.id
-    WHERE u1.role != 'admin' AND u2.role != 'admin' $periodo_sql
+    WHERE u1.role != 'admin' AND u2.role != 'admin' " . $periodo_sql . "
     GROUP BY u1.id, u2.id, u1.name, u2.name
     ORDER BY escalas_juntos DESC
     LIMIT 10
 ");
+$stmt->execute();
 $parceiros_frequentes = $stmt->fetchAll();
 
 // ==========================================
