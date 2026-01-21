@@ -87,7 +87,7 @@ $currentMembers = $stmtMembers->fetchAll(PDO::FETCH_ASSOC);
 
 // --- BUSCA MÚSICAS ATUAIS ---
 $stmtScheduleSongs = $pdo->prepare("
-    SELECT s.id, s.title, s.artist, s.tone, ss.order_index
+    SELECT s.id, s.title, s.artist, s.tone, s.bpm, s.link, s.category, ss.order_index
     FROM schedule_songs ss
     JOIN songs s ON ss.song_id = s.id
     WHERE ss.schedule_id = ?
