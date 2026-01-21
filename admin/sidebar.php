@@ -68,8 +68,8 @@ if (!empty($currentUser['avatar'])) {
     <!-- 2. Menu -->
     <nav class="sidebar-nav">
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-            <a href="lider.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'lider.php' ? 'active' : '' ?>" style="color: #d97706;">
-                <i data-lucide="crown"></i> <span class="sidebar-text">Líder</span>
+            <a href="lider.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'lider.php' ? 'active' : '' ?>" style="color: #b45309; background: #fffbeb;">
+                <i data-lucide="crown" style="color: #f59e0b;"></i> <span class="sidebar-text" style="color: #b45309;">Líder</span>
             </a>
             <div class="nav-divider"></div>
         <?php endif; ?>
@@ -101,7 +101,7 @@ if (!empty($currentUser['avatar'])) {
             <i data-lucide="book-heart"></i> <span class="sidebar-text">Devocional</span>
         </a>
         <a href="oracao.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
-            <i data-lucide="hands-praying"></i> <span class="sidebar-text">Oração</span>
+            <i data-lucide="heart-handshake"></i> <span class="sidebar-text">Oração</span>
         </a>
         <a href="leitura.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
             <i data-lucide="book-open"></i> <span class="sidebar-text">Leitura Bíblica</span>
