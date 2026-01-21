@@ -338,6 +338,48 @@ if (!empty($currentUser['avatar'])) {
         color: inherit;
     }
 
+    /* Cores Temáticas - Adaptação Dark Mode via body.dark-mode */
+    body.dark-mode .nav-blue i {
+        color: #60a5fa;
+        background: rgba(59, 130, 246, 0.15);
+    }
+
+    body.dark-mode .nav-purple i {
+        color: #a78bfa;
+        background: rgba(139, 92, 246, 0.15);
+    }
+
+    body.dark-mode .nav-orange i {
+        color: #fbbf24;
+        background: rgba(245, 158, 11, 0.15);
+    }
+
+    body.dark-mode .nav-indigo i {
+        color: #818cf8;
+        background: rgba(99, 102, 241, 0.15);
+    }
+
+    /* Estado Ativo no Dark Mode */
+    body.dark-mode .nav-item.active {
+        background: rgba(22, 101, 52, 0.2);
+        color: #4ade80;
+    }
+
+    body.dark-mode .nav-item.active i {
+        background: transparent;
+        color: #4ade80;
+    }
+
+    /* Divisórias */
+    body.dark-mode .nav-divider {
+        border-color: #334155;
+    }
+
+    /* Logout */
+    body.dark-mode .logout-item:hover {
+        background: rgba(239, 68, 68, 0.1);
+    }
+
     .nav-divider {
         height: 1px;
         background: var(--sidebar-border);
