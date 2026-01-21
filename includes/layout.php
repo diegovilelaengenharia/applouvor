@@ -359,6 +359,52 @@ function renderAppHeader($title, $backUrl = null)
             ::view-transition-new(root) {
                 animation-duration: 0.3s;
             }
+
+            /* Mini Toggle Switch for Profile Dropdown */
+            .toggle-switch-mini {
+                position: relative;
+                display: inline-block;
+                width: 36px;
+                height: 20px;
+            }
+
+            .toggle-switch-mini input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider-mini {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #cbd5e1;
+                transition: .3s;
+                border-radius: 34px;
+            }
+
+            .slider-mini:before {
+                position: absolute;
+                content: "";
+                height: 14px;
+                width: 14px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .3s;
+                border-radius: 50%;
+            }
+
+            input:checked + .slider-mini {
+                background-color: var(--primary);
+            }
+
+            input:checked + .slider-mini:before {
+                transform: translateX(16px);
+            }
         </style>
     </head>
 
@@ -407,9 +453,17 @@ function renderAppHeader($title, $backUrl = null)
                                 <a href="perfil.php" style="font-size: 0.8rem; color: var(--primary); text-decoration: none;">Ver perfil</a>
                              </div>
                              <div style="padding: 8px;">
-                                <a href="configuracoes.php" style="display: block; padding: 10px 12px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
-                                    <i data-lucide="settings" style="width: 18px;"></i> Configurações
-                                </a>
+                                <!-- Dark Mode Toggle -->
+                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
+                                    <i data-lucide="moon" style="width: 18px;"></i>
+                                    <span>Modo Escuro</span>
+                                    <div style="margin-left: auto;">
+                                        <label class="toggle-switch-mini">
+                                            <input type="checkbox" id="darkModeToggleMobile" onchange="toggleThemeMode()">
+                                            <span class="slider-mini round"></span>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
                                 <a href="../logout.php" style="display: block; padding: 10px 12px; color: #ef4444; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
                                     <i data-lucide="log-out" style="width: 18px;"></i> Sair
@@ -998,15 +1052,23 @@ function renderAppHeader($title, $backUrl = null)
                             </a>
                         <?php endif; ?>
 
-                        <a href="configuracoes.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+
+
+                        <!-- Dark Mode Toggle -->
+                        <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                             <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
                                 </svg>
                             </div>
-                            <span style="font-weight: 500;">Configurações</span>
-                        </a>
+                            <span style="font-weight: 500;">Modo Escuro</span>
+                            <div style="margin-left: auto;">
+                                <label class="toggle-switch-mini">
+                                    <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
+                                    <span class="slider-mini round"></span>
+                                </label>
+                            </div>
+                        </div>
 
                         <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
 

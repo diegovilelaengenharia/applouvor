@@ -35,50 +35,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         </div>
     </div>
 
-
-    <!-- 2. ACESSO RÁPIDO (Dashboard) -->
-    <div class="settings-section">
-        <h3 class="settings-title">
-            <i data-lucide="layout-grid"></i> Dashboard de Acesso
-        </h3>
-        <div class="settings-card">
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
-                Selecione quais atalhos aparecem na sua tela inicial:
-            </p>
-
-            <div class="switch-row petite">
-                <span>Escalas</span>
-                <label class="toggle-switch small">
-                    <input type="checkbox" checked disabled> <!-- Obrigatório -->
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <div class="switch-row petite">
-                <span>Repertório</span>
-                <label class="toggle-switch small">
-                    <input type="checkbox" checked>
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <div class="switch-row petite">
-                <span>Mural de Avisos</span>
-                <label class="toggle-switch small">
-                    <input type="checkbox" checked>
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <div class="switch-row petite">
-                <span>Leitura Bíblica</span>
-                <label class="toggle-switch small">
-                    <input type="checkbox">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- 3. SOBRE O APP -->
+    <!-- 2. SOBRE O APP -->
     <div class="settings-section">
         <h3 class="settings-title">
             <i data-lucide="info"></i> Sobre
