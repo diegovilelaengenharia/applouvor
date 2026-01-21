@@ -649,10 +649,10 @@ renderAppHeader('Detalhes da Escala');
         <i data-lucide="settings" style="width: 14px;"></i> Gerenciamento
     </h3>
     
-    <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
         <!-- Botão Editar -->
         <button onclick="openEditModal()" class="ripple" style="
-            width: 100%;
+            flex: 1;
             background: white;
             border: 1px solid #fbbf24;
             color: #d97706;
@@ -672,7 +672,7 @@ renderAppHeader('Detalhes da Escala');
         </button>
 
         <!-- Botão Excluir -->
-        <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.')" style="margin: 0;">
+        <form method="POST" onsubmit="return confirm('ATENÇÃO: Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.')" style="margin: 0; flex: 1;">
             <input type="hidden" name="action" value="delete_schedule">
             <button type="submit" class="ripple" style="
                 width: 100%;
