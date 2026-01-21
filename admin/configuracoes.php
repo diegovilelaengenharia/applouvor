@@ -46,6 +46,20 @@ renderPageHeader('Configurações', 'Gerencie sua conta e o aplicativo');
             <i data-lucide="chevron-right" style="width: 20px; color: #cbd5e1;"></i>
         </a>
 
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+            <!-- Painel do Líder (Restaurado) -->
+            <a href="lider.php" class="ripple" style="display: flex; align-items: center; gap: 16px; padding: 16px; text-decoration: none; border-bottom: 1px solid #f1f5f9; background: #fffbeb;">
+                <div style="width: 40px; height: 40px; background: #fef3c7; border-radius: 10px; color: #d97706; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="crown" style="width: 20px;"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: #1e293b;">Painel do Líder</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">Gestão avançada do ministério</div>
+                </div>
+                <i data-lucide="chevron-right" style="width: 20px; color: #cbd5e1;"></i>
+            </a>
+        <?php endif; ?>
+
         <!-- Outras Configurações Futuras -->
         <a href="#" class="ripple" style="display: flex; align-items: center; gap: 16px; padding: 16px; text-decoration: none; opacity: 0.6; cursor: not-allowed;">
             <div style="width: 40px; height: 40px; background: #f1f5f9; border-radius: 10px; color: #64748b; display: flex; align-items: center; justify-content: center;">
