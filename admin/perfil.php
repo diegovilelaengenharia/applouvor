@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$error) {
-            $sql = "UPDATE users SET name = ?, email = ?, address_street = ?, address_number = ?, address_neighborhood = ?";
-            $params = [$name, $email, $address_street, $address_number, $address_neighborhood];
+            $sql = "UPDATE users SET name = ?, email = ?, phone = ?, address_street = ?, address_number = ?, address_neighborhood = ?";
+            $params = [$name, $email, $phone, $address_street, $address_number, $address_neighborhood];
 
             if ($avatar_path) {
                 $sql .= ", avatar = ?";
@@ -177,12 +177,12 @@ renderAppHeader('Meu Perfil');
                 </div>
 
                 <div style="border-top: 1px solid #f1f5f9; padding: 16px; background: #f8fafc;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase;">
-                        Telefone (Fixo)
-                        <span style="font-size: 0.7rem; font-weight: normal; text-transform: none; margin-left: 4px;">Não editável</span>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">
+                        Telefone / WhatsApp
                     </label>
-                    <input type="text" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" disabled
-                        style="width: 100%; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; font-size: 1rem; color: #94a3b8; background: #f1f5f9; cursor: not-allowed;">
+                    <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>"
+                        style="width: 100%; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; font-size: 1rem; color: #1e293b; outline: none; transition: border 0.2s;"
+                        onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e2e8f0'">
                 </div>
             </div>
         </div>
