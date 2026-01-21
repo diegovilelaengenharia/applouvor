@@ -190,9 +190,41 @@ function renderAppHeader($title, $backUrl = null)
 <?php
     }
 
-    // Funções de Helper Antigas (Manter por compatibilidade)
-    function renderGlobalNavButtons()
+    // Nova função para cabeçalhos padronizados (Clean Header)
+    function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
     {
-        // Deprecated - Agora controlado pela Sidebar
+?>
+    <header style="
+            background: white; 
+            padding: 20px 24px; 
+            border-bottom: 1px solid #e2e8f0; 
+            margin: -16px -16px 24px -16px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        ">
+        <!-- Spacer para centralizar o título corretamente, compensando o botão da direita -->
+        <div style="width: 40px;">
+            <!-- Em mobile, o botão de menu já está na barra superior do layout, mas aqui podemos colocar um voltar se necessário -->
+        </div>
+
+        <div style="text-align: center;">
+            <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b; letter-spacing: -0.5px;"><?= htmlspecialchars($title) ?></h1>
+            <?php if ($subtitle): ?>
+                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #64748b; font-weight: 500;"><?= htmlspecialchars($subtitle) ?></p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Ação à Direita (Filtros, Adicionar, etc) -->
+        <div style="width: 40px; display: flex; justify-content: flex-end;">
+            <?php if ($rightAction): ?>
+                <?= $rightAction ?>
+            <?php endif; ?>
+        </div>
+    </header>
+<?php
     }
 ?>

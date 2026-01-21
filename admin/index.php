@@ -142,12 +142,13 @@ renderAppHeader('Início');
         <?php renderGlobalNavButtons(); ?>
     </div>
 
-    <!-- Banner Principal (Se tiver escala) -->
-    <?php if ($nextSchedule):
-        $date = new DateTime($nextSchedule['event_date']);
-        $isToday = $date->format('Y-m-d') === date('Y-m-d');
-    ?>
-        <a href="escalas.php?mine=1" class="ripple" style="
+    <div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
+        <!-- Banner Principal (Se tiver escala) -->
+        <?php if ($nextSchedule):
+            $date = new DateTime($nextSchedule['event_date']);
+            $isToday = $date->format('Y-m-d') === date('Y-m-d');
+        ?>
+            <a href="escalas.php?mine=1" class="ripple" style="
             display: block;
             background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
             border-radius: 20px;
@@ -159,118 +160,118 @@ renderAppHeader('Início');
             overflow: hidden;
             margin-bottom: 32px;
         ">
-            <div style="position: absolute; right: -20px; bottom: -20px; opacity: 0.1;">
-                <i data-lucide="mic-2" style="width: 120px; height: 120px;"></i>
-            </div>
-
-            <div style="position: relative; z-index: 1;">
-                <div style="display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; backdrop-filter: blur(4px);">
-                    <?= $isToday ? 'É HOJE!' : 'PRÓXIMA ESCALA' ?>
+                <div style="position: absolute; right: -20px; bottom: -20px; opacity: 0.1;">
+                    <i data-lucide="mic-2" style="width: 120px; height: 120px;"></i>
                 </div>
-                <h2 style="margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 700;"><?= htmlspecialchars($nextSchedule['event_type']) ?></h2>
-                <div style="display: flex; align-items: center; gap: 8px; opacity: 0.9; font-size: 0.95rem;">
-                    <i data-lucide="calendar" style="width: 16px;"></i>
-                    <span><?= $date->format('d/m') ?> (<?= ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][$date->format('w')] ?>)</span>
-                    <span>•</span>
-                    <i data-lucide="clock" style="width: 16px;"></i>
-                    <span>19:00</span>
+
+                <div style="position: relative; z-index: 1;">
+                    <div style="display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; backdrop-filter: blur(4px);">
+                        <?= $isToday ? 'É HOJE!' : 'PRÓXIMA ESCALA' ?>
+                    </div>
+                    <h2 style="margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 700;"><?= htmlspecialchars($nextSchedule['event_type']) ?></h2>
+                    <div style="display: flex; align-items: center; gap: 8px; opacity: 0.9; font-size: 0.95rem;">
+                        <i data-lucide="calendar" style="width: 16px;"></i>
+                        <span><?= $date->format('d/m') ?> (<?= ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][$date->format('w')] ?>)</span>
+                        <span>•</span>
+                        <i data-lucide="clock" style="width: 16px;"></i>
+                        <span>19:00</span>
+                    </div>
                 </div>
-            </div>
-        </a>
-    <?php endif; ?>
-
-    <!-- Grid de Sinalizações -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
-
-        <!-- Avisos (Card Harmônico) -->
-        <a href="avisos.php" class="dashboard-card ripple">
-            <?php if ($totalAvisos > 0): ?>
-                <div class="status-indicator" style="background: #ef4444; box-shadow: 0 0 0 4px #fee2e2;"></div>
-            <?php endif; ?>
-
-            <div>
-                <div class="card-icon-bg" style="background: #fff7ed; color: #f59e0b;">
-                    <i data-lucide="bell" style="width: 24px;"></i>
-                </div>
-                <div class="card-title">Quadro de Avisos</div>
-                <div class="card-value" style="font-size: 1rem; font-weight: 600;">
-                    <?php if ($totalAvisos > 0): ?>
-                        <?= mb_strimwidth($ultimoAviso, 0, 25, '...') ?>
-                    <?php else: ?>
-                        Tudo tranquilo
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <div class="card-subtext">
-                <?= $totalAvisos ?> comunicado<?= $totalAvisos != 1 ? 's' : '' ?>
-            </div>
-        </a>
-
-        <!-- Aniversariantes (Card Harmônico) -->
-        <a href="aniversarios.php" class="dashboard-card ripple">
-            <?php if ($niverCount > 0): ?>
-                <div class="status-indicator" style="background: #ec4899; box-shadow: 0 0 0 4px #fce7f3;"></div>
-            <?php endif; ?>
-
-            <div>
-                <div class="card-icon-bg" style="background: #fdf2f8; color: #db2777;">
-                    <i data-lucide="cake" style="width: 24px;"></i>
-                </div>
-                <div class="card-title">Aniversários</div>
-                <div class="card-value">
-                    <?= $niverCount > 0 ? "$niverCount celebrações" : "Ninguém este mês" ?>
-                </div>
-            </div>
-
-            <div class="card-subtext">
-                Em <?= strtolower(date('M')) ?>
-            </div>
-        </a>
-
-        <!-- Minhas Escalas (Se não tiver destaque acima ou para ver todas) -->
-        <a href="escalas.php?mine=1" class="dashboard-card ripple">
-            <div>
-                <div class="card-icon-bg" style="background: #eff6ff; color: #2563eb;">
-                    <i data-lucide="calendar-check" style="width: 24px;"></i>
-                </div>
-                <div class="card-title">Minha Agenda</div>
-                <div class="card-value">Ver escalas</div>
-            </div>
-            <div class="card-subtext">
-                Planejamento pessoal
-            </div>
-        </a>
-
-    </div>
-
-    <!-- Quick Links / Atalhos Sutis -->
-    <div style="margin-top: 32px;">
-        <div class="section-title" style="font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Acesso Rápido</div>
-
-        <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">
-            <a href="repertorio.php" class="ripple" style="
-                flex: 0 0 auto;
-                background: white; border: 1px solid #e2e8f0; 
-                padding: 12px 20px; border-radius: 50px; 
-                color: #475569; text-decoration: none; font-weight: 600; font-size: 0.9rem;
-                display: flex; align-items: center; gap: 8px;
-            ">
-                <i data-lucide="music-2" style="width: 18px;"></i> Repertório
             </a>
-            <a href="indisponibilidade.php" class="ripple" style="
-                flex: 0 0 auto;
-                background: white; border: 1px solid #e2e8f0; 
-                padding: 12px 20px; border-radius: 50px; 
-                color: #475569; text-decoration: none; font-weight: 600; font-size: 0.9rem;
-                display: flex; align-items: center; gap: 8px;
-            ">
-                <i data-lucide="calendar-off" style="width: 18px;"></i> Avisar Ausência
+        <?php endif; ?>
+
+        <!-- Grid de Sinalizações -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+
+            <!-- Avisos (Card Harmônico) -->
+            <a href="avisos.php" class="dashboard-card ripple">
+                <?php if ($totalAvisos > 0): ?>
+                    <div class="status-indicator" style="background: #ef4444; box-shadow: 0 0 0 4px #fee2e2;"></div>
+                <?php endif; ?>
+
+                <div>
+                    <div class="card-icon-bg" style="background: #fff7ed; color: #f59e0b;">
+                        <i data-lucide="bell" style="width: 24px;"></i>
+                    </div>
+                    <div class="card-title">Quadro de Avisos</div>
+                    <div class="card-value" style="font-size: 1rem; font-weight: 600;">
+                        <?php if ($totalAvisos > 0): ?>
+                            <?= mb_strimwidth($ultimoAviso, 0, 25, '...') ?>
+                        <?php else: ?>
+                            Tudo tranquilo
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="card-subtext">
+                    <?= $totalAvisos ?> comunicado<?= $totalAvisos != 1 ? 's' : '' ?>
+                </div>
             </a>
+
+            <!-- Aniversariantes (Card Harmônico) -->
+            <a href="aniversarios.php" class="dashboard-card ripple">
+                <?php if ($niverCount > 0): ?>
+                    <div class="status-indicator" style="background: #ec4899; box-shadow: 0 0 0 4px #fce7f3;"></div>
+                <?php endif; ?>
+
+                <div>
+                    <div class="card-icon-bg" style="background: #fdf2f8; color: #db2777;">
+                        <i data-lucide="cake" style="width: 24px;"></i>
+                    </div>
+                    <div class="card-title">Aniversários</div>
+                    <div class="card-value">
+                        <?= $niverCount > 0 ? "$niverCount celebrações" : "Ninguém este mês" ?>
+                    </div>
+                </div>
+
+                <div class="card-subtext">
+                    Em <?= strtolower(date('M')) ?>
+                </div>
+            </a>
+
+            <!-- Minhas Escalas (Se não tiver destaque acima ou para ver todas) -->
+            <a href="escalas.php?mine=1" class="dashboard-card ripple">
+                <div>
+                    <div class="card-icon-bg" style="background: #eff6ff; color: #2563eb;">
+                        <i data-lucide="calendar-check" style="width: 24px;"></i>
+                    </div>
+                    <div class="card-title">Minha Agenda</div>
+                    <div class="card-value">Ver escalas</div>
+                </div>
+                <div class="card-subtext">
+                    Planejamento pessoal
+                </div>
+            </a>
+
         </div>
+
+        <!-- Quick Links / Atalhos Sutis -->
+        <div style="margin-top: 32px;">
+            <div class="section-title" style="font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Acesso Rápido</div>
+
+            <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">
+                <a href="repertorio.php" class="ripple" style="
+                flex: 0 0 auto;
+                background: white; border: 1px solid #e2e8f0; 
+                padding: 12px 20px; border-radius: 50px; 
+                color: #475569; text-decoration: none; font-weight: 600; font-size: 0.9rem;
+                display: flex; align-items: center; gap: 8px;
+            ">
+                    <i data-lucide="music-2" style="width: 18px;"></i> Repertório
+                </a>
+                <a href="indisponibilidade.php" class="ripple" style="
+                flex: 0 0 auto;
+                background: white; border: 1px solid #e2e8f0; 
+                padding: 12px 20px; border-radius: 50px; 
+                color: #475569; text-decoration: none; font-weight: 600; font-size: 0.9rem;
+                display: flex; align-items: center; gap: 8px;
+            ">
+                    <i data-lucide="calendar-off" style="width: 18px;"></i> Avisar Ausência
+                </a>
+            </div>
+        </div>
+
     </div>
 
-</div>
-
-<div style="height: 60px;"></div>
-<?php renderAppFooter(); ?>
+    <div style="height: 60px;"></div>
+    <?php renderAppFooter(); ?>
