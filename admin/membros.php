@@ -237,7 +237,7 @@ renderAppHeader('Membros');
 
 <!-- Lista de Membros -->
 <?php foreach ($users as $user): ?>
-    <div class="member-card">
+    <div class="member-card" style="cursor: pointer;" onclick="window.location='membro_detalhe.php?id=<?= $user['id'] ?>'">
         <div class="member-info">
             <div class="member-name">
                 <?= htmlspecialchars($user['name']) ?>
@@ -250,7 +250,7 @@ renderAppHeader('Membros');
                 <span><i data-lucide="phone" style="width: 14px; display: inline;"></i> <?= htmlspecialchars($user['phone']) ?></span>
             </div>
         </div>
-        <div class="member-actions">
+        <div class="member-actions" onclick="event.stopPropagation();">
             <button onclick='openEditModal(<?= json_encode($user) ?>)' class="btn-icon" style="color: var(--accent-interactive);">
                 <i data-lucide="edit-2" style="width: 18px;"></i>
             </button>
