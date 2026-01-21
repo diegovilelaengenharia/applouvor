@@ -580,10 +580,30 @@ $distribuicao_instrumentos = $stmt->fetchAll();
     <div class="stats-container">
         <!-- Header -->
         <div class="stats-header">
-            <a href="lider.php" style="color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 15px; opacity: 0.9;">
-                <i data-lucide="arrow-left" style="width: 20px;"></i>
-                Voltar
-            </a>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <a href="lider.php" style="color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: 0.9;">
+                    <i data-lucide="arrow-left" style="width: 20px;"></i>
+                    Voltar
+                </a>
+                <button onclick="gerarPDF()" style="
+                    background: rgba(255,255,255,0.2);
+                    border: 2px solid white;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition: all 0.2s;
+                    backdrop-filter: blur(10px);
+                " onmouseover="this.style.background='white'; this.style.color='#667eea';" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white';">
+                    <i data-lucide="download" style="width: 18px;"></i>
+                    Baixar PDF
+                </button>
+            </div>
             <h1>📊 Boletim Estatístico do Ministério</h1>
             <p>Análise completa de desempenho e participação - <?= $periodo_label ?></p>
         </div>
@@ -897,6 +917,64 @@ $distribuicao_instrumentos = $stmt->fetchAll();
 
     <script>
         lucide.createIcons();
+
+        function gerarPDF() {
+            // Salvar título original
+            const tituloOriginal = document.title;
+
+            // Definir título do PDF
+            const periodo = '<?= $periodo_label ?>';
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            document.title = `Boletim Estatístico - ${periodo} - ${dataAtual}`;
+
+            // Configurar impressão
+            const css = `
+                @media print {
+                    body { 
+                        margin: 0; 
+                        padding: 20px;
+                        background: white;
+                    }
+                    .stats-header a,
+                    .stats-header button {
+                        display: none !important;
+                    }
+                    .period-selector {
+                        display: none !important;
+                    }
+                    .stats-header {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                    .metric-card,
+                    .table-container {
+                        page-break-inside: avoid;
+                    }
+                    .section-title {
+                        page-break-after: avoid;
+                    }
+                    .badge,
+                    .progress-fill {
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                }
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = css;
+            document.head.appendChild(style);
+
+            // Abrir diálogo de impressão
+            window.print();
+
+            // Restaurar título e remover estilo
+            setTimeout(() => {
+                document.title = tituloOriginal;
+                style.remove();
+            }, 100);
+        }
     </script>
 </body>
 
