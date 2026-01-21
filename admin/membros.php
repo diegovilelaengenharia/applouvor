@@ -1,9 +1,10 @@
 <?php
 // admin/membros.php
+require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Verificar se é admin (você pode adicionar verificação de sessão aqui)
+checkLogin();
 
 // --- LÓGICA DE POST ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -24,14 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Atualizar membro
         elseif ($_POST['action'] === 'edit') {
             $stmt = $pdo->prepare("UPDATE users SET name = ?, role = ?, instrument = ?, phone = ?, password = ? WHERE id = ?");
-            $stmt->execute([
+            $params = [
                 $_POST['name'],
                 $_POST['role'],
                 $_POST['instrument'],
                 $_POST['phone'],
                 $_POST['password'],
                 $_POST['id']
-            ]);
+            ];
+            $stmt->execute($params);
+
             header("Location: membros.php");
             exit;
         }
@@ -46,282 +49,329 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Buscar todos os membros
-$users = $pdo->query("SELECT * FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$users = $pdo->query("SELECT * FROM users ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 renderAppHeader('Membros');
 ?>
 
+<div class="container" style="padding-top: 24px; max-width: 900px; margin: 0 auto;">
+
+    <!-- Cabeçalho Principal com Busca e Add -->
+    <div style="margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div>
+                <h1 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Equipe</h1>
+                <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">
+                    <?= count($users) ?> membros cadastrados
+                </p>
+            </div>
+            <button onclick="openAddModal()" class="ripple" style="
+                background: linear-gradient(135deg, #059669 0%, #047857 100%); 
+                color: white; border: none; padding: 12px 20px; 
+                border-radius: 12px; font-weight: 700; font-size: 0.9rem; 
+                display: flex; align-items: center; gap: 8px; 
+                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+                cursor: pointer;
+            ">
+                <i data-lucide="plus" style="width: 18px;"></i>
+                <span style="display: none; @media(min-width: 480px) { display: inline; }">Novo Membro</span>
+            </button>
+        </div>
+
+        <!-- Barra de Busca -->
+        <div style="position: relative;">
+            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 20px;"></i>
+            <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()"
+                style="
+                       width: 100%; padding: 14px 14px 14px 48px; border-radius: 12px; 
+                       border: 1px solid #e2e8f0; font-size: 1rem; outline: none; 
+                       transition: border 0.2s; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                   "
+                onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'">
+        </div>
+    </div>
+
+    <!-- Grid de Cards -->
+    <div class="member-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+
+        <?php foreach ($users as $user): ?>
+            <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+
+                    <div style="display: flex; gap: 16px;">
+                        <!-- Avatar / Iniciais -->
+                        <div style="
+                            width: 56px; height: 56px; border-radius: 50%; 
+                            background: <?= generateAvatarColor($user['name']) ?>; 
+                            color: white; display: flex; align-items: center; justify-content: center;
+                            font-weight: 700; font-size: 1.2rem;
+                            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+                            border: 2px solid white;
+                        ">
+                            <?php if (!empty($user['avatar'])): ?>
+                                <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            <?php else: ?>
+                                <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                            <?php endif; ?>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <h3 class="member-name" style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">
+                                    <?= htmlspecialchars($user['name']) ?>
+                                </h3>
+                                <?php if ($user['role'] === 'admin'): ?>
+                                    <span style="background: #e0e7ff; color: #4338ca; padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;">ADMIN</span>
+                                <?php endif; ?>
+                            </div>
+
+                            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: #64748b; font-weight: 500;">
+                                <?= htmlspecialchars($user['instrument'] ?: 'Membro da Equipe') ?>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Botão de Ações (Menu) -->
+                    <div style="position: relative;">
+                        <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="btn-icon ripple" style="color: #94a3b8; padding: 4px;">
+                            <i data-lucide="more-vertical" style="width: 20px;"></i>
+                        </button>
+
+                        <!-- Dropdown -->
+                        <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
+                            display: none; position: absolute; right: 0; top: 32px; 
+                            background: white; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); 
+                            border: 1px solid #e2e8f0; width: 140px; z-index: 10; overflow: hidden;
+                        ">
+                            <button onclick='openEditModal(<?= json_encode($user) ?>)' style="
+                                width: 100%; text-align: left; padding: 12px; background: white; border: none; 
+                                color: #334155; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
+                                transition: background 0.2s;
+                            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                                <i data-lucide="edit-3" style="width: 16px;"></i> Editar
+                            </button>
+
+                            <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                                <button type="submit" style="
+                                    width: 100%; text-align: left; padding: 12px; background: white; border: none; 
+                                    color: #ef4444; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
+                                    border-top: 1px solid #f1f5f9;
+                                    transition: background 0.2s;
+                                " onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+                                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
+                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple" style="
+                        flex: 1; padding: 8px; border-radius: 8px; background: #f0fdf4; color: #166534; 
+                        text-decoration: none; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;
+                    ">
+                        <i data-lucide="message-circle" style="width: 16px;"></i> WhatsApp
+                    </a>
+                    <a href="tel:<?= $user['phone'] ?>" class="ripple" style="
+                        width: 36px; height: 36px; border-radius: 8px; background: #f1f5f9; color: #64748b; 
+                        display: flex; align-items: center; justify-content: center;
+                    ">
+                        <i data-lucide="phone" style="width: 16px;"></i>
+                    </a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+    </div>
+
+    <div style="height: 60px;"></div>
+
+</div>
+
+<!-- MODAL ADD/EDIT -->
+<div id="memberModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
+    <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);"></div>
+
+    <div style="
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 90%; max-width: 450px; background: white; border-radius: 24px; padding: 32px;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        max-height: 90vh; overflow-y: auto;
+    ">
+        <div style="margin-bottom: 24px; text-align: center;">
+            <h2 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Novo Membro</h2>
+            <p style="color: #64748b; margin-top: 4px;">Gerencie as informações de acesso</p>
+        </div>
+
+        <form method="POST" id="memberForm">
+            <input type="hidden" name="action" id="formAction" value="add">
+            <input type="hidden" name="id" id="userId">
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Nome Completo</label>
+                <input type="text" name="name" id="userName" required class="input-modern" placeholder="Ex: João da Silva">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Função</label>
+                    <input type="text" name="instrument" id="userInst" class="input-modern" placeholder="Ex: Baixo">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Permissão</label>
+                    <div style="position: relative;">
+                        <select name="role" id="userRole" class="input-modern" style="appearance: none;">
+                            <option value="user">Membro</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: #64748b; pointer-events: none;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">WhatsApp</label>
+                <input type="text" name="phone" id="userPhone" class="input-modern" placeholder="(37) 99999-9999">
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Senha de Acesso</label>
+                <input type="text" name="password" id="userPass" required class="input-modern" placeholder="4 dígitos para login">
+                <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button type="button" onclick="closeModal()" style="
+                    flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #cbd5e1; background: white; 
+                    color: #475569; font-weight: 600; cursor: pointer;
+                ">Cancelar</button>
+                <button type="submit" style="
+                    flex: 2; padding: 14px; border-radius: 12px; border: none; background: #1e293b; 
+                    color: white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                ">Salvar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 <style>
     .member-card {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-subtle);
-        border-radius: 16px;
-        padding: 16px;
-        margin-bottom: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .member-info {
-        flex: 1;
-    }
-
-    .member-name {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-    }
-
-    .member-details {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    .member-actions {
-        display: flex;
-        gap: 8px;
-    }
-
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .modal-overlay.active {
-        display: flex;
-    }
-
-    .modal-content {
-        background: var(--bg-secondary);
+        background: white;
         border-radius: 20px;
-        padding: 24px;
-        width: 90%;
-        max-width: 500px;
-        max-height: 90vh;
-        overflow-y: auto;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    }
+
+    .member-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        border-color: #cbd5e1;
+    }
+
+    .input-modern {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #cbd5e1;
+        font-size: 1rem;
+        color: #1e293b;
+        outline: none;
+        transition: all 0.2s;
+        background: #f8fafc;
+    }
+
+    .input-modern:focus {
+        background: white;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 </style>
 
-<?php
-// Botão Adicionar (Ação Direita)
-$addButton = '
-<button onclick="openAddModal()" class="ripple" style="
-    background: #dcfce7; 
-    color: #166534; 
-    border: none; 
-    padding: 10px 16px; 
-    border-radius: 12px; 
-    font-weight: 700; 
-    font-size: 0.9rem; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px;
-    cursor: pointer;
-">
-    <i data-lucide="plus" style="width: 18px;"></i> <span style="display: none; @media(min-width: 360px) { display: inline; }">Novo</span>
-</button>';
-
-renderPageHeader('Membros', 'Louvor PIB Oliveira', $addButton);
-?>
-
-<!-- Barra de Busca (Reposicionada) -->
-<div style="margin-bottom: 24px;">
-    <div style="position: relative;">
-        <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 20px;"></i>
-        <input
-            type="text"
-            id="memberSearch"
-            placeholder="Buscar membros..."
-            onkeyup="filterMembers()"
-            style="
-                width: 100%; 
-                padding: 12px 12px 12px 48px; 
-                border-radius: 12px; 
-                border: 1px solid #e2e8f0; 
-                font-size: 1rem; 
-                outline: none; 
-                transition: border 0.2s;
-                background: white;
-            "
-            onfocus="this.style.borderColor='#3b82f6'"
-            onblur="this.style.borderColor='#e2e8f0'">
-    </div>
-</div>
-
 <script>
+    // Gerador de cores para avatar
+    // (O PHP já cuida disso no server side rendering, mas se precisar no JS, ok)
+
+    // Filtro de Busca
     function filterMembers() {
-        const input = document.getElementById('memberSearch');
-        const filter = input.value.toLowerCase();
-        const cards = document.getElementsByClassName('member-card');
+        const term = document.getElementById('memberSearch').value.toLowerCase();
+        const cards = document.querySelectorAll('.member-card');
 
-        for (let i = 0; i < cards.length; i++) {
-            const name = cards[i].querySelector('.member-name').textContent || cards[i].querySelector('.member-name').innerText;
-            if (name.toLowerCase().indexOf(filter) > -1) {
-                cards[i].style.display = "";
+        cards.forEach(card => {
+            const name = card.getAttribute('data-name');
+            const role = card.getAttribute('data-role');
+            if (name.includes(term) || role.includes(term)) {
+                card.style.display = 'block';
             } else {
-                cards[i].style.display = "none";
+                card.style.display = 'none';
             }
-        }
+        });
     }
-</script>
 
-<!-- Lista de Membros -->
-<?php foreach ($users as $user): ?>
-    <div class="member-card" style="cursor: pointer;" onclick="window.location='membro_detalhe.php?id=<?= $user['id'] ?>'">
-        <div class="member-info">
-            <div class="member-name">
-                <?= htmlspecialchars($user['name']) ?>
-                <?php if ($user['role'] === 'admin'): ?>
-                    <span style="background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-left: 8px;">ADMIN</span>
-                <?php endif; ?>
-            </div>
-            <div class="member-details">
-                <span><i data-lucide="music" style="width: 14px; display: inline;"></i> <?= htmlspecialchars($user['instrument'] ?: 'Não definido') ?></span>
-                <span><i data-lucide="phone" style="width: 14px; display: inline;"></i> <?= htmlspecialchars($user['phone']) ?></span>
-            </div>
-        </div>
-        <div class="member-actions" onclick="event.stopPropagation();">
-            <button onclick='openEditModal(<?= json_encode($user) ?>)' class="btn-icon" style="color: var(--accent-interactive);">
-                <i data-lucide="edit-2" style="width: 18px;"></i>
-            </button>
-            <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                <button type="submit" class="btn-icon" style="color: var(--status-error);">
-                    <i data-lucide="trash-2" style="width: 18px;"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-<?php endforeach; ?>
-
-<!-- Modal Adicionar -->
-<div id="modalAdd" class="modal-overlay">
-    <div class="modal-content">
-        <h2 style="margin-bottom: 20px;">Novo Membro</h2>
-        <form method="POST">
-            <input type="hidden" name="action" value="add">
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Nome</label>
-                <input type="text" name="name" class="form-input" required>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Instrumento/Função</label>
-                <input type="text" name="instrument" class="form-input" placeholder="Ex: Voz, Violão, Bateria">
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Telefone</label>
-                <input type="text" name="phone" class="form-input" placeholder="37 98888-8888">
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Senha (4 dígitos)</label>
-                <input type="text" name="password" class="form-input" required placeholder="Últimos 4 dígitos do telefone">
-            </div>
-
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label">Tipo de Acesso</label>
-                <select name="role" class="form-input">
-                    <option value="user">Usuário</option>
-                    <option value="admin">Administrador</option>
-                </select>
-            </div>
-
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal('modalAdd')" class="btn-outline ripple" style="flex: 1;">Cancelar</button>
-                <button type="submit" class="btn-action-save ripple" style="flex: 1;">Salvar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Modal Editar -->
-<div id="modalEdit" class="modal-overlay">
-    <div class="modal-content">
-        <h2 style="margin-bottom: 20px;">Editar Membro</h2>
-        <form method="POST">
-            <input type="hidden" name="action" value="edit">
-            <input type="hidden" name="id" id="edit_id">
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Nome</label>
-                <input type="text" name="name" id="edit_name" class="form-input" required>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Instrumento/Função</label>
-                <input type="text" name="instrument" id="edit_instrument" class="form-input">
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Telefone</label>
-                <input type="text" name="phone" id="edit_phone" class="form-input">
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Senha</label>
-                <input type="text" name="password" id="edit_password" class="form-input" required>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label">Tipo de Acesso</label>
-                <select name="role" id="edit_role" class="form-input">
-                    <option value="user">Usuário</option>
-                    <option value="admin">Administrador</option>
-                </select>
-            </div>
-
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal('modalEdit')" class="btn-outline ripple" style="flex: 1;">Cancelar</button>
-                <button type="submit" class="btn-action-save ripple" style="flex: 1;">Atualizar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
+    // Modal Logic
     function openAddModal() {
-        document.getElementById('modalAdd').classList.add('active');
+        document.getElementById('modalTitle').innerText = 'Novo Membro';
+        document.getElementById('formAction').value = 'add';
+        document.getElementById('memberForm').reset();
+        document.getElementById('userId').value = '';
+        document.getElementById('memberModal').style.display = 'block';
     }
 
     function openEditModal(user) {
-        document.getElementById('edit_id').value = user.id;
-        document.getElementById('edit_name').value = user.name;
-        document.getElementById('edit_instrument').value = user.instrument || '';
-        document.getElementById('edit_phone').value = user.phone || '';
-        document.getElementById('edit_password').value = user.password;
-        document.getElementById('edit_role').value = user.role;
-        document.getElementById('modalEdit').classList.add('active');
+        document.getElementById('modalTitle').innerText = 'Editar Membro';
+        document.getElementById('formAction').value = 'edit';
+        document.getElementById('userId').value = user.id;
+        document.getElementById('userName').value = user.name;
+        document.getElementById('userInst').value = user.instrument;
+        document.getElementById('userPhone').value = user.phone;
+        document.getElementById('userPass').value = user.password;
+        document.getElementById('userRole').value = user.role;
+
+        closeAllMenus();
+        document.getElementById('memberModal').style.display = 'block';
     }
 
-    function closeModal(id) {
-        document.getElementById(id).classList.remove('active');
+    function closeModal() {
+        document.getElementById('memberModal').style.display = 'none';
     }
 
-    // Fechar modal ao clicar fora
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
-        });
+    // Dropdown Logic
+    function toggleMenu(id) {
+        // Fechar outros
+        closeAllMenus();
+        const menu = document.getElementById(id);
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'block';
+        }
+    }
+
+    function closeAllMenus() {
+        document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
+    }
+
+    // Fechar dropdowns ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.btn-icon') && !e.target.closest('.dropdown-menu')) {
+            closeAllMenus();
+        }
     });
 </script>
 
-<?php renderAppFooter(); ?>
+<?php
+// Helper function para cor
+function generateAvatarColor($name)
+{
+    $colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
+    $index = crc32($name) % count($colors);
+    return $colors[$index];
+}
+
+renderAppFooter();
+?>
