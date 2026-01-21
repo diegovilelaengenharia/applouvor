@@ -375,23 +375,24 @@ function renderAppHeader($title, $backUrl = null)
                 </button>
                 <div class="page-title"><?= htmlspecialchars($title) ?></div>
 
-                <!-- Stats Button (Repertorio only) -->
-                <?php if (strpos($_SERVER['PHP_SELF'], 'repertorio.php') !== false): ?>
-                    <a href="repertorio_stats.php" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #ecfdf5; border-radius: 8px; text-decoration: none; margin-right: 8px;">
-                        <i data-lucide="bar-chart-2" style="color: #047857; width: 18px;"></i>
-                    </a>
-                <?php endif; ?>
+                <!-- Right Side: Stats + Avatar -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <!-- Stats Button (Repertorio only) -->
+                    <?php if (strpos($_SERVER['PHP_SELF'], 'repertorio.php') !== false): ?>
+                        <a href="repertorio_stats.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #047857, #059669); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3);">
+                            <i data-lucide="bar-chart-2" style="color: white; width: 20px;"></i>
+                        </a>
+                    <?php endif; ?>
 
-                <!-- Mobile Profile Avatar (New) -->
-                <div style="flex: 1; display: flex; justify-content: flex-end;">
-                     <div style="position: relative;">
-                         <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 36px; height: 36px; padding: 0; border: 1px solid var(--border-color); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
-                             <?php else: ?>
-                                 <i data-lucide="user" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
-                             <?php endif; ?>
-                         </button>
+                    <!-- Mobile Profile Avatar -->
+                    <div style="position: relative;">
+                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 36px; height: 36px; padding: 0; border: 1px solid var(--border-color); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                            <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
+                                <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                            <?php else: ?>
+                                <i data-lucide="user" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                            <?php endif; ?>
+                        </button>
                          
                          <!-- Mobile Dropdown -->
                          <div id="mobileProfileDropdown" style="
