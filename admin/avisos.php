@@ -100,23 +100,8 @@ renderAppHeader('Avisos');
 
 
     <?php
-    $actionBtn = '';
-    if ($_SESSION['user_role'] === 'admin') {
-        $actionBtn = '
-        <button onclick="openCreateModal()" class="ripple" style="
-            background: var(--primary); 
-            color: white; border: none; padding: 12px 20px; 
-            border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
-            display: flex; align-items: center; gap: 8px; 
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-        ">
-            <i data-lucide="plus" style="width: 18px;"></i>
-            <span style="display: none; @media(min-width: 480px) { display: inline; }">Novo Aviso</span>
-        </button>';
-    }
-
-    renderPageHeader('Mural de Avisos', 'Fique por dentro do que acontece', $actionBtn);
+    // Header Limpo
+    renderPageHeader('Mural de Avisos', 'Fique por dentro do que acontece');
     ?>
 
     <!-- Header Principal (Removido, substituído acima) -->
@@ -266,6 +251,22 @@ renderAppHeader('Avisos');
 
     <div style="height: 60px;"></div>
 </div>
+
+<?php if ($_SESSION['user_role'] === 'admin'): ?>
+    <!-- Floating Action Button -->
+    <button onclick="openCreateModal()" class="ripple" style="
+        position: fixed; bottom: 32px; right: 24px;
+        background: #166534; color: white; padding: 16px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
+        border: none; cursor: pointer; z-index: 50; transition: transform 0.2s;
+    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+        </svg>
+    </button>
+<?php endif; ?>
 
 <!-- Modal Universal (Add/Edit) -->
 <div id="avisoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
