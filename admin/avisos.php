@@ -101,17 +101,17 @@ renderAppHeader('Avisos');
     <!-- Header Principal -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Mural de Avisos</h1>
-            <p style="color: #64748b; margin-top: 4px;">Fique por dentro do que acontece</p>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Mural de Avisos</h1>
+            <p style="color: var(--text-muted); margin-top: 4px;">Fique por dentro do que acontece</p>
         </div>
 
         <?php if ($_SESSION['user_role'] === 'admin'): ?>
             <button onclick="openCreateModal()" class="ripple" style="
-                background: linear-gradient(135deg, #059669 0%, #047857 100%); 
+                background: var(--primary); 
                 color: white; border: none; padding: 12px 20px; 
-                border-radius: 12px; font-weight: 700; font-size: 0.9rem; 
+                border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
                 display: flex; align-items: center; gap: 8px; 
-                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+                box-shadow: var(--shadow-sm);
                 cursor: pointer;
             ">
                 <i data-lucide="plus" style="width: 18px;"></i>
@@ -125,17 +125,18 @@ renderAppHeader('Avisos');
 
         <!-- Busca -->
         <div style="margin-bottom: 16px; position: relative;">
-            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 20px;"></i>
+            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
             <form onsubmit="return true;"> <!-- Submit via GET padrão -->
                 <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
                 <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
                 <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..."
                     style="
-                        width: 100%; padding: 12px 12px 12px 48px; border-radius: 12px; 
-                        border: 1px solid #e2e8f0; font-size: 1rem; outline: none; 
-                        transition: border 0.2s; background: white;
+                        width: 100%; padding: 12px 12px 12px 48px; border-radius: var(--radius-md); 
+                        border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
+                        transition: border 0.2s; background: var(--bg-surface); color: var(--text-main);
+                        box-shadow: var(--shadow-sm);
                     "
-                    onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'">
+                    onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
             </form>
         </div>
 
@@ -152,13 +153,14 @@ renderAppHeader('Avisos');
             ];
             foreach ($types as $key => $data):
                 $isActive = $filterType === $key;
-                $bg = $isActive ? '#1e293b' : 'white';
-                $color = $isActive ? 'white' : '#64748b';
+                $bg = $isActive ? 'var(--primary)' : 'var(--bg-surface)';
+                $color = $isActive ? 'white' : 'var(--text-muted)';
+                $border = $isActive ? 'var(--primary)' : 'var(--border-color)';
             ?>
                 <a href="?type=<?= $key ?><?= $showArchived ? '&archived=1' : '' ?><?= $search ? '&search=' . $search : '' ?>" class="ripple" style="
                     white-space: nowrap; padding: 8px 16px; border-radius: 20px; 
                     background: <?= $bg ?>; color: <?= $color ?>; 
-                    border: 1px solid <?= $isActive ? '#1e293b' : '#e2e8f0' ?>;
+                    border: 1px solid <?= $border ?>;
                     text-decoration: none; font-size: 0.85rem; font-weight: 600;
                     display: flex; align-items: center; gap: 6px;
                 ">
@@ -168,7 +170,7 @@ renderAppHeader('Avisos');
         </div>
 
         <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 0.85rem;">
-            <a href="?archived=<?= $showArchived ? '0' : '1' ?>" style="color: #64748b; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+            <a href="?archived=<?= $showArchived ? '0' : '1' ?>" style="color: var(--text-muted); font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px;">
                 <i data-lucide="<?= $showArchived ? 'rotate-ccw' : 'archive' ?>" style="width: 14px;"></i>
                 <?= $showArchived ? 'Ver Ativos' : 'Ver Arquivados' ?>
             </a>
@@ -179,7 +181,7 @@ renderAppHeader('Avisos');
     <!-- Lista de Avisos -->
     <div style="display: flex; flex-direction: column; gap: 16px;">
         <?php if (empty($avisos)): ?>
-            <div style="text-align: center; padding: 48px; background: white; border-radius: 16px; border: 1px solid #e2e8f0; color: #64748b;">
+            <div style="text-align: center; padding: 48px; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: var(--shadow-sm);">
                 <i data-lucide="inbox" style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5;"></i>
                 <p>Nenhum aviso encontrado.</p>
             </div>
@@ -193,7 +195,7 @@ renderAppHeader('Avisos');
             ];
             $pStyle = $priorityColors[$aviso['priority']] ?? $priorityColors['info'];
         ?>
-            <div class="notice-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; position: relative;">
+            <div class="notice-card" style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 20px; position: relative; box-shadow: var(--shadow-sm);">
 
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                     <span style="
@@ -205,19 +207,23 @@ renderAppHeader('Avisos');
 
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
                         <div style="position: relative;">
-                            <button onclick="toggleMenu('menu-<?= $aviso['id'] ?>')" class="btn-icon ripple" style="color: #94a3b8; padding: 4px;">
+                            <button onclick="toggleMenu('menu-<?= $aviso['id'] ?>')" class="btn-icon ripple" style="color: var(--text-muted); padding: 4px;">
                                 <i data-lucide="more-horizontal" style="width: 20px;"></i>
                             </button>
                             <!-- Menu Dropdown -->
-                            <div id="menu-<?= $aviso['id'] ?>" class="dropdown-menu" style="display: none; position: absolute; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); width: 140px; z-index: 10;">
-                                <button onclick='openEditModal(<?= json_encode($aviso) ?>)' style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+                            <div id="menu-<?= $aviso['id'] ?>" class="dropdown-menu" style="
+                                display: none; position: absolute; right: 0; 
+                                background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
+                                box-shadow: var(--shadow-md); width: 140px; z-index: 10;
+                            ">
+                                <button onclick='openEditModal(<?= json_encode($aviso) ?>)' style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-main);">
                                     <i data-lucide="edit-3" style="width: 14px;"></i> Editar
                                 </button>
 
                                 <form method="POST" style="margin:0;">
                                     <input type="hidden" name="action" value="<?= $showArchived ? 'unarchive' : 'archive' ?>">
                                     <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #475569;">
+                                    <button type="submit" style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted);">
                                         <i data-lucide="<?= $showArchived ? 'rotate-ccw' : 'archive' ?>" style="width: 14px;"></i> <?= $showArchived ? 'Desarquivar' : 'Arquivar' ?>
                                     </button>
                                 </form>
@@ -225,7 +231,7 @@ renderAppHeader('Avisos');
                                 <form method="POST" onsubmit="return confirm('Excluir?')" style="margin:0;">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #ef4444; border-top: 1px solid #f1f5f9;">
+                                    <button type="submit" style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #ef4444; border-top: 1px solid var(--border-color);">
                                         <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
                                     </button>
                                 </form>
@@ -234,15 +240,15 @@ renderAppHeader('Avisos');
                     <?php endif; ?>
                 </div>
 
-                <h2 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 0 0 12px 0;">
+                <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">
                     <?= htmlspecialchars($aviso['title']) ?>
                 </h2>
 
-                <div class="ql-editor" style="padding: 0; color: #475569; font-size: 0.95rem; line-height: 1.6; max-height: 200px; overflow: hidden; position: relative;">
+                <div class="ql-editor" style="padding: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-height: 200px; overflow: hidden; position: relative;">
                     <?= $aviso['message'] ?> <!-- HTML Seguro vindo do Quill -->
                 </div>
 
-                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #94a3b8;">
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
                     <div style="display: flex; align-items: center; gap: 6px;">
                         <i data-lucide="user" style="width: 14px;"></i>
                         <?= htmlspecialchars($aviso['author_name'] ?: 'Admin') ?>
@@ -265,24 +271,30 @@ renderAppHeader('Avisos');
 
     <div style="
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 600px; background: white; border-radius: 24px; padding: 24px;
-        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto;
+        width: 90%; max-width: 600px; background: var(--bg-surface); border-radius: 24px; padding: 24px;
+        box-shadow: var(--shadow-xl); max-height: 90vh; overflow-y: auto;
     ">
-        <h2 id="modalTitle" style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 800; color: #1e293b;">Novo Aviso</h2>
+        <h2 id="modalTitle" style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Novo Aviso</h2>
         <form method="POST" id="avisoForm" onsubmit="return prepareSubmit()">
             <input type="hidden" name="action" id="formAction" value="create">
             <input type="hidden" name="id" id="avisoId">
             <input type="hidden" name="message" id="hiddenMessage">
 
             <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label" style="display: block; font-weight: 700; color: #334155; margin-bottom: 6px;">Título</label>
-                <input type="text" name="title" id="avisoTitle" required class="input-modern" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1; outline: none;">
+                <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Título</label>
+                <input type="text" name="title" id="avisoTitle" required class="input-modern" style="
+                    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
+                    outline: none; background: var(--bg-body); color: var(--text-main);
+                ">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                 <div>
-                    <label class="form-label" style="display: block; font-weight: 700; color: #334155; margin-bottom: 6px;">Tipo</label>
-                    <select name="type" id="avisoType" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1;">
+                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Tipo</label>
+                    <select name="type" id="avisoType" style="
+                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
+                        background: var(--bg-body); color: var(--text-main);
+                    ">
                         <option value="general">Geral</option>
                         <option value="event">Evento</option>
                         <option value="music">Música</option>
@@ -291,8 +303,11 @@ renderAppHeader('Avisos');
                     </select>
                 </div>
                 <div>
-                    <label class="form-label" style="display: block; font-weight: 700; color: #334155; margin-bottom: 6px;">Prioridade</label>
-                    <select name="priority" id="avisoPriority" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1;">
+                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Prioridade</label>
+                    <select name="priority" id="avisoPriority" style="
+                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
+                        background: var(--bg-body); color: var(--text-main);
+                    ">
                         <option value="info">Info</option>
                         <option value="important">Importante</option>
                         <option value="urgent">Urgente</option>
@@ -301,13 +316,19 @@ renderAppHeader('Avisos');
             </div>
 
             <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label" style="display: block; font-weight: 700; color: #334155; margin-bottom: 6px;">Mensagem</label>
-                <div id="editor" style="height: 150px; background: white;"></div>
+                <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Mensagem</label>
+                <div id="editor" style="height: 150px; background: white; color: black !important;"></div>
             </div>
 
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #cbd5e1; background: white; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: #1e293b; color: white; font-weight: 700; cursor: pointer;">Salvar Aviso</button>
+                <button type="button" onclick="closeModal()" style="
+                    flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); 
+                    background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);
+                ">Cancelar</button>
+                <button type="submit" style="
+                    flex: 2; padding: 14px; border-radius: 12px; border: none; 
+                    background: var(--primary); color: white; font-weight: 700; cursor: pointer;
+                ">Salvar Aviso</button>
             </div>
         </form>
     </div>

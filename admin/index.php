@@ -372,14 +372,14 @@ renderAppHeader('Início');
 
     <div style="
         position: absolute; bottom: 0; left: 0; width: 100%;
-        background: white; border-radius: 20px 20px 0 0;
+        background: var(--bg-surface); border-radius: 20px 20px 0 0;
         padding: 24px; padding-bottom: 40px;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        box-shadow: var(--shadow-xl);
         animation: slideUp 0.3s ease-out;
     ">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Personalizar Atalhos</h3>
-            <button onclick="closeSheet('quickAccessSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: #64748b;">
+            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);">Personalizar Atalhos</h3>
+            <button onclick="closeSheet('quickAccessSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: var(--text-muted);">
                 <i data-lucide="x" style="width: 24px;"></i>
             </button>
         </div>
@@ -389,27 +389,28 @@ renderAppHeader('Início');
                 <?php foreach ($allItems as $key => $item):
                     $isChecked = in_array($key, $quickAccessItems);
                 ?>
-                    <label style="
+                    <label class="ripple" style="
                         display: flex; align-items: center; justify-content: space-between;
-                        padding: 12px 16px; background: #f8fafc; border-radius: 12px;
-                        border: 1px solid #e2e8f0; cursor: pointer;
+                        padding: 12px 16px; background: var(--bg-body); border-radius: 12px;
+                        border: 1px solid var(--border-color); cursor: pointer;
+                        transition: all 0.2s;
                     ">
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <div style="background: <?= $item['bg'] ?>; padding: 6px; border-radius: 8px;">
                                 <i data-lucide="<?= $item['icon'] ?>" style="width: 18px; color: <?= $item['color'] ?>;"></i>
                             </div>
-                            <span style="font-weight: 600; color: #334155;"><?= $item['label'] ?></span>
+                            <span style="font-weight: 600; color: var(--text-main);"><?= $item['label'] ?></span>
                         </div>
                         <input type="checkbox" name="quick_access[]" value="<?= $key ?>" <?= $isChecked ? 'checked' : '' ?>
-                            style="width: 18px; height: 18px; accent-color: #166534;">
+                            style="width: 18px; height: 18px; accent-color: var(--primary);">
                     </label>
                 <?php endforeach; ?>
             </div>
 
             <button type="button" onclick="saveQuickAccess()" style="
-                width: 100%; padding: 14px; border: none; background: #166534; 
+                width: 100%; padding: 14px; border: none; background: var(--primary); 
                 color: white; font-weight: 700; border-radius: 12px; font-size: 1rem;
-                cursor: pointer;
+                cursor: pointer; box-shadow: var(--shadow-md);
             ">
                 Salvar Alterações
             </button>

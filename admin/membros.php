@@ -60,17 +60,17 @@ renderAppHeader('Membros');
     <div style="margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <div>
-                <h1 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Equipe</h1>
-                <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">
+                <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Equipe</h1>
+                <p style="color: var(--text-muted); margin-top: 4px; font-size: 0.95rem;">
                     <?= count($users) ?> membros cadastrados
                 </p>
             </div>
             <button onclick="openAddModal()" class="ripple" style="
-                background: linear-gradient(135deg, #059669 0%, #047857 100%); 
+                background: var(--primary); 
                 color: white; border: none; padding: 12px 20px; 
-                border-radius: 12px; font-weight: 700; font-size: 0.9rem; 
+                border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
                 display: flex; align-items: center; gap: 8px; 
-                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+                box-shadow: var(--shadow-sm);
                 cursor: pointer;
             ">
                 <i data-lucide="plus" style="width: 18px;"></i>
@@ -80,14 +80,15 @@ renderAppHeader('Membros');
 
         <!-- Barra de Busca -->
         <div style="position: relative;">
-            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 20px;"></i>
+            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
             <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()"
                 style="
-                       width: 100%; padding: 14px 14px 14px 48px; border-radius: 12px; 
-                       border: 1px solid #e2e8f0; font-size: 1rem; outline: none; 
-                       transition: border 0.2s; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                       width: 100%; padding: 14px 14px 14px 48px; border-radius: var(--radius-md); 
+                       border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
+                       transition: border 0.2s; background: var(--bg-surface); box-shadow: var(--shadow-sm);
+                       color: var(--text-main);
                    "
-                onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'">
+                onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
         </div>
     </div>
 
@@ -105,8 +106,8 @@ renderAppHeader('Membros');
                             background: <?= generateAvatarColor($user['name']) ?>; 
                             color: white; display: flex; align-items: center; justify-content: center;
                             font-weight: 700; font-size: 1.2rem;
-                            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-                            border: 2px solid white;
+                            box-shadow: var(--shadow-sm);
+                            border: 2px solid var(--bg-surface);
                         ">
                             <?php if (!empty($user['avatar'])): ?>
                                 <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
@@ -117,15 +118,15 @@ renderAppHeader('Membros');
 
                         <div>
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <h3 class="member-name" style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">
+                                <h3 class="member-name" style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">
                                     <?= htmlspecialchars($user['name']) ?>
                                 </h3>
                                 <?php if ($user['role'] === 'admin'): ?>
-                                    <span style="background: #e0e7ff; color: #4338ca; padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;">ADMIN</span>
+                                    <span style="background: var(--primary-subtle); color: var(--primary); padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;">ADMIN</span>
                                 <?php endif; ?>
                             </div>
 
-                            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: #64748b; font-weight: 500;">
+                            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">
                                 <?= htmlspecialchars($user['instrument'] ?: 'Membro da Equipe') ?>
                             </p>
                         </div>
@@ -133,21 +134,21 @@ renderAppHeader('Membros');
 
                     <!-- Botão de Ações (Menu) -->
                     <div style="position: relative;">
-                        <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="btn-icon ripple" style="color: #94a3b8; padding: 4px;">
+                        <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="btn-icon ripple" style="color: var(--text-muted); padding: 4px;">
                             <i data-lucide="more-vertical" style="width: 20px;"></i>
                         </button>
 
                         <!-- Dropdown -->
                         <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
                             display: none; position: absolute; right: 0; top: 32px; 
-                            background: white; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); 
-                            border: 1px solid #e2e8f0; width: 140px; z-index: 10; overflow: hidden;
+                            background: var(--bg-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); 
+                            border: 1px solid var(--border-color); width: 140px; z-index: 10; overflow: hidden;
                         ">
                             <button onclick='openEditModal(<?= json_encode($user) ?>)' style="
-                                width: 100%; text-align: left; padding: 12px; background: white; border: none; 
-                                color: #334155; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
+                                width: 100%; text-align: left; padding: 12px; background: var(--bg-surface); border: none; 
+                                color: var(--text-main); font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
                                 transition: background 0.2s;
-                            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                            " onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='var(--bg-surface)'">
                                 <i data-lucide="edit-3" style="width: 16px;"></i> Editar
                             </button>
 
@@ -155,11 +156,11 @@ renderAppHeader('Membros');
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                 <button type="submit" style="
-                                    width: 100%; text-align: left; padding: 12px; background: white; border: none; 
+                                    width: 100%; text-align: left; padding: 12px; background: var(--bg-surface); border: none; 
                                     color: #ef4444; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer;
-                                    border-top: 1px solid #f1f5f9;
+                                    border-top: 1px solid var(--border-color);
                                     transition: background 0.2s;
-                                " onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+                                " onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='var(--bg-surface)'">
                                     <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
                                 </button>
                             </form>
@@ -168,15 +169,15 @@ renderAppHeader('Membros');
 
                 </div>
 
-                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px;">
                     <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple" style="
-                        flex: 1; padding: 8px; border-radius: 8px; background: #f0fdf4; color: #166534; 
+                        flex: 1; padding: 8px; border-radius: 8px; background: var(--primary-subtle); color: var(--primary); 
                         text-decoration: none; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;
                     ">
                         <i data-lucide="message-circle" style="width: 16px;"></i> WhatsApp
                     </a>
                     <a href="tel:<?= $user['phone'] ?>" class="ripple" style="
-                        width: 36px; height: 36px; border-radius: 8px; background: #f1f5f9; color: #64748b; 
+                        width: 36px; height: 36px; border-radius: 8px; background: var(--bg-body); color: var(--text-muted); 
                         display: flex; align-items: center; justify-content: center;
                     ">
                         <i data-lucide="phone" style="width: 16px;"></i>
@@ -197,13 +198,13 @@ renderAppHeader('Membros');
 
     <div style="
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 450px; background: white; border-radius: 24px; padding: 32px;
-        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        width: 90%; max-width: 450px; background: var(--bg-surface); border-radius: 24px; padding: 32px;
+        box-shadow: var(--shadow-md);
         max-height: 90vh; overflow-y: auto;
     ">
         <div style="margin-bottom: 24px; text-align: center;">
-            <h2 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">Novo Membro</h2>
-            <p style="color: #64748b; margin-top: 4px;">Gerencie as informações de acesso</p>
+            <h2 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Novo Membro</h2>
+            <p style="color: var(--text-muted); margin-top: 4px;">Gerencie as informações de acesso</p>
         </div>
 
         <form method="POST" id="memberForm">
@@ -211,46 +212,46 @@ renderAppHeader('Membros');
             <input type="hidden" name="id" id="userId">
 
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Nome Completo</label>
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Nome Completo</label>
                 <input type="text" name="name" id="userName" required class="input-modern" placeholder="Ex: João da Silva">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                 <div>
-                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Função</label>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Função</label>
                     <input type="text" name="instrument" id="userInst" class="input-modern" placeholder="Ex: Baixo">
                 </div>
                 <div>
-                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Permissão</label>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Permissão</label>
                     <div style="position: relative;">
                         <select name="role" id="userRole" class="input-modern" style="appearance: none;">
                             <option value="user">Membro</option>
                             <option value="admin">Admin</option>
                         </select>
-                        <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: #64748b; pointer-events: none;"></i>
+                        <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
                     </div>
                 </div>
             </div>
 
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">WhatsApp</label>
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">WhatsApp</label>
                 <input type="text" name="phone" id="userPhone" class="input-modern" placeholder="(37) 99999-9999">
             </div>
 
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Senha de Acesso</label>
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Senha de Acesso</label>
                 <input type="text" name="password" id="userPass" required class="input-modern" placeholder="4 dígitos para login">
-                <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
             </div>
 
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeModal()" style="
-                    flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #cbd5e1; background: white; 
-                    color: #475569; font-weight: 600; cursor: pointer;
+                    flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); 
+                    color: var(--text-muted); font-weight: 600; cursor: pointer;
                 ">Cancelar</button>
                 <button type="submit" style="
-                    flex: 2; padding: 14px; border-radius: 12px; border: none; background: #1e293b; 
-                    color: white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--text-main); 
+                    color: white; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm);
                 ">Salvar</button>
             </div>
 
@@ -260,36 +261,36 @@ renderAppHeader('Membros');
 
 <style>
     .member-card {
-        background: white;
-        border-radius: 20px;
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
         padding: 20px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--border-color);
         transition: all 0.2s;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        box-shadow: var(--shadow-sm);
     }
 
     .member-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        border-color: #cbd5e1;
+        box-shadow: var(--shadow-md);
+        border-color: var(--border-color);
     }
 
     .input-modern {
         width: 100%;
         padding: 12px;
         border-radius: 10px;
-        border: 1px solid #cbd5e1;
+        border: 1px solid var(--border-color);
         font-size: 1rem;
-        color: #1e293b;
+        color: var(--text-main);
         outline: none;
         transition: all 0.2s;
-        background: #f8fafc;
+        background: var(--bg-body);
     }
 
     .input-modern:focus {
-        background: white;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        background: var(--bg-surface);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
     }
 </style>
 

@@ -156,29 +156,29 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
 
-                    // Definir Tema de Cor baseado no Tipo
+                    // Definir Tema de Cor (Moderate Palette)
                     $type = mb_strtolower($schedule['event_type']);
                     if (strpos($type, 'domingo') !== false) {
-                        $themeColor = '#059669'; // Emerald 600
+                        $themeColor = '#047857'; // Emerald 700 (Primary)
                         $themeLight = '#ecfdf5'; // Emerald 50
                     } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = '#d97706'; // Amber 600
+                        $themeColor = '#b45309'; // Amber 700
                         $themeLight = '#fffbeb'; // Amber 50
                     } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#7c3aed'; // Violet 600
-                        $themeLight = '#f5f3ff'; // Violet 50
+                        $themeColor = '#4338ca'; // Indigo 700
+                        $themeLight = '#eef2ff'; // Indigo 50
                     } elseif (strpos($type, 'especial') !== false) {
-                        $themeColor = '#db2777'; // Pink 600
-                        $themeLight = '#fdf2f8'; // Pink 50
+                        $themeColor = '#be123c'; // Rose 700
+                        $themeLight = '#fff1f2'; // Rose 50
                     } else {
-                        $themeColor = '#2563eb'; // Blue 600
+                        $themeColor = '#1d4ed8'; // Blue 700
                         $themeLight = '#eff6ff'; // Blue 50
                     }
 
-                    // Sobrescrever se for HOJE (Verde destaque)
+                    // Sobrescrever se for HOJE (Destaque sutil)
                     if ($isToday) {
-                        $themeColor = '#16a34a'; // Green 600
-                        $themeLight = '#dcfce7'; // Green 50
+                        $themeColor = '#15803d'; // Green 700
+                        $themeLight = '#f0fdf4'; // Green 50
                     }
 
                     // Buscar participantes (Top 5)
@@ -216,147 +216,109 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $totalSongs = $stmtSongCount->fetchColumn();
                     $extraSongs = max(0, $totalSongs - 3);
                 ?>
-                    <div class="timeline-row" style="display: flex; gap: 24px;">
-                        <!-- Coluna Data Colorida -->
-                        <div class="timeline-date" style="text-align: right; min-width: 60px; padding-top: 8px;">
-                            <div style="font-size: 1.8rem; font-weight: 700; color: <?= $themeColor ?>; line-height: 1;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
-                            <div style="font-size: 0.7rem; color: #cbd5e1; margin-top: 4px;"><?= $date->format('D') ?></div>
+                    <div class="timeline-row" style="display: flex; gap: 20px;">
+                        <!-- Coluna Data -->
+                        <div class="timeline-date" style="text-align: center; min-width: 50px; padding-top: 4px;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-main); line-height: 1;"><?= $date->format('d') ?></div>
+                            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                         </div>
 
-                        <!-- Card Evento Rico -->
+                        <!-- Card Evento (Clean) -->
                         <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
                                 flex: 1; 
-                                background: white; 
-                                border-radius: 16px; 
-                                border: 1px solid #e2e8f0;
-                                border-left: 5px solid <?= $themeColor ?>;
+                                background: var(--bg-surface); 
+                                border-radius: var(--radius-lg); 
+                                border: 1px solid var(--border-color);
                                 padding: 0; 
                                 text-decoration: none; 
                                 color: inherit;
-                                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+                                box-shadow: var(--shadow-sm);
                                 transition: all 0.2s;
                                 position: relative;
                                 overflow: hidden;
                             ">
 
-                            <!-- Header do Card -->
-                            <div style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9; background: linear-gradient(to right, <?= $themeLight ?>30, transparent);">
-                                <?php if ($isToday): ?>
-                                    <div style="float: right; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-left: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                                        HOJE
+                            <div style="padding: 20px;">
+                                <!-- Header -->
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div>
+                                        <?php if ($isToday): ?>
+                                            <span style="
+                                            display: inline-block; background: #dcfce7; color: #166534; 
+                                            padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; margin-bottom: 8px;
+                                        ">HOJE</span>
+                                        <?php endif; ?>
+                                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">
+                                            <?= htmlspecialchars($schedule['event_type']) ?>
+                                        </h3>
                                     </div>
-                                <?php endif; ?>
+                                    <div style="background: <?= $themeLight ?>; padding: 8px; border-radius: 8px; color: <?= $themeColor ?>;">
+                                        <i data-lucide="<?= strpos($type, 'ensaio') !== false ? 'music-2' : 'calendar' ?>" style="width: 20px;"></i>
+                                    </div>
+                                </div>
 
-                                <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">
-                                    <?= htmlspecialchars($schedule['event_type']) ?>
-                                </h3>
-                                <div style="display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: #64748b;">
+                                <!-- Info Row -->
+                                <div style="display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
                                     <div style="display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="clock" style="width: 14px; color: <?= $themeColor ?>;"></i>
-                                        <span style="font-weight: 500;"><?= $date->format('H:i') ?></span>
+                                        <i data-lucide="clock" style="width: 16px;"></i>
+                                        <span><?= $date->format('H:i') ?></span>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="map-pin" style="width: 14px; color: <?= $themeColor ?>;"></i>
+                                        <i data-lucide="map-pin" style="width: 16px;"></i>
                                         <span>PIB Oliveira</span>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Corpo do Card: Infos Resumidas -->
-                            <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                                <!-- Separator -->
+                                <div style="height: 1px; background: var(--bg-body); margin: 0 -20px 16px -20px;"></div>
 
-                                <!-- Seção Músicas -->
-                                <?php if (!empty($songs)): ?>
-                                    <div style="display: flex; gap: 12px;">
-                                        <div style="padding-top: 2px;">
-                                            <i data-lucide="music" style="width: 16px; color: <?= $themeColor ?>;"></i>
-                                        </div>
-                                        <div style="flex: 1;">
-                                            <div style="font-size: 0.75rem; font-weight: 800; color: <?= $themeColor ?>; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">Repertório</div>
-                                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                                                <?php foreach ($songs as $s): ?>
-                                                    <span style="
-                                                        font-size: 0.85rem; 
-                                                        color: #334155; 
-                                                        background: <?= $themeLight ?>; 
-                                                        padding: 4px 10px; 
-                                                        border-radius: 6px; 
-                                                        border: 1px solid <?= $themeColor ?>20;
-                                                        font-weight: 500;
-                                                    ">
-                                                        <?= htmlspecialchars($s['title']) ?>
-                                                    </span>
-                                                <?php endforeach; ?>
-                                                <?php if ($extraSongs > 0): ?>
-                                                    <span style="font-size: 0.8rem; color: #64748b; padding: 2px 4px; align-self: center;">+<?= $extraSongs ?></span>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-
-                                <!-- Seção Equipe -->
-                                <div style="display: flex; gap: 12px; align-items: center;">
-                                    <div>
-                                        <i data-lucide="users" style="width: 16px; color: #64748b;"></i>
-                                    </div>
-                                    <div style="flex: 1; display: flex; align-items: center; justify-content: space-between;">
-                                        <div style="display: flex; align-items: center;">
-                                            <div style="display: flex; padding-left: 8px;">
-                                                <?php if (empty($participants)): ?>
-                                                    <span style="font-size: 0.85rem; color: #94a3b8; font-style: italic;">Nenhum participante definido</span>
-                                                <?php else: ?>
-                                                    <?php foreach ($participants as $i => $p):
-                                                        $zIndex = 10 - $i;
-                                                        // Foto ou Initials
-                                                        $hasPhoto = $p['photo'] && file_exists(__DIR__ . '/../assets/img/' . $p['photo']); // Check absoluto simples ou relativo melhorado
-                                                        // Fallback visual no front se path quebrar
-                                                        $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
-                                                    ?>
-                                                        <div style="
-                                                                width: 28px; height: 28px; 
-                                                                border-radius: 50%; 
-                                                                border: 2px solid white; 
-                                                                background: <?= $p['avatar_color'] ?: '#cbd5e1' ?>;
-                                                                margin-left: -8px; 
-                                                                z-index: <?= $zIndex ?>;
-                                                                display: flex; align-items: center; justify-content: center;
-                                                                color: white; font-size: 0.65rem; font-weight: 700;
-                                                                overflow: hidden;
-                                                            ">
-                                                            <?php if ($photoUrl): ?>
-                                                                <img src="<?= htmlspecialchars($photoUrl) ?>" onerror="this.style.display='none'; this.parentElement.innerText='<?= strtoupper(substr($p['name'], 0, 1)) ?>'" style="width: 100%; height: 100%; object-fit: cover;">
-                                                            <?php else: ?>
-                                                                <?= strtoupper(substr($p['name'], 0, 1)) ?>
-                                                            <?php endif; ?>
-                                                        </div>
-                                                    <?php endforeach; ?>
-
-                                                    <?php if ($extraCount > 0): ?>
-                                                        <div style="
-                                                                width: 28px; height: 28px; 
-                                                                border-radius: 50%; 
-                                                                border: 2px solid white; 
-                                                                background: #f1f5f9; 
-                                                                margin-left: -8px; 
-                                                                z-index: 0;
-                                                                display: flex; align-items: center; justify-content: center;
-                                                                color: #64748b; font-size: 0.65rem; font-weight: 700;
-                                                            ">
-                                                            +<?= $extraCount ?>
-                                                        </div>
+                                <!-- Footer (Equipe) -->
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; padding-left: 10px;">
+                                        <?php if (empty($participants)): ?>
+                                            <span style="font-size: 0.85rem; color: var(--text-muted);">Equipe não definida</span>
+                                        <?php else: ?>
+                                            <?php foreach ($participants as $i => $p):
+                                                $zIndex = 10 - $i;
+                                                $hasPhoto = $p['photo'] && file_exists(__DIR__ . '/../assets/img/' . $p['photo']);
+                                                $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
+                                            ?>
+                                                <div style="
+                                                    width: 32px; height: 32px; 
+                                                    border-radius: 50%; 
+                                                    border: 2px solid var(--bg-surface); 
+                                                    background: <?= $p['avatar_color'] ?: '#cbd5e1' ?>;
+                                                    margin-left: -10px; 
+                                                    z-index: <?= $zIndex ?>;
+                                                    display: flex; align-items: center; justify-content: center;
+                                                    color: white; font-size: 0.75rem; font-weight: 700;
+                                                    overflow: hidden;
+                                                ">
+                                                    <?php if ($photoUrl): ?>
+                                                        <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <?= strtoupper(substr($p['name'], 0, 1)) ?>
                                                     <?php endif; ?>
-
-                                                    <div style="margin-left: 12px; font-size: 0.85rem; color: #64748b;">
-                                                        <span style="font-weight: 600; color: #334155;"><?= $totalParticipants ?></span> na equipe
-                                                    </div>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                            <?php if ($extraCount > 0): ?>
+                                                <div style="
+                                                    width: 32px; height: 32px; 
+                                                    border-radius: 50%; 
+                                                    border: 2px solid var(--bg-surface); 
+                                                    background: #f1f5f9; 
+                                                    margin-left: -10px; 
+                                                    z-index: 0;
+                                                    display: flex; align-items: center; justify-content: center;
+                                                    color: #64748b; font-size: 0.75rem; font-weight: 700;
+                                                ">+<?= $extraCount ?></div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">
+                                        <strong><?= $totalParticipants ?></strong> pessoas
                                     </div>
                                 </div>
-
                             </div>
                         </a>
                     </div>
@@ -364,30 +326,24 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             </div>
 
             <!-- VIEW: LIST (Compact) -->
-            <div id="view-list" style="display: none; flex-direction: column; gap: 8px; padding-bottom: 100px;">
+            <div id="view-list" style="display: none; flex-direction: column; gap: 12px; padding-bottom: 100px;">
                 <?php foreach ($futureSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
-
-                    // Contagens
-                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
-                    $stmtCount->execute([$schedule['id']]);
-                    $teamCount = $stmtCount->fetchColumn();
-
-                    $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
-                    $stmtSongs->execute([$schedule['id']]);
-                    $songCount = $stmtSongs->fetchColumn();
                 ?>
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="
                         display: flex; align-items: center; justify-content: space-between;
-                        padding: 16px 20px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;
+                        padding: 16px 20px; 
+                        background: var(--bg-surface); 
+                        border-radius: var(--radius-md); 
+                        border: 1px solid var(--border-color);
                         text-decoration: none; color: inherit; transition: background 0.2s;
                     ">
                         <div style="display: flex; align-items: center; gap: 16px;">
                             <!-- Date Badge -->
                             <div style="
-                                background: <?= $isToday ? '#dcfce7' : '#f1f5f9' ?>; 
-                                color: <?= $isToday ? '#166534' : '#64748b' ?>;
+                                background: <?= $isToday ? 'var(--primary-subtle)' : 'var(--bg-body)' ?>; 
+                                color: <?= $isToday ? 'var(--primary)' : 'var(--text-muted)' ?>;
                                 padding: 8px 12px; border-radius: 8px; text-align: center; min-width: 50px;
                             ">
                                 <div style="font-weight: 700; font-size: 1.1rem; line-height: 1;"><?= $date->format('d') ?></div>
@@ -395,17 +351,17 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             </div>
 
                             <div>
-                                <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b;">
+                                <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: var(--text-main);">
                                     <?= htmlspecialchars($schedule['event_type']) ?>
-                                    <?php if ($isToday): ?><span style="font-size: 0.7rem; color: #166534; background: #dcfce7; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">HOJE</span><?php endif; ?>
+                                    <?php if ($isToday): ?><span style="font-size: 0.7rem; color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 4px; margin-left: 6px;">HOJE</span><?php endif; ?>
                                 </h3>
-                                <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">
-                                    <?= $teamCount ?> participantes • <?= $songCount ?> músicas
+                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                                    <?= $date->format('H:i') ?> • PIB Oliveira
                                 </div>
                             </div>
                         </div>
 
-                        <i data-lucide="chevron-right" style="color: #cbd5e1; width: 18px;"></i>
+                        <i data-lucide="chevron-right" style="color: var(--border-color); width: 20px;"></i>
                     </a>
                 <?php endforeach; ?>
             </div>
@@ -416,205 +372,34 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     <!-- TAB: ANTERIORES -->
     <div id="tab-past" style="display: none;">
         <?php if (empty($pastSchedules)): ?>
-            <div style="text-align: center; padding: 40px; color: #94a3b8;">
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
                 <p>Nenhum histórico recente.</p>
             </div>
         <?php else: ?>
             <div id="view-timeline-past" class="timeline-container" style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 100px;">
                 <?php foreach ($pastSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
-
-                    // Definir Tema de Cor (Mesma lógica do Future)
-                    $type = mb_strtolower($schedule['event_type']);
-                    if (strpos($type, 'domingo') !== false) {
-                        $themeColor = '#059669';
-                        $themeLight = '#ecfdf5';
-                    } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = '#d97706';
-                        $themeLight = '#fffbeb';
-                    } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#7c3aed';
-                        $themeLight = '#f5f3ff';
-                    } elseif (strpos($type, 'especial') !== false) {
-                        $themeColor = '#db2777';
-                        $themeLight = '#fdf2f8';
-                    } else {
-                        $themeColor = '#2563eb';
-                        $themeLight = '#eff6ff';
-                    }
-
-                    // Buscar dados (Cópia simplificada)
-                    $stmtUsers = $pdo->prepare("SELECT u.name, u.photo, u.avatar_color FROM schedule_users su JOIN users u ON su.user_id = u.id WHERE su.schedule_id = ? LIMIT 5");
-                    $stmtUsers->execute([$schedule['id']]);
-                    $participants = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
-
-                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
-                    $stmtCount->execute([$schedule['id']]);
-                    $totalParticipants = $stmtCount->fetchColumn();
-                    $extraCount = max(0, $totalParticipants - 5);
-
-                    $stmtSongs = $pdo->prepare("SELECT s.title FROM schedule_songs ss JOIN songs s ON ss.song_id = s.id WHERE ss.schedule_id = ? ORDER BY ss.order_index ASC LIMIT 3");
-                    $stmtSongs->execute([$schedule['id']]);
-                    $songs = $stmtSongs->fetchAll(PDO::FETCH_ASSOC);
-
-                    $stmtSongCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
-                    $stmtSongCount->execute([$schedule['id']]);
-                    $totalSongs = $stmtSongCount->fetchColumn();
-                    $extraSongs = max(0, $totalSongs - 3);
-                ?>
-                    <div class="timeline-row" style="display: flex; gap: 24px;">
-                        <!-- Coluna Data (Apagada) -->
-                        <div class="timeline-date" style="text-align: right; min-width: 60px; padding-top: 8px; opacity: 0.5; filter: grayscale(1);">
-                            <div style="font-size: 1.8rem; font-weight: 700; color: <?= $themeColor ?>; line-height: 1;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
-                            <div style="font-size: 0.7rem; color: #cbd5e1; margin-top: 4px;"><?= $date->format('Y') ?></div>
-                        </div>
-
-                        <!-- Card Evento (Passado/Faded) -->
-                        <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
-                                flex: 1; 
-                                background: #fdfdfd; 
-                                border-radius: 16px; 
-                                border: 1px solid #e2e8f0;
-                                border-left: 5px solid <?= $themeColor ?>;
-                                padding: 0; 
-                                text-decoration: none; 
-                                color: inherit;
-                                box-shadow: none;
-                                transition: all 0.2s;
-                                position: relative;
-                                overflow: hidden;
-                                filter: grayscale(1) opacity(0.8); /* EFEITO DE PASSADO */
-                            ">
-
-                            <!-- Header do Card -->
-                            <div style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9; background: linear-gradient(to right, <?= $themeLight ?>30, transparent);">
-                                <div style="float: right; border: 1px solid #cbd5e1; color: #64748b; padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase;">
-                                    Realizado
-                                </div>
-
-                                <h3 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: #1e293b; text-decoration: line-through #cbd5e1;">
-                                    <?= htmlspecialchars($schedule['event_type']) ?>
-                                </h3>
-                                <div style="display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: #64748b;">
-                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="clock" style="width: 14px;"></i>
-                                        <span><?= $date->format('H:i') ?></span>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                        <i data-lucide="map-pin" style="width: 14px;"></i>
-                                        <span>PIB Oliveira</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Corpo Resumido -->
-                            <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
-                                <?php if (!empty($songs)): ?>
-                                    <div style="display: flex; gap: 12px; opacity: 0.8;">
-                                        <div style="padding-top: 2px;">
-                                            <i data-lucide="music" style="width: 16px; color: #64748b;"></i>
-                                        </div>
-                                        <div style="flex: 1;">
-                                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                                                <?php foreach ($songs as $s): ?>
-                                                    <span style="font-size: 0.8rem; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">
-                                                        <?= htmlspecialchars($s['title']) ?>
-                                                    </span>
-                                                <?php endforeach; ?>
-                                                <?php if ($extraSongs > 0): ?>
-                                                    <span style="font-size: 0.75rem; color: #94a3b8;">+<?= $extraSongs ?></span>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-            <!-- VIEW: LIST PAST (NOVIDADE) -->
-            <div id="view-list-past" style="display: none; flex-direction: column; gap: 8px; padding-bottom: 100px;">
-                <?php foreach ($pastSchedules as $schedule):
-                    $date = new DateTime($schedule['event_date']);
-
-                    // Definir Tema de Cor (Mesma lógica)
-                    $type = mb_strtolower($schedule['event_type']);
-                    if (strpos($type, 'domingo') !== false) {
-                        $themeColor = '#059669';
-                        $themeLight = '#ecfdf5';
-                    } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = '#d97706';
-                        $themeLight = '#fffbeb';
-                    } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#7c3aed';
-                        $themeLight = '#f5f3ff';
-                    } elseif (strpos($type, 'especial') !== false) {
-                        $themeColor = '#db2777';
-                        $themeLight = '#fdf2f8';
-                    } else {
-                        $themeColor = '#2563eb';
-                        $themeLight = '#eff6ff';
-                    }
-
-                    // Contagens
-                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
-                    $stmtCount->execute([$schedule['id']]);
-                    $teamCount = $stmtCount->fetchColumn();
-
-                    $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
-                    $stmtSongs->execute([$schedule['id']]);
-                    $songCount = $stmtSongs->fetchColumn();
                 ?>
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="
-                        display: flex; align-items: center; justify-content: space-between;
+                        display: flex; align-items: center; gap: 16px;
                         padding: 16px 20px; 
-                        background: white; 
-                        border-radius: 12px; 
-                        border: 1px solid #e2e8f0;
-                        border-left: 4px solid <?= $themeColor ?>;
-                        text-decoration: none; color: inherit; transition: all 0.2s;
-                        filter: grayscale(1) opacity(0.7); /* Estilo Passado */
+                        background: var(--bg-surface); 
+                        border-radius: var(--radius-md); 
+                        border: 1px solid var(--border-color);
+                        text-decoration: none; color: inherit; 
+                        opacity: 0.75;
                     ">
-                        <div style="display: flex; align-items: center; gap: 16px;">
-                            <!-- Date Badge Temático -->
-                            <div style="
-                                background: <?= $themeLight ?>; 
-                                color: <?= $themeColor ?>;
-                                padding: 8px 12px; border-radius: 8px; text-align: center; min-width: 54px;
-                            ">
-                                <div style="font-weight: 700; font-size: 1.2rem; line-height: 1;"><?= $date->format('d') ?></div>
-                                <div style="font-size: 0.65rem; text-transform: uppercase; font-weight: 600;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
-                            </div>
-
-                            <div>
-                                <h3 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 700; color: #1e293b; text-decoration: line-through #cbd5e1;">
-                                    <?= htmlspecialchars($schedule['event_type']) ?>
-                                </h3>
-                                <div style="font-size: 0.8rem; color: #64748b; display: flex; align-items: center; gap: 8px;">
-                                    <span><?= $date->format('H:i') ?></span>
-                                    <span style="width: 3px; height: 3px; background: #cbd5e1; border-radius: 50%;"></span>
-                                    <span><?= $teamCount ?> na equipe</span>
-                                    <span style="font-size:0.7rem; background:#f1f5f9; padding:2px 6px; border-radius:4px;">REALIZADO</span>
-                                </div>
-                            </div>
+                        <div style="text-align: center; min-width: 40px; color: var(--text-muted);">
+                            <div style="font-weight: 700; font-size: 1rem;"><?= $date->format('d/m') ?></div>
                         </div>
-
-                        <div style="
-                            width: 32px; height: 32px; 
-                            background: <?= $themeLight ?>; 
-                            border-radius: 50%; 
-                            display: flex; align-items: center; justify-content: center;
-                            color: <?= $themeColor ?>;
-                        ">
-                            <i data-lucide="chevron-right" style="width: 18px;"></i>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Realizado</div>
                         </div>
+                        <i data-lucide="chevron-right" style="width: 18px; color: var(--border-color);"></i>
                     </a>
                 <?php endforeach; ?>
             </div>
-
         <?php endif; ?>
     </div>
 </div>

@@ -13,18 +13,18 @@ renderPageHeader('Repertório');
 ?>
 
 <!-- Tabs Navegação -->
-<div style="background: #f1f5f9; padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 600px; margin-left: auto; margin-right: auto;">
+<div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 600px; margin-left: auto; margin-right: auto;">
     <a href="?tab=musicas" class="ripple" style="
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'musicas' ? 'background: white; color: #166534; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
+        <?= $tab == 'musicas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
     ">Músicas</a>
     <a href="?tab=pastas" class="ripple" style="
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'pastas' ? 'background: white; color: #166534; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
+        <?= $tab == 'pastas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
     ">Pastas</a>
     <a href="?tab=artistas" class="ripple" style="
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'artistas' ? 'background: white; color: #166534; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
+        <?= $tab == 'artistas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
     ">Artistas</a>
 </div>
 
@@ -34,10 +34,13 @@ renderPageHeader('Repertório');
     <!-- Busca -->
     <form style="margin-bottom: 24px;">
         <div style="position: relative;">
-            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 20px;"></i>
+            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
             <input type="text" name="q" placeholder="Buscar música, artista..." value="<?= htmlspecialchars($search) ?>" style="
-                width: 100%; padding: 12px 12px 12px 48px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 1rem; outline: none; transition: border 0.2s;
-            " onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'">
+                width: 100%; padding: 12px 14px 12px 48px; border-radius: var(--radius-md); 
+                border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
+                transition: border 0.2s; background: var(--bg-surface); color: var(--text-main);
+                box-shadow: var(--shadow-sm);
+            " onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
         </div>
     </form>
 
@@ -90,12 +93,14 @@ renderPageHeader('Repertório');
             <?php foreach ($songs as $song): ?>
                 <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="
                     display: flex; align-items: center; gap: 16px; text-decoration: none; 
-                    padding: 16px; /* Mais Espaçamento */
-                    border-radius: var(--radius-md); 
+                    padding: 16px; 
+                    border-radius: var(--radius-lg); 
                     background: var(--bg-surface); 
-                    border: 1px solid var(--border-color); /* Borda Sutil */
-                    transition: background 0.2s;
-                ">
+                    border: 1px solid var(--border-color);
+                    transition: all 0.2s;
+                    box-shadow: var(--shadow-sm);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)'">
                     <!-- Cover Placeholder -->
                     <div style="
                         width: 48px; height: 48px; flex-shrink: 0;
@@ -104,16 +109,17 @@ renderPageHeader('Repertório');
                     "></div>
 
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 600; color: var(--text-main); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
-                        <div style="color: var(--text-muted); font-size: 0.85rem;"><?= htmlspecialchars($song['artist']) ?></div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
+                        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;"><?= htmlspecialchars($song['artist']) ?></div>
                     </div>
 
                     <div style="text-align: right; min-width: 60px;">
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #d97706;">Tom: <?= $song['tone'] ?: '-' ?></div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">BPM: <?= $song['bpm'] ?: '-' ?></div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary); background: var(--primary-subtle); padding: 2px 8px; border-radius: 6px; display: inline-block;">
+                            <?= $song['tone'] ?: '-' ?>
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">BPM: <?= $song['bpm'] ?: '-' ?></div>
                     </div>
                 </a>
-                <div style="height: 1px; background: #f1f5f9; margin: 0 12px;"></div>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -142,11 +148,11 @@ renderPageHeader('Repertório');
                 // Converter hex para rgb para usar opacidade se necessário, ou usar direto
             ?>
                 <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="ripple" style="
-                background: white; 
-                border-radius: 20px; 
+                background: var(--bg-surface); 
+                border-radius: var(--radius-lg); 
                 padding: 20px; 
                 text-decoration: none; 
-                border: 1px solid #f1f5f9;
+                border: 1px solid var(--border-color);
                 display: flex; 
                 flex-direction: column; 
                 align-items: flex-start; 
@@ -154,8 +160,9 @@ renderPageHeader('Repertório');
                 transition: transform 0.2s, box-shadow 0.2s;
                 position: relative;
                 overflow: hidden;
-            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 20px -10px rgba(0,0,0,0.1)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                box-shadow: var(--shadow-sm);
+            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
 
                     <!-- Barra de cor lateral -->
                     <div style="
@@ -174,15 +181,15 @@ renderPageHeader('Repertório');
                     </div>
 
                     <div style="width: 100%;">
-                        <div style="font-weight: 800; color: #1e293b; font-size: 1rem; margin-bottom: 4px; line-height: 1.2;">
+                        <div style="font-weight: 800; color: var(--text-main); font-size: 1rem; margin-bottom: 4px; line-height: 1.2;">
                             <?= htmlspecialchars($tag['name']) ?>
                         </div>
                         <?php if (!empty($tag['description'])): ?>
-                            <div style="font-size: 0.75rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px;">
                                 <?= htmlspecialchars($tag['description']) ?>
                             </div>
                         <?php endif; ?>
-                        <div style="font-size: 0.8rem; font-weight: 600; color: #64748b; background: #f8fafc; padding: 4px 10px; border-radius: 20px; display: inline-block;">
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: var(--bg-body); padding: 4px 10px; border-radius: 20px; display: inline-block;">
                             <?= $tag['count'] ?> músicas
                         </div>
                     </div>
@@ -191,24 +198,25 @@ renderPageHeader('Repertório');
 
             <!-- Botão para gerenciar tags -->
             <a href="classificacoes.php" class="ripple" style="
-            background: #f8fafc; 
-            border-radius: 20px; 
+            background: var(--bg-body); 
+            border-radius: var(--radius-lg); 
             padding: 20px; 
             text-decoration: none; 
-            border: 2px dashed #cbd5e1;
+            border: 2px dashed var(--border-color);
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
             gap: 12px; 
-            color: #94a3b8;
+            color: var(--text-muted);
             transition: all 0.2s;
         ">
                 <div style="
                 width: 44px; height: 44px; 
-                background: #e2e8f0; 
+                background: var(--bg-surface); 
                 border-radius: 50%; 
                 display: flex; align-items: center; justify-content: center;
+                box-shadow: var(--shadow-sm);
             ">
                     <i data-lucide="plus" style="width: 24px;"></i>
                 </div>
@@ -236,23 +244,24 @@ renderPageHeader('Repertório');
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($artists as $artist): ?>
                 <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="ripple" style="
-                display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; border-radius: 12px; background: white; border: 1px solid white; transition: background 0.2s;
+                display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
+                border-radius: var(--radius-lg); background: var(--bg-surface); border: 1px solid var(--border-color);
+                box-shadow: var(--shadow-sm); transition: all 0.2s;
             ">
                     <!-- Avatar do Artista -->
                     <div style="
-                    width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; 
+                    width: 48px; height: 48px; border-radius: 50%; background: var(--bg-body); 
                     background-image: url('https://ui-avatars.com/api/?name=<?= urlencode($artist['name']) ?>&background=random&color=fff&size=96');
                     background-size: cover;
                 "></div>
 
                     <div style="flex: 1;">
-                        <div style="font-weight: 700; color: #1e293b; font-size: 1rem;"><?= htmlspecialchars($artist['name']) ?></div>
-                        <div style="color: #64748b; font-size: 0.85rem;"><?= $artist['count'] ?> músicas</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><?= htmlspecialchars($artist['name']) ?></div>
+                        <div style="color: var(--text-muted); font-size: 0.85rem;"><?= $artist['count'] ?> músicas</div>
                     </div>
 
-                    <i data-lucide="chevron-right" style="width: 20px; color: #cbd5e1;"></i>
+                    <i data-lucide="chevron-right" style="width: 20px; color: var(--text-muted);"></i>
                 </a>
-                <div style="height: 1px; background: #f1f5f9; margin: 0 12px;"></div>
             <?php endforeach; ?>
             <?php if (empty($artists)): ?>
                 <div style="text-align: center; padding: 40px; color: #94a3b8;">
@@ -264,21 +273,23 @@ renderPageHeader('Repertório');
 </div>
 
 <!-- Floating Action Button -->
+<!-- Floating Action Button -->
 <a href="musica_adicionar.php" class="ripple" style="
     position: fixed;
     bottom: 80px; 
     right: 24px;
-    background: #dcfce7;
-    color: #166534;
+    background: var(--primary);
+    color: white;
     padding: 12px 24px;
     border-radius: 30px;
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 12px rgba(22, 101, 52, 0.2);
+    box-shadow: var(--shadow-xl);
     text-decoration: none;
     font-weight: 600;
     z-index: 50;
+    font-family: 'Inter', sans-serif;
 ">
     <i data-lucide="plus" style="width: 20px; height: 20px;"></i>
     <span>Música</span>
