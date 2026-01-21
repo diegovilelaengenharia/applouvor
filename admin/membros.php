@@ -54,14 +54,14 @@ $users = $pdo->query("SELECT * FROM users ORDER BY name ASC")->fetchAll(PDO::FET
 renderAppHeader('Membros');
 ?>
 
-<div class="container" style="padding-top: 24px; max-width: 900px; margin: 0 auto;">
+<div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
 
     <!-- Cabeçalho Principal com Busca e Add -->
-    <div style="margin-bottom: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <div style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <div>
                 <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Equipe</h1>
-                <p style="color: var(--text-muted); margin-top: 4px; font-size: 0.95rem;">
+                <p style="color: var(--text-muted); margin-top: 2px; font-size: 0.9rem;">
                     <?= count($users) ?> membros cadastrados
                 </p>
             </div>
@@ -83,7 +83,7 @@ renderAppHeader('Membros');
             <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
             <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()"
                 style="
-                       width: 100%; padding: 14px 14px 14px 48px; border-radius: var(--radius-md); 
+                       width: 100%; padding: 12px 14px 12px 48px; border-radius: var(--radius-md); 
                        border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
                        transition: border 0.2s; background: var(--bg-surface); box-shadow: var(--shadow-sm);
                        color: var(--text-main);
