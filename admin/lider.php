@@ -38,7 +38,7 @@ renderAppHeader('Painel Líder');
             <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
         </a>
 
-        <div style="display: flex; align-items: center;">`r`n            <?php renderGlobalNavButtons(); ?>`r`n        </div>
+        <div style="display: flex; align-items: center;">`r`n <?php renderGlobalNavButtons(); ?>`r`n </div>
     </div>
 
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -140,7 +140,19 @@ renderAppHeader('Painel Líder');
             <i data-lucide="chevron-right" class="wide-btn-arrow"></i>
         </a>
 
-        <!-- Exportar Dados (Por enquanto só este) -->
+        <!-- Boletim Estatístico -->
+        <a href="boletim_estatistico.php" class="wide-action-btn ripple">
+            <div class="wide-btn-icon" style="background: rgba(102, 126, 234, 0.1); color: #667eea;">
+                <i data-lucide="bar-chart-3"></i>
+            </div>
+            <div class="wide-btn-content">
+                <div class="wide-btn-title">Boletim Estatístico</div>
+                <div class="wide-btn-desc">Análise completa de desempenho e participação</div>
+            </div>
+            <i data-lucide="chevron-right" class="wide-btn-arrow"></i>
+        </a>
+
+        <!-- Exportar Dados -->
         <a href="exportar.php" class="wide-action-btn ripple">
             <div class="wide-btn-icon" style="background: rgba(45, 122, 79, 0.1); color: var(--accent-interactive);">
                 <i data-lucide="database"></i>
