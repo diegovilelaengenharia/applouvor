@@ -314,7 +314,7 @@ renderAppHeader('Editar Música');
                 <?php endforeach; ?>
             </div>
             <div style="margin-top: 10px; text-align: right;">
-                <a href="classificacoes.php" target="_blank" style="font-size: 0.85rem; color: #047857; font-weight: 600; text-decoration: none;">+ Gerenciar Classificações</a>
+                <button type="button" onclick="openTagManager()" style="font-size: 0.85rem; color: #047857; font-weight: 600; background: none; border: none; cursor: pointer; text-decoration: none;">+ Gerenciar Classificações</button>
             </div>
         </div>
 
@@ -440,6 +440,77 @@ renderAppHeader('Editar Música');
     </div>
 </form>
 
+<!-- Modal de Gestão de Tags -->
+<div id="tagManagerModal" class="bottom-sheet-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 1000; align-items: flex-end;">
+    <div class="bottom-sheet-content" style="background: var(--bg-surface); border-radius: 24px 24px 0 0; padding: 24px; width: 100%; max-width: 600px; margin: 0 auto; max-height: 80vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">Gerenciar Classificações</h2>
+            <button type="button" onclick="closeTagManager()" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--bg-body); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="x" style="width: 20px;"></i>
+            </button>
+        </div>
+
+        <!-- Lista de Tags Existentes -->
+        <div id="tagsList" style="margin-bottom: 24px;">
+            <?php foreach ($allTags as $tag): ?>
+                <div class="tag-card" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: '#047857' ?>;">
+                        <i data-lucide="folder" style="width: 24px;"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 700; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;"><?= htmlspecialchars($tag['name']) ?></div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' style="width: 36px; height: 36px; border-radius: 8px; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b;">
+                            <i data-lucide="edit-2" style="width: 18px;"></i>
+                        </button>
+                        <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" style="width: 36px; height: 36px; border-radius: 8px; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ef4444;">
+                            <i data-lucide="trash-2" style="width: 18px;"></i>
+                        </button>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Formulário de Nova Tag -->
+        <div style="background: var(--bg-body); border-radius: 16px; padding: 20px;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px;" id="tagFormTitle">Nova Classificação</h3>
+
+            <input type="hidden" id="editingTagId" value="">
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; color: var(--text-main); margin-bottom: 8px;">Nome da Pasta</label>
+                <input type="text" id="tagNameInput" placeholder="Ex: Adoração" style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: var(--text-main); font-size: 0.95rem;">
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; color: var(--text-main); margin-bottom: 8px;">Descrição</label>
+                <textarea id="tagDescInput" rows="3" placeholder="Para que serve..." style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface); color: var(--text-main); font-size: 0.95rem; resize: vertical;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; color: var(--text-main); margin-bottom: 8px;">Cor</label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <?php
+                    $colors = ['#047857', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#6366F1'];
+                    foreach ($colors as $c): ?>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">
+                            <div class="color-circle-inline" style="width: 32px; height: 32px; background: <?= $c ?>; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s;"></div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <button type="button" onclick="saveTagInline()" style="width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);">
+                <i data-lucide="save" style="width: 18px;"></i>
+                <span id="saveButtonText">Salvar</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     // Autocomplete de artistas
     const artists = <?= json_encode($artists) ?>;
@@ -515,6 +586,116 @@ renderAppHeader('Editar Música');
     function removeExistingField(id) {
         document.getElementById(`custom-field-existing-${id}`).remove();
     }
+
+    // ===== GESTÃO DE TAGS INLINE =====
+    function openTagManager() {
+        document.getElementById('tagManagerModal').style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    function closeTagManager() {
+        document.getElementById('tagManagerModal').style.display = 'none';
+        resetTagForm();
+    }
+
+    function resetTagForm() {
+        document.getElementById('editingTagId').value = '';
+        document.getElementById('tagNameInput').value = '';
+        document.getElementById('tagDescInput').value = '';
+        document.getElementById('tagFormTitle').textContent = 'Nova Classificação';
+        document.getElementById('saveButtonText').textContent = 'Salvar';
+        document.querySelectorAll('input[name="tagColor"]').forEach(input => {
+            input.checked = false;
+            input.nextElementSibling.style.transform = 'scale(1)';
+            input.nextElementSibling.style.borderColor = 'transparent';
+        });
+    }
+
+    function selectTagColor(input) {
+        document.querySelectorAll('.color-circle-inline').forEach(c => {
+            c.style.transform = 'scale(1)';
+            c.style.borderColor = 'transparent';
+        });
+        if (input.checked) {
+            input.nextElementSibling.style.transform = 'scale(1.2)';
+            input.nextElementSibling.style.borderColor = 'white';
+            input.nextElementSibling.style.boxShadow = '0 0 0 2px ' + input.value;
+        }
+    }
+
+    function editTagInline(tag) {
+        document.getElementById('editingTagId').value = tag.id;
+        document.getElementById('tagNameInput').value = tag.name;
+        document.getElementById('tagDescInput').value = tag.description || '';
+        document.getElementById('tagFormTitle').textContent = 'Editar Classificação';
+        document.getElementById('saveButtonText').textContent = 'Atualizar';
+
+        // Selecionar cor
+        document.querySelectorAll('input[name="tagColor"]').forEach(input => {
+            if (input.value === tag.color) {
+                input.checked = true;
+                selectTagColor(input);
+            }
+        });
+    }
+
+    function saveTagInline() {
+        const tagId = document.getElementById('editingTagId').value;
+        const name = document.getElementById('tagNameInput').value.trim();
+        const description = document.getElementById('tagDescInput').value.trim();
+        const colorInput = document.querySelector('input[name="tagColor"]:checked');
+        const color = colorInput ? colorInput.value : '#047857';
+
+        if (!name) {
+            alert('Por favor, insira um nome para a classificação');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', tagId ? 'update' : 'create');
+        if (tagId) formData.append('id', tagId);
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('color', color);
+
+        fetch('classificacoes.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(() => {
+                // Recarregar a página para atualizar as tags
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao salvar classificação');
+            });
+    }
+
+    function deleteTagInline(tagId) {
+        if (!confirm('Excluir esta classificação?')) return;
+
+        const formData = new FormData();
+        formData.append('action', 'delete');
+        formData.append('id', tagId);
+
+        fetch('classificacoes.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao excluir classificação');
+            });
+    }
+
+    // Fechar modal ao clicar fora
+    document.getElementById('tagManagerModal').addEventListener('click', function(e) {
+        if (e.target === this) closeTagManager();
+    });
 </script>
 
 <?php renderAppFooter(); ?>
