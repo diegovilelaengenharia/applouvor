@@ -24,10 +24,38 @@ CREATE TABLE IF NOT EXISTS songs (
     title VARCHAR(150) NOT NULL,
     artist VARCHAR(100),
     bpm INT,
+    duration VARCHAR(10),
     tone VARCHAR(10), -- Tom da música
-    link VARCHAR(255), -- Link do YouTube/CifraClub
-    category VARCHAR(50), -- Ex: Adoração, Celebração, Hino
+    link_letra VARCHAR(255),
+    link_cifra VARCHAR(255),
+    link_audio VARCHAR(255),
+    link_video VARCHAR(255),
+    category VARCHAR(50), -- Mantida por compatibilidade (mas usamos tags agora)
+    tags TEXT, -- Tags antigas como string (ex: "Repertório 2025")
+    notes TEXT,
+    custom_fields JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ==========================================
+-- 2.1 TABELA DE TAGS (Categorias Coloridas)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS tags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    color VARCHAR(7) DEFAULT '#047857',
+    description TEXT
+);
+
+-- ==========================================
+-- 2.2 RELACIONAMENTO MÚSICA-TAGS
+-- ==========================================
+CREATE TABLE IF NOT EXISTS song_tags (
+    song_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    PRIMARY KEY (song_id, tag_id),
+    FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
 
 -- ==========================================
