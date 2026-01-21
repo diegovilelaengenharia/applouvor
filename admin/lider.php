@@ -479,26 +479,6 @@ try {
         </a>
     </div>
 
-    <!-- Gráficos -->
-    <div class="section-header">
-        <i data-lucide="trending-up"></i>
-        <h2>Visão Geral</h2>
-    </div>
-    <div class="charts-grid">
-        <div class="chart-card">
-            <div class="chart-title">Top 5 Músicas Mais Tocadas (Último Mês)</div>
-            <canvas id="topSongsChart"></canvas>
-        </div>
-
-        <div class="chart-card">
-            <div class="chart-title">Escalas Próximas (30 dias)</div>
-            <div style="text-align: center; padding: 40px;">
-                <div style="font-size: 3rem; font-weight: 800; color: var(--primary);"><?= $upcoming_schedules ?></div>
-                <div style="color: var(--text-muted); margin-top: 8px;">Escalas agendadas</div>
-            </div>
-        </div>
-    </div>
-
     <!-- Atividade Recente -->
     <div class="section-header">
         <i data-lucide="activity"></i>
@@ -544,44 +524,4 @@ try {
         <?php endif; ?>
     </div>
 
-</div>
-
-<script>
-    // Gráfico de Top Músicas
-    const topSongsData = <?= json_encode($top_songs) ?>;
-
-    if (topSongsData.length > 0) {
-        const ctx = document.getElementById('topSongsChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: topSongsData.map(s => s.title),
-                datasets: [{
-                    label: 'Vezes Tocadas',
-                    data: topSongsData.map(s => s.vezes),
-                    backgroundColor: '#10b981',
-                    borderRadius: 8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        });
-    }
-</script>
-
-<?php renderAppFooter(); ?>
+    <?php renderAppFooter(); ?>
