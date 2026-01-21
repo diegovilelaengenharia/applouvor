@@ -140,9 +140,9 @@ renderAppHeader('Detalhes da Escala');
         box-shadow: var(--shadow-sm);
     }
 
-    .tab-content {
-        display: none;
-        animation: fadeIn 0.3s ease;
+    /* .tab-content {
+        /* display: none; */
+        /* animation: fadeIn 0.3s ease; */ }
     }
 
     .tab-content.active {
@@ -205,7 +205,7 @@ renderAppHeader('Detalhes da Escala');
 
 <!-- CONTEÚDO: DETALHES -->
 <!-- NOVO DESIGN: ABA DETALHES -->
-<div id="detalhes" class="tab-content <?= $activeTab === 'detalhes' ? 'active' : '' ?>">
+<div id="detalhes">
     <?php
     $d = new DateTime($schedule['event_date']);
     $dayNum = $d->format('d');
@@ -261,7 +261,7 @@ renderAppHeader('Detalhes da Escala');
                 </button>
                 
                 <!-- Dropdown Menu -->
-                <div id="actionMenu" style="display: none; position: absolute; top: 45px; right: 0; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); min-width: 180px; overflow: hidden; z-index: 1000; border: 1px solid var(--border-subtle);">
+                <div id="actionMenu" style="/* display: none; */ position: absolute; top: 45px; right: 0; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); min-width: 180px; overflow: hidden; z-index: 1000; border: 1px solid var(--border-subtle);">
                     <button onclick="openEditModal(); toggleMenu();" class="ripple" style="width: 100%; background: transparent; border: none; padding: 14px 18px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-primary); font-weight: 600; font-size: 0.9rem; transition: all 0.2s;" onmouseover="this.style.background='var(--bg-tertiary)';" onmouseout="this.style.background='transparent';">
                         <i data-lucide="edit-3" style="width: 18px; color: #FFC107;"></i>
                         Editar Escala
@@ -562,7 +562,7 @@ renderAppHeader('Detalhes da Escala');
 <div style="margin-top: 24px;"></div>
 
 <!-- CONTEÚDO: REPERTÓRIO -->
-<div id="repertorio" class="tab-content <?= $activeTab === 'repertorio' ? 'active' : '' ?>">
+<div id="repertorio" style="margin-top: 24px;">
     <?php if (empty($currentSongs)): ?>
         <div class="empty-state">
             <div style="background: var(--bg-tertiary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
