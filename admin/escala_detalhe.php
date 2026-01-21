@@ -240,15 +240,8 @@ renderAppHeader('Detalhes da Escala');
     </div>
 </div>
 
-<!-- Navegação por Abas -->
-<div class="tabs-nav" style="margin-top: -30px; position: relative; z-index: 10; padding: 6px; background: var(--bg-tertiary); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-    <button class="tab-btn <?= $activeTab === 'detalhes' ? 'active' : '' ?>" onclick="openTab('detalhes')">Detalhes</button>
-    <button class="tab-btn <?= $activeTab === 'equipe' ? 'active' : '' ?>" onclick="openTab('equipe')">Equipe</button>
-    <button class="tab-btn <?= $activeTab === 'repertorio' ? 'active' : '' ?>" onclick="openTab('repertorio')">Músicas</button>
-</div>
-
 <!-- CONTEÚDO: DETALHES -->
-<div id="detalhes" class="tab-content <?= $activeTab === 'detalhes' ? 'active' : '' ?>">
+<div id="detalhes">
     <?php
     $d = new DateTime($schedule['event_date']);
     $dayNum = $d->format('d');
@@ -404,7 +397,7 @@ renderAppHeader('Detalhes da Escala');
 </div>
 
 <!-- NOVO DESIGN: ABA EQUIPE -->
-<div id="equipe" class="tab-content <?= $activeTab === 'equipe' ? 'active' : '' ?>">
+<div id="equipe" style="margin-top: 24px;">
     <?php
     // Agrupar por tipo
     $vozMembers = [];
@@ -578,7 +571,7 @@ renderAppHeader('Detalhes da Escala');
 </div>
 
 <!-- NOVO DESIGN: ABA MÚSICAS -->
-<div id="repertorio" class="tab-content <?= $activeTab === 'repertorio' ? 'active' : '' ?>">
+<div id="repertorio" style="margin-top: 24px;">
     <?php
     $totalMusicas = count($currentSongs);
     $duracaoTotal = $totalMusicas * 5; // 5 min por música (estimativa)
@@ -733,22 +726,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Funções de tab
-function openTab(tabName) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => tab.classList.remove('active'));
-    
-    const buttons = document.querySelectorAll('.tab-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    
-    document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
-    
-    // Atualizar URL
-    const url = new URL(window.location);
-    url.searchParams.set('tab', tabName);
-    window.history.pushState({}, '', url);
-}
+
 
 lucide.createIcons();
 </script>
