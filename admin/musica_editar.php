@@ -618,28 +618,28 @@ renderAppHeader('Editar Música');
             <div class="form-group" style="margin-bottom: 12px;">
                 <label class="form-label">Spotify</label>
                 <div class="input-icon-wrapper">
-                    <input type="url" name="link_spotify" id="link_spotify" class="form-input" value="<?= htmlspecialchars($song['link_spotify']) ?>" placeholder="https://open.spotify.com/...">
+                    <input type="url" name="link_spotify" id="link_spotify" class="form-input" value="<?= htmlspecialchars($song['link_spotify'] ?? '') ?>" placeholder="https://open.spotify.com/...">
                 </div>
             </div>
 
             <div class="form-group" style="margin-bottom: 12px;">
                 <label class="form-label">YouTube</label>
                 <div class="input-icon-wrapper">
-                    <input type="url" name="link_youtube" id="link_youtube" class="form-input" value="<?= htmlspecialchars($song['link_youtube']) ?>" placeholder="https://youtube.com/...">
+                    <input type="url" name="link_youtube" id="link_youtube" class="form-input" value="<?= htmlspecialchars($song['link_youtube'] ?? '') ?>" placeholder="https://youtube.com/...">
                 </div>
             </div>
 
             <div class="form-group" style="margin-bottom: 12px;">
                 <label class="form-label">Apple Music</label>
                 <div class="input-icon-wrapper">
-                    <input type="url" name="link_apple_music" id="link_apple_music" class="form-input" value="<?= htmlspecialchars($song['link_apple_music']) ?>" placeholder="https://music.apple.com/...">
+                    <input type="url" name="link_apple_music" id="link_apple_music" class="form-input" value="<?= htmlspecialchars($song['link_apple_music'] ?? '') ?>" placeholder="https://music.apple.com/...">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Deezer</label>
                 <div class="input-icon-wrapper">
-                    <input type="url" name="link_deezer" id="link_deezer" class="form-input" value="<?= htmlspecialchars($song['link_deezer']) ?>" placeholder="https://deezer.com/...">
+                    <input type="url" name="link_deezer" id="link_deezer" class="form-input" value="<?= htmlspecialchars($song['link_deezer'] ?? '') ?>" placeholder="https://deezer.com/...">
                 </div>
             </div>
         </div>
