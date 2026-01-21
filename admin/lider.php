@@ -269,21 +269,9 @@ try {
     }
 </style>
 
-<div class="lider-hero fade-in-down">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 4px;">Paz, Líder!</div>
-            <h1 style="margin: 0; font-size: 1.4rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #cbd5e1); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
-                Gestão do Ministério
-            </h1>
-            <p style="margin: 8px 0 0 0; opacity: 0.7; font-size: 0.95rem; max-width: 400px;">
-                "Quem governa, faça-o com dedicação." <span style="font-size: 0.8rem; font-style: italic;">(Romanos 12:8)</span>
-            </p>
-        </div>
-    </div>
-</div>
 
-<div id="app-content-inner" style="padding: 0 16px 40px 16px; max-width: 1000px; margin: 0 auto;">
+
+<div id="app-content-inner" style="padding: 16px 16px 40px 16px; max-width: 1000px; margin: 0 auto;">
 
     <!-- 1. Stats Row -->
     <div class="stats-row">
