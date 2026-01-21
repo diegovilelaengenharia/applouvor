@@ -31,259 +31,139 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Louvor PIB - Login</title>
 
     <!-- PWA Fullscreen & Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
-    <link rel="icon" type="image/png" href="assets/images/logo-white.png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="assets/images/logo-black.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* Estilos Exclusivos da Página de Login (Inline para garantir override) */
-        body.login-page {
-            background: linear-gradient(-45deg, #1E5A3A, #2D7A4F, #4A5568, #2D3748);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+        /* --- Login Page Styles (Light & Clean) --- */
+        :root {
+            --primary: #047857;
+            /* Emerald 700 */
+            --primary-hover: #065f46;
+            /* Emerald 800 */
+            --bg-body: #f8fafc;
+            /* Slate 50 */
+            --bg-surface: #ffffff;
+            --text-main: #1e293b;
+            /* Slate 800 */
+            --text-muted: #64748b;
+            /* Slate 500 */
+            --border: #e2e8f0;
+            /* Slate 200 */
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             padding: 20px;
-            position: relative;
-            overflow: hidden;
         }
 
-        /* Notas Musicais Flutuantes */
-        .music-note {
-            position: absolute;
-            opacity: 0.15;
-            animation: float 20s infinite ease-in-out;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-        }
-
-        .music-note svg {
-            fill: white;
-            stroke: white;
-        }
-
-        .music-note:nth-child(1) {
-            top: 5%;
-            left: 8%;
-            animation-delay: 0s;
-            width: 120px;
-        }
-
-        .music-note:nth-child(2) {
-            top: 60%;
-            right: 10%;
-            animation-delay: 6s;
-        }
-
-        .music-note:nth-child(5) {
-            bottom: 15%;
-            right: 25%;
-            animation-delay: 8s;
-            font-size: 3.5rem;
-        }
-
-        .music-note:nth-child(6) {
-            top: 40%;
-            left: 5%;
-            animation-delay: 10s;
-            font-size: 2rem;
-        }
-
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-
-            25% {
-                transform: translateY(-30px) rotate(5deg);
-            }
-
-            50% {
-                transform: translateY(-60px) rotate(-5deg);
-            }
-
-            75% {
-                transform: translateY(-30px) rotate(3deg);
-            }
-        }
-
-        .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 40px 30px;
-            border-radius: 24px;
+        .login-container {
             width: 100%;
-            max-width: 360px;
+            max-width: 400px;
+            background: var(--bg-surface);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: var(--shadow);
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            position: relative;
-            z-index: 10;
+            border: 1px solid var(--border);
+            animation: fadeIn 0.6s ease-out;
         }
 
         .brand-logo {
-            width: 80px;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            width: 90px;
+            height: auto;
+            margin-bottom: 24px;
         }
 
-        .login-header h2 {
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
+        .app-title {
+            font-size: 1.5rem;
             font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         .form-label {
             display: block;
-            text-align: left;
             font-size: 0.85rem;
-            color: #555;
-            margin-bottom: 6px;
             font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
         }
 
-        .form-input-login {
-            background: #F9FAFB;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            padding: 14px 16px;
+        .form-input {
             width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
             font-size: 1rem;
-            margin-bottom: 20px;
+            color: var(--text-main);
             outline: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s;
+            background: #f8fafc;
         }
 
-        .form-input-login:focus {
-            border-color: #2D7A4F;
+        .form-input:focus {
+            border-color: var(--primary);
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1);
         }
 
-        .btn-gold {
-            background: linear-gradient(135deg, #2D7A4F 0%, #1E5A3A 100%);
-            color: #fff;
+        .btn-primary {
             width: 100%;
             padding: 16px;
-            border-radius: 12px;
-            font-weight: 700;
+            background: var(--primary);
+            color: white;
             border: none;
-            cursor: pointer;
-            font-size: 1.05rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 20px rgba(45, 122, 79, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-gold::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-gold:hover::before {
-            left: 100%;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
-        }
-
-        .btn-gold:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
-        .custom-footer {
-            margin-top: 25px;
-            font-size: 0.85rem;
-            color: #888;
-        }
-
-        .version {
-            font-size: 0.7rem;
-            color: #ccc;
-            margin-top: 5px;
-        }
-
-        /* Error Message */
-        .error-message {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            border: 1px solid #fca5a5;
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-10px);
-            }
-
-            75% {
-                transform: translateX(10px);
-            }
-        }
-
-        .btn-outline-gold {
-            background: transparent;
-            color: #2D7A4F;
-            border: 2px solid #2D7A4F;
-            width: 100%;
-            padding: 12px;
             border-radius: 12px;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.3s;
+            transition: background 0.2s, transform 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -291,27 +171,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 12px;
         }
 
-        .btn-outline-gold:hover {
-            background: rgba(45, 122, 79, 0.1);
+        .btn-primary:hover {
+            background: var(--primary-hover);
         }
 
-        .ios-instruction {
-            margin-top: 15px;
-            background: #f0fdf4;
-            padding: 15px;
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            border: 1px solid #bbf7d0;
-            font-size: 0.85rem;
-            text-align: left;
-            color: #166534;
-            display: none;
-            animation: fadeIn 0.5s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            text-decoration: none;
+            transition: all 0.2s;
         }
 
+        .btn-secondary:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            border: 1px solid #fecaca;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-credits {
+            margin-top: 40px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .footer-credits a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(20px);
             }
 
             to {
@@ -319,88 +241,110 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 transform: translateY(0);
             }
         }
+
+        /* PWA Install Area */
+        #pwa-install-area,
+        #pwa-ios-area {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .ios-instruction {
+            margin-top: 12px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: left;
+            border: 1px solid var(--border);
+        }
     </style>
-    <meta name="theme-color" content="#2D7A4F">
-    <link rel="manifest" href="manifest.json">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="login-page">
-    <!-- ... (Elementos Musicais Decorativos Mantidos - Omissão para brevidade do diff) ... -->
+<body>
 
-    <div class="login-card">
-        <div class="login-header">
-            <img src="assets/images/logo-black.png" alt="Logo" class="brand-logo">
-            <h2>Ministério de Louvor</h2>
-        </div>
+    <div class="login-container">
+        <img src="assets/images/logo-black.png" alt="Logo PIB Oliveira" class="brand-logo">
+        <h1 class="app-title">Ministério de Louvor</h1>
+        <p class="app-subtitle">Acesso Restrito à Equipe</p>
 
         <?php if ($error): ?>
             <div class="error-message">
+                <i data-lucide="alert-circle" style="width: 18px;"></i>
                 <?= htmlspecialchars($error) ?>
             </div>
         <?php endif; ?>
 
         <form method="POST">
-            <div style="text-align:left;">
+            <div class="form-group">
                 <label class="form-label">Seu Nome</label>
-                <input type="text" name="name" class="form-input-login" placeholder="Ex: Diego" required>
+                <input type="text" name="name" class="form-input" placeholder="Ex: Diego" required autocomplete="username">
             </div>
 
-            <div style="text-align:left;">
-                <label class="form-label">Senha (4 dígitos)</label>
-                <input type="password" name="password" class="form-input-login" placeholder="Sua senha" required>
+            <div class="form-group">
+                <label class="form-label">Senha de Acesso</label>
+                <input type="password" name="password" class="form-input" placeholder="••••" required autocomplete="current-password" inputmode="numeric" pattern="[0-9]*">
             </div>
 
-            <button type="submit" class="btn-gold">
+            <button type="submit" class="btn-primary">
                 Entrar
+                <i data-lucide="arrow-right" style="width: 18px;"></i>
             </button>
         </form>
 
-        <!-- Botões de Instalação PWA -->
+        <!-- PWA Install -->
         <div id="pwa-install-area" style="display: none;">
-            <button id="btnInstallAndroid" class="btn-outline-gold">
-                <i data-lucide="download" style="width: 18px;"></i> Instalar Aplicativo
+            <button id="btnInstallAndroid" class="btn-secondary">
+                <i data-lucide="download" style="width: 16px;"></i> Instalar App
             </button>
         </div>
 
         <div id="pwa-ios-area" style="display: none;">
-            <button id="btnInstallIOS" class="btn-outline-gold" onclick="toggleIOSHelp()">
-                <i data-lucide="share" style="width: 18px;"></i> Instalar no iPhone
+            <button class="btn-secondary" onclick="toggleIOSHelp()">
+                <i data-lucide="share" style="width: 16px;"></i> Instalar no iPhone
             </button>
-            <div id="iosHelp" class="ios-instruction">
-                <p style="font-weight: 700; margin-bottom: 8px;">Para instalar:</p>
-                <ol style="padding-left: 20px; margin: 0; line-height: 1.5;">
+            <div id="iosHelp" class="ios-instruction" style="display: none;">
+                <p><strong>Para instalar:</strong></p>
+                <ol style="margin-top: 8px; margin-left: 20px; line-height: 1.6;">
                     <li>Toque no botão <strong>Compartilhar</strong> <i data-lucide="share" style="width: 12px; display: inline;"></i> abaixo.</li>
-                    <li>Role para cima e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+                    <li>Escolha <strong>"Adicionar à Tela de Início"</strong>.</li>
                 </ol>
             </div>
         </div>
 
-        <div class="custom-footer">
-            <p>Esqueceu a senha? Fale com o líder.</p>
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
-                <p style="font-size: 0.75rem; font-weight: 600; color: #555;">Desenvolvido por Diego T. N. Vilela</p>
-                <a href="https://wa.me/5535984529577" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #2D7A4F; font-size: 0.75rem; font-weight: 600; margin-top: 4px; background: rgba(45, 122, 79, 0.1); padding: 4px 10px; border-radius: 12px; transition: transform 0.2s;">
-                    <i data-lucide="message-circle" style="width: 12px; height: 12px;"></i>
-                    Suporte: (35) 98452-9577
-                </a>
-            </div>
-            <p class="version" style="margin-top: 10px;">v2.1.0 © 2026</p>
+        <div class="footer-credits">
+            <p>Desenvolvido por <span style="font-weight: 600;">Diego T. N. Vilela</span></p>
+            <a href="https://wa.me/5535984529577" target="_blank" style="margin-top: 8px; display: inline-block;">
+                Suporte Técnico
+            </a>
+            <p style="margin-top: 8px; opacity: 0.6;">v2.1.0 • 2026</p>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
 
-        // PWA Logic
+        // PWA Registration & Logic
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    // Check for updates
+                    reg.onupdatefound = () => {
+                        const newWorker = reg.installing;
+                        newWorker.onstatechange = () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New version available, reload to update
+                                window.location.reload();
+                            }
+                        };
+                    };
+                });
             });
         }
 
-        // Android Install
+        // Install Prompts
         let deferredPrompt;
         const installArea = document.getElementById('pwa-install-area');
         const btnAndroid = document.getElementById('btnInstallAndroid');
@@ -411,16 +355,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             installArea.style.display = 'block';
         });
 
-        btnAndroid.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const {
-                    outcome
-                } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                installArea.style.display = 'none';
-            }
-        });
+        if (btnAndroid) {
+            btnAndroid.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const {
+                        outcome
+                    } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    installArea.style.display = 'none';
+                }
+            });
+        }
 
         // iOS Detection
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -432,7 +378,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function toggleIOSHelp() {
             const help = document.getElementById('iosHelp');
-            help.style.display = help.style.display === 'none' || help.style.display === '' ? 'block' : 'none';
+            help.style.display = help.style.display === 'none' ? 'block' : 'none';
         }
     </script>
 </body>

@@ -1,4 +1,13 @@
 <?php
+// Configurar sessão para 30 dias
+ini_set('session.gc_maxlifetime', 2592000); // 30 dias
+session_set_cookie_params([
+    'lifetime' => 2592000,
+    'path' => '/',
+    'secure' => true, // Apenas HTTPS (Production)
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
 
 // Verifica se o usuário está logado

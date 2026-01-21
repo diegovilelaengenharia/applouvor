@@ -3,6 +3,15 @@
 
 // Inicia sessão se não estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
+    // Configurar sessão para 30 dias (backup, idealmente auth.php deve ser chamado antes)
+    ini_set('session.gc_maxlifetime', 2592000);
+    session_set_cookie_params([
+        'lifetime' => 2592000,
+        'path' => '/',
+        'secure' => true,
+        'httponly' => true,
+        'samesite' => 'Strict'
+    ]);
     session_start();
 }
 
@@ -398,11 +407,11 @@ function renderAppHeader($title, $backUrl = null)
                 border-radius: 50%;
             }
 
-            input:checked + .slider-mini {
+            input:checked+.slider-mini {
                 background-color: var(--primary);
             }
 
-            input:checked + .slider-mini:before {
+            input:checked+.slider-mini:before {
                 transform: translateX(16px);
             }
         </style>
@@ -439,20 +448,20 @@ function renderAppHeader($title, $backUrl = null)
                                 <i data-lucide="user" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
                             <?php endif; ?>
                         </button>
-                         
-                         <!-- Mobile Dropdown -->
-                         <div id="mobileProfileDropdown" style="
+
+                        <!-- Mobile Dropdown -->
+                        <div id="mobileProfileDropdown" style="
                             display: none; position: absolute; top: 48px; right: 0; 
                             background: var(--bg-surface); border-radius: 16px; 
                             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
                             min-width: 240px; z-index: 2000; border: 1px solid var(--border-color);
                             overflow: hidden;
                          ">
-                             <div style="padding: 16px; text-align: center; border-bottom: 1px solid var(--border-color);">
+                            <div style="padding: 16px; text-align: center; border-bottom: 1px solid var(--border-color);">
                                 <div style="font-weight: 600; color: var(--text-main);"><?= $_layoutUser['name'] ?></div>
                                 <a href="perfil.php" style="font-size: 0.8rem; color: var(--primary); text-decoration: none;">Ver perfil</a>
-                             </div>
-                             <div style="padding: 8px;">
+                            </div>
+                            <div style="padding: 8px;">
                                 <!-- Dark Mode Toggle -->
                                 <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
                                     <i data-lucide="moon" style="width: 18px;"></i>
@@ -468,9 +477,9 @@ function renderAppHeader($title, $backUrl = null)
                                 <a href="../logout.php" style="display: block; padding: 10px 12px; color: #ef4444; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
                                     <i data-lucide="log-out" style="width: 18px;"></i> Sair
                                 </a>
-                             </div>
-                         </div>
-                     </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </header>
 
@@ -492,7 +501,8 @@ function renderAppHeader($title, $backUrl = null)
                 display: flex;
                 flex-direction: column;
                 z-index: 1000;
-                pointer-events: none; /* Permite clicar no conteúdo atrás quando menus estão fechados */
+                pointer-events: none;
+                /* Permite clicar no conteúdo atrás quando menus estão fechados */
             }
 
             /* Main Bar */
@@ -501,13 +511,15 @@ function renderAppHeader($title, $backUrl = null)
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
                 border-top: 1px solid var(--border-color);
-                padding: 12px 16px 12px 16px; /* Reduced bottom padding */
-                padding-bottom: max(12px, env(safe-area-inset-bottom)); /* Respect notch but default to tight */
+                padding: 12px 16px 12px 16px;
+                /* Reduced bottom padding */
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+                /* Respect notch but default to tight */
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
                 pointer-events: auto;
-                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
             }
 
             /* Nav Items */
@@ -530,7 +542,7 @@ function renderAppHeader($title, $backUrl = null)
             .b-nav-item.active {
                 color: var(--primary);
             }
-            
+
             .b-nav-item:active {
                 transform: scale(0.95);
             }
@@ -559,17 +571,20 @@ function renderAppHeader($title, $backUrl = null)
             /* Bottom Sheet / Submenu */
             .bottom-sheet {
                 position: fixed;
-                bottom: 0; /* Fixa no fundo */
+                bottom: 0;
+                /* Fixa no fundo */
                 left: 0;
                 right: 0;
                 background: var(--bg-surface);
                 border-radius: 24px 24px 0 0;
-                padding: 24px 20px 100px 20px; /* Padding bottom extra para não ficar escondido atrás da barra */
-                box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+                padding: 24px 20px 100px 20px;
+                /* Padding bottom extra para não ficar escondido atrás da barra */
+                box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
                 transform: translateY(110%);
                 transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
                 pointer-events: auto;
-                z-index: 999; /* Fica atrás da barra de navegação (1000) mas na frente do conteúdo */
+                z-index: 999;
+                /* Fica atrás da barra de navegação (1000) mas na frente do conteúdo */
                 max-height: 80vh;
                 overflow-y: auto;
             }
@@ -587,7 +602,7 @@ function renderAppHeader($title, $backUrl = null)
                 padding-bottom: 16px;
                 border-bottom: 1px solid var(--border-color);
             }
-            
+
             .sheet-title {
                 font-size: 1.1rem;
                 font-weight: 700;
@@ -636,8 +651,11 @@ function renderAppHeader($title, $backUrl = null)
             /* Overlay */
             .bs-overlay {
                 position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
-                background: rgba(0,0,0,0.4);
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.4);
                 backdrop-filter: blur(4px);
                 z-index: 998;
                 opacity: 0;
@@ -652,8 +670,13 @@ function renderAppHeader($title, $backUrl = null)
             }
 
             @media (min-width: 1025px) {
-                .bottom-nav-container { display: none; }
-                .bs-overlay { display: none; }
+                .bottom-nav-container {
+                    display: none;
+                }
+
+                .bs-overlay {
+                    display: none;
+                }
             }
         </style>
 
@@ -772,10 +795,10 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Barra de Navegação Fixa -->
         <div class="bottom-nav-container">
             <nav class="bottom-nav-bar">
-                
+
                 <!-- Botão HOME (Primeiro) -->
                 <a href="index.php" class="b-nav-item" onclick="closeAllSheets()">
-                     <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white;">
+                    <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white;">
                         <i data-lucide="home"></i>
                     </div>
                     <span style="font-weight: 600; color:var(--primary);">Início</span>
@@ -821,10 +844,10 @@ function renderAppHeader($title, $backUrl = null)
                 if (!isOpen) {
                     sheet.classList.add('open');
                     overlay.classList.add('active');
-                    
+
                     // Highlight Active Button
-                    if(btn) btn.classList.add('active');
-                    
+                    if (btn) btn.classList.add('active');
+
                     // Haptic Feedback (Vibe)
                     if (navigator.vibrate) navigator.vibrate(10);
                 }
@@ -1058,7 +1081,7 @@ function renderAppHeader($title, $backUrl = null)
                         <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                             <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
                                 </svg>
                             </div>
                             <span style="font-weight: 500;">Modo Escuro</span>
@@ -1091,7 +1114,7 @@ function renderAppHeader($title, $backUrl = null)
                     e.stopPropagation();
                     const dropdown = document.getElementById(dropdownId);
                     if (!dropdown) return;
-                    
+
                     const isVisible = dropdown.style.display === 'block';
 
                     // Fechar outros

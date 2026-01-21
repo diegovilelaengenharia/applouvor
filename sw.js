@@ -1,4 +1,4 @@
-const CACHE_NAME = 'louvor-pib-v4';
+const CACHE_NAME = 'louvor-pib-v2.1.0';
 const urlsToCache = [
   '/',
   '/index.php',
@@ -9,11 +9,32 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  // Força o SW a ativar imediatamente
+  self.skipWaiting();
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
         return cache.addAll(urlsToCache);
       })
+  );
+});
+
+self.addEventListener('activate', event => {
+  // Reivindica o controle dos clientes imediatamente
+  event.waitUntil(self.clients.claim());
+
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });
 
@@ -28,21 +49,5 @@ self.addEventListener('fetch', event => {
         // Se não, busca na rede
         return fetch(event.request);
       })
-  );
-});
-
-// Atualização do Cache
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
   );
 });
