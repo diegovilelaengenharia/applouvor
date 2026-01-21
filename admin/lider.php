@@ -334,38 +334,11 @@ try {
             <div class="section-title"><i data-lucide="grid"></i> Central de Controle</div>
 
             <div class="tool-grid">
-                <!-- Membros -->
-                <a href="membros.php" class="tool-card">
-                    <div style="background: #eff6ff; padding: 12px; border-radius: 50%; color: #3b82f6;">
-                        <i data-lucide="users"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: #1e293b;">Membros</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Equipe e Funções</div>
-                    </div>
-                </a>
 
-                <!-- Escalas -->
-                <a href="escalas.php" class="tool-card">
-                    <div style="background: #f5f3ff; padding: 12px; border-radius: 50%; color: #8b5cf6;">
-                        <i data-lucide="calendar-days"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: #1e293b;">Escalas</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Agenda do Mês</div>
-                    </div>
-                </a>
 
-                <!-- Avisos -->
-                <a href="avisos.php" class="tool-card">
-                    <div style="background: #fffbeb; padding: 12px; border-radius: 50%; color: #f59e0b;">
-                        <i data-lucide="bell"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: #1e293b;">Mural</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Criar Alertas</div>
-                    </div>
-                </a>
+
+
+
 
                 <!-- Monitoramento -->
                 <a href="monitoramento_usuarios.php" class="tool-card">
@@ -390,13 +363,13 @@ try {
                 </a>
 
                 <!-- Boletim Estatístico -->
-                <a href="boletim_estatistico.php" class="tool-card">
+                <a href="relatorio_gestao.php" class="tool-card">
                     <div style="background: #fef3c7; padding: 12px; border-radius: 50%; color: #f59e0b;">
                         <i data-lucide="bar-chart-3"></i>
                     </div>
                     <div>
-                        <div style="font-weight: 700; color: #1e293b;">Boletim</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Estatísticas</div>
+                        <div style="font-weight: 700; color: #1e293b;">Boletim de Gestão</div>
+                        <div style="font-size: 0.8rem; color: #64748b;">Relatório Completo</div>
                     </div>
                 </a>
             </div>
