@@ -74,46 +74,46 @@ if (!empty($currentUser['avatar'])) {
             <div class="nav-divider"></div>
         <?php endif; ?>
 
-        <a href="index.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+        <a href="index.php" class="nav-item nav-indigo <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
             <i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Visão Geral</span>
         </a>
 
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
 
-        <a href="escalas.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
+        <a href="escalas.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <i data-lucide="calendar-days"></i> <span class="sidebar-text">Escalas</span>
         </a>
-        <a href="repertorio.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
+        <a href="repertorio.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
             <i data-lucide="music-2"></i> <span class="sidebar-text">Repertório</span>
         </a>
-        <a href="membros.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
+        <a href="membros.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
             <i data-lucide="users"></i> <span class="sidebar-text">Membros</span>
         </a>
-        <a href="indisponibilidade.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
+        <a href="indisponibilidade.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
             <i data-lucide="calendar-off"></i> <span class="sidebar-text">Ausências de Escala</span>
         </a>
 
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
 
-        <a href="devocionais.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
+        <a href="devocionais.php" class="nav-item nav-purple <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
             <i data-lucide="book-heart"></i> <span class="sidebar-text">Devocional</span>
         </a>
-        <a href="oracao.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
+        <a href="oracao.php" class="nav-item nav-purple <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
             <i data-lucide="heart-handshake"></i> <span class="sidebar-text">Oração</span>
         </a>
-        <a href="leitura.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
+        <a href="leitura.php" class="nav-item nav-purple <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
             <i data-lucide="book-open"></i> <span class="sidebar-text">Leitura Bíblica</span>
         </a>
 
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
 
-        <a href="avisos.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
+        <a href="avisos.php" class="nav-item nav-orange <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
             <i data-lucide="bell"></i> <span class="sidebar-text">Avisos</span>
         </a>
-        <a href="aniversarios.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
+        <a href="aniversarios.php" class="nav-item nav-orange <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
             <i data-lucide="cake"></i> <span class="sidebar-text">Aniversários</span>
         </a>
     </nav>
@@ -274,10 +274,63 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .nav-item i {
-        width: 22px;
-        height: 22px;
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.03);
+        /* Fundo padrão sutil */
         flex-shrink: 0;
-        transition: color 0.2s;
+        transition: all 0.2s;
+        color: #94a3b8;
+    }
+
+    /* Cores Temáticas */
+    .nav-blue i {
+        color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    .nav-blue:hover i {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .nav-purple i {
+        color: #8b5cf6;
+        background: #f5f3ff;
+    }
+
+    .nav-purple:hover i {
+        background: #8b5cf6;
+        color: white;
+    }
+
+    .nav-orange i {
+        color: #f59e0b;
+        background: #fffbeb;
+    }
+
+    .nav-orange:hover i {
+        background: #f59e0b;
+        color: white;
+    }
+
+    .nav-indigo i {
+        color: #6366f1;
+        background: #eef2ff;
+    }
+
+    .nav-indigo:hover i {
+        background: #6366f1;
+        color: white;
+    }
+
+    /* Estado Ativo */
+    .nav-item.active i {
+        background: transparent;
+        /* Remove fundo individual */
+        color: inherit;
     }
 
     .nav-divider {

@@ -121,10 +121,69 @@ try {
         gap: 8px;
     }
 
+    /* Layout Principal Desktop (Padrão) */
+    .main-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
     .tool-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 16px;
+    }
+
+    /* --- MOBILE OPTIMIZATIONS --- */
+    @media (max-width: 768px) {
+        .lider-hero {
+            padding: 24px 20px;
+            margin-bottom: 20px;
+        }
+
+        .lider-hero h1 {
+            font-size: 1.5rem !important;
+        }
+
+        .main-layout {
+            grid-template-columns: 1fr;
+            /* Coluna única */
+        }
+
+        /* Horizontal Scroll para Status no Mobile */
+        .stats-row {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 16px;
+            gap: 12px;
+            margin-left: -16px;
+            margin-right: -16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .stat-card {
+            min-width: 260px;
+            scroll-snap-align: center;
+        }
+
+        /* Ajuste do Grid de Ferramentas no Mobile */
+        .tool-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .section-title {
+            margin-top: 8px;
+        }
     }
 
     .tool-card {
