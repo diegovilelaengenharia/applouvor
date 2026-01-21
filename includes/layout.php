@@ -1010,10 +1010,15 @@ function renderAppHeader($title, $backUrl = null)
             <?php endif; ?>
         </div>
 
-        <!-- Direita: Ações + Perfil -->
+        <!-- Direita: Ações + Líder + Perfil -->
         <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
 
-
+            <!-- Líder Button (Admin only) - Desktop -->
+            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
+                    <i data-lucide="crown" style="color: white; width: 20px;"></i>
+                </a>
+            <?php endif; ?>
 
             <!-- Ação da Página (se houver) -->
             <?php if (isset($rightAction) && $rightAction): ?>
