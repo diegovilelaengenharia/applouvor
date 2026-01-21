@@ -198,74 +198,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn-secondary {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 12px;
+            gap: 6px;
+            padding: 8px 16px;
             background: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            color: var(--primary);
+            border: 1px dashed var(--border);
+            /* Modern "dashed" look or just transparent */
+            border-radius: 20px;
+            /* Pill shape */
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
-            margin-top: 16px;
             text-decoration: none;
             transition: all 0.2s;
+            margin-top: 0;
         }
 
         .btn-secondary:hover {
-            background: #f1f5f9;
-            color: var(--text-main);
+            background: rgba(4, 120, 87, 0.05);
+            border-color: var(--primary);
         }
 
-        .error-message {
-            background: #fef2f2;
-            color: #ef4444;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            margin-bottom: 24px;
-            border: 1px solid #fecaca;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .footer-credits {
-            margin-top: 40px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        .footer-credits a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* PWA Install Area */
+        /* PWA Install Area - Minimalist */
         #pwa-install-area,
         #pwa-ios-area {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
+            margin-top: 16px;
+            padding-top: 0;
+            border-top: none;
+            display: flex;
+            justify-content: center;
         }
 
         .ios-instruction {
