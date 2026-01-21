@@ -66,7 +66,24 @@ if ($filterMine) $activeFilters++;
 if (!empty($filterType)) $activeFilters++;
 
 renderAppHeader('Escalas');
+
 // Botão Filtro para a ação direita
+$filterButton = '';
+$badge = '';
+
+if ($activeFilters > 0) {
+    $badge = '<span style="
+        position: absolute; top: -4px; right: -4px; 
+        background: #166534; color: white; 
+        font-size: 0.7rem; font-weight: 700; 
+        width: 18px; height: 18px; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center;
+        border: 2px solid white;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        z-index: 10;
+    ">' . $activeFilters . '</span>';
+}
+
 $filterButton = '
 <button onclick="openSheet(\'filterSheet\')" class="ripple" style="
     width: 40px; height: 40px; 
@@ -80,17 +97,7 @@ $filterButton = '
     overflow: visible;
 ">
     <i data-lucide="filter" style="width: 20px;"></i>
-    ' . ($activeFilters > 0 ? '
-    <span style="
-        position: absolute; top: -4px; right: -4px; 
-        background: #166534; color: white; 
-        font-size: 0.7rem; font-weight: 700; 
-        width: 18px; height: 18px; border-radius: 50%; 
-        display: flex; align-items: center; justify-content: center;
-        border: 2px solid white;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        z-index: 10;
-    ">' . $activeFilters . '</span>' : '') . '
+    ' . $badge . '
 </button>';
 
 renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
