@@ -291,7 +291,7 @@ renderPageHeader('Detalhes da Música', $song['artist'], $menuActions);
             </div>
             <div style="flex: 1;">
                 <div style="font-weight: 600; color: #1e293b;">Letra</div>
-                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none;"><?= $song['link_letra'] ?: 'Não cadastrado' ?></div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_letra'] ?: 'Não cadastrado' ?></div>
             </div>
             <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
         </a>
@@ -304,20 +304,33 @@ renderPageHeader('Detalhes da Música', $song['artist'], $menuActions);
             </div>
             <div style="flex: 1;">
                 <div style="font-weight: 600; color: #1e293b;">Cifra</div>
-                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none;"><?= $song['link_cifra'] ?: 'Não cadastrado' ?></div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_cifra'] ?: 'Não cadastrado' ?></div>
             </div>
             <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
         </a>
     </div>
 
     <div class="ref-link">
-        <a href="<?= $song['link_youtube'] ?: ($song['link_audio'] ?? '#') ?>" target="_blank" class="ripple" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+        <a href="<?= $song['link_audio'] ?: '#' ?>" target="_blank" class="ripple" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
             <div style="width: 40px; height: 40px; background: #eff6ff; border-radius: 10px; color: #3b82f6; display: flex; align-items: center; justify-content: center;">
                 <i data-lucide="headphones" style="width: 20px;"></i>
             </div>
             <div style="flex: 1;">
-                <div style="font-weight: 600; color: #1e293b;">Áudio/Vídeo</div>
-                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none;"><?= $song['link_youtube'] ?: ($song['link_audio'] ?? 'Não cadastrado') ?></div>
+                <div style="font-weight: 600; color: #1e293b;">Áudio</div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_audio'] ?: 'Não cadastrado' ?></div>
+            </div>
+            <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
+        </a>
+    </div>
+
+    <div class="ref-link">
+        <a href="<?= $song['link_video'] ?: '#' ?>" target="_blank" class="ripple" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; width: 100%;">
+            <div style="width: 40px; height: 40px; background: #fef2f2; border-radius: 10px; color: #ef4444; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="video" style="width: 20px;"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #1e293b;">Vídeo</div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_video'] ?: 'Não cadastrado' ?></div>
             </div>
             <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
         </a>
