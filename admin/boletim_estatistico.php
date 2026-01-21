@@ -30,26 +30,47 @@ $periodo_sql = '';
 $periodo_label = '';
 $periodo_meses = 6;
 
+// Cores por período
+$cor_primaria = '';
+$cor_secundaria = '';
+$cor_accent = '';
+
 switch ($periodo) {
     case 'mensal':
         $periodo_sql = "AND s.event_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)";
         $periodo_label = "Último Mês";
         $periodo_meses = 1;
+        // Verde vibrante
+        $cor_primaria = '#10b981';
+        $cor_secundaria = '#059669';
+        $cor_accent = '#d1fae5';
         break;
     case 'semestral':
         $periodo_sql = "AND s.event_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)";
         $periodo_label = "Últimos 6 Meses";
         $periodo_meses = 6;
+        // Roxo original
+        $cor_primaria = '#667eea';
+        $cor_secundaria = '#764ba2';
+        $cor_accent = '#e0e7ff';
         break;
     case 'anual':
         $periodo_sql = "AND s.event_date >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)";
         $periodo_label = "Último Ano";
         $periodo_meses = 12;
+        // Azul profundo
+        $cor_primaria = '#3b82f6';
+        $cor_secundaria = '#1e40af';
+        $cor_accent = '#dbeafe';
         break;
     default:
         $periodo_sql = "";
         $periodo_label = "Todo o Período";
         $periodo_meses = 999;
+        // Roxo padrão
+        $cor_primaria = '#667eea';
+        $cor_secundaria = '#764ba2';
+        $cor_accent = '#e0e7ff';
 }
 
 // ==========================================
@@ -216,12 +237,12 @@ $distribuicao_instrumentos = $stmt->fetchAll();
         }
 
         .stats-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, <?= $cor_primaria ?> 0%, <?= $cor_secundaria ?> 100%);
             padding: 30px 20px;
             border-radius: 16px;
             color: white;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(<?= hexdec(substr($cor_primaria, 1, 2)) ?>, <?= hexdec(substr($cor_primaria, 3, 2)) ?>, <?= hexdec(substr($cor_primaria, 5, 2)) ?>, 0.3);
         }
 
         .stats-header h1 {
@@ -275,13 +296,13 @@ $distribuicao_instrumentos = $stmt->fetchAll();
         }
 
         .period-btn:hover {
-            border-color: #667eea;
-            color: #667eea;
+            border-color: <?= $cor_primaria ?>;
+            color: <?= $cor_primaria ?>;
         }
 
         .period-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
+            background: linear-gradient(135deg, <?= $cor_primaria ?> 0%, <?= $cor_secundaria ?> 100%);
+            border-color: <?= $cor_primaria ?>;
             color: white;
         }
 
@@ -389,7 +410,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
         .metric-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, <?= $cor_primaria ?> 0%, <?= $cor_secundaria ?> 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -409,7 +430,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
         }
 
         .section-title i {
-            color: #667eea;
+            color: <?= $cor_primaria ?>;
         }
 
         .section-desc {
@@ -433,7 +454,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
         }
 
         .stats-table thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, <?= $cor_primaria ?> 0%, <?= $cor_secundaria ?> 100%);
             color: white;
         }
 
@@ -513,7 +534,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, <?= $cor_primaria ?> 0%, <?= $cor_secundaria ?> 100%);
             border-radius: 4px;
             transition: width 0.3s ease;
         }
