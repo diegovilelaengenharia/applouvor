@@ -45,73 +45,7 @@ renderAppHeader('Início');
         <!-- Navigation Buttons (Top Right) -->
         <div style="display: flex; justify-content: flex-end; margin-bottom: 12px; gap: 12px; align-items: center;">
 
-            <?php renderGlobalNavButtons(); ?>
-                        background: #EF4444;
-                        color: white;
-                        font-size: 0.7rem;
-                        font-weight: 700;
-                        border-radius: 10px;
-                        border: 2px solid #047857; /* Matches header bg for cutout effect */
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    ">
-                        <?= $unreadCount > 9 ? '9+' : $unreadCount ?>
-                    </span>
-                <?php endif; ?>
-            </button>
-
-            <!-- 3. Avatar (Profile) -->
-            <button onclick="openSheet('sheet-perfil')" class="ripple" style="
-                width: 44px; 
-                height: 44px; 
-                border-radius: 14px;
-                padding: 2px;
-                background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
-                border: 1px solid rgba(255,255,255,0.3);
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            ">
-                <?php
-                $displayAvatar = $_SESSION['user_avatar'] ?? '';
-
-                // Specific fix for Diego
-                if (($_SESSION['user_name'] ?? '') === 'Diego') {
-                    // Check if specific file exists (assuming we know it's diego_avatar.jpg based on file list)
-                    if (file_exists('../assets/uploads/diego_avatar.jpg')) {
-                        $displayAvatar = 'diego_avatar.jpg';
-                    }
-                }
-                ?>
-
-                <?php if (!empty($displayAvatar)): ?>
-                    <img src="../assets/uploads/<?= htmlspecialchars($displayAvatar) ?>" style="
-                        width: 100%; 
-                        height: 100%; 
-                        border-radius: 12px; 
-                        object-fit: cover;
-                    ">
-                <?php else: ?>
-                    <div style="
-                        width: 100%; 
-                        height: 100%; 
-                        background: rgba(255,255,255,0.9);
-                        border-radius: 12px;
-                        display: flex; 
-                        align-items: center; 
-                        justify-content: center;
-                        color: #047857;
-                        font-weight: 700;
-                        font-size: 1.1rem;
-                    ">
-                        <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                    </div>
-                <?php endif; ?>
-            </button>
-
-        </div>
+            <?php renderGlobalNavButtons(); ?>`r`n        </div>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div style="flex: 1; min-width: 0;">
