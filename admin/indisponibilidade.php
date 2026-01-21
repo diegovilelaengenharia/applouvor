@@ -4,61 +4,229 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-renderAppHeader('Indisponibilidades');
+checkLogin();
 
-// Render optimized hero header
-renderHeroHeader('Indisponibilidades', 'Louvor PIB Oliveira');
+$user_id = $_SESSION['user_id'];
+$success = '';
+$error = '';
+
+// --- PROCESSAR FORMULÁRIO ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        // Adicionar
+        if ($_POST['action'] === 'add') {
+            $start_date = $_POST['start_date'];
+            $end_date = $_POST['end_date'] ?: $start_date; // Se não preencher fim, assume 1 dia
+            $reason = $_POST['reason'];
+            $replacement_id = !empty($_POST['replacement_id']) ? $_POST['replacement_id'] : null;
+
+            if ($start_date) {
+                try {
+                    $stmt = $pdo->prepare("INSERT INTO user_unavailability (user_id, start_date, end_date, reason, replacement_id) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->execute([$user_id, $start_date, $end_date, $reason, $replacement_id]);
+                    $success = "Indisponibilidade registrada com sucesso!";
+                } catch (Exception $e) {
+                    $error = "Erro ao registrar: " . $e->getMessage();
+                }
+            } else {
+                $error = "Data de início é obrigatória.";
+            }
+        }
+        // Excluir
+        elseif ($_POST['action'] === 'delete') {
+            $id = $_POST['id'];
+            $stmt = $pdo->prepare("DELETE FROM user_unavailability WHERE id = ? AND user_id = ?");
+            if ($stmt->execute([$id, $user_id])) {
+                $success = "Item removido com sucesso.";
+            } else {
+                $error = "Erro ao remover item.";
+            }
+        }
+    }
+}
+
+// --- BUSCAR DADOS ---
+
+// 1. Minhas Indisponibilidades (Futuras e Recentes)
+$stmt = $pdo->prepare("
+    SELECT u.*, r.name as replacement_name 
+    FROM user_unavailability u
+    LEFT JOIN users r ON u.replacement_id = r.id
+    WHERE u.user_id = ? AND u.end_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    ORDER BY u.start_date ASC
+");
+$stmt->execute([$user_id]);
+$my_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// 2. Lista de Membros (Para o Select de Substituto)
+$stmt = $pdo->query("SELECT id, name FROM users WHERE id != $user_id ORDER BY name ASC");
+$users_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+renderAppHeader('Indisponibilidades');
+renderPageHeader('Indisponibilidades', 'Informe suas ausências');
 ?>
 
-<!-- Main Content -->
 <div class="container fade-in-up">
-    <!-- Empty State - Ready for Implementation -->
-    <div style="text-align: center; padding: 60px 20px;">
-        <div style="background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-            <i data-lucide="calendar-x" style="color: #DC2626; width: 48px; height: 48px;"></i>
+
+    <!-- Feedback -->
+    <?php if ($success): ?>
+        <div style="background: #DCFCE7; color: #166534; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 500; display: flex; align-items: center; gap: 12px; border: 1px solid #bbf7d0;">
+            <i data-lucide="check-circle" style="width: 20px;"></i>
+            <?= $success ?>
         </div>
-        <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 1.25rem; font-weight: 700;">Gerenciar Indisponibilidades</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto;">
-            Informe suas datas de indisponibilidade para facilitar o planejamento das escalas.
+    <?php endif; ?>
+
+    <?php if ($error): ?>
+        <div style="background: #FEF2F2; color: #991B1B; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 500; display: flex; align-items: center; gap: 12px; border: 1px solid #fecaca;">
+            <i data-lucide="alert-circle" style="width: 20px;"></i>
+            <?= $error ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- INSTRUÇÕES / COMO FUNCIONA -->
+    <div style="background: #eff6ff; border: 1px solid #dbeafe; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+        <h4 style="margin: 0 0 8px 0; color: #1e40af; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="info" style="width: 18px;"></i>
+            Como funciona?
+        </h4>
+        <p style="margin: 0; font-size: 0.9rem; color: #1e3a8a; line-height: 1.5;">
+            Vai viajar ou tem um compromisso? Avise aqui para não ser escalado nesses dias.
+            <br>
+            <strong>1.</strong> Escolha a data de início e fim.
+            <br>
+            <strong>2.</strong> Se possível, combine com outro membro para te substituir e marque o nome dele.
         </p>
-
-        <!-- Placeholder Cards -->
-        <div style="display: grid; gap: 16px; max-width: 600px; margin: 0 auto; text-align: left;">
-            <!-- Example Unavailability Card -->
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-sm);">
-                <div style="display: flex; gap: 16px; align-items: start;">
-                    <div style="background: var(--error-light); padding: 12px; border-radius: 12px;">
-                        <i data-lucide="calendar-x" style="color: var(--error); width: 24px; height: 24px;"></i>
-                    </div>
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0 0 4px; font-size: 1rem; font-weight: 600; color: var(--text-primary);">Viagem</h4>
-                        <p style="margin: 0 0 8px; font-size: 0.875rem; color: var(--text-secondary);">
-                            <i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
-                            15/02 a 20/02
-                        </p>
-                        <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">Motivo: Viagem em família</p>
-                    </div>
-                    <button style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 8px;">
-                        <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Add Button -->
-            <button style="background: var(--primary-500); color: white; border: none; border-radius: 12px; padding: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;">
-                <i data-lucide="plus" style="width: 20px; height: 20px;"></i>
-                Adicionar Indisponibilidade
-            </button>
-
-            <!-- Coming Soon Note -->
-            <div style="background: var(--info-light); border: 1px solid var(--info); border-radius: 12px; padding: 16px; text-align: center;">
-                <p style="margin: 0; color: var(--info-dark); font-size: 0.875rem; font-weight: 500;">
-                    <i data-lucide="info" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                    Funcionalidade em desenvolvimento
-                </p>
-            </div>
-        </div>
     </div>
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+
+        <!-- FORMULÁRIO -->
+        <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 10px; color: #1e293b;">
+                <i data-lucide="calendar-plus" style="color: #667eea;"></i>
+                Nova Indisponibilidade
+            </h3>
+
+            <form method="POST" style="margin-top: 20px;">
+                <input type="hidden" name="action" value="add">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Data Início</label>
+                        <input type="date" name="start_date" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#cbd5e1'">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Data Fim (Opcional)</label>
+                        <input type="date" name="end_date" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#cbd5e1'">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Motivo</label>
+                    <input type="text" name="reason" placeholder="Ex: Viagem, Trabalho, Saúde..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#cbd5e1'">
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Substituto Sugerido (Opcional)</label>
+                    <div style="position: relative;">
+                        <!-- Input visível para busca -->
+                        <input type="text" list="users_datalist" placeholder="Digite para buscar..."
+                            onchange="updateReplacementId(this)"
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; transition: border 0.2s;"
+                            onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#cbd5e1'">
+
+                        <!-- Input hidden que vai enviar o ID -->
+                        <input type="hidden" name="replacement_id" id="replacement_id_input">
+
+                        <!-- Lista de opções -->
+                        <datalist id="users_datalist">
+                            <?php foreach ($users_list as $u): ?>
+                                <option data-id="<?= $u['id'] ?>" value="<?= htmlspecialchars($u['name']) ?>"></option>
+                            <?php endforeach; ?>
+                        </datalist>
+
+                        <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;">
+                            <i data-lucide="search" style="width: 16px;"></i>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Combine com alguém para te cobrir se possível.</p>
+                </div>
+
+                <button type="submit" class="ripple" style="background: #1e293b; color: white; border: none; padding: 14px; border-radius: 12px; width: 100%; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                    <i data-lucide="check" style="width: 18px;"></i>
+                    Registrar Ausência
+                </button>
+            </form>
+        </div>
+
+        <!-- LISTA -->
+        <div>
+            <h3 style="margin: 0 0 16px 0; font-size: 1.1rem; color: #334155; font-weight: 700;">Suas Ausências Programadas</h3>
+
+            <?php if (empty($my_items)): ?>
+                <div style="text-align: center; padding: 40px; background: #f8fafc; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                    <i data-lucide="calendar-check" style="width: 40px; height: 40px; color: #94a3b8; margin-bottom: 12px;"></i>
+                    <p style="color: #64748b; margin: 0; font-weight: 500;">Nenhuma indisponibilidade futura registrada.</p>
+                </div>
+            <?php else: ?>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <?php foreach ($my_items as $item):
+                        $start = date('d/m', strtotime($item['start_date']));
+                        $end = date('d/m', strtotime($item['end_date']));
+                        $periodo = ($start === $end) ? $start : "$start até $end";
+                    ?>
+                        <div style="background: white; border-radius: 12px; padding: 16px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                    <div style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">
+                                        <?= $periodo ?>
+                                    </div>
+                                    <?php if ($item['replacement_name']): ?>
+                                        <div style="font-size: 0.75rem; color: #64748b; display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 4px 8px; border-radius: 6px;">
+                                            <i data-lucide="user-check" style="width: 12px;"></i>
+                                            Sub: <strong><?= htmlspecialchars($item['replacement_name']) ?></strong>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div style="color: #1e293b; font-weight: 600; font-size: 0.95rem;">
+                                    <?= htmlspecialchars($item['reason'] ?: 'Sem motivo especificado') ?>
+                                </div>
+                            </div>
+
+                            <form method="POST" onsubmit="return confirm('Cancelar esta indisponibilidade?');">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                                <button type="submit" class="ripple" style="background: #fef2f2; border: none; color: #ef4444; cursor: pointer; padding: 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    </div>
+
+    <div style="height: 48px;"></div>
 </div>
+
+<script>
+    function updateReplacementId(input) {
+        const list = document.getElementById('users_datalist');
+        const hiddenInput = document.getElementById('replacement_id_input');
+        const options = list.options;
+
+        hiddenInput.value = ''; // Reset se não encontrar match exato
+
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === input.value) {
+                hiddenInput.value = options[i].getAttribute('data-id');
+                break;
+            }
+        }
+    }
+</script>
 
 <?php renderAppFooter(); ?>
