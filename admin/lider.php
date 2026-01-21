@@ -393,6 +393,56 @@ try {
         font-weight: 600;
     }
 
+    .alerts-container {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+
+    .alert-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+
+    .alert-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .activity-list {
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        padding: 20px;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     @media (max-width: 768px) {
         .create-grid {
             grid-template-columns: repeat(2, 1fr);
