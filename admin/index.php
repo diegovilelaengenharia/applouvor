@@ -1,283 +1,299 @@
 <?php
-// admin/index.php
+require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Estatísticas Rápidas
-$stats = [
-    'musicas' => $pdo->query("SELECT COUNT(*) FROM songs")->fetchColumn(),
-    'escalas' => $pdo->query("SELECT COUNT(*) FROM schedules")->fetchColumn(),
-    'membros' => $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn(),
-    'proxima_escala' => $pdo->query("SELECT event_date FROM schedules WHERE event_date >= CURDATE() ORDER BY event_date ASC LIMIT 1")->fetchColumn()
-];
 
-// Formatar data da próxima escala
-$proximaEscalaTexto = $stats['proxima_escala']
-    ? date('d/m', strtotime($stats['proxima_escala']))
-    : '--/--';
 
-// Header com Saudação
-$hora = date('H');
-$saudacao = $hora < 12 ? 'Bom dia' : ($hora < 18 ? 'Boa tarde' : 'Boa noite');
 
-renderAppHeader('Painel de Controle');
+
+// ==========================================
+// BUSCAR ÚLTIMOS AVISOS
+// ==========================================
+$recentAvisos = [];
+
+try {
+    $stmt = $pdo->query("
+        SELECT a.*, u.name as author_name
+        FROM avisos a
+        JOIN users u ON a.created_by = u.id
+        WHERE a.archived_at IS NULL
+          AND (a.priority = 'urgent' OR a.priority = 'important')
+        ORDER BY a.created_at DESC
+        LIMIT 3
+    ");
+    $recentAvisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Silently fail if table doesn't exist yet
+}
+
+renderAppHeader('Início');
 ?>
 
-<style>
-    /* Estilos Específicos do Dashboard */
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 24px;
-    }
+<div class="container">
 
-    .stat-card {
-        background: white;
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 140px;
+    <!-- Hero Section Admin -->
+    <div style="
+        background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
+        margin: -24px -16px 32px -16px; 
+        padding: 20px 20px 40px 20px; 
+        border-radius: 0 0 24px 24px; 
+        box-shadow: var(--shadow-md);
         position: relative;
-        overflow: hidden;
-        transition: transform 0.2s;
-        text-decoration: none;
-    }
+        overflow: visible;
+    ">
+        <!-- Navigation Buttons (Top Right) -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px; gap: 12px; align-items: center;">
 
-    .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    }
+            <?php renderGlobalNavButtons(); ?>`r`n        </div>
 
-    .stat-card-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 12px;
-    }
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1; min-width: 0;">
+                <h1 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;">Gestão Louvor</h1>
+                <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.875rem;">Painel de Liderança</p>
+            </div>
+        </div>
+    </div>
 
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #1e293b;
-        line-height: 1;
-    }
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
 
-    .stat-label {
-        color: #64748b;
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
 
-    .stat-decoration {
-        position: absolute;
-        right: -10px;
-        bottom: -10px;
-        opacity: 0.1;
-        transform: rotate(-15deg);
-    }
 
-    /* Seção de Acesso Rápido */
-    .quick-actions {
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-        padding-bottom: 16px;
-        margin: 0 -16px 24px -16px;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
 
-    .action-btn {
-        min-width: 100px;
-        height: 100px;
-        background: white;
-        border-radius: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        border: 1px solid #e2e8f0;
-        text-decoration: none;
-        color: #475569;
-        font-weight: 600;
-        font-size: 0.85rem;
-        transition: all 0.2s;
-    }
+    </div>
 
-    .action-btn:active {
-        background: #f1f5f9;
-        transform: scale(0.95);
-    }
+</div>
 
-    .action-icon {
-        width: 40px;
-        height: 40px;
-        background: #f8fafc;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #047857;
-    }
-
-    /* Hero Section Personalizada */
-    .dashboard-hero {
-        background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
-        margin: -24px -16px 24px -16px;
-        padding: 32px 24px 48px 24px;
-        border-radius: 0 0 32px 32px;
-        color: white;
-        position: relative;
-    }
-
-    .dashboard-hero h2 {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-
-    .dashboard-hero p {
-        opacity: 0.8;
-        font-size: 0.95rem;
-    }
-</style>
-
-<!-- Substitui o Header Padrão por um Hero Customizado (Hack visual) -->
 <script>
-    // Remove o header padrão gerado pelo layout.php para usar o customizado
-    document.addEventListener('DOMContentLoaded', () => {
-        const defaultHeader = document.querySelector('.app-header');
-        if (defaultHeader) defaultHeader.style.display = 'none';
+    function toggleScheduleDetails() {
+        const details = document.getElementById('schedule-details');
+        const icon = document.getElementById('toggle-icon');
+        const text = document.getElementById('toggle-text');
 
-        // Ajusta padding do body
-        document.body.style.paddingTop = '0';
-    });
+        if (details.style.display === 'none') {
+            details.style.display = 'block';
+            icon.setAttribute('data-lucide', 'chevron-up');
+            text.textContent = 'Mostrar Menos';
+        } else {
+            details.style.display = 'none';
+            icon.setAttribute('data-lucide', 'chevron-down');
+            text.textContent = 'Saiba Mais';
+        }
+
+        // Reinicializar ícones Lucide
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    // Welcome Popup
+    function showWelcomePopup() {
+        const popup = document.getElementById('welcome-popup');
+        if (popup && !sessionStorage.getItem('welcomeShown')) {
+            setTimeout(() => {
+                popup.classList.add('active');
+                sessionStorage.setItem('welcomeShown', 'true');
+            }, 500);
+        }
+    }
+
+    function closeWelcomePopup() {
+        document.getElementById('welcome-popup').classList.remove('active');
+    }
+
+    // Show popup on page load
+    window.addEventListener('DOMContentLoaded', showWelcomePopup);
 </script>
 
-<div class="dashboard-hero">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <h2><?= $saudacao ?>, Time!</h2>
-            <p>Vamos organizar o louvor hoje?</p>
+<!-- Welcome Popup (Subtle & Modern) -->
+<?php if (!empty($recentAvisos)): ?>
+    <style>
+        @keyframes subtleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 80px;
+            animation: subtleFadeIn 0.3s ease;
+        }
+
+        .welcome-popup-overlay.active {
+            display: flex;
+        }
+
+        .welcome-popup-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            max-width: 420px;
+            width: calc(100% - 40px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: subtleFadeIn 0.4s ease 0.1s both;
+            overflow: hidden;
+        }
+
+        .notice-mini-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .notice-mini-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
+
+    <div id="welcome-popup" class="welcome-popup-overlay" onclick="if(event.target === this) closeWelcomePopup()">
+        <div class="welcome-popup-card">
+            <!-- Minimalist Header -->
+            <div style="padding: 24px 24px 16px; border-bottom: 1px solid var(--border-subtle);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="
+                        width: 40px;
+                        height: 40px;
+                        background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.5rem;
+                    ">
+                            📢
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">Avisos Importantes</h3>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);"><?= count($recentAvisos) ?> atualização(s) recente(s)</p>
+                        </div>
+                    </div>
+                    <button onclick="closeWelcomePopup()" style="
+                    background: transparent;
+                    border: none;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    color: var(--text-muted);
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='var(--bg-tertiary)'" onmouseout="this.style.background='transparent'">
+                        <i data-lucide="x" style="width: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notices List (Compact) -->
+            <div style="padding: 16px 24px; max-height: 400px; overflow-y: auto;">
+                <?php foreach ($recentAvisos as $aviso):
+                    // Priority colors
+                    $priorityColors = [
+                        'urgent' => '#EF4444',
+                        'important' => '#F59E0B',
+                        'info' => '#3B82F6'
+                    ];
+                    $borderColor = $priorityColors[$aviso['priority']] ?? '#3B82F6';
+
+                    // Type emojis
+                    $typeEmojis = [
+                        'general' => '📢',
+                        'event' => '🎉',
+                        'music' => '🎵',
+                        'spiritual' => '🙏',
+                        'urgent' => '🚨'
+                    ];
+                    $emoji = $typeEmojis[$aviso['type']] ?? '📢';
+                ?>
+                    <div class="notice-mini-card" style="border-left-color: <?= $borderColor ?>;" onclick="window.location.href='avisos.php'">
+                        <div style="display: flex; align-items: flex-start; gap: 10px;">
+                            <span style="font-size: 1.2rem; flex-shrink: 0;"><?= $emoji ?></span>
+                            <div style="flex: 1; min-width: 0;">
+                                <h4 style="
+                                margin: 0 0 4px;
+                                font-size: 0.9rem;
+                                font-weight: 600;
+                                color: var(--text-primary);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            "><?= htmlspecialchars($aviso['title']) ?></h4>
+                                <p style="
+                                margin: 0 0 6px;
+                                font-size: 0.8rem;
+                                color: var(--text-secondary);
+                                line-height: 1.4;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 2;
+                                line-clamp: 2;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                            "><?= htmlspecialchars(mb_substr(strip_tags($aviso['message']), 0, 80)) ?><?= mb_strlen(strip_tags($aviso['message'])) > 80 ? '...' : '' ?></p>
+                                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted);">
+                                    <span><?= htmlspecialchars($aviso['author_name']) ?></span>
+                                    <span>•</span>
+                                    <span><?= date('d/m', strtotime($aviso['created_at'])) ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Footer Actions -->
+            <div style="padding: 16px 24px; border-top: 1px solid var(--border-subtle); display: flex; gap: 12px;">
+                <a href="avisos.php" class="btn-primary ripple" style="
+                flex: 1;
+                justify-content: center;
+                text-decoration: none;
+                padding: 12px;
+                font-size: 0.9rem;
+            ">
+                    Ver Todos
+                </a>
+                <button onclick="closeWelcomePopup()" class="ripple" style="
+                flex: 1;
+                padding: 12px;
+                background: var(--bg-tertiary);
+                border: 1px solid var(--border-subtle);
+                border-radius: 12px;
+                color: var(--text-primary);
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 0.9rem;
+            ">
+                    Fechar
+                </button>
+            </div>
         </div>
-        <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 12px;">
-            <i data-lucide="sparkles" style="color: white;"></i>
-        </div>
     </div>
-</div>
+<?php endif; ?>
 
-<div style="padding: 0 8px; margin-top: -30px;">
-    <!-- Grid de Estatísticas -->
-    <div class="dashboard-grid">
-        <!-- Card Próxima Escala -->
-        <a href="escalas.php" class="stat-card ripple">
-            <div>
-                <div class="stat-card-icon" style="background: #ecfdf5; color: #047857;">
-                    <i data-lucide="calendar"></i>
-                </div>
-                <div class="stat-value"><?= $proximaEscalaTexto ?></div>
-                <div class="stat-label">Próxima Escala</div>
-            </div>
-            <i data-lucide="calendar" class="stat-decoration" style="width: 80px; height: 80px;"></i>
-        </a>
-
-        <!-- Card Músicas -->
-        <a href="repertorio.php" class="stat-card ripple">
-            <div>
-                <div class="stat-card-icon" style="background: #eff6ff; color: #2563eb;">
-                    <i data-lucide="music"></i>
-                </div>
-                <div class="stat-value"><?= $stats['musicas'] ?></div>
-                <div class="stat-label">Músicas</div>
-            </div>
-            <i data-lucide="music" class="stat-decoration" style="width: 80px; height: 80px;"></i>
-        </a>
-
-        <!-- Card Membros -->
-        <a href="membros.php" class="stat-card ripple">
-            <div>
-                <div class="stat-card-icon" style="background: #fefce8; color: #ca8a04;">
-                    <i data-lucide="users"></i>
-                </div>
-                <div class="stat-value"><?= $stats['membros'] ?></div>
-                <div class="stat-label">Membros</div>
-            </div>
-            <i data-lucide="users" class="stat-decoration" style="width: 80px; height: 80px;"></i>
-        </a>
-
-        <!-- Card Avisos (Placeholder para futuro) -->
-        <a href="avisos.php" class="stat-card ripple">
-            <div>
-                <div class="stat-card-icon" style="background: #fef2f2; color: #dc2626;">
-                    <i data-lucide="bell"></i>
-                </div>
-                <div class="stat-value">--</div>
-                <div class="stat-label">Avisos</div>
-            </div>
-            <i data-lucide="bell" class="stat-decoration" style="width: 80px; height: 80px;"></i>
-        </a>
-    </div>
-
-    <!-- Ações Rápidas -->
-    <h3 style="margin-left: 8px; margin-bottom: 12px; font-size: 1rem; color: #334155; font-weight: 700;">Acesso Rápido</h3>
-    <div class="quick-actions">
-        <a href="musica_adicionar.php" class="action-btn ripple">
-            <div class="action-icon"><i data-lucide="plus"></i></div>
-            <span>Add Música</span>
-        </a>
-        <a href="escala_criar.php" class="action-btn ripple">
-            <div class="action-icon"><i data-lucide="calendar-plus"></i></div>
-            <span>Nova Escala</span>
-        </a>
-        <a href="classificacoes.php" class="action-btn ripple">
-            <div class="action-icon"><i data-lucide="tags"></i></div>
-            <span>Tags</span>
-        </a>
-        <a href="membros.php" class="action-btn ripple">
-            <div class="action-icon"><i data-lucide="user-plus"></i></div>
-            <span>Equipe</span>
-        </a>
-    </div>
-
-    <!-- Lista Recente (Exemplo: Últimas Músicas) -->
-    <h3 style="margin-left: 8px; margin-bottom: 12px; font-size: 1rem; color: #334155; font-weight: 700;">Recém Adicionadas</h3>
-    <div style="display: flex; flex-direction: column; gap: 8px;">
-        <?php
-        $recentSongs = $pdo->query("SELECT * FROM songs ORDER BY created_at DESC LIMIT 3")->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($recentSongs as $song):
-        ?>
-            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="
-            background: white; 
-            padding: 16px; 
-            border-radius: 16px; 
-            display: flex; 
-            align-items: center; 
-            gap: 16px; 
-            text-decoration: none; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid #f1f5f9;
-        ">
-                <div style="width: 40px; height: 40px; background: #f8fafc; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #64748b;">
-                    <i data-lucide="music-2" style="width: 20px;"></i>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-weight: 700; color: #334155; font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
-                    <div style="font-size: 0.8rem; color: #94a3b8;"><?= htmlspecialchars($song['artist']) ?></div>
-                </div>
-                <i data-lucide="chevron-right" style="width: 18px; color: #cbd5e1;"></i>
-            </a>
-        <?php endforeach; ?>
-    </div>
-</div>
-
-<div style="height: 80px;"></div> <!-- Espaço para footer -->
-
-<?php renderAppFooter(); ?>
+<?php
+renderAppFooter();
+?>
+```
