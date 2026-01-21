@@ -24,12 +24,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     $stmt = $pdo->prepare("INSERT INTO user_unavailability (user_id, start_date, end_date, reason, replacement_id) VALUES (?, ?, ?, ?, ?)");
                     $stmt->execute([$user_id, $start_date, $end_date, $reason, $replacement_id]);
-                    $success = "Indisponibilidade registrada com sucesso!";
+
+                    // NOTIFICAR LÍDERES (Admins)
+                    $user_name = $_SESSION['user_name'];
+                    $periodo = date('d/m', strtotime($start_date));
+                    if ($end_date != $start_date) {
+                        $periodo .= " a " . date('d/m', strtotime($end_date));
+                    }
+
+                    $notif_msg = "$user_name registrou ausência para $periodo. Motivo: $reason";
+
+                    // Buscar admins
+                    $stmt_admin = $pdo->query("SELECT id FROM users WHERE role = 'admin'");
+                    $admins = $stmt_admin->fetchAll(PDO::FETCH_COLUMN);
+
+                    $stmt_notif = $pdo->prepare("INSERT INTO notifications (user_id, title, message, type, link) VALUES (?, ?, ?, 'warning', 'indisponibilidade.php')");
+
+                    foreach ($admins as $admin_id) {
+                        // Não notificar a si mesmo se for admin
+                        if ($admin_id != $user_id) {
+                            $stmt_notif->execute([$admin_id, 'Nova Ausência', $notif_msg]);
+                        }
+                    }
+
+                    $_SESSION['success'] = "Indisponibilidade registrada e líderes notificados!";
                 } catch (Exception $e) {
-                    $error = "Erro ao registrar: " . $e->getMessage();
+                    $_SESSION['error'] = "Erro ao registrar: " . $e->getMessage();
                 }
             } else {
-                $error = "Data de início é obrigatória.";
+                $_SESSION['error'] = "Data de início é obrigatória.";
             }
         }
         // EDITAR
@@ -43,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("UPDATE user_unavailability SET start_date = ?, end_date = ?, reason = ?, replacement_id = ? WHERE id = ? AND user_id = ?");
                 $stmt->execute([$start_date, $end_date, $reason, $replacement_id, $id, $user_id]);
-                $success = "Indisponibilidade atualizada com sucesso!";
+                $_SESSION['success'] = "Indisponibilidade atualizada com sucesso!";
             } catch (Exception $e) {
-                $error = "Erro ao atualizar: " . $e->getMessage();
+                $_SESSION['error'] = "Erro ao atualizar: " . $e->getMessage();
             }
         }
         // EXCLUIR
@@ -53,12 +76,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
             $stmt = $pdo->prepare("DELETE FROM user_unavailability WHERE id = ? AND user_id = ?");
             if ($stmt->execute([$id, $user_id])) {
-                $success = "Item removido com sucesso.";
+                $_SESSION['success'] = "Item removido com sucesso.";
             } else {
-                $error = "Erro ao remover item.";
+                $_SESSION['error'] = "Erro ao remover item.";
             }
         }
+
+        // REDIRECT (PRG Pattern)
+        header("Location: indisponibilidade.php");
+        exit;
     }
+}
+
+// Recuperar Feedback da Sessão
+if (isset($_SESSION['success'])) {
+    $success = $_SESSION['success'];
+    unset($_SESSION['success']);
+}
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']);
 }
 
 // --- BUSCAR DADOS ---
