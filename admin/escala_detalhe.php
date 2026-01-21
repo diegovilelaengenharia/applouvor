@@ -103,7 +103,7 @@ $songs = $stmtSongs->fetchAll(PDO::FETCH_ASSOC);
 $allUsers = $pdo->query("SELECT id, name, instrument FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 $allSongs = $pdo->query("SELECT id, title, artist, tone FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
 
-renderAppHeader('Detalhes da Escala');
+renderAppHeader('Detalhes');
 ?>
 
 <!-- Compact Header -->
