@@ -15,6 +15,16 @@ $stmt = $pdo->prepare("SELECT * FROM songs WHERE id = ?");
 $stmt->execute([$id]);
 $song = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+// Buscar Tags da Música
+$stmtTags = $pdo->prepare("
+    SELECT t.* FROM tags t
+    JOIN song_tags st ON t.id = st.tag_id
+    WHERE st.song_id = ?
+");
+$stmtTags->execute([$id]);
+$songTags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+
 if (!$song) {
     header('Location: repertorio.php');
     exit;
