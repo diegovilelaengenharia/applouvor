@@ -3,172 +3,127 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-if (!isset($_GET['id'])) {
+$id = $_GET['id'] ?? null;
+
+if (!$id) {
     header('Location: repertorio.php');
     exit;
 }
 
-$id = $_GET['id'];
-
-// Buscar música
+// Buscar Música
 $stmt = $pdo->prepare("SELECT * FROM songs WHERE id = ?");
 $stmt->execute([$id]);
 $song = $stmt->fetch(PDO::FETCH_ASSOC);
 
+if (!$song) {
+    die("Música não encontrada.");
+}
 
-// Buscar Tags da Música
+// Buscar Tags
 $stmtTags = $pdo->prepare("
-    SELECT t.* FROM tags t
-    JOIN song_tags st ON t.id = st.tag_id
+    SELECT t.* 
+    FROM tags t 
+    JOIN song_tags st ON st.tag_id = t.id 
     WHERE st.song_id = ?
 ");
 $stmtTags->execute([$id]);
-$songTags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+$tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 
-if (!$song) {
-    header('Location: repertorio.php');
-    exit;
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_song') {
-    try {
-        $stmt = $pdo->prepare("DELETE FROM songs WHERE id = ?");
-        $stmt->execute([$id]);
-        header("Location: repertorio.php");
-        exit;
-    } catch (PDOException $e) {
-        // Tratar erro de chave estrangeira se houver
-        echo "<script>alert('Erro ao excluir música. Ela pode estar em uso em alguma escala.');</script>";
-    }
-}
-
-renderAppHeader('Música');
-
+renderAppHeader('Detalhes da Música');
 ?>
 
-<style>
-    .song-header {
-        text-align: center;
-        padding: 24px 16px;
-        background: linear-gradient(135deg, #2D7A4F 0%, #1a4d2e 100%);
-        border-radius: 16px;
-        margin-bottom: 24px;
-        color: white;
-    }
-
-    .song-header-icon {
-        width: 80px;
-        height: 80px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 16px;
-    }
-
-    .song-header-title {
-        font-size: 1.5rem;
-        font-weight: 800;
-        margin-bottom: 8px;
-    }
-
-    .song-header-artist {
-        font-size: 1rem;
-        opacity: 0.9;
-    }
-
-    
-    .info-section {
-        background: white;
-        border: 1px solid var(--border-subtle);
-        border-radius: 20px;
-        padding: 24px;
-        margin-bottom: 32px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    }
+}
 
 
-    .info-section-title {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 12px;
-    }
+.info-section {
+background: white;
+border: 1px solid var(--border-subtle);
+border-radius: 20px;
+padding: 24px;
+margin-bottom: 32px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
 
-    .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 12px;
-    }
 
-    .info-item {
-        text-align: center;
-        padding: 12px;
-        background: var(--bg-tertiary);
-        border-radius: 8px;
-    }
+.info-section-title {
+font-size: 0.85rem;
+font-weight: 700;
+color: var(--text-secondary);
+text-transform: uppercase;
+letter-spacing: 0.5px;
+margin-bottom: 12px;
+}
 
-    .info-label {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        margin-bottom: 4px;
-    }
+.info-grid {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 12px;
+}
 
-    .info-value {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--accent-interactive);
-    }
+.info-item {
+text-align: center;
+padding: 12px;
+background: var(--bg-tertiary);
+border-radius: 8px;
+}
 
-    .link-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 14px;
-        background: var(--bg-tertiary);
-        border-radius: 10px;
-        margin-bottom: 8px;
-        text-decoration: none;
-        transition: all 0.2s;
-        border: 1px solid transparent;
-    }
+.info-label {
+font-size: 0.75rem;
+color: var(--text-secondary);
+margin-bottom: 4px;
+}
 
-    .link-item:hover {
-        background: var(--bg-secondary);
-        border-color: var(--accent-interactive);
-    }
+.info-value {
+font-size: 1.1rem;
+font-weight: 700;
+color: var(--accent-interactive);
+}
 
-    .link-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
+.link-item {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 14px;
+background: var(--bg-tertiary);
+border-radius: 10px;
+margin-bottom: 8px;
+text-decoration: none;
+transition: all 0.2s;
+border: 1px solid transparent;
+}
 
-    .link-info {
-        flex: 1;
-    }
+.link-item:hover {
+background: var(--bg-secondary);
+border-color: var(--accent-interactive);
+}
 
-    .link-title {
-        font-weight: 700;
-        color: var(--text-primary);
-        font-size: 0.95rem;
-    }
+.link-icon {
+width: 40px;
+height: 40px;
+border-radius: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
 
-    .link-url {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.link-info {
+flex: 1;
+}
+
+.link-title {
+font-weight: 700;
+color: var(--text-primary);
+font-size: 0.95rem;
+}
+
+.link-url {
+font-size: 0.75rem;
+color: var(--text-muted);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
 </style>
 
 <!-- Hero Header -->
@@ -202,7 +157,7 @@ renderAppHeader('Música');
 
         <div style="display: flex; gap: 12px; align-items: center;">
             <!-- Edit Button -->
-            
+
 
             <?php renderGlobalNavButtons(); ?>
         </div>
@@ -340,7 +295,7 @@ renderAppHeader('Música');
     <h3 style="font-size: 0.85rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
         <i data-lucide="settings" style="width: 14px;"></i> Gerenciamento
     </h3>
-    
+
     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
         <!-- Botão Editar -->
         <a href="musica_editar.php?id=<?= $id ?>" class="ripple" style="
