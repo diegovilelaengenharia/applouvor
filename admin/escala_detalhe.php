@@ -106,74 +106,55 @@ $allSongs = $pdo->query("SELECT id, title, artist, tone FROM songs ORDER BY titl
 renderAppHeader('Detalhes da Escala');
 ?>
 
-<!-- HERO BANNER (Dark Theme) -->
-<div style="
-        background: radial-gradient(circle at top right, #3b82f6, #1e3a8a); 
-        color: white; 
-        padding: 32px 24px; 
-        border-radius: 24px; 
-        margin-bottom: 24px; 
-        box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.4);
-        position: relative;
-        overflow: hidden;
-    ">
-    <!-- Decoration Circles -->
-    <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-    <div style="position: absolute; bottom: -40px; right: 40px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
-
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
-        <div>
-            <a href="escalas.php" style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
-                <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
+<!-- Compact Header -->
+<div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div style="flex: 1;">
+            <a href="escalas.php" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px;">
+                <i data-lucide="arrow-left" style="width: 14px;"></i> Voltar
             </a>
+            <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+        </div>
+        
+        <!-- Actions Menu -->
+        <div style="position: relative;">
+            <button onclick="toggleOptionsMenu()" id="menuBtn" class="ripple" style="background: var(--bg-body); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 8px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="more-vertical" style="width: 18px;"></i>
+            </button>
 
-            <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
-                <div style="
-                        background: rgba(255,255,255,0.2); 
-                        padding: 8px 16px; 
-                        border-radius: 12px; 
-                        text-align: center; 
-                        backdrop-filter: blur(4px);
-                        border: 1px solid rgba(255,255,255,0.2);
-                    ">
-                    <div style="font-size: 1.5rem; font-weight: 800; line-height: 1;"><?= $date->format('d') ?></div>
-                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;"><?= strtoupper(substr($monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1], 0, 3)) ?></div>
-                </div>
-                <div>
-                    <h1 style="margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-                    <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 1rem; font-weight: 500;">
-                        <?= $diaSemana ?> • 19:00 <?= $schedule['notes'] ? '• ' . htmlspecialchars(substr($schedule['notes'], 0, 30)) . '...' : '' ?>
-                    </p>
-                </div>
+            <!-- Dropdown Menu -->
+            <div id="optionsMenu" style="display: none; position: absolute; top: 42px; right: 0; background: var(--bg-surface); border-radius: 12px; box-shadow: var(--shadow-md); min-width: 180px; z-index: 50; overflow: hidden; border: 1px solid var(--border-color);">
+                <button onclick="openModal('modalEditSchedule'); toggleOptionsMenu()" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="edit-2" style="width: 16px;"></i> Editar Detalhes
+                </button>
+                <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');" style="margin: 0;">
+                    <input type="hidden" name="action" value="delete_schedule">
+                    <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border-color);">
+                        <i data-lucide="trash-2" style="width: 16px;"></i> Excluir Escala
+                    </button>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- Actions (Edit/Delete) - Absolute top right or flex -->
-        <button onclick="toggleOptionsMenu()" id="menuBtn" class="ripple" style="
-                background: rgba(255,255,255,0.2); border: none; 
-                width: 40px; height: 40px; border-radius: 12px;
-                color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
-                backdrop-filter: blur(4px);
-            ">
-            <i data-lucide="more-vertical"></i>
-        </button>
-
-        <!-- Dropdown Menu (Hidden) -->
-        <div id="optionsMenu" style="
-                    display: none; position: absolute; top: 50px; right: 0; 
-                    background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-                    min-width: 180px; z-index: 50; overflow: hidden; border: 1px solid #e2e8f0;
-                ">
-            <button onclick="openModal('modalEditSchedule'); toggleOptionsMenu()" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="edit-2" style="width: 16px;"></i> Editar Detalhes
-            </button>
-            <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');" style="margin: 0;">
-                <input type="hidden" name="action" value="delete_schedule">
-                <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 10px; border-top: 1px solid #f1f5f9;">
-                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir Escala
-                </button>
-            </form>
+    <!-- Event Info Row -->
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: var(--text-muted);">
+            <i data-lucide="calendar" style="width: 16px;"></i>
+            <span><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></span>
         </div>
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: var(--text-muted);">
+            <i data-lucide="clock" style="width: 16px;"></i>
+            <span>19:00</span>
+        </div>
+        <?php if ($schedule['notes']): ?>
+            <div style="flex: 1; min-width: 0;">
+                <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <i data-lucide="info" style="width: 14px; display: inline; vertical-align: text-bottom;"></i>
+                    <?= htmlspecialchars(substr($schedule['notes'], 0, 50)) ?><?= strlen($schedule['notes']) > 50 ? '...' : '' ?>
+                </p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
