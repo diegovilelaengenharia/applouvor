@@ -111,6 +111,28 @@ try {
     $recent_activities = [];
 }
 
+// 11. Métricas para Estatísticas de Escalas
+try {
+    // Total de escalas este mês
+    $stmt = $pdo->query("
+        SELECT COUNT(*) FROM schedules 
+        WHERE MONTH(event_date) = MONTH(CURDATE()) 
+        AND YEAR(event_date) = YEAR(CURDATE())
+    ");
+    $escalas_mes = $stmt->fetchColumn();
+
+    // Taxa de confirmação média
+    $stmt = $pdo->query("
+        SELECT 
+            ROUND((COUNT(CASE WHEN confirmed = 1 THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0)), 0) as taxa
+        FROM schedule_users
+    ");
+    $taxa_confirmacao = $stmt->fetchColumn() ?: 0;
+} catch (Exception $e) {
+    $escalas_mes = 0;
+    $taxa_confirmacao = 0;
+}
+
 ?>
 
 <!-- Chart.js CDN -->
@@ -241,93 +263,145 @@ try {
         margin-bottom: 32px;
     }
 
-    .action-btn {
+    .create-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .create-btn {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: var(--radius-lg);
-        padding: 20px;
+        border-radius: 10px;
+        padding: 12px 8px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center;
-        gap: 12px;
+        gap: 6px;
         text-decoration: none;
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
+    }
+
+    .create-btn span {
+        font-size: 0.85rem;
+        font-weight: 600;
         color: var(--text-main);
     }
 
-    .action-btn:hover {
-        transform: translateY(-3px);
+    .create-btn:hover {
+        transform: translateY(-2px);
         box-shadow: var(--shadow-md);
         border-color: var(--primary);
     }
 
-    .action-icon {
+    .stats-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .stats-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 20px;
+        text-decoration: none;
+        transition: all 0.3s;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+        border-color: var(--primary);
+    }
+
+    .stats-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stats-icon {
         width: 48px;
         height: 48px;
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
     }
 
-    .action-label {
+    .stats-icon i {
+        width: 24px;
+        height: 24px;
+    }
+
+    .stats-badge {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stats-card-body h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+    }
+
+    .stats-card-body p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin: 4px 0 0 0;
+    }
+
+    .stats-card-footer {
+        display: flex;
+        gap: 20px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .stats-metric {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1;
+    }
+
+    .metric-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
         font-weight: 600;
-        font-size: 0.9rem;
-    }
-
-    .alerts-container {
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        border-radius: var(--radius-lg);
-        padding: 16px;
-        margin-bottom: 24px;
-    }
-
-    .alert-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px;
-        background: white;
-        border-radius: 8px;
-        margin-bottom: 8px;
-    }
-
-    .alert-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .activity-list {
-        background: var(--bg-surface);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border-color);
-        padding: 20px;
-    }
-
-    .activity-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .activity-item:last-child {
-        border-bottom: none;
-    }
-
-    .activity-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     @media (max-width: 768px) {
+        .create-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stats-buttons {
+            grid-template-columns: 1fr;
+        }
+
         .charts-grid {
             grid-template-columns: 1fr;
         }
@@ -437,45 +511,81 @@ try {
         </div>
     <?php endif; ?>
 
-    <!-- Ações Rápidas -->
+    <!-- Criar Novo -->
     <div class="section-header">
-        <i data-lucide="zap"></i>
-        <h2>Ações Rápidas</h2>
+        <i data-lucide="plus-circle"></i>
+        <h2>Criar Novo</h2>
     </div>
-    <div class="actions-grid">
-        <a href="escala_adicionar.php" class="action-btn">
-            <div class="action-icon" style="background: #f5f3ff; color: #8b5cf6;">
-                <i data-lucide="calendar-plus"></i>
+    <div class="create-grid">
+        <a href="escala_adicionar.php" class="create-btn">
+            <i data-lucide="calendar-plus" style="width: 18px; color: #8b5cf6;"></i>
+            <span>Escala</span>
+        </a>
+        <a href="musica_adicionar.php" class="create-btn">
+            <i data-lucide="music" style="width: 18px; color: #10b981;"></i>
+            <span>Música</span>
+        </a>
+        <a href="membros.php" class="create-btn">
+            <i data-lucide="user-plus" style="width: 18px; color: #3b82f6;"></i>
+            <span>Membro</span>
+        </a>
+        <a href="avisos.php" class="create-btn">
+            <i data-lucide="megaphone" style="width: 18px; color: #f59e0b;"></i>
+            <span>Aviso</span>
+        </a>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="section-header" style="margin-top: 32px;">
+        <i data-lucide="bar-chart-2"></i>
+        <h2>Estatísticas</h2>
+    </div>
+    <div class="stats-buttons">
+        <!-- Estatísticas de Escalas -->
+        <a href="escalas_stats.php" class="stats-card">
+            <div class="stats-card-header">
+                <div class="stats-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+                    <i data-lucide="calendar-check"></i>
+                </div>
+                <div class="stats-badge">Novo</div>
             </div>
-            <span class="action-label">Nova Escala</span>
+            <div class="stats-card-body">
+                <h3>Estatísticas de Escalas</h3>
+                <p>Análise completa de participação e frequência</p>
+            </div>
+            <div class="stats-card-footer">
+                <div class="stats-metric">
+                    <span class="metric-value"><?= $escalas_mes ?></span>
+                    <span class="metric-label">escalas este mês</span>
+                </div>
+                <div class="stats-metric">
+                    <span class="metric-value"><?= $taxa_confirmacao ?>%</span>
+                    <span class="metric-label">confirmação</span>
+                </div>
+            </div>
         </a>
 
-        <a href="musica_adicionar.php" class="action-btn">
-            <div class="action-icon" style="background: #ecfdf5; color: #10b981;">
-                <i data-lucide="music"></i>
+        <!-- Estatísticas do Repertório -->
+        <a href="repertorio_stats.php" class="stats-card">
+            <div class="stats-card-header">
+                <div class="stats-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <i data-lucide="music-2"></i>
+                </div>
             </div>
-            <span class="action-label">Adicionar Música</span>
-        </a>
-
-        <a href="membros.php" class="action-btn">
-            <div class="action-icon" style="background: #eff6ff; color: #3b82f6;">
-                <i data-lucide="user-plus"></i>
+            <div class="stats-card-body">
+                <h3>Estatísticas do Repertório</h3>
+                <p>Músicas mais tocadas e análises detalhadas</p>
             </div>
-            <span class="action-label">Novo Membro</span>
-        </a>
-
-        <a href="avisos.php" class="action-btn">
-            <div class="action-icon" style="background: #fffbeb; color: #f59e0b;">
-                <i data-lucide="megaphone"></i>
+            <div class="stats-card-footer">
+                <div class="stats-metric">
+                    <span class="metric-value"><?= $total_songs ?></span>
+                    <span class="metric-label">músicas ativas</span>
+                </div>
+                <div class="stats-metric">
+                    <span class="metric-value"><?= count($top_songs) ?></span>
+                    <span class="metric-label">top músicas</span>
+                </div>
             </div>
-            <span class="action-label">Criar Aviso</span>
-        </a>
-
-        <a href="repertorio_stats.php" class="action-btn">
-            <div class="action-icon" style="background: #fef2f2; color: #ef4444;">
-                <i data-lucide="bar-chart-2"></i>
-            </div>
-            <span class="action-label">Estatísticas</span>
         </a>
     </div>
 
