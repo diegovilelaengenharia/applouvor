@@ -4,31 +4,61 @@
 $userId = $_SESSION['user_id'] ?? 1;
 
 try {
-    $stmtUser = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
+    // Tenta buscar foto também
+    $stmtUser = $pdo->prepare("SELECT name, phone, photo FROM users WHERE id = ?");
     $stmtUser->execute([$userId]);
     $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
-    $currentUser = null;
+    // Fallback se a coluna photo não existir ainda
+    try {
+        $stmtUser = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
+        $stmtUser->execute([$userId]);
+        $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $ex) {
+        $currentUser = null;
+    }
 }
 
 if (!$currentUser) {
-    $currentUser = ['name' => 'Usuário', 'phone' => ''];
+    $currentUser = ['name' => 'Usuário', 'phone' => '', 'photo' => null];
 }
 if (!$currentUser['phone']) $currentUser['phone'] = 'Membro da Equipe';
 
-// Avatar
-$userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=dcfce7&color=166534';
+// Avatar Logic
+if (!empty($currentUser['photo'])) {
+    // Verifica se é path relativo ou url completa
+    $userPhoto = $currentUser['photo'];
+    // Ajuste simples para path relativo se necessário (ex: ../uploads/...)
+    if (strpos($userPhoto, 'http') === false && strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
+        $userPhoto = '../assets/img/' . $userPhoto; // Tentativa de path
+    }
+} else {
+    $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=dcfce7&color=166534';
+}
 ?>
 
 <div id="app-sidebar" class="sidebar">
-    <!-- Cabeçalho Sidebar com Toggle -->
-    <div style="padding: 20px 16px; display: flex; align-items: center; justify-content: space-between;">
-        <div class="logo-area" style="font-weight: 800; color: #166534; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;">
-            <div style="background: #dcfce7; padding: 6px; border-radius: 8px;">
-                <i data-lucide="music" style="width: 20px; height: 20px; color: #15803d;"></i>
+    <!-- Cabeçalho Sidebar com Logo -->
+    <div style="padding: 24px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div class="logo-area" style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
+            <!-- Logo da Igreja (Usando Icon Church como placeholder visual bonito) -->
+            <div style="
+                width: 36px; height: 36px; 
+                background: #166534; 
+                border-radius: 8px; 
+                display: flex; align-items: center; justify-content: center;
+                color: white;
+                box-shadow: 0 2px 5px rgba(22, 101, 52, 0.2);
+            ">
+                <i data-lucide="church" style="width: 20px; height: 20px;"></i>
             </div>
-            <span class="sidebar-text">App Louvor</span>
+
+            <div style="display: flex; flex-direction: column; line-height: 1.1;">
+                <span class="sidebar-text" style="color:#166534;">PIB Oliveira</span>
+                <span class="sidebar-text" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">App Louvor</span>
+            </div>
         </div>
+
         <button onclick="toggleSidebarDesktop()" class="btn-toggle-desktop ripple">
             <i data-lucide="chevrons-left-right" style="width: 20px; height: 20px;"></i>
         </button>
@@ -36,12 +66,12 @@ $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name'
 
     <!-- 1. Perfil -->
     <a href="perfil.php" class="sidebar-profile ripple">
-        <img src="<?= $userPhoto ?>" alt="Foto" class="profile-img">
+        <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto" class="profile-img" style="object-fit: cover;">
         <div class="profile-info sidebar-text">
             <div class="profile-name"><?= htmlspecialchars($currentUser['name']) ?></div>
             <div class="profile-meta"><?= htmlspecialchars($currentUser['phone']) ?></div>
         </div>
-        <i data-lucide="chevron-right" class="profile-arrow sidebar-text" style="width: 16px;"></i>
+        <i data-lucide="chevron-right" class="profile-arrow sidebar-text" style="width: 16px; color: #cbd5e1;"></i>
     </a>
 
     <!-- 2. Menu -->
