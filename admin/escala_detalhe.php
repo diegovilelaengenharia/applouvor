@@ -653,9 +653,9 @@ renderAppHeader('Detalhes da Escala');
         <!-- Botão Editar -->
         <button onclick="openEditModal()" class="ripple" style="
             flex: 1;
-            background: white;
-            border: 1px solid #fbbf24;
-            color: #d97706;
+            background: #fbbf24;
+            border: none;
+            color: #78350f;
             padding: 16px;
             border-radius: 12px;
             font-weight: 700;
@@ -667,7 +667,7 @@ renderAppHeader('Detalhes da Escala');
             gap: 10px;
             transition: all 0.2s;
             box-shadow: 0 2px 4px rgba(251, 191, 36, 0.1);
-        " onmouseover="this.style.background='#fffbeb'" onmouseout="this.style.background='white'">
+        " onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">
             <i data-lucide="edit-3" style="width: 20px;"></i> Editar Detalhes da Escala
         </button>
 
@@ -676,9 +676,9 @@ renderAppHeader('Detalhes da Escala');
             <input type="hidden" name="action" value="delete_schedule">
             <button type="submit" class="ripple" style="
                 width: 100%;
-                background: white;
-                border: 1px solid #fecaca;
-                color: #dc2626;
+                background: #ef4444;
+                border: none;
+                color: white;
                 padding: 16px;
                 border-radius: 12px;
                 font-weight: 700;
@@ -689,7 +689,7 @@ renderAppHeader('Detalhes da Escala');
                 justify-content: center;
                 gap: 10px;
                 transition: all 0.2s;
-            " onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+            " onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#fbbf24'">
                 <i data-lucide="trash-2" style="width: 20px;"></i> Excluir Escala
             </button>
         </form>
