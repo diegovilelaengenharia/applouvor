@@ -62,211 +62,209 @@ $nomeUser = explode(' ', $_SESSION['user_name'])[0];
 renderAppHeader('Início');
 ?>
 
-<!-- Estilos Específicos para a Nova Home -->
+<!-- Estilos Específicos para a Nova Home (Moderate) -->
 <style>
-    /* Card Hover Effect */
+    /* Card Interativo (Padrão Clean) */
     .interact-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        /* Mais espaçamento */
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        transform: translateY(0);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        border: 1px solid transparent;
-        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         position: relative;
         overflow: hidden;
+        box-shadow: var(--shadow-sm);
     }
 
     .interact-card:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        z-index: 10;
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-light);
     }
 
-    /* Gradient Backgrounds & Text */
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
-    }
-
-    .bg-gradient-success {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    }
-
-    .bg-gradient-warning {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    }
-
-    .bg-gradient-danger {
-        background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-    }
-
-    .bg-gradient-info {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    }
-
-    /* Glass Effect Element */
-    .glass-pill {
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    /* Icon Circle */
-    .icon-circle {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
+    /* Icon Box (Quadrado arredondado suave) */
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        margin-bottom: 12px;
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        margin-bottom: 16px;
+        font-size: 24px;
+        transition: transform 0.3s ease;
     }
 
-    .interact-card:hover .icon-circle {
-        transform: scale(1.1) rotate(5deg);
+    .interact-card:hover .icon-box {
+        transform: scale(1.1);
     }
 
     /* Typography */
     .card-label {
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
         margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .card-value {
-        font-size: 1.25rem;
-        font-weight: 800;
-        color: white;
+        font-size: 1.5rem;
+        /* 24px */
+        font-weight: 700;
+        color: var(--text-main);
         line-height: 1.2;
     }
 </style>
 
-<div style="max-width: 900px; margin: 0 auto; padding: 16px;">
+<div style="max-width: 900px; margin: 0 auto;">
 
-    <!-- 1. HERO SECTION: Saudação e Próxima Escala -->
+    <!-- 1. HERO SECTION: Saudação -->
     <div style="margin-bottom: 32px;">
-        <h1 style="font-size: 1.75rem; font-weight: 800; color: #1e293b; margin-bottom: 4px;">
-            <?= $saudacao ?>, <span style="color: #4f46e5;"><?= $nomeUser ?></span>! 👋
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+            <?= $saudacao ?>, <span style="color: var(--primary);"><?= $nomeUser ?></span>!
         </h1>
-        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 24px;">
-            Aqui está o que está rolando no ministério hoje.
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Confira o que temos para hoje.
         </p>
 
         <?php if ($nextSchedule):
             $date = new DateTime($nextSchedule['event_date']);
             $isToday = $date->format('Y-m-d') === date('Y-m-d');
         ?>
-            <!-- CARD HERO -->
+            <!-- CARD HERO (Moderate Emerald) -->
             <a href="escalas.php?mine=1" class="interact-card" style="
-                display: block;
-                background: linear-gradient(120deg, #4f46e5, #ec4899);
-                border-radius: 24px;
-                padding: 28px;
-                text-decoration: none;
+                background: var(--primary); 
+                border: none; 
+                margin-top: 24px;
                 color: white;
-                position: relative;
+                min-height: 180px;
+                display: block;
             ">
-                <!-- Decorative Circle -->
-                <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.1);"></div>
+                <!-- Background Pattern sutil -->
+                <div style="position: absolute; right: -20px; top: -20px; opacity: 0.1;">
+                    <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </div>
 
                 <div style="position: relative; z-index: 2;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <div class="glass-pill" style="display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 12px; color: white;">
-                                <?php if ($isToday): ?>
-                                    <span style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #4ade80;"></span>
-                                    É HOJE!
-                                <?php else: ?>
-                                    PRÓXIMA ESCALA
-                                <?php endif; ?>
-                            </div>
+                    <!-- Badge -->
+                    <div style="
+                        display: inline-flex; align-items: center; 
+                        padding: 6px 12px; border-radius: 20px; 
+                        background: rgba(255,255,255,0.2); 
+                        backdrop-filter: blur(4px);
+                        font-size: 0.8rem; font-weight: 700; 
+                        margin-bottom: 16px; color: white;
+                    ">
+                        <?php if ($isToday): ?>
+                            <span style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 8px #4ade80;"></span>
+                            É HOJE
+                        <?php else: ?>
+                            PRÓXIMA ESCALA
+                        <?php endif; ?>
+                    </div>
 
-                            <h2 style="font-size: 1.6rem; font-weight: 800; margin: 0 0 8px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <?= htmlspecialchars($nextSchedule['event_type']) ?>
-                            </h2>
+                    <h2 style="font-size: 1.75rem; font-weight: 700; margin: 0 0 8px 0; color: white; letter-spacing: -0.5px;">
+                        <?= htmlspecialchars($nextSchedule['event_type']) ?>
+                    </h2>
 
-                            <div style="display: flex; gap: 16px; font-size: 1rem; opacity: 0.95; font-weight: 500;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i data-lucide="calendar" style="width: 18px;"></i>
-                                    <?= $date->format('d/m') ?>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i data-lucide="clock" style="width: 18px;"></i>
-                                    19:00
-                                </div>
-                            </div>
+                    <div style="display: flex; gap: 20px; font-size: 1.05rem; opacity: 0.9;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="calendar" style="width: 20px;"></i>
+                            <?= $date->format('d/m') ?>
                         </div>
-
-                        <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <i data-lucide="mic-2" style="width: 32px; height: 32px; color: white;"></i>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="clock" style="width: 20px;"></i>
+                            19:00
                         </div>
                     </div>
                 </div>
             </a>
         <?php else: ?>
-            <div style="background: #f1f5f9; border-radius: 20px; padding: 24px; text-align: center; color: #64748b;">
-                <i data-lucide="coffee" style="width: 32px; height: 32px; margin-bottom: 8px; color: #94a3b8;"></i>
-                <p>Nenhuma escala agendada para os próximos dias. Descanse!</p>
+            <div style="
+                background: var(--bg-surface); 
+                border: 1px dashed var(--border-color); 
+                border-radius: var(--radius-lg); 
+                padding: 32px; 
+                text-align: center; 
+                margin-top: 24px;
+                color: var(--text-muted);
+            ">
+                <i data-lucide="coffee" style="width: 40px; height: 40px; margin-bottom: 12px; color: var(--text-muted); opacity: 0.5;"></i>
+                <p style="margin: 0; font-size: 1rem;">Tudo tranquilo por aqui. Nenhuma escala próxima.</p>
             </div>
         <?php endif; ?>
     </div>
 
 
-    <!-- 2. GRID INFO: Cards Coloridos -->
-    <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 16px; letter-spacing: 0.5px; text-transform: uppercase;">Visão Geral</h3>
+    <!-- 2. GRID INFO (Clean White Cards) -->
+    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px;">Visão Geral</h3>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 32px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-bottom: 40px;">
 
-        <!-- Minhas Escalas (Agora o 1º) -->
-        <a href="escalas.php?mine=1" class="interact-card bg-gradient-info" style="border-radius: 20px; padding: 20px; text-decoration: none;">
-            <div class="icon-circle" style="color: #2563eb;">
-                <i data-lucide="calendar-check" style="width: 24px;"></i>
+        <!-- Minha Agenda -->
+        <a href="escalas.php?mine=1" class="interact-card">
+            <div class="icon-box" style="background: #eff6ff; color: #2563eb;"> <!-- Blue -->
+                <i data-lucide="calendar-check"></i>
             </div>
-            <div class="card-label">Minha Agenda</div>
-            <div class="card-value">Ver tudo</div>
+            <div>
+                <div class="card-label">Minha Agenda</div>
+                <div class="card-value" style="font-size: 1.25rem;">Ver Tudo</div>
+            </div>
         </a>
 
         <!-- Avisos -->
-        <a href="avisos.php" class="interact-card bg-gradient-warning" style="border-radius: 20px; padding: 20px; text-decoration: none;">
-            <div class="icon-circle" style="color: #d97706;">
-                <i data-lucide="bell" style="width: 24px;"></i>
+        <a href="avisos.php" class="interact-card">
+            <div class="icon-box" style="background: #fff7ed; color: #ea580c;"> <!-- Orange -->
+                <i data-lucide="bell"></i>
             </div>
-            <div class="card-label">Mural</div>
-            <div class="card-value">
-                <?= $totalAvisos > 0 ? $totalAvisos . ' novos' : 'Em dia' ?>
+            <div>
+                <div class="card-label">Mural</div>
+                <div class="card-value" style="font-size: 1.25rem;">
+                    <?= $totalAvisos > 0 ? $totalAvisos . ' novos' : 'Em dia' ?>
+                </div>
             </div>
         </a>
 
         <!-- Aniversários -->
-        <a href="aniversarios.php" class="interact-card bg-gradient-danger" style="border-radius: 20px; padding: 20px; text-decoration: none;">
-            <div class="icon-circle" style="color: #db2777;">
-                <i data-lucide="cake" style="width: 24px;"></i>
+        <a href="aniversarios.php" class="interact-card">
+            <div class="icon-box" style="background: #fdf2f8; color: #db2777;"> <!-- Pink -->
+                <i data-lucide="cake"></i>
             </div>
-            <div class="card-label">Nivers de <?= strtolower(strftime('%b')) ?></div>
-            <div class="card-value">
-                <?= $niverCount > 0 ? $niverCount . ' festa(s)' : 'Nenhum' ?>
+            <div>
+                <div class="card-label">Aniversários</div>
+                <div class="card-value" style="font-size: 1.25rem;">
+                    <?= $niverCount > 0 ? $niverCount : 'Nenhum' ?>
+                </div>
             </div>
         </a>
 
     </div>
 
     <!-- 3. ACTIONS: Customizável -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin: 0; letter-spacing: 0.5px; text-transform: uppercase;">Acesso Rápido</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin: 0;">Acesso Rápido</h3>
         <button onclick="openSheet('quickAccessSheet')" class="ripple" style="
-            background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: #64748b; cursor: pointer;
+            background: var(--bg-surface); border: 1px solid var(--border-color);
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; 
+            color: var(--text-muted); cursor: pointer;
         ">
-            <i data-lucide="settings-2" style="width: 16px;"></i>
+            <i data-lucide="settings-2" style="width: 18px;"></i>
         </button>
     </div>
 
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
         <?php
         // Buscar Preferências
         $stmtPrefs = $pdo->prepare("SELECT dashboard_prefs FROM users WHERE id = ?");
@@ -281,41 +279,41 @@ renderAppHeader('Início');
             $quickAccessItems = $userPrefs['quick_access'];
         }
 
-        // Definição de todos os itens disponíveis
+        // Definição Modificada - Cores mais suaves
         $allItems = [
             'repertorio' => [
                 'label' => 'Repertório',
                 'icon' => 'music-2',
-                'color' => '#64748b',
-                'bg' => '#f1f5f9',
+                'color' => '#047857', // Primary
+                'bg' => '#d1fae5',    // Primary Light
                 'url' => 'repertorio.php'
             ],
             'ausencia' => [
                 'label' => 'Avisar Ausência',
                 'icon' => 'calendar-off',
-                'color' => '#be123c',
-                'bg' => '#fff1f2',
+                'color' => '#be123c', // Red 700
+                'bg' => '#ffe4e6',    // Red 100
                 'url' => 'indisponibilidade.php'
             ],
             'escalas' => [
                 'label' => 'Escalas',
                 'icon' => 'calendar',
-                'color' => '#059669',
-                'bg' => '#ecfdf5',
+                'color' => '#0369a1', // Sky 700
+                'bg' => '#e0f2fe',    // Sky 100
                 'url' => 'escalas.php'
             ],
             'membros' => [
                 'label' => 'Membros',
                 'icon' => 'users',
-                'color' => '#4f46e5',
-                'bg' => '#eef2ff',
+                'color' => '#4338ca', // Indigo 700
+                'bg' => '#e0e7ff',    // Indigo 100
                 'url' => 'membros.php'
             ],
             'perfil' => [
                 'label' => 'Meu Perfil',
                 'icon' => 'user',
-                'color' => '#d97706',
-                'bg' => '#fffbeb',
+                'color' => '#b45309', // Amber 700
+                'bg' => '#fef3c7',    // Amber 100
                 'url' => 'perfil.php'
             ]
         ];
@@ -326,15 +324,19 @@ renderAppHeader('Início');
                 $item = $allItems[$key];
         ?>
                 <a href="<?= $item['url'] ?>" class="ripple" style="
-                flex: 1; min-width: 140px;
-                background: white; border: 1px solid #e2e8f0;
-                padding: 16px; border-radius: 16px;
-                text-decoration: none; color: #475569;
-                display: flex; align-items: center; gap: 12px;
-                font-weight: 600; font-size: 0.95rem;
-                transition: all 0.2s;
-            ">
-                    <div style="background: <?= $item['bg'] ?>; padding: 8px; border-radius: 10px;">
+                    flex: 1; min-width: 140px;
+                    background: var(--bg-surface); 
+                    border: 1px solid var(--border-color);
+                    padding: 20px; 
+                    border-radius: var(--radius-lg);
+                    text-decoration: none; 
+                    color: var(--text-main);
+                    display: flex; align-items: center; gap: 16px;
+                    font-weight: 600; font-size: 0.95rem;
+                    transition: all 0.2s;
+                    box-shadow: var(--shadow-sm);
+                ">
+                    <div style="background: <?= $item['bg'] ?>; padding: 10px; border-radius: 10px;">
                         <i data-lucide="<?= $item['icon'] ?>" style="width: 20px; color: <?= $item['color'] ?>;"></i>
                     </div>
                     <?= $item['label'] ?>
@@ -345,8 +347,10 @@ renderAppHeader('Início');
         <!-- Botão Adicionar se estiver vazio -->
         <?php if (empty($quickAccessItems)): ?>
             <button onclick="openSheet('quickAccessSheet')" style="
-                flex: 1; min-width: 140px; padding: 16px; border: 1px dashed #cbd5e1; 
-                background: transparent; color: #94a3b8; border-radius: 16px; font-weight: 600; cursor: pointer;
+                flex: 1; min-width: 140px; padding: 20px; 
+                border: 2px dashed var(--border-color); 
+                background: transparent; color: var(--text-muted); 
+                border-radius: var(--radius-lg); font-weight: 600; cursor: pointer;
             ">
                 + Personalizar
             </button>

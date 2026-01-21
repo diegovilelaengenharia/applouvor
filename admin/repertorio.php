@@ -88,18 +88,29 @@ renderPageHeader('Repertório');
         <?php endif; ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($songs as $song): ?>
-                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; border-radius: 12px; background: white; border: 1px solid white; transition: background 0.2s;">
+                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="
+                    display: flex; align-items: center; gap: 16px; text-decoration: none; 
+                    padding: 16px; /* Mais Espaçamento */
+                    border-radius: var(--radius-md); 
+                    background: var(--bg-surface); 
+                    border: 1px solid var(--border-color); /* Borda Sutil */
+                    transition: background 0.2s;
+                ">
                     <!-- Cover Placeholder -->
-                    <div style="width: 48px; height: 48px; background: url('https://ui-avatars.com/api/?name=<?= urlencode($song['title']) ?>&background=047857&color=fff&size=96') center/cover; border-radius: 8px;"></div>
+                    <div style="
+                        width: 48px; height: 48px; flex-shrink: 0;
+                        background: url('https://ui-avatars.com/api/?name=<?= urlencode($song['title']) ?>&background=047857&color=fff&size=96') center/cover; 
+                        border-radius: 10px;
+                    "></div>
 
-                    <div style="flex: 1;">
-                        <div style="font-weight: 700; color: #1e293b; font-size: 1rem;"><?= htmlspecialchars($song['title']) ?></div>
-                        <div style="color: #64748b; font-size: 0.85rem;"><?= htmlspecialchars($song['artist']) ?></div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; color: var(--text-main); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
+                        <div style="color: var(--text-muted); font-size: 0.85rem;"><?= htmlspecialchars($song['artist']) ?></div>
                     </div>
 
                     <div style="text-align: right; min-width: 60px;">
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #f59e0b;">Tom: <?= $song['tone'] ?: '-' ?></div>
-                        <div style="font-size: 0.75rem; color: #3b82f6;">BPM: <?= $song['bpm'] ?: '-' ?></div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #d97706;">Tom: <?= $song['tone'] ?: '-' ?></div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">BPM: <?= $song['bpm'] ?: '-' ?></div>
                     </div>
                 </a>
                 <div style="height: 1px; background: #f1f5f9; margin: 0 12px;"></div>
