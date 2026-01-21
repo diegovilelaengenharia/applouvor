@@ -610,7 +610,7 @@ $distribuicao_instrumentos = $stmt->fetchAll();
                     <i data-lucide="arrow-left" style="width: 20px;"></i>
                     Voltar
                 </a>
-                <button onclick="gerarPDF()" style="
+                <button onclick="window.print()" style="
                     background: rgba(255,255,255,0.2);
                     border: 2px solid white;
                     color: white;
@@ -625,8 +625,8 @@ $distribuicao_instrumentos = $stmt->fetchAll();
                     transition: all 0.2s;
                     backdrop-filter: blur(10px);
                 " onmouseover="this.style.background='white'; this.style.color='#667eea';" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white';">
-                    <i data-lucide="download" style="width: 18px;"></i>
-                    Baixar PDF
+                    <i data-lucide="printer" style="width: 18px;"></i>
+                    Imprimir / PDF
                 </button>
             </div>
             <h1>📊 Boletim Estatístico do Ministério</h1>

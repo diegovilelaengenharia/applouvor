@@ -91,8 +91,18 @@ if (!empty($currentUser['photo'])) {
         <a href="aniversarios.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
             <i data-lucide="cake"></i> <span class="sidebar-text">Aniversários</span>
         </a>
+        <div class="nav-divider"></div>
+
+        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
+
+        <a href="devocionais.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
+            <i data-lucide="book-heart"></i> <span class="sidebar-text">Devocional</span>
+        </a>
+        <a href="oracao.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
+            <i data-lucide="hands-praying"></i> <span class="sidebar-text">Oração</span>
+        </a>
         <a href="leitura.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
-            <i data-lucide="book-open"></i> <span class="sidebar-text">Leitura</span>
+            <i data-lucide="book-open"></i> <span class="sidebar-text">Leitura Bíblica</span>
         </a>
     </nav>
 
