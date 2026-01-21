@@ -159,26 +159,26 @@ renderAppHeader('Detalhes');
 </div>
 
 <!-- MAIN GRID LAYOUT -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; align-items: start;">
 
     <!-- LEFT COLUMN: Observations & Participants -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
 
         <!-- Observations Card -->
         <?php if (!empty($schedule['notes'])): ?>
-            <div style="background: #ffffff; color: #4b5563; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin: 0 0 12px 0;">Observações</h3>
-                <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></p>
+            <div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin: 0 0 8px 0;">Observações</h3>
+                <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></p>
             </div>
         <?php endif; ?>
 
         <!-- Participants Card -->
-        <div style="background: #ffffff; border-radius: 20px; padding: 24px; position: relative; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">Participantes <span style="font-size: 0.9rem; color: #64748b; font-weight: 500;">(<?= count($team) ?>)</span></h3>
+        <div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 14px; position: relative; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">Participantes <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= count($team) ?>)</span></h3>
                 <button onclick="openModal('modalMembers')" style="
-                        background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; 
-                        padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; cursor: pointer;
+                        background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border-color); 
+                        padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; cursor: pointer;
                         transition: all 0.2s;
                     ">
                     + Editar
@@ -186,25 +186,25 @@ renderAppHeader('Detalhes');
             </div>
 
             <?php if (empty($team)): ?>
-                <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Ninguém escalado ainda.</p>
+                <div style="text-align: center; padding: 12px; background: var(--bg-body); border-radius: 8px; border: 1px dashed var(--border-color);">
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">Ninguém escalado ainda.</p>
                 </div>
             <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
                     <?php foreach ($team as $member): ?>
-                        <div style="display: flex; align-items: center; gap: 14px; padding: 8px 0;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 0;">
                             <div style="
-                                    width: 44px; height: 44px; 
+                                    width: 36px; height: 36px; 
                                     background: #eff6ff; color: #2563eb; border-radius: 50%; 
                                     display: flex; align-items: center; justify-content: center; 
-                                    font-weight: 700; font-size: 1rem;
+                                    font-weight: 700; font-size: 0.85rem;
                                     flex-shrink: 0; border: 1px solid #dbeafe;
                                 ">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 600; color: #0f172a; font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
+                                <div style="font-weight: 600; color: var(--text-main); font-size: 0.85rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
                             </div>
                             <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
                                 <input type="hidden" name="action" value="remove_member">
@@ -221,30 +221,30 @@ renderAppHeader('Detalhes');
     </div>
 
     <!-- RIGHT COLUMN: Roteiro (Songs) -->
-    <div style="background: #ffffff; border-radius: 20px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">Roteiro <span style="font-size: 0.9rem; color: #64748b; font-weight: 500;">(<?= count($songs) ?>)</span></h3>
+    <div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">Roteiro <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= count($songs) ?>)</span></h3>
             <button onclick="openModal('modalSongs')" style="
                     background: #0f172a; color: white; border: none; 
-                    padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
-                    display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+                    padding: 6px 12px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; cursor: pointer;
+                    display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
                 ">
-                <i data-lucide="music" style="width: 14px;"></i> Add Música
+                <i data-lucide="music" style="width: 12px;"></i> + Música
             </button>
         </div>
 
         <?php if (empty($songs)): ?>
-            <div style="text-align: center; padding: 40px 20px; border: 2px dashed #e2e8f0; border-radius: 12px; background: #f8fafc;">
-                <i data-lucide="music-2" style="width: 32px; height: 32px; color: #94a3b8; margin-bottom: 8px;"></i>
-                <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Nenhuma música selecionada.</p>
+            <div style="text-align: center; padding: 20px 12px; border: 1px dashed var(--border-color); border-radius: 8px; background: var(--bg-body);">
+                <i data-lucide="music-2" style="width: 24px; height: 24px; color: var(--text-muted); margin-bottom: 6px;"></i>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">Nenhuma música selecionada.</p>
             </div>
         <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <?php foreach ($songs as $index => $song): ?>
-                    <div style="display: flex; align-items: flex-start; gap: 16px; position: relative;">
+                    <div style="display: flex; align-items: flex-start; gap: 10px; position: relative;">
                         <div style="
-                                font-size: 1.5rem; font-weight: 800; color: #e2e8f0; 
-                                width: 30px; text-align: center; line-height: 1; margin-top: 2px;
+                                font-size: 1.1rem; font-weight: 800; color: #e2e8f0; 
+                                width: 24px; text-align: center; line-height: 1; margin-top: 2px;
                             ">
                             <?= $index + 1 ?>ª
                         </div>

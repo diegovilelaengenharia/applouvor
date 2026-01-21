@@ -375,11 +375,11 @@ function renderAppHeader($title, $backUrl = null)
                 </button>
                 <div class="page-title"><?= htmlspecialchars($title) ?></div>
 
-                <!-- Ações do Header (opcional - Search) -->
+                <!-- Stats Button (Repertorio only) -->
                 <?php if (strpos($_SERVER['PHP_SELF'], 'repertorio.php') !== false): ?>
-                    <div style="background: #ecfdf5; padding: 6px; border-radius: 8px;">
-                        <i data-lucide="search" style="color: #047857; width: 20px;"></i>
-                    </div>
+                    <a href="repertorio_stats.php" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #ecfdf5; border-radius: 8px; text-decoration: none; margin-right: 8px;">
+                        <i data-lucide="bar-chart-2" style="color: #047857; width: 18px;"></i>
+                    </a>
                 <?php endif; ?>
 
                 <!-- Mobile Profile Avatar (New) -->
