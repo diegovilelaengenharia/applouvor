@@ -198,46 +198,7 @@ renderAppHeader('Detalhes da Escala');
     }
 </style>
 
-<!-- Hero Header -->
-<div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: visible;
-">
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <a href="escala.php" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: #047857; 
-            background: white; 
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        ">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
-        </a>
 
-        <div style="display: flex; align-items: center;">
-            <?php renderGlobalNavButtons(); ?>
-        </div>
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Detalhes da Escala</h1>
-            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
-        </div>
-    </div>
 </div>
 
 
@@ -271,8 +232,30 @@ renderAppHeader('Detalhes da Escala');
         <!-- Header com Data -->
         
         <div style="background: linear-gradient(135deg, #047857 0%, #065f46 100%); padding: 24px; color: white; position: relative;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; position: relative; z-index: 10;">
+        <a href="escala.php" class="ripple" style="
+            padding: 10px 20px;
+            border-radius: 50px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            color: #047857; 
+            background: white; 
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        ">
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
+        </a>
+
+        <div style="display: flex; align-items: center;">
+            <?php renderGlobalNavButtons(); ?>
+        </div>
+    </div>
             <!-- Menu de Três Pontinhos -->
-            <div style="position: absolute; top: 20px; right: 20px;">
+            <div style="position: absolute; top: 24px; right: 20px; z-index: 20;">
                 <button onclick="toggleMenu()" class="ripple" style="background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(10px);">
                     <i data-lucide="more-vertical" style="width: 20px; color: white;"></i>
                 </button>
