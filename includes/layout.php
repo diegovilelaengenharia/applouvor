@@ -35,6 +35,43 @@ function renderAppHeader($title, $backUrl = null)
                 --bg-light: #f8fafc;
                 --text-primary: #1e293b;
                 --text-secondary: #64748b;
+                --text-secondary: #64748b;
+            }
+
+            /* Global Dark Mode Overrides */
+            body.dark-mode {
+                --bg-light: #0f172a;
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+            }
+
+            body.dark-mode .sidebar {
+                background: #1e293b;
+                border-color: #334155;
+            }
+
+            body.dark-mode .sidebar .nav-item {
+                color: #cbd5e1;
+            }
+
+            body.dark-mode .sidebar .nav-item:hover {
+                background: #334155;
+            }
+
+            body.dark-mode .sidebar .sidebar-text {
+                color: #e2e8f0 !important;
+            }
+
+            body.dark-mode header {
+                /* Page Headers */
+                background: #1e293b !important;
+                border-bottom-color: #334155 !important;
+            }
+
+            body.dark-mode h1,
+            body.dark-mode h2,
+            body.dark-mode h3 {
+                color: #f8fafc !important;
             }
 
             * {

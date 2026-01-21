@@ -272,7 +272,7 @@ try {
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
             <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 4px;">Paz, Líder!</div>
-            <h1 style="margin: 0; font-size: 1.75rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            <h1 style="margin: 0; font-size: 1.4rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                 Gestão do Ministério
             </h1>
             <p style="margin: 8px 0 0 0; opacity: 0.7; font-size: 0.95rem; max-width: 400px;">
@@ -288,7 +288,7 @@ try {
 <div id="app-content-inner" style="padding: 0 16px 40px 16px; max-width: 1000px; margin: 0 auto;">
 
     <!-- 1. Stats Row -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px;">
+    <div class="stats-row">
 
         <!-- Next Event Card -->
         <a href="escalas.php" class="stat-card">
@@ -341,7 +341,7 @@ try {
 
     </div>
 
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+    <div class="main-layout">
 
         <!-- Left Column: Tools -->
         <div>
@@ -420,7 +420,7 @@ try {
         <div>
             <div class="section-title"><i data-lucide="inbox"></i> Notificações</div>
 
-            <div style="background: white; border-radius: 16px; padding: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;">
+            <div class="notif-box" style="background: white; border-radius: 16px; padding: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;">
                 <?php if (empty($notifications)): ?>
                     <div style="padding: 24px; text-align: center; color: #94a3b8;">
                         <i data-lucide="check-circle" style="width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.5;"></i>
