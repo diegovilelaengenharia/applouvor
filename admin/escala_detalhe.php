@@ -253,38 +253,7 @@ renderAppHeader('Detalhes da Escala');
         <div style="display: flex; align-items: center;">
             <?php renderGlobalNavButtons(); ?>
 
-    <div style="position: relative; margin-left: 8px;">
-        <button onclick="toggleMenu()" class="ripple" style="
-            background: rgba(255,255,255,0.2); 
-            border: none; 
-            width: 40px; 
-            height: 40px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            transition: all 0.2s;
-            color: white;
-        ">
-            <i data-lucide="more-vertical" style="width: 20px;"></i>
-        </button>
-        <!-- Dropdown Menu (Ajustado) -->
-        <div id="actionMenu" style="display: none; position: absolute; top: 50px; right: 0; background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); min-width: 200px; overflow: hidden; z-index: 1000; border: 1px solid var(--border-subtle); transform-origin: top right; animation: menuIn 0.2s ease;">
-            <button onclick="openEditModal(); toggleMenu();" class="ripple" style="width: 100%; background: transparent; border: none; padding: 14px 20px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-primary); font-weight: 600; font-size: 0.95rem; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-tertiary)';" onmouseout="this.style.background='transparent';">
-                <i data-lucide="edit-3" style="width: 18px; color: #f59e0b;"></i>
-                Editar Escala
-            </button>
-            <div style="height: 1px; background: var(--border-subtle); margin: 0 16px;"></div>
-            <form method="POST" onsubmit="return confirm('Excluir esta escala?')" style="margin: 0;">
-                <input type="hidden" name="action" value="delete_schedule">
-                <button type="submit" class="ripple" style="width: 100%; background: transparent; border: none; padding: 14px 20px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; color: #ef4444; font-weight: 600; font-size: 0.95rem; transition: background 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
-                    <i data-lucide="trash-2" style="width: 18px;"></i>
-                    Excluir Escala
-                </button>
-            </form>
-        </div>
-    </div>
+    
     
         </div>
     </div>
