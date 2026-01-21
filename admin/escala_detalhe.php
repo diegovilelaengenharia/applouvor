@@ -252,12 +252,16 @@ renderAppHeader('Detalhes da Escala');
 
         <div style="display: flex; align-items: center;">
             <?php renderGlobalNavButtons(); ?>
-<div style="margin-left: 8px; position: relative;"><button onclick="toggleMenu()" class="ripple" style="background: transparent; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; ">
+        </div>
+    </div>
+            <!-- Menu de Três Pontinhos -->
+            <div style="position: absolute; top: 24px; right: 20px; z-index: 20;">
+                <button onclick="toggleMenu()" class="ripple" style="background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(10px);">
                     <i data-lucide="more-vertical" style="width: 20px; color: white;"></i>
                 </button>
                 
                 <!-- Dropdown Menu -->
-                <div id="actionMenu" style="/* display: none; */ position: relative; top: 40px; right: 0; width: max-content; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); min-width: 180px; overflow: hidden; z-index: 1000; border: 1px solid var(--border-subtle);">
+                <div id="actionMenu" style="/* display: none; */ position: absolute; top: 45px; right: 0; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); min-width: 180px; overflow: hidden; z-index: 1000; border: 1px solid var(--border-subtle);">
                     <button onclick="openEditModal(); toggleMenu();" class="ripple" style="width: 100%; background: transparent; border: none; padding: 14px 18px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-primary); font-weight: 600; font-size: 0.9rem; transition: all 0.2s;" onmouseover="this.style.background='var(--bg-tertiary)';" onmouseout="this.style.background='transparent';">
                         <i data-lucide="edit-3" style="width: 18px; color: #FFC107;"></i>
                         Editar Escala
@@ -270,11 +274,8 @@ renderAppHeader('Detalhes da Escala');
                             Excluir Escala
                         </button>
                     </form>
-                </div></div>
-        </div>
-    </div>
-            <!-- Menu de Três Pontinhos -->
-            
+                </div>
+            </div>
     
             <div style="display: flex; gap: 20px; align-items: flex-start;">
                 <!-- Badge de Data -->
@@ -367,7 +368,7 @@ renderAppHeader('Detalhes da Escala');
         <!-- Observações -->
         <?php if (!empty($schedule['notes'])): ?>
             <div style="padding: 24px; border-bottom: 1px solid var(--border-subtle);">
-                <div style="background: #fffbeb; border-left: 4px solid #FACC15; padding: 16px; border-radius: 0 12px 12px 0; display: flex; gap: 12px;">
+                <div style="background: rgba(250, 204, 21, 0.1); border-left: 4px solid #FACC15; padding: 16px; border-radius: 0 12px 12px 0; display: flex; gap: 12px;">
                     <i data-lucide="info" style="color: #EAB308; width: 20px; flex-shrink: 0; margin-top: 2px;"></i>
                     <div>
                         <div style="font-weight: 700; color: #EAB308; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 6px;">Observações</div>
