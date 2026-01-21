@@ -37,8 +37,6 @@ function renderAppHeader($title, $backUrl = null)
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <style>
-            <style>
-
             /* --- DESIGN SYSTEM 2.0 (Moderate & Mobile First) --- */
             :root {
                 /* Cores Principais - Emerald (Sofisticado) */
@@ -203,37 +201,36 @@ function renderAppHeader($title, $backUrl = null)
                     margin-left: 0 !important;
                 }
             }
-        </style>
 
-        /* Utilitários Universais */
-        .ripple {
-        position: relative;
-        overflow: hidden;
-        transform: translate3d(0, 0, 0);
-        }
+            /* Utilitários Universais */
+            .ripple {
+                position: relative;
+                overflow: hidden;
+                transform: translate3d(0, 0, 0);
+            }
 
-        .ripple:after {
-        content: "";
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-        background-repeat: no-repeat;
-        background-position: 50%;
-        transform: scale(10, 10);
-        opacity: 0;
-        transition: transform .5s, opacity 1s;
-        }
+            .ripple:after {
+                content: "";
+                display: block;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+                background-repeat: no-repeat;
+                background-position: 50%;
+                transform: scale(10, 10);
+                opacity: 0;
+                transition: transform .5s, opacity 1s;
+            }
 
-        .ripple:active:after {
-        transform: scale(0, 0);
-        opacity: 0.2;
-        transition: 0s;
-        }
+            .ripple:active:after {
+                transform: scale(0, 0);
+                opacity: 0.2;
+                transition: 0s;
+            }
         </style>
     </head>
 
