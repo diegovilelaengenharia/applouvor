@@ -56,27 +56,34 @@ renderAppHeader('Membros');
 
 <div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
 
-    <!-- Cabeçalho Principal com Busca e Add -->
+    <!-- Cabeçalho Principal (Substituído por renderPageHeader) -->
+    <?php
+    $actionBtn = '
+        <button onclick="openAddModal()" class="ripple" style="
+            background: var(--primary); 
+            color: white; border: none; padding: 12px 20px; 
+            border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
+            display: flex; align-items: center; gap: 8px; 
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        ">
+            <i data-lucide="plus" style="width: 18px;"></i>
+            <span style="display: none; @media(min-width: 480px) { display: inline; }">Novo Membro</span>
+        </button>';
+
+    renderPageHeader('Equipe', count($users) . ' membros cadastrados', $actionBtn);
+    ?>
+
     <div style="margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div style="display: none;"> <!-- Ocultando header manual antigo -->
             <div>
                 <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Equipe</h1>
                 <p style="color: var(--text-muted); margin-top: 2px; font-size: 0.9rem;">
                     <?= count($users) ?> membros cadastrados
                 </p>
             </div>
-            <button onclick="openAddModal()" class="ripple" style="
-                background: var(--primary); 
-                color: white; border: none; padding: 12px 20px; 
-                border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
-                display: flex; align-items: center; gap: 8px; 
-                box-shadow: var(--shadow-sm);
-                cursor: pointer;
-            ">
-                <i data-lucide="plus" style="width: 18px;"></i>
-                <span style="display: none; @media(min-width: 480px) { display: inline; }">Novo Membro</span>
-            </button>
         </div>
+
 
         <!-- Barra de Busca -->
         <div style="position: relative;">
@@ -98,7 +105,7 @@ renderAppHeader('Membros');
         <?php foreach ($users as $user): ?>
             <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    
+
                     <!-- Avatar Compacto -->
                     <div style="
                         width: 42px; height: 42px; border-radius: 50%; 
@@ -137,7 +144,7 @@ renderAppHeader('Membros');
                         <a href="tel:<?= $user['phone'] ?>" class="ripple icon-action" title="Ligar" style="color: var(--text-muted); background: var(--bg-body);">
                             <i data-lucide="phone" style="width: 16px;"></i>
                         </a>
-                        
+
                         <!-- Menu Trigger -->
                         <div style="position: relative;">
                             <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
@@ -242,8 +249,8 @@ renderAppHeader('Membros');
 
 <style>
     .member-grid {
-        display: grid; 
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 12px;
     }
 
@@ -263,18 +270,18 @@ renderAppHeader('Membros');
     }
 
     .icon-action {
-        width: 32px; 
-        height: 32px; 
-        border-radius: 8px; 
-        display: flex; 
-        align-items: center; 
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
         justify-content: center;
         border: none;
         cursor: pointer;
         transition: background 0.2s;
         text-decoration: none;
     }
-    
+
     .icon-action:hover {
         filter: brightness(0.95);
     }

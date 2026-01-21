@@ -98,27 +98,29 @@ renderAppHeader('Avisos');
 
 <div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
 
-    <!-- Header Principal -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Mural de Avisos</h1>
-            <p style="color: var(--text-muted); margin-top: 4px;">Fique por dentro do que acontece</p>
-        </div>
 
-        <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <button onclick="openCreateModal()" class="ripple" style="
-                background: var(--primary); 
-                color: white; border: none; padding: 12px 20px; 
-                border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
-                display: flex; align-items: center; gap: 8px; 
-                box-shadow: var(--shadow-sm);
-                cursor: pointer;
-            ">
-                <i data-lucide="plus" style="width: 18px;"></i>
-                <span style="display: none; @media(min-width: 480px) { display: inline; }">Novo Aviso</span>
-            </button>
-        <?php endif; ?>
-    </div>
+    <?php
+    $actionBtn = '';
+    if ($_SESSION['user_role'] === 'admin') {
+        $actionBtn = '
+        <button onclick="openCreateModal()" class="ripple" style="
+            background: var(--primary); 
+            color: white; border: none; padding: 12px 20px; 
+            border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem; 
+            display: flex; align-items: center; gap: 8px; 
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        ">
+            <i data-lucide="plus" style="width: 18px;"></i>
+            <span style="display: none; @media(min-width: 480px) { display: inline; }">Novo Aviso</span>
+        </button>';
+    }
+
+    renderPageHeader('Mural de Avisos', 'Fique por dentro do que acontece', $actionBtn);
+    ?>
+
+    <!-- Header Principal (Removido, substituído acima) -->
+
 
     <!-- Filtros de Navegação -->
     <div style="margin-bottom: 24px;">
