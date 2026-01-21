@@ -37,49 +37,56 @@ function renderAppHeader($title, $backUrl = null)
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <style>
+            <style>
+
+            /* --- DESIGN SYSTEM 2.0 (Moderate & Mobile First) --- */
             :root {
-                --primary-green: #047857;
-                --primary-dark: #064e3b;
-                --bg-light: #f8fafc;
-                --text-primary: #1e293b;
-                --text-secondary: #64748b;
-                --text-secondary: #64748b;
+                /* Cores Principais - Emerald (Sofisticado) */
+                --primary: #047857;
+                /* Emerald 700 */
+                --primary-hover: #065f46;
+                /* Emerald 800 */
+                --primary-light: #d1fae5;
+                /* Emerald 100 */
+                --primary-subtle: #ecfdf5;
+                /* Emerald 50 */
+
+                /* Tons Neutros - Slate (Leitura Confortável) */
+                --bg-body: #f8fafc;
+                /* Slate 50 */
+                --bg-surface: #ffffff;
+                /* White */
+                --text-main: #334155;
+                /* Slate 700 */
+                --text-muted: #64748b;
+                /* Slate 500 */
+                --border-color: #e2e8f0;
+                /* Slate 200 */
+
+                /* Espaçamento & Touch (Mobile Friendly) */
+                --touch-target: 48px;
+                /* Mínimo para Samsung M34 */
+                --radius-md: 12px;
+                --radius-lg: 16px;
+                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
 
-            /* Global Dark Mode Overrides */
+            /* Global Dark Mode */
             body.dark-mode {
-                --bg-light: #0f172a;
-                --text-primary: #f8fafc;
-                --text-secondary: #cbd5e1;
-            }
-
-            body.dark-mode .sidebar {
-                background: #1e293b;
-                border-color: #334155;
-            }
-
-            body.dark-mode .sidebar .nav-item {
-                color: #cbd5e1;
-            }
-
-            body.dark-mode .sidebar .nav-item:hover {
-                background: #334155;
-            }
-
-            body.dark-mode .sidebar .sidebar-text {
-                color: #e2e8f0 !important;
-            }
-
-            body.dark-mode header {
-                /* Page Headers */
-                background: #1e293b !important;
-                border-bottom-color: #334155 !important;
-            }
-
-            body.dark-mode h1,
-            body.dark-mode h2,
-            body.dark-mode h3 {
-                color: #f8fafc !important;
+                --bg-body: #0f172a;
+                /* Slate 900 */
+                --bg-surface: #1e293b;
+                /* Slate 800 */
+                --text-main: #f1f5f9;
+                /* Slate 100 */
+                --text-muted: #94a3b8;
+                /* Slate 400 */
+                --border-color: #334155;
+                /* Slate 700 */
+                --primary-light: #064e3b;
+                /* Emerald 900 (fundo) */
+                --primary-subtle: #064e3b;
             }
 
             * {
@@ -90,22 +97,54 @@ function renderAppHeader($title, $backUrl = null)
             body {
                 font-family: 'Inter', sans-serif;
                 margin: 0;
-                background-color: var(--bg-light);
-                color: var(--text-primary);
-                padding-bottom: 24px;
-                /* Espaço footer */
+                background-color: var(--bg-body);
+                color: var(--text-main);
+                font-size: 0.9375rem;
+                /* 15px - Melhor leitura */
+                line-height: 1.6;
+                padding-bottom: 32px;
             }
 
-            /* Main Content Container */
+            /* Tipografia Responsiva */
+            h1,
+            h2,
+            h3,
+            h4 {
+                color: var(--text-main);
+                margin: 0;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+            }
+
+            /* 24px */
+            h2 {
+                font-size: 1.25rem;
+                font-weight: 600;
+                letter-spacing: -0.5px;
+            }
+
+            /* 20px */
+            h3 {
+                font-size: 1.125rem;
+                font-weight: 600;
+            }
+
+            /* 18px */
+
+            /* Main Content */
             #app-content {
-                padding: 16px;
+                padding: 20px;
+                /* Mais respiro */
                 min-height: 100vh;
-                /* Margin-left é controlado via JS na sidebar.php para desktop */
+                margin-left: 0;
+                transition: margin-left 0.3s ease;
             }
 
             @media (min-width: 1025px) {
-
-                /* Margem inicial padrão para evitar FOUC (Flash of Unstyled Content) */
                 #app-content {
                     margin-left: 280px;
                 }
@@ -114,40 +153,44 @@ function renderAppHeader($title, $backUrl = null)
             /* Header Mobile */
             .mobile-header {
                 display: none;
-                /* Desktop usa sidebar fixa */
                 align-items: center;
                 gap: 16px;
-                padding: 16px;
-                background: white;
+                padding: 16px 20px;
+                background: var(--bg-surface);
                 position: sticky;
                 top: 0;
                 z-index: 90;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-                margin: -16px -16px 24px -16px;
-                /* Negativo para encostar nas bordas */
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: var(--shadow-sm);
+                margin: -20px -20px 24px -20px;
             }
 
             .btn-menu-trigger {
+                width: 44px;
+                height: 44px;
+                /* Touch Target Grande */
                 background: transparent;
                 border: none;
-                padding: 8px;
-                margin-left: -8px;
+                padding: 0;
+                margin-left: -12px;
                 cursor: pointer;
-                color: var(--text-primary);
+                color: var(--text-main);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 8px;
+                border-radius: 50%;
+                transition: background 0.2s;
             }
 
             .btn-menu-trigger:active {
-                background: #f1f5f9;
+                background: var(--border-color);
             }
 
             .page-title {
-                font-size: 1.1rem;
+                font-size: 1.125rem;
+                /* 18px */
                 font-weight: 700;
-                color: var(--text-primary);
+                color: var(--text-main);
                 flex: 1;
             }
 
@@ -156,43 +199,41 @@ function renderAppHeader($title, $backUrl = null)
                     display: flex;
                 }
 
-                /* Aparece no Mobile */
                 #app-content {
                     margin-left: 0 !important;
                 }
-
-                /* Remove margem desktop */
             }
+        </style>
 
-            /* Utilitários Universais */
-            .ripple {
-                position: relative;
-                overflow: hidden;
-                transform: translate3d(0, 0, 0);
-            }
+        /* Utilitários Universais */
+        .ripple {
+        position: relative;
+        overflow: hidden;
+        transform: translate3d(0, 0, 0);
+        }
 
-            .ripple:after {
-                content: "";
-                display: block;
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                pointer-events: none;
-                background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-                background-repeat: no-repeat;
-                background-position: 50%;
-                transform: scale(10, 10);
-                opacity: 0;
-                transition: transform .5s, opacity 1s;
-            }
+        .ripple:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+        background-repeat: no-repeat;
+        background-position: 50%;
+        transform: scale(10, 10);
+        opacity: 0;
+        transition: transform .5s, opacity 1s;
+        }
 
-            .ripple:active:after {
-                transform: scale(0, 0);
-                opacity: 0.2;
-                transition: 0s;
-            }
+        .ripple:active:after {
+        transform: scale(0, 0);
+        opacity: 0.2;
+        transition: 0s;
+        }
         </style>
     </head>
 

@@ -45,7 +45,7 @@ if (!empty($currentUser['avatar'])) {
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color:#166534;">PIB Oliveira</span>
+                <span class="sidebar-text" style="color:#047857;">PIB Oliveira</span>
                 <span class="sidebar-text" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">App Louvor</span>
             </div>
         </div>
@@ -55,7 +55,7 @@ if (!empty($currentUser['avatar'])) {
         </button>
     </div>
 
-    <!-- Botão de Recolher (Aparece quando expandido, estilo de aba lateral) -->
+    <!-- Botão de Recolher (Desktop) -->
     <div class="sidebar-collapser" onclick="toggleSidebarDesktop()">
         <i data-lucide="chevron-left"></i>
     </div>
@@ -69,65 +69,71 @@ if (!empty($currentUser['avatar'])) {
             <div class="nav-divider"></div>
         <?php endif; ?>
 
-        <a href="index.php" class="nav-item nav-indigo <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+        <a href="index.php" class="nav-item nav-primary <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
             <i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Visão Geral</span>
         </a>
 
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
 
-        <a href="escalas.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
+        <a href="escalas.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <i data-lucide="calendar-days"></i> <span class="sidebar-text">Escalas</span>
         </a>
-        <a href="repertorio.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
+        <a href="repertorio.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
             <i data-lucide="music-2"></i> <span class="sidebar-text">Repertório</span>
         </a>
-        <a href="membros.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
+        <a href="membros.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
             <i data-lucide="users"></i> <span class="sidebar-text">Membros</span>
         </a>
-        <a href="indisponibilidade.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
+        <a href="indisponibilidade.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
             <i data-lucide="calendar-off"></i> <span class="sidebar-text">Ausências de Escala</span>
         </a>
 
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
 
-        <a href="devocionais.php" class="nav-item nav-purple <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
+        <a href="devocionais.php" class="nav-item nav-slate <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
             <i data-lucide="book-heart"></i> <span class="sidebar-text">Devocional</span>
         </a>
-        <a href="oracao.php" class="nav-item nav-purple <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
+        <a href="oracao.php" class="nav-item nav-slate <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
             <i data-lucide="heart-handshake"></i> <span class="sidebar-text">Oração</span>
         </a>
-        <a href="leitura.php" class="nav-item nav-purple <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
+        <a href="leitura.php" class="nav-item nav-slate <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
             <i data-lucide="book-open"></i> <span class="sidebar-text">Leitura Bíblica</span>
         </a>
 
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
 
-        <a href="avisos.php" class="nav-item nav-orange <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
+        <a href="avisos.php" class="nav-item nav-slate <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
             <i data-lucide="bell"></i> <span class="sidebar-text">Avisos</span>
         </a>
-        <a href="aniversarios.php" class="nav-item nav-orange <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
+        <a href="aniversarios.php" class="nav-item nav-slate <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
             <i data-lucide="cake"></i> <span class="sidebar-text">Aniversários</span>
         </a>
     </nav>
 
-    <!-- 3. Rodapé: Cartão de Usuário Premium -->
+    <!-- 3. Rodapé Integrado -->
     <div class="sidebar-footer">
-        <div class="user-profile-row">
-            <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto" class="user-avatar-sm">
+        <div class="user-profile-integrated">
+            <!-- Avatar & Info -->
+            <a href="perfil.php" class="profile-link" title="Meu Perfil">
+                <div class="avatar-wrapper">
+                    <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto" class="user-avatar-compact">
+                    <span class="status-indicator"></span>
+                </div>
+                <div class="user-info-row">
+                    <div class="u-name"><?= htmlspecialchars($currentUser['name']) ?></div>
+                    <div class="u-role">Ver Perfil</div>
+                </div>
+            </a>
 
-            <div class="user-info-mini">
-                <div class="u-name"><?= htmlspecialchars($currentUser['name']) ?></div>
-                <div class="u-role">Ver Perfil</div>
-            </div>
-
-            <div class="user-actions">
-                <a href="configuracoes.php" class="action-icon" title="Configurações">
+            <!-- Ações Rápidas -->
+            <div class="actions-row">
+                <a href="configuracoes.php" class="action-icon-subtle" title="Configurações">
                     <i data-lucide="settings-2"></i>
                 </a>
-                <a href="../logout.php" class="action-icon danger" title="Sair">
+                <a href="../logout.php" class="action-icon-subtle danger" title="Sair">
                     <i data-lucide="log-out"></i>
                 </a>
             </div>
@@ -136,39 +142,132 @@ if (!empty($currentUser['avatar'])) {
 </div>
 
 <style>
-    /* CSS Extra para o Footer Redesenhado */
-    .sidebar-footer {
-        padding: 16px;
-        background: #f8fafc;
-        border-top: 1px solid #e2e8f0;
+    /* VARIÁVEIS LOCAIS (Compatíveis com Modo Moderate) */
+    :root {
+        --sidebar-width: 280px;
+        --sidebar-collapsed-width: 88px;
+        --sidebar-bg: #ffffff;
+        --sidebar-text: #475569;
+        --brand-primary: #047857;
+        /* Emerald 700 */
+        --brand-light: #d1fae5;
+        /* Emerald 100 */
+        --brand-hover: #ecfdf5;
+        /* Emerald 50 */
     }
 
-    .user-profile-row {
+    /* Sidebar Layout */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: var(--sidebar-width);
+        background: var(--sidebar-bg);
+        border-right: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Navegação Item */
+    .nav-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        background: white;
-        padding: 10px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        padding: 12px 16px;
+        /* Touch target melhor */
+        border-radius: 8px;
+        color: var(--sidebar-text);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9375rem;
+        /* 15px */
         transition: all 0.2s;
+        margin-bottom: 2px;
     }
 
-    .user-profile-row:hover {
-        border-color: #cbd5e1;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    .nav-item:hover {
+        background-color: var(--brand-hover);
+        color: var(--brand-primary);
     }
 
-    .user-avatar-sm {
-        width: 36px;
-        height: 36px;
+    .nav-item.active {
+        background-color: var(--brand-light);
+        color: var(--brand-primary);
+        font-weight: 600;
+    }
+
+    .nav-item i {
+        width: 24px;
+        height: 24px;
+        color: #94a3b8;
+        /* Slate 400 */
+    }
+
+    .nav-item.active i {
+        color: var(--brand-primary);
+    }
+
+    .nav-divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 8px 16px;
+    }
+
+    /* CSS Extra para o Footer Integrado */
+    .sidebar-footer {
+        padding: 16px;
+        border-top: 1px solid #e2e8f0;
+        background: #f8fafc;
+        /* Slate 50 */
+    }
+
+    .user-profile-integrated {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .profile-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        flex: 1;
+        min-width: 0;
+        padding: 8px;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+
+    .profile-link:hover {
+        background: #e2e8f0;
+    }
+
+    .user-avatar-compact {
+        width: 40px;
+        height: 40px;
         border-radius: 10px;
-        /* Quadrado arredondado moderno */
         object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
-    .user-info-mini {
+    .status-indicator {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 12px;
+        height: 12px;
+        background: #22c55e;
+        border: 2px solid #fff;
+        border-radius: 50%;
+    }
+
+    .user-info-row {
         flex: 1;
         min-width: 0;
         display: flex;
@@ -177,486 +276,150 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .u-name {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #1e293b;
+        font-size: 0.9375rem;
+        /* 15px */
+        font-weight: 600;
+        color: #334155;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        line-height: 1.2;
     }
 
     .u-role {
-        font-size: 0.7rem;
-        color: #94a3b8;
-        font-weight: 500;
+        font-size: 0.75rem;
+        color: #64748b;
     }
 
-    .user-actions {
-        display: flex;
-        gap: 4px;
-    }
-
-    .action-icon {
-        width: 28px;
-        height: 28px;
+    .actions-row {
         display: flex;
         align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        color: #64748b;
-        transition: all 0.2s;
-        background: transparent;
     }
 
-    .action-icon:hover {
-        background: #f1f5f9;
-        color: #3b82f6;
-    }
-
-    .action-icon.danger:hover {
-        background: #fef2f2;
-        color: #ef4444;
-    }
-
-    .action-icon i {
-        width: 16px;
-        height: 16px;
-    }
-
-    /* Modo Recolhido */
-    .sidebar.collapsed .sidebar-footer {
-        padding: 12px;
-    }
-
-    .sidebar.collapsed .user-profile-row {
-        padding: 0;
-        border: none;
-        box-shadow: none;
-        background: transparent;
-        justify-content: center;
-    }
-
-    .sidebar.collapsed .user-info-mini,
-    .sidebar.collapsed .user-actions {
-        display: none;
-    }
-
-    .sidebar.collapsed .user-avatar-sm {
+    .action-icon-subtle {
         width: 40px;
         height: 40px;
-        border-radius: 12px;
-    }
-
-    /* Dark Mode */
-    body.dark-mode .sidebar-footer {
-        background: #1e293b;
-        border-color: #334155;
-    }
-
-    body.dark-mode .user-profile-row {
-        background: #0f172a;
-        border-color: #334155;
-    }
-
-    body.dark-mode .u-name {
-        color: #f1f5f9;
-    }
-
-    body.dark-mode .action-icon {
-        color: #94a3b8;
-    }
-
-    body.dark-mode .action-icon:hover {
-        background: #1e293b;
-        color: #fff;
-    }
-</style>
-
-<!-- Overlay Mobile -->
-<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebarMobile()"></div>
-
-<style>
-    /* Variáveis CLARAS + VERDES */
-    :root {
-        --sidebar-width: 280px;
-        --sidebar-collapsed-width: 88px;
-        /* Um pouco mais larga recolhida */
-        --sidebar-bg: #ffffff;
-        --sidebar-text: #475569;
-        --sidebar-hover: #f1f5f9;
-        --sidebar-border: #e2e8f0;
-
-        /* Tema Verde */
-        --brand-green: #166534;
-        --brand-green-light: #dcfce7;
-        --brand-border: #22c55e;
-    }
-
-    body {
-        background-color: #f8fafc;
-    }
-
-    /* Sidebar Base */
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--sidebar-width);
-        background: var(--sidebar-bg);
-        border-right: 1px solid var(--sidebar-border);
         display: flex;
-        flex-direction: column;
-        z-index: 1000;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow-x: hidden;
-    }
-
-    /* Perfil */
-    .sidebar-profile {
-        margin: 0 16px 16px 16px;
-        padding: 12px;
-        background: #f8fafc;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        border: 1px solid var(--sidebar-border);
-        transition: all 0.2s;
-    }
-
-    .sidebar-profile:hover {
-        border-color: var(--brand-border);
-        background: #fff;
-        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.1);
-    }
-
-    .profile-img {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid var(--brand-green);
-        /* Borda Verde */
-    }
-
-    .profile-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .profile-name {
-        color: #1e293b;
-        font-weight: 700;
-        font-size: 0.9rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .profile-meta {
-        color: #64748b;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* Navegação */
-    .sidebar-nav {
-        flex: 1;
-        padding: 0 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scrollbar-width: none;
-        /* Firefox */
-        -ms-overflow-style: none;
-        /* IE/Edge */
-    }
-
-    .sidebar-nav::-webkit-scrollbar {
-        display: none;
-        /* Chrome/Safari/Opera */
-    }
-
-    .nav-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 14px;
-        border-radius: 10px;
-        color: var(--sidebar-text);
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-        white-space: nowrap;
-        position: relative;
-    }
-
-    .nav-item:hover {
-        background: #f0fdf4;
-        color: var(--brand-green);
-    }
-
-    .nav-item.active {
-        background: var(--brand-green-light);
-        color: var(--brand-green);
-    }
-
-    .nav-item.active:before {
-        /* Indicador lateral */
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 10%;
-        bottom: 10%;
-        width: 4px;
-        background: var(--brand-green);
-        border-radius: 0 4px 4px 0;
-        display: none;
-        /* Opcional, removi para ficar mais clean */
-    }
-
-    .nav-item i {
-        width: 32px;
-        height: 32px;
-        padding: 6px;
-        border-radius: 8px;
-        background: rgba(0, 0, 0, 0.03);
-        /* Fundo padrão sutil */
-        flex-shrink: 0;
-        transition: all 0.2s;
-        color: #94a3b8;
-    }
-
-    /* Cores Temáticas */
-    .nav-blue i {
-        color: #3b82f6;
-        background: #eff6ff;
-    }
-
-    .nav-blue:hover i {
-        background: #3b82f6;
-        color: white;
-    }
-
-    .nav-purple i {
-        color: #8b5cf6;
-        background: #f5f3ff;
-    }
-
-    .nav-purple:hover i {
-        background: #8b5cf6;
-        color: white;
-    }
-
-    .nav-orange i {
-        color: #f59e0b;
-        background: #fffbeb;
-    }
-
-    .nav-orange:hover i {
-        background: #f59e0b;
-        color: white;
-    }
-
-    .nav-indigo i {
-        color: #6366f1;
-        background: #eef2ff;
-    }
-
-    .nav-indigo:hover i {
-        background: #6366f1;
-        color: white;
-    }
-
-    /* Estado Ativo */
-    .nav-item.active i {
-        background: transparent;
-        /* Remove fundo individual */
-        color: inherit;
-    }
-
-    /* Cores Temáticas - Adaptação Dark Mode via body.dark-mode */
-    body.dark-mode .nav-blue i {
-        color: #60a5fa;
-        background: rgba(59, 130, 246, 0.15);
-    }
-
-    body.dark-mode .nav-purple i {
-        color: #a78bfa;
-        background: rgba(139, 92, 246, 0.15);
-    }
-
-    body.dark-mode .nav-orange i {
-        color: #fbbf24;
-        background: rgba(245, 158, 11, 0.15);
-    }
-
-    body.dark-mode .nav-indigo i {
-        color: #818cf8;
-        background: rgba(99, 102, 241, 0.15);
-    }
-
-    /* Estado Ativo no Dark Mode */
-    body.dark-mode .nav-item.active {
-        background: rgba(22, 101, 52, 0.2);
-        color: #4ade80;
-    }
-
-    body.dark-mode .nav-item.active i {
-        background: transparent;
-        color: #4ade80;
-    }
-
-    /* Divisórias */
-    body.dark-mode .nav-divider {
-        border-color: #334155;
-    }
-
-    /* Logout */
-    body.dark-mode .logout-item:hover {
-        background: rgba(239, 68, 68, 0.1);
-    }
-
-    .nav-divider {
-        height: 1px;
-        background: var(--sidebar-border);
-        margin: 8px 12px;
-    }
-
-    .sidebar-footer {
-        padding: 16px 12px;
-        border-top: 1px solid var(--sidebar-border);
-        background: #fcfcfc;
-    }
-
-    .logout-item {
-        color: #ef4444;
-    }
-
-    .logout-item:hover {
-        background: #fef2f2;
-        color: #dc2626;
-    }
-
-    /* Botão Toggle no Header da Sidebar */
-    .btn-toggle-desktop {
-        background: #f1f5f9;
-        border: none;
-        cursor: pointer;
-        color: #64748b;
-        padding: 8px;
-        border-radius: 8px;
-        transition: all 0.2s;
-        display: none;
-        /* Controlado via media query */
-    }
-
-    .btn-toggle-desktop:hover {
-        background: #e2e8f0;
-        color: #1e293b;
-    }
-
-    /* Faixa de Recolhimento (Borda clicável) */
-    .sidebar-collapser {
-        position: absolute;
-        top: 50%;
-        right: -12px;
-        transform: translateY(-50%);
-        width: 24px;
-        height: 48px;
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-left: none;
-        border-radius: 0 12px 12px 0;
-        display: none;
-        /* Desktop only */
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
-        z-index: 1001;
+        border-radius: 8px;
         color: #94a3b8;
+        transition: all 0.2s;
     }
 
-    .sidebar-collapser:hover {
-        color: var(--brand-green);
-        background: #f0fdf4;
+    .action-icon-subtle:hover {
+        background: #fff;
+        color: #0f172a;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
-    @media (min-width: 1025px) {
-        .btn-toggle-desktop {
-            display: flex;
-        }
-
-        /* .sidebar-collapser { display: flex; }  <-- Se quiser usar estilo flutuante fora da barra */
-
-        .sidebar.collapsed .sidebar-collapser i {
-            transform: rotate(180deg);
-        }
-
-        /* Ajuste do ícone quando recolhido */
-        .sidebar.collapsed .btn-toggle-desktop i {
-            transform: rotate(180deg);
-            /* Vira o icone */
-        }
+    .action-icon-subtle.danger:hover {
+        color: #ef4444;
+        background: #fff;
     }
 
-    /* --- MOBILE --- */
+    /* MODO RECOLHIDO (Desktop) */
+    .sidebar.collapsed {
+        width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar.collapsed .sidebar-text,
+    .sidebar.collapsed .u-name,
+    .sidebar.collapsed .u-role,
+    .sidebar.collapsed .user-info-row {
+        display: none;
+    }
+
+    .sidebar.collapsed .nav-item {
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .sidebar.collapsed .nav-item i {
+        margin: 0;
+    }
+
+    .sidebar.collapsed .logo-area {
+        justify-content: center;
+    }
+
+    .sidebar.collapsed .logo-area img {
+        height: 32px;
+    }
+
+    .sidebar.collapsed .profile-link {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .sidebar.collapsed .user-profile-integrated {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sidebar.collapsed .actions-row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* MOBILE OVERRIDES */
     @media (max-width: 1024px) {
         .sidebar {
             transform: translateX(-100%);
-            width: 280px;
+            width: 85%;
+            /* Largura mais confortável no mobile */
+            max-width: 320px;
         }
 
         .sidebar.open {
             transform: translateX(0);
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
         }
 
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .sidebar-collapser,
         .btn-toggle-desktop {
             display: none;
         }
+    }
 
-        .sidebar-collapser {
-            display: none;
-        }
+    /* Overlay */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.4);
+        /* Slate 900 com opacidade */
+        backdrop-filter: blur(2px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
 
-        .sidebar-profile {
-            margin-top: 24px;
-        }
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
 </style>
+
+<!-- Overlay para Fechar no Mobile -->
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebarMobile()"></div>
 
 <script>
     const sidebar = document.getElementById('app-sidebar');
     const content = document.getElementById('app-content');
 
+    // --- State Management ---
     function isDesktop() {
         return window.innerWidth > 1024;
     }
 
     function toggleSidebarDesktop() {
         if (!isDesktop()) return;
-
         sidebar.classList.toggle('collapsed');
         const isCollapsed = sidebar.classList.contains('collapsed');
-
-        if (content) {
-            content.style.marginLeft = isCollapsed ? '88px' : '280px';
-        }
+        if (content) content.style.marginLeft = isCollapsed ? '88px' : '280px';
         localStorage.setItem('sidebarCollapsed', isCollapsed);
     }
 
@@ -665,11 +428,10 @@ if (!empty($currentUser['avatar'])) {
         document.getElementById('sidebar-overlay').classList.toggle('active');
     }
 
+    // --- Init ---
     document.addEventListener('DOMContentLoaded', () => {
         if (isDesktop()) {
-            // Padrão: EXPANDIDO (false) se não houver registro
             const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-
             if (savedCollapsed) {
                 sidebar.classList.add('collapsed');
                 if (content) content.style.marginLeft = '88px';
@@ -678,7 +440,53 @@ if (!empty($currentUser['avatar'])) {
                 if (content) content.style.marginLeft = '280px';
             }
         }
+
+        // --- SWIPE LOGIC FIXED (PREVENT BACK) ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const widthTrigger = 35; // Pixels da borda
+
+        document.addEventListener('touchstart', (e) => {
+            if (isDesktop()) return;
+            touchStartX = e.touches[0].clientX;
+        }, {
+            passive: false
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDesktop()) return;
+            const currentX = e.touches[0].clientX;
+
+            // Se o toque começou na zona de SWIPE e está movendo para a direita...
+            if (touchStartX < widthTrigger && currentX > touchStartX) {
+                // ...BLOQUEIA o comportamento padrão (que seria "Voltar" no navegador)
+                e.preventDefault();
+            }
+        }, {
+            passive: false
+        });
+
+        document.addEventListener('touchend', (e) => {
+            if (isDesktop()) return;
+            touchEndX = e.changedTouches[0].clientX;
+            handleSwipe();
+        }, {
+            passive: true
+        });
+
+        function handleSwipe() {
+            const threshold = 60; // Sensibilidade
+            // Swipe Right -> Abrir
+            if (touchStartX < widthTrigger && touchEndX > touchStartX + threshold) {
+                if (!sidebar.classList.contains('open')) toggleSidebarMobile();
+            }
+            // Swipe Left -> Fechar
+            if (touchEndX < touchStartX - threshold) {
+                if (sidebar.classList.contains('open')) toggleSidebarMobile();
+            }
+        }
     });
 
+    // Torna global
     window.toggleSidebar = toggleSidebarMobile;
 </script>
