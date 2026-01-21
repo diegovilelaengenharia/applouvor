@@ -3,6 +3,18 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
+// Buscar todas as tags
+$allTags = $pdo->query("SELECT * FROM tags ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
+
+// Se for editar, buscar tags já selecionadas
+$selectedTagIds = [];
+if (isset($id)) {
+    $stmtTags = $pdo->prepare("SELECT tag_id FROM song_tags WHERE song_id = ?");
+    $stmtTags->execute([$id]);
+    $selectedTagIds = $stmtTags->fetchAll(PDO::FETCH_COLUMN);
+}
+
+
 // Buscar artistas únicos para autocomplete
 $artists = $pdo->query("SELECT DISTINCT artist FROM songs ORDER BY artist ASC")->fetchAll(PDO::FETCH_COLUMN);
 
@@ -22,6 +34,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $customFieldsJson = !empty($customFields) ? json_encode($customFields) : null;
 
+    
+    // Pegar nome da primeira tag para preencher category (legacy)
+    $categoryLegacy = 'Outros';
+    if (!empty($_POST['selected_tags'])) {
+        // Buscar nome da primeira tag selecionada
+        $firstTagId = $_POST['selected_tags'][0];
+        foreach ($allTags as $t) {
+            if ($t['id'] == $firstTagId) {
+                $categoryLegacy = $t['name'];
+                break;
+            }
+        }
+    } else {
+        $categoryLegacy = $_POST['category'] ?? 'Louvor'; // Fallback se o usuário não selecionar nada
+    }
+
     $stmt = $pdo->prepare("
         INSERT INTO songs (
             title, artist, tone, bpm, duration, category, 
@@ -36,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['tone'] ?: null,
         $_POST['bpm'] ?: null,
         $_POST['duration'] ?: null,
-        $_POST['category'],
+        $categoryLegacy,
         $_POST['link_letra'] ?: null,
         $_POST['link_cifra'] ?: null,
         $_POST['link_audio'] ?: null,
@@ -47,6 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
     $newId = $pdo->lastInsertId();
+
+    // Salvar Relacionamento song_tags
+    if (!empty($_POST['selected_tags'])) {
+        $stmtTag = $pdo->prepare("INSERT INTO song_tags (song_id, tag_id) VALUES (?, ?)");
+        foreach ($_POST['selected_tags'] as $tagId) {
+            $stmtTag->execute([$newId, $tagId]);
+        }
+    }
+    
     header("Location: musica_detalhe.php?id=$newId");
     exit;
 }
@@ -56,125 +93,33 @@ renderAppHeader('Nova Música');
 
 
 <style>
-    /* Modern Form Styles */
-    body {
-        background-color: #f8fafc !important; 
-    }
-
-    .form-section {
-        background: white;
-        border: 1px solid rgba(226, 232, 240, 0.8);
-        border-radius: 20px;
-        padding: 32px;
-        margin-bottom: 32px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-        transition: all 0.3s ease;
-    }
-
-    .form-section:hover {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-    }
-
-    .form-section-title {
-        font-size: 0.85rem;
-        font-weight: 800;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 24px;
-        border-bottom: 2px solid #f1f5f9;
-        padding-bottom: 12px;
-    }
-
-    .form-group {
-        position: relative;
-    }
-
-    .form-label {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #334155;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .form-input {
-        width: 100%;
-        padding: 14px 16px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-        color: #1e293b;
-        font-size: 0.95rem;
-        font-weight: 500;
-        transition: all 0.2s;
-    }
-
-    .form-input:focus {
-        background: white;
-        border-color: #047857;
-        box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1);
-        outline: none;
-    }
+    /* Modern Form Styles & Tag Selector */
+    body { background-color: #f8fafc !important; }
+    .form-section { background: white; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); transition: all 0.3s ease; }
+    .form-section:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+    .form-section-title { font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
+    .form-label { font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px; display: block; }
+    .form-input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; }
+    .form-input:focus { background: white; border-color: #047857; box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1); outline: none; }
     
-    .form-input::placeholder {
-        color: #94a3b8;
-        font-weight: 400;
-    }
-
-    /* Input com Ícone Interno */
-    .input-icon-wrapper {
-        position: relative;
-    }
+    /* Tag Selector */
+    .tag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .tag-option { position: relative; cursor: pointer; }
+    .tag-option input { display: none; }
+    .tag-pill { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 12px; background: #f1f5f9; border: 2px solid transparent; font-weight: 600; color: #64748b; transition: all 0.2s; text-align: center; font-size: 0.9rem; }
+    .tag-option input:checked + .tag-pill { background: #ecfdf5; border-color: var(--tag-color, #047857); color: var(--tag-color, #047857); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .tag-pill::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--tag-color, #ccc); opacity: 0.5; }
+    .tag-option input:checked + .tag-pill::before { opacity: 1; box-shadow: 0 0 0 2px white; }
     
-    .input-icon-wrapper i {
-        position: absolute;
-        left: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #94a3b8;
-        width: 18px;
-        transition: color 0.2s;
-        pointer-events: none;
-    }
-
-    .input-icon-wrapper input {
-        padding-left: 48px;
-    }
-
-    .input-icon-wrapper input:focus + i,
-    .input-icon-wrapper input:focus ~ i { /* Fallback */
-        color: #047857;
-    }
+    /* Input Icon */
+    .input-icon-wrapper { position: relative; }
+    .input-icon-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; pointer-events: none; }
+    .input-icon-wrapper input { padding-left: 48px; }
     
     /* Autocomplete */
-    .autocomplete-suggestions {
-        position: absolute;
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        max-height: 250px;
-        overflow-y: auto;
-        z-index: 1000;
-        width: 100%;
-        display: none;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        margin-top: 4px;
-    }
-
-    .autocomplete-suggestion {
-        padding: 12px 16px;
-        cursor: pointer;
-        border-bottom: 1px solid #f1f5f9;
-        color: #475569;
-        font-weight: 500;
-        transition: background 0.1s;
-    }
-
-    .autocomplete-suggestion:hover {
-        background: #f0fdf4;
-        color: #047857;
-    }
+    .autocomplete-suggestions { position: absolute; background: white; border: 1px solid #e2e8f0; border-radius: 12px; max-height: 250px; overflow-y: auto; z-index: 1000; width: 100%; display: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-top: 4px; }
+    .autocomplete-suggestion { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: #475569; }
+    .autocomplete-suggestion:hover { background: #f0fdf4; color: #047857; }
 </style>
 
 
@@ -236,15 +181,26 @@ renderAppHeader('Nova Música');
             <div id="artistSuggestions" class="autocomplete-suggestions"></div>
         </div>
 
+        
         <div class="form-group">
-            <label class="form-label">Categoria</label>
-            <select name="category" class="form-input">
-                <option value="Louvor" selected>Louvor</option>
-                <option value="Adoração">Adoração</option>
-                <option value="Celebração">Celebração</option>
-                <option value="Hino">Hino</option>
-            </select>
+            <label class="form-label">Classificações (Selecione uma ou mais)</label>
+            <div class="tag-grid">
+                <?php foreach ($allTags as $tag): 
+                    $isChecked = in_array($tag['id'], $selectedTagIds); 
+                ?>
+                    <label class="tag-option">
+                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?>>
+                        <span class="tag-pill" style="--tag-color: <?= $tag['color'] ?: '#047857' ?>">
+                            <?= htmlspecialchars($tag['name']) ?>
+                        </span>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+            <div style="margin-top: 10px; text-align: right;">
+                <a href="classificacoes.php" target="_blank" style="font-size: 0.85rem; color: #047857; font-weight: 600; text-decoration: none;">+ Gerenciar Classificações</a>
+            </div>
         </div>
+
     </div>
 
     <!-- Detalhes Musicais -->
