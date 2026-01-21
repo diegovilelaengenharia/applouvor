@@ -545,7 +545,30 @@ renderAppHeader('Detalhes da Escala');
 <div style="margin-top: 24px;"></div>
 
 <!-- CONTEÚDO: REPERTÓRIO -->
-<div id="repertorio" style="margin-top: 24px;">
+
+<div id="repertorio" style="margin-top: 32px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;">
+        <div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #1f2937; margin: 0; letter-spacing: -0.02em;">Repertório Musical</h3>
+            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 2px;">Músicas selecionadas para o culto</p>
+        </div>
+        <button onclick="openModal('modalSongs')" class="ripple" style="
+            background: #ecfdf5; 
+            color: #047857; 
+            border: 1px solid #d1fae5; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            transition: all 0.2s;
+        " onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#ecfdf5'">
+            <i data-lucide="plus" style="width: 16px;"></i> Adicionar
+        </button>
+    </div>
     <?php if (empty($currentSongs)): ?>
         <div class="empty-state">
             <div style="background: var(--bg-tertiary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
@@ -558,9 +581,7 @@ renderAppHeader('Detalhes da Escala');
             </button>
         </div>
     <?php else: ?>
-        <button onclick="openModal('modalSongs')" class="btn-action-add ripple w-full" style="margin-bottom: 16px;">
-            <i data-lucide="plus"></i> Adicionar Música
-        </button>
+        
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($currentSongs as $index => $song): ?>
                 <div style="
