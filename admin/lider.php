@@ -7,6 +7,7 @@ require_once '../includes/layout.php';
 checkAdmin();
 
 renderAppHeader('Painel do Líder');
+renderPageHeader('Painel do Líder', 'Gestão Estratégica');
 
 // --- DADOS DO DASHBOARD ---
 $today = date('Y-m-d');
@@ -272,16 +273,13 @@ try {
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
             <div style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 4px;">Paz, Líder!</div>
-            <h1 style="margin: 0; font-size: 1.4rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            <h1 style="margin: 0; font-size: 1.4rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #cbd5e1); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
                 Gestão do Ministério
             </h1>
             <p style="margin: 8px 0 0 0; opacity: 0.7; font-size: 0.95rem; max-width: 400px;">
                 "Quem governa, faça-o com dedicação." <span style="font-size: 0.8rem; font-style: italic;">(Romanos 12:8)</span>
             </p>
         </div>
-        <a href="../index.php" style="background: rgba(255,255,255,0.1); padding: 8px; border-radius: 12px; color: white; display: flex;">
-            <i data-lucide="home" style="width: 20px;"></i>
-        </a>
     </div>
 </div>
 
@@ -403,60 +401,16 @@ try {
                     </div>
                 </a>
 
-                <!-- Repertório Analytics (Placeholder) -->
-                <a href="#" onclick="alert('Em breve: Analise quais músicas são mais tocadas!')" class="tool-card" style="opacity: 0.7;">
-                    <div style="background: #f0f9ff; padding: 12px; border-radius: 50%; color: #0ea5e9;">
-                        <i data-lucide="bar-chart-2"></i>
+                <!-- Relatório de Escalas -->
+                <a href="relatorio_print.php" target="_blank" class="tool-card">
+                    <div style="background: #fef3c7; padding: 12px; border-radius: 50%; color: #f59e0b;">
+                        <i data-lucide="printer"></i>
                     </div>
                     <div>
-                        <div style="font-weight: 700; color: #1e293b;">Repertório</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">Estatísticas</div>
+                        <div style="font-weight: 700; color: #1e293b;">Relatório</div>
+                        <div style="font-size: 0.8rem; color: #64748b;">Imprimir Escalas</div>
                     </div>
                 </a>
-            </div>
-        </div>
-
-        <!-- Right Column: Notifications Feed -->
-        <div>
-            <div class="section-title"><i data-lucide="inbox"></i> Notificações</div>
-
-            <div class="notif-box" style="background: white; border-radius: 16px; padding: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;">
-                <?php if (empty($notifications)): ?>
-                    <div style="padding: 24px; text-align: center; color: #94a3b8;">
-                        <i data-lucide="check-circle" style="width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.5;"></i>
-                        <div style="font-size: 0.9rem;">Tudo em dia!</div>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($notifications as $n): ?>
-                        <div class="notif-item">
-                            <div class="notif-dot" style="background: <?= $n['is_read'] ? '#cbd5e1' : '#f59e0b' ?>"></div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600; font-size: 0.9rem; color: #1e293b;">
-                                    <?= htmlspecialchars($n['title']) ?>
-                                </div>
-                                <div style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">
-                                    <?= htmlspecialchars($n['message']) ?>
-                                </div>
-                                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">
-                                    <?= date('d/m H:i', strtotime($n['created_at'])) ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-                <a href="#" class="ripple" style="display: block; padding: 12px; text-align: center; font-size: 0.85rem; color: #3b82f6; font-weight: 600; border-top: 1px solid #f1f5f9; text-decoration: none;">
-                    Ver todas
-                </a>
-            </div>
-
-            <!-- Quick Tip -->
-            <div style="margin-top: 24px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); padding: 16px; border-radius: 16px; border: 1px solid #fde68a;">
-                <div style="display: flex; gap: 8px; color: #d97706; font-weight: 700; font-size: 0.9rem; margin-bottom: 4px;">
-                    <i data-lucide="lightbulb" style="width: 16px;"></i> Dica do Dia
-                </div>
-                <p style="margin: 0; font-size: 0.85rem; color: #92400e; line-height: 1.5;">
-                    Verifique as ausências com antecedência para evitar buracos na escala de Domingo.
-                </p>
             </div>
         </div>
 

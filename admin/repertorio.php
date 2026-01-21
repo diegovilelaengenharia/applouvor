@@ -9,7 +9,22 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório');
 
-renderPageHeader('Repertório');
+// Right Action: Stats Button
+ob_start();
+?>
+<a href="repertorio_stats.php" class="ripple" style="
+    background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe;
+    padding: 8px 16px; border-radius: 12px; text-decoration: none;
+    font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s;
+">
+    <i data-lucide="bar-chart-2" style="width: 16px;"></i>
+    Estatísticas
+</a>
+<?php
+$rightAction = ob_get_clean();
+
+renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
 ?>
 
 <!-- Tabs Navegação -->
@@ -291,7 +306,10 @@ renderPageHeader('Repertório');
     z-index: 50;
     font-family: 'Inter', sans-serif;
 ">
-    <i data-lucide="plus" style="width: 20px; height: 20px;"></i>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+    </svg>
     <span>Música</span>
 </a>
 

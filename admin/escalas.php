@@ -69,68 +69,93 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 ?>
 
 <!-- Top Controls: Toggle & View Options -->
-<div style="max-width: 900px; margin: 0 auto 32px auto; padding: 0 16px; display: flex; justify-content: space-between; align-items: center;">
+<!-- Top Controls: Toggle & View Options -->
+<div style="max-width: 900px; margin: 0 auto 32px auto; padding: 0 16px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center;">
 
     <!-- Toggle Central -->
-    <div style="background: #e2e8f0; padding: 4px; border-radius: 12px; display: flex; gap: 4px;">
+    <div style="background: #e2e8f0; padding: 4px; border-radius: 14px; display: flex; gap: 2px;">
         <button onclick="switchTab('future')" id="btn-future" class="ripple" style="
                 border: none; background: white; color: #0f172a; 
-                padding: 8px 24px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
+                padding: 10px 24px; border-radius: 10px; font-weight: 700; font-size: 0.9rem;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
             ">Próximas</button>
         <button onclick="switchTab('past')" id="btn-past" class="ripple" style="
                 border: none; background: transparent; color: #64748b; 
-                padding: 8px 24px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+                padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
                 cursor: pointer; transition: all 0.2s;
             ">Anteriores</button>
     </div>
 
-    <!-- View Toggles (Real) & Filter -->
-    <div style="display: flex; gap: 8px;">
+    <!-- Right Controls: View Toggle & Filter -->
+    <div style="display: flex; gap: 12px; align-items: center;">
+
+        <!-- View Switcher -->
+        <div style="background: white; border: 1px solid #e2e8f0; padding: 4px; border-radius: 14px; display: flex; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+            <button onclick="setView('timeline')" id="btn-view-timeline" title="Linha do Tempo" class="ripple" style="
+                border: none; background: #f1f5f9; color: #0f172a; 
+                width: 40px; height: 40px; border-radius: 10px; 
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer; transition: all 0.2s;
+            ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                    <line x1="16" x2="16" y1="2" y2="6" />
+                    <line x1="8" x2="8" y1="2" y2="6" />
+                    <line x1="3" x2="21" y1="10" y2="10" />
+                    <path d="M8 14h.01" />
+                    <path d="M12 14h.01" />
+                    <path d="M16 14h.01" />
+                    <path d="M8 18h.01" />
+                    <path d="M12 18h.01" />
+                    <path d="M16 18h.01" />
+                </svg>
+            </button>
+            <button onclick="setView('list')" id="btn-view-list" title="Modo Lista" class="ripple" style="
+                border: none; background: transparent; color: #64748b; 
+                width: 40px; height: 40px; border-radius: 10px; 
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer; transition: all 0.2s;
+            ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" x2="21" y1="6" y2="6" />
+                    <line x1="8" x2="21" y1="12" y2="12" />
+                    <line x1="8" x2="21" y1="18" y2="18" />
+                    <line x1="3" x2="3.01" y1="6" y2="6" />
+                    <line x1="3" x2="3.01" y1="12" y2="12" />
+                    <line x1="3" x2="3.01" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
         <!-- Filter Button -->
         <button onclick="openSheet('filterSheet')" class="ripple" style="
-            width: 36px; height: 36px; 
-            background: <?= $activeFilters > 0 ? '#dcfce7' : '#white' ?>; 
+            width: 48px; height: 48px; 
+            background: <?= $activeFilters > 0 ? '#dcfce7' : 'white' ?>; 
             border: <?= $activeFilters > 0 ? '1px solid #166534' : '1px solid #e2e8f0' ?>; 
             color: <?= $activeFilters > 0 ? '#166534' : '#64748b' ?>; 
-            border-radius: 12px; 
+            border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             position: relative;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s;
         ">
-            <i data-lucide="filter" style="width: 18px;"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            </svg>
             <?php if ($activeFilters > 0): ?>
                 <span style="
-                    position: absolute; top: -4px; right: -4px; 
+                    position: absolute; top: -6px; right: -6px; 
                     background: #166534; color: white; 
-                    font-size: 0.6rem; font-weight: 700; 
-                    width: 16px; height: 16px; border-radius: 50%; 
+                    font-size: 0.7rem; font-weight: 700; 
+                    width: 20px; height: 20px; border-radius: 50%; 
                     display: flex; align-items: center; justify-content: center;
                     border: 2px solid white;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 "><?= $activeFilters ?></span>
             <?php endif; ?>
         </button>
 
-        <div style="background: #e2e8f0; padding: 4px; border-radius: 12px; display: flex; gap: 4px;">
-            <button onclick="setView('timeline')" id="btn-view-timeline" title="Linha do Tempo" class="ripple" style="
-                border: none; background: white; color: #0f172a; 
-                width: 36px; height: 36px; border-radius: 8px; 
-                display: flex; align-items: center; justify-content: center;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
-            ">
-                <i data-lucide="calendar-clock" style="width: 20px;"></i>
-            </button>
-            <button onclick="setView('list')" id="btn-view-list" title="Modo Lista" class="ripple" style="
-                border: none; background: transparent; color: #64748b; 
-                width: 36px; height: 36px; border-radius: 8px; 
-                display: flex; align-items: center; justify-content: center;
-                cursor: pointer; transition: all 0.2s;
-                box-shadow: none;
-            ">
-                <i data-lucide="list" style="width: 20px;"></i>
-            </button>
-        </div>
     </div>
 </div>
 
@@ -412,7 +437,10 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
         text-decoration: none; z-index: 50; transition: transform 0.2s;
     " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-    <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+    </svg>
 </a>
 
 

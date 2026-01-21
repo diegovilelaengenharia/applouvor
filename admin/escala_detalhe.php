@@ -106,157 +106,210 @@ $allSongs = $pdo->query("SELECT id, title, artist, tone FROM songs ORDER BY titl
 renderAppHeader('Detalhes da Escala');
 ?>
 
-<!-- Header Clean (Estilo LouveApp) -->
-<!-- Header Clean (Estilo LouveApp) -->
-<header style="
-    background: var(--bg-surface); 
-    padding: 20px 24px; 
-    border-bottom: 1px solid var(--border-color); 
-    margin: -16px -16px 24px -16px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    position: sticky; top: 0; z-index: 20;
-">
-    <a href="escalas.php" class="ripple" style="
-        width: 40px; height: 40px; 
-        display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; color: var(--text-muted); 
-        border-radius: 50%;
-        transition: background 0.2s;
-    " onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-        <i data-lucide="arrow-left"></i>
-    </a>
+<!-- HERO BANNER (Dark Theme) -->
+<div style="
+        background: radial-gradient(circle at top right, #3b82f6, #1e3a8a); 
+        color: white; 
+        padding: 32px 24px; 
+        border-radius: 24px; 
+        margin-bottom: 24px; 
+        box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.4);
+        position: relative;
+        overflow: hidden;
+    ">
+    <!-- Decoration Circles -->
+    <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+    <div style="position: absolute; bottom: -40px; right: 40px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
 
-    <div style="text-align: center;">
-        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
-            <?= $diaSemana ?>, <?= $date->format('d/m') ?>
-        </p>
-    </div>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
+        <div>
+            <a href="escalas.php" style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+                <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
+            </a>
 
-    <!-- Botão de Opções (Editar/Excluir) -->
-    <div style="position: relative;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+                <div style="
+                        background: rgba(255,255,255,0.2); 
+                        padding: 8px 16px; 
+                        border-radius: 12px; 
+                        text-align: center; 
+                        backdrop-filter: blur(4px);
+                        border: 1px solid rgba(255,255,255,0.2);
+                    ">
+                    <div style="font-size: 1.5rem; font-weight: 800; line-height: 1;"><?= $date->format('d') ?></div>
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;"><?= strtoupper(substr($monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1], 0, 3)) ?></div>
+                </div>
+                <div>
+                    <h1 style="margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+                    <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 1rem; font-weight: 500;">
+                        <?= $diaSemana ?> • 19:00 <?= $schedule['notes'] ? '• ' . htmlspecialchars(substr($schedule['notes'], 0, 30)) . '...' : '' ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions (Edit/Delete) - Absolute top right or flex -->
         <button onclick="toggleOptionsMenu()" id="menuBtn" class="ripple" style="
-            width: 40px; height: 40px; 
-            background: transparent; border: none; 
-            color: var(--text-muted); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-        ">
+                background: rgba(255,255,255,0.2); border: none; 
+                width: 40px; height: 40px; border-radius: 12px;
+                color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+                backdrop-filter: blur(4px);
+            ">
             <i data-lucide="more-vertical"></i>
         </button>
-        <!-- Dropdown Menu -->
+
+        <!-- Dropdown Menu (Hidden) -->
         <div id="optionsMenu" style="
-            display: none; position: absolute; top: 48px; right: 0; 
-            background: var(--bg-surface); border-radius: 12px; box-shadow: var(--shadow-xl); 
-            min-width: 160px; z-index: 50; overflow: hidden; border: 1px solid var(--border-color);
-        ">
-            <button onclick="openModal('modalEditSchedule'); toggleOptionsMenu()" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="edit-2" style="width: 16px;"></i> Editar
+                    display: none; position: absolute; top: 50px; right: 0; 
+                    background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                    min-width: 180px; z-index: 50; overflow: hidden; border: 1px solid #e2e8f0;
+                ">
+            <button onclick="openModal('modalEditSchedule'); toggleOptionsMenu()" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                <i data-lucide="edit-2" style="width: 16px;"></i> Editar Detalhes
             </button>
             <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');" style="margin: 0;">
                 <input type="hidden" name="action" value="delete_schedule">
-                <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border-color);">
-                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
+                <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; font-size: 0.9rem; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 10px; border-top: 1px solid #f1f5f9;">
+                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir Escala
                 </button>
             </form>
         </div>
     </div>
-</header>
+</div>
 
-<div style="max-width: 900px; margin: 0 auto; padding: 0 16px;">
+<!-- MAIN GRID LAYOUT -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start;">
 
-    <!-- Resumo (Cards Coloridos Compactos) -->
-    <!-- Resumo (Cards Coloridos Compactos) -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
-        <div style="background: var(--primary-subtle); padding: 16px; border-radius: 12px; text-align: center;">
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary);"><?= count($team) ?></div>
-            <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary-dark); opacity: 0.8;">Membros</div>
-        </div>
-        <div style="background: #fdf2f8; padding: 16px; border-radius: 12px; text-align: center;">
-            <div style="font-size: 1.5rem; font-weight: 800; color: #ec4899;"><?= count($songs) ?></div>
-            <div style="font-size: 0.8rem; font-weight: 600; color: #9d174d; opacity: 0.8;">Músicas</div>
-        </div>
-    </div>
+    <!-- LEFT COLUMN: Observations & Participants -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
 
-    <!-- Seção: Equipe -->
-    <div style="margin-bottom: 32px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0;">Equipe Escalada</h2>
-            <button onclick="openModal('modalMembers')" style="color: var(--primary); font-weight: 600; background: none; border: none; font-size: 0.9rem; cursor: pointer;">
-                + Adicionar
-            </button>
-        </div>
-
-        <?php if (empty($team)): ?>
-            <div style="text-align: center; padding: 32px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Nenhum membro escalado.</p>
-            </div>
-        <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <?php foreach ($team as $member): ?>
-                    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); justify-content: space-between;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="width: 36px; height: 36px; background: var(--primary-subtle); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
-                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
-                            </div>
-                            <div>
-                                <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
-                            </div>
-                        </div>
-                        <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
-                            <input type="hidden" name="action" value="remove_member">
-                            <input type="hidden" name="user_id" value="<?= $member['user_id'] ?>"> <!-- Corrigido para user_id se tabela pivot -->
-                            <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 8px;">
-                                <i data-lucide="minus-circle" style="width: 18px;"></i>
-                            </button>
-                        </form>
-                    </div>
-                <?php endforeach; ?>
+        <!-- Observations Card -->
+        <?php if (!empty($schedule['notes'])): ?>
+            <div style="background: #ffffff; color: #4b5563; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <h3 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin: 0 0 12px 0;">Observações</h3>
+                <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></p>
             </div>
         <?php endif; ?>
+
+        <!-- Participants Card -->
+        <div style="background: #ffffff; border-radius: 20px; padding: 24px; position: relative; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">Participantes <span style="font-size: 0.9rem; color: #64748b; font-weight: 500;">(<?= count($team) ?>)</span></h3>
+                <button onclick="openModal('modalMembers')" style="
+                        background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; 
+                        padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; cursor: pointer;
+                        transition: all 0.2s;
+                    ">
+                    + Editar
+                </button>
+            </div>
+
+            <?php if (empty($team)): ?>
+                <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Ninguém escalado ainda.</p>
+                </div>
+            <?php else: ?>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <?php foreach ($team as $member): ?>
+                        <div style="display: flex; align-items: center; gap: 14px; padding: 8px 0;">
+                            <div style="
+                                    width: 44px; height: 44px; 
+                                    background: #eff6ff; color: #2563eb; border-radius: 50%; 
+                                    display: flex; align-items: center; justify-content: center; 
+                                    font-weight: 700; font-size: 1rem;
+                                    flex-shrink: 0; border: 1px solid #dbeafe;
+                                ">
+                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #0f172a; font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                <div style="font-size: 0.8rem; color: #64748b;"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
+                            </div>
+                            <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
+                                <input type="hidden" name="action" value="remove_member">
+                                <input type="hidden" name="user_id" value="<?= $member['user_id'] ?>">
+                                <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 6px; border-radius: 6px; transition: background 0.2s;">
+                                    <i data-lucide="x" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
 
-    <!-- Seção: Repertório -->
-    <div style="margin-bottom: 100px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0;">Repertório</h2>
-            <button onclick="openModal('modalSongs')" style="color: var(--primary); font-weight: 600; background: none; border: none; font-size: 0.9rem; cursor: pointer;">
-                + Músicas
+    <!-- RIGHT COLUMN: Roteiro (Songs) -->
+    <div style="background: #ffffff; border-radius: 20px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">Roteiro <span style="font-size: 0.9rem; color: #64748b; font-weight: 500;">(<?= count($songs) ?>)</span></h3>
+            <button onclick="openModal('modalSongs')" style="
+                    background: #0f172a; color: white; border: none; 
+                    padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+                    display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+                ">
+                <i data-lucide="music" style="width: 14px;"></i> Add Música
             </button>
         </div>
 
         <?php if (empty($songs)): ?>
-            <div style="text-align: center; padding: 32px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Nenhuma música selecionada.</p>
+            <div style="text-align: center; padding: 40px 20px; border: 2px dashed #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                <i data-lucide="music-2" style="width: 32px; height: 32px; color: #94a3b8; margin-bottom: 8px;"></i>
+                <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Nenhuma música selecionada.</p>
             </div>
         <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <?php foreach ($songs as $song): ?>
-                    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);">
-                        <div style="width: 32px; height: 32px; background: var(--bg-body); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700; font-size: 0.8rem;">
-                            <?= $song['order_index'] ?? ($song['position'] + 1) ?>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <?php foreach ($songs as $index => $song): ?>
+                    <div style="display: flex; align-items: flex-start; gap: 16px; position: relative;">
+                        <div style="
+                                font-size: 1.5rem; font-weight: 800; color: #e2e8f0; 
+                                width: 30px; text-align: center; line-height: 1; margin-top: 2px;
+                            ">
+                            <?= $index + 1 ?>ª
                         </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?> • Tom: <span style="color: #d97706; font-weight: 600;"><?= $song['key_semitone'] ?? $song['tone'] ?></span></div>
-                        </div>
+                        <div style="flex: 1; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <h4 style="margin: 0 0 4px 0; color: #0f172a; font-size: 1rem; font-weight: 700;"><?= htmlspecialchars($song['title']) ?></h4>
+                                <!-- Actions for Song -->
+                                <form method="POST" onsubmit="return confirm('Remover música?');" style="margin: 0;">
+                                    <input type="hidden" name="action" value="remove_song">
+                                    <input type="hidden" name="song_id" value="<?= $song['song_id'] ?>">
+                                    <button type="submit" style="background: none; border: none; color: #94a3b8; cursor: pointer; opacity: 0.6; padding: 4px;">
+                                        <i data-lucide="trash-2" style="width: 16px;"></i>
+                                    </button>
+                                </form>
+                            </div>
 
-                        <form method="POST" onsubmit="return confirm('Remover música?');" style="margin: 0;">
-                            <input type="hidden" name="action" value="remove_song">
-                            <input type="hidden" name="song_id" value="<?= $song['song_id'] ?>"> <!-- Ajustado para song_id da pivot table -->
-                            <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 8px;">
-                                <i data-lucide="trash-2" style="width: 18px;"></i>
-                            </button>
-                        </form>
+                            <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                                <?= htmlspecialchars($song['artist']) ?>
+                            </p>
+
+                            <div style="margin-top: 10px; display: flex; gap: 8px;">
+                                <?php if ($song['tone']): ?>
+                                    <span style="
+                                            background: #fff7ed; color: #ea580c; 
+                                            padding: 4px 10px; border-radius: 6px; 
+                                            font-size: 0.75rem; font-weight: 700; border: 1px solid #ffedd5;
+                                        ">TOM: <?= $song['key_semitone'] ?? $song['tone'] ?></span>
+                                <?php endif; ?>
+
+                                <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
+                                        background: #fef2f2; color: #ef4444; text-decoration: none;
+                                        padding: 4px 10px; border-radius: 6px; 
+                                        font-size: 0.75rem; font-weight: 700; border: 1px solid #fee2e2;
+                                        display: flex; align-items: center; gap: 4px;
+                                        transition: background 0.2s;
+                                     ">
+                                    <i data-lucide="youtube" style="width: 12px;"></i> YouTube
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>
-
+</div>
 </div>
 
 <!-- AREA DE MODAIS -->

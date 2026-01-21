@@ -37,36 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 renderAppHeader('Nova Escala');
+renderPageHeader('Nova Escala', 'Passo <span id="step-count">1</span> de 3');
 ?>
-
-<!-- Header Clean -->
-<header style="
-    background: white; 
-    padding: 20px 24px; 
-    border-bottom: 1px solid #e2e8f0; 
-    margin: -16px -16px 24px -16px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    position: sticky; top: 0; z-index: 20;
-">
-    <a href="escalas.php" class="ripple" style="
-        width: 40px; height: 40px; 
-        display: flex; align-items: center; justify-content: center; 
-        text-decoration: none; color: var(--text-muted); 
-        border-radius: 50%;
-        transition: background 0.2s;
-    " onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-        <i data-lucide="x"></i>
-    </a>
-
-    <div style="text-align: center;">
-        <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">Nova Escala</h1>
-        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">Passo <span id="step-count">1</span> de 3</p>
-    </div>
-
-    <div style="width: 40px;"></div> <!-- Spacer para centralizar -->
-</header>
 
 <style>
     .wizard-container {

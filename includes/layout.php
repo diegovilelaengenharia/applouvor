@@ -10,7 +10,46 @@ require_once 'db.php';
 
 function renderAppHeader($title, $backUrl = null)
 {
-    global $pdo; // Correção: Garante acesso ao banco de dados dentro da função
+    global $pdo;
+
+    // --- Lógica de Usuário Global (Movida do Sidebar) ---
+    $userId = $_SESSION['user_id'] ?? 1;
+    $currentUser = null;
+    $userPhoto = null;
+
+    if ($userId) {
+        try {
+            // Tenta buscar foto também
+            $stmtUser = $pdo->prepare("SELECT name, phone, avatar FROM users WHERE id = ?");
+            $stmtUser->execute([$userId]);
+            $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) { /* Ignorar erros de coluna */
+        }
+
+        if (!$currentUser) {
+            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usuário', 'phone' => '', 'avatar' => null];
+        }
+
+        // Avatar Logic
+        if (!empty($currentUser['avatar'])) {
+            $userPhoto = $currentUser['avatar'];
+            if (strpos($userPhoto, 'http') === false && strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
+                $userPhoto = '../assets/uploads/' . $userPhoto;
+            }
+        } else {
+            $userNameForAvatar = $currentUser['name'] ?? 'U';
+            $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($userNameForAvatar) . '&background=dcfce7&color=166534';
+        }
+    }
+    // Compartilhar com globais ou session para acesso no header
+    // Uma forma suja mas eficaz para templates é usar global ou re-passar. 
+    // Vamos usar global $_layoutUser para acesso em renderPageHeader
+    global $_layoutUser;
+    $_layoutUser = [
+        'name' => $currentUser['name'],
+        'photo' => $userPhoto,
+        'profile_link' => 'perfil.php'
+    ];
 ?>
     <!DOCTYPE html>
     <html lang="pt-BR">
@@ -31,7 +70,11 @@ function renderAppHeader($title, $backUrl = null)
         <meta property="og:description" content="Gestão de escalas, repertório e ministério de louvor da PIB Oliveira.">
         <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando possível -->
         <meta property="og:url" content="https://app.piboliveira.com.br/">
-        <meta name="theme-color" content="#2D7A4F">
+        <meta name="theme-color" content="#047857">
+        <meta name="view-transition" content="same-origin">
+        <link rel="manifest" href="/manifest.json">
+        <meta name="view-transition" content="same-origin">
+        <link rel="manifest" href="/manifest.json">
 
         <!-- Ícones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -66,8 +109,51 @@ function renderAppHeader($title, $backUrl = null)
                 /* Mínimo para Samsung M34 */
                 --radius-md: 12px;
                 --radius-lg: 16px;
+                --radius-lg: 16px;
                 --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
                 --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+
+            /* Animations (Vibe Coding) */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .animate-in {
+                animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                opacity: 0;
+                /* Começa invisível */
+            }
+
+            /* Stagger delays for multiple items */
+            .animate-in:nth-child(1) {
+                animation-delay: 0.1s;
+            }
+
+            .animate-in:nth-child(2) {
+                animation-delay: 0.15s;
+            }
+
+            .animate-in:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+
+            .animate-in:nth-child(4) {
+                animation-delay: 0.25s;
+            }
+
+            /* View Transition Fixes */
+            ::view-transition-old(root),
+            ::view-transition-new(root) {
+                animation-duration: 0.3s;
             }
 
             /* Global Dark Mode */
@@ -231,6 +317,48 @@ function renderAppHeader($title, $backUrl = null)
                 opacity: 0.2;
                 transition: 0s;
             }
+
+            /* Animations (Vibe Coding) */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .animate-in {
+                animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                opacity: 0;
+                /* Começa invisível */
+            }
+
+            /* Stagger delays for multiple items */
+            .animate-in:nth-child(1) {
+                animation-delay: 0.1s;
+            }
+
+            .animate-in:nth-child(2) {
+                animation-delay: 0.15s;
+            }
+
+            .animate-in:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+
+            .animate-in:nth-child(4) {
+                animation-delay: 0.25s;
+            }
+
+            /* View Transition Fixes */
+            ::view-transition-old(root),
+            ::view-transition-new(root) {
+                animation-duration: 0.3s;
+            }
         </style>
     </head>
 
@@ -263,10 +391,167 @@ function renderAppHeader($title, $backUrl = null)
         ?>
         </div> <!-- Fim #app-content -->
 
+        <!-- Bottom Navigation (Mobile Only) -->
+        <style>
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--bg-surface);
+                border-top: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-around;
+                padding: 8px 4px 24px 4px;
+                /* Mais padding bottom por causa da area segura do iOS */
+                z-index: 1000;
+                box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+
+            .bottom-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                color: var(--text-muted);
+                font-size: 0.7rem;
+                font-weight: 600;
+                padding: 8px;
+                border-radius: 8px;
+                flex: 1;
+                transition: color 0.2s;
+            }
+
+            .bottom-nav-item.active {
+                color: var(--primary);
+            }
+
+            .bottom-nav-item i {
+                width: 24px;
+                height: 24px;
+                stroke-width: 2px;
+            }
+
+            .bottom-nav-item.active i {
+                fill: rgba(4, 120, 87, 0.1);
+                /* Preenchimento sutil no ativo */
+            }
+
+            @media (min-width: 1025px) {
+                .bottom-nav {
+                    display: none;
+                }
+            }
+        </style>
+
+        <nav class="bottom-nav">
+            <a href="index.php" class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+                <i data-lucide="home"></i>
+                Início
+            </a>
+            <a href="escalas.php" class="bottom-nav-item <?= in_array(basename($_SERVER['PHP_SELF']), ['escalas.php', 'repertorio.php', 'membros.php']) ? 'active' : '' ?>">
+                <i data-lucide="calendar"></i>
+                Gestão
+            </a>
+            <a href="devocionais.php" class="bottom-nav-item <?= in_array(basename($_SERVER['PHP_SELF']), ['devocionais.php', 'oracao.php']) ? 'active' : '' ?>">
+                <i data-lucide="book-open"></i>
+                Espírito
+            </a>
+            <a href="avisos.php" class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
+                <i data-lucide="bell"></i>
+                Comunica
+            </a>
+            <a href="chat.php" class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'active' : '' ?>">
+                <i data-lucide="message-circle"></i>
+                Chat
+            </a>
+        </nav>
+
+
         <!-- Inicializar Ícones -->
         <script>
             lucide.createIcons();
+
+            // Registrar PWA Service Worker
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(registration => console.log('SW registrado com sucesso:', registration.scope))
+                        .catch(err => console.log('Falha ao registrar SW:', err));
+                });
+            }
+
+            // ... (Restante do script mantido, apenas adicionando verificação para evitar duplicidade de listeners se necessário)
+
+            // Adicionar classe animate-in aos cards principais automaticamente
+            document.addEventListener('DOMContentLoaded', () => {
+                const cards = document.querySelectorAll('.card, .stats-card, .notice-card');
+                cards.forEach((card, index) => {
+                    card.classList.add('animate-in');
+                    card.style.animationDelay = `${index * 0.1}s`;
+                });
+                // Sidebar Swipe Logic (Vibe Coding)
+                const sidebar = document.getElementById('app-sidebar');
+                const appContent = document.getElementById('app-content');
+                if (!sidebar) return; // Segurança
+
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                // ... (Mantendo a lógica de swipe anterior) ...
+
+                document.addEventListener('touchstart', e => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, {
+                    passive: true
+                });
+
+                document.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSidebarSwipe();
+                }, {
+                    passive: true
+                });
+
+                function handleSidebarSwipe() {
+                    const swipeThreshold = 100; // Swipe mais longo para evitar acidentes
+                    const diff = touchEndX - touchStartX;
+                    const isSidebarOpen = sidebar.classList.contains('active');
+
+                    if (diff > swipeThreshold && touchStartX < 50 && !isSidebarOpen) {
+                        toggleSidebar();
+                    }
+                    if (diff < -swipeThreshold && isSidebarOpen) {
+                        toggleSidebar();
+                    }
+                }
+
+                function toggleSidebar() {
+                    sidebar.classList.toggle('active');
+                    let overlay = document.getElementById('sidebar-overlay');
+                    if (!overlay) {
+                        overlay = document.createElement('div');
+                        overlay.id = 'sidebar-overlay';
+                        overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:99;opacity:0;transition:opacity 0.3s;';
+                        overlay.onclick = toggleSidebar;
+                        document.body.appendChild(overlay);
+                        setTimeout(() => overlay.style.opacity = '1', 10);
+                    } else {
+                        if (sidebar.classList.contains('active')) {
+                            overlay.style.display = 'block';
+                            setTimeout(() => overlay.style.opacity = '1', 10);
+                        } else {
+                            overlay.style.opacity = '0';
+                            setTimeout(() => overlay.style.display = 'none', 300);
+                        }
+                    }
+                }
+            });
         </script>
+
+        <!-- Gestures Script -->
+        <script src="/assets/js/gestures.js"></script>
     </body>
 
     </html>
@@ -276,49 +561,168 @@ function renderAppHeader($title, $backUrl = null)
     // Nova função para cabeçalhos padronizados (Clean Header)
     function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
     {
+        global $_layoutUser;
+        $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
     <header style="
-            background: white; 
-            padding: 20px 24px; 
-            border-bottom: 1px solid #e2e8f0; 
-            margin: -16px -16px 24px -16px; 
+            background: var(--bg-surface); 
+            padding: 16px; 
+            margin: -20px -20px 24px -20px; 
             display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 20;
+            align-items: center; 
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 40;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
         ">
-        <!-- Spacer para centralizar o título corretamente, compensando o botão da direita -->
-        <div style="width: 40px;">
-            <!-- Botão Voltar Profissional -->
-            <button onclick="history.back()" class="ripple" style="
-                background: transparent; 
-                border: 1px solid #e2e8f0; 
-                width: 40px; height: 40px; 
-                border-radius: 12px; 
-                display: flex; align-items: center; justify-content: center; 
-                cursor: pointer; 
-                color: #64748b;
-                transition: all 0.2s;
-            " onmouseover="this.style.background='#f1f5f9'; this.style.color='#1e293b'"
-                onmouseout="this.style.background='transparent'; this.style.color='#64748b'">
-                <i data-lucide="arrow-left" style="width: 20px;"></i>
-            </button>
-        </div>
 
-        <div style="text-align: center;">
-            <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b; letter-spacing: -0.5px;"><?= htmlspecialchars($title) ?></h1>
-            <?php if ($subtitle): ?>
-                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #64748b; font-weight: 500;"><?= htmlspecialchars($subtitle) ?></p>
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <?php if (!$isHome): ?>
+                <button onclick="history.back()" class="ripple" title="Voltar" style="
+                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
+                display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
+            ">
+                    <i data-lucide="arrow-left" style="width: 22px;"></i>
+                </button>
+
+                <a href="index.php" class="ripple" title="Navegação Principal" style="
+                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
+                display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
+            ">
+                    <i data-lucide="home" style="width: 22px;"></i>
+                </a>
             <?php endif; ?>
         </div>
 
-        <!-- Ação à Direita (Filtros, Adicionar, etc) -->
-        <div style="width: 40px; display: flex; justify-content: flex-end;">
-            <?php if ($rightAction): ?>
+        <div style="flex: 1; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+            <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($title) ?></h1>
+            <?php if ($subtitle): ?>
+                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($subtitle) ?></p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Direita: Ações + Perfil -->
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
+
+
+
+            <!-- Ação da Página (se houver) -->
+            <?php if (isset($rightAction) && $rightAction): ?>
                 <?= $rightAction ?>
             <?php endif; ?>
+
+            <!-- Perfil Dropdown (Card Moderno) -->
+            <div style="position: relative; margin-left: 4px;">
+                <button onclick="toggleProfileDropdown(event)"
+                    class="ripple" style="
+                    width: 52px; height: 52px; padding: 0; 
+                    border: 2px solid white; 
+                    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25), 0 4px 12px rgba(34, 197, 94, 0.2);
+                    border-radius: 50%; overflow: hidden; cursor: pointer; background: var(--bg-surface);
+                    display: flex; align-items: center; justify-content: center;
+                    transition: transform 0.2s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
+                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 100%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                    <?php endif; ?>
+                </button>
+
+                <!-- Dropdown Card -->
+                <div id="headerProfileDropdown" style="
+                    display: none; position: absolute; top: 54px; right: 0; 
+                    background: var(--bg-surface); border-radius: 16px; 
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
+                    min-width: 260px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
+                    animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                    transform-origin: top right;
+                ">
+                    <!-- Header do Card -->
+                    <div style="padding: 24px 20px; text-align: center; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
+                        <div style="width: 72px; height: 72px; margin: 0 auto 12px auto; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="font-weight: 800; color: var(--text-main); font-size: 1.05rem; margin-bottom: 4px;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                        <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Membro da Equipe</span>
+                    </div>
+
+                    <!-- Menu Itens -->
+                    <div style="padding: 12px;">
+                        <a href="perfil.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+                            <span style="font-weight: 500;">Meu Perfil</span>
+                        </a>
+
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <a href="lider.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                <div style="background: #fff7ed; padding: 8px; border-radius: 8px; display: flex; color: #d97706;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
+                                        <path d="M5 16v4h14v-4" />
+                                    </svg>
+                                </div>
+                                <span style="font-weight: 500;">Painel do Líder</span>
+                            </a>
+                        <?php endif; ?>
+
+                        <a href="configuracoes.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </div>
+                            <span style="font-weight: 500;">Configurações</span>
+                        </a>
+
+                        <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
+
+                        <a href="../logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #ef4444; font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
+                            <div style="background: #fee2e2; padding: 8px; border-radius: 8px; display: flex; color: #ef4444;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <polyline points="16 17 21 12 16 7" />
+                                    <line x1="21" x2="9" y1="12" y2="12" />
+                                </svg>
+                            </div>
+                            <span style="font-weight: 600;">Sair da Conta</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toggleProfileDropdown(e) {
+                    e.stopPropagation();
+                    const dropdown = document.getElementById('headerProfileDropdown');
+                    const isVisible = dropdown.style.display === 'block';
+
+                    // Fechar outros
+                    document.querySelectorAll('[id$="Dropdown"]').forEach(d => d.style.display = 'none');
+
+                    if (!isVisible) {
+                        dropdown.style.display = 'block';
+                    }
+                }
+
+                document.addEventListener('click', function(e) {
+                    const dropdown = document.getElementById('headerProfileDropdown');
+                    if (dropdown && dropdown.style.display === 'block') {
+                        dropdown.style.display = 'none';
+                    }
+                });
+            </script>
         </div>
     </header>
 <?php

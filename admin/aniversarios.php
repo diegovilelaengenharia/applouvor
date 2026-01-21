@@ -13,6 +13,7 @@ try {
 }
 
 renderAppHeader('Aniversariantes');
+renderPageHeader('Aniversariantes', 'Membros que celebram a vida este mês');
 ?>
 
 <div style="text-align: center; margin-top: 40px;">
