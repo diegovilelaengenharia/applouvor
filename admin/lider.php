@@ -114,13 +114,13 @@ renderAppHeader('Painel Líder');
             <i data-lucide="chevron-right" style="color: #cbd5e1;"></i>
         </a>
 
-        <!-- Boletim Estatístico -->
-        <a href="boletim_estatistico.php" class="ripple" style="
+        <!-- Boletim Estatístico (Repertório) -->
+        <a href="#" onclick="alert('Funcionalidade sendo implementada!')" class="ripple" style="
             display: flex; align-items: center; gap: 16px; 
             background: white; padding: 20px; border-radius: 16px; 
             border: 1px solid #e2e8f0; text-decoration: none; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-            transition: all 0.2s;
+            transition: all 0.2s; opacity: 0.8;
         " onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-2px)'"
             onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'">
 
@@ -134,7 +134,33 @@ renderAppHeader('Painel Líder');
 
             <div style="flex: 1;">
                 <h3 style="margin: 0; color: #1e293b; font-size: 1.05rem; font-weight: 700;">Boletim Estatístico</h3>
-                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 0.9rem;">Métricas de participação e repertório</p>
+                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 0.9rem;">Métricas de repertório e escalas</p>
+            </div>
+
+            <i data-lucide="chevron-right" style="color: #cbd5e1;"></i>
+        </a>
+
+        <!-- Monitoramento de Usuários (Novo) -->
+        <a href="monitoramento_usuarios.php" class="ripple" style="
+            display: flex; align-items: center; gap: 16px; 
+            background: white; padding: 20px; border-radius: 16px; 
+            border: 1px solid #e2e8f0; text-decoration: none; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        " onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'">
+
+            <div style="
+                width: 48px; height: 48px; border-radius: 12px; 
+                background: #eff6ff; color: #3b82f6; 
+                display: flex; align-items: center; justify-content: center;
+            ">
+                <i data-lucide="activity" style="width: 24px;"></i>
+            </div>
+
+            <div style="flex: 1;">
+                <h3 style="margin: 0; color: #1e293b; font-size: 1.05rem; font-weight: 700;">Monitoramento de Acessos</h3>
+                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 0.9rem;">Logins, atividade e usuários online</p>
             </div>
 
             <i data-lucide="chevron-right" style="color: #cbd5e1;"></i>
