@@ -175,6 +175,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         $themeLight = '#eff6ff'; // Blue 50
                     }
 
+                    // Sobrescrever se for HOJE (Verde destaque)
+                    if ($isToday) {
+                        $themeColor = '#16a34a'; // Green 600
+                        $themeLight = '#dcfce7'; // Green 50
+                    }
+
                     // Buscar participantes (Top 5)
                     $stmtUsers = $pdo->prepare("
                             SELECT u.name, u.photo, u.avatar_color 
