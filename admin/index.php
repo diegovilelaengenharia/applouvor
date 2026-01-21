@@ -132,15 +132,9 @@ renderAppHeader('Início');
     }
 </style>
 
-<!-- Hero Simples e Saudação -->
-<div style="padding: 24px 20px 32px 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-            <h1 style="margin: 0; font-size: 1.5rem; color: #1e293b; font-weight: 800;">Olá, <?= explode(' ', $_SESSION['user_name'] ?? 'Membro')[0] ?>! 👋</h1>
-            <p style="margin: 4px 0 0 0; color: #64748b; font-size: 0.9rem;">Bem-vindo ao LouveApp</p>
-        </div>
-        <?php renderGlobalNavButtons(); ?>
-    </div>
+<!-- Conteúdo Principal -->
+<div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
+
 
     <div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
         <!-- Banner Principal (Se tiver escala) -->

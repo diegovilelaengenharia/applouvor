@@ -142,62 +142,29 @@ renderAppHeader('Detalhes da Música');
     }
 </style>
 
-<!-- Hero Header -->
-<div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: visible;
-">
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <a href="repertorio.php" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: #047857; 
-            background: white; 
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        ">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
-        </a>
+// Header com Botão Voltar (já incluído no layout, mas podemos personalizar se quiser)
+// Vamos usar o renderPageHeader padrão
+renderPageHeader('Detalhes da Música', $song['artist']);
 
-        <div style="display: flex; gap: 12px; align-items: center;">
-            <!-- Edit Button -->
-
-
-            <?php renderGlobalNavButtons(); ?>
-        </div>
+// Ícone Principal (separado do header agora, como destaque no topo do corpo)
+?>
+<div style="text-align: center; margin-bottom: 24px;">
+    <div style="
+        width: 64px; 
+        height: 64px; 
+        background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+        border-radius: 16px; 
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+    ">
+        <i data-lucide="music" style="width: 32px; height: 32px; color: white;"></i>
     </div>
-
-    <!-- Song Info in Hero -->
-    <div style="text-align: center;">
-        <div style="
-            width: 64px; 
-            height: 64px; 
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 16px; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-bottom: 16px;
-            backdrop-filter: blur(4px);
-        ">
-            <i data-lucide="music" style="width: 32px; height: 32px; color: white;"></i>
-        </div>
-        <h1 style="color: white; margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($song['title']) ?></h1>
-        <p style="color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 500; font-size: 1.1rem;"><?= htmlspecialchars($song['artist']) ?></p>
-    </div>
+    <h1 style="color: #1e293b; margin: 16px 0 4px 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
+    <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 1rem;"><?= htmlspecialchars($song['artist']) ?></p>
 </div>
+<?php
 
 <!-- Versão -->
 <div class="info-section">
