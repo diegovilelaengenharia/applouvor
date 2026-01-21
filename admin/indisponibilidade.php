@@ -63,8 +63,8 @@ $stmt = $pdo->query("SELECT id, name FROM users WHERE id != $user_id ORDER BY na
 $users_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-renderAppHeader('Indisponibilidades');
-renderPageHeader('Indisponibilidades', 'Informe suas ausências');
+renderAppHeader('Ausências de Escala');
+renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 ?>
 
 <div class="container fade-in-up">

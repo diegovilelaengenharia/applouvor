@@ -84,7 +84,7 @@ if (!empty($currentUser['avatar'])) {
             <i data-lucide="users"></i> <span class="sidebar-text">Membros</span>
         </a>
         <a href="indisponibilidade.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
-            <i data-lucide="calendar-off"></i> <span class="sidebar-text">Indisponibilidade</span>
+            <i data-lucide="calendar-off"></i> <span class="sidebar-text">Ausências de Escala</span>
         </a>
 
         <div class="nav-divider"></div>
