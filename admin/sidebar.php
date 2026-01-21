@@ -389,6 +389,15 @@ if (!empty($currentUser['avatar'])) {
         gap: 4px;
         overflow-y: auto;
         overflow-x: hidden;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE/Edge */
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari/Opera */
     }
 
     .nav-item {
