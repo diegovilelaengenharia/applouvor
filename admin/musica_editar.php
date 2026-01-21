@@ -180,6 +180,7 @@ renderAppHeader('Editar Música');
         margin-bottom: 16px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 8px;
     }
 
@@ -223,6 +224,25 @@ renderAppHeader('Editar Música');
         outline: none;
         border-color: var(--primary);
         box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+    }
+
+    /* Input Icon */
+    .input-icon-wrapper {
+        position: relative;
+    }
+
+    .input-icon-wrapper i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        width: 16px;
+        pointer-events: none;
+    }
+
+    .input-icon-wrapper input {
+        padding-left: 40px;
     }
 
     /* Tag Pills Compact */
@@ -304,6 +324,19 @@ renderAppHeader('Editar Música');
         gap: 6px;
     }
 
+    .btn-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: var(--bg-body);
+        color: var(--text-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     /* Modal Styles */
     .modal-overlay {
         display: none;
@@ -361,25 +394,16 @@ renderAppHeader('Editar Música');
         margin: 0;
     }
 
-    .btn-close {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        border: none;
-        background: var(--bg-body);
-        color: var(--text-muted);
-        cursor: pointer;
-        display: flex;
+    .custom-field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 32px;
+        gap: 12px;
         align-items: center;
-        justify-content: center;
-    }
-
-    .custom-field-item {
-        background: var(--bg-body);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px;
         margin-bottom: 12px;
+        background: var(--bg-body);
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
     }
 
     @media (max-width: 768px) {
@@ -387,6 +411,18 @@ renderAppHeader('Editar Música');
         .form-grid-2,
         .form-grid-3 {
             grid-template-columns: 1fr;
+        }
+
+        .custom-field-row {
+            grid-template-columns: 1fr;
+            gap: 8px;
+            position: relative;
+        }
+
+        .custom-field-row button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
         }
     }
 </style>
@@ -404,8 +440,10 @@ renderAppHeader('Editar Música');
         <!-- Card 1: Informações Principais -->
         <div class="form-card">
             <div class="card-title">
-                <i data-lucide="music" style="width: 14px;"></i>
-                Informações Principais
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="music" style="width: 14px;"></i>
+                    Informações Principais
+                </div>
             </div>
 
             <div class="form-grid">
@@ -439,25 +477,80 @@ renderAppHeader('Editar Música');
 
                     <div class="form-group">
                         <label class="form-label">&nbsp;</label>
-                        <div style="display: flex; gap: 8px;">
-                            <button type="button" onclick="openLinksModal()" class="btn-action btn-secondary" style="flex: 1;" title="Links e Streaming">
-                                <i data-lucide="link" style="width: 16px;"></i>
-                            </button>
-                            <button type="button" onclick="openExtrasModal()" class="btn-action btn-secondary" style="flex: 1;" title="Campos Extras">
-                                <i data-lucide="plus-circle" style="width: 16px;"></i>
-                            </button>
-                        </div>
+                        <button type="button" onclick="openLinksModal()" class="btn-action btn-secondary" style="width: 100%;">
+                            <i data-lucide="radio" style="width: 16px;"></i>
+                            Streaming
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Card 2: Classificações -->
+        <!-- Card 2: Referências e Mídia (Novo Card) -->
         <div class="form-card">
             <div class="card-title">
-                <i data-lucide="folder" style="width: 14px;"></i>
-                Classificações
-                <button type="button" onclick="openTagManager()" class="btn-link" style="margin-left: auto;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="link" style="width: 14px;"></i>
+                    Referências e Mídia
+                </div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+                <div class="form-group">
+                    <label class="form-label">Link da Letra</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="file-text"></i>
+                        <input type="url" name="link_letra" class="form-input" value="<?= htmlspecialchars($song['link_letra']) ?>" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Link da Cifra</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="music-2"></i>
+                        <input type="url" name="link_cifra" class="form-input" value="<?= htmlspecialchars($song['link_cifra']) ?>" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Link do Áudio</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="headphones"></i>
+                        <input type="url" name="link_audio" class="form-input" value="<?= htmlspecialchars($song['link_audio']) ?>" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Link do Vídeo</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="video"></i>
+                        <input type="url" name="link_video" class="form-input" value="<?= htmlspecialchars($song['link_video']) ?>" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; border-top: 1px dashed var(--border-color); padding-top: 16px;">
+                <label class="form-label" style="margin-bottom: 12px;">Outras Referências</label>
+
+                <div id="customFieldsList">
+                    <!-- Renderizado via JS -->
+                </div>
+
+                <button type="button" onclick="addCustomFieldUI()" class="btn-link" style="padding: 0;">
+                    <i data-lucide="plus-circle" style="width: 16px;"></i>
+                    Adicionar Referência Personalizada
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 3: Classificações -->
+        <div class="form-card">
+            <div class="card-title">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="folder" style="width: 14px;"></i>
+                    Classificações
+                </div>
+                <button type="button" onclick="openTagManager()" class="btn-link">
                     <i data-lucide="settings" style="width: 14px;"></i>
                     Gerenciar
                 </button>
@@ -476,11 +569,13 @@ renderAppHeader('Editar Música');
             </div>
         </div>
 
-        <!-- Card 3: Observações -->
+        <!-- Card 4: Observações -->
         <div class="form-card">
             <div class="card-title">
-                <i data-lucide="message-square" style="width: 14px;"></i>
-                Observações
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="message-square" style="width: 14px;"></i>
+                    Observações
+                </div>
             </div>
 
             <div class="form-group">
@@ -509,97 +604,47 @@ renderAppHeader('Editar Música');
     </form>
 </div>
 
-<!-- Modal: Links e Referências -->
+<!-- Modal: Streaming -->
 <div id="linksModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title">Links e Referências</h3>
+            <h3 class="modal-title">Plataformas de Streaming</h3>
             <button type="button" onclick="closeLinksModal()" class="btn-close">
                 <i data-lucide="x" style="width: 18px;"></i>
             </button>
         </div>
 
         <div style="display: grid; gap: 16px;">
-            <!-- Referências Básicas -->
-            <div>
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase;">Referências</h4>
-
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label class="form-label">Letra</label>
-                    <input type="url" name="link_letra" id="link_letra" class="form-input" value="<?= htmlspecialchars($song['link_letra']) ?>" placeholder="https://">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label class="form-label">Cifra</label>
-                    <input type="url" name="link_cifra" id="link_cifra" class="form-input" value="<?= htmlspecialchars($song['link_cifra']) ?>" placeholder="https://">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label class="form-label">Áudio</label>
-                    <input type="url" name="link_audio" id="link_audio" class="form-input" value="<?= htmlspecialchars($song['link_audio']) ?>" placeholder="https://">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Vídeo</label>
-                    <input type="url" name="link_video" id="link_video" class="form-input" value="<?= htmlspecialchars($song['link_video']) ?>" placeholder="https://">
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label">Spotify</label>
+                <div class="input-icon-wrapper">
+                    <input type="url" name="link_spotify" id="link_spotify" class="form-input" value="<?= htmlspecialchars($song['link_spotify']) ?>" placeholder="https://open.spotify.com/...">
                 </div>
             </div>
 
-            <!-- Plataformas de Streaming -->
-            <div>
-                <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase;">Streaming</h4>
-
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label class="form-label">Spotify</label>
-                    <input type="url" name="link_spotify" id="link_spotify" class="form-input" value="<?= htmlspecialchars($song['link_spotify']) ?>" placeholder="https://open.spotify.com/...">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label class="form-label">YouTube</label>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label">YouTube</label>
+                <div class="input-icon-wrapper">
                     <input type="url" name="link_youtube" id="link_youtube" class="form-input" value="<?= htmlspecialchars($song['link_youtube']) ?>" placeholder="https://youtube.com/...">
                 </div>
+            </div>
 
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <label class="form-label">Apple Music</label>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label">Apple Music</label>
+                <div class="input-icon-wrapper">
                     <input type="url" name="link_apple_music" id="link_apple_music" class="form-input" value="<?= htmlspecialchars($song['link_apple_music']) ?>" placeholder="https://music.apple.com/...">
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label">Deezer</label>
+            <div class="form-group">
+                <label class="form-label">Deezer</label>
+                <div class="input-icon-wrapper">
                     <input type="url" name="link_deezer" id="link_deezer" class="form-input" value="<?= htmlspecialchars($song['link_deezer']) ?>" placeholder="https://deezer.com/...">
                 </div>
             </div>
         </div>
 
         <button type="button" onclick="closeLinksModal()" class="btn-action btn-primary" style="width: 100%; margin-top: 20px;">
-            Concluído
-        </button>
-    </div>
-</div>
-
-<!-- Modal: Campos Extras -->
-<div id="extrasModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Campos Adicionais</h3>
-            <button type="button" onclick="closeExtrasModal()" class="btn-close">
-                <i data-lucide="x" style="width: 18px;"></i>
-            </button>
-        </div>
-
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
-            Adicione links personalizados como Google Drive, Partitura, Playback, etc.
-        </p>
-
-        <div id="customFieldsList">
-            <!-- Renderizado via JS -->
-        </div>
-
-        <button type="button" onclick="addCustomFieldUI()" class="btn-action btn-secondary" style="width: 100%; margin-top: 12px; margin-bottom: 24px;">
-            <i data-lucide="plus" style="width: 18px;"></i> Adicionar Campo
-        </button>
-
-        <button type="button" onclick="syncCustomFields()" class="btn-action btn-primary" style="width: 100%;">
             Concluído
         </button>
     </div>
@@ -684,20 +729,17 @@ renderAppHeader('Editar Música');
 
         customFieldsData.forEach((field, index) => {
             const item = document.createElement('div');
-            item.className = 'custom-field-item';
+            item.className = 'custom-field-row';
             item.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-muted);">Campo #${index + 1}</span>
-                    <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="width: 28px; height: 28px; background: rgba(239, 68, 68, 0.1); color: #ef4444;">
-                        <i data-lucide="trash-2" style="width: 14px;"></i>
-                    </button>
+                <div>
+                    <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input" placeholder="Descrição (Ex: Partitura)">
                 </div>
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input" placeholder="Nome (Ex: Partitura)">
-                </div>
-                <div class="form-group">
+                <div>
                     <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input" placeholder="Link (https://...)">
                 </div>
+                <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="width: 32px; height: 32px; color: #ef4444;" title="Remover">
+                    <i data-lucide="trash-2" style="width: 16px;"></i>
+                </button>
             `;
             list.appendChild(item);
         });
@@ -730,11 +772,8 @@ renderAppHeader('Editar Música');
 
     function updateCustomFieldData(index, key, value) {
         customFieldsData[index][key] = value;
-    }
-
-    function syncCustomFields() {
-        renderCustomFields(); // Garante que hidden inputs estejam atualizados
-        closeExtrasModal();
+        // Atualizar hidden inputs
+        renderCustomFields();
     }
 
     // Modal Functions
@@ -745,16 +784,6 @@ renderAppHeader('Editar Música');
 
     function closeLinksModal() {
         document.getElementById('linksModal').classList.remove('active');
-    }
-
-    function openExtrasModal() {
-        renderCustomFields();
-        document.getElementById('extrasModal').classList.add('active');
-        lucide.createIcons();
-    }
-
-    function closeExtrasModal() {
-        document.getElementById('extrasModal').classList.remove('active');
     }
 
     function openTagManager() {
@@ -779,16 +808,6 @@ renderAppHeader('Editar Música');
             label.style.color = 'var(--text-muted)';
         }
     }
-
-    // Tag Management CRUD (Dummy Implementation for UI - Needs Backend Endpoint)
-    // Para funcionar realmente inline, precisaria de um endpoint API.
-    // Como estamos simplificando, vou fazer submeter para classificacoes.php e recarregar ou implementar ajax real se tiver endpoint.
-    // Vou implementar uma chamada fetch para classificacoes.php mas como ela retorna HTML, teria que adaptar.
-    // Melhor abordagem: Simular a UI e recarregar a página ao fechar se houve alteração, OU implementar AJAX real se eu crar um endpoint JSON.
-    // VOU CRIAR A LOGICA AJAX ASSUMINDO QUE POSSO CRIAR UM ENDPOINT SIMPLES OU USAR O PROPRIO classificacoes.php COM PARAMETRO JSON.
-
-    // Vou usar a lógica de submissão via form hidden para criar tags, mas idealmente seria AJAX.
-    // Por enquanto, vou deixar o script AJAX preparado para um futuro endpoint 'api/tags.php'.
 
     // SIMULAÇÃO VISUAL DE SELEÇÃO DE COR
     function selectTagColor(radio) {
@@ -820,9 +839,6 @@ renderAppHeader('Editar Música');
     }
 
     function saveTagInline() {
-        // Como não tenho endpoint API JSON pronto, vou fazer um submit tradicional para classificacoes.php
-        // POST para classificacoes.php com action=create/update
-
         const id = document.getElementById('editingTagId').value;
         const name = document.getElementById('tagNameInput').value;
         const desc = document.getElementById('tagDescInput').value;
@@ -841,7 +857,6 @@ renderAppHeader('Editar Música');
             method: 'POST',
             body: formData
         }).then(() => {
-            // Recarregar página para atualizar lista (solução simples e robusta)
             location.reload();
         });
     }
