@@ -5,11 +5,11 @@ $userId = $_SESSION['user_id'] ?? 1;
 
 try {
     // Tenta buscar foto também
-    $stmtUser = $pdo->prepare("SELECT name, phone, photo FROM users WHERE id = ?");
+    $stmtUser = $pdo->prepare("SELECT name, phone, avatar FROM users WHERE id = ?");
     $stmtUser->execute([$userId]);
     $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
-    // Fallback se a coluna photo não existir ainda
+    // Fallback se a coluna avatar não existir ainda
     try {
         $stmtUser = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
         $stmtUser->execute([$userId]);
@@ -20,17 +20,17 @@ try {
 }
 
 if (!$currentUser) {
-    $currentUser = ['name' => 'Usuário', 'phone' => '', 'photo' => null];
+    $currentUser = ['name' => 'Usuário', 'phone' => '', 'avatar' => null];
 }
 if (!$currentUser['phone']) $currentUser['phone'] = 'Membro da Equipe';
 
 // Avatar Logic
-if (!empty($currentUser['photo'])) {
+if (!empty($currentUser['avatar'])) {
     // Verifica se é path relativo ou url completa
-    $userPhoto = $currentUser['photo'];
+    $userPhoto = $currentUser['avatar'];
     // Ajuste simples para path relativo se necessário (ex: ../uploads/...)
     if (strpos($userPhoto, 'http') === false && strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
-        $userPhoto = '../assets/img/' . $userPhoto; // Tentativa de path
+        $userPhoto = '../assets/uploads/' . $userPhoto; // Path correto para uploads
     }
 } else {
     $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($currentUser['name']) . '&background=dcfce7&color=166534';
