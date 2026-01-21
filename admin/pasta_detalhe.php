@@ -78,26 +78,7 @@ renderAppHeader('Pasta');
             <i data-lucide="arrow-left" style="width: 20px;"></i>
         </a>
 
-        <div onclick="openSheet('sheet-perfil')" class="ripple" style="
-            width: 40px; 
-            height: 40px; 
-            border-radius: 50%; 
-            background: rgba(255,255,255,0.2); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            overflow: hidden; 
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.3);
-        ">
-            <?php if (!empty($_SESSION['user_avatar'])): ?>
-                <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-            <?php else: ?>
-                <span style="font-weight: 700; font-size: 0.9rem; color: white;">
-                    <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                </span>
-            <?php endif; ?>
-        </div>
+        <div style="display: flex; align-items: center;">`r`n            <?php renderGlobalNavButtons(); ?>`r`n        </div>
     </div>
 
     <!-- Category Info in Hero -->
