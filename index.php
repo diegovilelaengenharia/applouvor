@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
 
     if (empty($name) || empty($password)) {
-        $error = "Por favor, preencha todos os campos.";
+        $error = "Preencha todos os campos.";
     } else {
         if (login($name, $password, $pdo)) {
             // Verifica nivel e redireciona
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit;
         } else {
-            $error = "Nome ou senha incorretos.";
+            $error = "Dados incorretos.";
         }
     }
 }
@@ -34,58 +34,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Louvor PIB - Login</title>
 
-    <!-- PWA Fullscreen & Mobile -->
+    <!-- PWA Config -->
+    <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/images/logo-black.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="icon" type="image/png" href="assets/images/logo-black.png">
-    <link rel="manifest" href="manifest.json">
-
-    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* --- Login Page Styles (Light & Clean) --- */
         :root {
+            /* Light Theme */
+            --bg: #ffffff;
+            --text-main: #18181b;
+            /* Zinc 900 */
+            --text-muted: #71717a;
+            /* Zinc 500 */
             --primary: #047857;
             /* Emerald 700 */
-            --primary-hover: #065f46;
-            /* Emerald 800 */
-            --bg-body: #f8fafc;
-            /* Slate 50 */
-            --bg-surface: #ffffff;
-            --text-main: #1e293b;
-            /* Slate 800 */
-            --text-muted: #64748b;
-            /* Slate 500 */
-            --border: #e2e8f0;
-            /* Slate 200 */
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --primary-light: #ecfdf5;
+            /* Emerald 50 */
+            --input-bg: #f4f4f5;
+            /* Zinc 100 */
+            --border: #e4e4e7;
+            /* Zinc 200 */
+            --error-bg: #fef2f2;
+            --error-text: #ef4444;
         }
 
         body.dark-mode {
+            /* Dark Theme */
+            --bg: #09090b;
+            /* Zinc 950 */
+            --text-main: #f4f4f5;
+            /* Zinc 100 */
+            --text-muted: #a1a1aa;
+            /* Zinc 400 */
             --primary: #34d399;
             /* Emerald 400 */
-            --primary-hover: #10b981;
-            /* Emerald 500 */
-            --bg-body: #0f172a;
-            /* Slate 900 */
-            --bg-surface: #1e293b;
-            /* Slate 800 */
-            --text-main: #f1f5f9;
-            /* Slate 100 */
-            --text-muted: #94a3b8;
-            /* Slate 400 */
-            --border: #334155;
-            /* Slate 700 */
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --primary-light: #064e3b;
+            /* Emerald 900 */
+            --input-bg: #18181b;
+            /* Zinc 900 */
+            --border: #27272a;
+            /* Zinc 800 */
+            --error-bg: #450a0a;
+            --error-text: #fca5a5;
         }
 
         * {
@@ -97,178 +95,214 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
+            background-color: var(--bg);
             color: var(--text-main);
-            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 380px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            background: var(--bg-surface);
-            border-radius: 24px;
-            padding: 40px 32px;
-            box-shadow: var(--shadow);
             text-align: center;
-            border: 1px solid var(--border);
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .brand-logo {
-            width: 90px;
+        .logo {
+            width: 80px;
             height: auto;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            /* Invert logo in DM if using black png without transparency issues or swap src via JS. 
+               Assuming PNG is dark. Filter handles simple inversion for dark mode if needed. */
         }
 
-        .app-title {
+        body.dark-mode .logo {
+            filter: invert(1) brightness(2);
+        }
+
+        h1 {
             font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-main);
+            font-weight: 700;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.025em;
         }
 
-        .app-subtitle {
+        p.subtitle {
             font-size: 0.95rem;
             color: var(--text-muted);
-            margin-bottom: 32px;
-            font-weight: 500;
+            margin-bottom: 40px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .form-input {
+        form {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            background: var(--input-bg);
+            border: 1px solid transparent;
+            border-radius: 16px;
             font-size: 1rem;
             color: var(--text-main);
             outline: none;
             transition: all 0.2s;
-            background: #f8fafc;
         }
 
-        .form-input:focus {
+        input:focus {
+            background: var(--bg);
             border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1);
+            box-shadow: 0 0 0 4px var(--primary-light);
         }
 
-        .btn-primary {
+        input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        button.btn-primary {
             width: 100%;
             padding: 16px;
-            background: var(--primary);
-            color: white;
+            background: var(--text-main);
+            /* Black in light, White in dark */
+            color: var(--bg);
+            /* White in light, Black in dark */
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-top: 12px;
+            transition: transform 0.1s, opacity 0.2s;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-primary:active {
+        button.btn-primary:active {
             transform: scale(0.98);
         }
 
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 8px 16px;
+        /* Install Button - Outline Style, Same Size */
+        .install-wrapper {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        button.btn-install {
+            width: 100%;
+            padding: 16px;
             background: transparent;
             color: var(--primary);
-            border: 1px dashed var(--border);
-            /* Modern "dashed" look or just transparent */
-            border-radius: 20px;
-            /* Pill shape */
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-            margin-top: 0;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(4, 120, 87, 0.05);
-            border-color: var(--primary);
-        }
-
-        /* PWA Install Area - Minimalist */
-        #pwa-install-area,
-        #pwa-ios-area {
-            margin-top: 16px;
-            padding-top: 0;
-            border-top: none;
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
             display: flex;
+            align-items: center;
             justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 1;
         }
 
-        .ios-instruction {
-            margin-top: 12px;
-            background: #f8fafc;
-            padding: 16px;
+        button.btn-install:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .error {
+            background: var(--error-bg);
+            color: var(--error-text);
+            padding: 12px;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .credits {
+            margin-top: 48px;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            text-align: left;
-            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .credits a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* iOS Help Modal */
+        #ios-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            padding: 24px;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+            border-top: 1px solid var(--border);
+        }
+
+        #ios-modal.show {
+            transform: translateY(0);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="login-container">
-        <img src="assets/images/logo-black.png" alt="Logo PIB Oliveira" class="brand-logo">
-        <h1 class="app-title">Ministério de Louvor</h1>
-        <p class="app-subtitle">Acesso Restrito à Equipe</p>
+    <div class="login-wrapper">
+        <img src="assets/images/logo-black.png" alt="Logo" class="logo">
+
+        <h1>Ministério de Louvor</h1>
+        <p class="subtitle">Bem-vindo(a) de volta</p>
 
         <?php if ($error): ?>
-            <div class="error-message">
+            <div class="error">
                 <i data-lucide="alert-circle" style="width: 18px;"></i>
                 <?= htmlspecialchars($error) ?>
             </div>
         <?php endif; ?>
 
         <form method="POST">
-            <div class="form-group">
-                <label class="form-label">Seu Nome</label>
-                <input type="text" name="name" class="form-input" placeholder="Ex: Diego" required autocomplete="username">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Senha de Acesso</label>
-                <input type="password" name="password" class="form-input" placeholder="••••" required autocomplete="current-password" inputmode="numeric" pattern="[0-9]*">
-            </div>
+            <input type="text" name="name" placeholder="Seu nome" required autocomplete="username">
+            <input type="password" name="password" placeholder="Senha" required autocomplete="current-password" pattern="[0-9]*" inputmode="numeric">
 
             <button type="submit" class="btn-primary">
                 Entrar
@@ -276,97 +310,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
-        <!-- PWA Install -->
-        <div id="pwa-install-area" style="display: none;">
-            <button id="btnInstallAndroid" class="btn-secondary">
-                <i data-lucide="download" style="width: 16px;"></i> Instalar App
+        <div class="install-wrapper">
+            <button class="btn-install" id="btnInstall">
+                <i data-lucide="download" style="width: 16px;"></i>
+                Instalar App
             </button>
         </div>
 
-        <div id="pwa-ios-area" style="display: none;">
-            <button class="btn-secondary" onclick="toggleIOSHelp()">
-                <i data-lucide="share" style="width: 16px;"></i> Instalar no iPhone
-            </button>
-            <div id="iosHelp" class="ios-instruction" style="display: none;">
-                <p><strong>Para instalar:</strong></p>
-                <ol style="margin-top: 8px; margin-left: 20px; line-height: 1.6;">
-                    <li>Toque no botão <strong>Compartilhar</strong> <i data-lucide="share" style="width: 12px; display: inline;"></i> abaixo.</li>
-                    <li>Escolha <strong>"Adicionar à Tela de Início"</strong>.</li>
-                </ol>
-            </div>
-        </div>
-
-        <div class="footer-credits">
-            <p>Desenvolvido por <span style="font-weight: 600;">Diego T. N. Vilela</span></p>
-            <a href="https://wa.me/5535984529577" target="_blank" style="margin-top: 8px; display: inline-block;">
-                Suporte Técnico
+        <div class="credits">
+            <span>Desenvolvido por Diego T. N. Vilela</span>
+            <a href="https://wa.me/5535984529577" target="_blank">
+                <i data-lucide="message-circle" style="width: 14px; display: inline; vertical-align: middle;"></i>
+                Contato WhatsApp
             </a>
-            <p style="margin-top: 8px; opacity: 0.6;">v2.1.0 • 2026</p>
         </div>
     </div>
 
+    <!-- iOS Help -->
+    <div id="ios-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3 style="font-size: 1.1rem; font-weight: 700;">Instalar no iPhone</h3>
+            <button onclick="toggleIOS()" style="background:none; border:none; color:var(--text-muted);"><i data-lucide="x"></i></button>
+        </div>
+        <p style="color:var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px;">
+            Para instalar, toque no botão <strong>Compartilhar</strong> <i data-lucide="share" style="display:inline; width:14px;"></i> e depois em <strong>Adicionar à Tela de Início</strong>.
+        </p>
+        <button onclick="toggleIOS()" style="width:100%; padding:14px; background:var(--input-bg); border:none; border-radius:12px; font-weight:600; color:var(--text-main);">Entendi</button>
+    </div>
+
     <script>
-        // Check saved theme and apply
+        // Init Icons
+        lucide.createIcons();
+
+        // Theme Logic
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-mode');
         }
 
-        lucide.createIcons();
+        // PWA Logic
+        let deferredPrompt;
+        const btnInstall = document.getElementById('btnInstall');
+        const iosModal = document.getElementById('ios-modal');
 
-        // PWA Registration & Logic
+        // Detect iOS
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+        if (isStandalone) {
+            // If already installed, we might hide the button or change text
+            btnInstall.innerHTML = '<i data-lucide="check"></i> App Instalado';
+            btnInstall.style.pointerEvents = 'none';
+            btnInstall.style.opacity = '0.5';
+            lucide.createIcons();
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Button is already visible, just prepared
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (isIos && !isStandalone) {
+                toggleIOS();
+                return;
+            }
+
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const {
+                    outcome
+                } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            } else {
+                // If clicked but no prompt available (desktop chrome, firefox, or already installed)
+                if (!isStandalone) {
+                    alert('Para instalar: Utilize o menu do seu navegador e procure por "Instalar App" ou "Adicionar à Tela Inicial".');
+                }
+            }
+        });
+
+        function toggleIOS() {
+            iosModal.classList.toggle('show');
+        }
+
+        // SW Register
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
-                    // Check for updates
                     reg.onupdatefound = () => {
                         const newWorker = reg.installing;
                         newWorker.onstatechange = () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // New version available, reload to update
                                 window.location.reload();
                             }
                         };
                     };
                 });
             });
-        }
-
-        // Install Prompts
-        let deferredPrompt;
-        const installArea = document.getElementById('pwa-install-area');
-        const btnAndroid = document.getElementById('btnInstallAndroid');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installArea.style.display = 'block';
-        });
-
-        if (btnAndroid) {
-            btnAndroid.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const {
-                        outcome
-                    } = await deferredPrompt.userChoice;
-                    deferredPrompt = null;
-                    installArea.style.display = 'none';
-                }
-            });
-        }
-
-        // iOS Detection
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-        if (isIos && !isStandalone) {
-            document.getElementById('pwa-ios-area').style.display = 'block';
-        }
-
-        function toggleIOSHelp() {
-            const help = document.getElementById('iosHelp');
-            help.style.display = help.style.display === 'none' ? 'block' : 'none';
         }
     </script>
 </body>
