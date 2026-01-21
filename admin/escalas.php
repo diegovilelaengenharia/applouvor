@@ -8,7 +8,6 @@ $filterMine = isset($_GET['mine']) && $_GET['mine'] == '1';
 $filterType = $_GET['type'] ?? '';
 
 // ID do usuário logado (Assumindo sessão ou hardcoded 1 para dev se não tiver sessão ainda)
-// Na prática deve vir de $_SESSION['user_id']
 $loggedUserId = $_SESSION['user_id'] ?? 1;
 
 // Construção da Query FUTURA
@@ -120,18 +119,24 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
             ">Anteriores</button>
     </div>
 
-    <!-- View Options Dropdown (Simulado) -->
-    <div style="position: relative;">
-        <button class="ripple" style="
-                background: white; border: 1px solid #e2e8f0; 
-                padding: 8px 16px; border-radius: 10px; 
-                display: flex; align-items: center; gap: 8px; 
-                color: #334155; font-weight: 600; font-size: 0.9rem;
-                cursor: pointer;
-            ">
-            <i data-lucide="align-left" style="width: 18px;"></i>
-            <span class="desktop-only">Visualização</span>
-            <i data-lucide="chevron-down" style="width: 16px; color: #94a3b8;"></i>
+    <!-- View Toggles (Real) -->
+    <div style="background: #e2e8f0; padding: 4px; border-radius: 12px; display: flex; gap: 4px;">
+        <button onclick="setView('timeline')" id="btn-view-timeline" title="Linha do Tempo" class="ripple" style="
+            border: none; background: white; color: #0f172a; 
+            width: 36px; height: 36px; border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
+        ">
+            <i data-lucide="calendar-clock" style="width: 20px;"></i>
+        </button>
+        <button onclick="setView('list')" id="btn-view-list" title="Modo Lista" class="ripple" style="
+            border: none; background: transparent; color: #64748b; 
+            width: 36px; height: 36px; border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: none;
+        ">
+            <i data-lucide="list" style="width: 20px;"></i>
         </button>
     </div>
 </div>
@@ -151,7 +156,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                 <a href="escala_adicionar.php" style="display: inline-block; margin-top: 24px; color: #166534; font-weight: 600; text-decoration: none;">+ Adicionar Escala</a>
             </div>
         <?php else: ?>
-            <div class="timeline-container" style="display: flex; flex-direction: column; gap: 24px; padding-bottom: 100px;">
+
+            <!-- VIEW: TIMELINE -->
+            <div id="view-timeline" class="timeline-container" style="display: flex; flex-direction: column; gap: 24px; padding-bottom: 100px;">
                 <?php foreach ($futureSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
@@ -167,7 +174,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                     $stmtUsers->execute([$schedule['id']]);
                     $participants = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
 
-                    // Contar total
+                    // Contar total e extra
                     $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
                     $stmtCount->execute([$schedule['id']]);
                     $totalParticipants = $stmtCount->fetchColumn();
@@ -177,8 +184,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                         <!-- Coluna Data -->
                         <div class="timeline-date" style="text-align: right; min-width: 60px; padding-top: 8px;">
                             <div style="font-size: 1.8rem; font-weight: 300; color: #334155; line-height: 1;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;"><?= strtoupper(strftime('%b', $date->getTimestamp())) // Mes abrev 
-                                                                                                                            ?></div>
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                             <div style="font-size: 0.7rem; color: #cbd5e1; margin-top: 4px;"><?= $date->format('D') ?></div>
                         </div>
 
@@ -215,8 +221,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                                         <?php foreach ($participants as $i => $p):
                                             $zIndex = 10 - $i;
                                             $photo = $p['photo'] ? (strpos($p['photo'], 'path') !== false ? '../assets/img/' . $p['photo'] : '../assets/img/' . $p['photo']) : null;
-                                            // Ajuste simples de path
-                                            if ($p['photo'] && !file_exists('../assets/img/' . $p['photo'])) $photo = null; // Fallback check
+                                            if ($p['photo'] && !file_exists('../assets/img/' . $p['photo'])) $photo = null;
                                         ?>
                                             <div style="
                                                     width: 32px; height: 32px; 
@@ -257,6 +262,54 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- VIEW: LIST (Compact) -->
+            <div id="view-list" style="display: none; flex-direction: column; gap: 8px; padding-bottom: 100px;">
+                <?php foreach ($futureSchedules as $schedule):
+                    $date = new DateTime($schedule['event_date']);
+                    $isToday = $date->format('Y-m-d') === date('Y-m-d');
+
+                    // Contagens
+                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
+                    $stmtCount->execute([$schedule['id']]);
+                    $teamCount = $stmtCount->fetchColumn();
+
+                    $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
+                    $stmtSongs->execute([$schedule['id']]);
+                    $songCount = $stmtSongs->fetchColumn();
+                ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="
+                        display: flex; align-items: center; justify-content: space-between;
+                        padding: 16px 20px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;
+                        text-decoration: none; color: inherit; transition: background 0.2s;
+                    ">
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <!-- Date Badge -->
+                            <div style="
+                                background: <?= $isToday ? '#dcfce7' : '#f1f5f9' ?>; 
+                                color: <?= $isToday ? '#166534' : '#64748b' ?>;
+                                padding: 8px 12px; border-radius: 8px; text-align: center; min-width: 50px;
+                            ">
+                                <div style="font-weight: 700; font-size: 1.1rem; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.65rem; text-transform: uppercase;"><?= strtoupper($date->format('M')) ?></div>
+                            </div>
+
+                            <div>
+                                <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b;">
+                                    <?= htmlspecialchars($schedule['event_type']) ?>
+                                    <?php if ($isToday): ?><span style="font-size: 0.7rem; color: #166534; background: #dcfce7; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">HOJE</span><?php endif; ?>
+                                </h3>
+                                <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">
+                                    <?= $teamCount ?> participantes • <?= $songCount ?> músicas
+                                </div>
+                            </div>
+                        </div>
+
+                        <i data-lucide="chevron-right" style="color: #cbd5e1; width: 18px;"></i>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
         <?php endif; ?>
     </div>
 
@@ -300,8 +353,88 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
     <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
 </a>
 
+
+<!-- FILTER SHEET (CORRIGIDO E RESTAURADO) -->
+<div id="filterSheet" style="
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2000;
+">
+    <!-- Backdrop -->
+    <div onclick="closeSheet('filterSheet')" style="
+        position: absolute; width: 100%; height: 100%; 
+        background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+    "></div>
+
+    <!-- Sheet Content -->
+    <div style="
+        position: absolute; bottom: 0; left: 0; width: 100%;
+        background: white; border-radius: 20px 20px 0 0;
+        padding: 24px; padding-bottom: 40px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        animation: slideUp 0.3s ease-out;
+    ">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Filtrar Escalas</h3>
+            <button onclick="closeSheet('filterSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: #64748b;">
+                <i data-lucide="x" style="width: 24px;"></i>
+            </button>
+        </div>
+
+        <form method="GET" action="escalas.php">
+            <!-- Toggle Minhas Escalas -->
+            <label style="
+                display: flex; align-items: center; justify-content: space-between;
+                padding: 16px; background: #f8fafc; border-radius: 12px;
+                cursor: pointer; margin-bottom: 20px; border: 1px solid #e2e8f0;
+            ">
+                <span style="font-weight: 600; color: #334155;">Apenas em que participo</span>
+                <input type="checkbox" name="mine" value="1" <?= $filterMine ? 'checked' : '' ?> style="transform: scale(1.5);">
+            </label>
+
+            <!-- Tipo de Evento -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 8px;">Tipo de Evento</label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <?php
+                    $types = ['Culto Domingo a Noite', 'Ensaio', 'Culto Jovem', 'Especial'];
+                    foreach ($types as $t):
+                        $active = $filterType === $t;
+                    ?>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="type" value="<?= $t ?>" <?= $active ? 'checked' : '' ?> style="display: none;">
+                            <div style="
+                                padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+                                background: <?= $active ? '#dcfce7' : 'white' ?>;
+                                color: <?= $active ? '#166534' : '#64748b' ?>;
+                                border: 1px solid <?= $active ? '#166534' : '#e2e8f0' ?>;
+                                transition: all 0.2s;
+                            ">
+                                <?= $t ?>
+                            </div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div style="display: flex; gap: 12px;">
+                <a href="escalas.php" style="
+                    flex: 1; padding: 14px; text-align: center; text-decoration: none;
+                    color: #64748b; font-weight: 600; background: #f1f5f9; border-radius: 12px;
+                ">Limpar</a>
+                <button type="submit" style="
+                    flex: 2; padding: 14px; border: none; background: #166534; 
+                    color: white; font-weight: 700; border-radius: 12px; font-size: 1rem;
+                    box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2); cursor: pointer;
+                ">Aplicar Filtros</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <!-- Scripts -->
 <script>
+    // Tab Switching (Próximas vs Anteriores)
     function switchTab(tab) {
         const btnFuture = document.getElementById('btn-future');
         const btnPast = document.getElementById('btn-past');
@@ -332,12 +465,77 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
             btnPast.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
         }
     }
+
+    // View Toggle (Timeline vs List)
+    function setView(view) {
+        const timeline = document.getElementById('view-timeline');
+        const list = document.getElementById('view-list');
+        const btnTimeline = document.getElementById('btn-view-timeline');
+        const btnList = document.getElementById('btn-view-list');
+
+        // Salvar preferência se quiser (opcional)
+        // localStorage.setItem('escalasView', view);
+
+        if (view === 'timeline') {
+            if (timeline) timeline.style.display = 'flex';
+            if (list) list.style.display = 'none';
+
+            if (btnTimeline) {
+                btnTimeline.style.background = 'white';
+                btnTimeline.style.color = '#0f172a';
+                btnTimeline.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
+            }
+            if (btnList) {
+                btnList.style.background = 'transparent';
+                btnList.style.color = '#64748b';
+                btnList.style.boxShadow = 'none';
+            }
+        } else {
+            if (timeline) timeline.style.display = 'none';
+            if (list) list.style.display = 'flex';
+
+            if (btnTimeline) {
+                btnTimeline.style.background = 'transparent';
+                btnTimeline.style.color = '#64748b';
+                btnTimeline.style.boxShadow = 'none';
+            }
+            if (btnList) {
+                btnList.style.background = 'white';
+                btnList.style.color = '#0f172a';
+                btnList.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
+            }
+        }
+    }
+
+    // Sheet Modal Logic
+    function openSheet(id) {
+        const sheet = document.getElementById(id);
+        if (sheet) {
+            sheet.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+    }
+
+    function closeSheet(id) {
+        const sheet = document.getElementById(id);
+        if (sheet) {
+            sheet.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    }
 </script>
 
-<!-- Filtros Bottom Sheet (Mantido igual, apenas oculto por padrão) -->
-<!-- ... (Código do filtro existente mantido abaixo, se necessário) ... -->
-
 <style>
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
     .timeline-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
@@ -350,6 +548,5 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira', $filterButton);
         }
     }
 </style>
-
 
 <?php renderAppFooter(); ?>

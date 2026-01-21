@@ -42,7 +42,7 @@ if (!empty($currentUser['photo'])) {
     <div style="padding: 24px 20px; display: flex; align-items: center; justify-content: space-between;">
         <div class="logo-area" style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
             <!-- Logo Imagem -->
-            <img src="../assets/img/logo_pib_white.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
+            <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
                 <span class="sidebar-text" style="color:#166534;">PIB Oliveira</span>
