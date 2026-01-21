@@ -668,8 +668,34 @@ renderAppHeader('Detalhes da Escala');
                             </div>
                         </div>
 
-    </div>
-</div>
+                        <!-- Ações -->
+                        <div style="display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+                            <!-- Link Cifra -->
+                            <?php if (!empty($song['link'])): ?>
+                                <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" class="ripple" style="flex: 1; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#e5e7eb';" onmouseout="this.style.background='#f3f4f6';">
+                                    <i data-lucide="link" style="width: 16px;"></i>
+                                    Cifra
+                                </a>
+                            <?php endif; ?>
+
+                            <!-- Botão Ver Detalhes -->
+                            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="flex: 1; background: #3b82f6; color: white; border: none; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);" onmouseover="this.style.background='#2563eb';" onmouseout="this.style.background='#3b82f6';">
+                                <i data-lucide="eye" style="width: 16px;"></i>
+                                Ver Detalhes
+                            </a>
+
+                            <!-- Botão Remover -->
+                            <form method="POST" onsubmit="return confirm('Remover <?= htmlspecialchars($song['title']) ?>?');" style="margin: 0;">
+                                <input type="hidden" name="action" value="remove_song">
+                                <input type="hidden" name="song_id" value="<?= $song['id'] ?>">
+                                <input type="hidden" name="current_tab" value="repertorio">
+                                <button type="submit" class="ripple" style="background: transparent; border: 1px solid #fca5a5; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
+                                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             <?php endforeach; ?>
         </div>
 
@@ -683,3 +709,48 @@ renderAppHeader('Detalhes da Escala');
 
     <?php endif; ?>
 </div>
+
+<!-- MODAIS -->
+
+<script>
+// Função para toggle do menu de ações
+function toggleMenu() {
+    const menu = document.getElementById('actionMenu');
+    if (menu.style.display === 'none' || menu.style.display === '') {
+        menu.style.display = 'block';
+    } else {
+        menu.style.display = 'none';
+    }
+}
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('actionMenu');
+    const button = event.target.closest('button[onclick*="toggleMenu"]');
+    
+    if (!button && menu && !menu.contains(event.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+// Funções de tab
+function openTab(tabName) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+    
+    // Atualizar URL
+    const url = new URL(window.location);
+    url.searchParams.set('tab', tabName);
+    window.history.pushState({}, '', url);
+}
+
+lucide.createIcons();
+</script>
+
+<?php renderAppFooter(); ?>
