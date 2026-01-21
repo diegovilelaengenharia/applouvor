@@ -26,16 +26,16 @@ renderAppHeader('Repertório');
 <!-- Tabs Navegação -->
 <div style="background: #f1f5f9; padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 600px; margin-left: auto; margin-right: auto;">
     <a href="?tab=musicas" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600;
-        <?= $tab == 'musicas' ? 'background: white; color: #0f172a; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
+        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+        <?= $tab == 'musicas' ? 'background: white; color: #166534; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
     ">Músicas</a>
     <a href="?tab=pastas" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600;
-        <?= $tab == 'pastas' ? 'background: white; color: #0f172a; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
+        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+        <?= $tab == 'pastas' ? 'background: white; color: #166534; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
     ">Pastas</a>
     <a href="?tab=artistas" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600;
-        <?= $tab == 'artistas' ? 'background: white; color: #0f172a; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
+        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+        <?= $tab == 'artistas' ? 'background: white; color: #166534; box-shadow: 0 1px 2px rgba(0,0,0,0.05);' : 'color: #64748b;' ?>
     ">Artistas</a>
 </div>
 

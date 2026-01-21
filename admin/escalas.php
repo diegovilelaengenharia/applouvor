@@ -40,16 +40,17 @@ renderAppHeader('Escalas');
     <!-- Filtros/Ações à direita (Desktop) ou Toolbar abaixo (Mobile) -->
 </header>
 
-<!-- Tabs Navegação (Estilo LouveApp) -->
+<!-- Tabs Navegação (Estilo LouveApp - Verde) -->
 <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; padding: 0 16px;">
     <button class="ripple" style="
-        background: #eff6ff; 
-        color: #1d4ed8; 
+        background: #dcfce7; 
+        color: #166534; 
         border: none; 
         padding: 8px 32px; 
         border-radius: 20px; 
-        font-weight: 600; 
+        font-weight: 700; 
         font-size: 0.9rem;
+        box-shadow: 0 2px 6px rgba(22, 101, 52, 0.1);
     ">Próximas</button>
     <button class="ripple" style="
         background: transparent; 
@@ -132,18 +133,19 @@ renderAppHeader('Escalas');
     position: fixed;
     bottom: 80px; /* Acima da Bottom Bar no mobile */
     right: 24px;
-    background: #eff6ff;
-    color: #1d4ed8;
+    background: #166534; /* Verde Escuro */
+    color: white;
     padding: 12px 24px;
     border-radius: 30px;
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 4px 12px rgba(22, 101, 52, 0.3);
     text-decoration: none;
     font-weight: 600;
     z-index: 50;
-">
+    transition: transform 0.2s;
+" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
     <i data-lucide="plus" style="width: 20px; height: 20px;"></i>
     <span>Adicionar</span>
 </a>
