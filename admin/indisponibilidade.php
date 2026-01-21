@@ -85,17 +85,20 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
     <?php endif; ?>
 
     <!-- INSTRUÇÕES / COMO FUNCIONA -->
-    <div style="background: #eff6ff; border: 1px solid #dbeafe; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
-        <h4 style="margin: 0 0 8px 0; color: #1e40af; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="info" style="width: 18px;"></i>
+    <div style="background: linear-gradient(to right, #eff6ff, #f8fafc); border-left: 4px solid #3b82f6; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.05);">
+        <h4 style="margin: 0 0 10px 0; color: #1e40af; display: flex; align-items: center; gap: 8px; font-size: 1rem;">
+            <div style="background: #dbeafe; padding: 6px; border-radius: 8px; display: flex;">
+                <i data-lucide="info" style="width: 18px; color: #2563eb;"></i>
+            </div>
             Como funciona?
         </h4>
-        <p style="margin: 0; font-size: 0.9rem; color: #1e3a8a; line-height: 1.5;">
-            Vai viajar ou tem um compromisso? Avise aqui para não ser escalado nesses dias.
+        <p style="margin: 0; font-size: 0.9rem; color: #334155; line-height: 1.6;">
+            Vai viajar ou tem um compromisso? Avise aqui.
             <br>
-            <strong>1.</strong> Escolha a data de início e fim.
-            <br>
-            <strong>2.</strong> Se possível, combine com outro membro para te substituir e marque o nome dele.
+            <span style="display: inline-block; margin-top: 6px;">
+                <strong style="color: #2563eb;">1.</strong> Escolha o período. &nbsp;
+                <strong style="color: #2563eb;">2.</strong> <span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">Obrigatório:</span> Indique quem vai te substituir.
+            </span>
         </p>
     </div>
 
