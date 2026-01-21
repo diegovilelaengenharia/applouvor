@@ -7,20 +7,66 @@ require_once '../includes/layout.php';
 renderAppHeader('Estatísticas do Repertório');
 renderPageHeader('Estatísticas do Repertório', 'Análise de Músicas');
 
+// Filtros de período
+$period = $_GET['period'] ?? 'all';
+$customStart = $_GET['start_date'] ?? '';
+$customEnd = $_GET['end_date'] ?? '';
+
+// Definir datas baseado no período
+$dateFilter = '';
+$params = [];
+
+if ($period === 'month') {
+    $dateFilter = "AND ss.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+} elseif ($period === '3months') {
+    $dateFilter = "AND ss.created_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+} elseif ($period === '6months') {
+    $dateFilter = "AND ss.created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)";
+} elseif ($period === 'year') {
+    $dateFilter = "AND ss.created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR)";
+} elseif ($period === 'custom' && $customStart && $customEnd) {
+    $dateFilter = "AND ss.created_at BETWEEN ? AND ?";
+    $params = [$customStart, $customEnd];
+}
+
 // Buscar dados estatísticos
 try {
     // Total de músicas
     $totalSongs = $pdo->query("SELECT COUNT(*) FROM songs")->fetchColumn();
 
-    // Músicas mais tocadas (baseado em quantas vezes aparece em escalas)
-    $mostPlayed = $pdo->query("
+    // Músicas sem material completo
+    $incompleteSongs = $pdo->query("
+        SELECT COUNT(*) FROM songs 
+        WHERE (chords IS NULL OR chords = '') OR (lyrics IS NULL OR lyrics = '')
+    ")->fetchColumn();
+
+    // Músicas adicionadas recentemente (últimos 30 dias)
+    $recentSongs = $pdo->query("
+        SELECT COUNT(*) FROM songs 
+        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+    ")->fetchColumn();
+
+    // Músicas mais tocadas (com filtro de período)
+    $sql = "
         SELECT s.title, s.artist, COUNT(ss.song_id) as play_count
         FROM songs s
         LEFT JOIN schedule_songs ss ON s.id = ss.song_id
+        WHERE 1=1 $dateFilter
         GROUP BY s.id
+        HAVING play_count > 0
         ORDER BY play_count DESC
         LIMIT 10
-    ")->fetchAll(PDO::FETCH_ASSOC);
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $mostPlayed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Músicas nunca tocadas
+    $neverPlayed = $pdo->query("
+        SELECT COUNT(*) FROM songs s
+        LEFT JOIN schedule_songs ss ON s.id = ss.song_id
+        WHERE ss.song_id IS NULL
+    ")->fetchColumn();
 
     // Músicas por tom
     $byTone = $pdo->query("
@@ -32,7 +78,7 @@ try {
         LIMIT 8
     ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // Músicas por categoria
+    // Músicas por categoria/tag
     $byCategory = $pdo->query("
         SELECT category, COUNT(*) as count
         FROM songs
@@ -40,19 +86,84 @@ try {
         GROUP BY category
         ORDER BY count DESC
     ")->fetchAll(PDO::FETCH_ASSOC);
+
+    // Artistas mais tocados
+    $topArtists = $pdo->query("
+        SELECT s.artist, COUNT(ss.song_id) as play_count
+        FROM songs s
+        LEFT JOIN schedule_songs ss ON s.id = ss.song_id
+        WHERE s.artist IS NOT NULL AND s.artist != ''
+        GROUP BY s.artist
+        ORDER BY play_count DESC
+        LIMIT 5
+    ")->fetchAll(PDO::FETCH_ASSOC);
+
+    // BPM médio
+    $avgBpm = $pdo->query("
+        SELECT ROUND(AVG(bpm)) as avg_bpm
+        FROM songs
+        WHERE bpm IS NOT NULL AND bpm > 0
+    ")->fetchColumn();
 } catch (Exception $e) {
     $totalSongs = 0;
+    $incompleteSongs = 0;
+    $recentSongs = 0;
     $mostPlayed = [];
+    $neverPlayed = 0;
     $byTone = [];
     $byCategory = [];
+    $topArtists = [];
+    $avgBpm = 0;
 }
 ?>
 
 <style>
     .stats-container {
-        max-width: 900px;
+        max-width: 1200px;
         margin: 0 auto;
         padding: 0 16px;
+    }
+
+    .filter-bar {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+    }
+
+    .filter-tab {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .custom-date-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 12px;
+        margin-top: 12px;
     }
 
     .stat-hero {
@@ -64,9 +175,39 @@ try {
         text-align: center;
     }
 
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .kpi-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+    }
+
+    .kpi-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+    .kpi-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 16px;
         margin-bottom: 32px;
     }
@@ -122,9 +263,43 @@ try {
     .rank-number.bronze {
         background: linear-gradient(135deg, #f97316, #ea580c);
     }
+
+    @media (max-width: 768px) {
+        .custom-date-inputs {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
 <div class="stats-container">
+
+    <!-- Filtros de Período -->
+    <div class="filter-bar">
+        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="calendar" style="width: 18px;"></i>
+            Período de Análise
+        </div>
+
+        <div class="filter-tabs">
+            <a href="?period=all" class="filter-tab <?= $period === 'all' ? 'active' : '' ?>">Todo Período</a>
+            <a href="?period=month" class="filter-tab <?= $period === 'month' ? 'active' : '' ?>">Último Mês</a>
+            <a href="?period=3months" class="filter-tab <?= $period === '3months' ? 'active' : '' ?>">3 Meses</a>
+            <a href="?period=6months" class="filter-tab <?= $period === '6months' ? 'active' : '' ?>">6 Meses</a>
+            <a href="?period=year" class="filter-tab <?= $period === 'year' ? 'active' : '' ?>">1 Ano</a>
+            <a href="#" onclick="document.getElementById('customDates').style.display='grid'; return false;" class="filter-tab <?= $period === 'custom' ? 'active' : '' ?>">Personalizado</a>
+        </div>
+
+        <form method="GET" id="customDates" class="custom-date-inputs" style="display: <?= $period === 'custom' ? 'grid' : 'none' ?>;">
+            <input type="hidden" name="period" value="custom">
+            <input type="date" name="start_date" value="<?= htmlspecialchars($customStart) ?>" required
+                style="padding: 10px; border: 1px solid var(--border-color); border-radius: 8px;">
+            <input type="date" name="end_date" value="<?= htmlspecialchars($customEnd) ?>" required
+                style="padding: 10px; border: 1px solid var(--border-color); border-radius: 8px;">
+            <button type="submit" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                Aplicar
+            </button>
+        </form>
+    </div>
 
     <!-- Hero Stats -->
     <div class="stat-hero">
@@ -132,14 +307,42 @@ try {
         <div style="font-size: 1.1rem; opacity: 0.9;">Músicas no Repertório</div>
     </div>
 
+    <!-- KPIs Grid -->
+    <div class="kpi-grid">
+        <div class="kpi-card" style="border-left: 4px solid #10b981;">
+            <div class="kpi-value" style="color: #10b981;"><?= $totalSongs - $neverPlayed ?></div>
+            <div class="kpi-label">Músicas Tocadas</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #f59e0b;">
+            <div class="kpi-value" style="color: #f59e0b;"><?= $neverPlayed ?></div>
+            <div class="kpi-label">Nunca Tocadas</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #ef4444;">
+            <div class="kpi-value" style="color: #ef4444;"><?= $incompleteSongs ?></div>
+            <div class="kpi-label">Sem Material</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #3b82f6;">
+            <div class="kpi-value" style="color: #3b82f6;"><?= $recentSongs ?></div>
+            <div class="kpi-label">Adicionadas (30d)</div>
+        </div>
+
+        <div class="kpi-card" style="border-left: 4px solid #8b5cf6;">
+            <div class="kpi-value" style="color: #8b5cf6;"><?= $avgBpm ?: '--' ?></div>
+            <div class="kpi-label">BPM Médio</div>
+        </div>
+    </div>
+
     <!-- Top 10 Mais Tocadas -->
-    <div class="stat-card">
-        <div class="stat-title">🔥 Top 10 Mais Tocadas</div>
+    <div class="stat-card" style="margin-bottom: 24px;">
+        <div class="stat-title">🔥 Top 10 Mais Tocadas <?= $period !== 'all' ? '(Período Selecionado)' : '' ?></div>
 
         <?php if (empty($mostPlayed)): ?>
             <div style="text-align: center; padding: 20px; color: var(--text-muted);">
                 <i data-lucide="music" style="width: 32px; height: 32px; opacity: 0.3; margin-bottom: 8px;"></i>
-                <p style="margin: 0;">Nenhum dado disponível</p>
+                <p style="margin: 0;">Nenhum dado disponível para o período selecionado</p>
             </div>
         <?php else: ?>
             <?php foreach ($mostPlayed as $index => $song): ?>
@@ -165,6 +368,23 @@ try {
 
     <!-- Grid de Estatísticas -->
     <div class="stat-grid">
+
+        <!-- Top Artistas -->
+        <div class="stat-card">
+            <div class="stat-title">🎤 Top 5 Artistas</div>
+            <?php if (empty($topArtists)): ?>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Nenhum dado</p>
+            <?php else: ?>
+                <?php foreach ($topArtists as $artist): ?>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <span style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($artist['artist']) ?></span>
+                        <span style="background: #ecfdf5; color: #047857; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
+                            <?= $artist['play_count'] ?>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
 
         <!-- Por Tom -->
         <div class="stat-card">
