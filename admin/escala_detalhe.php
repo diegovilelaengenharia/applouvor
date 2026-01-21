@@ -400,20 +400,6 @@ renderAppHeader('Detalhes da Escala');
             </div>
         <?php endif; ?>
 
-        <!-- Ações -->
-        <div style="padding: 20px; background: var(--bg-tertiary); display: flex; gap: 12px;">
-            <button onclick="openEditModal()" class="ripple" style="flex: 0 0 auto; width: 50px; height: 50px; background: #FFC107; color: white; border: none; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3); transition: all 0.2s;">
-                <i data-lucide="edit-3" style="width: 20px;"></i>
-            </button>
-
-            <form method="POST" onsubmit="return confirm('Excluir esta escala?')" style="margin: 0; flex: 1;">
-                <input type="hidden" name="action" value="delete_schedule">
-                <button type="submit" class="ripple" style="width: 100%; background: #DC3545; color: white; border: none; padding: 14px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3); transition: all 0.2s;">
-                    <i data-lucide="trash-2" style="width: 18px;"></i> Excluir Escala
-                </button>
-            </form>
-        </div>
-
     </div>
 </div>
 
@@ -682,34 +668,8 @@ renderAppHeader('Detalhes da Escala');
                             </div>
                         </div>
 
-                        <!-- Ações -->
-                        <div style="display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
-                            <!-- Link Cifra -->
-                            <?php if (!empty($song['link'])): ?>
-                                <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" class="ripple" style="flex: 1; background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#e5e7eb';" onmouseout="this.style.background='#f3f4f6';">
-                                    <i data-lucide="link" style="width: 16px;"></i>
-                                    Cifra
-                                </a>
-                            <?php endif; ?>
-
-                            <!-- Botão Ver Detalhes -->
-                            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="flex: 1; background: #3b82f6; color: white; border: none; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);" onmouseover="this.style.background='#2563eb';" onmouseout="this.style.background='#3b82f6';">
-                                <i data-lucide="eye" style="width: 16px;"></i>
-                                Ver Detalhes
-                            </a>
-
-                            <!-- Botão Remover -->
-                            <form method="POST" onsubmit="return confirm('Remover <?= htmlspecialchars($song['title']) ?>?');" style="margin: 0;">
-                                <input type="hidden" name="action" value="remove_song">
-                                <input type="hidden" name="song_id" value="<?= $song['id'] ?>">
-                                <input type="hidden" name="current_tab" value="repertorio">
-                                <button type="submit" class="ripple" style="background: transparent; border: 1px solid #fca5a5; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='transparent';">
-                                    <i data-lucide="trash-2" style="width: 18px;"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    </div>
+</div>
             <?php endforeach; ?>
         </div>
 
