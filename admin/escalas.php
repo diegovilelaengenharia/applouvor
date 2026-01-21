@@ -126,6 +126,45 @@ renderAppHeader('Escalas');
         </div>
     <?php endif; ?>
 
+    <!-- Seção Histórico (Restaurada) -->
+    <?php if (!empty($pastSchedules)): ?>
+        <h2 style="font-size: 0.9rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin: 32px 0 16px 0; letter-spacing: 0.05em;">Histórico Recente</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 80px;">
+            <?php foreach ($pastSchedules as $schedule):
+                $date = new DateTime($schedule['event_date']);
+            ?>
+                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="display: block; text-decoration: none; color: inherit;">
+                    <div style="
+                    background: #f8fafc; 
+                    border-radius: 12px; 
+                    padding: 16px; 
+                    border: 1px solid #e2e8f0; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 16px;
+                    opacity: 0.8;
+                ">
+                        <!-- Data Box Small -->
+                        <div style="text-align: center; min-width: 50px;">
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #64748b; line-height: 1;"><?= $date->format('d') ?></div>
+                            <div style="font-size: 0.65rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-top: 2px;"><?= strtoupper($date->format('M')) ?></div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="width: 1px; height: 32px; background: #e2e8f0;"></div>
+
+                        <!-- Info -->
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #475569;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">Realizado</div>
+                        </div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
 </div>
 
 <!-- Floating Action Button Clean -->
