@@ -180,21 +180,38 @@ renderAppHeader('Leitura Bíblica');
         transition: all 0.2s;
     }
     .verse-check-item:hover { border-color: var(--primary); }
+        border-radius: 16px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .verse-check-item:active { transform: scale(0.98); }
+    .verse-check-item.read {
+        background: #ecfdf5; /* Green-50 */
+        border-color: #a7f3d0; /* Green-200 */
+    }
+    .verse-check-item.read .verse-text {
+        color: #065f46;
+        text-decoration: line-through;
+        opacity: 0.8;
+    }
     
     .verse-info { display: flex; align-items: center; gap: 12px; flex: 1; }
     .verse-text { font-size: 1rem; font-weight: 600; color: var(--text-main); text-decoration: none; }
     .verse-text:hover { text-decoration: underline; color: var(--primary); }
 
+    /* Checkbox Circle */
     .check-circle {
-        width: 28px; height: 28px;
-        border-radius: 50%;
+        width: 24px; height: 24px;
         border: 2px solid var(--border-color);
+        border-radius: 50%;
+        margin-right: 12px;
         display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
         transition: all 0.2s;
-        background: var(--bg-body);
+        flex-shrink: 0;
     }
-    .check-circle.checked {
+    .verse-check-item.read .check-circle {
         background: #10b981;
         border-color: #10b981;
         color: white;
@@ -235,8 +252,12 @@ renderAppHeader('Leitura Bíblica');
         z-index: 3000;
         display: none;
         flex-direction: column;
+        transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow-y: auto;
     }
     .modal-config.active { display: flex; }
+    .modal-config.open { transform: translateY(0); }
+
     .config-header {
         padding: 16px 20px;
         background: var(--bg-surface);
@@ -246,7 +267,7 @@ renderAppHeader('Leitura Bíblica');
 
     /* Page Header Override for Settings Icon */
     .page-header-actions {
-        position: absolute; right: 20px; top: 20px;
+        position: absolute; right: 20px; top: 20px; z-index: 10;
     }
     @media(max-width: 768px) {
         .page-header-actions { top: 16px; right: 16px; }
@@ -287,11 +308,13 @@ renderAppHeader('Leitura Bíblica');
     <div style="display: flex; gap: 12px; margin-bottom: 12px;">
          <button id="comment-trigger" onclick="openCommentModal()" style="
             flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);
-            padding: 14px; border-radius: 20px; font-weight: 600; font-size: 0.95rem;
+            background: linear-gradient(135deg, #3b82f6, #2563eb); 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            color: white; border: none;
+            padding: 14px; border-radius: 16px; font-weight: 600; font-size: 0.95rem;
          ">
             <i data-lucide="message-square" style="width: 18px;"></i>
-            <span id="comment-text-label">Anotação</span>
+            <span id="comment-text-label">Minha Anotação</span>
          </button>
     </div>
 
@@ -302,7 +325,7 @@ renderAppHeader('Leitura Bíblica');
 
 <!-- CONFIG MODAL -->
 <div id="modal-config" class="modal-config">
-    <div class="config-header">
+    <div class="config-header" style="background: white; padding: 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color);">
         <button onclick="closeConfig()" style="background:none; border:none; padding:8px; margin-left:-8px;"><i data-lucide="arrow-left"></i></button>
         <h3 style="margin:0; font-size: 1.1rem;">Configurações</h3>
         <div style="width: 40px;"></div> <!-- Spacer -->
@@ -314,14 +337,14 @@ renderAppHeader('Leitura Bíblica');
             
             <h4 style="margin-bottom: 12px;">Preferências</h4>
             
-            <div class="form-card" style="margin-bottom: 24px;">
+            <div class="form-card" style="margin-bottom: 24px; background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Horário do Lembrete</label>
                 <input type="time" name="notification_time" value="<?= htmlspecialchars($notifTime) ?>" style="
                     width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 1rem;
                 ">
             </div>
 
-            <div class="form-card" style="margin-bottom: 24px;">
+            <div class="form-card" style="margin-bottom: 24px; background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Data de Início do Plano</label>
                 <input type="date" name="start_date" value="<?= htmlspecialchars($startDate) ?>" style="
                     width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 1rem;
@@ -332,9 +355,19 @@ renderAppHeader('Leitura Bíblica');
             <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; margin-bottom: 24px;">Salvar Alterações</button>
         </form>
 
+        <form method="POST">
+            <input type="hidden" name="action" value="export_report">
+            <button type="submit" class="ripple" style="
+                width: 100%; padding: 14px; background: white; border: 1px solid var(--primary); color: var(--primary); 
+                border-radius: 12px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 8px;
+            ">
+                <i data-lucide="download"></i> Baixar Relatório de Leitura
+            </button>
+        </form>
+
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 24px;">
 
-        <div class="form-card" style="border-color: #fecaca; background: #fef2f2;">
+        <div class="form-card" style="border-color: #fecaca; background: #fef2f2; padding: 16px; border-radius: 12px; border: 1px solid #fecaca;">
              <h4 style="color: #991b1b; margin-bottom: 8px;">Zona de Perigo</h4>
              <p style="font-size: 0.85rem; color: #7f1d1d; margin-bottom: 16px;">Isso irá apagar todo o seu histórico de leitura.</p>
              <form method="POST" onsubmit="return confirm('Tem certeza? Isso não pode ser desfeito.');">

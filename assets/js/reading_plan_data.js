@@ -19,9 +19,16 @@ function getBibleLink(verseRef) {
     const lastSpace = verseRef.lastIndexOf(' ');
     if (lastSpace === -1) return '#';
     const bookName = verseRef.substring(0, lastSpace).trim();
-    const ref = verseRef.substring(lastSpace + 1).trim();
+    let ref = verseRef.substring(lastSpace + 1).trim();
+
+    // Normalize Ref: Replace ':' with '.' for YouVersion URL compatibility
+    // Example: "1:1-17" -> "1.1-17"
+    ref = ref.replace(/:/g, '.');
+
     const bookAbbr = bibleBooksMap[bookName] || 'GEN';
-    return `https://www.bible.com/bible/129/${bookAbbr}.${ref}`;
+
+    // New Format: https://www.bible.com/pt/bible/129/MAT.1.NVI
+    return `https://www.bible.com/pt/bible/129/${bookAbbr}.${ref}.NVI`;
 }
 
 const bibleReadingPlan = {
