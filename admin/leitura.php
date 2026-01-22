@@ -281,8 +281,8 @@ function renderContent(m, d) {
                 </div>
             </div>
             <a href="${link}" target="_blank" class="ripple" style="
-                background: var(--primary-light); color: var(--primary); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px; flex-shrink: 0;
-            ">LER <i data-lucide="external-link" style="width:14px;"></i></a>
+                background: #eff6ff; color: #2563eb; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px; flex-shrink: 0; border: 1px solid #dbeafe;
+            ">LER <i data-lucide="book-open" style="width:14px;"></i></a>
         `;
         if(container) container.appendChild(item);
     });
