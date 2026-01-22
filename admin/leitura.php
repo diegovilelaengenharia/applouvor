@@ -242,11 +242,12 @@ renderAppHeader('Leitura Bíblica');
 <!-- DESKTOP HEADER -->
 <div class="desktop-header">
     <div class="header-left">
-        <button onclick="window.history.back()" style="border:none; background:none; cursor:pointer; color:var(--text-light); padding:0; display:flex;">
+        <button onclick="window.history.back()" title="Voltar" style="border:none; background:none; cursor:pointer; color:var(--text-light); padding:8px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:background 0.2s;">
             <i data-lucide="arrow-left" width="22"></i>
         </button>
-        <!-- Home Icon Optional if needed to match reference exactly, adding placeholder logic -->
-        <a href="index.php" style="color:var(--text-light); text-decoration:none; display:flex;"><i data-lucide="home" width="20"></i></a>
+        <a href="index.php" title="Início" style="color:var(--text-light); text-decoration:none; display:flex; align-items:center; justify-content:center; padding:8px; border-radius:8px; transition:background 0.2s;">
+            <i data-lucide="home" width="20"></i>
+        </a>
     </div>
 
     <div class="header-center">
