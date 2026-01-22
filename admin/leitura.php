@@ -427,16 +427,10 @@ function completeDay() {
         const currentRead = document.querySelectorAll('.verse-check-item.read').length;
         updateProgress(currentRead, total);
 
-        const modal = document.getElementById('modal-success');
-        if(modal) {
-            modal.style.display = 'flex';
-            // Update button to "Next Day"
-            const successBtn = modal.querySelector('button');
-            if(successBtn) {
-                successBtn.innerText = "Próximo Dia →";
-                successBtn.onclick = goToNextDay;
-            }
-        }
+        // Navegar direto para próximo dia (sem popup)
+        setTimeout(() => {
+            goToNextDay();
+        }, 800); // Pequeno delay para ver a atualização visual
     });
 }
 
