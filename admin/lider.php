@@ -193,19 +193,22 @@ try {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        /* Reduzido de 1.2rem */
     }
 
     .kpi-value {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
+        /* Reduzido de 1.5rem */
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .kpi-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+        /* Reduzido de 0.75rem */
         color: var(--text-muted);
         font-weight: 600;
         text-transform: uppercase;
@@ -213,7 +216,8 @@ try {
     }
 
     .kpi-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        /* Reduzido de 0.8rem */
         color: var(--text-muted);
         margin-top: 4px;
     }
