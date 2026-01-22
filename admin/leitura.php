@@ -532,24 +532,23 @@ window.addEventListener('load', init);
         padding-bottom: 100px;
     }
 
-    /* Verse Check List */
-    .check-circle {
-        width: 24px; height: 24px;
-        border-radius: 50%;
-        border: 2px solid var(--border-color);
-        display: flex; align-items: center; justify-content: center;
+    /* Verse Check List Items */
+    .verse-check-item {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         transition: all 0.2s;
-        background: transparent; /* Ensure empty by default */
-    }
-    .verse-check-item.read .check-circle {
-        background: var(--primary);
-        border-color: var(--primary);
-    }
-    .verse-check-item:hover .check-circle {
-        border-color: var(--primary);
+        cursor: pointer;
     }
     .verse-check-item:hover { border-color: var(--primary); }
     .verse-check-item:active { transform: scale(0.98); }
+    
+    /* READ STATE (Applied via JS class) */
     .verse-check-item.read {
         background: #ecfdf5; /* Green-50 */
         border-color: #a7f3d0; /* Green-200 */
@@ -559,25 +558,33 @@ window.addEventListener('load', init);
         text-decoration: line-through;
         opacity: 0.8;
     }
-    
-    .verse-info { display: flex; align-items: center; gap: 12px; flex: 1; }
-    .verse-text { font-size: 1rem; font-weight: 600; color: var(--text-main); text-decoration: none; }
-    .verse-text:hover { text-decoration: underline; color: var(--primary); }
 
-    /* Checkbox Circle */
+    /* Check Circle Base */
     .check-circle {
         width: 24px; height: 24px;
-        border: 2px solid var(--border-color);
         border-radius: 50%;
-        margin-right: 12px;
+        border: 2px solid var(--border-color);
         display: flex; align-items: center; justify-content: center;
         transition: all 0.2s;
+        background: transparent; /* Default Empty */
+        margin-right: 12px;
         flex-shrink: 0;
     }
+    
+    /* Check Circle Read State */
     .verse-check-item.read .check-circle {
         background: #10b981;
         border-color: #10b981;
+        color: white; /* For the check icon inside */
+    }
+    
+    .check-circle i {
+        opacity: 0;
+        transition: opacity 0.2s;
         color: white;
+    }
+    .verse-check-item.read .check-circle i {
+        opacity: 1;
     }
 
     /* Fixed Bottom Action */
