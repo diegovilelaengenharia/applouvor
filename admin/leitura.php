@@ -271,7 +271,25 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
 <!-- ========================================== -->
 
 <!-- Header Custom -->
-<?php renderPageHeader('Leitura Bíblica', 'Dia ' . $planDayIndex . ' de 300 (' . $completionPercent . '%)'); ?>
+<div style="background: white; border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <button onclick="window.history.back()" style="border: none; background: none; color: var(--text-light); cursor: pointer;"><i data-lucide="arrow-left" width="20"></i></button>
+        <div>
+            <h2 style="font-size: 1rem; margin: 0; color: var(--text);">Leitura Bíblica</h2>
+            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">
+                <span style="color:var(--primary); font-weight:700;"><?= $totalChaptersRead ?></span> de 300 dias concluídos (<?= $completionPercent ?>%)
+            </div>
+        </div>
+    </div>
+    <div style="width: 40px; height: 40px; background: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="openConfig()">
+        <i data-lucide="settings-2" width="18" style="color: var(--text-light);"></i>
+    </div>
+</div>
+
+<!-- Progress Bar Strip -->
+<div style="height: 4px; background: var(--bg); width: 100%;">
+    <div style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: <?= $completionPercent ?>%;"></div>
+</div>
 
 <div class="cal-strip" id="calendar-strip">
     <!-- Rendered via JS -->
@@ -282,7 +300,8 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
     <!-- Day Title -->
     <div style="margin-bottom: 24px;">
         <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700;">Leitura de Hoje</span>
-        <h1 id="day-title" style="font-size:1.5rem; margin:4px 0;">Carregando...</h1>
+        <h1 id="day-title" style="font-size:1.75rem; margin:4px 0; color: var(--text);">Carregando...</h1>
+        <div id="day-subtitle" style="font-size: 0.85rem; color: var(--text-light);"></div>
     </div>
 
     <!-- Verses Container -->
@@ -308,20 +327,74 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
 </div>
 
 <!-- ========================================== -->
-<!-- 4. MODALS (Simplified) -->
+<!-- 4. MODALS (Modern Redesign) -->
 <!-- ========================================== -->
 
 <!-- Note Modal -->
-<div id="modal-note" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;">
-    <div style="background:white; width:90%; max-width:500px; max-height:80vh; border-radius:20px; padding:20px; display:flex; flex-direction:column;">
-        <h3 style="margin:0 0 16px 0;">Minha Anotação</h3>
-        <textarea id="note-input" style="flex:1; min-height:150px; padding:12px; border:1px solid #ddd; border-radius:12px; font-family:inherit; margin-bottom:16px;" placeholder="O que Deus falou com você hoje?"></textarea>
-        <div style="display:flex; justify-content:end; gap:10px;">
-            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding:10px 20px; border:none; background:#f1f5f9; border-radius:10px; cursor:pointer;">Cancelar</button>
-            <button onclick="saveNote()" style="padding:10px 20px; border:none; background:var(--primary); color:white; border-radius:10px; font-weight:700; cursor:pointer;">Salvar</button>
+<div id="modal-note" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index:2000; align-items:center; justify-content:center; animation: fadeIn 0.2s;">
+    <div style="
+        background: white; 
+        width: 95%; max-width: 600px; 
+        border-radius: 24px; 
+        box-shadow: 0 20px 50px -10px rgba(0,0,0,0.25); 
+        display: flex; flex-direction: column; overflow: hidden;
+        animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    ">
+        <!-- Header -->
+        <div style="
+            background: #fff7ed; /* Orange-50 (Suave) */
+            padding: 20px 24px; 
+            border-bottom: 1px solid #fed7aa;
+            display: flex; justify-content: space-between; align-items: center;
+        ">
+            <h3 style="margin: 0; color: #c2410c; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="pen-line" width="18"></i> Minha Anotação
+            </h3>
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; color: #9a3412; cursor: pointer; padding: 4px;">
+                <i data-lucide="x" width="20"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 24px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px;">O que Deus falou com você?</label>
+            <textarea id="note-input" style="
+                width: 100%; min-height: 200px; 
+                padding: 16px; 
+                border: 1px solid #e2e8f0; border-radius: 12px; 
+                font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #334155;
+                outline: none; resize: vertical; background: #f8fafc;
+                transition: border-color 0.2s, background 0.2s;
+            " placeholder="Escreva aqui suas reflexões..." onfocus="this.style.borderColor='#f97316'; this.style.background='white'" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'"></textarea>
+            
+            <div style="margin-top: 12px; font-size: 0.75rem; color: #94a3b8; text-align: right;">
+                Suas anotações são privadas.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 12px;">
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="
+                padding: 12px 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; 
+                border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                Cancelar
+            </button>
+            <button onclick="saveNote()" style="
+                padding: 12px 24px; border: none; background: #f97316; color: white; 
+                border-radius: 12px; font-weight: 700; cursor: pointer; 
+                box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25); transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+            " onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                <i data-lucide="save" width="16"></i> Salvar Anotação
+            </button>
         </div>
     </div>
 </div>
+
+<style>
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
 
 <!-- Config Modal (Reset) -->
 <div id="modal-config" style="display:none; position:fixed; top:0; right:0; width:300px; height:100%; background:white; z-index:3000; padding:20px; box-shadow:-5px 0 20px rgba(0,0,0,0.1);">
