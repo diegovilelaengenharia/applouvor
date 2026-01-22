@@ -286,13 +286,12 @@ renderAppHeader('Leitura Bíblica'); // Standard Header (with Avatar, Menu, Conf
 </div>
 
 <div class="main-area">
-    <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
-        <div>
-            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700;">Leitura de Hoje</span>
-            <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
-                <h1 id="day-title" style="font-size:1.75rem; margin:0; color: var(--text);">Carregando...</h1>
-                <span id="status-badge-container"></span>
-            </div>
+    <!-- Day Header Flex Container -->
+    <div style="margin-bottom: 24px;">
+        <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700; display:block; margin-bottom:4px;">Leitura de Hoje</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <h1 id="day-title" style="font-size:1.75rem; margin:0; color: var(--text); line-height:1;">Carregando...</h1>
+            <span id="status-badge-container" style="flex-shrink: 0;"></span>
         </div>
     </div>
     <div id="verses-list"></div>
@@ -334,31 +333,41 @@ renderAppHeader('Leitura Bíblica'); // Standard Header (with Avatar, Menu, Conf
     </div>
 </div>
 
-<!-- FULL CONFIG MODAL -->
-<div id="modal-config" class="config-fullscreen">
-    <div class="config-header">
-        <h2 style="font-size: 1.25rem;">Configurações & Diário</h2>
-        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
+<!-- FULL CONFIG MODAL (Refined Design) -->
+<div id="modal-config" class="config-fullscreen" style="background: var(--bg-body);">
+    <div class="config-header" style="background: var(--bg-surface);">
+        <h2 style="font-size: 1.25rem; font-weight:700;">Configurações & Diário</h2>
+        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer; padding:8px; margin-right:-8px;"><i data-lucide="x"></i></button>
     </div>
-    <div class="config-tabs">
+    <div class="config-tabs" style="background: var(--bg-surface);">
         <div class="tab-btn active" onclick="switchTab('general')" id="tab-general">Geral</div>
         <div class="tab-btn" onclick="switchTab('diary')" id="tab-diary">Meu Diário</div>
     </div>
     
     <div id="content-general" class="config-content">
-        <div class="report-item">
-            <h4 style="margin:0 0 16px 0;">Meu Plano</h4>
-            <label style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:8px;">Data de Início da Leitura</label>
-            <div style="display:flex; gap:12px;">
-                <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="padding:10px; border:1px solid var(--border); border-radius:8px; flex:1;">
-                <button onclick="saveStartDate()" style="padding:10px 20px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Atualizar</button>
+        <div class="report-item" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); border:1px solid var(--border);">
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+                 <div style="width:40px; height:40px; background:var(--primary-soft); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--primary);"><i data-lucide="calendar"></i></div>
+                 <div>
+                    <h4 style="margin:0;">Meu Plano</h4>
+                    <span style="font-size:0.8rem; color:var(--text-light);">Ajuste o cronograma de leitura</span>
+                 </div>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">Isso ajustará qual é o "Dia 1" do seu plano.</p>
+            
+            <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:8px;">Data de Início da Leitura</label>
+            <div style="display:flex; gap:12px;">
+                <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="padding:10px 12px; border:1px solid var(--border); border-radius:8px; flex:1; font-family:inherit; color:var(--text);">
+                <button onclick="saveStartDate()" style="padding:10px 20px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Atualizar</button>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-light); margin-top:8px;">Isso ajustará qual é o "Dia 1" do seu plano.</p>
         </div>
-        <div class="report-item" style="border-color:#fecaca; background:#fef2f2;">
-            <h4 style="margin:0 0 8px 0; color:#b91c1c;">Zona de Perigo</h4>
-            <p style="font-size:0.9rem; color:#7f1d1d; margin-bottom:16px;">Apagar todo o seu progresso de leitura e anotações.</p>
-            <button onclick="resetPlan()" style="padding:12px 20px; background:#b91c1c; color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; width:100%;">Resetar Tudo</button>
+        <div class="report-item" style="border-color:#fecaca; background:#fff1f2; box-shadow:none;">
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+                 <div style="width:36px; height:36px; background:#fecaca; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#dc2626;"><i data-lucide="alert-triangle" width="18"></i></div>
+                 <h4 style="margin:0; color:#991b1b;">Zona de Perigo</h4>
+            </div>
+            <p style="font-size:0.85rem; color:#7f1d1d; margin-bottom:16px;">Apagar todo o seu progresso de leitura e anotações. Esta ação é irreversível.</p>
+            <button onclick="resetPlan()" style="padding:12px 20px; background:#dc2626; color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; width:100%;">Resetar Tudo</button>
         </div>
     </div>
 
