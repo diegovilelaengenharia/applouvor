@@ -165,41 +165,44 @@ renderAppHeader('Leitura Bíblica');
     
     .main-area { max-width: 800px; margin: 0 auto; padding: 20px 16px; }
 
-    /* DAY HEADER CARD (New Request) */
+    /* DAY HEADER CARD (Refined for Project Consistency) */
     .day-header-card {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 24px;
+        border-radius: 12px; /* Padronizado com outros cards */
+        padding: 20px 24px;
         margin-bottom: 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        /* Remover sombra excessiva se houver */
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     .day-header-info { display: flex; flex-direction: column; gap: 4px; }
+    
     .day-header-label { 
         font-size: 0.75rem; 
         text-transform: uppercase; 
         letter-spacing: 0.05em; 
-        color: var(--primary); 
-        font-weight: 700;
-        background: var(--primary-soft);
-        padding: 4px 10px;
-        border-radius: 12px;
-        align-self: flex-start;
-        margin-bottom: 6px;
+        color: var(--text-light); /* Cinza padrão do projeto */
+        font-weight: 600;
+        background: transparent; /* Remove bg roxo */
+        padding: 0;
+        margin-bottom: 2px;
+        display: flex; align-items: center; gap: 6px;
     }
+    
     .day-header-title { 
-        font-size: 2rem; 
-        font-weight: 800; 
+        font-size: 1.5rem; /* Menor, mais sóbrio */
+        font-weight: 700; 
         color: var(--text); 
-        line-height: 1; 
-        letter-spacing: -0.02em;
+        line-height: 1.2; 
+        letter-spacing: -0.01em;
     }
-    /* Status Badge Refined inside Card */
+    
+    /* Status Badge Refined */
     .status-badge { 
-        font-size: 0.8rem; font-weight: 700; padding: 6px 14px; border-radius: 30px; 
+        font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 6px; /* Quadrado arredondado padrão */
         text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px;
     }
     
@@ -278,7 +281,7 @@ renderAppHeader('Leitura Bíblica');
     <!-- NEW HEADER CARD -->
     <div class="day-header-card">
         <div class="day-header-info">
-            <span class="day-header-label"><i data-lucide="book-open" width="12" style="margin-right:4px;"></i> Leitura de Hoje</span>
+            <span class="day-header-label">Leitura de Hoje</span>
             <h1 id="day-title" class="day-header-title">Carregando...</h1>
         </div>
         <div id="status-badge-container"></div>
