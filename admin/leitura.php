@@ -416,6 +416,15 @@ function completeDay() {
     .then(r => r.json())
     .catch(() => ({success:true}))
     .then(() => {
+        // Visual update
+        const dayCard = document.getElementById(`day-card-${m}-${d}`);
+        if(dayCard) dayCard.classList.add('completed');
+        
+        // Update local map
+        if(typeof completedMap !== 'undefined') {
+            completedMap[`${m}_${d}`] = { completed_at: new Date().toISOString() };
+        }
+
         const modal = document.getElementById('modal-success');
         if(modal) modal.style.display = 'flex';
         else window.location.reload();
