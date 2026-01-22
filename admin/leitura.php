@@ -524,6 +524,37 @@ function getMonthAbbr(m) {
     return ["", "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"][m];
 }
 
+// Função global para resetar o plano
+window.resetPlan = function() {
+    if(!confirm('Tem certeza que deseja resetar TODO o plano de leitura? Esta ação não pode ser desfeita!')) {
+        return;
+    }
+    
+    // Limpar TODOS os dados do localStorage relacionados à leitura
+    const keysToRemove = [];
+    for(let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if(key && key.startsWith('reading_check_')) {
+            keysToRemove.push(key);
+        }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    // Chamar endpoint PHP para limpar banco de dados
+    const formData = new FormData();
+    formData.append('action', 'reset_plan');
+    
+    fetch('leitura.php', { method: 'POST', body: formData })
+        .then(() => {
+            // Redirecionar para o Dia 1
+            window.location.href = 'leitura.php?m=1&d=1';
+        })
+        .catch(() => {
+            // Mesmo se der erro, redirecionar
+            window.location.href = 'leitura.php?m=1&d=1';
+        });
+};
+
 window.addEventListener('load', init);
 </script>
 
