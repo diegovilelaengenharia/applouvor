@@ -66,17 +66,17 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
 <!-- Estilos da Nova Home (Vertical Feed) -->
 <style>
     .section-title {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 700;
         color: var(--text-main);
-        margin: 24px 0 12px 0;
+        margin: 20px 0 10px 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
     .section-action {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: var(--primary);
         text-decoration: none;
         font-weight: 600;
@@ -84,14 +84,14 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
 
     .feed-card {
         background: var(--bg-surface);
-        border-radius: 16px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 16px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow-sm);
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
         text-decoration: none;
         color: inherit;
         transition: transform 0.2s, box-shadow 0.2s;
@@ -102,25 +102,25 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     }
 
     .feed-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 700;
     }
 
     /* Empty State */
     .empty-state {
         background: #f8fafc;
-        border-radius: 12px;
-        padding: 16px;
+        border-radius: 10px;
+        padding: 12px;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         color: var(--text-muted);
         border: 1px dashed var(--border-color);
     }
@@ -129,14 +129,14 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin-bottom: 24px;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     .stat-card {
         background: var(--bg-surface);
         border-radius: 12px;
-        padding: 16px;
+        padding: 12px;
         border: 1px solid var(--border-color);
         text-align: center;
         transition: transform 0.2s;
@@ -147,14 +147,15 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     }
 
     .stat-value {
-        font-size: 2rem;
+        font-size: 1.6rem;
         font-weight: 800;
         line-height: 1;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
+        color: var(--text-main);
     }
 
     .stat-label {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--text-muted);
         font-weight: 600;
     }
