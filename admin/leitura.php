@@ -608,54 +608,59 @@ window.addEventListener('load', init);
 <!-- CONTENT -->
 <div class="reading-container">
     <!-- HEADER & ACTIONS -->
+    <!-- HEADER & ACTIONS -->
     <div style="margin-bottom: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; gap: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px;">
             <div>
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Leitura de Hoje</div>
                 <h1 id="main-date-title" style="margin: 4px 0 0 0; font-size: 1.5rem;">Carregando...</h1>
+                
+                <!-- Days Lost Indicator -->
+                <?php if ($delay > 0): ?>
+                <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #fef2f2; border: 1px solid #fee2e2; border-radius: 20px; color: #ef4444; font-size: 0.75rem; font-weight: 700;">
+                    <i data-lucide="alert-circle" style="width: 12px;"></i> <?= $delay ?> dias atrasados
+                </div>
+                <?php endif; ?>
             </div>
             
-            <!-- Top Action Button (Replaces "Em dia") -->
+            <!-- Top Action Button -->
             <button id="btn-main-action" onclick="completeDay()" class="ripple" style="
-                border: none;
-                padding: 10px 20px;
-                border-radius: 12px;
-                font-weight: 700;
-                font-size: 0.85rem;
-                cursor: pointer;
-                transition: all 0.2s;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                white-space: nowrap;
+                border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); white-space: nowrap;
             ">
                 Carregando...
             </button>
         </div>
         
-        <!-- Daily Progress Bar -->
-        <div style="background: var(--border-color); height: 6px; border-radius: 3px; overflow: hidden; position: relative;">
-            <div id="daily-progress-bar" style="width: 0%; height: 100%; background: #10b981; transition: width 0.3s ease;"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.7rem; color: var(--text-muted);">
-            <span>Progresso Diário</span>
-            <span id="daily-progress-text">0%</span>
+        <!-- DUAL PROGRESS SECTION -->
+        <div style="display: grid; gap: 16px; margin-bottom: 16px;">
+            
+            <!-- Annual Progress -->
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">
+                    <span>Progresso Anual (App)</span>
+                    <span><?= $percentage ?>%</span>
+                </div>
+                <div style="background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="width: <?= $percentage ?>%; height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 4px;"></div>
+                </div>
+            </div>
+
+            <!-- Daily Progress -->
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">
+                    <span>Leitura de Hoje</span>
+                    <span id="daily-progress-text">0%</span>
+                </div>
+                <div style="background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div id="daily-progress-bar" style="width: 0%; height: 100%; background: #10b981; transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+                </div>
+            </div>
+
         </div>
         
         <!-- Encouragement Message -->
         <div id="encouragement-msg" style="
-            margin-top: 16px; 
-            padding: 12px 16px; 
-            background: linear-gradient(to right, #f0fdf4, #dcfce7); 
-            border-left: 4px solid #22c55e; 
-            border-radius: 8px;
-            color: #15803d;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-top: 16px; padding: 12px 16px; background: linear-gradient(to right, #f0fdf4, #dcfce7); border-left: 4px solid #22c55e; border-radius: 8px; color: #15803d; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 10px;
         ">
             <i data-lucide="sparkles" style="width: 18px; color: #16a34a;"></i>
             <span>A palavra de Deus renova suas forças. Continue firme! 💪</span>
