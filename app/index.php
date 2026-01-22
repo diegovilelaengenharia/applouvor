@@ -59,12 +59,42 @@ try {
         LIMIT 3
     ");
     $recentAvisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $recentAvisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     // Silently fail
 }
 
+// ==========================================
+// STATUS LEITURA (Popup Logic)
+// ==========================================
+$showReadingPopup = false;
+$readingPopupData = null;
+try {
+    // Verificar se já marcou o dia de hoje
+    $m = (int)date('n');
+    $d = min((int)date('j'), 25); // Limita a 25 do plano
+    
+    // Verifica se completou
+    $stmt = $pdo->prepare("SELECT id FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+    $stmt->execute([$_SESSION['user_id'], $m, $d]);
+    $readingDone = $stmt->fetch();
+
+    if (!$readingDone) {
+        // Se não fez, verifica filtro de cookie/sessão para não mostrar toda hora?
+        // O cliente pediu "popup que apareça na tela após abrir o aplicativo".
+        // Vamos mostrar sempre que entrar na Home se não tiver feito.
+        $showReadingPopup = true;
+        $readingPopupData = [
+            'month' => $m,
+            'day' => $d
+        ];
+    }
+} catch (Exception $e) {}
+
 renderAppHeader('Início');
 ?>
+<!-- Import JSON for Popup -->
+<script src="../assets/js/reading_plan_data.js"></script>
 
 <!-- Hero Section User -->
 <div style="
@@ -228,6 +258,36 @@ renderAppHeader('Início');
         <?php endif; ?>
     </div>
 
+    <!-- Card: Leitura Bíblica -->
+    <div class="dashboard-card">
+        <a href="leitura.php" class="ripple" style="
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 16px; 
+            text-decoration: none; 
+            color: var(--text-primary);
+        ">
+            <div style="
+                width: 48px; 
+                height: 48px; 
+                border-radius: 12px; 
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            ">
+                <i data-lucide="book-open" style="width: 24px; color: white;"></i>
+            </div>
+            <div>
+                <h4 style="margin: 0; font-size: 1rem; font-weight: 700;">Leitura Bíblica</h4>
+                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">Acompanhe seu plano</p>
+            </div>
+            <i data-lucide="chevron-right" style="margin-left: auto; width: 20px; color: var(--text-muted);"></i>
+        </a>
+    </div>
+
     <!-- Card: Avisos -->
     <div class="dashboard-card">
         <div class="dashboard-card-header">
@@ -315,6 +375,55 @@ renderAppHeader('Início');
             text.textContent = 'Ver Detalhes';
         }
         lucide.createIcons();
+    }
+
+    // Reading Popup Logic
+    const showReadingPopup = <?= $showReadingPopup ? 'true' : 'false' ?>;
+    const readingData = <?= json_encode($readingPopupData) ?>;
+
+    if (showReadingPopup && readingData && bibleReadingPlan) {
+        window.addEventListener('load', () => {
+            // Check if already dismissed in session to avoid annoyance?
+            // User requested "popup que apareça na tela após abrir o aplicativo".
+            // Let's create the modal HTML dynamically
+            
+            const verses = bibleReadingPlan[readingData.month][readingData.day - 1];
+            if (!verses) return;
+
+            const modalHtml = `
+            <div id="reading-modal" class="modal-overlay active" style="z-index: 2000;">
+                <div class="modal-content" style="background: var(--bg-surface); padding: 24px; border-radius: 20px; max-width: 320px; width: 90%; text-align: center; position:relative; overflow:hidden;">
+                    <!-- Decorative Background -->
+                    <div style="position:absolute; top:0; left:0; width:100%; height:6px; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                    
+                    <div style="width: 56px; height: 56px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                        <i data-lucide="book-open" style="width: 28px; color: #10b981;"></i>
+                    </div>
+
+                    <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Leitura de Hoje</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+                        Dia ${readingData.day}/${readingData.month}
+                    </p>
+
+                    <div style="background: var(--bg-body); padding: 12px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
+                        ${verses.map(v => `<div style="font-size:0.9rem; font-weight:500; padding:4px 0; border-bottom:1px solid var(--border-color);">${v}</div>`).join('')}
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <a href="leitura.php" class="btn-primary" style="text-decoration: none; justify-content: center;">
+                            Ir para Leitura
+                        </a>
+                        <button onclick="document.getElementById('reading-modal').remove()" style="background: transparent; border: none; padding: 12px; color: var(--text-muted); font-weight: 600;">
+                            Lembrar depois
+                        </button>
+                    </div>
+                </div>
+            </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            lucide.createIcons();
+        });
     }
 </script>
 
