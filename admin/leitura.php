@@ -72,6 +72,7 @@ $completionPercent = min(100, round(($totalChaptersRead / 300) * 100));
 
 // RENDER: Mobile Header & Layout
 renderAppHeader('Leitura Bíblica'); 
+renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
 ?>
 
 <!-- FRONTEND -->
@@ -85,50 +86,6 @@ renderAppHeader('Leitura Bíblica');
         --text: #1e293b; --text-light: #64748b; --border: #e2e8f0;
     }
     body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
-    
-    /* Desktop Header Fixed */
-    .desktop-header {
-        display: none; background: var(--bg-surface); padding: 16px 32px; border-bottom: 1px solid var(--border);
-        align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;
-    }
-    @media (min-width: 1025px) { .desktop-header { display: flex; } }
-    
-    /* Header Actions Premium */
-    .header-actions { display: flex; align-items: center; gap: 16px; }
-    
-    .btn-icon-header {
-        width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
-        border: 1px solid var(--border); background: var(--surface); color: var(--text-light); cursor: pointer; transition: all 0.2s;
-        text-decoration: none;
-    }
-    .btn-icon-header:hover { background: var(--bg); color: var(--text); transform: translateY(-1px); }
-    
-    /* Config Button Spec: Inside Leader logic if needed, but keeping separate nicely */
-    
-    /* LEADER BUTTON STYLE (Image Match) */
-    .btn-lider {
-        background: #ef4444 !important; /* Red Solid */
-        color: white !important;
-        border: none !important;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); /* Red Glow */
-    }
-    .btn-lider:hover { box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5); transform: translateY(-2px); }
-
-    /* AVATAR WITH GREEN RING (Image Match) */
-    .avatar-circle {
-        width: 46px; height: 46px; 
-        border-radius: 50%; 
-        padding: 3px; /* Gap for ring */
-        border: 2px solid #a7f3d0; /* Green Ring Soft */
-        background: white;
-        cursor: pointer; display: block;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        transition: all 0.2s;
-    }
-    .avatar-circle:hover { border-color: #10b981; transform: scale(1.05); }
-    .avatar-circle img { 
-        width: 100%; height: 100%; object-fit: cover; border-radius: 50%; 
-    }
 
     /* Calendar Strip */
     .cal-strip {
