@@ -353,33 +353,17 @@ function updateProgress(current, total) {
     
     if(!btn) return;
     
-    // Force reset
-    btn.style.cssText = ""; 
-    btn.className = "ripple";
-
-    // Base Style
-    const baseStyle = "border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; white-space: nowrap;";
-
-    // ORDEM CORRETA: Verificar current PRIMEIRO
-    if (current < total) {
-        // INCOMPLETO - Amber suave (apenas visual, não clicável)
-        const missing = total - current;
-        btn.innerHTML = `<i data-lucide="circle-dashed"></i> Faltam ${missing}`;
-        btn.onclick = null; // Não clicável
-        btn.style.cssText = baseStyle + "background: var(--warning-light); color: var(--warning-dark); border: 1px solid var(--warning); cursor: default;";
-        if(statusText) statusText.innerHTML = '<span style="color:var(--warning-dark)">Pendente</span>';
-    } else if (isDoneServer) {
-        // JÁ SALVO NO SERVIDOR - Emerald suave
-        btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
-        btn.onclick = null;
-        btn.style.cssText = baseStyle + "background: var(--success-light); color: var(--success-dark); border: 1px solid var(--success);";
-        if(statusText) statusText.innerHTML = '<span style="color:var(--success-dark)">Concluído</span>';
-    } else {
-        // TODAS LIDAS MAS NÃO SALVO - Pronto para concluir (MANUAL)
-        btn.innerHTML = '<i data-lucide="check"></i> Concluir Dia';
-        btn.onclick = () => completeDay();
-        btn.style.cssText = baseStyle + "background: var(--primary); color: white; box-shadow: var(--shadow-md);";
-        if(statusText) statusText.innerHTML = '<span style="color:var(--primary)">Pronto!</span>';
+    // Esconder botão completamente
+    btn.style.display = 'none';
+    
+    // Auto-save quando todas as leituras forem marcadas
+    if (current === total && !isDoneServer) {
+        // Salvar automaticamente após 800ms
+        setTimeout(() => {
+            if(!completedMap[`${selectedMonth}_${selectedDay}`]) {
+                completeDay();
+            }
+        }, 800);
     }
     
     if(window.lucide) window.lucide.createIcons();
