@@ -110,13 +110,310 @@ renderAppHeader('Leitura Bíblica');
 // Inject Settings Button into Header via JS or inline absolute since we are in a "Page" concept
 ?>
 
-<!-- Import JSON Data -->
+<!-- Import JSON Data with Cache Busting -->
 <script src="../assets/js/reading_plan_data.js?v=<?= time() ?>"></script>
 
-<style>
-    /* YouVersion Inspired Styles */
-    :root {
-        --yv-bg: #ffffff;
+<script>
+// ==========================================
+// Expose Functions to Global Window explicitly
+// ==========================================
+window.openConfig = function() { 
+    const modal = document.getElementById('modal-config');
+    if(modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex'; // Ensure display is flex
+        // Force reflow
+        void modal.offsetWidth;
+        modal.classList.add('open');
+    } else {
+        console.error("Modal config not found");
+    }
+};
+window.closeConfig = function() { 
+    const modal = document.getElementById('modal-config');
+    if(modal) {
+        modal.classList.remove('open');
+        setTimeout(() => {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }, 300);
+    }
+};
+
+// ==========================================
+// DATA & STATE
+// ==========================================
+// Parse PHP Data securely
+const planDayIndex = <?= json_encode($planDayIndex) ?>; 
+const currentPlanMonth = <?= json_encode($currentPlanMonth) ?>;
+const currentPlanDay = <?= json_encode($currentPlanDay) ?>;
+const completedMap = <?= json_encode($completedIds) ?>;
+
+// State
+let selectedMonth = currentPlanMonth;
+let selectedDay = currentPlanDay;
+
+// ==========================================
+// INIT
+// ==========================================
+function init() {
+    console.log("Reading Plan Init", {selectedMonth, selectedDay});
+    renderCalendar();
+    selectDay(selectedMonth, selectedDay); 
+    if(window.lucide) window.lucide.createIcons();
+    
+    setTimeout(() => {
+        const active = document.querySelector('.cal-day-item.active');
+        if(active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }, 100);
+}
+
+// ==========================================
+// CALENDAR RENDERING
+// ==========================================
+function renderCalendar() {
+    const strip = document.getElementById('calendar-strip');
+    if(!strip) return;
+    
+    strip.innerHTML = '';
+    const m = selectedMonth; // Show current selected month or active month logic
+    
+    for (let d = 1; d <= 25; d++) {
+        const isCompleted = completedMap[`${m}_${d}`];
+        const isActive = (d === selectedDay); 
+        const el = document.createElement('div');
+        el.className = `cal-day-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+        el.id = `day-card-${m}-${d}`;
+        el.onclick = () => selectDay(m, d);
+        el.innerHTML = `<div class="cal-day-month">${getMonthAbbr(m)}</div><div class="cal-day-num">${d}</div>`;
+        strip.appendChild(el);
+    }
+}
+
+function selectDay(m, d) {
+    console.log("Selecting Day:", m, d);
+    
+    // Update UI visuals
+    document.querySelectorAll('.cal-day-item').forEach(e => e.classList.remove('active'));
+    const target = document.getElementById(`day-card-${m}-${d}`);
+    if(target) target.classList.add('active');
+    
+    selectedMonth = m;
+    selectedDay = d;
+    
+    renderContent(m, d);
+}
+
+function renderContent(m, d) {
+    const container = document.getElementById('verses-container');
+    const commentLabel = document.getElementById('comment-text-label');
+    const globalIdx = (m - 1) * 25 + d;
+
+    // Header Content Update
+    const titleArea = document.getElementById('main-date-title');
+    if(titleArea) {
+        titleArea.innerText = `Dia ${d}`;
+        // Update surrounding elements if structure allows, or just title
+        const parent = titleArea.parentElement;
+        if(parent.querySelector('div')) {
+           parent.querySelector('div').innerText = `DIA ${globalIdx} / 300`;
+        }
+    }
+    
+    if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
+        if(container) container.innerHTML = "<div style='padding:20px; text-align:center;'>Sem leitura para este dia.</div>";
+        updateProgress(0, 1);
+        return;
+    }
+    
+    const verses = bibleReadingPlan[m][d-1]; 
+    if(container) container.innerHTML = '';
+    
+    let readCount = 0;
+    
+    verses.forEach((v, idx) => {
+        const link = getBibleLink(v);
+        const storageKey = `reading_check_${m}_${d}_${idx}`;
+        const isRead = localStorage.getItem(storageKey) === 'true';
+        if(isRead) readCount++;
+        
+        const item = document.createElement('div');
+        item.className = `verse-check-item ${isRead ? 'read' : ''}`;
+        
+        // Inline styles for JS dynamic states (restored from working version)
+        if(isRead) {
+            item.style.background = '#ecfdf5';
+            item.style.borderColor = '#a7f3d0';
+        }
+        
+        item.onclick = (e) => {
+            if(e.target.closest('a')) return;
+            toggleVerseRead(m, d, idx, item);
+        };
+        
+        item.innerHTML = `
+            <div style="display:flex; align-items:center;">
+                <div class="check-circle" style="
+                    background:${isRead ? '#10b981' : 'transparent'}; 
+                    border-color:${isRead ? '#10b981' : 'var(--border-color)'};
+                ">
+                    <i data-lucide="check" style="width:14px; color:white; opacity:${isRead ? '1' : '0'}; transition:opacity 0.2s;"></i>
+                </div>
+                <div class="verse-info">
+                    <div class="verse-text" style="font-weight:600; ${isRead ? 'color:#065f46; text-decoration:line-through; opacity:0.8;' : ''}">${v}</div>
+                </div>
+            </div>
+            <a href="${link}" target="_blank" class="ripple" style="
+                background: var(--primary-light); color: var(--primary); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px; flex-shrink: 0;
+            ">LER <i data-lucide="external-link" style="width:14px;"></i></a>
+        `;
+        if(container) container.appendChild(item);
+    });
+    
+    if(window.lucide) window.lucide.createIcons();
+    updateProgress(readCount, verses.length);
+    
+    const isDone = completedMap[`${m}_${d}`];
+    if(commentLabel) commentLabel.innerText = (isDone && isDone.comment) ? "Editar Minha Anotação" : "Adicionar Anotação";
+}
+
+function toggleVerseRead(m, d, idx, item) {
+    const storageKey = `reading_check_${m}_${d}_${idx}`;
+    const newState = !item.classList.contains('read');
+    
+    item.classList.toggle('read');
+    localStorage.setItem(storageKey, newState);
+    
+    // Visual Updates specific to this item
+    const checkCircle = item.querySelector('.check-circle');
+    const checkIcon = item.querySelector('.check-circle i');
+    const verseText = item.querySelector('.verse-text');
+    
+    if(newState) {
+        item.style.background = '#ecfdf5';
+        item.style.borderColor = '#a7f3d0';
+        checkCircle.style.background = '#10b981';
+        checkCircle.style.borderColor = '#10b981';
+        checkIcon.style.opacity = '1';
+        verseText.style.color = '#065f46';
+        verseText.style.textDecoration = 'line-through';
+        verseText.style.opacity = '0.8';
+    } else {
+        item.style.background = 'var(--bg-surface)';
+        item.style.borderColor = 'var(--border-color)';
+        checkCircle.style.background = 'transparent';
+        checkCircle.style.borderColor = 'var(--border-color)';
+        checkIcon.style.opacity = '0';
+        verseText.style.color = 'var(--text-main)';
+        verseText.style.textDecoration = 'none';
+        verseText.style.opacity = '1';
+    }
+    
+    // Recalculate progress for this day
+    const total = document.querySelectorAll('.verse-check-item').length;
+    const currentRead = document.querySelectorAll('.verse-check-item.read').length;
+    updateProgress(currentRead, total);
+}
+
+function updateProgress(current, total) {
+    if(total === 0) return;
+    const pct = Math.round((current / total) * 100);
+    const bar = document.getElementById('daily-progress-bar');
+    const text = document.getElementById('daily-progress-text');
+    if(bar) bar.style.width = `${pct}%`;
+    if(text) text.innerText = `${pct}% Concluído`;
+    
+    const btn = document.getElementById('btn-main-action');
+    const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
+    
+    if(!btn) return;
+
+    if (current < total) {
+        const missing = total - current;
+        btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing} leituras...`;
+        btn.onclick = () => alert("Por favor, marque todos os textos como lidos antes de concluir.");
+        btn.style = "width:100%; background:#fef3c7; color:#d97706; border:1px solid #fde68a; padding:16px; border-radius:16px; font-weight:700; display:flex; justify-content:center; gap:8px; box-shadow:none;";
+    } else {
+        if (isDoneServer) {
+             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Leitura Registrada';
+             btn.onclick = () => completeDay();
+             btn.style = "width:100%; background:#d1fae5; color:#065f46; border:none; padding:16px; border-radius:16px; font-weight:700; display:flex; justify-content:center; gap:8px; box-shadow:none;";
+        } else {
+             btn.innerHTML = 'Confirmar Conclusão Do Dia';
+             btn.onclick = () => completeDay();
+             btn.style = "width:100%; background:#10b981; color:white; border:none; padding:16px; border-radius:16px; font-weight:700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); display:flex; justify-content:center; gap:8px;";
+        }
+    }
+    if(window.lucide) window.lucide.createIcons();
+}
+
+function insertFormat(startTag, endTag) {
+    const tarea = document.getElementById('temp-comment-area');
+    if(!tarea) return;
+    const start = tarea.selectionStart;
+    const end = tarea.selectionEnd;
+    const text = tarea.value;
+    const before = text.substring(0, start);
+    const selected = text.substring(start, end);
+    const after = text.substring(end);
+    tarea.value = before + startTag + selected + endTag + after;
+    tarea.focus();
+    tarea.selectionStart = start + startTag.length;
+    tarea.selectionEnd = end + startTag.length;
+}
+
+function shareWhatsApp() {
+    const tarea = document.getElementById('temp-comment-area');
+    const text = tarea ? tarea.value : '';
+    if(!text) return alert("Escreva algo primeiro!");
+    const url = `https://wa.me/?text=${encodeURIComponent("*Minha Anotação de Leitura:* \n\n" + text)}`;
+    window.open(url, '_blank');
+}
+
+function completeDay() {
+    const m = selectedMonth;
+    const d = selectedDay;
+    const formData = new FormData();
+    formData.append('action', 'mark_read');
+    formData.append('month', m);
+    formData.append('day', d);
+    fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
+}
+
+function saveCommentAndFinish() {
+    const tarea = document.getElementById('temp-comment-area');
+    const val = tarea ? tarea.value : '';
+    const m = selectedMonth;
+    const d = selectedDay;
+    const formData = new FormData();
+    formData.append('action', 'mark_read');
+    formData.append('month', m);
+    formData.append('day', d);
+    formData.append('comment', val);
+    fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
+}
+
+function openCommentModal() {
+    const m = selectedMonth;
+    const d = selectedDay;
+    const isDone = completedMap[`${m}_${d}`];
+    const tarea = document.getElementById('temp-comment-area');
+    const modal = document.getElementById('modal-comment');
+    
+    if(tarea) tarea.value = isDone ? (isDone.comment || '') : '';
+    if(modal) modal.style.display = 'flex';
+}
+function closeCommentModal() { 
+    const modal = document.getElementById('modal-comment');
+    if(modal) modal.style.display = 'none'; 
+}
+
+function getMonthAbbr(m) {
+    return ["", "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"][m];
+}
+
+window.addEventListener('load', init);
+</script>        --yv-bg: #ffffff;
         --yv-bar: #eeeeee;
         --yv-check: #50bdae;
         --yv-text: #333333;
