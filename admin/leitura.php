@@ -342,7 +342,7 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
         <!-- Right Side: Stats Button + Status Badge -->
         <div style="display: flex; align-items: center; gap: 12px;">
             <button onclick="document.getElementById('modal-stats').style.display='flex'" class="ripple" title="Ver Estatísticas" style="
-                border: 1px solid var(--border); background: white; color: var(--text-light);
+                border: 1px solid #bae6fd; background: #e0f2fe; color: #0284c7;
                 width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
                 cursor: pointer; transition: all 0.2s;
             ">
