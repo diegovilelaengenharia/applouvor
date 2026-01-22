@@ -285,9 +285,22 @@ function renderContent(m, d) {
                     <div class="verse-text">${v}</div>
                 </div>
             </div>
-            <a href="${link}" target="_blank" class="ripple" style="
-                background: #eff6ff; color: #2563eb; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px; flex-shrink: 0; border: 1px solid #dbeafe;
-            ">LER <i data-lucide="book-open" style="width:14px;"></i></a>
+            <a href="${link}" target="_blank" class="btn-read ripple" style="
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+                color: white; 
+                padding: 8px 14px; 
+                border-radius: 18px; 
+                text-decoration: none; 
+                font-size: 0.75rem; 
+                font-weight: 700; 
+                display:flex; 
+                align-items:center; 
+                gap:5px; 
+                flex-shrink: 0; 
+                border: none;
+                box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+                transition: all 0.2s ease;
+            ">LER <i data-lucide="book-open" style="width:13px;"></i></a>
         `;
         if(container) container.appendChild(item);
     });
