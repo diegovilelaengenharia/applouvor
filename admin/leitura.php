@@ -716,6 +716,20 @@ window.addEventListener('load', init);
                 <i data-lucide="download"></i> Baixar Relatório de Leitura
             </button>
         </form>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 24px;">
+            <h4 style="margin-bottom: 8px; color: #ef4444;">Zona de Perigo</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+                Ao resetar, todo o seu progresso de leitura e anotações serão apagados permanentemente.
+            </p>
+            
+            <form method="POST" onsubmit="return confirm('TEM CERTEZA? Essa ação não pode ser desfeita e todo o histórico será perdido.');">
+                <input type="hidden" name="action" value="reset_plan">
+                <button type="submit" class="ripple" style="width: 100%; padding: 14px; background: #fee2e2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i data-lucide="trash-2"></i> Resetar Tudo e Começar do Zero
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 
