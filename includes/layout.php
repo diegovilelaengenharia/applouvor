@@ -439,6 +439,13 @@ function renderAppHeader($title, $backUrl = null)
                         </a>
                     <?php endif; ?>
 
+                    <!-- Stats Button (Escalas only) -->
+                    <?php if (strpos($_SERVER['PHP_SELF'], 'escalas.php') !== false): ?>
+                        <a href="escalas_stats.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);">
+                            <i data-lucide="bar-chart-2" style="color: white; width: 20px;"></i>
+                        </a>
+                    <?php endif; ?>
+
                     <!-- Líder Button (Admin only) -->
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
