@@ -438,6 +438,13 @@ function renderAppHeader($title, $backUrl = null)
                         </a>
                     <?php endif; ?>
 
+                    <!-- Leitura Config Button (Leitura Only) -->
+                    <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
+                        <button onclick="openConfig()" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; flex-shrink:0; cursor: pointer; color: var(--text-muted);">
+                            <i data-lucide="settings" style="width: 20px;"></i>
+                        </button>
+                    <?php endif; ?>
+
                     <!-- Mobile Profile Avatar -->
                     <div style="position: relative;">
                         <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 40px; height: 40px; padding: 0; border: 2px solid white; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25), 0 2px 8px rgba(34, 197, 94, 0.2); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;">

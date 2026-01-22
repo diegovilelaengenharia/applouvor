@@ -253,19 +253,8 @@ renderAppHeader('Leitura Bíblica');
     }
 </style>
 
-<!-- HEADER WITH SETTINGS ICON -->
-<div style="position: relative;">
-    <?php renderPageHeader('Leitura Bíblica', 'Dia ' . $planDayIndex . ' de 300 (' . $percentage . '%)'); ?>
-    <div class="page-header-actions">
-        <button onclick="openConfig()" class="ripple" style="
-            width: 40px; height: 40px; background: var(--bg-surface); border: 1px solid var(--border-color);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--text-main); cursor: pointer; box-shadow: var(--shadow-sm);
-        ">
-            <i data-lucide="settings" style="width: 20px;"></i>
-        </button>
-    </div>
-</div>
+<!-- HEADER (Settings moved to layout.php) -->
+<?php renderPageHeader('Leitura Bíblica', 'Dia ' . $planDayIndex . ' de 300 (' . $percentage . '%)'); ?>
 
 <!-- HORIZONTAL DATE SCROLL (Calendar Strip) -->
 <div class="calendar-strip" id="calendar-strip">
@@ -290,17 +279,25 @@ renderAppHeader('Leitura Bíblica');
     </div>
 
     <!-- Empty Space for bottom bar -->
-    <div style="height: 60px;"></div>
+    <div style="height: 100px;"></div>
 </div>
 
 <!-- BOTTOM ACTION BAR -->
 <div class="bottom-action-bar" id="bottom-bar">
-    <button id="btn-main-action" class="btn-finish-day" onclick="completeDay()">
-        Começar a leitura
-    </button>
-    <div style="text-align: center;">
-         <span id="comment-trigger" onclick="openCommentModal()" style="font-size: 0.85rem; color: var(--text-muted); text-decoration: underline; cursor: pointer;">Adicionar anotação...</span>
+    <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+         <button id="comment-trigger" onclick="openCommentModal()" style="
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 14px; border-radius: 20px; font-weight: 600; font-size: 0.95rem;
+         ">
+            <i data-lucide="message-square" style="width: 18px;"></i>
+            <span id="comment-text-label">Anotação</span>
+         </button>
     </div>
+
+    <button id="btn-main-action" class="btn-finish-day" onclick="completeDay()">
+        Concluir Leitura
+    </button>
 </div>
 
 <!-- CONFIG MODAL -->
@@ -386,30 +383,16 @@ function init() {
     }, 100);
 }
 
-// Render Calendar Strip (Showing +/- 5 days around current plan day, or just all?)
-// Showing 'all 300' is too much. Let's show current month days (1..25) for simplicity, or 
-// maybe a window around Plan Day Index. 
-// App "YouVersion" shows huge scroll. Let's show the current month's 25 days.
 function renderCalendar() {
     const strip = document.getElementById('calendar-strip');
     strip.innerHTML = '';
     
-    // Render only the selected month for now, or maybe previous/next buttons?
-    // Let's render the Current Month (1-25)
-    // To support full year scrolling we'd need more logic. 
-    // Let's stick to the current month derived from Plan Day Index.
-    
-    // We can define "Day 1" as the Start Date.
-    // Let's render -5 to +10 days from planDayIndex just to show context?
-    // Or simpler: Render the 25 days of the calculated "Current Month".
-    
     const m = currentPlanMonth;
     
+    // Render current month days
     for (let d = 1; d <= 25; d++) {
-        // Global Day Index used for "Day 365" display
-        const globalIdx = (m - 1) * 25 + d;
         const isCompleted = completedMap[`${m}_${d}`];
-        const isActive = (d === currentPlanDay); // Today relative to start date
+        const isActive = (d === currentPlanDay); 
         
         const el = document.createElement('div');
         el.className = `cal-day-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
@@ -425,7 +408,6 @@ function renderCalendar() {
 }
 
 function selectDay(m, d) {
-    // Update UI
     document.querySelectorAll('.cal-day-item').forEach(e => e.classList.remove('active'));
     document.getElementById(`day-card-${m}-${d}`)?.classList.add('active');
     
@@ -439,34 +421,41 @@ function renderContent(m, d) {
     const container = document.getElementById('verses-container');
     const title = document.getElementById('main-date-title');
     const btn = document.getElementById('btn-main-action');
-    const commentTrig = document.getElementById('comment-trigger');
+    const commentLabel = document.getElementById('comment-text-label');
     
     // Title
     const globalIdx = (m - 1) * 25 + d;
     title.innerHTML = `Dia ${d} <span style="font-size:0.9rem; color:var(--text-muted); font-weight:400;">(Dia ${globalIdx} do ano)</span>`;
     
-    // Verses
-    if (!bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
-        container.innerHTML = "<div>Sem leitura para este dia.</div>";
+    // Ensure data exists
+    if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
+        container.innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-muted);'>Nenhuma leitura cadastrada para este dia.</div>";
         btn.style.display = 'none';
         return;
     }
     
-    const verses = bibleReadingPlan[m][d-1]; // array strings
+    const verses = bibleReadingPlan[m][d-1]; // string array
     container.innerHTML = '';
     
     verses.forEach(v => {
         const link = getBibleLink(v);
+        // Clean verse text
         const item = document.createElement('div');
         item.className = 'verse-check-item';
-        item.onclick = () => window.open(link, '_blank'); // Click card to open bible
+        // Note: Removing onclick from container to avoid misclicks. Button specific.
         
         item.innerHTML = `
             <div class="verse-info">
                 <i data-lucide="book" style="width:20px; color:var(--primary);"></i>
                 <div class="verse-text">${v}</div>
             </div>
-            <i data-lucide="external-link" style="width:16px; color:var(--text-muted);"></i>
+            <a href="${link}" target="_blank" class="ripple" style="
+                background: var(--primary-light); color: var(--primary);
+                padding: 8px 16px; border-radius: 20px; text-decoration: none;
+                font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px;
+            ">
+                LER <i data-lucide="external-link" style="width:14px;"></i>
+            </a>
         `;
         container.appendChild(item);
     });
@@ -482,16 +471,18 @@ function renderContent(m, d) {
         btn.style.color = '#065f46';
         btn.onclick = null;
         
-        commentTrig.innerText = isDone.comment ? "Ver anotação" : "Adicionar anotação...";
+        commentLabel.innerText = isDone.comment ? "Ver Anotação" : "Adicionar Anotação";
     } else {
         btn.innerHTML = 'Concluir Leitura';
         btn.style.background = '#111';
         btn.style.color = 'white';
         btn.onclick = () => completeDay();
         
-        commentTrig.innerText = "Adicionar anotação...";
+        commentLabel.innerText = "Adicionar Anotação";
     }
 }
+
+// ... Actions and Modals same as before ...
 
 // Actions
 function completeDay() {
