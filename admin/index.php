@@ -190,6 +190,45 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         </div>
     <?php endif; ?>
 
+    <!-- WIDGET: LEITURA BÍBLICA (Sempre visível para incentivar) -->
+    <?php
+    $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+    // Calculate current plan day again (simplified for this view)
+    $stmtSet = $pdo->prepare("SELECT setting_value FROM user_settings WHERE user_id = ? AND setting_key = 'reading_plan_start_date'");
+    $stmtSet->execute([$userId]);
+    $sDate = $stmtSet->fetchColumn() ?: date('Y-01-01');
+    $sDateTime = new DateTime($sDate);
+    $nowTime = new DateTime();
+    $sDateTime->setTime(0,0,0); $nowTime->setTime(0,0,0);
+    $diffDays = ($sDateTime->diff($nowTime)->invert ? -1 : 1) * $sDateTime->diff($nowTime)->days;
+    $pDayIdx = $diffDays + 1;
+    if ($pDayIdx < 1) $pDayIdx = 1;
+
+    $curPMonth = floor(($pDayIdx - 1) / 25) + 1;
+    $curPDay = (($pDayIdx - 1) % 25) + 1;
+
+    $stmtCheck->execute([$userId, $curPMonth, $curPDay]);
+    $readToday = $stmtCheck->fetchColumn() > 0;
+    ?>
+    <div class="section-title">
+        <span>Leitura de Hoje</span>
+        <a href="leitura.php" class="section-action">Abrir Plano</a>
+    </div>
+    
+    <a href="leitura.php" class="feed-card" style="background: <?= $readToday ? '#ecfdf5' : '#fef2f2' ?>; border-color: <?= $readToday ? '#a7f3d0' : '#fecaca' ?>;">
+        <div class="feed-icon" style="background: <?= $readToday ? '#10b981' : '#ef4444' ?>; color: white;">
+            <i data-lucide="<?= $readToday ? 'check-circle-2' : 'book-open' ?>"></i>
+        </div>
+        <div>
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: <?= $readToday ? '#065f46' : '#991b1b' ?>;">
+                <?= $readToday ? 'Leitura Concluída! 🎉' : 'Leitura Pendente' ?>
+            </h4>
+            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: <?= $readToday ? '#047857' : '#7f1d1d' ?>;">
+                <?= $readToday ? "Você completou o dia $curPDay." : "Você precisa ler o dia $curPDay hoje." ?>
+            </p>
+        </div>
+    </a>
+
 
 
 
