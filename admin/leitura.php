@@ -289,7 +289,16 @@ const currentPlanMonth = <?= json_encode($currentPlanMonth) ?>;
 const currentPlanDay = <?= json_encode($currentPlanDay) ?>;
 const state = { m: currentPlanMonth, d: currentPlanDay, data: serverData, saveTimer: null };
 
-function init() { renderCalendar(); loadDay(state.m, state.d); lucide.createIcons(); }
+function init() { 
+    // FIX: Move Modals to Body to prevent layout clipping
+    document.body.appendChild(document.getElementById('modal-note'));
+    document.body.appendChild(document.getElementById('modal-config'));
+    document.body.appendChild(document.getElementById('save-toast'));
+
+    renderCalendar(); 
+    loadDay(state.m, state.d); 
+    lucide.createIcons(); 
+}
 
 function renderCalendar() {
     const el = document.getElementById('calendar-strip'); el.innerHTML = '';
