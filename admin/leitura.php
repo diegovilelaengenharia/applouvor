@@ -816,21 +816,39 @@ window.addEventListener('load', init);
 <!-- BOTTOM ACTION BAR -->
 <div class="bottom-action-bar" id="bottom-bar">
     <div style="display: flex; gap: 12px;">
-        <button id="comment-trigger" onclick="openCommentModal()" style="
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+        <button id="comment-trigger" onclick="openCommentModal()" class="ripple" style="
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
             background: #fff; border: 1px solid var(--border-color); color: var(--text-main);
-            padding: 14px; border-radius: 16px; font-weight: 700; font-size: 0.95rem; box-shadow: var(--shadow-sm);
+            padding: 16px; border-radius: 16px; font-weight: 600; font-size: 0.9rem;
+            box-shadow: var(--shadow-sm); transition: all 0.2s;
         ">
-            <i data-lucide="pen-line" style="width: 18px;"></i>
-            <span id="comment-text-label">Anotar</span>
+            <div style="
+                width: 40px; height: 40px; 
+                background: var(--secondary-light); 
+                border-radius: 12px; 
+                display: flex; align-items: center; justify-content: center;
+                color: var(--secondary);
+            ">
+                <i data-lucide="pen-line" style="width: 20px;"></i>
+            </div>
+            <span id="comment-text-label">Minha Anotação</span>
         </button>
 
         <button onclick="openGroupComments()" class="ripple" style="
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: #f0f9ff; border: 1px solid #bae6fd; color: #0284c7;
-            padding: 14px; border-radius: 16px; font-weight: 700; font-size: 0.95rem; box-shadow: var(--shadow-sm);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            background: #fff; border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 16px; border-radius: 16px; font-weight: 600; font-size: 0.9rem;
+            box-shadow: var(--shadow-sm); transition: all 0.2s;
         ">
-            <i data-lucide="users" style="width: 18px;"></i>
+            <div style="
+                width: 40px; height: 40px; 
+                background: #e0f2fe; 
+                border-radius: 12px; 
+                display: flex; align-items: center; justify-content: center;
+                color: #0284c7;
+            ">
+                <i data-lucide="message-circle" style="width: 20px;"></i>
+            </div>
             <span>Comentários</span>
         </button>
     </div>
