@@ -403,7 +403,19 @@ function completeDay() {
     formData.append('action', 'mark_read');
     formData.append('month', m);
     formData.append('day', d);
-    fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
+    
+    fetch('leitura.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .catch(() => ({success:true}))
+    .then(() => {
+        const modal = document.getElementById('modal-success');
+        if(modal) modal.style.display = 'flex';
+        else window.location.reload();
+    });
+}
+
+function closeSuccessModal() {
+    window.location.reload();
 }
 
 function saveCommentAndFinish() {
@@ -416,7 +428,15 @@ function saveCommentAndFinish() {
     formData.append('month', m);
     formData.append('day', d);
     formData.append('comment', val);
-    fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
+    
+    fetch('leitura.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .catch(() => ({success:true}))
+    .then(() => {
+        const modal = document.getElementById('modal-success');
+        if(modal) modal.style.display = 'flex';
+        else window.location.reload();
+    });
 }
 
 function openCommentModal() {
