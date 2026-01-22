@@ -284,13 +284,24 @@ renderAppHeader('Leitura Bíblica');
 
 <!-- CONTENT -->
 <div class="reading-container">
-    <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: end;">
-        <div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Leitura de Hoje</div>
-            <h1 id="main-date-title" style="margin: 4px 0 0 0; font-size: 1.5rem;">Carregando...</h1>
+    <div style="margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 12px;">
+            <div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Leitura de Hoje</div>
+                <h1 id="main-date-title" style="margin: 4px 0 0 0; font-size: 1.5rem;">Carregando...</h1>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.75rem; color: #ef4444; font-weight: 600;"><?= $delay > 0 ? $delay . ' Dias Perdidos' : 'Em dia!' ?></div>
+            </div>
         </div>
-        <div style="text-align: right;">
-            <div style="font-size: 0.75rem; color: #ef4444; font-weight: 600;"><?= $delay > 0 ? $delay . ' Dias Perdidos' : 'Em dia!' ?></div>
+        
+        <!-- Daily Progress Bar -->
+        <div style="background: var(--border-color); height: 6px; border-radius: 3px; overflow: hidden; position: relative;">
+            <div id="daily-progress-bar" style="width: 0%; height: 100%; background: #10b981; transition: width 0.3s ease;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.7rem; color: var(--text-muted);">
+            <span>Progresso Diário</span>
+            <span id="daily-progress-text">0%</span>
         </div>
     </div>
 
@@ -300,7 +311,7 @@ renderAppHeader('Leitura Bíblica');
     </div>
 
     <!-- Empty Space for bottom bar -->
-    <div style="height: 100px;"></div>
+    <div style="height: 120px;"></div>
 </div>
 
 <!-- BOTTOM ACTION BAR -->
@@ -380,24 +391,57 @@ renderAppHeader('Leitura Bíblica');
     </div>
 </div>
 
-<!-- COMMENT MODAL (Reused Logic) -->
-<div id="modal-comment" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center;">
-    <div style="background: var(--bg-surface); width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="font-size: 1.25rem;">Anotação</h3>
-            <button onclick="closeCommentModal()" style="background:none; border:none; cursor:pointer;"><i data-lucide="x"></i></button>
+<!-- COMMENT MODAL (Professional Redesign) -->
+<div id="modal-comment" class="modal-backdrop" style="
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    z-index: 2000; display: none; align-items: center; justify-content: center;
+">
+    <div style="
+        background: var(--bg-surface); width: 90%; max-width: 500px; 
+        border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: hidden; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    ">
+        <div style="
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 20px; 
+            color: white; display: flex; justify-content: space-between; align-items: center;
+        ">
+            <div>
+                <h3 style="margin: 0; font-size: 1.25rem;">Minhas Anotações</h3>
+                <p style="margin: 4px 0 0 0; font-size: 0.85rem; opacity: 0.8;">Rhema para o dia de hoje</p>
+            </div>
+            <button onclick="closeCommentModal()" style="background: rgba(255,255,255,0.2); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display:flex; align-items:center; justify-content:center;"><i data-lucide="x" style="width:18px;"></i></button>
         </div>
-        <textarea id="temp-comment-area" placeholder="Escreva aqui..." style="width: 100%; height: 120px; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;"></textarea>
-        <button onclick="saveCommentAndFinish()" class="btn-primary" style="width: 100%;">Salvar</button>
+        
+        <div style="padding: 24px;">
+            <textarea id="temp-comment-area" placeholder="O que Deus falou com você hoje?" style="
+                width: 100%; height: 200px; padding: 16px; border-radius: 16px; 
+                border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; font-size: 1rem;
+                background: var(--bg-body); resize: none; margin-bottom: 20px; outline: none;
+                transition: border-color 0.2s;
+            " onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'"></textarea>
+            
+            <button onclick="saveCommentAndFinish()" class="ripple" style="
+                width: 100%; padding: 16px; background: #0f172a; color: white; 
+                border: none; border-radius: 16px; font-weight: 700; font-size: 1rem;
+            ">Salvar Anotação</button>
+        </div>
     </div>
 </div>
 
+<style>
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+</style>
+
 <script>
 // Data Params
-const planDayIndex = <?= $planDayIndex ?>; // Based on Start Date
+const planDayIndex = <?= $planDayIndex ?>; 
 const currentPlanMonth = <?= $currentPlanMonth ?>;
 const currentPlanDay = <?= $currentPlanDay ?>;
-const completedMap = <?= json_encode($completedIds) ?>; // "M_D" -> {id...}
+const completedMap = <?= json_encode($completedIds) ?>;
 
 // State
 let selectedMonth = currentPlanMonth;
@@ -406,10 +450,10 @@ let selectedDay = currentPlanDay;
 // Init
 function init() {
     renderCalendar();
-    selectDay(currentPlanMonth, currentPlanDay); // Select "Today" by default
+    selectDay(currentPlanMonth, currentPlanDay); 
     lucide.createIcons();
     
-    // Scroll to active day
+    // Scroll to active
     setTimeout(() => {
         const active = document.querySelector('.cal-day-item.active');
         if(active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
@@ -419,10 +463,8 @@ function init() {
 function renderCalendar() {
     const strip = document.getElementById('calendar-strip');
     strip.innerHTML = '';
-    
     const m = currentPlanMonth;
     
-    // Render current month days
     for (let d = 1; d <= 25; d++) {
         const isCompleted = completedMap[`${m}_${d}`];
         const isActive = (d === currentPlanDay); 
@@ -443,10 +485,8 @@ function renderCalendar() {
 function selectDay(m, d) {
     document.querySelectorAll('.cal-day-item').forEach(e => e.classList.remove('active'));
     document.getElementById(`day-card-${m}-${d}`)?.classList.add('active');
-    
     selectedMonth = m;
     selectedDay = d;
-    
     renderContent(m, d);
 }
 
@@ -455,37 +495,67 @@ function renderContent(m, d) {
     const title = document.getElementById('main-date-title');
     const btn = document.getElementById('btn-main-action');
     const commentLabel = document.getElementById('comment-text-label');
+    const progressBar = document.getElementById('daily-progress-bar');
+    const progressText = document.getElementById('daily-progress-text');
     
     // Title
     const globalIdx = (m - 1) * 25 + d;
     title.innerHTML = `Dia ${d} <span style="font-size:0.9rem; color:var(--text-muted); font-weight:400;">(Dia ${globalIdx} do ano)</span>`;
     
-    // Ensure data exists
     if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
         container.innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-muted);'>Nenhuma leitura cadastrada para este dia.</div>";
         btn.style.display = 'none';
+        updateProgress(0, 1);
         return;
     }
     
     const verses = bibleReadingPlan[m][d-1]; // string array
     container.innerHTML = '';
     
-    verses.forEach(v => {
+    let readCount = 0;
+    
+    verses.forEach((v, idx) => {
         const link = getBibleLink(v);
-        // Clean verse text
         const item = document.createElement('div');
-        item.className = 'verse-check-item';
-        // Note: Removing onclick from container to avoid misclicks. Button specific.
+        
+        // Check "read" status from LocalStorage
+        const storageKey = `reading_check_${m}_${d}_${idx}`;
+        const isRead = localStorage.getItem(storageKey) === 'true';
+        if(isRead) readCount++;
+        
+        item.className = `verse-check-item ${isRead ? 'read' : ''}`;
+        
+        item.onclick = (e) => {
+            if(e.target.closest('a')) return;
+            
+            const newState = !item.classList.contains('read');
+            item.classList.toggle('read');
+            localStorage.setItem(storageKey, newState);
+            
+            // Update Check Icon Visuals immediately
+            const icon = item.querySelector('.check-circle i');
+            if(icon) icon.style.opacity = newState ? '1' : '0';
+            
+            // Recalc Progress
+            const total = document.querySelectorAll('.verse-check-item').length;
+            const currentRead = document.querySelectorAll('.verse-check-item.read').length;
+            updateProgress(currentRead, total);
+        };
         
         item.innerHTML = `
-            <div class="verse-info">
-                <i data-lucide="book" style="width:20px; color:var(--primary);"></i>
-                <div class="verse-text">${v}</div>
+            <div style="display:flex; align-items:center;">
+                <div class="check-circle" style="background:${isRead ? '#10b981' : 'transparent'}; border-color:${isRead ? '#10b981' : 'var(--border-color)'};">
+                    <i data-lucide="check" style="width:14px; color:white; opacity:${isRead ? '1' : '0'}; transition:opacity 0.2s;"></i>
+                </div>
+                <div class="verse-info">
+                    <div class="verse-text" style="font-weight:600; font-size:1rem;">${v}</div>
+                </div>
             </div>
             <a href="${link}" target="_blank" class="ripple" style="
                 background: var(--primary-light); color: var(--primary);
                 padding: 8px 16px; border-radius: 20px; text-decoration: none;
                 font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px;
+                flex-shrink: 0;
             ">
                 LER <i data-lucide="external-link" style="width:14px;"></i>
             </a>
@@ -495,66 +565,94 @@ function renderContent(m, d) {
     
     lucide.createIcons();
     
-    // Footer State
+    // Update Initial Progress
+    updateProgress(readCount, verses.length);
+    
+    // GLOBAL Footer State (Server Side)
     const isDone = completedMap[`${m}_${d}`];
     
+    // If not done on server but all checks are done locally, update visually
+    const allChecked = (readCount === verses.length && verses.length > 0);
+    
     if (isDone) {
-        btn.innerHTML = '<i data-lucide="check"></i> Leitura Concluída';
-        btn.style.background = '#d1fae5';
-        btn.style.color = '#065f46';
-        btn.onclick = null;
-        
-        commentLabel.innerText = isDone.comment ? "Ver Anotação" : "Adicionar Anotação";
+        setButtonState(true);
+        commentLabel.innerText = isDone.comment ? "Ver Minha Anotação" : "Minha Anotação";
     } else {
-        btn.innerHTML = 'Concluir Leitura';
-        btn.style.background = '#111';
-        btn.style.color = 'white';
-        btn.onclick = () => completeDay();
-        
+        // If all checked locally, turn green
+        if (allChecked) {
+             setButtonState(true, true); // Visual only, pending save
+        } else {
+             setButtonState(false);
+        }
         commentLabel.innerText = "Adicionar Anotação";
     }
 }
 
-// ... Actions and Modals same as before ...
+function updateProgress(current, total) {
+    if(total === 0) return;
+    const pct = Math.round((current / total) * 100);
+    document.getElementById('daily-progress-bar').style.width = `${pct}%`;
+    document.getElementById('daily-progress-text').innerText = `${pct}% Concluído`;
+    
+    // Auto Green Button Check
+    const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
+    if (!isDoneServer) {
+        if (current === total) {
+            setButtonState(true, true);
+        } else {
+            setButtonState(false);
+        }
+    }
+}
 
-// Actions
+function setButtonState(isDone, isPendingSave = false) {
+    const btn = document.getElementById('btn-main-action');
+    if (isDone) {
+        btn.innerHTML = isPendingSave ? '<i data-lucide="check"></i> Confirmar Conclusão' : '<i data-lucide="check"></i> Leitura Concluída';
+        btn.style.background = '#d1fae5';
+        btn.style.color = '#065f46';
+        if (isPendingSave) {
+            btn.style.background = '#22c55e'; // Strong Green for action
+            btn.style.color = 'white';
+            btn.onclick = () => completeDay(); // Allow click to save
+            lucide.createIcons();
+        } else {
+            btn.onclick = null;
+        }
+    } else {
+        btn.innerHTML = 'Concluir Leitura';
+        btn.style.background = '#1e293b';
+        btn.style.color = 'white';
+        btn.onclick = () => completeDay();
+    }
+}
+
+// ... Actions same ...
 function completeDay() {
-    // Check if user wants to add comment?
-    // User requested "Começar a leitura" which implies opening content. 
-    // But since we are listing verses, "Concluir" makes sense at bottom.
-    // Let's just mark as read.
     const m = selectedMonth;
     const d = selectedDay;
-    
     const formData = new FormData();
     formData.append('action', 'mark_read');
     formData.append('month', m);
     formData.append('day', d);
-    
-    fetch('leitura.php', { method: 'POST', body: formData })
-    .then(() => window.location.reload());
+    fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
 }
 
 function saveCommentAndFinish() {
     const val = document.getElementById('temp-comment-area').value;
     const m = selectedMonth;
     const d = selectedDay;
-    
     const formData = new FormData();
     formData.append('action', 'mark_read');
     formData.append('month', m);
     formData.append('day', d);
     formData.append('comment', val);
-    
-    fetch('leitura.php', { method: 'POST', body: formData })
-    .then(() => window.location.reload());
+    fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
 }
 
-// Config Modal
 function openConfig() { document.getElementById('modal-config').classList.add('active'); }
 function closeConfig() { document.getElementById('modal-config').classList.remove('active'); }
 
-// Comment Modal
 function openCommentModal() {
     const m = selectedMonth;
     const d = selectedDay;
@@ -564,7 +662,6 @@ function openCommentModal() {
 }
 function closeCommentModal() { document.getElementById('modal-comment').style.display = 'none'; }
 
-// Helpers
 function getMonthAbbr(m) {
     return ["", "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"][m];
 }
