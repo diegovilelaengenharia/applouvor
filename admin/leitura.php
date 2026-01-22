@@ -349,11 +349,11 @@ function updateProgress(current, total) {
 
     // ORDEM CORRETA: Verificar current PRIMEIRO
     if (current < total) {
-        // INCOMPLETO - Amber suave
+        // INCOMPLETO - Amber suave (apenas visual, não clicável)
         const missing = total - current;
         btn.innerHTML = `<i data-lucide="circle-dashed"></i> Faltam ${missing}`;
-        btn.onclick = () => alert(`Você precisa ler todas as passagens para concluir.\n\nLido: ${current}\nTotal: ${total}`);
-        btn.style.cssText = baseStyle + "background: var(--warning-light); color: var(--warning-dark); border: 1px solid var(--warning);";
+        btn.onclick = null; // Não clicável
+        btn.style.cssText = baseStyle + "background: var(--warning-light); color: var(--warning-dark); border: 1px solid var(--warning); cursor: default;";
         if(statusText) statusText.innerHTML = '<span style="color:var(--warning-dark)">Pendente</span>';
     } else if (isDoneServer) {
         // JÁ SALVO NO SERVIDOR - Emerald suave
