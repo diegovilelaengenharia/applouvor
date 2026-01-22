@@ -303,12 +303,25 @@ function init() {
 function renderCalendar() {
     const el = document.getElementById('calendar-strip'); el.innerHTML = '';
     const months = ["", "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+    
+    // Obter dia atual real do plano para cálculo de atraso
+    const actualPlanDay = currentPlanDay; 
+    const actualPlanMonth = currentPlanMonth;
+
     for(let d=1; d<=25; d++) {
         const key = `${state.m}_${d}`; const info = state.data[key];
         const isDone = info && info.verses && info.verses.length > 0 && isDayComplete(state.m,d); 
-        const isPartial = info && info.verses && info.verses.length > 0 && !isDone;
+        
+        // Lógica de Atraso: Se o mês é anterior, ou mês atual mas dia anterior ao dia do plano
+        const isPast = (state.m < actualPlanMonth) || (state.m === actualPlanMonth && d < actualPlanDay);
+        
+        // Partial/Warning: Tem progresso incompleto OU está atrasado
+        // Apenas marca como parcial se não estiver feito
+        const hasProgress = info && info.verses && info.verses.length > 0;
+        const isPartial = !isDone && (hasProgress || isPast);
+
         const div = document.createElement('div');
-        div.className = `cal-item ${state.d === d ? 'active' : ''} ${isDone ? 'done' : ''} ${isPartial ? 'partial' : ''}`;
+        div.className = `cal-item ${state.d === d ? 'active' : ''} ${isDone ? 'done' : ''} ${isPartial && state.d !== d ? 'partial' : ''}`;
         div.onclick = () => { state.d = d; renderCalendar(); loadDay(state.m, d); };
         div.innerHTML = `<div class="cal-month">${months[state.m]}</div><div class="cal-num">${d}</div>`;
         el.appendChild(div);
