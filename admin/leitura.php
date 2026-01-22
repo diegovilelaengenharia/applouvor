@@ -323,25 +323,51 @@ function updateProgress(current, total) {
     if(bar) bar.style.width = `${pct}%`;
     if(text) text.innerText = `${pct}% Concluído`;
     
+    // Top Action Button Logic
     const btn = document.getElementById('btn-main-action');
     const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
     
     if(!btn) return;
 
+    // Reset base styles for the small top button
+    btn.style.padding = "10px 20px";
+    btn.style.borderRadius = "12px";
+    btn.style.fontWeight = "700";
+    btn.style.fontSize = "0.85rem";
+    btn.style.display = "flex";
+    btn.style.alignItems = "center";
+    btn.style.gap = "8px";
+    btn.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+
     if (current < total) {
         const missing = total - current;
-        btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing} leituras...`;
+        btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing}`;
         btn.onclick = () => alert("Por favor, marque todos os textos como lidos antes de concluir.");
-        btn.style = "width:100%; background:#fef3c7; color:#d97706; border:1px solid #fde68a; padding:16px; border-radius:16px; font-weight:700; display:flex; justify-content:center; gap:8px; box-shadow:none;";
+        
+        // Yellow/Amber Style for Incomplete
+        btn.style.background = "#fffbeb"; // amber-50
+        btn.style.color = "#d97706";      // amber-600
+        btn.style.border = "1px solid #fcd34d"; // amber-300
     } else {
         if (isDoneServer) {
-             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Leitura Registrada';
-             btn.onclick = () => completeDay();
-             btn.style = "width:100%; background:#d1fae5; color:#065f46; border:none; padding:16px; border-radius:16px; font-weight:700; display:flex; justify-content:center; gap:8px; box-shadow:none;";
+             // Already done on server
+             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Concluído';
+             btn.onclick = () => completeDay(); // Allows toggling or re-confirming
+             
+             // Soft Green for already done
+             btn.style.background = "#d1fae5"; // emerald-100
+             btn.style.color = "#059669";      // emerald-600
+             btn.style.border = "1px solid transparent";
         } else {
-             btn.innerHTML = 'Confirmar Conclusão Do Dia';
+             // Ready to Finish
+             btn.innerHTML = 'Concluir Dia';
              btn.onclick = () => completeDay();
-             btn.style = "width:100%; background:#10b981; color:white; border:none; padding:16px; border-radius:16px; font-weight:700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); display:flex; justify-content:center; gap:8px;";
+             
+             // Bright Green for Action
+             btn.style.background = "#10b981"; // emerald-500
+             btn.style.color = "white";
+             btn.style.border = "none";
+             btn.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.4)";
         }
     }
     if(window.lucide) window.lucide.createIcons();
@@ -480,14 +506,9 @@ window.addEventListener('load', init);
         align-items: center;
         justify-content: space-between;
         transition: all 0.2s;
+        cursor: pointer; /* Moved from orphaned block */
     }
     .verse-check-item:hover { border-color: var(--primary); }
-        border-radius: 16px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid transparent;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
     .verse-check-item:active { transform: scale(0.98); }
     .verse-check-item.read {
         background: #ecfdf5; /* Green-50 */
@@ -586,15 +607,31 @@ window.addEventListener('load', init);
 
 <!-- CONTENT -->
 <div class="reading-container">
+    <!-- HEADER & ACTIONS -->
     <div style="margin-bottom: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; gap: 16px;">
             <div>
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Leitura de Hoje</div>
                 <h1 id="main-date-title" style="margin: 4px 0 0 0; font-size: 1.5rem;">Carregando...</h1>
             </div>
-            <div style="text-align: right;">
-                <div style="font-size: 0.75rem; color: #ef4444; font-weight: 600;"><?= $delay > 0 ? $delay . ' Dias Perdidos' : 'Em dia!' ?></div>
-            </div>
+            
+            <!-- Top Action Button (Replaces "Em dia") -->
+            <button id="btn-main-action" onclick="completeDay()" class="ripple" style="
+                border: none;
+                padding: 10px 20px;
+                border-radius: 12px;
+                font-weight: 700;
+                font-size: 0.85rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                white-space: nowrap;
+            ">
+                Carregando...
+            </button>
         </div>
         
         <!-- Daily Progress Bar -->
@@ -605,6 +642,24 @@ window.addEventListener('load', init);
             <span>Progresso Diário</span>
             <span id="daily-progress-text">0%</span>
         </div>
+        
+        <!-- Encouragement Message -->
+        <div id="encouragement-msg" style="
+            margin-top: 16px; 
+            padding: 12px 16px; 
+            background: linear-gradient(to right, #f0fdf4, #dcfce7); 
+            border-left: 4px solid #22c55e; 
+            border-radius: 8px;
+            color: #15803d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        ">
+            <i data-lucide="sparkles" style="width: 18px; color: #16a34a;"></i>
+            <span>A palavra de Deus renova suas forças. Continue firme! 💪</span>
+        </div>
     </div>
 
     <!-- Links List -->
@@ -613,25 +668,19 @@ window.addEventListener('load', init);
     </div>
 
     <!-- Empty Space for bottom bar -->
-    <div style="height: 120px;"></div>
+    <div style="height: 100px;"></div>
 </div>
 
-<!-- BOTTOM ACTION BAR -->
+<!-- BOTTOM ACTION BAR (Annotation Only) -->
 <div class="bottom-action-bar" id="bottom-bar">
-    <button id="btn-main-action" class="btn-finish-day" onclick="completeDay()">
-        Concluir Leitura
+    <button id="comment-trigger" onclick="openCommentModal()" style="
+        width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);
+        padding: 14px; border-radius: 16px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm);
+    ">
+        <i data-lucide="message-square" style="width: 18px;"></i>
+        <span id="comment-text-label">Ver Minha Anotação</span>
     </button>
-
-    <div style="display: flex; gap: 12px; margin-top: 12px;">
-         <button id="comment-trigger" onclick="openCommentModal()" style="
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);
-            padding: 14px; border-radius: 16px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm);
-         ">
-            <i data-lucide="message-square" style="width: 18px;"></i>
-            <span id="comment-text-label">Minha Anotação</span>
-         </button>
-    </div>
 </div>
 
 <!-- CONFIG MODAL -->
