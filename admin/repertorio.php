@@ -107,32 +107,32 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($songs as $song): ?>
                 <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="
-                    display: flex; align-items: center; gap: 16px; text-decoration: none; 
-                    padding: 16px; 
-                    border-radius: var(--radius-lg); 
+                    display: flex; align-items: center; gap: 12px; text-decoration: none; 
+                    padding: 10px; /* Padding reduzido */
+                    border-radius: 12px; 
                     background: var(--bg-surface); 
                     border: 1px solid var(--border-color);
                     transition: all 0.2s;
                     box-shadow: var(--shadow-sm);
                 " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
                     onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)'">
-                    <!-- Cover Placeholder -->
+                    <!-- Cover Placeholder Compact -->
                     <div style="
-                        width: 48px; height: 48px; flex-shrink: 0;
-                        background: url('https://ui-avatars.com/api/?name=<?= urlencode($song['title']) ?>&background=047857&color=fff&size=96') center/cover; 
-                        border-radius: 10px;
+                        width: 40px; height: 40px; flex-shrink: 0; /* Cover reduzido */
+                        background: url('https://ui-avatars.com/api/?name=<?= urlencode($song['title']) ?>&background=047857&color=fff&size=80') center/cover; 
+                        border-radius: 8px;
                     "></div>
 
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
-                        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;"><?= htmlspecialchars($song['artist']) ?></div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;"><?= htmlspecialchars($song['title']) ?></div>
+                        <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1px;"><?= htmlspecialchars($song['artist']) ?></div>
                     </div>
 
-                    <div style="text-align: right; min-width: 60px;">
-                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary); background: var(--primary-subtle); padding: 2px 8px; border-radius: 6px; display: inline-block;">
+                    <div style="text-align: right; min-width: 50px;">
+                        <div style="font-size: 0.7rem; font-weight: 700; color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 6px; display: inline-block;">
                             <?= $song['tone'] ?: '-' ?>
                         </div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">BPM: <?= $song['bpm'] ?: '-' ?></div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">BPM: <?= $song['bpm'] ?: '-' ?></div>
                     </div>
                 </a>
             <?php endforeach; ?>
