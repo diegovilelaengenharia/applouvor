@@ -437,6 +437,21 @@ renderAppHeader('Leitura Bíblica');
 </style>
 
 <script>
+// Expose to window immediately to ensure header button works
+window.openConfig = function() {
+    const modal = document.getElementById('modal-config');
+    if(modal) modal.classList.add('active');
+    else console.error("Modal config not found");
+};
+window.closeConfig = function() {
+    const modal = document.getElementById('modal-config');
+    if(modal) modal.classList.remove('active');
+};
+</script>
+
+<?php renderAppFooter(); ?>
+
+<script>
 // Data Params
 const planDayIndex = <?= $planDayIndex ?>; 
 const currentPlanMonth = <?= $currentPlanMonth ?>;
@@ -492,16 +507,41 @@ function selectDay(m, d) {
 
 function renderContent(m, d) {
     const container = document.getElementById('verses-container');
-    const title = document.getElementById('main-date-title');
     const btn = document.getElementById('btn-main-action');
     const commentLabel = document.getElementById('comment-text-label');
-    const progressBar = document.getElementById('daily-progress-bar');
-    const progressText = document.getElementById('daily-progress-text');
+    const subHeader = document.querySelector('.reading-container .text-muted'); // Use selector for flexibility
     
-    // Title
+    // Calculate Global Day (1-365) correctly
+    // Our logic: 12 months * 25 days = 300 days total in this specific plan structure? 
+    // Wait, the plan data has 12 keys. The loops show d<=25. 12*25 = 300. 
+    // User requested "1/365". If the plan only has 300 days, we should stick to 300 or adapt.
+    // The previous code said "Dia X de 300". I will use that logic but display as requested format if possible.
     const globalIdx = (m - 1) * 25 + d;
-    title.innerHTML = `Dia ${d} <span style="font-size:0.9rem; color:var(--text-muted); font-weight:400;">(Dia ${globalIdx} do ano)</span>`;
     
+    // Motivational Messages
+    const messages = [
+        "Lâmpada para os meus pés é a tua palavra. 📖",
+        "Você está indo muito bem, continue! 🚀",
+        "Alimente seu espírito hoje! 🔥",
+        "A palavra de Deus renova suas forças. 💪",
+        "Um capítulo por dia, uma vida transformada. ✨"
+    ];
+    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+
+    // Update Header Text with Animation
+    // We'll inject HTML directly for the title area
+    const titleArea = document.getElementById('main-date-title').parentElement;
+    titleArea.innerHTML = `
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; opacity:0.8;">
+            Dia ${globalIdx} / 300
+        </div>
+        <h1 style="margin: 4px 0 0 0; font-size: 1.5rem; display:flex; align-items:center; gap:8px;">
+            Dia ${d} 
+            <span style="font-size: 0.85rem; font-weight:400; color:#10b981; background:#ecfdf5; padding:2px 8px; border-radius:12px;">${randomMsg}</span>
+        </h1>
+    `;
+    
+    // Fetch Verses
     if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
         container.innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-muted);'>Nenhuma leitura cadastrada para este dia.</div>";
         btn.style.display = 'none';
@@ -509,34 +549,33 @@ function renderContent(m, d) {
         return;
     }
     
-    const verses = bibleReadingPlan[m][d-1]; // string array
+    btn.style.display = 'block'; // Ensure visible
+
+    const verses = bibleReadingPlan[m][d-1]; 
     container.innerHTML = '';
     
     let readCount = 0;
     
     verses.forEach((v, idx) => {
         const link = getBibleLink(v);
-        const item = document.createElement('div');
         
-        // Check "read" status from LocalStorage
         const storageKey = `reading_check_${m}_${d}_${idx}`;
         const isRead = localStorage.getItem(storageKey) === 'true';
         if(isRead) readCount++;
         
+        const item = document.createElement('div');
         item.className = `verse-check-item ${isRead ? 'read' : ''}`;
         
         item.onclick = (e) => {
             if(e.target.closest('a')) return;
-            
             const newState = !item.classList.contains('read');
             item.classList.toggle('read');
             localStorage.setItem(storageKey, newState);
             
-            // Update Check Icon Visuals immediately
             const icon = item.querySelector('.check-circle i');
             if(icon) icon.style.opacity = newState ? '1' : '0';
             
-            // Recalc Progress
+            // Recalc
             const total = document.querySelectorAll('.verse-check-item').length;
             const currentRead = document.querySelectorAll('.verse-check-item.read').length;
             updateProgress(currentRead, total);
@@ -565,27 +604,11 @@ function renderContent(m, d) {
     
     lucide.createIcons();
     
-    // Update Initial Progress
+    // Update Initial Progress & Button State
     updateProgress(readCount, verses.length);
     
-    // GLOBAL Footer State (Server Side)
     const isDone = completedMap[`${m}_${d}`];
-    
-    // If not done on server but all checks are done locally, update visually
-    const allChecked = (readCount === verses.length && verses.length > 0);
-    
-    if (isDone) {
-        setButtonState(true);
-        commentLabel.innerText = isDone.comment ? "Ver Minha Anotação" : "Minha Anotação";
-    } else {
-        // If all checked locally, turn green
-        if (allChecked) {
-             setButtonState(true, true); // Visual only, pending save
-        } else {
-             setButtonState(false);
-        }
-        commentLabel.innerText = "Adicionar Anotação";
-    }
+    commentLabel.innerText = (isDone && isDone.comment) ? "Ver Minha Anotação" : "Adicionar Anotação";
 }
 
 function updateProgress(current, total) {
@@ -594,40 +617,46 @@ function updateProgress(current, total) {
     document.getElementById('daily-progress-bar').style.width = `${pct}%`;
     document.getElementById('daily-progress-text').innerText = `${pct}% Concluído`;
     
-    // Auto Green Button Check
     const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
-    if (!isDoneServer) {
-        if (current === total) {
-            setButtonState(true, true);
-        } else {
-            setButtonState(false);
-        }
-    }
-}
-
-function setButtonState(isDone, isPendingSave = false) {
+    
     const btn = document.getElementById('btn-main-action');
-    if (isDone) {
-        btn.innerHTML = isPendingSave ? '<i data-lucide="check"></i> Confirmar Conclusão' : '<i data-lucide="check"></i> Leitura Concluída';
-        btn.style.background = '#d1fae5';
-        btn.style.color = '#065f46';
-        if (isPendingSave) {
-            btn.style.background = '#22c55e'; // Strong Green for action
-            btn.style.color = 'white';
-            btn.onclick = () => completeDay(); // Allow click to save
-            lucide.createIcons();
-        } else {
-            btn.onclick = null;
-        }
+    
+    // LOGIC:
+    // 1. If Server says DONE: Show "Concluída" (Static, Light Green/Gray)
+    // 2. If Not Done SERVER:
+    //    a. If Checked < Total: Yellow "Faltam X"
+    //    b. If Checked == Total: Green (Moderate) "Confirmar Conclusão"
+    
+    if (isDoneServer) {
+        btn.innerHTML = '<i data-lucide="check-circle-2"></i> Leitura Registrada';
+        btn.className = "btn-finish-day";
+        btn.style.background = '#f3f4f6'; // Grayish
+        btn.style.color = '#1f2937';
+        btn.style.border = '1px solid #e5e7eb';
+        btn.style.boxShadow = 'none';
+        btn.onclick = null; // Already done
     } else {
-        btn.innerHTML = 'Concluir Leitura';
-        btn.style.background = '#1e293b';
-        btn.style.color = 'white';
-        btn.onclick = () => completeDay();
+        if (current < total) {
+            const missing = total - current;
+            btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing} leituras...`;
+            btn.style.background = '#fef3c7'; // Amber-100
+            btn.style.color = '#d97706'; // Amber-600
+            btn.style.border = '1px solid #fde68a';
+            btn.style.boxShadow = 'none';
+            btn.onclick = () => alert("Por favor, marque todos os textos como lidos antes de concluir.");
+        } else {
+            // All Checked - Ready to Save
+            btn.innerHTML = 'Confirmar Conclusão Do Dia';
+            btn.style.background = '#059669'; // Emerald-600 (Moderate Green)
+            btn.style.color = 'white';
+            btn.style.border = 'none';
+            btn.style.boxShadow = '0 4px 12px rgba(5, 150, 105, 0.3)';
+            btn.onclick = () => completeDay();
+        }
     }
+    lucide.createIcons();
 }
 
-// ... Actions same ...
 function completeDay() {
     const m = selectedMonth;
     const d = selectedDay;
@@ -650,8 +679,8 @@ function saveCommentAndFinish() {
     fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
 }
 
-function openConfig() { document.getElementById('modal-config').classList.add('active'); }
-function closeConfig() { document.getElementById('modal-config').classList.remove('active'); }
+// Config Modal Handlers (Exposed via Window above, but kept here for clarity internally)
+// window.openConfig handled above
 
 function openCommentModal() {
     const m = selectedMonth;
@@ -668,5 +697,3 @@ function getMonthAbbr(m) {
 
 window.addEventListener('load', init);
 </script>
-
-<?php renderAppFooter(); ?>
