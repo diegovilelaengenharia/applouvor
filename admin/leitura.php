@@ -671,23 +671,7 @@ window.addEventListener('load', init);
             </button>
         </div>
         
-        <!-- DUAL PROGRESS SECTION -->
-        <div style="display: grid; gap: 16px; margin-bottom: 16px;">
-            
-            <!-- Annual Progress -->
-            <div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">
-                    <span>Progresso Anual (App)</span>
-                    <span><?= $percentage ?>%</span>
-                </div>
-                <div style="background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
-                    <div style="width: <?= $percentage ?>%; height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 4px;"></div>
-                </div>
-            </div>
 
-
-
-        </div>
         
 
     </div>
