@@ -89,41 +89,32 @@ function renderAppHeader($title, $backUrl = null)
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <style>
-            /* --- DESIGN SYSTEM 2.0 (Moderate & Mobile First) --- */
+            /* --- DESIGN SYSTEM 2.5 (Compact & Mobile First) --- */
             :root {
                 /* Cores Principais - Emerald (Sofisticado) */
                 --primary: #047857;
-                /* Emerald 700 */
                 --primary-hover: #065f46;
-                /* Emerald 800 */
                 --primary-light: #d1fae5;
-                /* Emerald 100 */
                 --primary-subtle: #ecfdf5;
-                /* Emerald 50 */
 
-                /* Tons Neutros - Slate (Leitura Confortável) */
+                /* Tons Neutros */
                 --bg-body: #f8fafc;
-                /* Slate 50 */
                 --bg-surface: #ffffff;
-                /* White */
                 --text-main: #334155;
-                /* Slate 700 */
                 --text-muted: #64748b;
-                /* Slate 500 */
                 --border-color: #e2e8f0;
-                /* Slate 200 */
 
-                /* Espaçamento & Touch (Mobile Friendly) */
-                --touch-target: 48px;
-                /* Mínimo para Samsung M34 */
-                --radius-md: 12px;
-                --radius-lg: 16px;
-                --radius-lg: 16px;
+                /* Espaçamento Compacto Mobile First */
+                --touch-target: 44px;
+                /* Mínimo aceitável reduzido */
+                --radius-md: 8px;
+                --radius-lg: 12px;
+                /* Mais quadrado, mais moderno */
                 --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
                 --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
 
-            /* Animations (Vibe Coding) */
+            /* ... Keyframes anteriores ... */
             @keyframes fadeInUp {
                 from {
                     opacity: 0;
@@ -139,24 +130,22 @@ function renderAppHeader($title, $backUrl = null)
             .animate-in {
                 animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 opacity: 0;
-                /* Começa invisível */
             }
 
-            /* Stagger delays for multiple items */
             .animate-in:nth-child(1) {
-                animation-delay: 0.1s;
+                animation-delay: 0.05s;
             }
 
             .animate-in:nth-child(2) {
-                animation-delay: 0.15s;
+                animation-delay: 0.1s;
             }
 
             .animate-in:nth-child(3) {
-                animation-delay: 0.2s;
+                animation-delay: 0.15s;
             }
 
             .animate-in:nth-child(4) {
-                animation-delay: 0.25s;
+                animation-delay: 0.2s;
             }
 
             /* View Transition Fixes */
@@ -168,17 +157,11 @@ function renderAppHeader($title, $backUrl = null)
             /* Global Dark Mode */
             body.dark-mode {
                 --bg-body: #0f172a;
-                /* Slate 900 */
                 --bg-surface: #1e293b;
-                /* Slate 800 */
                 --text-main: #f1f5f9;
-                /* Slate 100 */
                 --text-muted: #94a3b8;
-                /* Slate 400 */
                 --border-color: #334155;
-                /* Slate 700 */
                 --primary-light: #064e3b;
-                /* Emerald 900 (fundo) */
                 --primary-subtle: #064e3b;
             }
 
@@ -192,46 +175,48 @@ function renderAppHeader($title, $backUrl = null)
                 margin: 0;
                 background-color: var(--bg-body);
                 color: var(--text-main);
-                font-size: 0.9375rem;
-                /* 15px - Melhor leitura */
-                line-height: 1.6;
+                font-size: 0.85rem;
+                /* ~13.6px - Leitura densa e profissional */
+                line-height: 1.5;
                 padding-bottom: 80px;
+                /* Proteção Floating Button */
             }
 
-            /* Tipografia Responsiva */
+            /* Tipografia Compacta */
             h1,
             h2,
             h3,
             h4 {
                 color: var(--text-main);
                 margin: 0;
+                letter-spacing: -0.025em;
+                /* Títulos mais tight */
             }
 
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.35rem;
                 font-weight: 700;
-                letter-spacing: -0.5px;
             }
 
-            /* 24px */
             h2 {
-                font-size: 1.25rem;
-                font-weight: 600;
-                letter-spacing: -0.5px;
+                font-size: 1.15rem;
+                font-weight: 700;
             }
 
-            /* 20px */
             h3 {
-                font-size: 1.125rem;
+                font-size: 1rem;
                 font-weight: 600;
             }
 
-            /* 18px */
+            h4 {
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
 
-            /* Main Content */
+            /* Main Content Ajustado */
             #app-content {
-                padding: 20px;
-                /* Mais respiro */
+                padding: 12px;
+                /* Padding reduzido mobile */
                 min-height: 100vh;
                 margin-left: 0;
                 transition: margin-left 0.3s ease;
