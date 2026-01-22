@@ -362,17 +362,11 @@ function updateProgress(current, total) {
         btn.style.cssText = baseStyle + "background: var(--success-light); color: var(--success-dark); border: 1px solid var(--success);";
         if(statusText) statusText.innerHTML = '<span style="color:var(--success-dark)">Concluído</span>';
     } else {
-        // TODAS LIDAS MAS NÃO SALVO - Auto-concluir
-        btn.innerHTML = '<i data-lucide="loader"></i> Salvando...';
-        btn.style.cssText = baseStyle + "background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary);";
-        if(statusText) statusText.innerHTML = '<span style="color:var(--primary)">Salvando...</span>';
-        
-        // Auto-concluir após 500ms
-        setTimeout(() => {
-            if(!completedMap[`${selectedMonth}_${selectedDay}`]) {
-                completeDay();
-            }
-        }, 500);
+        // TODAS LIDAS MAS NÃO SALVO - Pronto para concluir (MANUAL)
+        btn.innerHTML = '<i data-lucide="check"></i> Concluir Dia';
+        btn.onclick = () => completeDay();
+        btn.style.cssText = baseStyle + "background: var(--primary); color: white; box-shadow: var(--shadow-md);";
+        if(statusText) statusText.innerHTML = '<span style="color:var(--primary)">Pronto!</span>';
     }
     
     if(window.lucide) window.lucide.createIcons();
