@@ -60,57 +60,58 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
 </div>
 
 <style>
-    /* CSS Específico da Página de Configurações */
+    /* CSS Específico da Página de Configurações Compacto */
     .settings-section {
-        margin-bottom: 32px;
+        margin-bottom: 24px;
     }
 
     .settings-title {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 700;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
     .settings-title i {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
     }
 
     .settings-card {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--border-color);
-        padding: 20px;
+        padding: 16px;
         box-shadow: var(--shadow-sm);
     }
 
     .form-group {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 4px;
         flex: 1;
     }
 
     .form-group label {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 600;
         color: var(--text-muted);
     }
 
     .form-input {
-        padding: 10px 12px;
+        padding: 8px 10px;
         border-radius: 8px;
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-main);
         outline: none;
         transition: all 0.2s;
+        font-size: 0.95rem;
     }
 
     .form-input.disabled {
@@ -122,20 +123,20 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     .grid-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 12px;
     }
 
     .btn-save {
         background: var(--primary);
         color: white;
         border: none;
-        padding: 12px;
+        padding: 10px;
         border-radius: var(--radius-md);
         font-weight: 700;
         cursor: pointer;
         margin-top: 8px;
         text-align: center;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         box-shadow: var(--shadow-sm);
         transition: all 0.2s;
     }
@@ -150,13 +151,13 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 10px 20px;
+        padding: 8px 16px;
         border-radius: 50px;
         border: 1px solid var(--border-color);
         color: var(--text-muted);
         text-decoration: none;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         transition: all 0.2s;
         background: transparent;
     }
@@ -172,12 +173,12 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0;
+        padding: 6px 0;
         border-bottom: 1px solid var(--border-color);
     }
 
     .switch-row.petite {
-        padding: 12px 0;
+        padding: 10px 0;
         border-bottom: 1px solid var(--bg-body);
     }
 
@@ -186,8 +187,8 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .icon-box {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -202,23 +203,24 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     .switch-label {
         font-weight: 600;
         color: var(--text-main);
+        font-size: 0.95rem;
     }
 
     .switch-desc {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--text-muted);
     }
 
     .toggle-switch {
         position: relative;
         display: inline-block;
-        width: 48px;
-        height: 24px;
+        width: 44px;
+        height: 22px;
     }
 
     .toggle-switch.small {
-        width: 36px;
-        height: 20px;
+        width: 32px;
+        height: 18px;
     }
 
     .toggle-switch input {
@@ -244,8 +246,8 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     .slider:before {
         position: absolute;
         content: "";
-        height: 18px;
-        width: 18px;
+        height: 16px;
+        width: 16px;
         left: 3px;
         bottom: 3px;
         background-color: white;
@@ -253,8 +255,8 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .toggle-switch.small .slider:before {
-        height: 14px;
-        width: 14px;
+        height: 12px;
+        width: 12px;
         left: 3px;
         bottom: 3px;
     }
@@ -265,11 +267,11 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     input:checked+.slider:before {
-        transform: translateX(24px);
+        transform: translateX(22px);
     }
 
     .toggle-switch.small input:checked+.slider:before {
-        transform: translateX(16px);
+        transform: translateX(14px);
     }
 
     .slider.round {
