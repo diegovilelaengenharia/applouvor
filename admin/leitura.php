@@ -211,8 +211,26 @@ function renderCalendar() {
     for (let d = 1; d <= 25; d++) {
         const isCompleted = completedMap[`${m}_${d}`];
         const isActive = (d === selectedDay); 
+        
+        // Verificar se tem leituras parciais (incompleto)
+        let isIncomplete = false;
+        if(!isCompleted && bibleReadingPlan && bibleReadingPlan[m] && bibleReadingPlan[m][d-1]) {
+            const verses = bibleReadingPlan[m][d-1];
+            let readCount = 0;
+            verses.forEach((v, idx) => {
+                const storageKey = `reading_check_${m}_${d}_${idx}`;
+                if(localStorage.getItem(storageKey) === 'true') {
+                    readCount++;
+                }
+            });
+            // Se tem alguma leitura mas não todas = incompleto
+            if(readCount > 0 && readCount < verses.length) {
+                isIncomplete = true;
+            }
+        }
+        
         const el = document.createElement('div');
-        el.className = `cal-day-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+        el.className = `cal-day-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${isIncomplete ? 'incomplete' : ''}`;
         el.id = `day-card-${m}-${d}`;
         el.onclick = () => selectDay(m, d);
         el.innerHTML = `<div class="cal-day-month">${getMonthAbbr(m)}</div><div class="cal-day-num">${d}</div>`;
