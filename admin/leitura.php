@@ -658,13 +658,7 @@ window.addEventListener('load', init);
 
         </div>
         
-        <!-- Encouragement Message -->
-        <div id="encouragement-msg" style="
-            margin-top: 16px; padding: 12px 16px; background: linear-gradient(to right, #f0fdf4, #dcfce7); border-left: 4px solid #22c55e; border-radius: 8px; color: #15803d; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 10px;
-        ">
-            <i data-lucide="sparkles" style="width: 18px; color: #16a34a;"></i>
-            <span>A palavra de Deus renova suas forças. Continue firme! 💪</span>
-        </div>
+
     </div>
 
     <!-- Links List -->
@@ -686,6 +680,22 @@ window.addEventListener('load', init);
         <i data-lucide="message-square" style="width: 18px;"></i>
         <span id="comment-text-label">Ver Minha Anotação</span>
     </button>
+</div>
+
+<!-- SUCCESS MODAL (Encouragement) -->
+<div id="modal-success" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
+    <div style="background: white; width: 85%; max-width: 400px; border-radius: 24px; padding: 24px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: zoomIn 0.3s;">
+        <div style="width: 60px; height: 60px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+            <i data-lucide="check" style="width: 32px; color: #16a34a; stroke-width: 3;"></i>
+        </div>
+        <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; color: #166534;">Leitura Concluída!</h3>
+        <p style="color: #4b5563; margin-bottom: 24px; font-size: 0.95rem; line-height: 1.5;">
+            "A palavra de Deus renova suas forças. Continue firme! 💪"
+        </p>
+        <button onclick="closeSuccessModal()" class="ripple" style="width: 100%; padding: 14px; background: #16a34a; color: white; border: none; border-radius: 16px; font-weight: 700; font-size: 1rem;">
+            Amém
+        </button>
+    </div>
 </div>
 
 <!-- CONFIG MODAL -->
@@ -766,6 +776,7 @@ window.addEventListener('load', init);
 
 <style>
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 
 <?php renderAppFooter(); ?>
