@@ -64,21 +64,21 @@ renderAppHeader('Artista');
     }
 </style>
 
-<!-- Hero Header -->
+<!-- Hero Header Compacto -->
 <div style="
     background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
+    margin: -24px -16px 24px -16px; 
+    padding: 24px 20px 48px 20px; 
+    border-radius: 0 0 24px 24px; 
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: visible;
 ">
     <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <a href="repertorio.php?tab=artistas" class="ripple" style="
-            width: 40px; 
-            height: 40px; 
+            width: 36px; 
+            height: 36px; 
             border-radius: 12px; 
             display: flex; 
             align-items: center; 
@@ -88,14 +88,14 @@ renderAppHeader('Artista');
             text-decoration: none;
             backdrop-filter: blur(4px);
         ">
-            <i data-lucide="arrow-left" style="width: 20px;"></i>
+            <i data-lucide="arrow-left" style="width: 18px;"></i>
         </a>
 
-        <div style="display: flex; gap: 12px; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center;">
             <!-- Edit Button -->
             <button onclick="openEditModal()" class="ripple" style="
-                width: 40px; 
-                height: 40px; 
+                width: 36px; 
+                height: 36px; 
                 border-radius: 12px; 
                 display: flex; 
                 align-items: center; 
@@ -106,35 +106,43 @@ renderAppHeader('Artista');
                 cursor: pointer;
                 backdrop-filter: blur(4px);
             ">
-                <i data-lucide="edit-2" style="width: 20px;"></i>
+                <i data-lucide="edit-2" style="width: 16px;"></i>
             </button>
 
-            <!-- User Avatar -->
-            <div style="display: flex; align-items: center;">`r`n            <?php renderGlobalNavButtons(); ?>`r`n        </div>
+            <!-- Home Button -->
+            <a href="index.php" class="ripple" style="
+                width: 36px; height: 36px; border-radius: 12px; 
+                background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);
+                display: flex; align-items: center; justify-content: center;
+                color: white; text-decoration: none;
+            ">
+                <i data-lucide="home" style="width: 16px;"></i>
+            </a>
         </div>
     </div>
 
     <!-- Artist Info in Hero -->
     <div style="text-align: center;">
         <div style="
-            width: 80px; 
-            height: 80px; 
+            width: 64px; 
+            height: 64px; 
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 50%; 
             display: inline-flex; 
             align-items: center; 
             justify-content: center; 
-            margin-bottom: 16px;
-            font-size: 2.5rem;
+            margin-bottom: 12px;
+            font-size: 1.8rem;
             font-weight: 800;
             color: white;
             backdrop-filter: blur(4px);
+            border: 2px solid rgba(255,255,255,0.3);
         ">
             <?= strtoupper(substr($artistName, 0, 1)) ?>
         </div>
-        <h1 style="color: white; margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($artistName) ?></h1>
-        <p style="color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 500; font-size: 1rem;">
-            <i data-lucide="music" style="width: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
+        <h1 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($artistName) ?></h1>
+        <p style="color: rgba(255,255,255,0.9); margin-top: 6px; font-weight: 500; font-size: 0.9rem;">
+            <i data-lucide="music" style="width: 12px; display: inline; vertical-align: middle; margin-right: 4px;"></i>
             <?= count($songs) ?> música<?= count($songs) > 1 ? 's' : '' ?>
         </p>
     </div>

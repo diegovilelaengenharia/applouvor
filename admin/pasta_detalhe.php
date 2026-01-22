@@ -66,41 +66,44 @@ renderAppHeader($tag['name']);
     }
 </style>
 
-<!-- Hero da Pasta -->
+<!-- Hero da Pasta Compacto -->
 <div style="
     background: <?= $tag['color'] ?: '#047857' ?>; 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
+    margin: -24px -16px 24px -16px; 
+    padding: 24px 20px 48px 20px; 
+    border-radius: 0 0 24px 24px; 
     box-shadow: var(--shadow-md);
     color: white;
     text-align: center;
     position: relative;
 ">
     <!-- Nav -->
-    <div style="position: absolute; top: 24px; left: 24px;">
-        <a href="repertorio.php?tab=pastas" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600; background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 20px;">
-            <i data-lucide="arrow-left" style="width: 18px;"></i> Voltar
+    <div style="position: absolute; top: 16px; left: 16px;">
+        <a href="repertorio.php?tab=pastas" style="
+            color: white; text-decoration: none; display: flex; align-items: center; gap: 6px; 
+            font-weight: 600; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem;
+        ">
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
         </a>
     </div>
 
     <!-- Icone Grande -->
     <div style="
-        width: 80px; 
-        height: 80px; 
+        width: 64px; 
+        height: 64px; 
         background: rgba(255,255,255,0.2); 
-        border-radius: 24px; 
+        border-radius: 16px; 
         display: inline-flex; 
         align-items: center; 
         justify-content: center; 
-        margin-bottom: 16px;
+        margin-bottom: 12px;
         backdrop-filter: blur(4px);
     ">
-        <i data-lucide="folder-open" style="width: 40px; height: 40px; color: white;"></i>
+        <i data-lucide="folder-open" style="width: 32px; height: 32px; color: white;"></i>
     </div>
 
-    <h1 style="margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -1px;"><?= htmlspecialchars($tag['name']) ?></h1>
-    <p style="margin-top: 8px; font-size: 1rem; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <h1 style="margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($tag['name']) ?></h1>
+    <p style="margin-top: 6px; font-size: 0.9rem; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
         <?= htmlspecialchars($tag['description']) ?: count($songs) . ' músicas classificadas' ?>
     </p>
 </div>
