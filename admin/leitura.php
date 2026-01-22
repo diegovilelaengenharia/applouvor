@@ -416,6 +416,11 @@ function completeDay() {
         if(typeof completedMap !== 'undefined') {
             completedMap[`${m}_${d}`] = { completed_at: new Date().toISOString() };
         }
+        
+        // RE-TRIGGER UI UPDATE to show "Concluído" button state immediately
+        const total = document.querySelectorAll('.verse-check-item').length;
+        const currentRead = document.querySelectorAll('.verse-check-item.read').length;
+        updateProgress(currentRead, total);
 
         const modal = document.getElementById('modal-success');
         if(modal) {
@@ -427,7 +432,6 @@ function completeDay() {
                 successBtn.onclick = goToNextDay;
             }
         }
-        else window.location.reload();
     });
 }
 
@@ -534,7 +538,12 @@ window.addEventListener('load', init);
     .cal-day-num { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
     .cal-day-month { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
     
-    .cal-day-item.completed .cal-day-num { color: #10b981; }
+    .cal-day-item.completed .cal-day-num { color: #166534; }
+    .cal-day-item.completed {
+        background: #dcfce7; /* Light Green */
+        border: 1px solid #bbf7d0;
+        opacity: 1;
+    }
 
     /* Main Content Area */
     .reading-container {
