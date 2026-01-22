@@ -357,24 +357,24 @@ function updateProgress(current, total) {
 
     // ORDEM CORRETA: Verificar current PRIMEIRO
     if (current < total) {
-        // INCOMPLETO - Amarelo
+        // INCOMPLETO - Amber suave
         const missing = total - current;
-        btn.innerHTML = `<i data-lucide="alert-circle"></i> Faltam ${missing}`;
+        btn.innerHTML = `<i data-lucide="circle-dashed"></i> Faltam ${missing}`;
         btn.onclick = () => alert(`Você precisa ler todas as passagens para concluir.\n\nLido: ${current}\nTotal: ${total}`);
-        btn.style.cssText = baseStyle + "background: #fef3c7; color: #d97706; border: 1px solid #fcd34d;";
-        if(statusText) statusText.innerHTML = '<span style="color:#d97706">Pendente</span>';
+        btn.style.cssText = baseStyle + "background: var(--warning-light); color: var(--warning-dark); border: 1px solid var(--warning);";
+        if(statusText) statusText.innerHTML = '<span style="color:var(--warning-dark)">Pendente</span>';
     } else if (isDoneServer) {
-        // JÁ SALVO NO SERVIDOR - Verde Claro
+        // JÁ SALVO NO SERVIDOR - Emerald suave
         btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
         btn.onclick = null;
-        btn.style.cssText = baseStyle + "background: #dcfce7; color: #166534; border: 1px solid transparent;";
-        if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
+        btn.style.cssText = baseStyle + "background: var(--success-light); color: var(--success-dark); border: 1px solid var(--success);";
+        if(statusText) statusText.innerHTML = '<span style="color:var(--success-dark)">Concluído</span>';
     } else {
-        // TODAS LIDAS MAS NÃO SALVO - Verde Vibrante
-        btn.innerHTML = '<i data-lucide="check"></i> Concluir Dia';
+        // TODAS LIDAS MAS NÃO SALVO - Indigo (Primary)
+        btn.innerHTML = '<i data-lucide="sparkles"></i> Concluir Dia';
         btn.onclick = () => completeDay();
-        btn.style.cssText = baseStyle + "background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);";
-        if(statusText) statusText.innerHTML = '<span style="color:#10b981">Pronto!</span>';
+        btn.style.cssText = baseStyle + "background: var(--primary); color: white; box-shadow: var(--shadow-md);";
+        if(statusText) statusText.innerHTML = '<span style="color:var(--primary)">Pronto!</span>';
     }
     
     if(window.lucide) window.lucide.createIcons();
@@ -500,12 +500,38 @@ window.addEventListener('load', init);
 </script>
 
 <style>
-    /* YouVersion Inspired Styles */
+    /* Professional Color Palette - Inspired by Notion/Linear */
     :root {
-        --yv-bg: #ffffff;
-        --yv-bar: #eeeeee;
-        --yv-check: #50bdae;
-        --yv-text: #333333;
+        /* Primary Colors */
+        --primary: #6366f1;        /* Indigo */
+        --primary-light: #eef2ff;  /* Indigo 50 */
+        --primary-dark: #4f46e5;   /* Indigo 600 */
+        
+        /* Secondary Colors */
+        --secondary: #8b5cf6;      /* Purple */
+        --secondary-light: #f5f3ff; /* Purple 50 */
+        
+        /* Success/Complete */
+        --success: #10b981;        /* Emerald */
+        --success-light: #d1fae5;  /* Emerald 100 */
+        --success-dark: #059669;   /* Emerald 600 */
+        
+        /* Warning/Pending */
+        --warning: #f59e0b;        /* Amber */
+        --warning-light: #fef3c7;  /* Amber 100 */
+        --warning-dark: #d97706;   /* Amber 600 */
+        
+        /* Neutral */
+        --text-main: #1e293b;      /* Slate 800 */
+        --text-muted: #64748b;     /* Slate 500 */
+        --border-color: #e2e8f0;   /* Slate 200 */
+        --bg-body: #f8fafc;        /* Slate 50 */
+        --bg-surface: #ffffff;     /* White */
+        
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     }
     
     /* Horizontal Calendar Scroll */
