@@ -441,13 +441,43 @@ function completeDay() {
 }
 
 function goToNextDay() {
-    // Logic to find next day index
-    // Currently relying on reading_plan_data.js. 
-    // Assuming 'currentPlanIndex' or similar exists, or just increment day.
-    // simpler approach: +1 to day of year or iterate keys.
-    // For now, reload to let PHP handle it or just increment 'd' + 1 if valid? 
-    // Best: reload page to rely on server state or existing navigation
-    window.location.reload(); 
+    // Encontrar próximo dia não concluído
+    let nextMonth = selectedMonth;
+    let nextDay = selectedDay + 1;
+    
+    // Ajustar mês se necessário (assumindo 25 dias por mês no plano)
+    if(nextDay > 25) {
+        nextDay = 1;
+        nextMonth++;
+    }
+    
+    // Verificar se o próximo dia existe e não está concluído
+    let found = false;
+    for(let attempts = 0; attempts < 300; attempts++) {
+        const key = `${nextMonth}_${nextDay}`;
+        if(!completedMap[key]) {
+            // Encontrou um dia não concluído
+            found = true;
+            break;
+        }
+        
+        // Tentar próximo dia
+        nextDay++;
+        if(nextDay > 25) {
+            nextDay = 1;
+            nextMonth++;
+        }
+        
+        if(nextMonth > 12) break; // Fim do ano
+    }
+    
+    if(found) {
+        // Navegar para o próximo dia não concluído
+        window.location.href = `leitura.php?m=${nextMonth}&d=${nextDay}`;
+    } else {
+        // Todos concluídos ou fim do plano
+        window.location.reload();
+    }
 }
 
 function closeSuccessModal() {
