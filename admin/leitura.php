@@ -70,6 +70,46 @@ foreach($rows as $r) {
 }
 $completionPercent = min(100, round(($totalChaptersRead / 300) * 100));
 
+// --- CALCULAR STREAK E ESTATÍSTICAS ---
+$currentStreak = 0;
+$bestStreak = 0; // Pode ser implementado salvando no banco futuramente
+$today = new DateTime(); 
+$today->setTime(0,0,0);
+
+// Verificar streak retroativo
+$checkDate = clone $today;
+$streakCount = 0;
+// Verifica até 365 dias para trás
+for($i=0; $i<365; $i++) {
+    $foundReading = false;
+    foreach($reportData as $rep) {
+        $rDate = new DateTime($rep['date']);
+        $rDate->setTime(0,0,0);
+        if($rDate == $checkDate) {
+            $foundReading = true;
+            break;
+        }
+    }
+    
+    if($foundReading) {
+        $streakCount++;
+        $checkDate->modify('-1 day');
+    } else {
+        // Se for hoje e não leu, não quebra o streak de ontem
+        if($i === 0) {
+            $checkDate->modify('-1 day');
+            continue;
+        }
+        break;
+    }
+}
+$currentStreak = $streakCount;
+
+// Média de Leitura (Capítulos / Dias passados desde o início)
+$daysSinceStart = max(1, $daysPassed);
+$avgChapters = round($totalChaptersRead / $daysSinceStart, 1);
+// --------------------------------------
+
 // RENDER: Mobile Header & Layout
 renderAppHeader('Leitura Bíblica'); 
 renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
@@ -209,6 +249,33 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
     .action-btn { background: var(--surface); border: 1px solid var(--border); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
     .icon-box { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
     .icon-box.purple { background: #f3e8ff; color: #9333ea; } .icon-box.blue { background: #e0f2fe; color: #0284c7; }
+
+    /* STATS DASHBOARD */
+    .stats-dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+        padding: 0 20px 20px 20px; /* Padding ajustado para ficar dentro do fluxo */
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0;
+    }
+    .stat-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center;
+        transition: all 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-color: var(--primary-soft); }
+    .stat-icon { font-size: 1.5rem; margin-bottom: 4px; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1; margin-bottom: 2px; }
+    .stat-label { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+    .stat-value.highlight { color: var(--primary); }
+    .stat-value.fire { color: #f59e0b; }
 </style>
 
 <!-- INFO BAR -->
@@ -221,6 +288,37 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
     </div>
     <div style="height: 6px; background: var(--bg); width: 100%; border-radius: 3px; overflow: hidden;">
         <div style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: <?= $completionPercent ?>%;"></div>
+    </div>
+</div>
+
+<!-- STATS DASHBOARD -->
+<div class="stats-dashboard">
+    <!-- Streak -->
+    <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value fire"><?= $currentStreak ?></div>
+        <div class="stat-label">Dias Seguidos</div>
+    </div>
+    
+    <!-- Média -->
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value"><?= $avgChapters ?></div>
+        <div class="stat-label">Cap./Dia</div>
+    </div>
+    
+    <!-- Dias Restantes -->
+    <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-value"><?= max(0, 300 - $totalChaptersRead) ?></div>
+        <div class="stat-label">Restantes</div>
+    </div>
+    
+    <!-- Conclusão -->
+    <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value highlight"><?= $completionPercent ?>%</div>
+        <div class="stat-label">Conclusão</div>
     </div>
 </div>
 
