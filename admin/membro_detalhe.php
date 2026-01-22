@@ -87,146 +87,143 @@ renderAppHeader('Detalhes do Membro');
 
 <style>
     .stat-card {
-        background: var(--bg-secondary);
+        background: var(--bg-card);
         border: 1px solid var(--border-subtle);
         border-radius: 12px;
         padding: 12px;
         text-align: center;
+        box-shadow: var(--shadow-sm);
     }
 
     .stat-value {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         font-weight: 800;
-        color: var(--accent-interactive);
+        color: var(--primary);
         margin-bottom: 2px;
         line-height: 1.2;
     }
 
     .stat-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         color: var(--text-secondary);
         font-weight: 600;
+        text-transform: uppercase;
     }
 
     .history-item {
-        background: var(--bg-secondary);
+        background: var(--bg-card);
         border: 1px solid var(--border-subtle);
-        border-left: 4px solid var(--accent-interactive);
-        border-radius: 10px;
-        padding: 12px;
+        border-left: 3px solid var(--primary);
+        border-radius: 8px;
+        padding: 10px 12px;
         margin-bottom: 8px;
         transition: all 0.2s;
+        text-decoration: none;
+        display: block;
     }
 
-    .history-item:hover {
-        box-shadow: var(--shadow-sm);
-        transform: translateX(2px);
+    .history-item:active {
+        background: var(--bg-hover);
+        transform: scale(0.98);
     }
 
     .tabs-nav {
         display: flex;
-        background: var(--bg-tertiary);
-        padding: 4px;
-        border-radius: 12px;
-        margin-bottom: 20px;
+        background: var(--bg-surface);
+        padding: 3px;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        border: 1px solid var(--border-subtle);
     }
 
     .tab-btn {
         flex: 1;
         text-align: center;
         padding: 8px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 600;
         color: var(--text-secondary);
         background: transparent;
         border: none;
-        border-radius: 8px;
+        border-radius: 7px;
         cursor: pointer;
         transition: all 0.2s;
+        text-decoration: none;
     }
 
     .tab-btn.active {
         color: var(--text-primary);
-        background: var(--bg-secondary);
-        box-shadow: var(--shadow-sm);
+        background: var(--bg-card);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        font-weight: 700;
     }
 
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    /* Form Compacto */
     .form-group {
         margin-bottom: 12px;
     }
 
     .form-label {
-        display: block;
         font-size: 0.8rem;
         font-weight: 600;
-        color: var(--text-muted);
+        color: var(--text-secondary);
         margin-bottom: 4px;
+        display: block;
     }
 
     .form-input {
-        width: 100%;
+        font-size: 0.9rem;
         padding: 10px;
         border-radius: 8px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-body);
-        font-size: 0.9rem;
-        color: var(--text-main);
+        border: 1px solid var(--border-subtle);
+        width: 100%;
+        background: var(--bg-input);
+        color: var(--text-primary);
+    }
+
+    .form-input:focus {
+        border-color: var(--primary);
+        outline: none;
     }
 </style>
 
 <!-- Hero Header Compacto -->
 <div style="
     background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
-    margin: -24px -16px 24px -16px; 
-    padding: 24px 20px 48px 20px; 
-    border-radius: 0 0 24px 24px; 
-    box-shadow: var(--shadow-md);
+    margin: -16px -16px 20px -16px; 
+    padding: 16px 16px 40px 16px; 
+    border-radius: 0 0 20px 20px; 
+    box-shadow: var(--shadow-sm);
     position: relative;
+    color: white;
 ">
-    <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <!-- Navbar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <a href="membros.php" class="ripple" style="
-            padding: 8px 16px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px;
-            color: #047857; 
-            background: white; 
+            width: 32px; height: 32px; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; 
+            color: white; background: rgba(255,255,255,0.2); 
             text-decoration: none;
-            font-weight: 700;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
         ">
-            <i data-lucide="arrow-left" style="width: 14px;"></i> Voltar
+            <i data-lucide="arrow-left" style="width: 18px;"></i>
         </a>
 
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
             <a href="index.php" class="ripple" style="
-                width: 36px; height: 36px; border-radius: 50%; 
+                width: 32px; height: 32px; border-radius: 10px; 
                 background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);
                 display: flex; align-items: center; justify-content: center;
-                color: white; text-decoration: none; border: 1px solid rgba(255,255,255,0.1);
+                color: white; text-decoration: none;
             ">
-                <i data-lucide="home" style="width: 18px;"></i>
+                <i data-lucide="home" style="width: 16px;"></i>
             </a>
-            <!-- Optional: Link para App do Usuário -->
             <a href="../app/index.php" class="ripple" style="
-                width: 36px; height: 36px; border-radius: 50%; 
+                width: 32px; height: 32px; border-radius: 10px; 
                 background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);
                 display: flex; align-items: center; justify-content: center;
-                color: white; text-decoration: none; border: 1px solid rgba(255,255,255,0.1);
+                color: white; text-decoration: none;
             ">
-                <i data-lucide="smartphone" style="width: 18px;"></i>
+                <i data-lucide="smartphone" style="width: 16px;"></i>
             </a>
         </div>
     </div>
@@ -234,35 +231,30 @@ renderAppHeader('Detalhes do Membro');
     <!-- Member Info -->
     <div style="text-align: center;">
         <div style="
-            width: 64px; 
-            height: 64px; 
+            width: 56px; height: 56px; 
             background: rgba(255, 255, 255, 0.2); 
             border-radius: 50%; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-bottom: 12px;
+            display: inline-flex; align-items: center; justify-content: center; 
+            margin-bottom: 8px;
             backdrop-filter: blur(4px);
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: white;
+            font-size: 1.5rem; font-weight: 800; color: white;
             border: 2px solid rgba(255,255,255,0.3);
         ">
             <?= strtoupper(substr($member['name'], 0, 1)) ?>
         </div>
-        <h1 style="color: white; margin: 0; font-size: 1.4rem; font-weight: 800; line-height: 1.2;">
+        <h1 style="color: white; margin: 0; font-size: 1.25rem; font-weight: 800; line-height: 1.2;">
             <?= htmlspecialchars($member['name']) ?>
             <?php if ($member['role'] === 'admin'): ?>
-                <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.6rem; vertical-align: middle;">ADMIN</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 8px; font-size: 0.6rem; vertical-align: middle; font-weight: 600;">ADMIN</span>
             <?php endif; ?>
         </h1>
-        <p style="color: rgba(255,255,255,0.9); margin-top: 6px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 12px;">
+        <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
             <span style="display: flex; align-items: center; gap: 4px;">
-                <i data-lucide="music" style="width: 14px;"></i>
+                <i data-lucide="music" style="width: 12px;"></i>
                 <?= htmlspecialchars($member['instrument'] ?: 'Não definido') ?>
             </span>
             <span style="display: flex; align-items: center; gap: 4px;">
-                <i data-lucide="phone" style="width: 14px;"></i>
+                <i data-lucide="phone" style="width: 12px;"></i>
                 <?= htmlspecialchars($member['phone']) ?>
             </span>
         </p>
@@ -270,118 +262,122 @@ renderAppHeader('Detalhes do Membro');
 </div>
 
 <!-- Stats Cards -->
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
-    <div class="stat-card">
-        <div class="stat-value"><?= $stats['total_escalas'] ?? 0 ?></div>
-        <div class="stat-label">Escalas</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-value"><?= $frequencia_media ?></div>
-        <div class="stat-label">Freq (dias)</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-value">
-            <?php
-            if ($stats['ultima_escala']) {
-                $ultima = new DateTime($stats['ultima_escala']);
-                echo $ultima->format('d/m');
-            } else {
-                echo '-';
-            }
-            ?>
+<div style="margin-top: -30px; position: relative; padding: 0 16px; margin-bottom: 20px;">
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+        <div class="stat-card">
+            <div class="stat-value"><?= $stats['total_escalas'] ?? 0 ?></div>
+            <div class="stat-label">Escalas</div>
         </div>
-        <div class="stat-label">Última</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-value">
-            <?php
-            if ($nextSchedule) {
-                $proxima = new DateTime($nextSchedule['event_date']);
-                echo $proxima->format('d/m');
-            } else {
-                echo '-';
-            }
-            ?>
+        <div class="stat-card">
+            <div class="stat-value"><?= $frequencia_media ?></div>
+            <div class="stat-label">Freq (dias)</div>
         </div>
-        <div class="stat-label">Próxima</div>
+        <div class="stat-card">
+            <div class="stat-value">
+                <?php
+                if ($stats['ultima_escala']) {
+                    $ultima = new DateTime($stats['ultima_escala']);
+                    echo $ultima->format('d/m');
+                } else {
+                    echo '-';
+                }
+                ?>
+            </div>
+            <div class="stat-label">Última</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">
+                <?php
+                if ($nextSchedule) {
+                    $proxima = new DateTime($nextSchedule['event_date']);
+                    echo $proxima->format('d/m');
+                } else {
+                    echo '-';
+                }
+                ?>
+            </div>
+            <div class="stat-label">Próxima</div>
+        </div>
     </div>
 </div>
 
-<!-- Tabs -->
-<div class="tabs-nav">
-    <a href="?id=<?= $id ?>&tab=historico" class="tab-btn <?= $activeTab === 'historico' ? 'active' : '' ?>">Histórico</a>
-    <a href="?id=<?= $id ?>&tab=dados" class="tab-btn <?= $activeTab === 'dados' ? 'active' : '' ?>">Dados</a>
-</div>
+<div style="padding: 0 16px;">
+    <!-- Tabs -->
+    <div class="tabs-nav">
+        <a href="?id=<?= $id ?>&tab=historico" class="tab-btn <?= $activeTab === 'historico' ? 'active' : '' ?>">Histórico</a>
+        <a href="?id=<?= $id ?>&tab=dados" class="tab-btn <?= $activeTab === 'dados' ? 'active' : '' ?>">Dados</a>
+    </div>
 
-<!-- Tab: Histórico -->
-<div class="tab-content <?= $activeTab === 'historico' ? 'active' : '' ?>">
-    <?php if (empty($schedules)): ?>
-        <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-            <i data-lucide="calendar-x" style="width: 48px; height: 48px; margin-bottom: 16px;"></i>
-            <p style="font-size: 0.9rem;">Nenhuma escala encontrada.</p>
-        </div>
-    <?php else: ?>
-        <?php foreach ($schedules as $schedule):
-            $date = new DateTime($schedule['event_date']);
-        ?>
-            <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="history-item" style="display: block; text-decoration: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 2px;">
-                            <?= htmlspecialchars($schedule['event_type']) ?>
+    <!-- Tab: Histórico -->
+    <div style="display: <?= $activeTab === 'historico' ? 'block' : 'none' ?>;">
+        <?php if (empty($schedules)): ?>
+            <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                <i data-lucide="calendar-x" style="width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.5;"></i>
+                <p style="font-size: 0.85rem;">Nenhuma escala encontrada.</p>
+            </div>
+        <?php else: ?>
+            <?php foreach ($schedules as $schedule):
+                $date = new DateTime($schedule['event_date']);
+            ?>
+                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="history-item">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 2px;">
+                                <?= htmlspecialchars($schedule['event_type']) ?>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                                <?= $date->format('d/m/Y') ?> • <?= $schedule['total_songs'] ?> música<?= $schedule['total_songs'] != 1 ? 's' : '' ?>
+                            </div>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
-                            <?= $date->format('d/m/Y') ?> • <?= $schedule['total_songs'] ?> música<?= $schedule['total_songs'] != 1 ? 's' : '' ?>
-                        </div>
+                        <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted);"></i>
                     </div>
-                    <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted);"></i>
-                </div>
-            </a>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</div>
+                </a>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 
-<!-- Tab: Dados -->
-<div class="tab-content <?= $activeTab === 'dados' ? 'active' : '' ?>">
-    <?php if (isset($_GET['updated'])): ?>
-        <div style="background: #DCFCE7; color: #166534; padding: 10px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: 0.9rem; font-weight: 600;">
-            ✓ Dados atualizados!
+    <!-- Tab: Dados -->
+    <div style="display: <?= $activeTab === 'dados' ? 'block' : 'none' ?>;">
+        <?php if (isset($_GET['updated'])): ?>
+            <div style="background: #DCFCE7; color: #166534; padding: 10px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: 0.85rem; font-weight: 600; border: 1px solid #bbf7d0;">
+                ✓ Dados atualizados!
+            </div>
+        <?php endif; ?>
+
+        <div style="background: var(--bg-card); padding: 16px; border-radius: 12px; border: 1px solid var(--border-subtle);">
+            <form method="POST">
+                <input type="hidden" name="action" value="update">
+
+                <div class="form-group">
+                    <label class="form-label">Nome Completo</label>
+                    <input type="text" name="name" class="form-input" value="<?= htmlspecialchars($member['name']) ?>" required style="font-weight: 600;">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Instrumento / Função</label>
+                    <input type="text" name="instrument" class="form-input" value="<?= htmlspecialchars($member['instrument'] ?? '') ?>" placeholder="Ex: Voz">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label class="form-label">Telefone</label>
+                        <input type="tel" name="phone" class="form-input" value="<?= htmlspecialchars($member['phone'] ?? '') ?>">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-input" value="<?= htmlspecialchars($member['email'] ?? '') ?>">
+                    </div>
+                </div>
+
+                <button type="submit" class="ripple" style="
+                    width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px;
+                    background: var(--primary); color: white; font-weight: 700; font-size: 0.9rem;
+                    display: flex; align-items: center; justify-content: center; gap: 8px;
+                ">
+                    <i data-lucide="save" style="width: 16px;"></i> Salvar Alterações
+                </button>
+            </form>
         </div>
-    <?php endif; ?>
-
-    <div style="background: var(--bg-surface); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <form method="POST">
-            <input type="hidden" name="action" value="update">
-
-            <div class="form-group">
-                <label class="form-label">Nome Completo</label>
-                <input type="text" name="name" class="form-input" value="<?= htmlspecialchars($member['name']) ?>" required style="font-weight: 700;">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Instrumento / Função</label>
-                <input type="text" name="instrument" class="form-input" value="<?= htmlspecialchars($member['instrument'] ?? '') ?>" placeholder="Ex: Voz">
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div class="form-group">
-                    <label class="form-label">Telefone</label>
-                    <input type="tel" name="phone" class="form-input" value="<?= htmlspecialchars($member['phone'] ?? '') ?>">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-input" value="<?= htmlspecialchars($member['email'] ?? '') ?>">
-                </div>
-            </div>
-
-            <button type="submit" class="ripple" style="
-                width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px;
-                background: var(--primary); color: white; font-weight: 700; font-size: 0.95rem;
-                display: flex; align-items: center; justify-content: center; gap: 8px;
-            ">
-                <i data-lucide="save" style="width: 18px;"></i> Salvar Alterações
-            </button>
-        </form>
     </div>
 </div>
 

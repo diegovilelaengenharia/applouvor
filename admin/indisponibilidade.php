@@ -124,74 +124,74 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
     <!-- Feedback -->
     <?php if ($success): ?>
-        <div style="background: var(--primary-subtle); color: var(--primary); padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--primary-light);">
-            <i data-lucide="check-circle" style="width: 20px;"></i>
+        <div style="background: var(--primary-subtle); color: var(--primary); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; border: 1px solid var(--primary-light);">
+            <i data-lucide="check-circle" style="width: 18px;"></i>
             <?= $success ?>
         </div>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <div style="background: #FEF2F2; color: #DC2626; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid #FECACA;">
-            <i data-lucide="alert-circle" style="width: 20px;"></i>
+        <div style="background: #FEF2F2; color: #DC2626; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; border: 1px solid #FECACA;">
+            <i data-lucide="alert-circle" style="width: 18px;"></i>
             <?= $error ?>
         </div>
     <?php endif; ?>
 
     <!-- INSTRUÇÕES / COMO FUNCIONA -->
-    <div style="background: var(--bg-surface); border-left: 4px solid var(--primary); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
-        <h4 style="margin: 0 0 8px 0; color: var(--primary); display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
-            <div style="background: var(--primary-subtle); padding: 4px; border-radius: 8px; display: flex;">
-                <i data-lucide="info" style="width: 16px; color: var(--primary);"></i>
+    <div style="background: var(--bg-surface); border-left: 4px solid var(--primary); border-radius: 12px; padding: 12px; margin-bottom: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+        <h4 style="margin: 0 0 6px 0; color: var(--primary); display: flex; align-items: center; gap: 6px; font-size: 0.9rem;">
+            <div style="background: var(--primary-subtle); padding: 4px; border-radius: 6px; display: flex;">
+                <i data-lucide="info" style="width: 14px; color: var(--primary);"></i>
             </div>
             Como funciona?
         </h4>
-        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+        <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
             Vai viajar ou tem um compromisso? Avise aqui.
             <br>
             <span style="display: inline-block; margin-top: 4px;">
                 <strong style="color: var(--primary);">1.</strong> Escolha o período. &nbsp;
-                <strong style="color: var(--primary);">2.</strong> <span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">Obrigatório:</span> Indique quem vai te substituir.
+                <strong style="color: var(--primary);">2.</strong> <span style="background: #fee2e2; color: #991b1b; padding: 1px 4px; border-radius: 4px; font-size: 0.7rem; font-weight: 700;">Obrigatório:</span> Indique quem vai te substituir.
             </span>
         </p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
 
         <!-- FORMULÁRIO -->
-        <div id="formCard" style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-            <h3 id="formTitle" style="margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-size: 1.1rem;">
-                <i data-lucide="calendar-plus" style="color: var(--primary); width: 20px;"></i>
+        <div id="formCard" style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+            <h3 id="formTitle" style="margin-top: 0; display: flex; align-items: center; gap: 6px; color: var(--text-main); font-size: 1rem;">
+                <i data-lucide="calendar-plus" style="color: var(--primary); width: 18px;"></i>
                 Nova Indisponibilidade
             </h3>
 
-            <form method="POST" id="absenceForm" style="margin-top: 16px;">
+            <form method="POST" id="absenceForm" style="margin-top: 12px;">
                 <input type="hidden" name="action" id="formAction" value="add">
                 <input type="hidden" name="id" id="formId" value="">
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                     <div>
-                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Data Início</label>
-                        <input type="date" name="start_date" id="startDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.9rem;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
+                        <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Data Início</label>
+                        <input type="date" name="start_date" id="startDate" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.85rem;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Data Fim (Opcional)</label>
-                        <input type="date" name="end_date" id="endDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.9rem;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
+                        <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Data Fim (Opcional)</label>
+                        <input type="date" name="end_date" id="endDate" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.85rem;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
                     </div>
                 </div>
 
-                <div style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Motivo</label>
-                    <input type="text" name="reason" id="reason" placeholder="Ex: Viagem, Trabalho, Saúde..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.9rem;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Motivo</label>
+                    <input type="text" name="reason" id="reason" placeholder="Ex: Viagem, Trabalho, Saúde..." style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.85rem;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
                         Substituto Sugerido <span style="color: #ef4444; margin-left: 2px;">*</span>
                     </label>
                     <div style="position: relative;">
                         <input type="text" list="users_datalist" id="replacementSearch" placeholder="Digite para buscar..." required
                             onchange="updateReplacementId(this)"
-                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.9rem;"
+                            style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); outline: none; transition: border 0.2s; background: var(--bg-body); color: var(--text-main); font-size: 0.85rem;"
                             onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
 
                         <input type="hidden" name="replacement_id" id="replacement_id_input">
@@ -203,18 +203,18 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                         </datalist>
 
                         <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;">
-                            <i data-lucide="search" style="width: 16px;"></i>
+                            <i data-lucide="search" style="width: 14px;"></i>
                         </div>
                     </div>
-                    <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">É obrigatório indicar quem irá te cobrir.</p>
+                    <p style="font-size: 0.7rem; color: #94a3b8; margin-top: 4px;">É obrigatório indicar quem irá te cobrir.</p>
                 </div>
 
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" id="cancelEditBtn" onclick="cancelEdit()" style="display: none; flex: 1; background: #f1f5f9; color: #64748b; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" id="cancelEditBtn" onclick="cancelEdit()" style="display: none; flex: 1; background: #f1f5f9; color: #64748b; border: none; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
                         Cancelar
                     </button>
-                    <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: #166534; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2);">
-                        <i data-lucide="check" style="width: 18px;"></i>
+                    <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: #166534; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2);">
+                        <i data-lucide="check" style="width: 16px;"></i>
                         <span id="submitText">Registrar Ausência</span>
                     </button>
                 </div>
@@ -223,15 +223,15 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
         <!-- LISTA -->
         <div>
-            <h3 style="margin: 0 0 12px 0; font-size: 1rem; color: #334155; font-weight: 700;">Suas Ausências Programadas</h3>
+            <h3 style="margin: 0 0 10px 0; font-size: 0.95rem; color: #334155; font-weight: 700;">Suas Ausências Programadas</h3>
 
             <?php if (empty($my_items)): ?>
-                <div style="text-align: center; padding: 32px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                    <i data-lucide="calendar-check" style="width: 32px; height: 32px; color: #94a3b8; margin-bottom: 8px;"></i>
-                    <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 0.9rem;">Nenhuma ausência futura registrada.</p>
+                <div style="text-align: center; padding: 24px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                    <i data-lucide="calendar-check" style="width: 24px; height: 24px; color: #94a3b8; margin-bottom: 6px;"></i>
+                    <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 0.85rem;">Nenhuma ausência futura registrada.</p>
                 </div>
             <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
                     <?php foreach ($my_items as $item):
                         $start = date('d/m', strtotime($item['start_date']));
                         $end = date('d/m', strtotime($item['end_date']));
@@ -240,36 +240,36 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                         // JSON para passar para o JS
                         $itemJson = htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8');
                     ?>
-                        <div style="background: white; border-radius: 12px; padding: 14px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <div style="background: white; border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
                             <div style="flex: 1;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                    <div style="background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                    <div style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
                                         <?= $periodo ?>
                                     </div>
                                     <?php if ($item['replacement_name']): ?>
-                                        <div style="font-size: 0.75rem; color: #64748b; display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 2px 6px; border-radius: 6px;">
+                                        <div style="font-size: 0.7rem; color: #64748b; display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 2px 6px; border-radius: 6px;">
                                             <i data-lucide="user-check" style="width: 12px;"></i>
                                             Sub: <strong><?= htmlspecialchars($item['replacement_name']) ?></strong>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <div style="color: #1e293b; font-weight: 600; font-size: 0.9rem;">
+                                <div style="color: #1e293b; font-weight: 600; font-size: 0.85rem;">
                                     <?= htmlspecialchars($item['reason'] ?: 'Sem motivo especificado') ?>
                                 </div>
                             </div>
 
-                            <div style="display: flex; gap: 8px;">
+                            <div style="display: flex; gap: 6px;">
                                 <!-- Botão Editar -->
-                                <button onclick="editItem(<?= $itemJson ?>)" style="background: #eff6ff; border: none; color: #3b82f6; cursor: pointer; padding: 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                    <i data-lucide="edit-2" style="width: 16px;"></i>
+                                <button onclick="editItem(<?= $itemJson ?>)" style="background: #eff6ff; border: none; color: #3b82f6; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                                    <i data-lucide="edit-2" style="width: 14px;"></i>
                                 </button>
 
                                 <!-- Botão Excluir -->
                                 <form method="POST" onsubmit="return confirm('Cancelar esta ausência?');" style="margin: 0;">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                                    <button type="submit" style="background: #fef2f2; border: none; color: #ef4444; cursor: pointer; padding: 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                        <i data-lucide="trash-2" style="width: 16px;"></i>
+                                    <button type="submit" style="background: #fef2f2; border: none; color: #ef4444; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                                        <i data-lucide="trash-2" style="width: 14px;"></i>
                                     </button>
                                 </form>
                             </div>

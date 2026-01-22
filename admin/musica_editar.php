@@ -179,19 +179,19 @@ renderAppHeader('Editar Música');
     .compact-container {
         max-width: 900px;
         margin: 0 auto;
-        padding: 24px 16px;
+        padding: 16px 12px 60px 12px;
     }
 
     .header-bar {
         display: flex;
         align-items: center;
-        gap: 16px;
-        margin-bottom: 32px;
+        gap: 12px;
+        margin-bottom: 24px;
     }
 
     .btn-back {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 12px;
         border: 1px solid var(--border-color);
         background: var(--bg-surface);
@@ -204,18 +204,16 @@ renderAppHeader('Editar Música');
         box-shadow: var(--shadow-sm);
     }
 
-    .btn-back:hover {
-        background: var(--bg-body);
-        color: var(--primary);
-        border-color: var(--primary-light);
-        transform: translateX(-2px);
+    .btn-back:align-self-center {
+        display: flex;
     }
 
     .page-title {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         font-weight: 800;
         background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
     }
@@ -224,19 +222,12 @@ renderAppHeader('Editar Música');
     .form-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: 20px;
-        padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-        transition: transform 0.2s, box-shadow 0.2s;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-sm);
         position: relative;
         overflow: hidden;
-    }
-
-    .form-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-        border-color: var(--primary-light);
     }
 
     /* Barra colorida lateral para cada card */
@@ -252,21 +243,21 @@ renderAppHeader('Editar Música');
     }
 
     .card-title {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 800;
         color: var(--card-color, var(--text-muted));
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 8px;
     }
 
     .form-grid {
         display: grid;
-        gap: 16px;
+        gap: 12px;
     }
 
     .form-grid-2 {
@@ -275,11 +266,6 @@ renderAppHeader('Editar Música');
 
     .form-grid-3-custom {
         grid-template-columns: 2fr 1fr;
-        /* Título ocupa 2/3, Versão 1/3 */
-    }
-
-    .form-grid-3 {
-        grid-template-columns: 1fr 1fr 1fr;
     }
 
     .form-group {
@@ -287,21 +273,21 @@ renderAppHeader('Editar Música');
     }
 
     .form-label {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         font-weight: 600;
         color: var(--text-secondary);
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         display: block;
     }
 
     .form-input {
         width: 100%;
-        padding: 12px 14px;
+        padding: 10px 12px;
         border-radius: 10px;
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-main);
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         transition: all 0.2s;
         font-weight: 500;
     }
@@ -310,7 +296,7 @@ renderAppHeader('Editar Música');
         outline: none;
         border-color: var(--card-color, var(--primary));
         background: var(--bg-surface);
-        box-shadow: 0 0 0 4px var(--focus-shadow, rgba(4, 120, 87, 0.1));
+        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(4, 120, 87, 0.1));
     }
 
     /* Input Icon */
@@ -320,7 +306,7 @@ renderAppHeader('Editar Música');
 
     .input-icon-wrapper i {
         position: absolute;
-        left: 14px;
+        left: 12px;
         top: 50%;
         transform: translateY(-50%);
         color: var(--text-secondary);
@@ -335,129 +321,15 @@ renderAppHeader('Editar Música');
     }
 
     .input-icon-wrapper input {
-        padding-left: 44px;
+        padding-left: 40px;
     }
 
-    /* Tag Pills Compact */
-    .tag-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .tag-pill-compact {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 14px;
-        border-radius: 20px;
-        background: var(--bg-body);
-        border: 1px solid var(--border-color);
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: all 0.2s;
-        user-select: none;
-    }
-
-    .tag-pill-compact:hover {
-        border-color: var(--primary-light);
-        color: var(--primary);
-        background: var(--bg-surface);
-    }
-
-    .tag-pill-compact input {
-        display: none;
-    }
-
-    .tag-pill-compact input:checked+label {
-        background: var(--primary-subtle);
-        border-color: var(--primary);
-        color: var(--primary);
-        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.15);
-    }
-
-    /* Action Buttons Compact */
-    .btn-action {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px 20px;
-        border-radius: 12px;
-        border: none;
-        font-weight: 600;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .btn-action:active {
-        transform: scale(0.98);
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-        color: white;
-        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
-    }
-
-    .btn-primary:hover {
-        box-shadow: 0 6px 16px rgba(4, 120, 87, 0.35);
-        transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-        background: var(--bg-surface);
-        color: var(--text-secondary);
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .btn-secondary:hover {
-        background: var(--bg-body);
-        color: var(--text-main);
-        border-color: var(--text-muted);
-    }
-
-    .btn-link {
-        background: none;
-        border: none;
-        color: var(--primary);
-        font-weight: 700;
-        font-size: 0.85rem;
-        cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: background 0.2s;
-    }
-
-    .btn-link:hover {
-        background: var(--primary-subtle);
-    }
-
-    .btn-close {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        border: none;
-        background: var(--bg-body);
-        color: var(--text-muted);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-    }
-
-    .btn-close:hover {
-        background: var(--border-color);
-        color: var(--status-error);
+    @media (max-width: 768px) {
+        .form-grid-2,
+        .form-grid-3-custom {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
     }
 
     /* Modal Styles */
@@ -469,7 +341,7 @@ renderAppHeader('Editar Música');
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(4px);
         z-index: 1000;
         align-items: center;
         justify-content: center;
@@ -482,67 +354,36 @@ renderAppHeader('Editar Música');
 
     .modal-content {
         background: var(--bg-surface);
-        border-radius: 24px;
-        padding: 32px;
+        border-radius: 20px;
+        padding: 24px;
         width: 100%;
-        max-width: 600px;
+        max-width: 500px;
         max-height: 85vh;
         overflow-y: auto;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
         animation: slideUp 0.3s ease-out;
+        display: flex;
+        flex-direction: column;
     }
 
     @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px) scale(0.95);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
+        flex-shrink: 0;
     }
 
     .modal-title {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         font-weight: 800;
         color: var(--text-main);
         margin: 0;
-    }
-
-    .custom-field-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr 32px;
-        gap: 12px;
-        align-items: center;
-        margin-bottom: 12px;
-        background: var(--bg-body);
-        padding: 16px;
-        border-radius: 12px;
-        border: 1px solid var(--border-color);
-        transition: all 0.2s;
-    }
-
-    .custom-field-row:hover {
-        border-color: var(--primary-light);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    }
-
-    @media (max-width: 768px) {
-
-        .form-grid-2,
-        .form-grid-3,
-        .form-grid-3-custom {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
 
@@ -567,14 +408,14 @@ renderAppHeader('Editar Música');
 
             <div class="form-grid">
                 <!-- Título e Versão lado a lado -->
-                <div class="form-grid form-grid-3-custom" style="display: grid; gap: 16px;">
+                <div class="form-grid form-grid-3-custom" style="display: grid; gap: 12px;">
                     <div class="form-group">
                         <label class="form-label">Título *</label>
-                        <input type="text" name="title" class="form-input" value="<?= htmlspecialchars($song['title']) ?>" required>
+                        <input type="text" name="title" class="form-input" value="<?= htmlspecialchars($song['title']) ?>" required style="font-weight: 700;">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Versão</label>
-                        <input type="text" name="version" class="form-input" value="<?= htmlspecialchars($song['version'] ?? '') ?>" placeholder="Ex: Ao Vivo, Acústico...">
+                        <input type="text" name="version" class="form-input" value="<?= htmlspecialchars($song['version'] ?? '') ?>" placeholder="Ex: Ao Vivo...">
                     </div>
                 </div>
 
@@ -586,7 +427,7 @@ renderAppHeader('Editar Música');
 
                     <div class="form-group">
                         <label class="form-label">Tom</label>
-                        <input type="text" name="tone" class="form-input" value="<?= htmlspecialchars($song['tone']) ?>" placeholder="Ex: G, Am">
+                        <input type="text" name="tone" class="form-input" value="<?= htmlspecialchars($song['tone']) ?>" placeholder="Ex: G">
                     </div>
                 </div>
 

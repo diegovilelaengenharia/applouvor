@@ -119,31 +119,31 @@ foreach ($users as $u) {
                         }
                     ?>
                         <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-                            <td style="padding: 16px 20px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 40px; height: 40px; border-radius: 50%; background: <?= $bg ?>; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #475569; font-size: 0.8rem; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <td style="padding: 10px 12px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $bg ?>; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #475569; font-size: 0.75rem; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                         <?php if (!$u['avatar']) echo strtoupper($initials); ?>
                                     </div>
                                     <div>
-                                        <div style="font-weight: 600; color: #1e293b;"><?= htmlspecialchars($u['name']) ?></div>
+                                        <div style="font-weight: 600; color: #1e293b; font-size: 0.9rem;"><?= htmlspecialchars($u['name']) ?></div>
                                     </div>
                                 </div>
                             </td>
-                            <td style="padding: 16px 20px;">
-                                <span style="background: <?= $u['role'] === 'admin' ? '#fef3c7' : '#f1f5f9' ?>; color: <?= $u['role'] === 'admin' ? '#d97706' : '#64748b' ?>; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                            <td style="padding: 10px 12px;">
+                                <span style="background: <?= $u['role'] === 'admin' ? '#fef3c7' : '#f1f5f9' ?>; color: <?= $u['role'] === 'admin' ? '#d97706' : '#64748b' ?>; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;">
                                     <?= ucfirst($u['role']) ?>
                                 </span>
                             </td>
-                            <td style="padding: 16px 20px; color: #475569; font-size: 0.9rem;">
+                            <td style="padding: 10px 12px; color: #475569; font-size: 0.85rem;">
                                 <?= $last_seen ?>
                             </td>
-                            <td style="padding: 16px 20px; text-align: center; font-weight: 600; color: #1e293b;">
+                            <td style="padding: 10px 12px; text-align: center; font-weight: 600; color: #1e293b; font-size: 0.85rem;">
                                 <?= $u['login_count'] ?>
                             </td>
-                            <td style="padding: 16px 20px; text-align: center;">
+                            <td style="padding: 10px 12px; text-align: center;">
                                 <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.03); padding: 4px 8px; border-radius: 6px;">
-                                    <div style="width: 8px; height: 8px; border-radius: 50%; background: <?= $status_color ?>;"></div>
-                                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;"><?= $status_text ?></span>
+                                    <div style="width: 6px; height: 6px; border-radius: 50%; background: <?= $status_color ?>;"></div>
+                                    <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;"><?= $status_text ?></span>
                                 </div>
                             </td>
                         </tr>

@@ -120,33 +120,33 @@ try {
     .stats-container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 16px;
+        padding: 0 12px;
     }
 
     .filter-bar {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 20px;
+        padding: 12px;
+        margin-bottom: 16px;
         box-shadow: var(--shadow-sm);
     }
 
     .filter-tabs {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         flex-wrap: wrap;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
 
     .filter-tab {
-        padding: 6px 14px;
-        border-radius: 20px;
+        padding: 6px 10px;
+        border-radius: 16px;
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-muted);
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         cursor: pointer;
         text-decoration: none;
         transition: all 0.2s;
@@ -161,76 +161,76 @@ try {
     .custom-date-inputs {
         display: grid;
         grid-template-columns: 1fr 1fr auto;
-        gap: 10px;
-        margin-top: 10px;
+        gap: 8px;
+        margin-top: 8px;
     }
 
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
     }
 
     .kpi-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 14px;
+        padding: 12px;
         box-shadow: var(--shadow-sm);
         text-align: center;
     }
 
     .kpi-value {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
 
     .kpi-label {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         color: var(--text-muted);
         font-weight: 600;
     }
 
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
     }
 
     .stat-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 16px;
+        padding: 12px;
         box-shadow: var(--shadow-sm);
     }
 
     .stat-title {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--text-muted);
         font-weight: 700;
         text-transform: uppercase;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .rank-item {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px;
+        gap: 8px;
+        padding: 8px;
         background: var(--bg-body);
-        border-radius: 10px;
-        margin-bottom: 6px;
+        border-radius: 8px;
+        margin-bottom: 4px;
     }
 
     .rank-number {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         background: var(--primary);
         color: white;
         border-radius: 50%;
@@ -238,7 +238,7 @@ try {
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         flex-shrink: 0;
     }
 

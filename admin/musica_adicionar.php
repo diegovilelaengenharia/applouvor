@@ -86,252 +86,391 @@ renderAppHeader('Adicionar Música');
 ?>
 
 <style>
-    .form-container {
-        max-width: 800px;
+    body { background: var(--bg-body); }
+
+    .compact-container {
+        max-width: 900px;
         margin: 0 auto;
-        padding-bottom: 80px;
+        padding: 16px 12px 60px 12px;
     }
 
-    .form-section {
-        background: var(--bg-surface);
-        border-radius: var(--radius-lg);
-        padding: 20px;
+    .header-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .btn-back {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
         border: 1px solid var(--border-color);
+        background: var(--bg-surface);
+        color: var(--text-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
         box-shadow: var(--shadow-sm);
-        margin-bottom: 20px;
+        text-decoration: none;
     }
 
-    .form-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--text-main);
+    .btn-back:hover {
+        background: var(--bg-body);
+        color: var(--primary);
+        border-color: var(--primary-light);
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+    }
+
+    /* Compact Form Card */
+    .form-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 4px; height: 100%;
+        background: var(--card-color, var(--primary));
+        opacity: 0.8;
+    }
+
+    .card-title {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--card-color, var(--text-muted));
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         margin-bottom: 16px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 8px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border-color);
     }
 
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-    }
+    .form-grid { display: grid; gap: 12px; }
+    .form-grid-2 { grid-template-columns: 1fr 1fr; }
+    .form-grid-3-custom { grid-template-columns: 2fr 1fr; }
 
-    .form-group {
-        margin-bottom: 16px;
-    }
-
-    .form-group label {
-        display: block;
-        font-size: 0.8rem;
+    .form-group { margin-bottom: 0; }
+    .form-label {
+        font-size: 0.75rem;
         font-weight: 600;
-        color: var(--text-muted);
+        color: var(--text-secondary);
         margin-bottom: 6px;
+        display: block;
     }
 
-    .input-field {
+    .form-input {
         width: 100%;
-        padding: 10px;
-        border-radius: 8px;
+        padding: 10px 12px;
+        border-radius: 10px;
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-main);
         font-size: 0.9rem;
-        outline: none;
-        transition: border 0.2s;
-    }
-
-    .input-field:focus {
-        border-color: var(--primary);
-        background: var(--bg-surface);
-    }
-
-    /* Tags Selection */
-    .tags-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .tag-checkbox {
-        display: none;
-    }
-
-    .tag-label {
-        padding: 6px 12px;
-        border-radius: 20px;
-        background: var(--bg-body);
-        border: 1px solid var(--border-color);
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        font-weight: 600;
-        cursor: pointer;
         transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        font-weight: 500;
     }
 
-    .tag-checkbox:checked+.tag-label {
+    .form-input:focus {
+        outline: none;
+        border-color: var(--card-color, var(--primary));
+        background: var(--bg-surface);
+        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(4, 120, 87, 0.1));
+    }
+
+    /* Input Icon */
+    .input-icon-wrapper { position: relative; }
+    .input-icon-wrapper i {
+        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+        color: var(--text-secondary); width: 18px; pointer-events: none; transition: color 0.2s;
+    }
+    .input-icon-wrapper input:focus + i, .input-icon-wrapper:focus-within i { color: var(--card-color, var(--primary)); }
+    .input-icon-wrapper input { padding-left: 40px; }
+
+    /* Tag Pills Compact */
+    .tag-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag-pill-compact {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 8px 14px; border-radius: 20px;
+        background: var(--bg-body); border: 1px solid var(--border-color);
+        font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+        cursor: pointer; transition: all 0.2s; user-select: none;
+    }
+    .tag-pill-compact:hover { border-color: var(--primary-light); color: var(--primary); background: var(--bg-surface); }
+    .tag-pill-compact input { display: none; }
+    .tag-pill-compact input:checked + .tag-dot { transform: scale(1.2); }
+    .tag-pill-compact input:checked + .tag-dot + span { color: var(--primary); } 
+    /* Hacky but works for keeping styles without complex label structure change */
+    
+    .tag-pill-compact.active {
         background: var(--primary-subtle);
         border-color: var(--primary);
         color: var(--primary);
+        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.15);
+    }
+    
+    .tag-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        transition: transform 0.2s;
     }
 
-    /* Bottom Actions */
-    .bottom-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: var(--bg-surface);
-        padding: 12px 24px;
-        border-top: 1px solid var(--border-color);
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        z-index: 40;
+    .btn-action {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.95rem;
+        cursor: pointer; transition: all 0.2s; width: 100%;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+    }
+    .btn-secondary { background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-color); }
+    .btn-secondary:hover { background: var(--bg-body); color: var(--text-main); }
+
+    .custom-field-row {
+        display: grid; grid-template-columns: 1fr 1fr 32px; gap: 10px; align-items: center;
+        margin-bottom: 10px; background: var(--bg-body); padding: 12px; border-radius: 10px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .btn-close {
+        width: 32px; height: 32px; border-radius: 50%; border: none;
+        background: var(--bg-body); color: var(--text-muted); cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
     }
 
-    @media (min-width: 768px) {
-        .bottom-bar {
-            position: static;
-            background: none;
-            border: none;
-            padding: 0;
-            justify-content: flex-start;
-            margin-top: 24px;
-        }
+    @media (max-width: 768px) {
+        .form-grid-2, .form-grid-3-custom { grid-template-columns: 1fr; gap: 10px; }
+        .custom-field-row { grid-template-columns: 1fr; gap: 8px; position: relative; }
+        .custom-field-row button { position: absolute; top: 8px; right: 8px; }
     }
 </style>
 
-<div class="container form-container">
-    <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
-        <div>
-            <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Nova Música</h1>
-            <p style="color: var(--text-muted); margin-top: 4px; font-size: 0.9rem;">Adicionar ao repertório</p>
-        </div>
-        <a href="repertorio.php" class="ripple" style="
-            width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface); 
-            display: flex; align-items: center; justify-content: center; color: var(--text-muted);
-            border: 1px solid var(--border-color);
-        ">
-            <i data-lucide="x" style="width: 18px;"></i>
+<div class="compact-container">
+    <div class="header-bar">
+        <a href="repertorio.php" class="btn-back">
+            <i data-lucide="arrow-left" style="width: 20px;"></i>
         </a>
+        <h1 class="page-title">Nova Música</h1>
     </div>
 
     <form method="POST">
-
-        <!-- INFO BÁSICA -->
-        <div class="form-section">
-            <h3 class="form-title"><i data-lucide="music" style="width: 18px;"></i> Informações Básicas</h3>
-
-            <div class="form-group">
-                <label>Título da Música</label>
-                <input type="text" name="title" class="input-field" required placeholder="Ex: Grande é o Senhor" style="font-weight: 600;">
-            </div>
-
-            <div class="form-group">
-                <label>Artista / Banda</label>
-                <input type="text" name="artist" class="input-field" list="artist-list" required placeholder="Ex: Adhemar de Campos">
-                <datalist id="artist-list">
-                    <?php foreach ($artists as $art): ?>
-                        <option value="<?= htmlspecialchars($art) ?>">
-                        <?php endforeach; ?>
-                </datalist>
+        <!-- Card 1: Informações Principais -->
+        <div class="form-card" style="--card-color: #3b82f6; --focus-shadow: rgba(59, 130, 246, 0.1);">
+            <div class="card-title">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="music" style="width: 14px;"></i>
+                    Informações Principais
+                </div>
             </div>
 
             <div class="form-grid">
-                <div class="form-group">
-                    <label>Tom (Original)</label>
-                    <select name="tone" class="input-field">
-                        <option value="">Selecione...</option>
-                        <?php
-                        $tones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'A#m', 'Bm'];
-                        foreach ($tones as $t) {
-                            echo "<option value='$t'>$t</option>";
-                        }
-                        ?>
-                    </select>
+                <div class="form-grid form-grid-3-custom" style="display: grid; gap: 12px;">
+                    <div class="form-group">
+                        <label class="form-label">Título *</label>
+                        <input type="text" name="title" class="form-input" required placeholder="Ex: Grande é o Senhor" style="font-weight: 700;">
+                    </div>
+                     <div class="form-group">
+                        <label class="form-label">Artista *</label>
+                        <input type="text" name="artist" class="form-input" list="artist-list" required placeholder="Ex: Adhemar...">
+                        <datalist id="artist-list">
+                            <?php foreach ($artists as $art): ?>
+                                <option value="<?= htmlspecialchars($art) ?>">
+                            <?php endforeach; ?>
+                        </datalist>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>BPM</label>
-                    <input type="number" name="bpm" class="input-field" placeholder="Ex: 72">
-                </div>
-            </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-                <label>Duração (mm:ss)</label>
-                <input type="text" name="duration" class="input-field" placeholder="05:30">
+                <div class="form-grid form-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Tom</label>
+                         <select name="tone" class="form-input" style="appearance: none;">
+                            <option value="">Selecione...</option>
+                            <?php
+                            $tones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'A#m', 'Bm'];
+                            foreach ($tones as $t) {
+                                echo "<option value='$t'>$t</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BPM</label>
+                        <input type="number" name="bpm" class="form-input" placeholder="Ex: 72">
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="form-label">Duração</label>
+                    <input type="text" name="duration" class="form-input" placeholder="Ex: 05:30">
+                </div>
             </div>
         </div>
 
-        <!-- LINKS -->
-        <div class="form-section">
-            <h3 class="form-title"><i data-lucide="link" style="width: 18px;"></i> Links e Referências</h3>
+        <!-- Card 2: Referências -->
+        <div class="form-card" style="--card-color: #10b981; --focus-shadow: rgba(16, 185, 129, 0.1);">
+            <div class="card-title">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="link" style="width: 14px;"></i>
+                    Links e Mídia
+                </div>
+            </div>
 
-            <div class="form-group">
-                <label><i data-lucide="music-2" style="width: 14px; display:inline; vertical-align:middle;"></i> Link da Cifra</label>
-                <input type="url" name="link_cifra" class="input-field" placeholder="https://cifraclub.com.br/...">
+            <div class="form-grid form-grid-2">
+                <div class="form-group">
+                    <label class="form-label">Link da Cifra</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="music-2"></i>
+                        <input type="url" name="link_cifra" class="form-input" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Link da Letra</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="file-text"></i>
+                        <input type="url" name="link_letra" class="form-input" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Link do Vídeo</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="video"></i>
+                        <input type="url" name="link_video" class="form-input" placeholder="https://youtube...">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="form-label">Link do Áudio</label>
+                    <div class="input-icon-wrapper">
+                        <i data-lucide="headphones"></i>
+                        <input type="url" name="link_audio" class="form-input" placeholder="https://spotify...">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label><i data-lucide="file-text" style="width: 14px; display:inline; vertical-align:middle;"></i> Link da Letra</label>
-                <input type="url" name="link_letra" class="input-field" placeholder="https://letras.mus.br/...">
-            </div>
-            <div class="form-group">
-                <label><i data-lucide="youtube" style="width: 14px; display:inline; vertical-align:middle;"></i> Link do Vídeo</label>
-                <input type="url" name="link_video" class="input-field" placeholder="https://youtube.com/...">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-                <label><i data-lucide="headphones" style="width: 14px; display:inline; vertical-align:middle;"></i> Link do Áudio</label>
-                <input type="url" name="link_audio" class="input-field" placeholder="https://spotify.com/...">
+
+             <!-- Campos Extras -->
+            <div style="border-top: 1px dashed var(--border-color); margin-top: 20px; padding-top: 20px;">
+                <label class="form-label" style="margin-bottom: 12px; color: var(--text-main);">Outras Referências</label>
+                <div id="customFieldsList"></div>
+                <button type="button" onclick="addCustomFieldUI()" class="btn-secondary" style="background:none; border:none; padding: 0; color: var(--primary); font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="plus-circle" style="width: 16px;"></i> Adicionar Referência Personalizada
+                </button>
             </div>
         </div>
 
-        <!-- TAGS -->
-        <div class="form-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; display:flex; gap:8px; align-items:center;"><i data-lucide="tag" style="width: 18px;"></i> Classificação</h3>
-                <a href="classificacoes.php" target="_blank" style="font-size: 0.75rem; color: var(--primary); font-weight: 600; text-decoration: none;">Gerenciar</a>
+        <!-- Card 3: Tags -->
+        <div class="form-card" style="--card-color: #f59e0b; --focus-shadow: rgba(245, 158, 11, 0.1);">
+            <div class="card-title">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="folder" style="width: 14px;"></i>
+                    Classificação
+                </div>
+                 <a href="classificacoes.php" target="_blank" style="color: var(--card-color); text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="settings" style="width: 12px;"></i> Gerenciar
+                </a>
             </div>
 
-            <div class="tags-grid">
+            <div class="tag-pills">
                 <?php foreach ($allTags as $tag): ?>
-                    <label>
-                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" class="tag-checkbox">
-                        <span class="tag-label">
-                            <?= htmlspecialchars($tag['name']) ?>
-                        </span>
+                    <label class="tag-pill-compact" onclick="this.classList.toggle('active')">
+                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>">
+                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#047857' ?>;"></span>
+                        <span><?= htmlspecialchars($tag['name']) ?></span>
                     </label>
                 <?php endforeach; ?>
             </div>
         </div>
 
-        <!-- NOTAS -->
-        <div class="form-section">
-            <h3 class="form-title"><i data-lucide="sticky-note" style="width: 18px;"></i> Observações</h3>
-            <textarea name="notes" rows="3" class="input-field" style="resize: vertical; min-height: 80px;" placeholder="Detalhes sobre arranjo, versão, etc..."></textarea>
+        <!-- Card 4: Obs -->
+        <div class="form-card" style="--card-color: #6366f1; --focus-shadow: rgba(99, 102, 241, 0.1);">
+             <div class="card-title">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="message-square" style="width: 14px;"></i>
+                    Observações
+                </div>
+            </div>
+            <textarea name="notes" class="form-input" rows="3" style="resize: vertical; min-height: 80px;" placeholder="Detalhes sobre arranjo, versão, etc..."></textarea>
         </div>
 
-        <!-- BOTTOM BAR -->
-        <div class="bottom-bar">
-            <a href="repertorio.php" style="
-                padding: 10px 20px; border-radius: 8px; font-weight: 600; color: var(--text-main); 
-                text-decoration: none; font-size: 0.9rem;
-            ">Cancelar</a>
-            <button type="submit" class="ripple" style="
-                background: var(--primary); color: white; border: none; padding: 10px 24px; 
-                border-radius: 8px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
-                box-shadow: var(--shadow-sm);
-            ">
-                <i data-lucide="check" style="width: 16px;"></i> Salvar Música
+        <!-- Bottom Actions -->
+        <div style="display: flex; gap: 12px; padding-bottom: 20px;">
+            <a href="repertorio.php" class="btn-action btn-secondary" style="flex: 1; text-decoration: none;">Cancelar</a>
+            <button type="submit" class="btn-action btn-primary" style="flex: 2;">
+                <i data-lucide="check" style="width: 18px;"></i> Salvar Música
             </button>
         </div>
+
+        <!-- Hidden Inputs Custom Fields -->
+        <div id="hiddenCustomFields"></div>
 
     </form>
 </div>
 
+<script>
+    let customFieldsData = [];
+
+    function renderCustomFields() {
+        const list = document.getElementById('customFieldsList');
+        list.innerHTML = '';
+        customFieldsData.forEach((field, index) => {
+            const item = document.createElement('div');
+            item.className = 'custom-field-row';
+            item.innerHTML = `
+                <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input" placeholder="Descrição">
+                <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input" placeholder="Link">
+                 <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="color: #ef4444;">
+                    <i data-lucide="trash-2" style="width: 14px;"></i>
+                </button>
+            `;
+            list.appendChild(item);
+        });
+
+        const hiddenContainer = document.getElementById('hiddenCustomFields');
+        hiddenContainer.innerHTML = '';
+        customFieldsData.forEach(field => {
+            hiddenContainer.innerHTML += `
+                <input type="hidden" name="custom_field_name[]" value="${field.name}">
+                <input type="hidden" name="custom_field_link[]" value="${field.link}">
+            `;
+        });
+        lucide.createIcons();
+    }
+
+    function addCustomFieldUI() {
+        customFieldsData.push({ name: '', link: '' });
+        renderCustomFields();
+    }
+
+    function removeCustomFieldData(index) {
+        customFieldsData.splice(index, 1);
+        renderCustomFields();
+    }
+
+    function updateCustomFieldData(index, key, value) {
+        customFieldsData[index][key] = value;
+        renderCustomFields();
+    }
+
+    // Toggle active class for tag pills on load if any checked (none on add)
+    // For Add page, we just toggle on click using inline onclick for simplicity
+</script>
 
 <?php renderAppFooter(); ?>

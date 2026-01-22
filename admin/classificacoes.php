@@ -38,7 +38,7 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     /* Tag Cards */
     .tag-list {
         display: grid;
-        gap: 12px;
+        gap: 8px;
         margin-bottom: 80px;
     }
 
@@ -46,10 +46,10 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 16px;
+        padding: 10px;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
     }
@@ -60,14 +60,18 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     }
 
     .tag-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         flex-shrink: 0;
+    }
+
+    .tag-icon i {
+        width: 16px;
     }
 
     .tag-content {
@@ -77,13 +81,13 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
 
     .tag-title {
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: var(--text-main);
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .tag-desc {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         color: var(--text-muted);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -91,8 +95,8 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     }
 
     .btn-icon {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         border-radius: 8px;
         border: none;
         background: transparent;
@@ -101,6 +105,10 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
         justify-content: center;
         cursor: pointer;
         transition: background 0.2s;
+    }
+
+    .btn-icon i {
+        width: 16px;
     }
 
     .btn-icon:hover {
@@ -112,8 +120,8 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
         position: fixed;
         bottom: 80px;
         right: 20px;
-        width: 56px;
-        height: 56px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--primary), var(--primary-hover));
         border: none;
@@ -125,6 +133,10 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
         justify-content: center;
         transition: transform 0.2s;
         z-index: 100;
+    }
+
+    .btn-fab i {
+        width: 20px;
     }
 
     .btn-fab:hover {
@@ -156,7 +168,7 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     .bottom-sheet-content {
         background: var(--bg-surface);
         border-radius: 24px 24px 0 0;
-        padding: 24px;
+        padding: 20px;
         width: 100%;
         max-width: 600px;
         margin: 0 auto;
@@ -176,33 +188,33 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     }
 
     .sheet-header {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: var(--text-main);
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
 
     /* Form Styles */
     .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 12px;
     }
 
     .form-label {
         display: block;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: var(--text-main);
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .form-input {
         width: 100%;
-        padding: 12px 16px;
+        padding: 10px 14px;
         border: 1px solid var(--border-color);
-        border-radius: 10px;
+        border-radius: 8px;
         background: var(--bg-body);
         color: var(--text-main);
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-family: 'Inter', sans-serif;
         transition: all 0.2s;
     }
@@ -217,10 +229,10 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
         background: linear-gradient(135deg, var(--primary), var(--primary-hover));
         color: white;
         border: none;
-        padding: 14px 24px;
-        border-radius: 12px;
+        padding: 12px 20px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.95rem;
         cursor: pointer;
         display: flex;
         align-items: center;

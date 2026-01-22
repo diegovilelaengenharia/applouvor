@@ -148,14 +148,14 @@ try {
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 16px;
     }
 
     .kpi-card {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
-        padding: 12px;
+        padding: 10px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow-sm);
         transition: all 0.2s;
@@ -183,21 +183,26 @@ try {
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
 
     .kpi-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 0.9rem;
     }
 
+    .kpi-icon i {
+        width: 14px;
+        height: 14px;
+    }
+
     .kpi-value {
-        font-size: 1.25rem;
+        font-size: 1.15rem;
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
@@ -205,7 +210,7 @@ try {
     }
 
     .kpi-label {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--text-muted);
         font-weight: 600;
         text-transform: uppercase;
@@ -213,7 +218,7 @@ try {
     }
 
     .kpi-subtitle {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--text-muted);
         margin-top: 2px;
     }
@@ -221,46 +226,51 @@ try {
     .section-header {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         margin: 16px 0 8px 0;
-        padding-bottom: 8px;
-        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--border-color);
     }
 
     .section-header h2 {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
     }
 
+    .section-header i {
+        width: 16px;
+        height: 16px;
+    }
+
     .charts-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
+        gap: 10px;
+        margin-bottom: 16px;
     }
 
     .chart-card {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
-        padding: 12px;
+        padding: 10px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow-sm);
     }
 
     .chart-title {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 700;
         color: var(--text-main);
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .actions-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 10px;
-        margin-bottom: 20px;
+        gap: 8px;
+        margin-bottom: 16px;
     }
 
     .create-grid {
@@ -274,7 +284,7 @@ try {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 8px;
-        padding: 8px 4px;
+        padding: 6px 4px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -285,7 +295,7 @@ try {
     }
 
     .create-btn span {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 600;
         color: var(--text-main);
     }
@@ -299,21 +309,21 @@ try {
     .stats-buttons {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 10px;
-        margin-bottom: 20px;
+        gap: 8px;
+        margin-bottom: 16px;
     }
 
     .stats-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 12px;
+        padding: 10px;
         text-decoration: none;
         transition: all 0.3s;
         box-shadow: var(--shadow-sm);
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
 
     .stats-card:hover {
@@ -329,8 +339,8 @@ try {
     }
 
     .stats-icon {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -339,56 +349,56 @@ try {
     }
 
     .stats-icon i {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
     }
 
     .stats-badge {
         background: linear-gradient(135deg, #fbbf24, #f59e0b);
         color: white;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 0.6rem;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 0.55rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .stats-card-body h3 {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
     }
 
     .stats-card-body p {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         color: var(--text-muted);
         margin: 2px 0 0 0;
     }
 
     .stats-card-footer {
         display: flex;
-        gap: 12px;
-        padding-top: 8px;
+        gap: 10px;
+        padding-top: 6px;
         border-top: 1px solid var(--border-color);
     }
 
     .stats-metric {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 1px;
     }
 
     .metric-value {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
     }
 
     .metric-label {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         color: var(--text-muted);
         font-weight: 600;
     }
@@ -397,19 +407,19 @@ try {
         background: #fffbeb;
         border: 1px solid #fde68a;
         border-radius: var(--radius-lg);
-        padding: 10px;
-        margin-bottom: 16px;
+        padding: 8px;
+        margin-bottom: 12px;
     }
 
     .alert-item {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px;
+        padding: 6px;
         background: white;
-        border-radius: 8px;
-        margin-bottom: 6px;
-        font-size: 0.85rem;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        font-size: 0.8rem;
     }
 
     .alert-item:last-child {
@@ -420,16 +430,16 @@ try {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--border-color);
-        padding: 10px;
+        padding: 8px;
     }
 
     .activity-item {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px;
+        padding: 6px;
         border-bottom: 1px solid var(--border-color);
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .activity-item:last-child {
@@ -437,8 +447,8 @@ try {
     }
 
     .activity-icon {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         border-radius: 6px;
         display: flex;
         align-items: center;
@@ -460,6 +470,10 @@ try {
 
         .actions-grid {
             grid-template-columns: repeat(2, 1fr);
+        }
+
+        .section-header h2 {
+            font-size: 0.85rem;
         }
     }
 </style>

@@ -24,26 +24,26 @@ renderAppHeader('Playlist Selecionada');
     .playlist-container {
         max-width: 800px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 16px;
     }
 
     .playlist-header {
         text-align: center;
-        padding: 32px 20px;
+        padding: 24px 16px;
         background: linear-gradient(135deg, #2D7A4F 0%, #1a4d2e 100%);
-        border-radius: 16px;
+        border-radius: 12px;
         color: white;
-        margin-bottom: 32px;
+        margin-bottom: 24px;
     }
 
     .playlist-title {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: 800;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
 
     .playlist-subtitle {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         opacity: 0.9;
     }
 
@@ -51,16 +51,16 @@ renderAppHeader('Playlist Selecionada');
         background: var(--bg-secondary);
         border: 1px solid var(--border-subtle);
         border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
+        padding: 12px;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
     }
 
     .song-number {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
         background: var(--accent-interactive);
         color: white;
         border-radius: 50%;
@@ -68,7 +68,7 @@ renderAppHeader('Playlist Selecionada');
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         flex-shrink: 0;
     }
 
@@ -78,18 +78,18 @@ renderAppHeader('Playlist Selecionada');
 
     .song-title {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         color: var(--text-primary);
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .song-artist {
         color: var(--text-secondary);
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     .youtube-link {
-        padding: 8px 16px;
+        padding: 6px 12px;
         background: #FF0000;
         color: white;
         border-radius: 8px;
@@ -97,8 +97,9 @@ renderAppHeader('Playlist Selecionada');
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         transition: all 0.2s;
+        font-size: 0.8rem;
     }
 
     .youtube-link:hover {
@@ -110,8 +111,8 @@ renderAppHeader('Playlist Selecionada');
         background: rgba(45, 122, 79, 0.1);
         border: 2px solid var(--accent-interactive);
         border-radius: 12px;
-        padding: 24px;
-        margin: 32px 0;
+        padding: 16px;
+        margin: 24px 0;
         text-align: center;
     }
 </style>
