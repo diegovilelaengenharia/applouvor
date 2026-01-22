@@ -165,7 +165,7 @@ try {
 
     .kpi-card:hover {
         transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
+        box-shadow: var(--shadow-sm);
         border-color: var(--primary-light);
     }
 
@@ -174,7 +174,7 @@ try {
         position: absolute;
         top: 0;
         left: 0;
-        width: 4px;
+        width: 3px;
         height: 100%;
         background: var(--accent-color, var(--primary));
     }
@@ -182,24 +182,22 @@ try {
     .kpi-header {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
+        gap: 6px;
+        margin-bottom: 6px;
     }
 
     .kpi-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.1rem;
-        /* Reduzido de 1.2rem */
+        font-size: 0.9rem;
     }
 
     .kpi-value {
-        font-size: 1.35rem;
-        /* Reduzido de 1.5rem */
+        font-size: 1.25rem;
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
@@ -208,7 +206,6 @@ try {
 
     .kpi-label {
         font-size: 0.7rem;
-        /* Reduzido de 0.75rem */
         color: var(--text-muted);
         font-weight: 600;
         text-transform: uppercase;
@@ -216,23 +213,22 @@ try {
     }
 
     .kpi-subtitle {
-        font-size: 0.75rem;
-        /* Reduzido de 0.8rem */
+        font-size: 0.7rem;
         color: var(--text-muted);
-        margin-top: 4px;
+        margin-top: 2px;
     }
 
     .section-header {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin: 20px 0 10px 0;
+        margin: 16px 0 8px 0;
         padding-bottom: 8px;
         border-bottom: 2px solid var(--border-color);
     }
 
     .section-header h2 {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
@@ -240,37 +236,37 @@ try {
 
     .charts-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 12px;
         margin-bottom: 20px;
     }
 
     .chart-card {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
-        padding: 16px;
+        padding: 12px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow-sm);
     }
 
     .chart-title {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 700;
         color: var(--text-main);
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
 
     .actions-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
         margin-bottom: 20px;
     }
 
     .create-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
+        gap: 6px;
         margin-bottom: 16px;
     }
 
@@ -278,7 +274,7 @@ try {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 8px;
-        padding: 10px 6px;
+        padding: 8px 4px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -289,40 +285,40 @@ try {
     }
 
     .create-btn span {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
         color: var(--text-main);
     }
 
     .create-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-sm);
         border-color: var(--primary);
     }
 
     .stats-buttons {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 10px;
         margin-bottom: 20px;
     }
 
     .stats-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: 14px;
-        padding: 16px;
+        border-radius: 12px;
+        padding: 12px;
         text-decoration: none;
         transition: all 0.3s;
         box-shadow: var(--shadow-sm);
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
     }
 
     .stats-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         border-color: var(--primary);
     }
 
@@ -333,9 +329,9 @@ try {
     }
 
     .stats-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -343,38 +339,38 @@ try {
     }
 
     .stats-icon i {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
 
     .stats-badge {
         background: linear-gradient(135deg, #fbbf24, #f59e0b);
         color: white;
-        padding: 3px 10px;
-        border-radius: 16px;
-        font-size: 0.65rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.6rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .stats-card-body h3 {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
     }
 
     .stats-card-body p {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--text-muted);
         margin: 2px 0 0 0;
     }
 
     .stats-card-footer {
         display: flex;
-        gap: 16px;
-        padding-top: 10px;
+        gap: 12px;
+        padding-top: 8px;
         border-top: 1px solid var(--border-color);
     }
 
@@ -385,14 +381,14 @@ try {
     }
 
     .metric-value {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
     }
 
     .metric-label {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--text-muted);
         font-weight: 600;
     }
@@ -401,18 +397,19 @@ try {
         background: #fffbeb;
         border: 1px solid #fde68a;
         border-radius: var(--radius-lg);
-        padding: 12px;
+        padding: 10px;
         margin-bottom: 16px;
     }
 
     .alert-item {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         padding: 8px;
         background: white;
         border-radius: 8px;
         margin-bottom: 6px;
+        font-size: 0.85rem;
     }
 
     .alert-item:last-child {
@@ -423,15 +420,16 @@ try {
         background: var(--bg-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--border-color);
-        padding: 14px;
+        padding: 10px;
     }
 
     .activity-item {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px;
+        gap: 8px;
+        padding: 8px;
         border-bottom: 1px solid var(--border-color);
+        font-size: 0.85rem;
     }
 
     .activity-item:last-child {
@@ -439,9 +437,9 @@ try {
     }
 
     .activity-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
