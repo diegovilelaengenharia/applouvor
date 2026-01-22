@@ -241,13 +241,19 @@ renderAppHeader('Leitura Bíblica');
 
 <!-- DESKTOP HEADER -->
 <div class="desktop-header">
-    <div style="display: flex; align-items: center; gap: 16px;">
-        <button onclick="window.history.back()" style="border:none; background:none; cursor:pointer;"><i data-lucide="arrow-left" color="#64748b"></i></button>
-        <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2;">Plano de Leitura Bíblica Anual</h1>
-            <div style="font-size: 0.85rem; color: var(--text-light);">App Louvor PIB Oliveira</div>
-        </div>
+    <div class="header-left">
+        <button onclick="window.history.back()" style="border:none; background:none; cursor:pointer; color:var(--text-light); padding:0; display:flex;">
+            <i data-lucide="arrow-left" width="22"></i>
+        </button>
+        <!-- Home Icon Optional if needed to match reference exactly, adding placeholder logic -->
+        <a href="index.php" style="color:var(--text-light); text-decoration:none; display:flex;"><i data-lucide="home" width="20"></i></a>
     </div>
+
+    <div class="header-center">
+        <h1 class="header-title">Plano de Leitura</h1>
+        <div class="header-subtitle">Bíblia Anual 2026</div>
+    </div>
+
     <div class="header-actions">
         <!-- Inverted Order: Config First, then Leader -->
         <button onclick="openConfig()" class="btn-icon-header" title="Configurações"><i data-lucide="settings-2" width="20"></i></button>
