@@ -269,12 +269,7 @@ function renderContent(m, d) {
         
         const item = document.createElement('div');
         item.className = `verse-check-item ${isRead ? 'read' : ''}`;
-        
-        // Inline styles for JS dynamic states (restored from working version)
-        if(isRead) {
-            item.style.background = '#ecfdf5';
-            item.style.borderColor = '#a7f3d0';
-        }
+        item.id = `verse-item-${idx}`;
         
         item.onclick = (e) => {
             if(e.target.closest('a')) return;
@@ -283,14 +278,11 @@ function renderContent(m, d) {
         
         item.innerHTML = `
             <div style="display:flex; align-items:center;">
-                <div class="check-circle" style="
-                    background:${isRead ? '#10b981' : 'transparent'}; 
-                    border-color:${isRead ? '#10b981' : 'var(--border-color)'};
-                ">
-                    <i data-lucide="check" style="width:14px; color:white; opacity:${isRead ? '1' : '0'}; transition:opacity 0.2s;"></i>
+                <div class="check-circle">
+                    <i data-lucide="check" style="width:14px;"></i>
                 </div>
                 <div class="verse-info">
-                    <div class="verse-text" style="font-weight:600; ${isRead ? 'color:#065f46; text-decoration:line-through; opacity:0.8;' : ''}">${v}</div>
+                    <div class="verse-text">${v}</div>
                 </div>
             </div>
             <a href="${link}" target="_blank" class="ripple" style="
