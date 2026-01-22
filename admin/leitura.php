@@ -93,18 +93,42 @@ renderAppHeader('Leitura Bíblica');
     }
     @media (min-width: 1025px) { .desktop-header { display: flex; } }
     
-    .header-actions { display: flex; align-items: center; gap: 12px; }
+    /* Header Actions Premium */
+    .header-actions { display: flex; align-items: center; gap: 16px; }
+    
     .btn-icon-header {
-        width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
         border: 1px solid var(--border); background: var(--surface); color: var(--text-light); cursor: pointer; transition: all 0.2s;
         text-decoration: none;
     }
-    .btn-icon-header:hover { background: var(--bg); color: var(--text); }
-    .avatar-circle {
-        width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid var(--bg); box-shadow: 0 0 0 2px var(--border);
-        cursor: pointer; display: block;
+    .btn-icon-header:hover { background: var(--bg); color: var(--text); transform: translateY(-1px); }
+    
+    /* Config Button Spec: Inside Leader logic if needed, but keeping separate nicely */
+    
+    /* LEADER BUTTON STYLE (Image Match) */
+    .btn-lider {
+        background: #ef4444 !important; /* Red Solid */
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); /* Red Glow */
     }
-    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .btn-lider:hover { box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5); transform: translateY(-2px); }
+
+    /* AVATAR WITH GREEN RING (Image Match) */
+    .avatar-circle {
+        width: 46px; height: 46px; 
+        border-radius: 50%; 
+        padding: 3px; /* Gap for ring */
+        border: 2px solid #a7f3d0; /* Green Ring Soft */
+        background: white;
+        cursor: pointer; display: block;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.2s;
+    }
+    .avatar-circle:hover { border-color: #10b981; transform: scale(1.05); }
+    .avatar-circle img { 
+        width: 100%; height: 100%; object-fit: cover; border-radius: 50%; 
+    }
 
     /* Calendar Strip */
     .cal-strip {
@@ -172,7 +196,7 @@ renderAppHeader('Leitura Bíblica');
     </div>
     <div class="header-actions">
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-            <a href="lider.php" class="btn-icon-header" title="Líder" style="background:#fef2f2; color:#ef4444; border-color:#fecaca;"><i data-lucide="crown" width="20"></i></a>
+            <a href="lider.php" class="btn-icon-header btn-lider" title="Líder"><i data-lucide="crown" width="20"></i></a>
         <?php endif; ?>
         <button onclick="openConfig()" class="btn-icon-header" title="Configurações"><i data-lucide="settings-2" width="20"></i></button>
         <a href="perfil.php" class="avatar-circle">
