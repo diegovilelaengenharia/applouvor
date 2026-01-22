@@ -86,6 +86,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: leitura.php"); exit;
     }
     
+    if ($action === 'unmark_read') {
+        $m = (int)$_POST['month'];
+        $d = (int)$_POST['day'];
+        
+        try {
+            $stmt = $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+            $stmt->execute([$userId, $m, $d]);
+        } catch (Exception $e) {}
+        
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) { echo json_encode(['success' => true]); exit; }
+        header("Location: leitura.php"); exit;
+    }
+    
     if ($action === 'save_settings') {
         $newStart = $_POST['start_date'];
         $newNotif = $_POST['notification_time'];
@@ -302,6 +315,24 @@ function toggleVerseRead(m, d, idx, item) {
     item.classList.toggle('read');
     localStorage.setItem(storageKey, newState);
     
+    // Se DESMARCOU e o dia estava concluído, precisa desmarcar o dia também
+    if(!newState && completedMap[`${m}_${d}`]) {
+        // Remove do mapa local
+        delete completedMap[`${m}_${d}`];
+        
+        // Chama API para desmarcar no servidor
+        const formData = new FormData();
+        formData.append('action', 'unmark_read');
+        formData.append('month', m);
+        formData.append('day', d);
+        fetch('leitura.php', { method: 'POST', body: formData })
+            .catch(() => console.log('Erro ao desmarcar dia'));
+        
+        // Remove classe do calendário
+        const dayCard = document.getElementById(`day-card-${m}-${d}`);
+        if(dayCard) dayCard.classList.remove('completed');
+    }
+    
     // Recalculate progress
     const total = document.querySelectorAll('.verse-check-item').length;
     const currentRead = document.querySelectorAll('.verse-check-item.read').length;
@@ -324,33 +355,26 @@ function updateProgress(current, total) {
     // Base Style
     const baseStyle = "border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; white-space: nowrap;";
 
-    // Lógica: Só mostra verde se REALMENTE concluído no servidor
-    if (isDoneServer) {
-        // JÁ CONCLUÍDO NO SERVIDOR - Verde
-        btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
-        btn.onclick = null; // Desabilita clique
-        btn.style.cssText = baseStyle + "background: #dcfce7; color: #166534; border: 1px solid transparent;";
-        if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
-    } else if (current < total) {
+    // ORDEM CORRETA: Verificar current PRIMEIRO
+    if (current < total) {
         // INCOMPLETO - Amarelo
         const missing = total - current;
         btn.innerHTML = `<i data-lucide="alert-circle"></i> Faltam ${missing}`;
         btn.onclick = () => alert(`Você precisa ler todas as passagens para concluir.\n\nLido: ${current}\nTotal: ${total}`);
         btn.style.cssText = baseStyle + "background: #fef3c7; color: #d97706; border: 1px solid #fcd34d;";
         if(statusText) statusText.innerHTML = '<span style="color:#d97706">Pendente</span>';
+    } else if (isDoneServer) {
+        // JÁ SALVO NO SERVIDOR - Verde Claro
+        btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
+        btn.onclick = null;
+        btn.style.cssText = baseStyle + "background: #dcfce7; color: #166534; border: 1px solid transparent;";
+        if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
     } else {
-        // TODAS LIDAS MAS NÃO SALVO - Verde Vibrante (pronto para concluir)
+        // TODAS LIDAS MAS NÃO SALVO - Verde Vibrante
         btn.innerHTML = '<i data-lucide="check"></i> Concluir Dia';
         btn.onclick = () => completeDay();
         btn.style.cssText = baseStyle + "background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);";
         if(statusText) statusText.innerHTML = '<span style="color:#10b981">Pronto!</span>';
-        
-        // Auto-trigger após 500ms
-        setTimeout(() => {
-            if(!completedMap[`${selectedMonth}_${selectedDay}`]) {
-                completeDay();
-            }
-        }, 500);
     }
     
     if(window.lucide) window.lucide.createIcons();
