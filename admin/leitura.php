@@ -244,7 +244,7 @@ renderAppHeader('Leitura Bíblica');
     <div style="display: flex; align-items: center; gap: 16px;">
         <button onclick="window.history.back()" style="border:none; background:none; cursor:pointer;"><i data-lucide="arrow-left" color="#64748b"></i></button>
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2;">Leitura Bíblica</h1>
+            <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2;">Plano de Leitura Bíblica Anual</h1>
             <div style="font-size: 0.85rem; color: var(--text-light);">App Louvor PIB Oliveira</div>
         </div>
     </div>
