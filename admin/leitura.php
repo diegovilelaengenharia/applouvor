@@ -665,16 +665,7 @@ window.addEventListener('load', init);
                 </div>
             </div>
 
-            <!-- Daily Progress -->
-            <div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">
-                    <span>Leitura de Hoje</span>
-                    <span id="daily-progress-text">0%</span>
-                </div>
-                <div style="background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
-                    <div id="daily-progress-bar" style="width: 0%; height: 100%; background: #10b981; transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
-                </div>
-            </div>
+
 
         </div>
         
