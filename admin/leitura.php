@@ -174,7 +174,7 @@ renderAppHeader('Leitura Bíblica');
         margin-bottom: 24px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        /* justify-content: space-between; REMOVED to align content left */
         /* Remover sombra excessiva se houver */
         box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
@@ -286,11 +286,13 @@ renderAppHeader('Leitura Bíblica');
 <div class="main-area">
     <!-- NEW HEADER CARD -->
     <div class="day-header-card">
-        <div class="day-header-info">
+        <div class="day-header-info" style="width: 100%;">
             <span class="day-header-label">Leitura de Hoje</span>
-            <h1 id="day-title" class="day-header-title">Carregando...</h1>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <h1 id="day-title" class="day-header-title">Carregando...</h1>
+                <div id="status-badge-container"></div>
+            </div>
         </div>
-        <div id="status-badge-container"></div>
     </div>
     
     <div id="verses-list"></div>
