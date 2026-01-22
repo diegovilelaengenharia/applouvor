@@ -115,7 +115,7 @@ renderAppHeader('Detalhes');
             </a>
             <h1 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
         </div>
-        
+
         <!-- Actions Menu -->
         <div style="position: relative;">
             <button onclick="toggleOptionsMenu()" id="menuBtn" class="ripple" style="background: var(--bg-body); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 8px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
@@ -203,14 +203,14 @@ renderAppHeader('Detalhes');
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 600; color: var(--text-main); font-size: 0.85rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
+                                <div style="font-weight: 600; color: var(--text-main); font-size: 0.8rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);"><?= htmlspecialchars($member['instrument'] ?? 'Vocal') ?></div>
                             </div>
                             <form method="POST" onsubmit="return confirm('Remover membro?');" style="margin: 0;">
                                 <input type="hidden" name="action" value="remove_member">
                                 <input type="hidden" name="user_id" value="<?= $member['user_id'] ?>">
                                 <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 6px; border-radius: 6px; transition: background 0.2s;">
-                                    <i data-lucide="x" style="width: 18px;"></i>
+                                    <i data-lucide="x" style="width: 16px;"></i> <!-- Ícone reduzido -->
                                 </button>
                             </form>
                         </div>
@@ -221,7 +221,7 @@ renderAppHeader('Detalhes');
     </div>
 
     <!-- RIGHT COLUMN: Roteiro (Songs) -->
-    <div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+    <div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">Roteiro <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= count($songs) ?>)</span></h3>
             <button onclick="openModal('modalSongs')" style="
@@ -239,29 +239,29 @@ renderAppHeader('Detalhes');
                 <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">Nenhuma música selecionada.</p>
             </div>
         <?php else: ?>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;"> <!-- Gap reduzido -->
                 <?php foreach ($songs as $index => $song): ?>
-                    <div style="display: flex; align-items: flex-start; gap: 10px; position: relative;">
+                    <div style="display: flex; align-items: flex-start; gap: 8px; position: relative;">
                         <div style="
-                                font-size: 1.1rem; font-weight: 800; color: #e2e8f0; 
-                                width: 24px; text-align: center; line-height: 1; margin-top: 2px;
+                                font-size: 1rem; font-weight: 800; color: #e2e8f0; 
+                                width: 20px; text-align: center; line-height: 1; margin-top: 3px;
                             ">
-                            <?= $index + 1 ?>ª
+                            <?= $index + 1 ?>
                         </div>
-                        <div style="flex: 1; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
+                        <div style="flex: 1; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <h4 style="margin: 0 0 4px 0; color: #0f172a; font-size: 1rem; font-weight: 700;"><?= htmlspecialchars($song['title']) ?></h4>
+                                <h4 style="margin: 0 0 2px 0; color: #0f172a; font-size: 0.95rem; font-weight: 700;"><?= htmlspecialchars($song['title']) ?></h4>
                                 <!-- Actions for Song -->
                                 <form method="POST" onsubmit="return confirm('Remover música?');" style="margin: 0;">
                                     <input type="hidden" name="action" value="remove_song">
                                     <input type="hidden" name="song_id" value="<?= $song['song_id'] ?>">
                                     <button type="submit" style="background: none; border: none; color: #94a3b8; cursor: pointer; opacity: 0.6; padding: 4px;">
-                                        <i data-lucide="trash-2" style="width: 16px;"></i>
+                                        <i data-lucide="trash-2" style="width: 14px;"></i> <!-- Ícone reduzido -->
                                     </button>
                                 </form>
                             </div>
 
-                            <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                            <p style="margin: 0; color: #64748b; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;">
                                 <?= htmlspecialchars($song['artist']) ?>
                             </p>
 
