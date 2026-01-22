@@ -111,7 +111,7 @@ renderAppHeader('Leitura Bíblica');
 ?>
 
 <!-- Import JSON Data -->
-<script src="../assets/js/reading_plan_data.js"></script>
+<script src="../assets/js/reading_plan_data.js?v=<?= time() ?>"></script>
 
 <style>
     /* YouVersion Inspired Styles */
@@ -316,22 +316,20 @@ renderAppHeader('Leitura Bíblica');
 
 <!-- BOTTOM ACTION BAR -->
 <div class="bottom-action-bar" id="bottom-bar">
-    <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+    <button id="btn-main-action" class="btn-finish-day" onclick="completeDay()">
+        Concluir Leitura
+    </button>
+
+    <div style="display: flex; gap: 12px; margin-top: 12px;">
          <button id="comment-trigger" onclick="openCommentModal()" style="
             flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb); 
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-            color: white; border: none;
-            padding: 14px; border-radius: 16px; font-weight: 600; font-size: 0.95rem;
+            background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 14px; border-radius: 16px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm);
          ">
             <i data-lucide="message-square" style="width: 18px;"></i>
             <span id="comment-text-label">Minha Anotação</span>
          </button>
     </div>
-
-    <button id="btn-main-action" class="btn-finish-day" onclick="completeDay()">
-        Concluir Leitura
-    </button>
 </div>
 
 <!-- CONFIG MODAL -->
@@ -339,7 +337,7 @@ renderAppHeader('Leitura Bíblica');
     <div class="config-header" style="background: white; padding: 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color);">
         <button onclick="closeConfig()" style="background:none; border:none; padding:8px; margin-left:-8px;"><i data-lucide="arrow-left"></i></button>
         <h3 style="margin:0; font-size: 1.1rem;">Configurações</h3>
-        <div style="width: 40px;"></div> <!-- Spacer -->
+        <div style="width: 40px;"></div>
     </div>
     
     <div style="padding: 24px;">
@@ -350,17 +348,12 @@ renderAppHeader('Leitura Bíblica');
             
             <div class="form-card" style="margin-bottom: 24px; background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Horário do Lembrete</label>
-                <input type="time" name="notification_time" value="<?= htmlspecialchars($notifTime) ?>" style="
-                    width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 1rem;
-                ">
+                <input type="time" name="notification_time" value="<?= htmlspecialchars($notifTime) ?>" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
             </div>
 
             <div class="form-card" style="margin-bottom: 24px; background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Data de Início do Plano</label>
-                <input type="date" name="start_date" value="<?= htmlspecialchars($startDate) ?>" style="
-                    width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 1rem;
-                ">
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Alterar a data ajusta o dia atual do plano.</p>
+                <input type="date" name="start_date" value="<?= htmlspecialchars($startDate) ?>" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
             </div>
 
             <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; margin-bottom: 24px;">Salvar Alterações</button>
@@ -368,85 +361,46 @@ renderAppHeader('Leitura Bíblica');
 
         <form method="POST">
             <input type="hidden" name="action" value="export_report">
-            <button type="submit" class="ripple" style="
-                width: 100%; padding: 14px; background: white; border: 1px solid var(--primary); color: var(--primary); 
-                border-radius: 12px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 8px;
-            ">
+            <button type="submit" class="ripple" style="width: 100%; padding: 14px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 12px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i data-lucide="download"></i> Baixar Relatório de Leitura
             </button>
         </form>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 24px;">
-
-        <div class="form-card" style="border-color: #fecaca; background: #fef2f2; padding: 16px; border-radius: 12px; border: 1px solid #fecaca;">
-             <h4 style="color: #991b1b; margin-bottom: 8px;">Zona de Perigo</h4>
-             <p style="font-size: 0.85rem; color: #7f1d1d; margin-bottom: 16px;">Isso irá apagar todo o seu histórico de leitura.</p>
-             <form method="POST" onsubmit="return confirm('Tem certeza? Isso não pode ser desfeito.');">
-                 <input type="hidden" name="action" value="reset_plan">
-                 <button type="submit" style="
-                    width: 100%; padding: 12px; border: 1px solid #ef4444; background: white; color: #ef4444; border-radius: 8px; font-weight: 600; cursor: pointer;
-                 ">Resetar o Plano</button>
-             </form>
-        </div>
     </div>
 </div>
 
-<!-- COMMENT MODAL (Professional Redesign) -->
-<div id="modal-comment" class="modal-backdrop" style="
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-    z-index: 2000; display: none; align-items: center; justify-content: center;
-">
-    <div style="
-        background: var(--bg-surface); width: 90%; max-width: 500px; 
-        border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        overflow: hidden; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    ">
-        <div style="
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 20px; 
-            color: white; display: flex; justify-content: space-between; align-items: center;
-        ">
-            <div>
-                <h3 style="margin: 0; font-size: 1.25rem;">Minhas Anotações</h3>
-                <p style="margin: 4px 0 0 0; font-size: 0.85rem; opacity: 0.8;">Rhema para o dia de hoje</p>
-            </div>
+<!-- COMMENT MODAL (Advanced) -->
+<div id="modal-comment" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-surface); width: 90%; max-width: 600px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; animation: slideUp 0.3s;">
+        <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 16px 24px; color: white; display: flex; justify-content: space-between; align-items: center;">
+            <div><h3 style="margin: 0; font-size: 1.1rem;">Minhas Anotações</h3></div>
             <button onclick="closeCommentModal()" style="background: rgba(255,255,255,0.2); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display:flex; align-items:center; justify-content:center;"><i data-lucide="x" style="width:18px;"></i></button>
         </div>
         
         <div style="padding: 24px;">
-            <textarea id="temp-comment-area" placeholder="O que Deus falou com você hoje?" style="
-                width: 100%; height: 200px; padding: 16px; border-radius: 16px; 
-                border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; font-size: 1rem;
-                background: var(--bg-body); resize: none; margin-bottom: 20px; outline: none;
-                transition: border-color 0.2s;
-            " onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'"></textarea>
+            <!-- Simple Toolbar -->
+            <div style="display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto;">
+                <button type="button" onclick="insertFormat('**', '**')" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; font-weight: bold;">B</button>
+                <button type="button" onclick="insertFormat('_', '_')" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; font-style: italic;">I</button>
+                <button type="button" onclick="insertFormat('\n> ', '')" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff;">❝</button>
+                <button type="button" onclick="shareWhatsApp()" style="padding: 6px 12px; border: 1px solid #25D366; border-radius: 8px; background: #dcfce7; color: #166534; display: flex; align-items: center; gap: 4px; margin-left: auto;">
+                    <i data-lucide="share-2" style="width: 14px;"></i> WhatsApp
+                </button>
+            </div>
+
+            <textarea id="temp-comment-area" placeholder="O que Deus falou com você hoje?" style="width: 100%; height: 200px; padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; font-size: 1rem; background: var(--bg-body); resize: none; margin-bottom: 20px; outline: none;"></textarea>
             
-            <button onclick="saveCommentAndFinish()" class="ripple" style="
-                width: 100%; padding: 16px; background: #0f172a; color: white; 
-                border: none; border-radius: 16px; font-weight: 700; font-size: 1rem;
-            ">Salvar Anotação</button>
+            <button onclick="saveCommentAndFinish()" class="ripple" style="width: 100%; padding: 16px; background: #0f172a; color: white; border: none; border-radius: 16px; font-weight: 700; font-size: 1rem;">Salvar Anotação</button>
         </div>
     </div>
 </div>
 
 <style>
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
 
 <script>
-// Expose to window immediately to ensure header button works
-window.openConfig = function() {
-    const modal = document.getElementById('modal-config');
-    if(modal) modal.classList.add('active');
-    else console.error("Modal config not found");
-};
-window.closeConfig = function() {
-    const modal = document.getElementById('modal-config');
-    if(modal) modal.classList.remove('active');
-};
+window.openConfig = function() { document.getElementById('modal-config').classList.add('active'); };
+window.closeConfig = function() { document.getElementById('modal-config').classList.remove('active'); };
 </script>
 
 <?php renderAppFooter(); ?>
@@ -467,8 +421,6 @@ function init() {
     renderCalendar();
     selectDay(currentPlanMonth, currentPlanDay); 
     lucide.createIcons();
-    
-    // Scroll to active
     setTimeout(() => {
         const active = document.querySelector('.cal-day-item.active');
         if(active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
@@ -479,20 +431,14 @@ function renderCalendar() {
     const strip = document.getElementById('calendar-strip');
     strip.innerHTML = '';
     const m = currentPlanMonth;
-    
     for (let d = 1; d <= 25; d++) {
         const isCompleted = completedMap[`${m}_${d}`];
         const isActive = (d === currentPlanDay); 
-        
         const el = document.createElement('div');
         el.className = `cal-day-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
         el.id = `day-card-${m}-${d}`;
         el.onclick = () => selectDay(m, d);
-        
-        el.innerHTML = `
-            <div class="cal-day-month">${getMonthAbbr(m)}</div>
-            <div class="cal-day-num">${d}</div>
-        `;
+        el.innerHTML = `<div class="cal-day-month">${getMonthAbbr(m)}</div><div class="cal-day-num">${d}</div>`;
         strip.appendChild(el);
     }
 }
@@ -507,29 +453,10 @@ function selectDay(m, d) {
 
 function renderContent(m, d) {
     const container = document.getElementById('verses-container');
-    const btn = document.getElementById('btn-main-action');
     const commentLabel = document.getElementById('comment-text-label');
-    const subHeader = document.querySelector('.reading-container .text-muted'); // Use selector for flexibility
-    
-    // Calculate Global Day (1-365) correctly
-    // Our logic: 12 months * 25 days = 300 days total in this specific plan structure? 
-    // Wait, the plan data has 12 keys. The loops show d<=25. 12*25 = 300. 
-    // User requested "1/365". If the plan only has 300 days, we should stick to 300 or adapt.
-    // The previous code said "Dia X de 300". I will use that logic but display as requested format if possible.
     const globalIdx = (m - 1) * 25 + d;
-    
-    // Motivational Messages
-    const messages = [
-        "Lâmpada para os meus pés é a tua palavra. 📖",
-        "Você está indo muito bem, continue! 🚀",
-        "Alimente seu espírito hoje! 🔥",
-        "A palavra de Deus renova suas forças. 💪",
-        "Um capítulo por dia, uma vida transformada. ✨"
-    ];
-    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
 
-    // Update Header Text with Animation
-    // We'll inject HTML directly for the title area
+    // Header Content Update (No encouragement text)
     const titleArea = document.getElementById('main-date-title').parentElement;
     titleArea.innerHTML = `
         <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; opacity:0.8;">
@@ -537,20 +464,15 @@ function renderContent(m, d) {
         </div>
         <h1 style="margin: 4px 0 0 0; font-size: 1.5rem; display:flex; align-items:center; gap:8px;">
             Dia ${d} 
-            <span style="font-size: 0.85rem; font-weight:400; color:#10b981; background:#ecfdf5; padding:2px 8px; border-radius:12px;">${randomMsg}</span>
         </h1>
     `;
     
-    // Fetch Verses
     if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
-        container.innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-muted);'>Nenhuma leitura cadastrada para este dia.</div>";
-        btn.style.display = 'none';
+        container.innerHTML = "<div style='padding:20px; text-align:center;'>Sem leitura.</div>";
         updateProgress(0, 1);
         return;
     }
     
-    btn.style.display = 'block'; // Ensure visible
-
     const verses = bibleReadingPlan[m][d-1]; 
     container.innerHTML = '';
     
@@ -558,7 +480,6 @@ function renderContent(m, d) {
     
     verses.forEach((v, idx) => {
         const link = getBibleLink(v);
-        
         const storageKey = `reading_check_${m}_${d}_${idx}`;
         const isRead = localStorage.getItem(storageKey) === 'true';
         if(isRead) readCount++;
@@ -566,16 +487,39 @@ function renderContent(m, d) {
         const item = document.createElement('div');
         item.className = `verse-check-item ${isRead ? 'read' : ''}`;
         
+        // Added green tint to parent if read
+        if(isRead) {
+            item.style.background = '#ecfdf5';
+            item.style.borderColor = '#a7f3d0';
+        }
+        
         item.onclick = (e) => {
             if(e.target.closest('a')) return;
             const newState = !item.classList.contains('read');
             item.classList.toggle('read');
             localStorage.setItem(storageKey, newState);
             
-            const icon = item.querySelector('.check-circle i');
-            if(icon) icon.style.opacity = newState ? '1' : '0';
+            // Visual Updates
+            if(newState) {
+                item.style.background = '#ecfdf5';
+                item.style.borderColor = '#a7f3d0';
+                item.querySelector('.check-circle').style.background = '#10b981';
+                item.querySelector('.check-circle').style.borderColor = '#10b981';
+                item.querySelector('.check-circle i').style.opacity = '1';
+                item.querySelector('.verse-text').style.color = '#065f46';
+                item.querySelector('.verse-text').style.textDecoration = 'line-through';
+                item.querySelector('.verse-text').style.opacity = '0.8';
+            } else {
+                item.style.background = 'var(--bg-surface)';
+                item.style.borderColor = 'var(--border-color)';
+                item.querySelector('.check-circle').style.background = 'transparent';
+                item.querySelector('.check-circle').style.borderColor = 'var(--border-color)';
+                item.querySelector('.check-circle i').style.opacity = '0';
+                item.querySelector('.verse-text').style.color = 'var(--text-main)';
+                item.querySelector('.verse-text').style.textDecoration = 'none';
+                item.querySelector('.verse-text').style.opacity = '1';
+            }
             
-            // Recalc
             const total = document.querySelectorAll('.verse-check-item').length;
             const currentRead = document.querySelectorAll('.verse-check-item.read').length;
             updateProgress(currentRead, total);
@@ -583,32 +527,28 @@ function renderContent(m, d) {
         
         item.innerHTML = `
             <div style="display:flex; align-items:center;">
-                <div class="check-circle" style="background:${isRead ? '#10b981' : 'transparent'}; border-color:${isRead ? '#10b981' : 'var(--border-color)'};">
+                <div class="check-circle" style="
+                    background:${isRead ? '#10b981' : 'transparent'}; 
+                    border-color:${isRead ? '#10b981' : 'var(--border-color)'};
+                ">
                     <i data-lucide="check" style="width:14px; color:white; opacity:${isRead ? '1' : '0'}; transition:opacity 0.2s;"></i>
                 </div>
                 <div class="verse-info">
-                    <div class="verse-text" style="font-weight:600; font-size:1rem;">${v}</div>
+                    <div class="verse-text" style="font-weight:600; ${isRead ? 'color:#065f46; text-decoration:line-through; opacity:0.8;' : ''}">${v}</div>
                 </div>
             </div>
             <a href="${link}" target="_blank" class="ripple" style="
-                background: var(--primary-light); color: var(--primary);
-                padding: 8px 16px; border-radius: 20px; text-decoration: none;
-                font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px;
-                flex-shrink: 0;
-            ">
-                LER <i data-lucide="external-link" style="width:14px;"></i>
-            </a>
+                background: var(--primary-light); color: var(--primary); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; display:flex; align-items:center; gap:6px; flex-shrink: 0;
+            ">LER <i data-lucide="external-link" style="width:14px;"></i></a>
         `;
         container.appendChild(item);
     });
     
     lucide.createIcons();
-    
-    // Update Initial Progress & Button State
     updateProgress(readCount, verses.length);
     
     const isDone = completedMap[`${m}_${d}`];
-    commentLabel.innerText = (isDone && isDone.comment) ? "Ver Minha Anotação" : "Adicionar Anotação";
+    commentLabel.innerText = (isDone && isDone.comment) ? "Editar Minha Anotação" : "Adicionar Anotação";
 }
 
 function updateProgress(current, total) {
@@ -617,44 +557,59 @@ function updateProgress(current, total) {
     document.getElementById('daily-progress-bar').style.width = `${pct}%`;
     document.getElementById('daily-progress-text').innerText = `${pct}% Concluído`;
     
+    const btn = document.getElementById('btn-main-action');
     const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
     
-    const btn = document.getElementById('btn-main-action');
+    // Logic: Yellow (Incomplete) vs Green (Complete)
+    // We prioritize local state interaction over server "done" state for button colors, 
+    // unless user hasn't touched anything? 
+    // Actually, if current < total, it MUST be yellow.
     
-    // LOGIC:
-    // 1. If Server says DONE: Show "Concluída" (Static, Light Green/Gray)
-    // 2. If Not Done SERVER:
-    //    a. If Checked < Total: Yellow "Faltam X"
-    //    b. If Checked == Total: Green (Moderate) "Confirmar Conclusão"
-    
-    if (isDoneServer) {
-        btn.innerHTML = '<i data-lucide="check-circle-2"></i> Leitura Registrada';
-        btn.className = "btn-finish-day";
-        btn.style.background = '#f3f4f6'; // Grayish
-        btn.style.color = '#1f2937';
-        btn.style.border = '1px solid #e5e7eb';
-        btn.style.boxShadow = 'none';
-        btn.onclick = null; // Already done
+    if (current < total) {
+        const missing = total - current;
+        btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing} leituras...`;
+        btn.onclick = () => alert("Por favor, marque todos os textos como lidos antes de concluir.");
+        // Yellow Amber Styling
+        btn.style = "width:100%; background:#fef3c7; color:#d97706; border:1px solid #fde68a; padding:16px; border-radius:16px; font-weight:700; display:flex; justify-content:center; gap:8px; box-shadow:none;";
     } else {
-        if (current < total) {
-            const missing = total - current;
-            btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing} leituras...`;
-            btn.style.background = '#fef3c7'; // Amber-100
-            btn.style.color = '#d97706'; // Amber-600
-            btn.style.border = '1px solid #fde68a';
-            btn.style.boxShadow = 'none';
-            btn.onclick = () => alert("Por favor, marque todos os textos como lidos antes de concluir.");
+        // Complete (Locally)
+        // Check if server also thinks it's done
+        if (isDoneServer) {
+             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Leitura Registrada';
+             // If user wants to re-submit (maybe updated note?), allowed.
+             btn.onclick = () => completeDay();
+             // Moderate Green / Grayish
+             btn.style = "width:100%; background:#d1fae5; color:#065f46; border:none; padding:16px; border-radius:16px; font-weight:700; display:flex; justify-content:center; gap:8px; box-shadow:none;";
         } else {
-            // All Checked - Ready to Save
-            btn.innerHTML = 'Confirmar Conclusão Do Dia';
-            btn.style.background = '#059669'; // Emerald-600 (Moderate Green)
-            btn.style.color = 'white';
-            btn.style.border = 'none';
-            btn.style.boxShadow = '0 4px 12px rgba(5, 150, 105, 0.3)';
-            btn.onclick = () => completeDay();
+             // Ready to Finish (New)
+             btn.innerHTML = 'Confirmar Conclusão Do Dia';
+             btn.onclick = () => completeDay();
+             // Strong Green
+             btn.style = "width:100%; background:#10b981; color:white; border:none; padding:16px; border-radius:16px; font-weight:700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); display:flex; justify-content:center; gap:8px;";
         }
     }
     lucide.createIcons();
+}
+
+function insertFormat(startTag, endTag) {
+    const tarea = document.getElementById('temp-comment-area');
+    const start = tarea.selectionStart;
+    const end = tarea.selectionEnd;
+    const text = tarea.value;
+    const before = text.substring(0, start);
+    const selected = text.substring(start, end);
+    const after = text.substring(end);
+    tarea.value = before + startTag + selected + endTag + after;
+    tarea.focus();
+    tarea.selectionStart = start + startTag.length;
+    tarea.selectionEnd = end + startTag.length;
+}
+
+function shareWhatsApp() {
+    const text = document.getElementById('temp-comment-area').value;
+    if(!text) return alert("Escreva algo primeiro!");
+    const url = `https://wa.me/?text=${encodeURIComponent("*Minha Anotação de Leitura:* \n\n" + text)}`;
+    window.open(url, '_blank');
 }
 
 function completeDay() {
@@ -679,8 +634,8 @@ function saveCommentAndFinish() {
     fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
 }
 
-// Config Modal Handlers (Exposed via Window above, but kept here for clarity internally)
-// window.openConfig handled above
+function openConfig() { document.getElementById('modal-config').classList.add('active'); }
+function closeConfig() { document.getElementById('modal-config').classList.remove('active'); }
 
 function openCommentModal() {
     const m = selectedMonth;
