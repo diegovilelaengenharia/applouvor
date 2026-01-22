@@ -291,34 +291,41 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
     </div>
 </div>
 
-<!-- STATS DASHBOARD -->
-<div class="stats-dashboard">
-    <!-- Streak -->
-    <div class="stat-card">
-        <div class="stat-icon">🔥</div>
-        <div class="stat-value fire"><?= $currentStreak ?></div>
-        <div class="stat-label">Dias Seguidos</div>
-    </div>
-    
-    <!-- Média -->
-    <div class="stat-card">
-        <div class="stat-icon">📊</div>
-        <div class="stat-value"><?= $avgChapters ?></div>
-        <div class="stat-label">Cap./Dia</div>
-    </div>
-    
-    <!-- Dias Restantes -->
-    <div class="stat-card">
-        <div class="stat-icon">⏳</div>
-        <div class="stat-value"><?= max(0, 300 - $totalChaptersRead) ?></div>
-        <div class="stat-label">Restantes</div>
-    </div>
-    
-    <!-- Conclusão -->
-    <div class="stat-card">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-value highlight"><?= $completionPercent ?>%</div>
-        <div class="stat-label">Conclusão</div>
+<!-- STATS MODAL (Hidden by default) -->
+<div id="modal-stats" class="modal-overlay" onclick="if(event.target===this) document.getElementById('modal-stats').style.display='none'">
+    <div class="config-content" style="max-width: 600px; padding: 0;">
+        <div class="config-header" style="border-radius: 12px 12px 0 0;">
+            <h2 style="margin:0; font-size:1.1rem; display:flex; align-items:center; gap:8px;"><i data-lucide="bar-chart-2"></i> Estatísticas de Leitura</h2>
+            <button onclick="document.getElementById('modal-stats').style.display='none'" style="background:none; border:none; cursor:pointer;"><i data-lucide="x"></i></button>
+        </div>
+        <div style="background: var(--bg); padding: 20px; border-radius: 0 0 12px 12px;">
+            <div class="stats-dashboard" style="background: transparent; border: none; padding: 0; box-shadow: none;">
+                <!-- Streak -->
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value fire"><?= $currentStreak ?></div>
+                    <div class="stat-label">Dias Seguidos</div>
+                </div>
+                <!-- Média -->
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value"><?= $avgChapters ?></div>
+                    <div class="stat-label">Cap./Dia</div>
+                </div>
+                <!-- Dias Restantes -->
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-value"><?= max(0, 300 - $totalChaptersRead) ?></div>
+                    <div class="stat-label">Restantes</div>
+                </div>
+                <!-- Conclusão -->
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value highlight"><?= $completionPercent ?>%</div>
+                    <div class="stat-label">Conclusão</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -331,7 +338,18 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
             <span class="day-header-label">Leitura de Hoje</span>
             <h1 id="day-title" class="day-header-title">Carregando...</h1>
         </div>
-        <div id="status-badge-container"></div>
+        
+        <!-- Right Side: Stats Button + Status Badge -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button onclick="document.getElementById('modal-stats').style.display='flex'" class="ripple" title="Ver Estatísticas" style="
+                border: 1px solid var(--border); background: white; color: var(--text-light);
+                width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+                cursor: pointer; transition: all 0.2s;
+            ">
+                <i data-lucide="bar-chart-2" width="18"></i>
+            </button>
+            <div id="status-badge-container"></div>
+        </div>
     </div>
     
     <div id="verses-list"></div>
@@ -423,6 +441,7 @@ function init() {
     // FIX: Move Modals to Body to prevent layout clipping
     document.body.appendChild(document.getElementById('modal-note'));
     document.body.appendChild(document.getElementById('modal-config'));
+    document.body.appendChild(document.getElementById('modal-stats')); // New Stats Modal
     document.body.appendChild(document.getElementById('save-toast'));
 
     renderCalendar(); 
