@@ -196,36 +196,6 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
     .icon-box.purple { background: #f3e8ff; color: #9333ea; } .icon-box.blue { background: #e0f2fe; color: #0284c7; }
 </style>
 
-<!-- DESKTOP HEADER -->
-<div class="desktop-header">
-    <div class="header-left">
-        <button onclick="window.history.back()" title="Voltar" style="border:none; background:none; cursor:pointer; color:var(--text-light); padding:8px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:background 0.2s;">
-            <i data-lucide="arrow-left" width="22"></i>
-        </button>
-        <a href="index.php" title="Início" style="color:var(--text-light); text-decoration:none; display:flex; align-items:center; justify-content:center; padding:8px; border-radius:8px; transition:background 0.2s;">
-            <i data-lucide="home" width="20"></i>
-        </a>
-    </div>
-
-    <div class="header-center">
-        <h1 class="header-title">Plano de Leitura</h1>
-        <div class="header-subtitle">Bíblia Anual 2026</div>
-    </div>
-
-    <div class="header-actions">
-        <!-- Inverted Order: Config First, then Leader -->
-        <button onclick="openConfig()" class="btn-icon-header" title="Configurações"><i data-lucide="settings-2" width="20"></i></button>
-        
-        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-            <a href="lider.php" class="btn-icon-header btn-lider" title="Líder"><i data-lucide="crown" width="20"></i></a>
-        <?php endif; ?>
-        
-        <a href="perfil.php" class="avatar-circle">
-            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=User' ?>" alt="Avatar">
-        </a>
-    </div>
-</div>
-
 <!-- INFO BAR -->
 <div style="background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 16px 20px;">
     <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 10px;">
