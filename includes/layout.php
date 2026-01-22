@@ -195,7 +195,7 @@ function renderAppHeader($title, $backUrl = null)
                 font-size: 0.9375rem;
                 /* 15px - Melhor leitura */
                 line-height: 1.6;
-                padding-bottom: 32px;
+                padding-bottom: 80px;
             }
 
             /* Tipografia Responsiva */
