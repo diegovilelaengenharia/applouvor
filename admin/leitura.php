@@ -634,8 +634,8 @@ function saveCommentAndFinish() {
     fetch('leitura.php', { method: 'POST', body: formData }).then(() => window.location.reload());
 }
 
-function openConfig() { document.getElementById('modal-config').classList.add('active'); }
-function closeConfig() { document.getElementById('modal-config').classList.remove('active'); }
+window.openConfig = function() { document.getElementById('modal-config').classList.add('active'); };
+window.closeConfig = function() { document.getElementById('modal-config').classList.remove('active'); };
 
 function openCommentModal() {
     const m = selectedMonth;
