@@ -85,92 +85,223 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 renderAppHeader('Adicionar Música');
 ?>
 
-<div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding-bottom: 80px;
+    }
 
-    <!-- Cabeçalho Simples -->
-    <!-- Cabeçalho Simples -->
-    <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+    .form-section {
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 20px;
+    }
+
+    .form-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-size: 0.9rem;
+        outline: none;
+        transition: border 0.2s;
+    }
+
+    .input-field:focus {
+        border-color: var(--primary);
+        background: var(--bg-surface);
+    }
+
+    /* Tags Selection */
+    .tags-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tag-checkbox {
+        display: none;
+    }
+
+    .tag-label {
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: var(--bg-body);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .tag-checkbox:checked+.tag-label {
+        background: var(--primary-subtle);
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* Bottom Actions */
+    .bottom-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--bg-surface);
+        padding: 12px 24px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        z-index: 40;
+    }
+
+    @media (min-width: 768px) {
+        .bottom-bar {
+            position: static;
+            background: none;
+            border: none;
+            padding: 0;
+            justify-content: flex-start;
+            margin-top: 24px;
+        }
+    }
+</style>
+
+<div class="container form-container">
+    <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
         <div>
             <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Nova Música</h1>
-            <p style="color: var(--text-muted); margin-top: 4px;">Preencha os dados da canção</p>
+            <p style="color: var(--text-muted); margin-top: 4px; font-size: 0.9rem;">Adicionar ao repertório</p>
         </div>
         <a href="repertorio.php" class="ripple" style="
-            width: 40px; height: 40px; border-radius: 50%; background: var(--bg-surface); 
+            width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface); 
             display: flex; align-items: center; justify-content: center; color: var(--text-muted);
             border: 1px solid var(--border-color);
         ">
-            <i data-lucide="x" style="width: 20px;"></i>
+            <i data-lucide="x" style="width: 18px;"></i>
         </a>
     </div>
 
-    <!-- Formulário -->
     <form method="POST">
 
-        <!-- Cartão Principal -->
-        <!-- Cartão Principal -->
-        <div style="background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-color); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+        <!-- INFO BÁSICA -->
+        <div class="form-section">
+            <h3 class="form-title"><i data-lucide="music" style="width: 18px;"></i> Informações Básicas</h3>
 
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Título</label>
-                <input type="text" name="title" required placeholder="Ex: Grande é o Senhor" autofocus
-                    style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s; background: var(--bg-body); color: var(--text-main);"
-                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 3px var(--primary-light)'"
-                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'">
+            <div class="form-group">
+                <label>Título da Música</label>
+                <input type="text" name="title" class="input-field" required placeholder="Ex: Grande é o Senhor" style="font-weight: 600;">
             </div>
 
-            <div style="margin-bottom: 20px; position: relative;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Artista</label>
-                <div style="position: relative;">
-                    <i data-lucide="mic-2" style="position: absolute; left: 12px; top: 12px; color: var(--text-muted); width: 18px;"></i>
-                    <input type="text" name="artist" id="artistInput" required placeholder="Ex: Adhemar de Campos" autocomplete="off"
-                        style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; outline: none; transition: all 0.2s; background: var(--bg-body); color: var(--text-main);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 3px var(--primary-light)'"
-                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'">
-                </div>
-                <div id="artistSuggestions" style="
-                    position: absolute; width: 100%; background: white; border: 1px solid #e2e8f0; 
-                    border-radius: 12px; margin-top: 4px; z-index: 100; max-height: 200px; overflow-y: auto; display: none;
-                    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-                "></div>
+            <div class="form-group">
+                <label>Artista / Banda</label>
+                <input type="text" name="artist" class="input-field" list="artist-list" required placeholder="Ex: Adhemar de Campos">
+                <datalist id="artist-list">
+                    <?php foreach ($artists as $art): ?>
+                        <option value="<?= htmlspecialchars($art) ?>">
+                        <?php endforeach; ?>
+                </datalist>
             </div>
 
-            <!-- Grid de Detalhes -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Tom</label>
-                    <input type="text" name="tone" placeholder="Ex: G"
-                        style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; text-transform: uppercase;">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tom (Original)</label>
+                    <select name="tone" class="input-field">
+                        <option value="">Selecione...</option>
+                        <?php
+                        $tones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'A#m', 'Bm'];
+                        foreach ($tones as $t) {
+                            echo "<option value='$t'>$t</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">BPM</label>
-                    <input type="number" name="bpm" placeholder="120"
-                        style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
-                </div>
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 6px;">Duração</label>
-                    <input type="text" name="duration" placeholder="0:00"
-                        style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <div class="form-group">
+                    <label>BPM</label>
+                    <input type="number" name="bpm" class="input-field" placeholder="Ex: 72">
                 </div>
             </div>
 
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>Duração (mm:ss)</label>
+                <input type="text" name="duration" class="input-field" placeholder="05:30">
+            </div>
         </div>
 
-        <!-- Tags / Classificações -->
-        <div style="margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin: 0;">Classificação</h3>
-                <a href="classificacoes.php" target="_blank" style="font-size: 0.8rem; color: #2563eb; font-weight: 600; text-decoration: none;">Gerenciar Tags</a>
+        <!-- LINKS -->
+        <div class="form-section">
+            <h3 class="form-title"><i data-lucide="link" style="width: 18px;"></i> Links e Referências</h3>
+
+            <div class="form-group">
+                <label><i data-lucide="music-2" style="width: 14px; display:inline; vertical-align:middle;"></i> Link da Cifra</label>
+                <input type="url" name="link_cifra" class="input-field" placeholder="https://cifraclub.com.br/...">
+            </div>
+            <div class="form-group">
+                <label><i data-lucide="file-text" style="width: 14px; display:inline; vertical-align:middle;"></i> Link da Letra</label>
+                <input type="url" name="link_letra" class="input-field" placeholder="https://letras.mus.br/...">
+            </div>
+            <div class="form-group">
+                <label><i data-lucide="youtube" style="width: 14px; display:inline; vertical-align:middle;"></i> Link do Vídeo</label>
+                <input type="url" name="link_video" class="input-field" placeholder="https://youtube.com/...">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label><i data-lucide="headphones" style="width: 14px; display:inline; vertical-align:middle;"></i> Link do Áudio</label>
+                <input type="url" name="link_audio" class="input-field" placeholder="https://spotify.com/...">
+            </div>
+        </div>
+
+        <!-- TAGS -->
+        <div class="form-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; display:flex; gap:8px; align-items:center;"><i data-lucide="tag" style="width: 18px;"></i> Classificação</h3>
+                <a href="classificacoes.php" target="_blank" style="font-size: 0.75rem; color: var(--primary); font-weight: 600; text-decoration: none;">Gerenciar</a>
             </div>
 
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <div class="tags-grid">
                 <?php foreach ($allTags as $tag): ?>
-                    <label style="cursor: pointer;">
-                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" style="display: none;" onchange="toggleTag(this)">
-                        <span class="tag-pill" style="
-                            display: inline-block; padding: 8px 16px; border-radius: 20px; 
-                            background: #f1f5f9; color: #64748b; font-size: 0.9rem; font-weight: 600;
-                            border: 1px solid transparent; transition: all 0.2s;
-                        ">
+                    <label>
+                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" class="tag-checkbox">
+                        <span class="tag-label">
                             <?= htmlspecialchars($tag['name']) ?>
                         </span>
                     </label>
@@ -178,108 +309,29 @@ renderAppHeader('Adicionar Música');
             </div>
         </div>
 
-        <!-- Links Úteis (Collapsible ou Grid) -->
-        <h3 style="font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 12px;">Links & Referências</h3>
-        <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 24px;">
-
-            <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="music-2" style="color: #f97316; width: 20px;"></i>
-                <input type="url" name="link_cifra" placeholder="Link da Cifra (CifraClub...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
-            </div>
-            <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="file-text" style="color: #f59e0b; width: 20px;"></i>
-                <input type="url" name="link_letra" placeholder="Link da Letra (Letras.mus.br...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
-            </div>
-            <div style="padding: 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="youtube" style="color: #ef4444; width: 20px;"></i>
-                <input type="url" name="link_video" placeholder="Link do Vídeo (YouTube...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
-            </div>
-            <div style="padding: 16px; display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="headphones" style="color: #10b981; width: 20px;"></i>
-                <input type="url" name="link_audio" placeholder="Link do Áudio (Spotify...)" style="flex: 1; border: none; outline: none; font-size: 0.95rem;">
-            </div>
-
+        <!-- NOTAS -->
+        <div class="form-section">
+            <h3 class="form-title"><i data-lucide="sticky-note" style="width: 18px;"></i> Observações</h3>
+            <textarea name="notes" rows="3" class="input-field" style="resize: vertical; min-height: 80px;" placeholder="Detalhes sobre arranjo, versão, etc..."></textarea>
         </div>
 
-        <!-- Observações -->
-        <div style="margin-bottom: 32px;">
-            <label style="display: block; font-size: 0.9rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Observações</label>
-            <textarea name="notes" rows="3" placeholder="Detalhes sobre arranjo, versão, etc..."
-                style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; resize: vertical;"></textarea>
+        <!-- BOTTOM BAR -->
+        <div class="bottom-bar">
+            <a href="repertorio.php" style="
+                padding: 10px 20px; border-radius: 8px; font-weight: 600; color: var(--text-main); 
+                text-decoration: none; font-size: 0.9rem;
+            ">Cancelar</a>
+            <button type="submit" class="ripple" style="
+                background: var(--primary); color: white; border: none; padding: 10px 24px; 
+                border-radius: 8px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+                box-shadow: var(--shadow-sm);
+            ">
+                <i data-lucide="check" style="width: 16px;"></i> Salvar Música
+            </button>
         </div>
-
-        <!-- Botão Salvar -->
-        <button type="submit" class="ripple" style="
-            width: 100%; border: none; 
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); 
-            color: white; padding: 16px; border-radius: 16px; 
-            font-size: 1.1rem; font-weight: 700; 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
-            cursor: pointer;
-        ">
-            <i data-lucide="check-circle" style="width: 20px;"></i>
-            Salvar Música
-        </button>
 
     </form>
-
-    <div style="height: 60px;"></div>
 </div>
 
-<script>
-    // Toggle Visual Tag
-    function toggleTag(input) {
-        const pill = input.nextElementSibling;
-        if (input.checked) {
-            pill.style.background = '#dcfce7';
-            pill.style.color = '#166534';
-            pill.style.borderColor = '#bbf7d0';
-        } else {
-            pill.style.background = '#f1f5f9';
-            pill.style.color = '#64748b';
-            pill.style.borderColor = 'transparent';
-        }
-    }
-
-    // Autocomplete Logic
-    const artists = <?= json_encode($artists) ?>;
-    const input = document.getElementById('artistInput');
-    const suggestions = document.getElementById('artistSuggestions');
-
-    input.addEventListener('input', function() {
-        const val = this.value.toLowerCase();
-        suggestions.innerHTML = '';
-        if (val.length < 2) {
-            suggestions.style.display = 'none';
-            return;
-        }
-
-        const filtered = artists.filter(a => a.toLowerCase().includes(val));
-        if (filtered.length > 0) {
-            suggestions.style.display = 'block';
-            filtered.forEach(artist => {
-                const div = document.createElement('div');
-                div.textContent = artist;
-                div.style.padding = '12px';
-                div.style.cursor = 'pointer';
-                div.style.borderBottom = '1px solid #f1f5f9';
-                div.onmouseover = () => div.style.background = '#f8fafc';
-                div.onmouseout = () => div.style.background = 'white';
-                div.onclick = () => {
-                    input.value = artist;
-                    suggestions.style.display = 'none';
-                }
-                suggestions.appendChild(div);
-            });
-        } else {
-            suggestions.style.display = 'none';
-        }
-    });
-
-    document.addEventListener('click', e => {
-        if (!input.contains(e.target)) suggestions.style.display = 'none';
-    });
-</script>
 
 <?php renderAppFooter(); ?>
