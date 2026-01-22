@@ -327,6 +327,7 @@ function toggleVerseRead(m, d, idx, item) {
     }
     
     // Recalculate progress for this day
+    // Recalculate progress for this day
     const total = document.querySelectorAll('.verse-check-item').length;
     const currentRead = document.querySelectorAll('.verse-check-item.read').length;
     updateProgress(currentRead, total);
@@ -335,10 +336,16 @@ function toggleVerseRead(m, d, idx, item) {
 function updateProgress(current, total) {
     if(total === 0) return;
     
-    const pct = Math.round((current / total) * 100);
+    // Auto-Complete Trigger
+    const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
+    
+    // If all read and NOT already marked as done on server, trigger completion automatically
+    if(current === total && !isDoneServer) {
+        completeDay(); // Auto-trigger
+    }
+
     const btn = document.getElementById('btn-main-action');
     const statusText = document.getElementById('day-status-text');
-    const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
     
     if(!btn) return;
     
@@ -353,29 +360,14 @@ function updateProgress(current, total) {
         // INCOMPLETE: Disabled-look
         btn.innerHTML = `Concluir Dia (${current}/${total})`;
         btn.onclick = () => alert(`Você precisa ler todas as passagens para concluir.\n\nLido: ${current}\nTotal: ${total}`);
-        
-        // Gray/Disabled Style
         btn.style.cssText = baseStyle + "background: #f1f5f9; color: #94a3b8; cursor: not-allowed; opacity: 0.8;";
-        
         if(statusText) statusText.innerHTML = '<span style="color:#d97706">Pendente</span>';
     } else {
-        // COMPLETE (Locally or Server)
-        if (isDoneServer) {
-             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
-             btn.onclick = () => completeDay(); 
-             // Soft Green (Done)
-             btn.style.cssText = baseStyle + "background: #dcfce7; color: #166534; border: 1px solid transparent;";
-             
-             if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
-        } else {
-             // Ready to Save
-             btn.innerHTML = 'Concluir Dia';
-             btn.onclick = () => completeDay();
-             // Bright Green (Action)
-             btn.style.cssText = baseStyle + "background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); transform: scale(1.02);";
-             
-             if(statusText) statusText.innerHTML = '<span style="color:#10b981">Pronto!</span>';
-        }
+        // COMPLETE
+        btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
+        btn.onclick = () => completeDay(); 
+        btn.style.cssText = baseStyle + "background: #dcfce7; color: #166534; border: 1px solid transparent;";
+        if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
     }
     
     if(window.lucide) window.lucide.createIcons();
@@ -426,13 +418,31 @@ function completeDay() {
         }
 
         const modal = document.getElementById('modal-success');
-        if(modal) modal.style.display = 'flex';
+        if(modal) {
+            modal.style.display = 'flex';
+            // Update button to "Next Day"
+            const successBtn = modal.querySelector('button');
+            if(successBtn) {
+                successBtn.innerText = "Próximo Dia →";
+                successBtn.onclick = goToNextDay;
+            }
+        }
         else window.location.reload();
     });
 }
 
+function goToNextDay() {
+    // Logic to find next day index
+    // Currently relying on reading_plan_data.js. 
+    // Assuming 'currentPlanIndex' or similar exists, or just increment day.
+    // simpler approach: +1 to day of year or iterate keys.
+    // For now, reload to let PHP handle it or just increment 'd' + 1 if valid? 
+    // Best: reload page to rely on server state or existing navigation
+    window.location.reload(); 
+}
+
 function closeSuccessModal() {
-    window.location.reload();
+    goToNextDay();
 }
 
 function saveCommentAndFinish() {
