@@ -182,12 +182,12 @@ renderAppHeader('Avisos');
             ];
             $pStyle = $priorityColors[$aviso['priority']] ?? $priorityColors['info'];
         ?>
-            <div class="notice-card" style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 20px; position: relative; box-shadow: var(--shadow-sm);">
+            <div class="notice-card" style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 16px; position: relative; box-shadow: var(--shadow-sm);">
 
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                     <span style="
                     background: <?= $pStyle['bg'] ?>; color: <?= $pStyle['text'] ?>; border: 1px solid <?= $pStyle['border'] ?>;
-                    padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+                    padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
                 ">
                         <?= $pStyle['label'] ?>
                     </span>
@@ -227,17 +227,17 @@ renderAppHeader('Avisos');
                     <?php endif; ?>
                 </div>
 
-                <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">
+                <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 8px 0;">
                     <?= htmlspecialchars($aviso['title']) ?>
                 </h2>
 
-                <div class="ql-editor" style="padding: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-height: 200px; overflow: hidden; position: relative;">
+                <div class="ql-editor" style="padding: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; max-height: 200px; overflow: hidden; position: relative;">
                     <?= $aviso['message'] ?> <!-- HTML Seguro vindo do Quill -->
                 </div>
 
-                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted);">
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <i data-lucide="user" style="width: 14px;"></i>
+                        <i data-lucide="user" style="width: 12px;"></i>
                         <?= htmlspecialchars($aviso['author_name'] ?: 'Admin') ?>
                     </div>
                     <div>
