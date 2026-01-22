@@ -639,6 +639,13 @@ window.addEventListener('load', init);
         border: 1px solid #bbf7d0;
         opacity: 1;
     }
+    
+    .cal-day-item.incomplete {
+        background: var(--warning-light);
+        border: 1px solid #fcd34d;
+        opacity: 1;
+    }
+    .cal-day-item.incomplete .cal-day-num { color: var(--warning-dark); }
 
     /* Main Content Area */
     .reading-container {
