@@ -120,6 +120,21 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
     }
     .cal-item.active.partial .cal-num { color: #d97706; }
     
+    /* Progress Indicator */
+    .cal-progress {
+        font-size: 0.65rem;
+        color: #64748b;
+        font-weight: 600;
+        margin-top: 4px;
+        line-height: 1;
+    }
+    .cal-item.partial .cal-progress {
+        color: #d97706;
+    }
+    .cal-item.done .cal-progress {
+        color: #047857;
+    }
+    
     .main-area { max-width: 800px; margin: 0 auto; padding: 20px 16px; }
 
     /* DAY HEADER CARD (Refined for Project Consistency) */
@@ -341,7 +356,22 @@ function renderCalendar() {
         // REMOVED '&& state.d !== d' from partial check so Active Item can also be Yellow
         div.className = `cal-item ${state.d === d ? 'active' : ''} ${isDone ? 'done' : ''} ${isPartial ? 'partial' : ''}`;
         div.onclick = () => { state.d = d; renderCalendar(); loadDay(state.m, d); };
-        div.innerHTML = `<div class="cal-month">${months[state.m]}</div><div class="cal-num">${d}</div>`;
+        
+        // Build HTML with progress indicator
+        let html = `<div class="cal-month">${months[state.m]}</div><div class="cal-num">${d}</div>`;
+        
+        // Add progress indicator if there's a reading plan for this day
+        if (bibleReadingPlan && bibleReadingPlan[state.m] && bibleReadingPlan[state.m][d-1]) {
+            const totalVerses = bibleReadingPlan[state.m][d-1].length;
+            const readVerses = info?.verses?.length || 0;
+            
+            // Show progress if user has started reading (even if not complete)
+            if (readVerses > 0) {
+                html += `<div class="cal-progress">${readVerses}/${totalVerses}</div>`;
+            }
+        }
+        
+        div.innerHTML = html;
         el.appendChild(div);
         if(state.d === d) setTimeout(() => div.scrollIntoView({behavior:'smooth', inline:'center'}), 100);
     }
