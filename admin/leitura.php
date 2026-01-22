@@ -142,10 +142,26 @@ renderAppHeader('Leitura Bíblica');
         min-width: 64px; height: 76px; border-radius: 16px; background: var(--bg); border: 2px solid transparent; 
         display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s;
     }
+    /* ACTIVE STATE */
     .cal-item.active { background: var(--surface); border-color: var(--primary); box-shadow: 0 4px 12px rgba(99,99,241,0.2); }
     .cal-item.active .cal-num { color: var(--primary); }
-    .cal-item.done { background: var(--success-soft); border-color: #a7f3d0; }
+    
+    /* DONE STATE */
+    .cal-item.done { background: var(--success-soft); border-color: #a7f3d0 !important; }
     .cal-item.done .cal-num { color: #047857; }
+    .cal-item.active.done { border-color: #059669 !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+
+    /* PARTIAL/PENDING STATE (Yellow) */
+    .cal-item.partial { background: var(--warning-soft); border-color: #fde68a; }
+    .cal-item.partial .cal-num { color: #b45309; }
+    
+    /* ACTIVE AND PENDING (Fix priority) */
+    .cal-item.active.partial { 
+        background: #fffbeb !important; 
+        border-color: #f59e0b !important; 
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); 
+    }
+    .cal-item.active.partial .cal-num { color: #d97706; }
     
     .main-area { max-width: 800px; margin: 0 auto; padding: 20px 16px; }
     .status-badge { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
@@ -195,10 +211,13 @@ renderAppHeader('Leitura Bíblica');
         </div>
     </div>
     <div class="header-actions">
+        <!-- Inverted Order: Config First, then Leader -->
+        <button onclick="openConfig()" class="btn-icon-header" title="Configurações"><i data-lucide="settings-2" width="20"></i></button>
+        
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
             <a href="lider.php" class="btn-icon-header btn-lider" title="Líder"><i data-lucide="crown" width="20"></i></a>
         <?php endif; ?>
-        <button onclick="openConfig()" class="btn-icon-header" title="Configurações"><i data-lucide="settings-2" width="20"></i></button>
+        
         <a href="perfil.php" class="avatar-circle">
             <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=User' ?>" alt="Avatar">
         </a>
@@ -345,7 +364,8 @@ function renderCalendar() {
         const isPartial = !isDone && (hasProgress || isPast);
 
         const div = document.createElement('div');
-        div.className = `cal-item ${state.d === d ? 'active' : ''} ${isDone ? 'done' : ''} ${isPartial && state.d !== d ? 'partial' : ''}`;
+        // REMOVED '&& state.d !== d' from partial check so Active Item can also be Yellow
+        div.className = `cal-item ${state.d === d ? 'active' : ''} ${isDone ? 'done' : ''} ${isPartial ? 'partial' : ''}`;
         div.onclick = () => { state.d = d; renderCalendar(); loadDay(state.m, d); };
         div.innerHTML = `<div class="cal-month">${months[state.m]}</div><div class="cal-num">${d}</div>`;
         el.appendChild(div);
