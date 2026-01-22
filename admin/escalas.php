@@ -148,33 +148,13 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     position: absolute; top: -6px; right: -6px; 
                     background: #166534; color: white; 
                     font-size: 0.7rem; font-weight: 700; 
-                    width: 20px; height: 20px; border-radius: 50%; 
+                    width: 20px; height: 20px; 
+                    border-radius: 50%; 
                     display: flex; align-items: center; justify-content: center;
-                    border: 2px solid white;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                 "><?= $activeFilters ?></span>
             <?php endif; ?>
         </button>
-
-        <!-- Stats Button -->
-        <a href="escalas_stats.php" class="ripple" style="
-            width: 48px; height: 48px; 
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
-            border: none; 
-            color: white; 
-            border-radius: 14px; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
-            transition: all 0.2s;
-        " title="Estatísticas de Escalas">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" x2="12" y1="20" y2="10"></line>
-                <line x1="18" x2="18" y1="20" y2="4"></line>
-                <line x1="6" x2="6" y1="20" y2="16"></line>
-            </svg>
-        </a>
 
     </div>
 </div>
