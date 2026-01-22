@@ -334,59 +334,58 @@ function toggleVerseRead(m, d, idx, item) {
 
 function updateProgress(current, total) {
     if(total === 0) return;
-    const pct = Math.round((current / total) * 100);
-    const bar = document.getElementById('daily-progress-bar');
-    const text = document.getElementById('daily-progress-text');
-    if(bar) bar.style.width = `${pct}%`;
-    if(text) text.innerText = `${pct}% Concluído`;
     
-    // Top Action Button Logic
+    /* Dynamic UI Updates */
+    const pct = Math.round((current / total) * 100);
+    // Not using daily-progress-bar anymore, but keeping safe check
+    const bar = document.getElementById('daily-progress-bar');
+    if(bar) bar.style.width = `${pct}%`;
+
     const btn = document.getElementById('btn-main-action');
+    const statusText = document.getElementById('day-status-text');
     const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
     
     if(!btn) return;
+    
+    // Force reset styles
+    btn.style.cssText = ""; 
+    btn.className = "ripple"; // maintain ripple class
 
-    // Reset base styles for the small top button
-    btn.style.padding = "10px 20px";
-    btn.style.borderRadius = "12px";
-    btn.style.fontWeight = "700";
-    btn.style.fontSize = "0.85rem";
-    btn.style.display = "flex";
-    btn.style.alignItems = "center";
-    btn.style.gap = "8px";
-    btn.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+    // Base Common Styles
+    const baseStyle = "border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; white-space: nowrap;";
 
     if (current < total) {
+        // INCOMPLETE STATE
         const missing = total - current;
         btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing}`;
-        btn.onclick = () => alert("Por favor, marque todos os textos como lidos antes de concluir.");
+        btn.onclick = () => alert(`Faltam ${missing} leituras para concluir o dia.`);
         
-        // Yellow/Amber Style for Incomplete
-        btn.style.background = "#fffbeb"; // amber-50
-        btn.style.color = "#d97706";      // amber-600
-        btn.style.border = "1px solid #fcd34d"; // amber-300
+        // Yellow/Amber Style
+        btn.style.cssText = baseStyle + "background: #fffbeb; color: #d97706; border: 1px solid #fcd34d; box-shadow: none;";
+        
+        if(statusText) statusText.innerHTML = '<span style="color:#d97706">Pendente</span>';
+        
     } else {
+        // COMPLETE STATE (Locally at least)
         if (isDoneServer) {
-             // Already done on server
+             // Already saved on server
              btn.innerHTML = '<i data-lucide="check-circle-2"></i> Concluído';
-             btn.onclick = () => completeDay(); // Allows toggling or re-confirming
+             btn.onclick = () => completeDay();
+             // Soft Green
+             btn.style.cssText = baseStyle + "background: #d1fae5; color: #059669; border: 1px solid transparent; box-shadow: none;";
              
-             // Soft Green for already done
-             btn.style.background = "#d1fae5"; // emerald-100
-             btn.style.color = "#059669";      // emerald-600
-             btn.style.border = "1px solid transparent";
+             if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
         } else {
-             // Ready to Finish
+             // Ready to Finish (All checked but not saved)
              btn.innerHTML = 'Concluir Dia';
              btn.onclick = () => completeDay();
+             // Bright Green Action
+             btn.style.cssText = baseStyle + "background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);";
              
-             // Bright Green for Action
-             btn.style.background = "#10b981"; // emerald-500
-             btn.style.color = "white";
-             btn.style.border = "none";
-             btn.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.4)";
+             if(statusText) statusText.innerHTML = '<span style="color:#10b981">Pronto!</span>';
         }
     }
+    
     if(window.lucide) window.lucide.createIcons();
 }
 
@@ -808,28 +807,63 @@ window.addEventListener('load', init);
     </div>
 </div>
 
-<!-- COMMENT MODAL (Advanced) -->
-<div id="modal-comment" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center;">
-    <div style="background: var(--bg-surface); width: 90%; max-width: 600px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; animation: slideUp 0.3s;">
-        <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); padding: 16px 24px; color: white; display: flex; justify-content: space-between; align-items: center;">
-            <div><h3 style="margin: 0; font-size: 1.1rem;">Minhas Anotações</h3></div>
-            <button onclick="closeCommentModal()" style="background: rgba(255,255,255,0.2); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display:flex; align-items:center; justify-content:center;"><i data-lucide="x" style="width:18px;"></i></button>
-        </div>
+<!-- ADVANCED NOTE MODAL -->
+<div id="modal-comment" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2100; display: none; align-items: center; justify-content: center;">
+    <div style="background: white; width: 95%; max-width: 700px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; animation: zoomIn 0.2s; display: flex; flex-direction: column;">
         
-        <div style="padding: 24px;">
-            <!-- Simple Toolbar -->
-            <div style="display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto;">
-                <button type="button" onclick="insertFormat('**', '**')" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; font-weight: bold;">B</button>
-                <button type="button" onclick="insertFormat('_', '_')" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; font-style: italic;">I</button>
-                <button type="button" onclick="insertFormat('\n> ', '')" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff;">❝</button>
-                <button type="button" onclick="shareWhatsApp()" style="padding: 6px 12px; border: 1px solid #25D366; border-radius: 8px; background: #dcfce7; color: #166534; display: flex; align-items: center; gap: 4px; margin-left: auto;">
-                    <i data-lucide="share-2" style="width: 14px;"></i> WhatsApp
-                </button>
+        <!-- Header -->
+        <div style="padding: 16px 24px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fff;">
+            <div>
+                <h3 style="margin: 0; color: #f97316; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="plus" style="width: 18px;"></i> Adicionar Nova Anotação
+                </h3>
+            </div>
+            <button onclick="closeCommentModal()" style="background: none; border: none; padding: 4px; color: #94a3b8; cursor: pointer;"><i data-lucide="x" style="width: 20px;"></i></button>
+        </div>
+
+        <div style="padding: 24px; background: #fafafa;">
+            
+            <!-- Title Mockup (Visual only unless DB supports it, defaulting to first line if needed later) -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 700; font-size: 0.85rem; color: #334155; margin-bottom: 8px;">Título</label>
+                <input type="text" placeholder="Ex: Reflexão sobre Salmos..." style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff;" disabled title="Funcionalidade em desenvolvimento">
             </div>
 
-            <textarea id="temp-comment-area" placeholder="O que Deus falou com você hoje?" style="width: 100%; height: 200px; padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; font-size: 1rem; background: var(--bg-body); resize: none; margin-bottom: 20px; outline: none;"></textarea>
-            
-            <button onclick="saveCommentAndFinish()" class="ripple" style="width: 100%; padding: 16px; background: #0f172a; color: white; border: none; border-radius: 16px; font-weight: 700; font-size: 1rem;">Salvar Anotação</button>
+            <!-- Description & Toolbar -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                   <label style="font-weight: 700; font-size: 0.85rem; color: #334155;">Descrição Detalhada</label> 
+                   <span style="font-size: 0.75rem; color: #94a3b8; background: #1e293b; color: white; padding: 2px 8px; border-radius: 4px;">Nenhum arquivo escolhido</span>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                    <!-- Toolbar -->
+                    <div style="padding: 8px 12px; border-bottom: 1px solid #e2e8f0; background: #fff; display: flex; gap: 4px;">
+                        <button type="button" onclick="insertFormat('**', '**')" title="Negrito" style="padding: 6px; border-radius: 4px; border: none; background: hover: #f1f5f9; cursor: pointer;"><i data-lucide="bold" style="width: 16px; color: #64748b;"></i></button>
+                        <button type="button" onclick="insertFormat('_', '_')" title="Itálico" style="padding: 6px; border-radius: 4px; border: none; background: hover: #f1f5f9; cursor: pointer;"><i data-lucide="italic" style="width: 16px; color: #64748b;"></i></button>
+                        <div style="width: 1px; height: 24px; background: #e2e8f0; margin: 0 8px;"></div>
+                        <button type="button" onclick="insertFormat('\n- ', '')" title="Lista" style="padding: 6px; border-radius: 4px; border: none; background: hover: #f1f5f9; cursor: pointer;"><i data-lucide="list" style="width: 16px; color: #64748b;"></i></button>
+                        <button type="button" onclick="insertFormat('[', '](url)')" title="Link" style="padding: 6px; border-radius: 4px; border: none; background: hover: #f1f5f9; cursor: pointer;"><i data-lucide="link" style="width: 16px; color: #64748b;"></i></button>
+                        <div style="margin-left: auto;"></div>
+                        <button type="button" style="padding: 6px; border-radius: 4px; border: none; cursor: not-allowed; opacity: 0.5;"><i data-lucide="undo" style="width: 16px; color: #64748b;"></i></button>
+                        <button type="button" style="padding: 6px; border-radius: 4px; border: none; cursor: not-allowed; opacity: 0.5;"><i data-lucide="redo" style="width: 16px; color: #64748b;"></i></button>
+                    </div>
+
+                    <textarea id="temp-comment-area" placeholder="Digite a descrição detalhada da anotação..." style="width: 100%; height: 250px; padding: 16px; border: none; outline: none; resize: none; font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.5; color: #334155;"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer Actions -->
+        <div style="padding: 16px 24px; border-top: 1px solid #f1f5f9; background: #fff; display: flex; justify-content: space-between; align-items: center;">
+             <button onclick="shareWhatsApp()" style="background: #fef08a; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; color: #854d0e; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="share-2" style="width: 16px;"></i> Compartilhar
+            </button>
+            <div style="display: flex; gap: 12px;">
+                <button onclick="closeCommentModal()" style="background: white; border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: 600; color: #475569; font-size: 0.9rem; cursor: pointer;">Cancelar</button>
+                <button onclick="saveCommentAndFinish()" style="background: #f97316; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; color: white; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);">Salvar Anotação</button>
+            </div>
         </div>
     </div>
 </div>
