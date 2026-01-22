@@ -1,7 +1,7 @@
 <?php
 // admin/leitura.php
 require_once '../includes/auth.php';
-require_once '../includes/db.php';
+// require_once '../includes/db.php'; // Já incluído em layout.php geralmente, mas ok garantir
 require_once '../includes/layout.php';
 
 checkLogin(); 
@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $versesJson = $_POST['verses'] ?? '[]'; 
         
         try {
-            // If comment is provided, include it in update
             if ($comment !== null) {
                 $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, comment, completed_at)
                         VALUES (?, ?, ?, ?, ?, NOW())
@@ -137,8 +136,8 @@ foreach($rows as $r) {
 
 $completionPercent = min(100, round(($totalChaptersRead / 300) * 100));
 
-// --- 1.5 Header Rendering ---
-renderAppHeader('Leitura Bíblica'); 
+// --- 1.5 Render System Header ---
+renderAppHeader('Leitura Bíblica'); // Standard Header (with Avatar, Menu, Config Button)
 ?>
 
 <!-- ========================================== -->
@@ -228,6 +227,13 @@ renderAppHeader('Leitura Bíblica');
     }
     .auto-save-feedback.show { opacity: 1; }
 
+    /* Status Badge */
+    .status-badge {
+        font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .status-badge.success { background: #dcfce7; color: #166534; }
+    .status-badge.pending { background: #ffedd5; color: #9a3412; }
+
     /* NEW: Config Modal Styles */
     .config-fullscreen {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000;
@@ -259,23 +265,20 @@ renderAppHeader('Leitura Bíblica');
 <!-- 3. MAIN UI -->
 <!-- ========================================== -->
 
-<!-- Header & Progress -->
-<div style="background: white; border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50;">
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <button onclick="window.history.back()" style="border: none; background: none; color: var(--text-light); cursor: pointer;"><i data-lucide="arrow-left" width="20"></i></button>
+<!-- Progress Header (Below Standard Header) -->
+<div style="background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 16px 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 10px;">
         <div>
-            <h2 style="font-size: 1rem; margin: 0; color: var(--text);">Leitura Bíblica</h2>
-            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">
-                <span style="color:var(--primary); font-weight:700;"><?= $totalChaptersRead ?></span> de 300 dias (<?= $completionPercent ?>%)
+            <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); font-weight:700; letter-spacing:0.5px;">Seu Progresso Global</span>
+            <div style="color:var(--text); font-weight:700; font-size:1.1rem; line-height:1.2;">
+                <span style="color:var(--primary);"><?= $totalChaptersRead ?></span> / 300
+                <span style="color:var(--text-light); font-size:0.9rem; font-weight:400;">(<?= $completionPercent ?>%)</span>
             </div>
         </div>
     </div>
-    <div style="width: 40px; height: 40px; background: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="openConfig()">
-        <i data-lucide="settings-2" width="18" style="color: var(--text-light);"></i>
+    <div style="height: 6px; background: var(--bg); width: 100%; border-radius: 3px; overflow: hidden;">
+        <div style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: <?= $completionPercent ?>%;"></div>
     </div>
-</div>
-<div style="height: 4px; background: var(--bg); width: 100%;">
-    <div style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: <?= $completionPercent ?>%;"></div>
 </div>
 
 <div class="cal-strip" id="calendar-strip">
@@ -283,9 +286,14 @@ renderAppHeader('Leitura Bíblica');
 </div>
 
 <div class="main-area">
-    <div style="margin-bottom: 24px;">
-        <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700;">Leitura de Hoje</span>
-        <h1 id="day-title" style="font-size:1.75rem; margin:4px 0; color: var(--text);">Carregando...</h1>
+    <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <div>
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700;">Leitura de Hoje</span>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                <h1 id="day-title" style="font-size:1.75rem; margin:0; color: var(--text);">Carregando...</h1>
+                <span id="status-badge-container"></span>
+            </div>
+        </div>
     </div>
     <div id="verses-list"></div>
 </div>
@@ -304,10 +312,10 @@ renderAppHeader('Leitura Bíblica');
 <div id="save-toast" class="auto-save-feedback"><i data-lucide="check" width="14"></i> Salvo automaticamente</div>
 
 <!-- ========================================== -->
-<!-- 4. MODALS -->
+<!-- 4. MODALS (Modern Redesign) -->
 <!-- ========================================== -->
 
-<!-- Modern Note Modal -->
+<!-- Note Modal -->
 <div id="modal-note" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index:2000; align-items:center; justify-content:center; animation: fadeIn 0.2s;">
     <div style="background: white; width: 95%; max-width: 600px; border-radius: 24px; box-shadow: 0 20px 50px -10px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
         <div style="background: #fff7ed; padding: 20px 24px; border-bottom: 1px solid #fed7aa; display: flex; justify-content: space-between; align-items: center;">
@@ -332,14 +340,11 @@ renderAppHeader('Leitura Bíblica');
         <h2 style="font-size: 1.25rem;">Configurações & Diário</h2>
         <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
     </div>
-    
-    <!-- TABS -->
     <div class="config-tabs">
         <div class="tab-btn active" onclick="switchTab('general')" id="tab-general">Geral</div>
         <div class="tab-btn" onclick="switchTab('diary')" id="tab-diary">Meu Diário</div>
     </div>
     
-    <!-- GENERAL TAB -->
     <div id="content-general" class="config-content">
         <div class="report-item">
             <h4 style="margin:0 0 16px 0;">Meu Plano</h4>
@@ -350,7 +355,6 @@ renderAppHeader('Leitura Bíblica');
             </div>
             <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">Isso ajustará qual é o "Dia 1" do seu plano.</p>
         </div>
-
         <div class="report-item" style="border-color:#fecaca; background:#fef2f2;">
             <h4 style="margin:0 0 8px 0; color:#b91c1c;">Zona de Perigo</h4>
             <p style="font-size:0.9rem; color:#7f1d1d; margin-bottom:16px;">Apagar todo o seu progresso de leitura e anotações.</p>
@@ -358,7 +362,6 @@ renderAppHeader('Leitura Bíblica');
         </div>
     </div>
 
-    <!-- DIARY TAB -->
     <div id="content-diary" class="config-content" style="display:none;">
         <?php if(empty($reportData)): ?>
             <div style="text-align:center; padding:40px; color:var(--text-light);">
@@ -373,29 +376,20 @@ renderAppHeader('Leitura Bíblica');
                         <span style="background:var(--primary-soft); color:var(--primary); padding:2px 8px; border-radius:4px; font-size:0.8rem;">Dia <?= $rep['d'] ?></span>
                         Mês <?= $rep['m'] ?>
                     </div>
-                    
                     <?php if($rep['verses_count'] > 0): ?>
                         <div style="font-size:0.9rem; margin-bottom:8px;">
                             <i data-lucide="check-circle-2" width="14" style="color:var(--success); vertical-align:middle;"></i> 
                             Leu <b><?= $rep['verses_count'] ?></b> passagens.
                         </div>
                     <?php endif; ?>
-
                     <?php if(!empty($rep['comment'])): ?>
-                        <div class="report-comment">
-                            "<?= htmlspecialchars($rep['comment']) ?>"
-                        </div>
+                        <div class="report-comment">"<?= htmlspecialchars($rep['comment']) ?>"</div>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
 </div>
-
-<style>
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-</style>
 
 <!-- ========================================== -->
 <!-- 5. FRONTEND LOGIC -->
@@ -439,8 +433,19 @@ function renderCalendar() {
 function loadDay(m, d) {
     const list = document.getElementById('verses-list');
     const title = document.getElementById('day-title');
+    const badgeContainer = document.getElementById('status-badge-container');
+    
     title.innerText = `Dia ${d}`;
     
+    // Status Badge Logic
+    let badgeHtml = '';
+    if(isDayComplete(m, d)) {
+        badgeHtml = '<span class="status-badge success">Concluído</span>';
+    } else {
+        badgeHtml = '<span class="status-badge pending">Pendente</span>';
+    }
+    badgeContainer.innerHTML = badgeHtml;
+
     if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
         list.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Sem leitura programada.</div>';
         return;
@@ -534,7 +539,9 @@ function saveNote() {
     saveToServer(state.m, state.d);
     document.getElementById('modal-note').style.display = 'none';
 }
-function openConfig() { document.getElementById('modal-config').style.display = 'flex'; }
+// Hook for layout button
+window.openConfig = function() { document.getElementById('modal-config').style.display = 'flex'; };
+
 function openGroupComments() { alert('Funcionalidade de grupo em breve!'); }
 function showToast() {
     const el = document.getElementById('save-toast');
