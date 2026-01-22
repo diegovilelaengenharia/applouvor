@@ -298,36 +298,11 @@ function toggleVerseRead(m, d, idx, item) {
     const storageKey = `reading_check_${m}_${d}_${idx}`;
     const newState = !item.classList.contains('read');
     
+    // Toggle class - CSS cuida do visual
     item.classList.toggle('read');
     localStorage.setItem(storageKey, newState);
     
-    // Visual Updates specific to this item
-    const checkCircle = item.querySelector('.check-circle');
-    const checkIcon = item.querySelector('.check-circle i');
-    const verseText = item.querySelector('.verse-text');
-    
-    if(newState) {
-        item.style.background = '#ecfdf5';
-        item.style.borderColor = '#a7f3d0';
-        checkCircle.style.background = '#10b981';
-        checkCircle.style.borderColor = '#10b981';
-        checkIcon.style.opacity = '1';
-        verseText.style.color = '#065f46';
-        verseText.style.textDecoration = 'line-through';
-        verseText.style.opacity = '0.8';
-    } else {
-        item.style.background = 'var(--bg-surface)';
-        item.style.borderColor = 'var(--border-color)';
-        checkCircle.style.background = 'transparent';
-        checkCircle.style.borderColor = 'var(--border-color)';
-        checkIcon.style.opacity = '0';
-        verseText.style.color = 'var(--text-main)';
-        verseText.style.textDecoration = 'none';
-        verseText.style.opacity = '1';
-    }
-    
-    // Recalculate progress for this day
-    // Recalculate progress for this day
+    // Recalculate progress
     const total = document.querySelectorAll('.verse-check-item').length;
     const currentRead = document.querySelectorAll('.verse-check-item.read').length;
     updateProgress(currentRead, total);
