@@ -201,27 +201,27 @@ document.addEventListener(\'click\', function(e) {
 
     renderPageHeader('Detalhes da Música', $song['artist'], $menuActions);
 
-    // Ícone Principal
+    // Ícone Principal Compacto
     ?>
-    <div style="text-align: center; margin-bottom: 24px;">
+    <div style="text-align: center; margin-bottom: 20px;">
         <div style="
-        width: 64px; 
-        height: 64px; 
+        width: 48px; 
+        height: 48px; 
         background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
-        border-radius: 16px; 
+        border-radius: 12px; 
         display: inline-flex; 
         align-items: center; 
         justify-content: center; 
         box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
     ">
-            <i data-lucide="music" style="width: 32px; height: 32px; color: white;"></i>
+            <i data-lucide="music" style="width: 24px; height: 24px; color: white;"></i>
         </div>
-        <h1 style="color: #1e293b; margin: 16px 0 4px 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
-        <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 1rem;"><?= htmlspecialchars($song['artist']) ?></p>
+        <h1 style="color: #1e293b; margin: 12px 0 2px 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
+        <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 0.9rem;"><?= htmlspecialchars($song['artist']) ?></p>
     </div>
 
 
-    <!-- Versão -->
+    <!-- Versão Compacta -->
     <div class="info-section">
         <div class="info-section-title">Versão (Original)</div>
 
