@@ -99,9 +99,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'reset_plan') {
         $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ?")->execute([$userId]);
-        // Optional: Reset start date to today?
-        // $pdo->prepare("UPDATE user_settings SET setting_value = CURDATE() WHERE user_id = ? AND setting_key = 'reading_plan_start_date'")->execute([$userId]);
         header("Location: leitura.php"); exit;
+    }
+
+    if ($action === 'get_group_comments') {
+        $m = (int)$_POST['month'];
+        $d = (int)$_POST['day'];
+        
+        $stmt = $pdo->prepare("
+            SELECT u.name, rp.comment, rp.completed_at 
+            FROM reading_progress rp 
+            JOIN users u ON rp.user_id = u.id 
+            WHERE rp.month_num = ? AND rp.day_num = ? 
+            AND rp.comment IS NOT NULL AND rp.comment != ''
+            ORDER BY rp.completed_at DESC
+        ");
+        $stmt->execute([$m, $d]);
+        $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        echo json_encode(['success' => true, 'data' => $comments]);
+        exit;
     }
 }
 
@@ -681,16 +698,48 @@ window.addEventListener('load', init);
     <div style="height: 100px;"></div>
 </div>
 
-<!-- BOTTOM ACTION BAR (Annotation Only) -->
+<!-- BOTTOM ACTION BAR -->
 <div class="bottom-action-bar" id="bottom-bar">
-    <button id="comment-trigger" onclick="openCommentModal()" style="
-        width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-        background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);
-        padding: 14px; border-radius: 16px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm);
+    <div style="display: flex; gap: 12px;">
+        <button id="comment-trigger" onclick="openCommentModal()" style="
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: #fff; border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 14px; border-radius: 16px; font-weight: 700; font-size: 0.95rem; box-shadow: var(--shadow-sm);
+        ">
+            <i data-lucide="pen-line" style="width: 18px;"></i>
+            <span id="comment-text-label">Anotar</span>
+        </button>
+
+        <button onclick="openGroupComments()" class="ripple" style="
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: #f0f9ff; border: 1px solid #bae6fd; color: #0284c7;
+            padding: 14px; border-radius: 16px; font-weight: 700; font-size: 0.95rem; box-shadow: var(--shadow-sm);
+        ">
+            <i data-lucide="users" style="width: 18px;"></i>
+            <span>Comentários</span>
+        </button>
+    </div>
+</div>
+
+<!-- GROUP COMMENTS MODAL -->
+<div id="modal-group-comments" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: end; justify-content: center;">
+    <div class="modal-content" style="
+        background: var(--bg-surface); width: 100%; max-width: 600px; height: 80vh; 
+        border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.2); 
+        display: flex; flex-direction: column; animation: slideUpBig 0.3s;
     ">
-        <i data-lucide="message-square" style="width: 18px;"></i>
-        <span id="comment-text-label">Ver Minha Anotação</span>
-    </button>
+        <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 1.2rem;">Comentários do Grupo</h3>
+            <button onclick="closeGroupComments()" style="background: none; border: none; padding: 8px;"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div id="group-comments-list" style="flex: 1; overflow-y: auto; padding: 20px; background: var(--bg-body);">
+            <!-- Populated via JS -->
+            <div style="text-align: center; color: var(--text-muted); margin-top: 40px;">
+                <div class="spinner"></div> Carregando...
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- SUCCESS MODAL (Encouragement) -->
