@@ -335,52 +335,44 @@ function toggleVerseRead(m, d, idx, item) {
 function updateProgress(current, total) {
     if(total === 0) return;
     
-    /* Dynamic UI Updates */
     const pct = Math.round((current / total) * 100);
-    // Not using daily-progress-bar anymore, but keeping safe check
-    const bar = document.getElementById('daily-progress-bar');
-    if(bar) bar.style.width = `${pct}%`;
-
     const btn = document.getElementById('btn-main-action');
     const statusText = document.getElementById('day-status-text');
     const isDoneServer = completedMap[`${selectedMonth}_${selectedDay}`];
     
     if(!btn) return;
     
-    // Force reset styles
+    // Force reset to base state
     btn.style.cssText = ""; 
-    btn.className = "ripple"; // maintain ripple class
+    btn.className = "ripple";
 
-    // Base Common Styles
-    const baseStyle = "border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; white-space: nowrap;";
+    // Base Style: Fixed Size, Bold
+    const baseStyle = "border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; white-space: nowrap;";
 
     if (current < total) {
-        // INCOMPLETE STATE
-        const missing = total - current;
-        btn.innerHTML = `<i data-lucide="circle"></i> Faltam ${missing}`;
-        btn.onclick = () => alert(`Faltam ${missing} leituras para concluir o dia.`);
+        // INCOMPLETE: Disabled-look
+        btn.innerHTML = `Concluir Dia (${current}/${total})`;
+        btn.onclick = () => alert(`Você precisa ler todas as passagens para concluir.\n\nLido: ${current}\nTotal: ${total}`);
         
-        // Yellow/Amber Style
-        btn.style.cssText = baseStyle + "background: #fffbeb; color: #d97706; border: 1px solid #fcd34d; box-shadow: none;";
+        // Gray/Disabled Style
+        btn.style.cssText = baseStyle + "background: #f1f5f9; color: #94a3b8; cursor: not-allowed; opacity: 0.8;";
         
         if(statusText) statusText.innerHTML = '<span style="color:#d97706">Pendente</span>';
-        
     } else {
-        // COMPLETE STATE (Locally at least)
+        // COMPLETE (Locally or Server)
         if (isDoneServer) {
-             // Already saved on server
-             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Concluído';
-             btn.onclick = () => completeDay();
-             // Soft Green
-             btn.style.cssText = baseStyle + "background: #d1fae5; color: #059669; border: 1px solid transparent; box-shadow: none;";
+             btn.innerHTML = '<i data-lucide="check-circle-2"></i> Dia Concluído';
+             btn.onclick = () => completeDay(); 
+             // Soft Green (Done)
+             btn.style.cssText = baseStyle + "background: #dcfce7; color: #166534; border: 1px solid transparent;";
              
              if(statusText) statusText.innerHTML = '<span style="color:#16a34a">Concluído</span>';
         } else {
-             // Ready to Finish (All checked but not saved)
+             // Ready to Save
              btn.innerHTML = 'Concluir Dia';
              btn.onclick = () => completeDay();
-             // Bright Green Action
-             btn.style.cssText = baseStyle + "background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);";
+             // Bright Green (Action)
+             btn.style.cssText = baseStyle + "background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); transform: scale(1.02);";
              
              if(statusText) statusText.innerHTML = '<span style="color:#10b981">Pronto!</span>';
         }
@@ -532,17 +524,20 @@ window.addEventListener('load', init);
     }
 
     /* Verse Check List */
-    .verse-check-item {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .check-circle {
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center;
         transition: all 0.2s;
-        cursor: pointer; /* Moved from orphaned block */
+        background: transparent; /* Ensure empty by default */
+    }
+    .verse-check-item.read .check-circle {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+    .verse-check-item:hover .check-circle {
+        border-color: var(--primary);
     }
     .verse-check-item:hover { border-color: var(--primary); }
     .verse-check-item:active { transform: scale(0.98); }
