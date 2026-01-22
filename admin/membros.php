@@ -256,9 +256,15 @@ renderAppHeader('Membros');
 
     .member-card {
         background: var(--bg-surface);
-        border-radius: var(--radius-md);
-        padding: 12px 16px;
         border: 1px solid var(--border-color);
+        border-radius: 12px;
+        /* Radius otimizado */
+        padding: 12px;
+        /* Padding reduzido de 16px */
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        /* Gap reduzido */
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
     }
@@ -269,13 +275,52 @@ renderAppHeader('Membros');
         border-color: var(--primary-light);
     }
 
-    .icon-action {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+    .member-avatar {
+        width: 42px;
+        /* Reduzido de 48px */
+        height: 42px;
+        border-radius: 10px;
+        /* Radius avatar otimizado */
+        background-color: var(--bg-body);
+        background-size: cover;
+        background-position: center;
+        flex-shrink: 0;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-weight: 700;
+        font-size: 1rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .member-info h3 {
+        font-size: 0.95rem;
+        /* Fonte reduzida */
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 2px;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    .member-role {
+        font-size: 0.75rem;
+        /* Fonte reduzida */
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .icon-action {
+        width: 32px;
+        /* Ícone de ação compacto */
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
         border: none;
         cursor: pointer;
         transition: background 0.2s;
@@ -284,6 +329,25 @@ renderAppHeader('Membros');
 
     .icon-action:hover {
         filter: brightness(0.95);
+    }
+
+    /* Modal Mobile Otimizado */
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 400px;
+        /* Max width reduzido */
+        background: var(--bg-surface);
+        border-radius: 20px;
+        /* Radius modal */
+        padding: 24px;
+        /* Padding modal reduzido */
+        box-shadow: var(--shadow-md);
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     .input-modern {
