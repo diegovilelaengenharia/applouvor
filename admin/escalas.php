@@ -228,9 +228,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
                             display: block;
                             background: var(--bg-surface); 
-                            border-radius: var(--radius-md); 
+                            border-radius: 12px; 
                             border: 1px solid var(--border-color);
-                            padding: 14px; 
+                            padding: 12px; 
                             text-decoration: none; 
                             color: inherit;
                             box-shadow: var(--shadow-sm);
@@ -244,11 +244,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             <div style="
                                 background: <?= $isToday ? 'var(--primary-subtle)' : 'var(--bg-body)' ?>; 
                                 color: <?= $isToday ? 'var(--primary)' : 'var(--text-muted)' ?>;
-                                min-width: 52px; padding: 8px 4px; border-radius: 10px; 
+                                min-width: 52px; padding: 6px 10px; border-radius: 8px; 
                                 text-align: center; border: 1px solid <?= $isToday ? 'rgba(4, 120, 87, 0.1)' : 'transparent' ?>;
                             ">
-                                <div style="font-weight: 800; font-size: 1.25rem; line-height: 1;"><?= $date->format('d') ?></div>
-                                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-top: 2px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                                <div style="font-weight: 700; font-size: 1.1rem; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; margin-top: 2px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                             </div>
 
                             <!-- Infos do Evento -->
