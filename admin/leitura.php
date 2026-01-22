@@ -12,50 +12,34 @@ checkLogin();
 $userId = $_SESSION['user_id'];
 $now = new DateTime();
 
-// --- 1.1 Fetch Settings ---
-$stmt = $pdo->prepare("SELECT setting_key, setting_value FROM user_settings WHERE user_id = ?");
-$stmt->execute([$userId]);
-$settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-$startDate = $settings['reading_plan_start_date'] ?? date('Y-01-01');
-
-// --- 1.2 Calculate Plan Day ---
-$start = new DateTime($startDate);
-$start->setTime(0, 0, 0); $now->setTime(0, 0, 0);
-$diff = $start->diff($now);
-$daysPassed = $diff->invert ? -1 * $diff->days : $diff->days;
-$planDayIndex = max(1, $daysPassed + 1);
-
-// Convert Index (1..300) to Month/Day (1..12 / 1..25)
-// Logic: 25 days per month fixed structure
-$currentPlanMonth = floor(($planDayIndex - 1) / 25) + 1;
-$currentPlanDay = (($planDayIndex - 1) % 25) + 1;
-if($currentPlanMonth > 12) { $currentPlanMonth = 12; $currentPlanDay = 25; } // Cap at end
-
-// --- 1.3 Handle API Requests (POST) ---
+// --- 1.1 Action Handler (POST) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     $action = $_POST['action'] ?? '';
+
+    // SAVE SETTINGS
+    if ($action === 'save_settings') {
+        $newStart = $_POST['start_date'];
+        try {
+            // Save to user_settings
+            $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_start_date', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")
+                ->execute([$userId, $newStart]);
+            echo json_encode(['success' => true]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        }
+        exit;
+    }
 
     // SAVE PROGRESS (Granular or Complete)
     if ($action === 'save_progress') {
         $m = (int)$_POST['month'];
         $d = (int)$_POST['day'];
         $comment = $_POST['comment'] ?? null;
-        $versesJson = $_POST['verses'] ?? '[]'; // JSON Array string: "[0, 1, 3]"
+        $versesJson = $_POST['verses'] ?? '[]'; 
         
         try {
-            // Check if exists to update or insert
-            // We use ON DUPLICATE to be atomic
-            $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at)
-                    VALUES (?, ?, ?, ?, NOW())
-                    ON DUPLICATE KEY UPDATE 
-                        verses_read = VALUES(verses_read),
-                        completed_at = NOW()";
-            
-            $params = [$userId, $m, $d, $versesJson];
-            
-            // If comment is provided (even empty string to clear), update it. 
-            // If null, leave as is.
+            // If comment is provided, include it in update
             if ($comment !== null) {
                 $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, comment, completed_at)
                         VALUES (?, ?, ?, ?, ?, NOW())
@@ -64,6 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             comment = VALUES(comment),
                             completed_at = NOW()";
                 $params = [$userId, $m, $d, $versesJson, $comment];
+            } else {
+                 $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at)
+                    VALUES (?, ?, ?, ?, NOW())
+                    ON DUPLICATE KEY UPDATE 
+                        verses_read = VALUES(verses_read),
+                        completed_at = NOW()";
+                $params = [$userId, $m, $d, $versesJson];
             }
 
             $stmt = $pdo->prepare($sql);
@@ -84,59 +75,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// --- 1.2 Fetch Settings ---
+$stmt = $pdo->prepare("SELECT setting_key, setting_value FROM user_settings WHERE user_id = ?");
+$stmt->execute([$userId]);
+$settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+$startDateStr = $settings['reading_plan_start_date'] ?? date('Y-01-01');
+
+// --- 1.3 Calculate Plan Day ---
+$start = new DateTime($startDateStr);
+$start->setTime(0, 0, 0); $now->setTime(0, 0, 0);
+$diff = $start->diff($now);
+$daysPassed = $diff->invert ? -1 * $diff->days : $diff->days;
+$planDayIndex = max(1, $daysPassed + 1);
+
+// Convert Index (1..300) to Month/Day logic
+$currentPlanMonth = floor(($planDayIndex - 1) / 25) + 1;
+$currentPlanDay = (($planDayIndex - 1) % 25) + 1;
+if($currentPlanMonth > 12) { $currentPlanMonth = 12; $currentPlanDay = 25; }
+
 // --- 1.4 Fetch User Progress State ---
-$stmt = $pdo->prepare("SELECT month_num, day_num, verses_read, comment, completed_at FROM reading_progress WHERE user_id = ?");
+$stmt = $pdo->prepare("
+    SELECT month_num, day_num, verses_read, comment, completed_at 
+    FROM reading_progress 
+    WHERE user_id = ? 
+    ORDER BY completed_at DESC
+");
 $stmt->execute([$userId]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Transform into Map for JS: "M_D" => { verses: [0,1], comment: "..." }
 $progressMap = [];
 $totalChaptersRead = 0;
+// Structure for Report: Array of objects
+$reportData = [];
+
 foreach($rows as $r) {
     $verses = json_decode($r['verses_read'] ?? '[]', true);
     if (!is_array($verses)) $verses = [];
     
-    // Count simple completion if at least one verse is read OR old logic
     if (count($verses) > 0 || !empty($r['completed_at'])) {
         $totalChaptersRead++;
     }
 
-    $progressMap["{$r['month_num']}_{$r['day_num']}"] = [
+    $key = "{$r['month_num']}_{$r['day_num']}";
+    $progressMap[$key] = [
         'verses' => $verses,
         'comment' => $r['comment'],
         'date' => $r['completed_at']
     ];
+    
+    // Add to report if has content
+    if (count($verses) > 0 || !empty($r['comment'])) {
+        $reportData[] = [
+            'm' => (int)$r['month_num'],
+            'd' => (int)$r['day_num'],
+            'date' => $r['completed_at'],
+            'comment' => $r['comment'],
+            'verses_count' => count($verses)
+        ];
+    }
 }
 
 $completionPercent = min(100, round(($totalChaptersRead / 300) * 100));
 
 // --- 1.5 Header Rendering ---
-renderAppHeader('Leitura Bíblica'); // Use existing layout helper
+renderAppHeader('Leitura Bíblica'); 
 ?>
 
 <!-- ========================================== -->
 <!-- 2. FRONTEND RESOURCES -->
 <!-- ========================================== -->
 <script src="../assets/js/reading_plan_data.js?v=<?= time() ?>"></script>
-<!-- Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
     :root {
-        --primary: #6366f1;         /* Indigo */
-        --primary-soft: #e0e7ff; 
-        --success: #10b981;         /* Emerald */
-        --success-soft: #d1fae5;
-        --warning: #f59e0b;         /* Amber */
-        --warning-soft: #fef3c7;
-        --surface: #ffffff;
-        --bg: #f8fafc;
-        --text: #1e293b;
-        --text-light: #64748b;
+        --primary: #6366f1;         --primary-soft: #e0e7ff; 
+        --success: #10b981;         --success-soft: #d1fae5;
+        --warning: #f59e0b;         --warning-soft: #fef3c7;
+        --surface: #ffffff;         --bg: #f8fafc;
+        --text: #1e293b;            --text-light: #64748b;
         --border: #e2e8f0;
     }
-    
-    body { background-color: var(--bg); color: var(--text); }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
     
     /* Calendar Strip */
     .cal-strip {
@@ -147,137 +167,106 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
     .cal-strip::-webkit-scrollbar { display: none; }
     
     .cal-item {
-        min-width: 60px; height: 72px;
-        border-radius: 12px;
-        background: var(--bg);
+        min-width: 60px; height: 72px; border-radius: 12px;
+        background: var(--bg); border: 2px solid transparent; 
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        border: 2px solid transparent; cursor: pointer;
-        transition: all 0.2s; position: relative;
-        flex-shrink: 0;
+        flex-shrink: 0; cursor: pointer; transition: all 0.2s;
     }
-    .cal-item.active {
-        background: var(--surface); border-color: var(--primary);
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-        z-index: 2;
-    }
+    .cal-item.active { background: var(--surface); border-color: var(--primary); box-shadow: 0 4px 12px rgba(99,99,241,0.2); }
     .cal-item.active .cal-num { color: var(--primary); }
-    
-    .cal-item.done {
-        background: var(--success-soft); border-color: #a7f3d0;
-    }
+    .cal-item.done { background: var(--success-soft); border-color: #a7f3d0; }
     .cal-item.done .cal-num { color: #047857; }
-    
-    /* Yellow state for partial */
-    .cal-item.partial {
-        background: var(--warning-soft); border-color: #fde68a;
-    }
+    .cal-item.partial { background: var(--warning-soft); border-color: #fde68a; }
     .cal-item.partial .cal-num { color: #b45309; }
     
     .cal-month { font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; }
     .cal-num { font-size: 1.2rem; font-weight: 800; }
 
-    /* Main Container */
-    .main-area {
-        max-width: 800px; margin: 0 auto; padding: 20px 16px 120px 16px;
-    }
+    /* Main Area */
+    .main-area { max-width: 800px; margin: 0 auto; padding: 20px 16px; }
 
     /* Verses */
     .verse-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 16px;
-        margin-bottom: 12px;
-        display: flex; align-items: center; justify-content: space-between;
-        transition: all 0.1s;
-        cursor: pointer;
+        background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px;
+        display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.1s;
     }
     .verse-card:active { transform: scale(0.99); }
-    
-    .verse-card.read {
-        background: #f0fdf4; border-color: #bbf7d0;
-    }
+    .verse-card.read { background: #f0fdf4; border-color: #bbf7d0; }
     
     .check-icon {
-        width: 24px; height: 24px; border-radius: 50%;
-        border: 2px solid var(--border);
-        color: transparent; display: flex; align-items: center; justify-content: center;
-        margin-right: 12px;
+        width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border);
+        color: transparent; display: flex; align-items: center; justify-content: center; margin-right: 12px;
     }
-    .verse-card.read .check-icon {
-        background: var(--success); border-color: var(--success); color: white;
-    }
-    
+    .verse-card.read .check-icon { background: var(--success); border-color: var(--success); color: white; }
     .btn-read-link {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white; padding: 8px 16px;
-        border-radius: 20px; text-decoration: none;
-        font-weight: 700; font-size: 0.75rem;
-        display: flex; align-items: center; gap: 6px;
-        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 8px 16px;
+        border-radius: 20px; text-decoration: none; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; gap: 6px;
     }
     
-    /* Floating Bottom Bar (Modern) */
+    /* Bottom Bar */
     .bottom-bar {
-        position: fixed; bottom: 0; left: 0; right: 0;
-        background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
-        border-top: 1px solid var(--border);
-        padding: 12px 16px 20px 16px;
-        display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        z-index: 100;
-        max-width: 800px; margin: 0 auto;
+        position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border); padding: 12px 16px 20px 16px; z-index: 100;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 800px; margin: 0 auto;
     }
-    
-    /* Adjust for sidebar layout if needed */
-    @media (min-width: 1024px) {
-        .bottom-bar { left: 280px; } /* Assuming sidebar width */
-    }
+    @media (min-width: 1024px) { .bottom-bar { left: 280px; } }
     
     .action-btn {
-        background: var(--surface); border: 1px solid var(--border);
-        padding: 12px; border-radius: 12px;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        gap: 6px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        transition: all 0.2s;
+        background: var(--surface); border: 1px solid var(--border); padding: 12px; border-radius: 12px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
     }
-    .action-btn:active { transform: scale(0.98); }
     .action-btn span { font-size: 0.8rem; font-weight: 600; color: var(--text); }
-    
-    .icon-box {
-        width: 32px; height: 32px; border-radius: 10px;
-        display: flex; align-items: center; justify-content: center;
-    }
+    .icon-box { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
     .icon-box.purple { background: #f3e8ff; color: #9333ea; }
     .icon-box.blue { background: #e0f2fe; color: #0284c7; }
 
-    /* Animations */
-    @keyframes pulse-green {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
+    /* Toast */
     .auto-save-feedback {
-        position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
-        background: var(--text); color: white;
-        padding: 8px 16px; border-radius: 20px; font-size: 0.8rem;
-        z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none;
-        display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        position: fixed; top: 90px; left: 50%; transform: translateX(-50%);
+        background: var(--text); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem;
+        z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; display: flex; align-items: center; gap: 8px;
     }
-    .auto-save-feedback.show { opacity: 1; top: 90px; }
+    .auto-save-feedback.show { opacity: 1; }
+
+    /* NEW: Config Modal Styles */
+    .config-fullscreen {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 5000;
+        overflow-y: auto; display: none; flex-direction: column;
+    }
+    .config-header {
+        background: var(--surface); padding: 16px 20px; border-bottom: 1px solid var(--border);
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .config-tabs {
+        display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px;
+    }
+    .tab-btn {
+        padding: 16px 20px; font-weight: 600; color: var(--text-light); border-bottom: 2px solid transparent; cursor: pointer;
+    }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    
+    .config-content { padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; }
+    
+    .report-item {
+        background: var(--surface); border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border);
+    }
+    .report-date { font-size: 0.75rem; color: var(--text-light); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+    .report-title { font-weight: 700; color: var(--text); font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .report-comment { background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 0.9rem; color: #475569; font-style: italic; border-left: 3px solid var(--primary); }
 </style>
 
 <!-- ========================================== -->
 <!-- 3. MAIN UI -->
 <!-- ========================================== -->
 
-<!-- Header Custom -->
+<!-- Header & Progress -->
 <div style="background: white; border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50;">
     <div style="display: flex; align-items: center; gap: 12px;">
         <button onclick="window.history.back()" style="border: none; background: none; color: var(--text-light); cursor: pointer;"><i data-lucide="arrow-left" width="20"></i></button>
         <div>
             <h2 style="font-size: 1rem; margin: 0; color: var(--text);">Leitura Bíblica</h2>
             <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">
-                <span style="color:var(--primary); font-weight:700;"><?= $totalChaptersRead ?></span> de 300 dias concluídos (<?= $completionPercent ?>%)
+                <span style="color:var(--primary); font-weight:700;"><?= $totalChaptersRead ?></span> de 300 dias (<?= $completionPercent ?>%)
             </div>
         </div>
     </div>
@@ -285,8 +274,6 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
         <i data-lucide="settings-2" width="18" style="color: var(--text-light);"></i>
     </div>
 </div>
-
-<!-- Progress Bar Strip -->
 <div style="height: 4px; background: var(--bg); width: 100%;">
     <div style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: <?= $completionPercent ?>%;"></div>
 </div>
@@ -296,20 +283,13 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
 </div>
 
 <div class="main-area">
-    
-    <!-- Day Title -->
     <div style="margin-bottom: 24px;">
         <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700;">Leitura de Hoje</span>
         <h1 id="day-title" style="font-size:1.75rem; margin:4px 0; color: var(--text);">Carregando...</h1>
-        <div id="day-subtitle" style="font-size: 0.85rem; color: var(--text-light);"></div>
     </div>
-
-    <!-- Verses Container -->
     <div id="verses-list"></div>
-
 </div>
 
-<!-- Bottom Actions -->
 <div class="bottom-bar">
     <button class="action-btn" onclick="openNoteModal()">
         <div class="icon-box purple"><i data-lucide="pen-line" width="18"></i></div>
@@ -321,73 +301,94 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
     </button>
 </div>
 
-<!-- Auto Save Toast -->
-<div id="save-toast" class="auto-save-feedback">
-    <i data-lucide="check" width="14"></i> Salvo automaticamente
-</div>
+<div id="save-toast" class="auto-save-feedback"><i data-lucide="check" width="14"></i> Salvo automaticamente</div>
 
 <!-- ========================================== -->
-<!-- 4. MODALS (Modern Redesign) -->
+<!-- 4. MODALS -->
 <!-- ========================================== -->
 
-<!-- Note Modal -->
+<!-- Modern Note Modal -->
 <div id="modal-note" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index:2000; align-items:center; justify-content:center; animation: fadeIn 0.2s;">
-    <div style="
-        background: white; 
-        width: 95%; max-width: 600px; 
-        border-radius: 24px; 
-        box-shadow: 0 20px 50px -10px rgba(0,0,0,0.25); 
-        display: flex; flex-direction: column; overflow: hidden;
-        animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    ">
-        <!-- Header -->
-        <div style="
-            background: #fff7ed; /* Orange-50 (Suave) */
-            padding: 20px 24px; 
-            border-bottom: 1px solid #fed7aa;
-            display: flex; justify-content: space-between; align-items: center;
-        ">
-            <h3 style="margin: 0; color: #c2410c; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="pen-line" width="18"></i> Minha Anotação
-            </h3>
-            <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; color: #9a3412; cursor: pointer; padding: 4px;">
-                <i data-lucide="x" width="20"></i>
-            </button>
+    <div style="background: white; width: 95%; max-width: 600px; border-radius: 24px; box-shadow: 0 20px 50px -10px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div style="background: #fff7ed; padding: 20px 24px; border-bottom: 1px solid #fed7aa; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; color: #c2410c; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;"><i data-lucide="pen-line" width="18"></i> Minha Anotação</h3>
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; color: #9a3412; cursor: pointer;"><i data-lucide="x" width="20"></i></button>
         </div>
-
-        <!-- Body -->
         <div style="padding: 24px;">
             <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px;">O que Deus falou com você?</label>
-            <textarea id="note-input" style="
-                width: 100%; min-height: 200px; 
-                padding: 16px; 
-                border: 1px solid #e2e8f0; border-radius: 12px; 
-                font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #334155;
-                outline: none; resize: vertical; background: #f8fafc;
-                transition: border-color 0.2s, background 0.2s;
-            " placeholder="Escreva aqui suas reflexões..." onfocus="this.style.borderColor='#f97316'; this.style.background='white'" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'"></textarea>
-            
-            <div style="margin-top: 12px; font-size: 0.75rem; color: #94a3b8; text-align: right;">
-                Suas anotações são privadas.
+            <textarea id="note-input" style="width: 100%; min-height: 200px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #334155; outline: none; background: #f8fafc;" placeholder="Escreva aqui suas reflexões..."></textarea>
+            <div style="margin-top: 12px; font-size: 0.75rem; color: #94a3b8; text-align: right;">Suas anotações são privadas.</div>
+        </div>
+        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 12px;">
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 12px; font-weight: 600; cursor: pointer;">Cancelar</button>
+            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: #f97316; color: white; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;"><i data-lucide="save" width="16"></i> Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- FULL CONFIG MODAL -->
+<div id="modal-config" class="config-fullscreen">
+    <div class="config-header">
+        <h2 style="font-size: 1.25rem;">Configurações & Diário</h2>
+        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
+    </div>
+    
+    <!-- TABS -->
+    <div class="config-tabs">
+        <div class="tab-btn active" onclick="switchTab('general')" id="tab-general">Geral</div>
+        <div class="tab-btn" onclick="switchTab('diary')" id="tab-diary">Meu Diário</div>
+    </div>
+    
+    <!-- GENERAL TAB -->
+    <div id="content-general" class="config-content">
+        <div class="report-item">
+            <h4 style="margin:0 0 16px 0;">Meu Plano</h4>
+            <label style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:8px;">Data de Início da Leitura</label>
+            <div style="display:flex; gap:12px;">
+                <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="padding:10px; border:1px solid var(--border); border-radius:8px; flex:1;">
+                <button onclick="saveStartDate()" style="padding:10px 20px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Atualizar</button>
             </div>
+            <p style="font-size:0.8rem; color:var(--text-light); margin-top:8px;">Isso ajustará qual é o "Dia 1" do seu plano.</p>
         </div>
 
-        <!-- Footer -->
-        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 12px;">
-            <button onclick="document.getElementById('modal-note').style.display='none'" style="
-                padding: 12px 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; 
-                border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                Cancelar
-            </button>
-            <button onclick="saveNote()" style="
-                padding: 12px 24px; border: none; background: #f97316; color: white; 
-                border-radius: 12px; font-weight: 700; cursor: pointer; 
-                box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25); transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-            " onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
-                <i data-lucide="save" width="16"></i> Salvar Anotação
-            </button>
+        <div class="report-item" style="border-color:#fecaca; background:#fef2f2;">
+            <h4 style="margin:0 0 8px 0; color:#b91c1c;">Zona de Perigo</h4>
+            <p style="font-size:0.9rem; color:#7f1d1d; margin-bottom:16px;">Apagar todo o seu progresso de leitura e anotações.</p>
+            <button onclick="resetPlan()" style="padding:12px 20px; background:#b91c1c; color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; width:100%;">Resetar Tudo</button>
         </div>
+    </div>
+
+    <!-- DIARY TAB -->
+    <div id="content-diary" class="config-content" style="display:none;">
+        <?php if(empty($reportData)): ?>
+            <div style="text-align:center; padding:40px; color:var(--text-light);">
+                <i data-lucide="book-open" width="40" style="opacity:0.5; margin-bottom:12px;"></i>
+                <p>Nenhuma leitura registrada ainda.</p>
+            </div>
+        <?php else: ?>
+            <?php foreach($reportData as $rep): ?>
+                <div class="report-item">
+                    <div class="report-date"><?= date('d/m/Y H:i', strtotime($rep['date'])) ?></div>
+                    <div class="report-title">
+                        <span style="background:var(--primary-soft); color:var(--primary); padding:2px 8px; border-radius:4px; font-size:0.8rem;">Dia <?= $rep['d'] ?></span>
+                        Mês <?= $rep['m'] ?>
+                    </div>
+                    
+                    <?php if($rep['verses_count'] > 0): ?>
+                        <div style="font-size:0.9rem; margin-bottom:8px;">
+                            <i data-lucide="check-circle-2" width="14" style="color:var(--success); vertical-align:middle;"></i> 
+                            Leu <b><?= $rep['verses_count'] ?></b> passagens.
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if(!empty($rep['comment'])): ?>
+                        <div class="report-comment">
+                            "<?= htmlspecialchars($rep['comment']) ?>"
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -396,90 +397,50 @@ renderAppHeader('Leitura Bíblica'); // Use existing layout helper
 @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 
-<!-- Config Modal (Reset) -->
-<div id="modal-config" style="display:none; position:fixed; top:0; right:0; width:300px; height:100%; background:white; z-index:3000; padding:20px; box-shadow:-5px 0 20px rgba(0,0,0,0.1);">
-    <h3>Configurações</h3>
-    <button onclick="resetPlan()" style="width:100%; padding:14px; background:#fee2e2; color:#b91c1c; border:none; border-radius:12px; display:flex; gap:8px; align-items:center; justify-content:center; margin-top:20px; cursor:pointer; font-weight:700;">
-        <i data-lucide="trash-2" width="18"></i> Resetar Plano
-    </button>
-    <button onclick="document.getElementById('modal-config').style.display='none'" style="margin-top:20px; width:100%; padding:10px;">Fechar</button>
-</div>
-
-<!-- Message Group Modal Stub -->
-<script>
-function openGroupComments() { alert('Funcionalidade de grupo em breve!'); }
-</script>
-
-
 <!-- ========================================== -->
-<!-- 5. FRONTEND LOGIC (Clean & Sync) -->
+<!-- 5. FRONTEND LOGIC -->
 <!-- ========================================== -->
 <script>
-// --- STATE MANAGEMENT ---
-// Source of truth is now Server Data, injected via PHP
 const serverData = <?= json_encode($progressMap) ?>;
-const planStartDate = <?= json_encode($planDayIndex) ?>;
 const currentPlanMonth = <?= json_encode($currentPlanMonth) ?>;
 const currentPlanDay = <?= json_encode($currentPlanDay) ?>;
+const state = { m: currentPlanMonth, d: currentPlanDay, data: serverData, saveTimer: null };
 
-const state = {
-    m: currentPlanMonth,
-    d: currentPlanDay,
-    data: serverData, // Map "M_D" -> { verses: [], comment: "" }
-    saveTimer: null
-};
-
-// --- INIT ---
 function init() {
     renderCalendar();
     loadDay(state.m, state.d);
-    
-    // Config Button hook (Header is global)
-    // We can inject the config button behavior if needed
+    lucide.createIcons();
 }
 
-// --- CALENDAR ---
 function renderCalendar() {
     const el = document.getElementById('calendar-strip');
     el.innerHTML = '';
-    
     const months = ["", "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-    // Render current month (25 days)
-    const m = state.m;
     
     for(let d=1; d<=25; d++) {
-        const key = `${m}_${d}`;
+        const key = `${state.m}_${d}`;
         const info = state.data[key];
-        const isDone = info && info.verses && info.verses.length > 0 && isDayComplete(m,d); 
+        const isDone = info && info.verses && info.verses.length > 0 && isDayComplete(state.m,d); 
         const isPartial = info && info.verses && info.verses.length > 0 && !isDone;
         
         const div = document.createElement('div');
         div.className = `cal-item ${state.d === d ? 'active' : ''} ${isDone ? 'done' : ''} ${isPartial ? 'partial' : ''}`;
         div.onclick = () => {
             state.d = d;
-            renderCalendar(); // Re-render to update active state
-            loadDay(m, d);
+            renderCalendar(); 
+            loadDay(state.m, d);
         };
-        div.innerHTML = `
-            <div class="cal-month">${months[m]}</div>
-            <div class="cal-num">${d}</div>
-        `;
+        div.innerHTML = `<div class="cal-month">${months[state.m]}</div><div class="cal-num">${d}</div>`;
         el.appendChild(div);
-        
-        // Auto scroll to active
-        if(state.d === d) {
-            setTimeout(() => div.scrollIntoView({behavior:'smooth', inline:'center'}), 100);
-        }
+        if(state.d === d) setTimeout(() => div.scrollIntoView({behavior:'smooth', inline:'center'}), 100);
     }
 }
 
-// --- LOAD DAY CONTENT ---
 function loadDay(m, d) {
     const list = document.getElementById('verses-list');
     const title = document.getElementById('day-title');
     title.innerText = `Dia ${d}`;
     
-    // Get Plan Data
     if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) {
         list.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Sem leitura programada.</div>';
         return;
@@ -490,88 +451,54 @@ function loadDay(m, d) {
     const savedVerses = (state.data[key] && state.data[key].verses) ? state.data[key].verses : [];
     
     list.innerHTML = '';
-    
     verses.forEach((vText, idx) => {
         const isRead = savedVerses.includes(idx);
-        
         const card = document.createElement('div');
         card.className = `verse-card ${isRead ? 'read' : ''}`;
-        card.onclick = (e) => {
-            if(e.target.closest('a')) return;
-            toggleVerse(m, d, idx);
-        };
-        
-        // Build Bible Link (Simple Helper)
+        card.onclick = (e) => { if(e.target.closest('a')) return; toggleVerse(m, d, idx); };
         const link = "https://www.bible.com/pt/bible/1608/" + vText.replace(/\s/g, '.').replace(/:/g, '.');
-        
         card.innerHTML = `
             <div style="display:flex; align-items:center;">
                 <div class="check-icon"><i data-lucide="check" width="14"></i></div>
                 <span style="font-weight:600; color:#334155;">${vText}</span>
             </div>
-            <a href="${link}" target="_blank" class="btn-read-link">
-                LER <i data-lucide="book-open" width="12"></i>
-            </a>
+            <a href="${link}" target="_blank" class="btn-read-link">LER <i data-lucide="book-open" width="12"></i></a>
         `;
         list.appendChild(card);
     });
-    
-    if(window.lucide) lucide.createIcons();
+    lucide.createIcons();
 }
 
-// --- LOGIC: TOGGLE & SAVE ---
 function toggleVerse(m, d, idx) {
     const key = `${m}_${d}`;
-    
-    // Init state if empty
     if (!state.data[key]) state.data[key] = { verses: [], comment: "" };
-    
     const list = state.data[key].verses;
     const exists = list.indexOf(idx);
     
-    if (exists === -1) {
-        list.push(idx); // Mark read
-    } else {
-        list.splice(exists, 1); // Unmark
-    }
+    if (exists === -1) list.push(idx); else list.splice(exists, 1);
     
-    // Optimistic UI Update
     loadDay(m, d);
     checkCompletionAndNavigate(m, d);
-    
-    // Debounce Save
     showToast();
     clearTimeout(state.saveTimer);
-    state.saveTimer = setTimeout(() => {
-        saveToServer(m, d);
-    }, 1000);
+    state.saveTimer = setTimeout(() => saveToServer(m, d), 1000);
 }
 
 function isDayComplete(m, d) {
     if (!bibleReadingPlan || !bibleReadingPlan[m]) return false;
-    const totalVerses = bibleReadingPlan[m][d-1].length;
-    const key = `${m}_${d}`;
-    const readCount = (state.data[key] && state.data[key].verses) ? state.data[key].verses.length : 0;
-    return readCount >= totalVerses;
+    return (state.data[`${m}_${d}`]?.verses?.length || 0) >= bibleReadingPlan[m][d-1].length;
 }
 
 function checkCompletionAndNavigate(m, d) {
-    // Check if day is complete
     if (isDayComplete(m, d)) {
-        renderCalendar(); // Update green status
-        
-        // Auto navigate to next unfinished day
-        setTimeout(() => {
-             navigateToNextDay();
-        }, 1200);
+        renderCalendar();
+        setTimeout(() => navigateToNextDay(), 1200);
     } else {
-        renderCalendar(); // Update partial status (yellow)
+        renderCalendar();
     }
 }
 
 function navigateToNextDay() {
-    // Simple logic: find next day in current month that is not complete
-    // We stay in current month for UX stability, unless it's last day
     let nextD = state.d + 1;
     if (nextD <= 25) {
         state.d = nextD;
@@ -583,7 +510,6 @@ function navigateToNextDay() {
 function saveToServer(m, d) {
     const key = `${m}_${d}`;
     const data = state.data[key];
-    
     const form = new FormData();
     form.append('action', 'save_progress');
     form.append('month', m);
@@ -591,52 +517,52 @@ function saveToServer(m, d) {
     form.append('verses', JSON.stringify(data.verses));
     if(data.comment) form.append('comment', data.comment);
     
-    fetch('leitura.php', { method: 'POST', body: form })
-        .then(r => r.json())
-        .then(res => {
-            if(res.success) console.log("Saved.");
-        })
-        .catch(err => console.error("Save failed", err));
+    fetch('leitura.php', { method: 'POST', body: form }).catch(err => console.error(err));
 }
 
-// --- MODALS ---
+// Config & Modal Logic
 function openNoteModal() {
     const key = `${state.m}_${state.d}`;
-    const current = state.data[key]?.comment || "";
-    document.getElementById('note-input').value = current;
+    document.getElementById('note-input').value = state.data[key]?.comment || "";
     document.getElementById('modal-note').style.display = 'flex';
 }
-
 function saveNote() {
     const val = document.getElementById('note-input').value;
     const key = `${state.m}_${state.d}`;
-    
     if(!state.data[key]) state.data[key] = { verses: [], comment: "" };
     state.data[key].comment = val;
-    
     saveToServer(state.m, state.d);
     document.getElementById('modal-note').style.display = 'none';
 }
-
-function openConfig() {
-    document.getElementById('modal-config').style.display = 'block';
-}
-
-function resetPlan() {
-    if(!confirm("Resetar TUDO?")) return;
-    
-    const f = new FormData(); f.append('action', 'reset_plan');
-    fetch('leitura.php', { method:'POST', body:f })
-        .then(() => window.location.reload());
-}
-
+function openConfig() { document.getElementById('modal-config').style.display = 'flex'; }
+function openGroupComments() { alert('Funcionalidade de grupo em breve!'); }
 function showToast() {
     const el = document.getElementById('save-toast');
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2000);
 }
 
-// Start
+// Config Tabs
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.config-content').forEach(c => c.style.display = 'none');
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.getElementById(`content-${tab}`).style.display = 'block';
+}
+
+function saveStartDate() {
+    const val = document.getElementById('start-date-input').value;
+    const f = new FormData();
+    f.append('action', 'save_settings');
+    f.append('start_date', val);
+    fetch('leitura.php', { method:'POST', body:f }).then(() => window.location.reload());
+}
+
+function resetPlan() {
+    if(!confirm("Tem certeza absoluta? Isso apagará TUDO.")) return;
+    const f = new FormData(); f.append('action', 'reset_plan');
+    fetch('leitura.php', { method:'POST', body:f }).then(() => window.location.reload());
+}
+
 init();
-window.openConfig = openConfig; // Expose to header
 </script>
