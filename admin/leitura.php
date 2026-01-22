@@ -164,9 +164,44 @@ renderAppHeader('Leitura Bíblica');
     .cal-item.active.partial .cal-num { color: #d97706; }
     
     .main-area { max-width: 800px; margin: 0 auto; padding: 20px 16px; }
-    .status-badge { font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-    .status-badge.success { background: #dcfce7; color: #166534; }
-    .status-badge.pending { background: #ffedd5; color: #9a3412; }
+
+    /* DAY HEADER CARD (New Request) */
+    .day-header-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+    }
+    .day-header-info { display: flex; flex-direction: column; gap: 4px; }
+    .day-header-label { 
+        font-size: 0.75rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.05em; 
+        color: var(--primary); 
+        font-weight: 700;
+        background: var(--primary-soft);
+        padding: 4px 10px;
+        border-radius: 12px;
+        align-self: flex-start;
+        margin-bottom: 6px;
+    }
+    .day-header-title { 
+        font-size: 2rem; 
+        font-weight: 800; 
+        color: var(--text); 
+        line-height: 1; 
+        letter-spacing: -0.02em;
+    }
+    /* Status Badge Refined inside Card */
+    .status-badge { 
+        font-size: 0.8rem; font-weight: 700; padding: 6px 14px; border-radius: 30px; 
+        text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px;
+    }
     
     .verse-card {
         background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px;
@@ -240,13 +275,15 @@ renderAppHeader('Leitura Bíblica');
 <div class="cal-strip" id="calendar-strip"></div>
 
 <div class="main-area">
-    <div style="margin-bottom: 24px;">
-        <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-light); font-weight:700; display:block; margin-bottom:4px;">Leitura de Hoje</span>
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <h1 id="day-title" style="font-size:1.75rem; margin:0; color: var(--text); line-height:1;">Carregando...</h1>
-            <span id="status-badge-container" style="flex-shrink: 0;"></span>
+    <!-- NEW HEADER CARD -->
+    <div class="day-header-card">
+        <div class="day-header-info">
+            <span class="day-header-label"><i data-lucide="book-open" width="12" style="margin-right:4px;"></i> Leitura de Hoje</span>
+            <h1 id="day-title" class="day-header-title">Carregando...</h1>
         </div>
+        <div id="status-badge-container"></div>
     </div>
+    
     <div id="verses-list"></div>
 </div>
 
@@ -378,9 +415,15 @@ function loadDay(m, d) {
     const title = document.getElementById('day-title');
     const badge = document.getElementById('status-badge-container');
     title.innerText = `Dia ${d}`;
-    badge.innerHTML = isDayComplete(m, d) ? '<span class="status-badge success">Concluído</span>' : '<span class="status-badge pending">Pendente</span>';
     
-    if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) { list.innerHTML = '...'; return; }
+    // Status Badge with Icons
+    if (isDayComplete(m, d)) {
+        badge.innerHTML = '<span class="status-badge success"><i data-lucide="check-circle" width="14"></i> Concluído</span>';
+    } else {
+        badge.innerHTML = '<span class="status-badge pending"><i data-lucide="clock" width="14"></i> Pendente</span>';
+    }
+    
+    if (!bibleReadingPlan || !bibleReadingPlan[m] || !bibleReadingPlan[m][d-1]) { list.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;">Sem leitura.</div>'; return; }
     const verses = bibleReadingPlan[m][d-1];
     const key = `${m}_${d}`;
     const savedVerses = (state.data[key] && state.data[key].verses) ? state.data[key].verses : [];
