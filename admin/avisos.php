@@ -9,29 +9,32 @@ checkLogin();
 // --- LÓGICA DE POST (CRUD) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
-        // Obter ID do usuário logado
-        $userId = $_SESSION['user_id'] ?? 1; // Fallback temporário
+        $userId = $_SESSION['user_id'] ?? 1;
 
         switch ($_POST['action']) {
             case 'create':
-                $stmt = $pdo->prepare("INSERT INTO avisos (title, message, priority, type, created_by, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+                $stmt = $pdo->prepare("INSERT INTO avisos (title, message, priority, type, target_audience, expires_at, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
                 $stmt->execute([
                     $_POST['title'],
                     $_POST['message'], // HTML do Quill
                     $_POST['priority'],
                     $_POST['type'],
+                    $_POST['target_audience'],
+                    !empty($_POST['expires_at']) ? $_POST['expires_at'] : NULL,
                     $userId
                 ]);
                 header('Location: avisos.php?success=created');
                 exit;
 
             case 'update':
-                $stmt = $pdo->prepare("UPDATE avisos SET title = ?, message = ?, priority = ?, type = ? WHERE id = ?");
+                $stmt = $pdo->prepare("UPDATE avisos SET title = ?, message = ?, priority = ?, type = ?, target_audience = ?, expires_at = ? WHERE id = ?");
                 $stmt->execute([
                     $_POST['title'],
                     $_POST['message'],
                     $_POST['priority'],
                     $_POST['type'],
+                    $_POST['target_audience'],
+                    !empty($_POST['expires_at']) ? $_POST['expires_at'] : NULL,
                     $_POST['id']
                 ]);
                 header('Location: avisos.php?success=updated');
@@ -84,7 +87,7 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
-$sql .= " ORDER BY a.created_at DESC";
+$sql .= " ORDER BY a.priority='urgent' DESC, a.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
@@ -101,7 +104,7 @@ renderAppHeader('Avisos');
 
     <?php
     // Header Limpo
-    renderPageHeader('Mural de Avisos', 'Fique por dentro do que acontece');
+    renderPageHeader('Mural de Avisos', 'Comunicação oficial e agenda');
     ?>
 
     <!-- Header Principal (Removido, substituído acima) -->
@@ -181,16 +184,36 @@ renderAppHeader('Avisos');
                 'info' => ['bg' => '#eff6ff', 'text' => '#2563eb', 'border' => '#bfdbfe', 'label' => 'Info'],
             ];
             $pStyle = $priorityColors[$aviso['priority']] ?? $priorityColors['info'];
+            
+            // Labels de Audience
+            $audLabels = ['all'=>'Todos', 'admins'=>'Líderes', 'team'=>'Equipe', 'leaders'=>'Líderes'];
+            $audLabel = $audLabels[$aviso['target_audience'] ?? 'all'] ?? 'Todos';
+            
+            $isExpired = !empty($aviso['expires_at']) && strtotime($aviso['expires_at']) < time();
+            $opacity = $isExpired ? '0.6' : '1';
         ?>
-            <div class="notice-card" style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 16px; position: relative; box-shadow: var(--shadow-sm);">
+            <div class="notice-card" style="opacity: <?= $opacity ?>; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 16px; position: relative; box-shadow: var(--shadow-sm);">
 
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                    <span style="
-                    background: <?= $pStyle['bg'] ?>; color: <?= $pStyle['text'] ?>; border: 1px solid <?= $pStyle['border'] ?>;
-                    padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-                ">
-                        <?= $pStyle['label'] ?>
-                    </span>
+                    <div style="display: flex; gap: 6px;">
+                        <span style="
+                            background: <?= $pStyle['bg'] ?>; color: <?= $pStyle['text'] ?>; border: 1px solid <?= $pStyle['border'] ?>;
+                            padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+                        ">
+                            <?= $pStyle['label'] ?>
+                        </span>
+                        <?php if($aviso['target_audience'] !== 'all'): ?>
+                            <span style="
+                                background: #f3f4f6; color: #4b5563; border: 1px solid #e5e7eb;
+                                padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600;
+                            ">
+                                <i data-lucide="users" width="10" style="display:inline; vertical-align:middle;"></i> <?= $audLabel ?>
+                            </span>
+                        <?php endif; ?>
+                         <?php if($isExpired): ?>
+                            <span style="background: #e5e7eb; color: #374151; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">EXPIRADO</span>
+                        <?php endif; ?>
+                    </div>
 
                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
                         <div style="position: relative;">
@@ -318,6 +341,28 @@ renderAppHeader('Avisos');
                 </div>
             </div>
 
+            <!-- NEW FIELDS: Audience & Expiration -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <div>
+                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Público-Alvo</label>
+                    <select name="target_audience" id="avisoTarget" style="
+                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
+                        background: var(--bg-body); color: var(--text-main);
+                    ">
+                        <option value="all">Todos</option>
+                        <option value="team">Equipe Louvor</option>
+                        <option value="admins">Apenas Líderes</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Expira em (Opcional)</label>
+                    <input type="date" name="expires_at" id="avisoExpires" style="
+                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
+                        background: var(--bg-body); color: var(--text-main);
+                    ">
+                </div>
+            </div>
+
             <div class="form-group" style="margin-bottom: 24px;">
                 <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Mensagem</label>
                 <div id="editor" style="height: 150px; background: white; color: black !important;"></div>
@@ -377,6 +422,11 @@ renderAppHeader('Avisos');
         document.getElementById('avisoTitle').value = aviso.title;
         document.getElementById('avisoType').value = aviso.type;
         document.getElementById('avisoPriority').value = aviso.priority;
+        
+        // New Fields
+        document.getElementById('avisoTarget').value = aviso.target_audience || 'all';
+        document.getElementById('avisoExpires').value = aviso.expires_at || '';
+
         quill.root.innerHTML = aviso.message; // Load HTML
 
         closeAllMenus();

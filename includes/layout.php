@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // includes/layout.php
 
-// Inicia sessão se não estiver iniciada
+// Inicia sess├úo se n├úo estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    // Configurar sessão para 30 dias (backup, idealmente auth.php deve ser chamado antes)
+    // Configurar sess├úo para 30 dias (backup, idealmente auth.php deve ser chamado antes)
     ini_set('session.gc_maxlifetime', 2592000);
     session_set_cookie_params([
         'lifetime' => 2592000,
@@ -21,14 +21,14 @@ function renderAppHeader($title, $backUrl = null)
 {
     global $pdo;
 
-    // --- Lógica de Usuário Global (Movida do Sidebar) ---
+    // --- L├│gica de Usu├írio Global (Movida do Sidebar) ---
     $userId = $_SESSION['user_id'] ?? 1;
     $currentUser = null;
     $userPhoto = null;
 
     if ($userId) {
         try {
-            // Tenta buscar foto também
+            // Tenta buscar foto tamb├®m
             $stmtUser = $pdo->prepare("SELECT name, phone, avatar FROM users WHERE id = ?");
             $stmtUser->execute([$userId]);
             $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ function renderAppHeader($title, $backUrl = null)
         }
 
         if (!$currentUser) {
-            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usuário', 'phone' => '', 'avatar' => null];
+            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usu├írio', 'phone' => '', 'avatar' => null];
         }
 
         // Avatar Logic
@@ -51,7 +51,7 @@ function renderAppHeader($title, $backUrl = null)
         }
     }
     // Compartilhar com globais ou session para acesso no header
-    // Uma forma suja mas eficaz para templates é usar global ou re-passar. 
+    // Uma forma suja mas eficaz para templates ├® usar global ou re-passar. 
     // Vamos usar global $_layoutUser para acesso em renderPageHeader
     global $_layoutUser;
     $_layoutUser = [
@@ -76,8 +76,8 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Open Graph / WhatsApp Sharing -->
         <meta property="og:type" content="website">
         <meta property="og:title" content="App Louvor PIB Oliveira">
-        <meta property="og:description" content="Gestão de escalas, repertório e ministério de louvor da PIB Oliveira.">
-        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando possível -->
+        <meta property="og:description" content="Gest├úo de escalas, repert├│rio e minist├®rio de louvor da PIB Oliveira.">
+        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss├¡vel -->
         <meta property="og:url" content="https://app.piboliveira.com.br/">
         <meta name="theme-color" content="#047857">
         <meta name="view-transition" content="same-origin">
@@ -85,7 +85,7 @@ function renderAppHeader($title, $backUrl = null)
         <meta name="view-transition" content="same-origin">
         <link rel="manifest" href="/manifest.json">
 
-        <!-- Ícones Lucide -->
+        <!-- ├ìcones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <style>
@@ -104,9 +104,9 @@ function renderAppHeader($title, $backUrl = null)
                 --text-muted: #64748b;
                 --border-color: #e2e8f0;
 
-                /* Espaçamento Compacto Mobile First */
+                /* Espa├ºamento Compacto Mobile First */
                 --touch-target: 44px;
-                /* Mínimo aceitável reduzido */
+                /* M├¡nimo aceit├ível reduzido */
                 --radius-md: 8px;
                 --radius-lg: 12px;
                 /* Mais quadrado, mais moderno */
@@ -179,7 +179,7 @@ function renderAppHeader($title, $backUrl = null)
                 /* ~13.6px - Leitura densa e profissional */
                 line-height: 1.5;
                 padding-bottom: 80px;
-                /* Proteção Floating Button */
+                /* Prote├º├úo Floating Button */
             }
 
             /* Tipografia Compacta */
@@ -190,7 +190,7 @@ function renderAppHeader($title, $backUrl = null)
                 color: var(--text-main);
                 margin: 0;
                 letter-spacing: -0.025em;
-                /* Títulos mais tight */
+                /* T├¡tulos mais tight */
             }
 
             h1 {
@@ -282,7 +282,7 @@ function renderAppHeader($title, $backUrl = null)
                 }
             }
 
-            /* Utilitários Universais */
+            /* Utilit├írios Universais */
             .ripple {
                 position: relative;
                 overflow: hidden;
@@ -328,7 +328,7 @@ function renderAppHeader($title, $backUrl = null)
             .animate-in {
                 animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 opacity: 0;
-                /* Começa invisível */
+                /* Come├ºa invis├¡vel */
             }
 
             /* Stagger delays for multiple items */
@@ -408,14 +408,30 @@ function renderAppHeader($title, $backUrl = null)
         <?php include_once 'sidebar.php'; ?>
 
         <div id="app-content">
-            <!-- Header Mobile (Só visível em telas menores) -->
+            <!-- Header Mobile (S├│ vis├¡vel em telas menores) -->
             <header class="mobile-header">
-                <button class="btn-menu-trigger" onclick="toggleSidebar()">
-                    <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
-                </button>
+                <?php
+                // Logic to determine if it's the home page
+                $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
+                ?>
+                
+                <?php if ($isHome): ?>
+                    <button class="btn-menu-trigger" onclick="toggleSidebar()">
+                        <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
+                    </button>
+                <?php else: ?>
+                    <div style="display: flex; gap: 4px; align-items: center; margin-left: -12px;">
+                        <button onclick="history.back()" class="btn-menu-trigger" style="margin-left: 0;" title="Voltar">
+                            <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
+                        </button>
+                        <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="Início">
+                            <i data-lucide="home" style="width: 24px; height: 24px;"></i>
+                        </a>
+                    </div>
+                <?php endif; ?>
                 <div class="page-title"><?= htmlspecialchars($title) ?></div>
 
-                <!-- Right Side: Stats + Líder + Avatar -->
+                <!-- Right Side: Stats + L├¡der + Avatar -->
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <!-- Stats Button (Repertorio only) -->
                     <?php if (strpos($_SERVER['PHP_SELF'], 'repertorio.php') !== false): ?>
@@ -431,32 +447,7 @@ function renderAppHeader($title, $backUrl = null)
                         </a>
                     <?php endif; ?>
 
-                    <!-- Notification Bell (Global) -->
-                    <?php
-                    // Check for Unread Notices (Simple check: created in last 3 days)
-                    $hasUnread = false;
-                    try {
-                        $nDate = date('Y-m-d', strtotime('-3 days'));
-                        $stmtN = $pdo->prepare("SELECT COUNT(*) FROM avisos WHERE created_at >= ? AND archived_at IS NULL AND (expires_at IS NULL OR expires_at >= CURDATE())");
-                        $stmtN->execute([$nDate]);
-                        $hasUnread = $stmtN->fetchColumn() > 0;
-                    } catch(Exception $e) {}
-                    ?>
-                    <a href="avisos.php" class="ripple" style="
-                        display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
-                        background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
-                        text-decoration: none; position: relative; color: var(--text-muted);
-                    ">
-                        <i data-lucide="bell" style="width: 20px;"></i>
-                        <?php if($hasUnread): ?>
-                            <span style="
-                                position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; 
-                                background: #ef4444; border-radius: 50%; border: 2px solid var(--bg-surface);
-                            "></span>
-                        <?php endif; ?>
-                    </a>
-
-                    <!-- Líder Button (Admin only) -->
+                    <!-- L├¡der Button (Admin only) -->
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
                             <i data-lucide="crown" style="color: white; width: 20px;"></i>
@@ -515,23 +506,6 @@ function renderAppHeader($title, $backUrl = null)
             </header>
 
         <?php
-
-    }
-
-    function renderPageHeader($title, $subtitle = '')
-    {
-    ?>
-        <div class="page-header-content" style="margin-bottom: 24px; animation: fadeInUp 0.5s ease-out;">
-            <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.03em; margin: 0;">
-                <?= htmlspecialchars($title) ?>
-            </h1>
-            <?php if ($subtitle): ?>
-                <p style="margin: 6px 0 0 0; color: var(--text-muted); font-size: 1rem; font-weight: 500;">
-                    <?= htmlspecialchars($subtitle) ?>
-                </p>
-            <?php endif; ?>
-        </div>
-    <?php
     }
 
 
@@ -552,7 +526,7 @@ function renderAppHeader($title, $backUrl = null)
                 flex-direction: column;
                 z-index: 1000;
                 pointer-events: none;
-                /* Permite clicar no conteúdo atrás quando menus estão fechados */
+                /* Permite clicar no conte├║do atr├ís quando menus est├úo fechados */
             }
 
             /* Main Bar */
@@ -628,13 +602,13 @@ function renderAppHeader($title, $backUrl = null)
                 background: var(--bg-surface);
                 border-radius: 24px 24px 0 0;
                 padding: 24px 20px 100px 20px;
-                /* Padding bottom extra para não ficar escondido atrás da barra */
+                /* Padding bottom extra para n├úo ficar escondido atr├ís da barra */
                 box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
                 transform: translateY(110%);
                 transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
                 pointer-events: auto;
                 z-index: 999;
-                /* Fica atrás da barra de navegação (1000) mas na frente do conteúdo */
+                /* Fica atr├ís da barra de navega├º├úo (1000) mas na frente do conte├║do */
                 max-height: 80vh;
                 overflow-y: auto;
             }
@@ -733,15 +707,15 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Overlay de Fundo -->
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
 
-        <!-- 1. Sheet GESTÃO -->
+        <!-- 1. Sheet GEST├âO -->
         <div id="sheet-gestao" class="bottom-sheet">
             <div class="sheet-header">
                 <div style="background: #ecfdf5; padding: 10px; border-radius: 12px; color: #047857;">
                     <i data-lucide="layout-grid"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">Gestão</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administração do Ministério</div>
+                    <div class="sheet-title">Gest├úo</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administra├º├úo do Minist├®rio</div>
                 </div>
             </div>
             <div class="sheet-grid">
@@ -755,7 +729,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="music"></i>
                     </div>
-                    Repertório
+                    Repert├│rio
                 </a>
                 <a href="membros.php" class="sheet-btn">
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
@@ -772,25 +746,25 @@ function renderAppHeader($title, $backUrl = null)
             </div>
         </div>
 
-        <!-- 2. Sheet ESPÍRITO -->
+        <!-- 2. Sheet ESP├ìRITO -->
         <div id="sheet-espirito" class="bottom-sheet">
             <div class="sheet-header">
                 <div style="background: #eef2ff; padding: 10px; border-radius: 12px; color: #4338ca;">
                     <i data-lucide="flame"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">Espírito</div>
+                    <div class="sheet-title">Esp├¡rito</div>
                     <div style="font-size: 0.85rem; color: var(--text-muted);">Vida Devocional</div>
                 </div>
             </div>
-            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista única para destaque -->
+            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista ├║nica para destaque -->
                 <a href="devocionais.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
                     <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
                         <i data-lucide="book-open"></i>
                     </div>
                     <div>
                         <div>Devocional</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexão diária</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conex├úo di├íria</div>
                     </div>
                 </a>
                 <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -798,8 +772,8 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="heart-handshake"></i>
                     </div>
                     <div>
-                        <div>Oração</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercessão e gratidão</div>
+                        <div>Ora├º├úo</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercess├úo e gratid├úo</div>
                     </div>
                 </a>
                 <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -807,7 +781,7 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="scroll"></i>
                     </div>
                     <div>
-                        <div>Leitura Bíblica</div>
+                        <div>Leitura B├¡blica</div>
                         <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Plano anual</div>
                     </div>
                 </a>
@@ -822,7 +796,7 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
                 <div>
                     <div class="sheet-title">Comunica</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mural e Interações</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mural e Intera├º├Áes</div>
                 </div>
             </div>
             <div class="sheet-grid">
@@ -836,25 +810,25 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
                         <i data-lucide="cake"></i>
                     </div>
-                    Aniversários
+                    Anivers├írios
                 </a>
             </div>
         </div>
 
 
-        <!-- Barra de Navegação Fixa -->
+        <!-- Barra de Navega├º├úo Fixa -->
         <div class="bottom-nav-container">
             <nav class="bottom-nav-bar">
 
-                <!-- Botão HOME (Primeiro) -->
+                <!-- Bot├úo HOME (Primeiro) -->
                 <a href="index.php" class="b-nav-item" onclick="closeAllSheets()">
                     <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white;">
                         <i data-lucide="home"></i>
                     </div>
-                    <span style="font-weight: 600; color:var(--primary);">Início</span>
+                    <span style="font-weight: 600; color:var(--primary);">In├¡cio</span>
                 </a>
 
-                <!-- Botão GERAL (ex-Gestão) -->
+                <!-- Bot├úo GERAL (ex-Gest├úo) -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #059669;">
                     <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
                         <i data-lucide="layout-grid"></i>
@@ -862,15 +836,15 @@ function renderAppHeader($title, $backUrl = null)
                     <span>Geral</span>
                 </button>
 
-                <!-- Botão ESPÍRITO -->
+                <!-- Bot├úo ESP├ìRITO -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #4f46e5;">
                     <div class="b-nav-icon-wrapper" style="background: #eef2ff;">
                         <i data-lucide="flame"></i>
                     </div>
-                    <span>Espírito</span>
+                    <span>Esp├¡rito</span>
                 </button>
 
-                <!-- Botão COMUNICA -->
+                <!-- Bot├úo COMUNICA -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-comunica', this)" style="color: #ea580c;">
                     <div class="b-nav-icon-wrapper" style="background: #fff7ed;">
                         <i data-lucide="megaphone"></i>
@@ -890,7 +864,7 @@ function renderAppHeader($title, $backUrl = null)
                 // 1. Fechar todos primeiro
                 closeAllSheets();
 
-                // 2. Se não estava aberto, abrir o clicado
+                // 2. Se n├úo estava aberto, abrir o clicado
                 if (!isOpen) {
                     sheet.classList.add('open');
                     overlay.classList.add('active');
@@ -911,7 +885,7 @@ function renderAppHeader($title, $backUrl = null)
         </script>
 
 
-        <!-- Inicializar Ícones -->
+        <!-- Inicializar ├ìcones -->
         <script>
             lucide.createIcons();
 
@@ -924,7 +898,7 @@ function renderAppHeader($title, $backUrl = null)
                 });
             }
 
-            // ... (Restante do script mantido, apenas adicionando verificação para evitar duplicidade de listeners se necessário)
+            // ... (Restante do script mantido, apenas adicionando verifica├º├úo para evitar duplicidade de listeners se necess├írio)
 
             // Adicionar classe animate-in aos cards principais automaticamente
             document.addEventListener('DOMContentLoaded', () => {
@@ -936,12 +910,12 @@ function renderAppHeader($title, $backUrl = null)
                 // Sidebar Swipe Logic (Vibe Coding)
                 const sidebar = document.getElementById('app-sidebar');
                 const appContent = document.getElementById('app-content');
-                if (!sidebar) return; // Segurança
+                if (!sidebar) return; // Seguran├ºa
 
                 let touchStartX = 0;
                 let touchEndX = 0;
 
-                // ... (Mantendo a lógica de swipe anterior) ...
+                // ... (Mantendo a l├│gica de swipe anterior) ...
 
                 document.addEventListener('touchstart', e => {
                     touchStartX = e.changedTouches[0].screenX;
@@ -1000,6 +974,209 @@ function renderAppHeader($title, $backUrl = null)
     </body>
 
     </html>
+<?php
+    }
+
+    // Nova fun├º├úo para cabe├ºalhos padronizados (Clean Header)
+    function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
+    {
+        global $_layoutUser;
+        $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
+?>
+    <header class="desktop-only-header" style="
+            background: var(--bg-surface); 
+            padding: 16px; 
+            margin: -20px -20px 24px -20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 40;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        ">
+        <style>
+            @media (max-width: 1024px) {
+                .desktop-only-header {
+                    display: none !important;
+                }
+            }
+        </style>
+
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <?php if (!$isHome): ?>
+                <button onclick="history.back()" class="ripple" title="Voltar" style="
+                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
+                display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
+            ">
+                    <i data-lucide="arrow-left" style="width: 22px;"></i>
+                </button>
+
+                <a href="index.php" class="ripple" title="Navega├º├úo Principal" style="
+                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
+                display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
+            ">
+                    <i data-lucide="home" style="width: 22px;"></i>
+                </a>
+            <?php endif; ?>
+        </div>
+
+        <div style="flex: 1; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+            <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($title) ?></h1>
+            <?php if ($subtitle): ?>
+                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($subtitle) ?></p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Direita: A├º├Áes + L├¡der + Perfil -->
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
+
+            <!-- L├¡der Button (Admin only) - Desktop -->
+            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
+                    <i data-lucide="crown" style="color: white; width: 20px;"></i>
+                </a>
+            <?php endif; ?>
+
+            <!-- A├º├úo da P├ígina (se houver) -->
+            <?php if (isset($rightAction) && $rightAction): ?>
+                <?= $rightAction ?>
+            <?php endif; ?>
+
+            <!-- Leitura Config Button (Leitura Only - Desktop) -->
+            <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
+                <button onclick="openConfig()" class="ripple" style="
+                    display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
+                    background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
+                    cursor: pointer; color: var(--text-muted); margin-left: 8px;
+                ">
+                    <i data-lucide="settings" style="width: 20px;"></i>
+                </button>
+            <?php endif; ?>
+
+            <!-- Perfil Dropdown (Card Moderno) -->
+            <div style="position: relative; margin-left: 4px;">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')"
+                    class="ripple" style="
+                    width: 52px; height: 52px; padding: 0; 
+                    border: 2px solid white; 
+                    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25), 0 4px 12px rgba(34, 197, 94, 0.2);
+                    border-radius: 50%; overflow: hidden; cursor: pointer; background: var(--bg-surface);
+                    display: flex; align-items: center; justify-content: center;
+                    transition: transform 0.2s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
+                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 100%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                    <?php endif; ?>
+                </button>
+
+                <!-- Dropdown Card -->
+                <div id="headerProfileDropdown" style="
+                    display: none; position: absolute; top: 54px; right: 0; 
+                    background: var(--bg-surface); border-radius: 16px; 
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
+                    min-width: 260px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
+                    animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                    transform-origin: top right;
+                ">
+                    <!-- Header do Card -->
+                    <div style="padding: 24px 20px; text-align: center; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
+                        <div style="width: 72px; height: 72px; margin: 0 auto 12px auto; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="font-weight: 800; color: var(--text-main); font-size: 1.05rem; margin-bottom: 4px;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                        <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Membro da Equipe</span>
+                    </div>
+
+                    <!-- Menu Itens -->
+                    <div style="padding: 12px;">
+                        <a href="perfil.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+                            <span style="font-weight: 500;">Meu Perfil</span>
+                        </a>
+
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <a href="lider.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                <div style="background: #fff7ed; padding: 8px; border-radius: 8px; display: flex; color: #d97706;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
+                                        <path d="M5 16v4h14v-4" />
+                                    </svg>
+                                </div>
+                                <span style="font-weight: 500;">Painel do L├¡der</span>
+                            </a>
+                        <?php endif; ?>
+
+
+
+                        <!-- Dark Mode Toggle -->
+                        <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                                </svg>
+                            </div>
+                            <span style="font-weight: 500;">Modo Escuro</span>
+                            <div style="margin-left: auto;">
+                                <label class="toggle-switch-mini">
+                                    <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
+                                    <span class="slider-mini round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
+
+                        <a href="../logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #ef4444; font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
+                            <div style="background: #fee2e2; padding: 8px; border-radius: 8px; display: flex; color: #ef4444;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <polyline points="16 17 21 12 16 7" />
+                                    <line x1="21" x2="9" y1="12" y2="12" />
+                                </svg>
+                            </div>
+                            <span style="font-weight: 600;">Sair da Conta</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toggleProfileDropdown(e, dropdownId = 'headerProfileDropdown') {
+                    e.stopPropagation();
+                    const dropdown = document.getElementById(dropdownId);
+                    if (!dropdown) return;
+
+                    const isVisible = dropdown.style.display === 'block';
+
+                    // Fechar outros
+                    document.querySelectorAll('[id$="Dropdown"]').forEach(d => d.style.display = 'none');
+
+                    if (!isVisible) {
+                        dropdown.style.display = 'block';
+                    }
+                }
+
+                document.addEventListener('click', function(e) {
+                    const dropdown = document.getElementById('headerProfileDropdown');
+                    if (dropdown && dropdown.style.display === 'block') {
+                        dropdown.style.display = 'none';
+                    }
+                });
+            </script>
+        </div>
+    </header>
 <?php
     }
 ?>

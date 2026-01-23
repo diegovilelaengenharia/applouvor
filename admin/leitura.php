@@ -1,5 +1,7 @@
 <?php
 // admin/leitura.php
+
+
 require_once '../includes/auth.php';
 require_once '../includes/layout.php';
 
@@ -27,22 +29,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     if ($action === 'save_progress') {
-        $m = (int)$_POST['month']; $d = (int)$_POST['day']; $comment = $_POST['comment'] ?? null; $title = $_POST['note_title'] ?? null; $versesJson = $_POST['verses'] ?? '[]';
+        $m = (int)$_POST['month']; 
+        $d = (int)$_POST['day']; 
+        $comment = $_POST['comment'] ?? null; 
+        $title = $_POST['note_title'] ?? null; 
+        $versesRaw = $_POST['verses'] ?? '[]';
+
+        // Validate JSON
+        $decoded = json_decode($versesRaw);
+        if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
+            echo json_encode(['success'=>false, 'error'=>'Invalid JSON data']);
+            exit;
+        }
+
         try {
             if ($comment !== null || $title !== null) {
-                $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at"; $vals = "VALUES (?, ?, ?, ?, NOW()"; $updates = "verses_read = VALUES(verses_read), completed_at = NOW()"; $params = [$userId, $m, $d, $versesJson];
+                // Ensure text fields are not excessively long (basic sanity check)
+                if ($comment && strlen($comment) > 5000) $comment = substr($comment, 0, 5000);
+                if ($title && strlen($title) > 255) $title = substr($title, 0, 255);
+
+                $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at"; 
+                $vals = "VALUES (?, ?, ?, ?, NOW()"; 
+                $updates = "verses_read = VALUES(verses_read), completed_at = NOW()"; 
+                $params = [$userId, $m, $d, $versesRaw];
+                
                 if($comment !== null) { $sql .= ", comment"; $vals .= ", ?"; $updates .= ", comment = VALUES(comment)"; $params[] = $comment; }
                 if($title !== null) { $sql .= ", note_title"; $vals .= ", ?"; $updates .= ", note_title = VALUES(note_title)"; $params[] = $title; }
+                
                 $sql .= ") $vals) ON DUPLICATE KEY UPDATE $updates";
             } else {
                  $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at) VALUES (?, ?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE verses_read = VALUES(verses_read), completed_at = NOW()";
-                $params = [$userId, $m, $d, $versesJson];
+                $params = [$userId, $m, $d, $versesRaw];
             }
             $pdo->prepare($sql)->execute($params);
             echo json_encode(['success' => true]);
-        } catch (Exception $e) { echo json_encode(['success'=>false, 'error'=>$e->getMessage()]); }
+        } catch (Exception $e) { 
+            // Return actual error only if strictly necessary, otherwise generic
+            error_log($e->getMessage()); // Log error on server
+            echo json_encode(['success'=>false, 'error'=>'Database error']); 
+        }
         exit;
     }
+
     if ($action === 'reset_plan') { $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ?")->execute([$userId]); echo json_encode(['success'=>true]); exit; }
 }
 
@@ -578,7 +606,16 @@ function saveStartDate() {
 }
 function resetPlan() { if(confirm("Certeza?")) { const f = new FormData(); f.append('action', 'reset_plan'); fetch('leitura.php', { method:'POST', body:f }).then(() => window.location.reload()); } }
 function showToast() { const el = document.getElementById('save-toast'); el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2000); }
-function openGroupComments() { alert('Breve'); }
+function openGroupComments() { 
+    const el = document.getElementById('save-toast'); 
+    el.innerHTML = '<i data-lucide="info" width="14"></i> Em breve: Comentários em Grupo!';
+    el.classList.add('show'); 
+    setTimeout(() => {
+        el.classList.remove('show');
+        // Reset toast text
+        setTimeout(() => el.innerHTML = '<i data-lucide="check" width="14"></i> Salvo auto', 300);
+    }, 2500); 
+}
 init();
 </script>
 <style> @keyframes scaleUp { from {transform:scale(0.95); opacity:0;} to {transform:scale(1); opacity:1;} } .auto-save-feedback.show { opacity:1; } </style>
