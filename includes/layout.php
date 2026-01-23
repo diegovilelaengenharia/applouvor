@@ -431,6 +431,31 @@ function renderAppHeader($title, $backUrl = null)
                         </a>
                     <?php endif; ?>
 
+                    <!-- Notification Bell (Global) -->
+                    <?php
+                    // Check for Unread Notices (Simple check: created in last 3 days)
+                    $hasUnread = false;
+                    try {
+                        $nDate = date('Y-m-d', strtotime('-3 days'));
+                        $stmtN = $pdo->prepare("SELECT COUNT(*) FROM avisos WHERE created_at >= ? AND archived_at IS NULL AND (expires_at IS NULL OR expires_at >= CURDATE())");
+                        $stmtN->execute([$nDate]);
+                        $hasUnread = $stmtN->fetchColumn() > 0;
+                    } catch(Exception $e) {}
+                    ?>
+                    <a href="avisos.php" class="ripple" style="
+                        display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
+                        background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
+                        text-decoration: none; position: relative; color: var(--text-muted);
+                    ">
+                        <i data-lucide="bell" style="width: 20px;"></i>
+                        <?php if($hasUnread): ?>
+                            <span style="
+                                position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; 
+                                background: #ef4444; border-radius: 50%; border: 2px solid var(--bg-surface);
+                            "></span>
+                        <?php endif; ?>
+                    </a>
+
                     <!-- Líder Button (Admin only) -->
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
@@ -490,7 +515,26 @@ function renderAppHeader($title, $backUrl = null)
             </header>
 
         <?php
+
     }
+
+    function renderPageHeader($title, $subtitle = '')
+    {
+    ?>
+        <div class="page-header-content" style="margin-bottom: 24px; animation: fadeInUp 0.5s ease-out;">
+            <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.03em; margin: 0;">
+                <?= htmlspecialchars($title) ?>
+            </h1>
+            <?php if ($subtitle): ?>
+                <p style="margin: 6px 0 0 0; color: var(--text-muted); font-size: 1rem; font-weight: 500;">
+                    <?= htmlspecialchars($subtitle) ?>
+                </p>
+            <?php endif; ?>
+        </div>
+    <?php
+    }
+
+
 
     function renderAppFooter()
     {
@@ -956,209 +1000,6 @@ function renderAppHeader($title, $backUrl = null)
     </body>
 
     </html>
-<?php
-    }
-
-    // Nova função para cabeçalhos padronizados (Clean Header)
-    function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
-    {
-        global $_layoutUser;
-        $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
-?>
-    <header class="desktop-only-header" style="
-            background: var(--bg-surface); 
-            padding: 16px; 
-            margin: -20px -20px 24px -20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            position: sticky; top: 0; z-index: 40;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-        ">
-        <style>
-            @media (max-width: 1024px) {
-                .desktop-only-header {
-                    display: none !important;
-                }
-            }
-        </style>
-
-        <div style="display: flex; align-items: center; gap: 4px;">
-            <?php if (!$isHome): ?>
-                <button onclick="history.back()" class="ripple" title="Voltar" style="
-                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
-                display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
-            ">
-                    <i data-lucide="arrow-left" style="width: 22px;"></i>
-                </button>
-
-                <a href="index.php" class="ripple" title="Navegação Principal" style="
-                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
-                display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
-            ">
-                    <i data-lucide="home" style="width: 22px;"></i>
-                </a>
-            <?php endif; ?>
-        </div>
-
-        <div style="flex: 1; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-            <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($title) ?></h1>
-            <?php if ($subtitle): ?>
-                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($subtitle) ?></p>
-            <?php endif; ?>
-        </div>
-
-        <!-- Direita: Ações + Líder + Perfil -->
-        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
-
-            <!-- Líder Button (Admin only) - Desktop -->
-            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
-                    <i data-lucide="crown" style="color: white; width: 20px;"></i>
-                </a>
-            <?php endif; ?>
-
-            <!-- Ação da Página (se houver) -->
-            <?php if (isset($rightAction) && $rightAction): ?>
-                <?= $rightAction ?>
-            <?php endif; ?>
-
-            <!-- Leitura Config Button (Leitura Only - Desktop) -->
-            <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
-                <button onclick="openConfig()" class="ripple" style="
-                    display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
-                    background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
-                    cursor: pointer; color: var(--text-muted); margin-left: 8px;
-                ">
-                    <i data-lucide="settings" style="width: 20px;"></i>
-                </button>
-            <?php endif; ?>
-
-            <!-- Perfil Dropdown (Card Moderno) -->
-            <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')"
-                    class="ripple" style="
-                    width: 52px; height: 52px; padding: 0; 
-                    border: 2px solid white; 
-                    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25), 0 4px 12px rgba(34, 197, 94, 0.2);
-                    border-radius: 50%; overflow: hidden; cursor: pointer; background: var(--bg-surface);
-                    display: flex; align-items: center; justify-content: center;
-                    transition: transform 0.2s;
-                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                    <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
-                    <?php else: ?>
-                        <div style="width: 100%; height: 100%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                        </div>
-                    <?php endif; ?>
-                </button>
-
-                <!-- Dropdown Card -->
-                <div id="headerProfileDropdown" style="
-                    display: none; position: absolute; top: 54px; right: 0; 
-                    background: var(--bg-surface); border-radius: 16px; 
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-                    min-width: 260px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
-                    animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-                    transform-origin: top right;
-                ">
-                    <!-- Header do Card -->
-                    <div style="padding: 24px 20px; text-align: center; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
-                        <div style="width: 72px; height: 72px; margin: 0 auto 12px auto; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-                            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div style="font-weight: 800; color: var(--text-main); font-size: 1.05rem; margin-bottom: 4px;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                        <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Membro da Equipe</span>
-                    </div>
-
-                    <!-- Menu Itens -->
-                    <div style="padding: 12px;">
-                        <a href="perfil.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            </div>
-                            <span style="font-weight: 500;">Meu Perfil</span>
-                        </a>
-
-                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <a href="lider.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                <div style="background: #fff7ed; padding: 8px; border-radius: 8px; display: flex; color: #d97706;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
-                                        <path d="M5 16v4h14v-4" />
-                                    </svg>
-                                </div>
-                                <span style="font-weight: 500;">Painel do Líder</span>
-                            </a>
-                        <?php endif; ?>
-
-
-
-                        <!-- Dark Mode Toggle -->
-                        <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-                                </svg>
-                            </div>
-                            <span style="font-weight: 500;">Modo Escuro</span>
-                            <div style="margin-left: auto;">
-                                <label class="toggle-switch-mini">
-                                    <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
-                                    <span class="slider-mini round"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
-
-                        <a href="../logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #ef4444; font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
-                            <div style="background: #fee2e2; padding: 8px; border-radius: 8px; display: flex; color: #ef4444;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                    <polyline points="16 17 21 12 16 7" />
-                                    <line x1="21" x2="9" y1="12" y2="12" />
-                                </svg>
-                            </div>
-                            <span style="font-weight: 600;">Sair da Conta</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-                function toggleProfileDropdown(e, dropdownId = 'headerProfileDropdown') {
-                    e.stopPropagation();
-                    const dropdown = document.getElementById(dropdownId);
-                    if (!dropdown) return;
-
-                    const isVisible = dropdown.style.display === 'block';
-
-                    // Fechar outros
-                    document.querySelectorAll('[id$="Dropdown"]').forEach(d => d.style.display = 'none');
-
-                    if (!isVisible) {
-                        dropdown.style.display = 'block';
-                    }
-                }
-
-                document.addEventListener('click', function(e) {
-                    const dropdown = document.getElementById('headerProfileDropdown');
-                    if (dropdown && dropdown.style.display === 'block') {
-                        dropdown.style.display = 'none';
-                    }
-                });
-            </script>
-        </div>
-    </header>
 <?php
     }
 ?>
