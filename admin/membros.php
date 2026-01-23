@@ -54,6 +54,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY name ASC")->fetchAll(PDO::FET
 renderAppHeader('Membros');
 ?>
 
+    <?php
     renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     ?>
 
@@ -123,6 +124,8 @@ renderAppHeader('Membros');
 
                     <!-- Ações Rápidas (Compactas) -->
                     <div style="display: flex; align-items: center; gap: 4px;">
+                    <!-- Ações Rápidas (Compactas) -->
+                    <div style="display: flex; align-items: center; gap: 4px;">
                         <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
                             <i data-lucide="message-circle" style="width: 16px;"></i>
                         </a>
@@ -130,30 +133,32 @@ renderAppHeader('Membros');
                             <i data-lucide="phone" style="width: 16px;"></i>
                         </a>
 
-                        <!-- Menu Trigger -->
-                        <div style="position: relative;">
-                            <button onclick="toggleMenu('menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
-                                <i data-lucide="more-vertical" style="width: 16px;"></i>
-                            </button>
-
-                            <!-- Dropdown (Mantido) -->
-                            <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
-                                display: none; position: absolute; right: 0; top: 32px; 
-                                background: var(--bg-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); 
-                                border: 1px solid var(--border-color); width: 140px; z-index: 10; overflow: hidden;
-                            ">
-                                <button onclick='openEditModal(<?= json_encode($user) ?>)' style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: var(--text-main); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                    <i data-lucide="edit-3" style="width: 14px;"></i> Editar
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <!-- Menu Trigger (Admin Only) -->
+                            <div style="position: relative;">
+                                <button onclick="toggleMenu(event, 'menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
+                                    <i data-lucide="more-vertical" style="width: 16px;"></i>
                                 </button>
-                                <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                                    <button type="submit" style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer; border-top: 1px solid var(--border-color);">
-                                        <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
+
+                                <!-- Dropdown -->
+                                <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
+                                    display: none; position: absolute; right: 0; top: 32px; 
+                                    background: var(--bg-surface); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+                                    border: 1px solid var(--border-color); width: 140px; z-index: 50; overflow: hidden;
+                                ">
+                                    <button onclick='openEditModal(<?= json_encode($user) ?>)' style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: var(--text-main); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <i data-lucide="edit-3" style="width: 14px;"></i> Editar
                                     </button>
-                                </form>
+                                    <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                                        <button type="submit" style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer; border-top: 1px solid var(--border-color);">
+                                            <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -163,19 +168,21 @@ renderAppHeader('Membros');
 
     <div style="height: 60px;"></div>
 
-    <!-- Floating Action Button -->
-    <button onclick="openAddModal()" class="ripple" style="
-        position: fixed; bottom: 32px; right: 24px;
-        background: #166534; color: white; padding: 16px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
-        border: none; cursor: pointer; z-index: 50; transition: transform 0.2s;
-    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
-        </svg>
-    </button>
+    <!-- Floating Action Button (Admin Only) -->
+    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+        <button onclick="openAddModal()" class="ripple" style="
+            position: fixed; bottom: 32px; right: 24px;
+            background: #166534; color: white; padding: 16px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
+            border: none; cursor: pointer; z-index: 50; transition: transform 0.2s;
+        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+            </svg>
+        </button>
+    <?php endif; ?>
 </div>
 
 <!-- MODAL ADD/EDIT -->
@@ -415,13 +422,16 @@ renderAppHeader('Membros');
     }
 
     // Dropdown Logic
-    function toggleMenu(id) {
-        // Fechar outros
-        closeAllMenus();
+    function toggleMenu(e, id) {
+        if(e) e.stopPropagation();
+        
+        // Se este j├í est├í aberto, fecha todos. Se n├úo, fecha e abre este.
         const menu = document.getElementById(id);
-        if (menu.style.display === 'block') {
-            menu.style.display = 'none';
-        } else {
+        const isVisible = menu.style.display === 'block';
+        
+        closeAllMenus();
+        
+        if (!isVisible) {
             menu.style.display = 'block';
         }
     }
@@ -432,7 +442,8 @@ renderAppHeader('Membros');
 
     // Fechar dropdowns ao clicar fora
     document.addEventListener('click', function(e) {
-        if (!e.target.closest('.btn-icon') && !e.target.closest('.dropdown-menu')) {
+        // Se n├úo clicou em um bot├úo de menu ou dentro de um menu, fecha tudo
+        if (!e.target.closest('.icon-action') && !e.target.closest('.dropdown-menu')) {
             closeAllMenus();
         }
     });
