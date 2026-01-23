@@ -99,13 +99,12 @@ renderAppHeader('Avisos');
 <!-- Quill CSS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-<div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
-
-
     <?php
     // Header Limpo
     renderPageHeader('Mural de Avisos', 'Comunicação oficial e agenda');
     ?>
+
+<div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
 
     <!-- Header Principal (Removido, substituído acima) -->
 

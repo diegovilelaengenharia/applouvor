@@ -54,9 +54,6 @@ $users = $pdo->query("SELECT * FROM users ORDER BY name ASC")->fetchAll(PDO::FET
 renderAppHeader('Membros');
 ?>
 
-<div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
-
-    <!-- Cabeçalho Principal (Substituído por renderPageHeader) -->
     <?php
     $actionBtn = '
         <button onclick="openAddModal()" class="ripple" style="
@@ -73,6 +70,8 @@ renderAppHeader('Membros');
 
     renderPageHeader('Equipe', count($users) . ' membros cadastrados', $actionBtn);
     ?>
+
+<div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
 
     <div style="margin-bottom: 16px;">
         <div style="display: none;"> <!-- Ocultando header manual antigo -->
