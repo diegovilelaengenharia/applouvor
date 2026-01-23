@@ -129,7 +129,6 @@ renderAppHeader('Membros');
                     </div>
 
                     <!-- Ações Rápidas (Compactas) -->
-                    <div style="display: flex; align-items: center; gap: 4px;">
                     <!-- Ações Rápidas (Compactas) -->
                     <div style="display: flex; align-items: center; gap: 4px;">
                         <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
