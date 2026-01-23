@@ -481,19 +481,19 @@ try {
 
 <div class="dashboard-container">
 
-    <!-- 1. Acesso Rápido (Grid Unificado) -->
+    <!-- 1. Gestão (Acesso Rápido) -->
     <div class="section-header">
         <div style="background: linear-gradient(135deg, #047857, #059669); padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
         </div>
-        <h2>Acesso Rápido</h2>
+        <h2>Gestão</h2>
     </div>
 
-    <!-- Grid de Botões (Estilo "Criar Novo") -->
+    <!-- Grid de Botões (Gestão) -->
     <div class="create-grid" style="
         display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
     ">
-        <!-- Gestão -->
+        <!-- Equipe -->
         <a href="membros.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -508,6 +508,7 @@ try {
             </div>
         </a>
 
+        <!-- Avisos -->
         <a href="avisos.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -522,7 +523,34 @@ try {
             </div>
         </a>
 
-        <!-- Estatísticas -->
+        <!-- Indisponibilidades (NOVO) -->
+        <a href="indisponibilidades_equipe.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 10px;">
+                <i data-lucide="calendar-x" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Ausências</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Equipe</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- 2. Estatísticas (Separado) -->
+    <div class="section-header">
+        <div style="background: linear-gradient(135deg, #3b82f6, #2563eb); padding: 8px; border-radius: 8px; color: white;">
+            <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
+        </div>
+        <h2>Estatísticas</h2>
+    </div>
+
+    <div class="create-grid" style="
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
+    ">
+         <!-- Estatísticas Escalas -->
         <a href="escalas_stats.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -533,10 +561,11 @@ try {
             </div>
              <div style="text-align: center;">
                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Escalas</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Estatísticas</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
             </div>
         </a>
 
+        <!-- Estatísticas Repertório -->
         <a href="repertorio_stats.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -547,51 +576,65 @@ try {
             </div>
              <div style="text-align: center;">
                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Repertório</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Análises</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
             </div>
         </a>
     </div>
 
-    <!-- 2. Criar Novo (Compact Grid) -->
+    <!-- 3. Criar Novo -->
     <div class="section-header">
-        <i data-lucide="plus-circle" style="color: var(--text-muted);"></i>
+        <div style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); padding: 8px; border-radius: 8px; color: white;">
+            <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
+        </div>
         <h2>Criar Novo</h2>
     </div>
     
     <div class="create-grid" style="
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
     ">
+         <!-- Nova Escala -->
          <a href="escala_adicionar.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #f5f3ff; color: #8b5cf6; padding: 8px; border-radius: 8px;">
-                <i data-lucide="calendar-plus" style="width: 18px;"></i>
+            <div style="background: #f5f3ff; color: #8b5cf6; padding: 10px; border-radius: 10px;">
+                <i data-lucide="calendar-plus" style="width: 20px;"></i>
             </div>
-            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Escala</span>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Escala</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Agendar Nova</div>
+            </div>
         </a>
 
+        <!-- Nova Música -->
         <a href="musica_adicionar.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-             <div style="background: #ecfdf5; color: #10b981; padding: 8px; border-radius: 8px;">
-                <i data-lucide="music" style="width: 18px;"></i>
+             <div style="background: #ecfdf5; color: #10b981; padding: 10px; border-radius: 10px;">
+                <i data-lucide="music" style="width: 20px;"></i>
             </div>
-            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Música</span>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Música</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Cadastrar</div>
+            </div>
         </a>
 
+        <!-- Novo Aviso -->
          <a href="avisos.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #fffbeb; color: #f59e0b; padding: 8px; border-radius: 8px;">
-                <i data-lucide="bell-plus" style="width: 18px;"></i>
+            <div style="background: #fffbeb; color: #f59e0b; padding: 10px; border-radius: 10px;">
+                <i data-lucide="bell-plus" style="width: 20px;"></i>
             </div>
-            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Aviso</span>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Aviso</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Publicar</div>
+            </div>
         </a>
     </div>
 

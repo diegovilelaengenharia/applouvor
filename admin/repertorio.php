@@ -9,20 +9,8 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório');
 
-// Right Action: Stats Button
-ob_start();
-?>
-<a href="repertorio_stats.php" class="ripple" style="
-    background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe;
-    padding: 8px 16px; border-radius: 12px; text-decoration: none;
-    font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
-    transition: all 0.2s;
-">
-    <i data-lucide="bar-chart-2" style="width: 16px;"></i>
-    Estatísticas
-</a>
-<?php
-$rightAction = ob_get_clean();
+
+$rightAction = null;
 
 renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
 ?>

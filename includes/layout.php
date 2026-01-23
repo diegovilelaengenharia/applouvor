@@ -1114,7 +1114,7 @@ function renderAppHeader($title, $backUrl = null)
                                         <path d="M5 16v4h14v-4" />
                                     </svg>
                                 </div>
-                                <span style="font-weight: 500;">Painel do L├¡der</span>
+                                <span style="font-weight: 500;">Painel do Líder</span>
                             </a>
                         <?php endif; ?>
 

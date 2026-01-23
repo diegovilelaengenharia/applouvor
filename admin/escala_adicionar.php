@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $eventType = $_POST['custom_event_type'];
     }
 
-    $stmt = $pdo->prepare("INSERT INTO schedules (event_date, event_type, notes) VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO schedules (event_date, event_type, notes, created_at) VALUES (?, ?, ?, NOW())");
     $stmt->execute([$_POST['event_date'], $eventType, $_POST['notes']]);
     $scheduleId = $pdo->lastInsertId();
 
