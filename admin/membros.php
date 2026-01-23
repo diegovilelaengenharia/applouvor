@@ -9,6 +9,12 @@ checkLogin();
 // --- LÓGICA DE POST ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
+        // Backend Validation (RBAC)
+        if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+            header("HTTP/1.1 403 Forbidden");
+            exit("Acesso negado. Apenas administradores podem realizar esta ação.");
+        }
+
         // Adicionar novo membro
         if ($_POST['action'] === 'add') {
             $stmt = $pdo->prepare("INSERT INTO users (name, role, instrument, phone, password) VALUES (?, ?, ?, ?, ?)");
