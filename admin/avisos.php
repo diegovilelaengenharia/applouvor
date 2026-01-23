@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // --- FILTROS E BUSCA ---
 $showArchived = isset($_GET['archived']) && $_GET['archived'] === '1';
+$showHistory = isset($_GET['history']) && $_GET['history'] === '1';
 $filterType = $_GET['type'] ?? 'all';
 $search = $_GET['search'] ?? '';
 
@@ -72,8 +73,11 @@ $params = [];
 
 if ($showArchived) {
     $sql .= " AND a.archived_at IS NOT NULL";
+} elseif ($showHistory) {
+    $sql .= " AND (a.archived_at IS NOT NULL OR (a.expires_at IS NOT NULL AND a.expires_at < CURDATE()))";
 } else {
-    $sql .= " AND a.archived_at IS NULL";
+    // Default: Not archived AND (Not expired OR today <= expires_at)
+    $sql .= " AND a.archived_at IS NULL AND (a.expires_at IS NULL OR a.expires_at >= CURDATE())";
 }
 
 if ($filterType !== 'all') {
@@ -87,7 +91,9 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
-$sql .= " ORDER BY a.priority='urgent' DESC, a.created_at DESC";
+$sql .= " ORDER BY 
+    CASE WHEN a.priority = 'urgent' THEN 1 WHEN a.priority = 'important' THEN 2 ELSE 3 END ASC, 
+    a.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
@@ -117,6 +123,7 @@ renderAppHeader('Avisos');
             <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
             <form onsubmit="return true;"> <!-- Submit via GET padrão -->
                 <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
+                <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
                 <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
                 <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..."
                     style="
@@ -159,9 +166,14 @@ renderAppHeader('Avisos');
         </div>
 
         <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 0.85rem;">
-            <a href="?archived=<?= $showArchived ? '0' : '1' ?>" style="color: var(--text-muted); font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px;">
-                <i data-lucide="<?= $showArchived ? 'rotate-ccw' : 'archive' ?>" style="width: 14px;"></i>
-                <?= $showArchived ? 'Ver Ativos' : 'Ver Arquivados' ?>
+            <a href="?history=<?= $showHistory ? '0' : '1' ?>" class="ripple" style="
+                color: var(--text-muted); font-weight: 600; text-decoration: none; 
+                display: flex; align-items: center; gap: 4px; padding: 6px 12px; 
+                background: <?= $showHistory ? 'var(--bg-surface)' : 'transparent' ?>; 
+                border-radius: 20px; border: 1px solid <?= $showHistory ? 'var(--border-color)' : 'transparent' ?>;
+            ">
+                <i data-lucide="clock" style="width: 14px;"></i>
+                <?= $showHistory ? 'Ver Ativos' : 'Ver Histórico' ?>
             </a>
         </div>
 

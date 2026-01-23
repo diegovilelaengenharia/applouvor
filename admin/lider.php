@@ -480,133 +480,112 @@ try {
 
 <div class="dashboard-container">
 
-    <!-- KPIs Grid -->
-    <div class="kpi-grid">
-
-        <!-- Próxima Escala -->
-        <a href="escalas.php" class="kpi-card" style="--accent-color: #8b5cf6;">
-            <div class="kpi-header">
-                <div class="kpi-icon" style="background: #f5f3ff; color: #8b5cf6;">
-                    <i data-lucide="calendar"></i>
+    <!-- 1. Funções Exclusivas (Premium Cards) -->
+    <div class="section-header">
+        <div style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 8px; border-radius: 8px; color: white;">
+            <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
+        </div>
+        <h2>Funções Exclusivas</h2>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px;">
+        <!-- Gerenciar Equipe -->
+        <a href="membros.php" class="ripple" style="
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 16px; padding: 20px; text-decoration: none; color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); position: relative; overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+            <div style="position: absolute; top: -10px; right: -10px; background: rgba(255,255,255,0.1); width: 80px; height: 80px; border-radius: 50%;"></div>
+            
+            <div style="display: flex; gap: 14px; align-items: center;">
+                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; backdrop-filter: blur(4px);">
+                    <i data-lucide="users" style="width: 28px; height: 28px;"></i>
                 </div>
-                <div class="kpi-label">Próxima Escala</div>
+                <div>
+                    <div style="font-size: 1.1rem; font-weight: 800;">Gerenciar Equipe</div>
+                    <div style="font-size: 0.8rem; opacity: 0.9;">Adicionar, editar e remover membros</div>
+                </div>
             </div>
-            <?php if ($next_scale): ?>
-                <div class="kpi-value"><?= date('d/m', strtotime($next_scale['event_date'])) ?></div>
-                <div class="kpi-subtitle"><?= htmlspecialchars($next_scale['event_type']) ?> • <?= date('H:i', strtotime($next_scale['event_time'])) ?></div>
-            <?php else: ?>
-                <div class="kpi-value">--</div>
-                <div class="kpi-subtitle">Nenhuma agendada</div>
-            <?php endif; ?>
+            <!-- Botão Fake -->
+            <div style="margin-top: 16px; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 6px;">
+                Acessar Painel <i data-lucide="arrow-right" style="width: 14px;"></i>
+            </div>
         </a>
 
-        <!-- Total de Músicas -->
-        <a href="repertorio.php" class="kpi-card" style="--accent-color: #10b981;">
-            <div class="kpi-header">
-                <div class="kpi-icon" style="background: #ecfdf5; color: #10b981;">
-                    <i data-lucide="music"></i>
-                </div>
-                <div class="kpi-label">Músicas Ativas</div>
-            </div>
-            <div class="kpi-value"><?= $total_songs ?></div>
-            <div class="kpi-subtitle"><?= $songs_incomplete ?> sem material completo</div>
-        </a>
+        <!-- Gerenciar Avisos -->
+        <a href="avisos.php" class="ripple" style="
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 16px; padding: 20px; text-decoration: none; color: white;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2); position: relative; overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+            <div style="position: absolute; top: -10px; right: -10px; background: rgba(255,255,255,0.1); width: 80px; height: 80px; border-radius: 50%;"></div>
 
-        <!-- Total de Membros -->
-        <a href="membros.php" class="kpi-card" style="--accent-color: #3b82f6;">
-            <div class="kpi-header">
-                <div class="kpi-icon" style="background: #eff6ff; color: #3b82f6;">
-                    <i data-lucide="users"></i>
+            <div style="display: flex; gap: 14px; align-items: center;">
+                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; backdrop-filter: blur(4px);">
+                    <i data-lucide="megaphone" style="width: 28px; height: 28px;"></i>
                 </div>
-                <div class="kpi-label">Membros Ativos</div>
-            </div>
-            <div class="kpi-value"><?= $total_members ?></div>
-            <div class="kpi-subtitle"><?= $birthdays_count ?> aniversariantes este mês</div>
-        </a>
-
-        <!-- Avisos Ativos -->
-        <a href="avisos.php" class="kpi-card" style="--accent-color: #f59e0b;">
-            <div class="kpi-header">
-                <div class="kpi-icon" style="background: #fffbeb; color: #f59e0b;">
-                    <i data-lucide="bell"></i>
+                <div>
+                    <div style="font-size: 1.1rem; font-weight: 800;">Comunicados</div>
+                    <div style="font-size: 0.8rem; opacity: 0.9;">Mural de avisos e notificações</div>
                 </div>
-                <div class="kpi-label">Avisos Ativos</div>
             </div>
-            <div class="kpi-value"><?= $total_avisos ?></div>
-            <div class="kpi-subtitle">Comunicação ativa</div>
+             <div style="margin-top: 16px; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 6px;">
+                Gerenciar Avisos <i data-lucide="arrow-right" style="width: 14px;"></i>
+            </div>
         </a>
-
     </div>
 
-    <!-- Alertas -->
-    <?php if ($absences_count > 0 || $songs_incomplete > 0 || $birthdays_count > 0): ?>
-        <div class="section-header">
-            <i data-lucide="alert-triangle" style="color: #f59e0b;"></i>
-            <h2>Alertas e Notificações</h2>
-        </div>
-        <div class="alerts-container">
-            <?php if ($absences_count > 0): ?>
-                <div class="alert-item">
-                    <i data-lucide="user-x" style="color: #ef4444;"></i>
-                    <div>
-                        <strong><?= $absences_count ?> indisponibilidade(s)</strong> registrada(s) para os próximos dias
-                        <a href="indisponibilidade.php" style="color: #ef4444; margin-left: 8px;">Ver detalhes →</a>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($songs_incomplete > 0): ?>
-                <div class="alert-item">
-                    <i data-lucide="music" style="color: #f59e0b;"></i>
-                    <div>
-                        <strong><?= $songs_incomplete ?> música(s)</strong> sem cifra ou letra completa
-                        <a href="repertorio.php" style="color: #f59e0b; margin-left: 8px;">Revisar →</a>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($birthdays_count > 0): ?>
-                <div class="alert-item">
-                    <i data-lucide="cake" style="color: #8b5cf6;"></i>
-                    <div>
-                        <strong><?= $birthdays_count ?> aniversariante(s)</strong> este mês
-                        <a href="aniversarios.php" style="color: #8b5cf6; margin-left: 8px;">Ver lista →</a>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Criar Novo -->
-    <div class="section-header">
-        <i data-lucide="plus-circle"></i>
+     <!-- 2. Criar Novo (Compact Grid) -->
+     <div class="section-header">
+        <i data-lucide="plus-circle" style="color: var(--text-muted);"></i>
         <h2>Criar Novo</h2>
     </div>
-    <div class="create-grid">
-        <a href="escala_adicionar.php" class="create-btn">
-            <i data-lucide="calendar-plus" style="width: 18px; color: #8b5cf6;"></i>
-            <span>Escala</span>
+    
+    <div class="create-grid" style="
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 32px;
+    ">
+        <a href="escala_adicionar.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #f5f3ff; color: #8b5cf6; padding: 8px; border-radius: 8px;">
+                <i data-lucide="calendar-plus" style="width: 20px;"></i>
+            </div>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Escala</span>
         </a>
-        <a href="musica_adicionar.php" class="create-btn">
-            <i data-lucide="music" style="width: 18px; color: #10b981;"></i>
-            <span>Música</span>
+
+        <a href="musica_adicionar.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #ecfdf5; color: #10b981; padding: 8px; border-radius: 8px;">
+                <i data-lucide="music" style="width: 20px;"></i>
+            </div>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Música</span>
         </a>
-        <a href="membros.php" class="create-btn">
-            <i data-lucide="user-plus" style="width: 18px; color: #3b82f6;"></i>
-            <span>Membro</span>
-        </a>
-        <a href="avisos.php" class="create-btn">
-            <i data-lucide="megaphone" style="width: 18px; color: #f59e0b;"></i>
-            <span>Aviso</span>
+
+         <a href="avisos.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #fffbeb; color: #f59e0b; padding: 8px; border-radius: 8px;">
+                <i data-lucide="bell-plus" style="width: 20px;"></i>
+            </div>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Aviso</span>
         </a>
     </div>
 
-    <!-- Estatísticas -->
-    <div class="section-header" style="margin-top: 32px;">
-        <i data-lucide="bar-chart-2"></i>
+    <!-- 3. Estatísticas -->
+    <div class="section-header">
+        <i data-lucide="bar-chart-2" style="color: var(--text-muted);"></i>
         <h2>Estatísticas</h2>
     </div>
-    <div class="stats-buttons">
+    <div class="stats-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 32px;">
         <!-- Estatísticas de Escalas -->
         <a href="escalas_stats.php" class="stats-card">
             <div class="stats-card-header">
@@ -655,9 +634,9 @@ try {
         </a>
     </div>
 
-    <!-- Atividade Recente -->
+    <!-- 4. Atividade Recente -->
     <div class="section-header">
-        <i data-lucide="activity"></i>
+        <i data-lucide="activity" style="color: var(--text-muted);"></i>
         <h2>Atividade Recente</h2>
     </div>
     <div class="activity-list">
