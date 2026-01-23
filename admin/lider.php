@@ -104,7 +104,8 @@ try {
         UNION ALL
         (SELECT 'aviso' as tipo, title as titulo, created_at FROM avisos ORDER BY created_at DESC LIMIT 3)
         ORDER BY created_at DESC
-        LIMIT 10
+        ORDER BY created_at DESC
+        LIMIT 20
     ");
     $recent_activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
@@ -480,157 +481,117 @@ try {
 
 <div class="dashboard-container">
 
-    <!-- 1. Funções Exclusivas (Premium Cards) -->
+    <!-- 1. Acesso Rápido (Grid Unificado) -->
     <div class="section-header">
-        <div style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 8px; border-radius: 8px; color: white;">
-            <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
+        <div style="background: linear-gradient(135deg, #047857, #059669); padding: 8px; border-radius: 8px; color: white;">
+            <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
         </div>
-        <h2>Funções Exclusivas</h2>
+        <h2>Acesso Rápido</h2>
     </div>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px;">
-        <!-- Gerenciar Equipe -->
-        <a href="membros.php" class="ripple" style="
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 16px; padding: 20px; text-decoration: none; color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); position: relative; overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+    <!-- Grid de Botões (Estilo "Criar Novo") -->
+    <div class="create-grid" style="
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
+    ">
+        <!-- Gestão -->
+        <a href="membros.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="position: absolute; top: -10px; right: -10px; background: rgba(255,255,255,0.1); width: 80px; height: 80px; border-radius: 50%;"></div>
-            
-            <div style="display: flex; gap: 14px; align-items: center;">
-                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; backdrop-filter: blur(4px);">
-                    <i data-lucide="users" style="width: 28px; height: 28px;"></i>
-                </div>
-                <div>
-                    <div style="font-size: 1.1rem; font-weight: 800;">Gerenciar Equipe</div>
-                    <div style="font-size: 0.8rem; opacity: 0.9;">Adicionar, editar e remover membros</div>
-                </div>
+            <div style="background: #ecfdf5; color: #10b981; padding: 10px; border-radius: 10px;">
+                <i data-lucide="users" style="width: 20px;"></i>
             </div>
-            <!-- Botão Fake -->
-            <div style="margin-top: 16px; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 6px;">
-                Acessar Painel <i data-lucide="arrow-right" style="width: 14px;"></i>
+            <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Equipe</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Gerenciar</div>
             </div>
         </a>
 
-        <!-- Gerenciar Avisos -->
-        <a href="avisos.php" class="ripple" style="
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            border-radius: 16px; padding: 20px; text-decoration: none; color: white;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2); position: relative; overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        <a href="avisos.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="position: absolute; top: -10px; right: -10px; background: rgba(255,255,255,0.1); width: 80px; height: 80px; border-radius: 50%;"></div>
-
-            <div style="display: flex; gap: 14px; align-items: center;">
-                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; backdrop-filter: blur(4px);">
-                    <i data-lucide="megaphone" style="width: 28px; height: 28px;"></i>
-                </div>
-                <div>
-                    <div style="font-size: 1.1rem; font-weight: 800;">Comunicados</div>
-                    <div style="font-size: 0.8rem; opacity: 0.9;">Mural de avisos e notificações</div>
-                </div>
+            <div style="background: #fffbeb; color: #f59e0b; padding: 10px; border-radius: 10px;">
+                <i data-lucide="megaphone" style="width: 20px;"></i>
             </div>
-             <div style="margin-top: 16px; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 6px;">
-                Gerenciar Avisos <i data-lucide="arrow-right" style="width: 14px;"></i>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Avisos</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Comunicados</div>
+            </div>
+        </a>
+
+        <!-- Estatísticas -->
+        <a href="escalas_stats.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #f5f3ff; color: #8b5cf6; padding: 10px; border-radius: 10px;">
+                <i data-lucide="bar-chart-2" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Escalas</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Estatísticas</div>
+            </div>
+        </a>
+
+        <a href="repertorio_stats.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #ecfdf5; color: #10b981; padding: 10px; border-radius: 10px;">
+                 <i data-lucide="music-2" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Repertório</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Análises</div>
             </div>
         </a>
     </div>
 
-     <!-- 2. Criar Novo (Compact Grid) -->
-     <div class="section-header">
+    <!-- 2. Criar Novo (Compact Grid) -->
+    <div class="section-header">
         <i data-lucide="plus-circle" style="color: var(--text-muted);"></i>
         <h2>Criar Novo</h2>
     </div>
     
     <div class="create-grid" style="
-        display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 32px;
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
     ">
-        <a href="escala_adicionar.php" class="create-btn" style="
+         <a href="escala_adicionar.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
             <div style="background: #f5f3ff; color: #8b5cf6; padding: 8px; border-radius: 8px;">
-                <i data-lucide="calendar-plus" style="width: 20px;"></i>
+                <i data-lucide="calendar-plus" style="width: 18px;"></i>
             </div>
             <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Escala</span>
         </a>
 
         <a href="musica_adicionar.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #ecfdf5; color: #10b981; padding: 8px; border-radius: 8px;">
-                <i data-lucide="music" style="width: 20px;"></i>
+             <div style="background: #ecfdf5; color: #10b981; padding: 8px; border-radius: 8px;">
+                <i data-lucide="music" style="width: 18px;"></i>
             </div>
             <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Música</span>
         </a>
 
          <a href="avisos.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
             <div style="background: #fffbeb; color: #f59e0b; padding: 8px; border-radius: 8px;">
-                <i data-lucide="bell-plus" style="width: 20px;"></i>
+                <i data-lucide="bell-plus" style="width: 18px;"></i>
             </div>
             <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-main);">Aviso</span>
-        </a>
-    </div>
-
-    <!-- 3. Estatísticas -->
-    <div class="section-header">
-        <i data-lucide="bar-chart-2" style="color: var(--text-muted);"></i>
-        <h2>Estatísticas</h2>
-    </div>
-    <div class="stats-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 32px;">
-        <!-- Estatísticas de Escalas -->
-        <a href="escalas_stats.php" class="stats-card">
-            <div class="stats-card-header">
-                <div class="stats-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
-                    <i data-lucide="calendar-check"></i>
-                </div>
-                <div class="stats-badge">Novo</div>
-            </div>
-            <div class="stats-card-body">
-                <h3>Estatísticas de Escalas</h3>
-                <p>Análise completa de participação e frequência</p>
-            </div>
-            <div class="stats-card-footer">
-                <div class="stats-metric">
-                    <span class="metric-value"><?= $escalas_mes ?></span>
-                    <span class="metric-label">escalas este mês</span>
-                </div>
-                <div class="stats-metric">
-                    <span class="metric-value"><?= $taxa_confirmacao ?>%</span>
-                    <span class="metric-label">confirmação</span>
-                </div>
-            </div>
-        </a>
-
-        <!-- Estatísticas do Repertório -->
-        <a href="repertorio_stats.php" class="stats-card">
-            <div class="stats-card-header">
-                <div class="stats-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
-                    <i data-lucide="music-2"></i>
-                </div>
-            </div>
-            <div class="stats-card-body">
-                <h3>Estatísticas do Repertório</h3>
-                <p>Músicas mais tocadas e análises detalhadas</p>
-            </div>
-            <div class="stats-card-footer">
-                <div class="stats-metric">
-                    <span class="metric-value"><?= $total_songs ?></span>
-                    <span class="metric-label">músicas ativas</span>
-                </div>
-                <div class="stats-metric">
-                    <span class="metric-value"><?= count($top_songs) ?></span>
-                    <span class="metric-label">top músicas</span>
-                </div>
-            </div>
         </a>
     </div>
 
@@ -645,7 +606,12 @@ try {
                 Nenhuma atividade recente
             </div>
         <?php else: ?>
-            <?php foreach ($recent_activities as $activity):
+            <?php 
+            $i = 0;
+            foreach ($recent_activities as $activity):
+                $i++;
+                $isHidden = $i > 5;
+                
                 $icon = 'circle';
                 $color = '#64748b';
                 $bg = '#f1f5f9';
@@ -664,7 +630,7 @@ try {
                     $bg = '#fffbeb';
                 }
             ?>
-                <div class="activity-item">
+                <div class="activity-item <?= $isHidden ? 'hidden-activity' : '' ?>" style="<?= $isHidden ? 'display: none;' : '' ?>">
                     <div class="activity-icon" style="background: <?= $bg ?>; color: <?= $color ?>;">
                         <i data-lucide="<?= $icon ?>"></i>
                     </div>
@@ -676,6 +642,34 @@ try {
                     </div>
                 </div>
             <?php endforeach; ?>
+
+            <?php if (count($recent_activities) > 5): ?>
+                <button onclick="showAllActivities(this)" style="
+                    width: 100%; padding: 12px; background: transparent; border: none; border-top: 1px solid var(--border-color);
+                    color: var(--primary); font-weight: 600; cursor: pointer; font-size: 0.9rem;
+                    display: flex; align-items: center; justify-content: center; gap: 6px;
+                ">
+                    Ver mais atividades <i data-lucide="chevron-down" style="width: 16px;"></i>
+                </button>
+            <?php endif; ?>
+
+            <script>
+                function showAllActivities(btn) {
+                    const hiddenItems = document.querySelectorAll('.hidden-activity');
+                    hiddenItems.forEach(item => {
+                        item.style.display = 'flex';
+                        // Adicionar animação simples
+                        item.animate([
+                            { opacity: 0, transform: 'translateY(-10px)' },
+                            { opacity: 1, transform: 'translateY(0)' }
+                        ], {
+                            duration: 300,
+                            easing: 'ease-out'
+                        });
+                    });
+                    btn.style.display = 'none';
+                }
+            </script>
         <?php endif; ?>
     </div>
 
