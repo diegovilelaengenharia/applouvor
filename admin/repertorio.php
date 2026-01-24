@@ -10,7 +10,21 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 renderAppHeader('Repertório');
 
 
-$rightAction = null;
+$rightAction = '
+    <a href="musica_adicionar.php" class="ripple" style="
+        display: flex; align-items: center; gap: 8px; padding: 8px 16px; 
+        background: var(--primary); color: white; border-radius: 10px; 
+        text-decoration: none; font-weight: 600; font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3); transition: all 0.2s;
+    " onmouseover="this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 4px 12px rgba(4, 120, 87, 0.4)\'"
+        onmouseout="this.style.transform=\'none\'; this.style.boxShadow=\'0 2px 8px rgba(4, 120, 87, 0.3)\'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+        </svg>
+        <span>Música</span>
+    </a>
+';
 
 renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
 ?>
@@ -361,42 +375,5 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             <?php endif; ?>
         </div>
     <?php endif; ?>
-</div>
-
-<!-- Floating Action Button -->
-<!-- Floating Action Button -->
-<a href="musica_adicionar.php" class="ripple" style="
-    position: fixed;
-    bottom: 80px; 
-    right: 24px;
-    background: var(--primary);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: var(--shadow-xl);
-    text-decoration: none;
-    font-weight: 600;
-    z-index: 50;
-    font-family: 'Inter', sans-serif;
-">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14" />
-        <path d="M12 5v14" />
-    </svg>
-    <span>Música</span>
-</a>
-
-<style>
-    @media (min-width: 1025px) {
-
-        /* No desktop, o botão fica no canto inferior direito padrão */
-        a[href="musica_adicionar.php"] {
-            bottom: 32px;
-        }
-    }
-</style>
 
 <?php renderAppFooter(); ?>
