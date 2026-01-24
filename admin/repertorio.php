@@ -10,7 +10,32 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 renderAppHeader('Repertório');
 
 
-$rightAction = '
+
+renderPageHeader('Repertório', 'Gestão de Músicas');
+?>
+
+<!-- Tabs Navegação com Menu -->
+<div style="display: flex; align-items: center; gap: 12px; margin: 0 16px 24px 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; flex: 1;">
+        <a href="?tab=musicas" class="ripple" style="
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            <?= $tab == 'musicas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
+        ">Músicas</a>
+        <a href="?tab=pastas" class="ripple" style="
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            <?= $tab == 'pastas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
+        ">TAG's</a>
+        <a href="?tab=artistas" class="ripple" style="
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            <?= $tab == 'artistas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
+        ">Artistas</a>
+        <a href="?tab=tons" class="ripple" style="
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            <?= $tab == 'tons' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
+        ">Tons</a>
+    </div>
+    
+    <!-- Botão de 3 Pontinhos -->
     <div style="position: relative;">
         <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="ripple" style="
             width: 48px; height: 48px; 
@@ -55,7 +80,7 @@ $rightAction = '
                 font-size: 0.9rem;
                 transition: background 0.2s;
                 border-bottom: 1px solid #f1f5f9;
-            " onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'white\'">
+            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
                 <div style="
                     width: 32px;
                     height: 32px;
@@ -83,7 +108,7 @@ $rightAction = '
                 font-weight: 600;
                 font-size: 0.9rem;
                 transition: background 0.2s;
-            " onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'white\'">
+            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
                 <div style="
                     width: 32px;
                     height: 32px;
@@ -100,54 +125,31 @@ $rightAction = '
             </a>
         </div>
     </div>
-    
-    <script>
-        function toggleOptionsMenu() {
-            const menu = document.getElementById(\'options-menu\');
-            const btn = document.getElementById(\'options-menu-btn\');
-            if (menu.style.display === \'none\' || menu.style.display === \'\') {
-                menu.style.display = \'block\';
-                btn.style.background = \'#f1f5f9\';
-            } else {
-                menu.style.display = \'none\';
-                btn.style.background = \'white\';
-            }
-        }
-        
-        // Fechar menu ao clicar fora
-        document.addEventListener(\'click\', function(event) {
-            const menu = document.getElementById(\'options-menu\');
-            const btn = document.getElementById(\'options-menu-btn\');
-            if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
-                menu.style.display = \'none\';
-                btn.style.background = \'white\';
-            }
-        });
-    </script>
-';
-
-renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
-?>
-
-<!-- Tabs Navegação -->
-<div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
-    <a href="?tab=musicas" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'musicas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
-    ">Músicas</a>
-    <a href="?tab=pastas" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'pastas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
-    ">TAG's</a>
-    <a href="?tab=artistas" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'artistas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
-    ">Artistas</a>
-    <a href="?tab=tons" class="ripple" style="
-        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-        <?= $tab == 'tons' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
-    ">Tons</a>
 </div>
+
+<script>
+    function toggleOptionsMenu() {
+        const menu = document.getElementById('options-menu');
+        const btn = document.getElementById('options-menu-btn');
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block';
+            btn.style.background = '#f1f5f9';
+        } else {
+            menu.style.display = 'none';
+            btn.style.background = 'white';
+        }
+    }
+    
+    // Fechar menu ao clicar fora
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('options-menu');
+        const btn = document.getElementById('options-menu-btn');
+        if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
+            menu.style.display = 'none';
+            btn.style.background = 'white';
+        }
+    });
+</script>
 
 <!-- Conteúdo das Tabs -->
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
