@@ -334,23 +334,20 @@ renderAppHeader('Membros');
 
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Funções / Instrumentos</label>
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Funções / Instrumentos</label>
                 <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; background: var(--bg-body);">
-                    <?php foreach ($groupedRoles as $category => $roles): ?>
-                        <div style="margin-bottom: 12px;">
-                            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 2px;"><?= $category ?></div>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px;">
-                                <?php foreach ($roles as $role): ?>
-                                    <label class="role-option" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; padding: 8px; border-radius: 8px; background: var(--bg-surface); border: 1px solid var(--border-color); transition: all 0.2s;">
-                                        <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox" style="accent-color: var(--primary); width: 16px; height: 16px;">
-                                        <span style="display: flex; align-items: center; gap: 6px;">
-                                            <span><?= $role['icon'] ?></span>
-                                            <span style="font-weight: 500; color: var(--text-main);"><?= $role['name'] ?></span>
-                                        </span>
-                                    </label>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px;">
+                        <?php foreach ($allRoles as $role): ?>
+                            <label class="role-option" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; padding: 8px; border-radius: 8px; background: var(--bg-surface); border: 1px solid var(--border-color); transition: all 0.2s;">
+                                <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox" style="accent-color: var(--primary); width: 16px; height: 16px;">
+                                <span style="display: flex; align-items: center; gap: 6px;">
+                                    <span><?= $role['icon'] ?></span>
+                                    <span style="font-weight: 500; color: var(--text-main);"><?= $role['name'] ?></span>
+                                </span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
 
@@ -385,8 +382,8 @@ renderAppHeader('Membros');
 
 <style>
     .member-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        display: flex;
+        flex-direction: column;
         gap: 12px;
     }
 
@@ -394,9 +391,12 @@ renderAppHeader('Membros');
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 12px;
+        padding: 16px; /* Aumentei um pouco padding para lista */
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
+        max-width: 800px; /* Limitar largura em telas grandes se quiser, ou 100% */
+        width: 100%;
+        margin: 0 auto;
     }
 
     .member-card:hover {

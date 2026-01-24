@@ -4,14 +4,20 @@ require_once '../includes/db.php';
 
 try {
     // Ler arquivo SQL
-    $sql = file_get_contents(__DIR__ . '/005_create_roles_system.sql');
+    $file = isset($_GET['file']) ? $_GET['file'] : '005_create_roles_system.sql';
+    $filepath = __DIR__ . '/' . $file;
+    
+    if (!file_exists($filepath)) {
+        die("Arquivo not found: $file");
+    }
+
+    $sql = file_get_contents($filepath);
     
     // Executar
     $pdo->exec($sql);
     
-    echo "Migration 005 executada com sucesso!\n";
-    echo "Tabelas 'roles' e 'user_roles' criadas.\n";
-    echo "18 funções cadastradas.\n";
+    echo "Migration ($file) executada com sucesso!\n";
+
     
 } catch (PDOException $e) {
     echo "Erro ao executar migration: " . $e->getMessage() . "\n";
