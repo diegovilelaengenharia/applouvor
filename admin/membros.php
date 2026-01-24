@@ -232,6 +232,7 @@ renderAppHeader('Membros');
                                     </form>
                                 </div>
                             </div>
+                        </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -292,9 +293,7 @@ renderAppHeader('Membros');
                     </select>
                     <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
-                    💡 Use o botão 🎵 no card do membro para definir funções/instrumentos
-                </p>
+                </div>
             </div>
 
             <!-- Campo instrument mantido como hidden para compatibilidade -->
@@ -525,7 +524,7 @@ renderAppHeader('Membros');
 </script>
 
 <!-- Roles Manager Script -->
-<script src="/assets/js/roles.js"></script>
+<script src="../assets/js/roles.js"></script>
 
 <?php
 // Helper function para cor

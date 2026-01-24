@@ -93,6 +93,18 @@ $songIds = array_column($songs, 'song_id');
 $allUsers = $pdo->query("SELECT id, name, instrument, avatar_color FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 $allSongs = $pdo->query("SELECT id, title, artist, tone, bpm, category FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
 
+// --- Buscar Funções (Roles) de TODOS os usuários ---
+$stmtRoles = $pdo->query("
+    SELECT ur.user_id, r.name, r.icon, r.color, ur.is_primary 
+    FROM user_roles ur 
+    JOIN roles r ON ur.role_id = r.id 
+    ORDER BY ur.is_primary DESC
+");
+$userRoles = [];
+while ($row = $stmtRoles->fetch(PDO::FETCH_ASSOC)) {
+    $userRoles[$row['user_id']][] = $row;
+}
+
 renderAppHeader('Escala');
 renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m/Y'));
 ?>
@@ -212,8 +224,22 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                             ">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
-                            <div style="font-weight: 700; font-size: 0.85rem; color: #1f2937; margin-bottom: 3px;"><?= htmlspecialchars($member['name']) ?></div>
-                            <div style="font-size: 0.7rem; color: #6b7280; font-weight: 500;"><?= htmlspecialchars($member['instrument'] ?: 'Vocal') ?></div>
+                                <div style="font-weight: 700; font-size: 0.85rem; color: #1f2937; margin-bottom: 3px;"><?= htmlspecialchars($member['name']) ?></div>
+                                <div style="display: flex; justify-content: center; gap: 4px; flex-wrap: wrap;">
+                                    <?php 
+                                    $mRoles = $userRoles[$member['user_id']] ?? [];
+                                    if (empty($mRoles) && $member['instrument']) {
+                                        // Fallback legacy
+                                        echo '<span style="font-size: 0.7rem; color: #6b7280; font-weight: 500;">' . htmlspecialchars($member['instrument']) . '</span>';
+                                    } else {
+                                        foreach ($mRoles as $role): 
+                                    ?>
+                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 0.85rem; cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
+                                    <?php 
+                                        endforeach; 
+                                    }
+                                    ?>
+                                </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -328,7 +354,28 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                             </div>
                             <div style="flex: 1; min-width: 0;">
                                 <div style="font-weight: 600; font-size: 0.8rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($user['name']) ?></div>
-                                <div style="font-size: 0.7rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
+                                <div style="display: flex; gap: 4px; margin-top: 2px;">
+                                    <?php 
+                                    $uRoles = $userRoles[$user['id']] ?? [];
+                                    if (empty($uRoles) && $user['instrument']) {
+                                        echo '<span style="font-size: 0.7rem; color: var(--text-muted);">' . htmlspecialchars($user['instrument']) . '</span>';
+                                    } else {
+                                        foreach ($uRoles as $role): 
+                                    ?>
+                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="
+                                            display: inline-flex; align-items: center; justify-content: center;
+                                            background: <?= $role['color'] ?>20; 
+                                            color: <?= $role['color'] ?>;
+                                            border: 1px solid <?= $role['color'] ?>40;
+                                            border-radius: 4px; padding: 2px 4px; font-size: 0.75rem;
+                                        ">
+                                            <?= $role['icon'] ?>
+                                        </span>
+                                    <?php 
+                                        endforeach; 
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </label>
                     <?php endforeach; ?>
