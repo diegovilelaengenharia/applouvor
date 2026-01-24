@@ -129,33 +129,33 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             </button>
         </div>
         
-        <!-- Info Row Melhorada (Ícones 10% menores) -->
-        <div style="display: flex; align-items: center; gap: 20px; padding: 16px; background: var(--bg-body); border-radius: 14px; margin-bottom: <?= $schedule['notes'] ? '16px' : '0' ?>;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="clock" style="width: 16px; color: white;"></i>
+        <!-- Info Row Compacta (Ícones reduzidos) -->
+        <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: <?= $schedule['notes'] ? '12px' : '0' ?>;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="clock" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Horário</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);">19:00</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Horário</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);">19:00</div>
                 </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="users" style="width: 16px; color: white;"></i>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="users" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Equipe</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><?= count($team) ?></div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Equipe</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);"><?= count($team) ?></div>
                 </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="music" style="width: 16px; color: white;"></i>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="music" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Músicas</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><?= count($songs) ?></div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Músicas</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);"><?= count($songs) ?></div>
                 </div>
             </div>
         </div>
@@ -191,29 +191,29 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Nenhum participante escalado</p>
                 </div>
             <?php else: ?>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;">
                     <?php foreach ($team as $member): ?>
                         <div style="
                             background: white; 
-                            border-radius: 16px; 
-                            padding: 16px; 
+                            border-radius: 14px; 
+                            padding: 12px; 
                             text-align: center; 
                             border: 1px solid #e5e7eb;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
                             transition: all 0.2s;
-                        " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" 
-                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)'">
+                        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.08)'" 
+                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04)'">
                             <div style="
-                                width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px;
+                                width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px;
                                 background: <?= $member['avatar_color'] ?: '#e2e8f0' ?>;
                                 color: white; display: flex; align-items: center; justify-content: center;
-                                font-weight: 700; font-size: 1.4rem;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                                font-weight: 700; font-size: 1.2rem;
+                                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
                             ">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
-                            <div style="font-weight: 700; font-size: 0.9rem; color: #1f2937; margin-bottom: 4px;"><?= htmlspecialchars($member['name']) ?></div>
-                            <div style="font-size: 0.75rem; color: #6b7280; font-weight: 500;"><?= htmlspecialchars($member['instrument'] ?: 'Vocal') ?></div>
+                            <div style="font-weight: 700; font-size: 0.85rem; color: #1f2937; margin-bottom: 3px;"><?= htmlspecialchars($member['name']) ?></div>
+                            <div style="font-size: 0.7rem; color: #6b7280; font-weight: 500;"><?= htmlspecialchars($member['instrument'] ?: 'Vocal') ?></div>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -233,55 +233,55 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Nenhuma música selecionada</p>
                 </div>
             <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
                     <?php foreach ($songs as $index => $song): ?>
                         <div style="
                             background: white; 
-                            border-radius: 16px; 
-                            padding: 18px; 
+                            border-radius: 14px; 
+                            padding: 14px; 
                             border: 1px solid #e5e7eb;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
                             transition: all 0.2s;
-                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" 
-                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)'">
-                            <div style="display: flex; gap: 14px; align-items: flex-start;">
+                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.08)'" 
+                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04)'">
+                            <div style="display: flex; gap: 12px; align-items: flex-start;">
                                 <div style="
-                                    min-width: 32px; height: 32px; 
+                                    min-width: 28px; height: 28px; 
                                     background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
-                                    border-radius: 10px; 
+                                    border-radius: 8px; 
                                     display: flex; align-items: center; justify-content: center;
-                                    font-size: 0.95rem; font-weight: 800; color: white;
-                                    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+                                    font-size: 0.85rem; font-weight: 800; color: white;
+                                    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.25);
                                 ">
                                     <?= $index + 1 ?>
                                 </div>
                                 <div style="flex: 1;">
-                                    <h4 style="margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: #1f2937;"><?= htmlspecialchars($song['title']) ?></h4>
-                                    <p style="margin: 0 0 12px 0; font-size: 0.85rem; color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                                    <h4 style="margin: 0 0 3px 0; font-size: 0.95rem; font-weight: 700; color: #1f2937;"><?= htmlspecialchars($song['title']) ?></h4>
+                                    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
+                                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
                                         <?php if ($song['category']): ?>
-                                            <span style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #bfdbfe;">
+                                            <span style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #bfdbfe;">
                                                 <?= htmlspecialchars($song['category']) ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['tone']): ?>
-                                            <span style="background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fed7aa;">
+                                            <span style="background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fed7aa;">
                                                 <?= $song['tone'] ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['bpm']): ?>
-                                            <span style="background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fecaca;">
+                                            <span style="background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fecaca;">
                                                 <?= $song['bpm'] ?> BPM
                                             </span>
                                         <?php endif; ?>
                                         <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
                                             background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #ef4444; text-decoration: none;
-                                            padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fecaca;
-                                            display: inline-flex; align-items: center; gap: 4px;
+                                            padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fecaca;
+                                            display: inline-flex; align-items: center; gap: 3px;
                                             transition: all 0.2s;
-                                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 2px 8px rgba(239, 68, 68, 0.2)'" 
+                                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 2px 6px rgba(239, 68, 68, 0.2)'" 
                                            onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-                                            <i data-lucide="youtube" style="width: 12px;"></i> YouTube
+                                            <i data-lucide="youtube" style="width: 11px;"></i> YouTube
                                         </a>
                                     </div>
                                 </div>
