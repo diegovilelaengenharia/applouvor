@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_artist'])) {
 
 // Buscar músicas do artista
 $stmt = $pdo->prepare("
-    SELECT id, title, artist, tone, bpm, category, tag, created_at
+    SELECT id, title, artist, tone, bpm, category, created_at
     FROM songs 
     WHERE artist = ?
     ORDER BY title ASC
@@ -137,11 +137,6 @@ renderPageHeader($artistName, 'Perfil do Artista');
                                 <?php if ($song['category']): ?>
                                     <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dbeafe;">
                                         <?= htmlspecialchars($song['category']) ?>
-                                    </span>
-                                <?php endif; ?>
-                                <?php if ($song['tag']): ?>
-                                    <span style="background: #f0fdf4; color: #16a34a; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dcfce7;">
-                                        <?= htmlspecialchars($song['tag']) ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($song['tone']): ?>

@@ -79,7 +79,7 @@ $teamIds = array_column($team, 'user_id');
 
 // Buscar Músicas com TODAS as tags
 $stmtSongs = $pdo->prepare("
-    SELECT ss.*, s.id as song_id, s.title, s.artist, s.tone, s.bpm, s.category, s.tag
+    SELECT ss.*, s.id as song_id, s.title, s.artist, s.tone, s.bpm, s.category
     FROM schedule_songs ss
     JOIN songs s ON ss.song_id = s.id
     WHERE ss.schedule_id = ?
@@ -91,7 +91,7 @@ $songIds = array_column($songs, 'song_id');
 
 // Buscar TODOS para edição
 $allUsers = $pdo->query("SELECT id, name, instrument, avatar_color FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-$allSongs = $pdo->query("SELECT id, title, artist, tone, bpm, category, tag FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
+$allSongs = $pdo->query("SELECT id, title, artist, tone, bpm, category FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
 
 renderAppHeader('Escala');
 renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m/Y'));
@@ -218,11 +218,6 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                     <?php if ($song['category']): ?>
                                         <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dbeafe;">
                                             <?= htmlspecialchars($song['category']) ?>
-                                        </span>
-                                    <?php endif; ?>
-                                    <?php if ($song['tag']): ?>
-                                        <span style="background: #f0fdf4; color: #16a34a; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dcfce7;">
-                                            <?= htmlspecialchars($song['tag']) ?>
                                         </span>
                                     <?php endif; ?>
                                     <?php if ($song['tone']): ?>
