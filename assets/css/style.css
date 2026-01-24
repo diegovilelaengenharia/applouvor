@@ -13,6 +13,9 @@
 /* Dashboard */
 @import url('dashboard.css');
 
+/* Dark Mode */
+@import url('dark-mode.css');
+
 
 /* PWA Fullscreen Adjustments */
 html {

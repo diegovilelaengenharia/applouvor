@@ -1,0 +1,752 @@
+/* ========================================
+   DARK MODE - App Louvor PIB
+   Paleta de cores agradáveis (não preto puro)
+   ======================================== */
+
+/* === VARIÁVEIS GLOBAIS DARK MODE === */
+body.dark-mode {
+    /* Backgrounds - Tons de cinza azulado */
+    --bg-primary: #1a1f2e;
+    --bg-secondary: #242938;
+    --bg-tertiary: #2d3348;
+    --bg-body: #1a1f2e;
+    --bg-surface: #242938;
+
+    /* Textos */
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --text-main: #e2e8f0;
+
+    /* Bordas */
+    --border-color: #334155;
+    --border-subtle: #334155;
+
+    /* Primary Colors - Mais vibrantes para contraste */
+    --primary: #10b981;
+    --primary-hover: #059669;
+    --primary-light: #064e3b;
+    --primary-subtle: #022c22;
+    --primary-green: #10b981;
+    --primary-green-light: #34d399;
+    --primary-green-dark: #059669;
+
+    /* Accent Colors */
+    --accent-primary: #10b981;
+    --accent-interactive: #34d399;
+    --primary-blue: #3b82f6;
+    --primary-blue-light: #60a5fa;
+
+    /* Glassmorphism Dark */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+
+    /* Shadows Dark - Mais sutis */
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    --shadow-elevated: 0 12px 48px rgba(16, 185, 129, 0.2);
+
+    /* Gradientes ajustados */
+    --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-elegant: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    --gradient-soft: linear-gradient(135deg, #2d3348 0%, #242938 100%);
+    --gradient-vibrant: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    --gradient-hero: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* === TRANSIÇÕES SUAVES === */
+body.dark-mode * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* === COMPONENTES GLOBAIS === */
+
+/* Scrollbar Dark */
+body.dark-mode ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Links */
+body.dark-mode a {
+    color: var(--primary-blue-light);
+}
+
+body.dark-mode a:hover {
+    color: var(--primary-green-light);
+}
+
+/* === NAVEGAÇÃO === */
+
+/* Sidebar */
+body.dark-mode .sidebar {
+    background: var(--bg-secondary);
+    border-right-color: var(--border-color);
+}
+
+body.dark-mode .sidebar-header {
+    border-bottom-color: var(--border-color);
+}
+
+body.dark-mode .nav-item {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .nav-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .nav-item.active {
+    background: var(--primary-light);
+    color: var(--primary-green-light);
+}
+
+/* Bottom Navigation */
+body.dark-mode .bottom-nav-bar {
+    background: rgba(36, 41, 56, 0.95);
+    backdrop-filter: blur(12px);
+    border-top-color: var(--border-color);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .b-nav-item {
+    color: var(--text-muted);
+}
+
+body.dark-mode .b-nav-item.active {
+    color: var(--primary-green-light);
+}
+
+body.dark-mode .b-nav-item.active .b-nav-icon-wrapper {
+    background: var(--primary-light);
+}
+
+/* Bottom Sheets */
+body.dark-mode .bottom-sheet {
+    background: var(--bg-secondary);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .sheet-header {
+    border-bottom-color: var(--border-color);
+}
+
+body.dark-mode .sheet-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .sheet-btn {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .sheet-btn:active {
+    background: var(--bg-primary);
+}
+
+/* Mobile Header */
+body.dark-mode .mobile-header {
+    background: var(--bg-secondary);
+    border-bottom-color: var(--border-color);
+}
+
+body.dark-mode .page-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .btn-menu-trigger {
+    color: var(--text-primary);
+}
+
+body.dark-mode .btn-menu-trigger:active {
+    background: var(--border-color);
+}
+
+/* Dropdowns */
+body.dark-mode .dropdown-menu {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .dropdown-item {
+    color: var(--text-primary);
+}
+
+body.dark-mode .dropdown-item:hover {
+    background: var(--bg-tertiary);
+}
+
+/* === CARDS === */
+
+body.dark-mode .card-clean,
+body.dark-mode .card-btn,
+body.dark-mode .quick-access-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+body.dark-mode .card-btn:active,
+body.dark-mode .quick-access-card:active {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .card-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .card-subtitle {
+    color: var(--text-secondary);
+}
+
+/* Hero Section */
+body.dark-mode .hero-section {
+    background: var(--gradient-hero);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+body.dark-mode .hero-greeting,
+body.dark-mode .hero-subtitle,
+body.dark-mode .hero-info {
+    color: white;
+}
+
+/* Timeline Cards */
+body.dark-mode .timeline-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .timeline-card:hover {
+    border-color: var(--primary-green);
+    box-shadow: var(--shadow-glow);
+}
+
+body.dark-mode .timeline-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .timeline-subtitle {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .timeline-meta {
+    color: var(--text-muted);
+}
+
+body.dark-mode .timeline-wrapper::before {
+    background: var(--border-color);
+}
+
+/* Event Cards */
+body.dark-mode .event-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .event-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .event-footer {
+    border-top-color: var(--border-color);
+}
+
+/* Compact Cards */
+body.dark-mode .compact-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .compact-title {
+    color: var(--text-primary);
+}
+
+/* Stat Cards */
+body.dark-mode .stat-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .stat-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+body.dark-mode .stat-icon {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .stat-label {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .stat-value {
+    color: var(--text-primary);
+}
+
+/* Schedule Cards */
+body.dark-mode .schedule-preview-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .schedule-preview-card:hover {
+    border-color: var(--primary-blue);
+}
+
+body.dark-mode .schedule-date-badge {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .schedule-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .schedule-time {
+    color: var(--text-secondary);
+}
+
+/* === FORMULÁRIOS === */
+
+body.dark-mode .form-input,
+body.dark-mode .form-select,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="date"],
+body.dark-mode input[type="time"],
+body.dark-mode input[type="number"],
+body.dark-mode textarea,
+body.dark-mode select {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .form-input:focus,
+body.dark-mode .form-select:focus,
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+    border-color: var(--primary-green);
+    background: var(--bg-secondary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+body.dark-mode .form-label {
+    color: var(--text-secondary);
+}
+
+body.dark-mode ::placeholder {
+    color: var(--text-muted);
+}
+
+/* === BOTÕES === */
+
+body.dark-mode .btn-primary {
+    background: var(--primary-green);
+    color: white;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: var(--primary-green-dark);
+}
+
+body.dark-mode .btn-outline {
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    background: transparent;
+}
+
+body.dark-mode .btn-outline:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-green);
+}
+
+body.dark-mode .btn-outline:active {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .btn-ghost {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .btn-ghost:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .btn-icon {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .btn-icon:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Action Buttons */
+body.dark-mode .btn-action-add,
+body.dark-mode .btn-action-save {
+    background: var(--primary-green);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+body.dark-mode .btn-action-cancel {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .btn-action-delete {
+    background: #ef4444;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* === TABELAS === */
+
+body.dark-mode .clean-table-container {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .clean-table th {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-bottom-color: var(--border-color);
+}
+
+body.dark-mode .clean-table td {
+    border-bottom-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .table-avatar {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* === BADGES E PILLS === */
+
+body.dark-mode .badge-pill.admin {
+    background: #064e3b;
+    color: #6ee7b7;
+}
+
+body.dark-mode .badge-pill.user {
+    background: #713f12;
+    color: #fde047;
+}
+
+body.dark-mode .stat-pill {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .text-highlight {
+    background: var(--primary-light);
+    color: var(--primary-green-light);
+}
+
+/* Tags */
+body.dark-mode .tag-purple {
+    background: #4c1d95;
+    color: #c4b5fd;
+}
+
+body.dark-mode .tag-green {
+    background: #064e3b;
+    color: #6ee7b7;
+}
+
+/* === AVATARES === */
+
+body.dark-mode .avatar-small,
+body.dark-mode .user-avatar-sm,
+body.dark-mode .avatar-placeholder {
+    border-color: var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .avatar-group .avatar-item {
+    border-color: var(--bg-secondary);
+}
+
+/* === SETTINGS PAGE === */
+
+body.dark-mode .settings-profile-header {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .settings-avatar {
+    border-color: var(--primary-green);
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .settings-name {
+    color: var(--text-primary);
+}
+
+body.dark-mode .settings-role {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .settings-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .settings-item {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .settings-item:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-green);
+}
+
+body.dark-mode .settings-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .settings-subtitle {
+    color: var(--text-muted);
+}
+
+body.dark-mode .settings-section-title {
+    color: var(--text-muted);
+}
+
+body.dark-mode .settings-icon svg {
+    color: var(--primary-green);
+}
+
+body.dark-mode .settings-arrow {
+    color: var(--text-muted);
+}
+
+/* === LISTAS === */
+
+body.dark-mode .list-card-simple {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .list-card-simple:active {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .list-day-simple {
+    color: var(--text-muted);
+}
+
+body.dark-mode .list-title-simple {
+    color: var(--text-primary);
+}
+
+/* === MODAIS E OVERLAYS === */
+
+body.dark-mode .modal-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .bs-overlay {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .bottom-sheet-overlay {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* === DASHBOARD === */
+
+body.dark-mode .dashboard-grid .card-btn {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .dashboard-grid .card-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-green);
+}
+
+/* === SECTION HEADERS === */
+
+body.dark-mode .section-header {
+    color: var(--text-primary);
+}
+
+body.dark-mode .section-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .section-action {
+    color: var(--primary-blue-light);
+}
+
+body.dark-mode .section-action:hover {
+    color: var(--primary-green-light);
+}
+
+/* === ÍCONES ESPECÍFICOS === */
+
+body.dark-mode .icon-box {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .card-icon-wrapper {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .card-icon-wrapper svg {
+    color: var(--primary-green);
+}
+
+body.dark-mode .quick-access-card:hover .card-icon-wrapper {
+    background: var(--gradient-primary);
+}
+
+body.dark-mode .quick-access-card:hover .card-icon-wrapper svg {
+    color: white;
+}
+
+/* === SHEET ICONS === */
+
+body.dark-mode #sheet-gestao .sheet-icon-wrapper {
+    background: #064e3b;
+    border-color: #047857;
+}
+
+body.dark-mode #sheet-gestao .sheet-icon-wrapper svg {
+    color: #6ee7b7;
+}
+
+body.dark-mode #sheet-espiritualidade .sheet-icon-wrapper {
+    background: #1e3a8a;
+    border-color: #2563eb;
+}
+
+body.dark-mode #sheet-espiritualidade .sheet-icon-wrapper svg {
+    color: #93c5fd;
+}
+
+body.dark-mode #sheet-comunicacao .sheet-icon-wrapper {
+    background: #7f1d1d;
+    border-color: #dc2626;
+}
+
+body.dark-mode #sheet-comunicacao .sheet-icon-wrapper svg {
+    color: #fca5a5;
+}
+
+/* === ELEMENTOS ESPECIAIS === */
+
+/* Reading Plan */
+body.dark-mode .reading-plan-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+/* Notices/Avisos */
+body.dark-mode .notice-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .notice-title {
+    color: var(--text-primary);
+}
+
+body.dark-mode .notice-content {
+    color: var(--text-secondary);
+}
+
+/* Empty States */
+body.dark-mode .empty-state {
+    color: var(--text-muted);
+}
+
+/* Dividers */
+body.dark-mode hr {
+    border-color: var(--border-color);
+}
+
+/* === AJUSTES FINAIS === */
+
+/* Garantir que imagens não fiquem muito brilhantes */
+body.dark-mode img:not([src*="logo"]) {
+    opacity: 0.9;
+}
+
+/* Ajustar logos para modo escuro */
+body.dark-mode img[src*="logo_pib_black"] {
+    filter: brightness(0) invert(1);
+}
+
+/* Garantir contraste em textos importantes */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4 {
+    color: var(--text-primary);
+}
+
+body.dark-mode p {
+    color: var(--text-secondary);
+}
+
+/* Ajustar sombras de elementos flutuantes */
+body.dark-mode .floating-button,
+body.dark-mode .fab {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* === RESPONSIVIDADE === */
+
+@media (max-width: 768px) {
+    body.dark-mode .mobile-header {
+        background: var(--bg-secondary);
+    }
+    
+    body.dark-mode #app-content {
+        background: var(--bg-primary);
+    }
+}
+
+/* === ANIMAÇÕES === */
+
+@keyframes dark-mode-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+body.dark-mode {
+    animation: dark-mode-fade-in 0.3s ease-in-out;
+}
