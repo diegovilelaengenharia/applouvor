@@ -433,9 +433,6 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
         <div style="flex: 1;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                 <span style="font-size:0.7rem; text-transform:uppercase; color:var(--gray-500, #6b7280); font-weight:700; letter-spacing:0.5px;">Progresso Anual</span>
-                <div style="font-size: 0.85rem; color: var(--primary-700, #064e3b); font-weight: 600;">
-                    <?= $currentMessage ?>
-                </div>
             </div>
             <div style="display: flex; align-items: center; gap: 16px;">
                 <!-- Dias Lidos -->
