@@ -272,9 +272,9 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .btn-whatsapp {
-        background: linear-gradient(135deg, #25D366, #128C7E);
+        background: #10b981;
         color: white;
-        box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
     }
 
     .btn-phone {
@@ -286,11 +286,13 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     .btn-edit {
         background: var(--primary);
         color: white;
+        box-shadow: 0 2px 8px rgba(22, 101, 52, 0.3);
     }
 
     .btn-delete {
         background: #ef4444;
         color: white;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
     }
 
     .action-btn:hover {
