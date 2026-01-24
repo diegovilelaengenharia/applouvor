@@ -827,23 +827,24 @@ function renderAppHeader($title, $backUrl = null)
 
                 <style>
                     @keyframes pulse-blue-3d {
-                        0% { box-shadow: 0 4px 0 #1e40af, 0 0 0 0 rgba(37, 99, 235, 0.7); transform: translateY(-6px) scale(1.1); }
-                        70% { box-shadow: 0 4px 0 #1e40af, 0 0 0 10px rgba(37, 99, 235, 0); transform: translateY(-6px) scale(1.15); }
-                        100% { box-shadow: 0 4px 0 #1e40af, 0 0 0 0 rgba(37, 99, 235, 0); transform: translateY(-6px) scale(1.1); }
+                        0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+                        70% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
+                        100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
                     }
                     .b-nav-item.home-3d .b-nav-icon-wrapper {
                         background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
                         color: white !important;
                         border: 1px solid rgba(255,255,255,0.3);
                         animation: pulse-blue-3d 2s infinite;
-                        box-shadow: 0 4px 0 #1e40af;
-                        transform: translateY(-6px) scale(1.1);
-                        width: 32px;
-                        height: 32px;
+                        /* Mantendo o tamanho padrão dos outros ícones */
+                        width: 28px;
+                        height: 28px;
                     }
                     .b-nav-item.home-3d span {
-                        font-weight: 800 !important;
+                        font-weight: 700 !important;
                         color: var(--primary);
+                        /* Tamanho de fonte padrão */
+                        font-size: 0.75rem !important;
                     }
                 </style>
 
