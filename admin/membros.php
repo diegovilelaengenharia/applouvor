@@ -15,18 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit("Acesso negado. Apenas administradores podem realizar esta ação.");
         }
 
+        // Initialize variable for role processing
+        $userIdRole = null;
+
         // Adicionar novo membro
         if ($_POST['action'] === 'add') {
             $stmt = $pdo->prepare("INSERT INTO users (name, role, instrument, phone, password) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([
                 $_POST['name'],
                 $_POST['role'],
-                $_POST['instrument'],
+                $_POST['instrument'], // Mantendo por compatibilidade
                 $_POST['phone'],
                 $_POST['password']
             ]);
-            header("Location: membros.php");
-            exit;
+            $userIdRole = $pdo->lastInsertId();
         }
         // Atualizar membro
         elseif ($_POST['action'] === 'edit') {
@@ -40,19 +42,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_POST['id']
             ];
             $stmt->execute($params);
-
-            header("Location: membros.php");
-            exit;
+            $userIdRole = $_POST['id'];
         }
         // Excluir membro
         elseif ($_POST['action'] === 'delete') {
             $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
             $stmt->execute([$_POST['id']]);
+            // Roles são deletadas por cascade ou irrelevantes
             header("Location: membros.php");
             exit;
         }
+
+        // --- PROCESSAR FUNÇÕES (ROLES) ---
+        // Se houve adição ou edição e temos um ID de usuário
+        if ($userIdRole) {
+            // Limpar funções anteriores (sempre limpa e recria para evitar complexidade)
+            $stmtDel = $pdo->prepare("DELETE FROM user_roles WHERE user_id = ?");
+            $stmtDel->execute([$userIdRole]);
+
+            // Se roles foram enviadas, insere as novas
+            if (isset($_POST['roles']) && is_array($_POST['roles'])) {
+                $stmtIns = $pdo->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)");
+                foreach ($_POST['roles'] as $roleId) {
+                    $stmtIns->execute([$userIdRole, $roleId]);
+                }
+            }
+        }
+
+        header("Location: membros.php");
+        exit;
     }
 }
+
+// Buscar TODAS as funções disponíveis para o formulário (Agrupadas)
+$stmtAllRoles = $pdo->query("SELECT * FROM roles ORDER BY category, name");
+$allRoles = $stmtAllRoles->fetchAll(PDO::FETCH_ASSOC);
+
+$groupedRoles = [];
+foreach ($allRoles as $role) {
+    $catName =  ucfirst($role['category']);
+    switch($role['category']) {
+        case 'voz': $catName = 'Vozes'; break;
+        case 'cordas': $catName = 'Cordas'; break;
+        case 'teclas': $catName = 'Teclas'; break;
+        case 'percussao': $catName = 'Percussão'; break;
+        case 'sopro': $catName = 'Sopro'; break;
+        case 'outros': $catName = 'Outros'; break;
+    }
+    $groupedRoles[$catName][] = $role;
+}
+
 
 // Buscar todos os membros com suas funções
 $stmt = $pdo->query("
@@ -203,10 +242,8 @@ renderAppHeader('Membros');
                         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                             <!-- Linha 2: Ações Admin -->
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <!-- Botão Editar Funções -->
-                                <button onclick="rolesManager.openRolesSelector(<?= $user['id'] ?>)" class="ripple icon-action" title="Editar Funções" style="color: var(--primary); background: var(--primary-subtle);">
-                                    <i data-lucide="music" style="width: 16px;"></i>
-                                </button>
+                                <!-- (Botão de Funções removido por solicitação) -->
+
                                 
                                 <!-- Menu Trigger -->
                                 <div style="position: relative;">
@@ -294,6 +331,28 @@ renderAppHeader('Membros');
                     <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
                 </div>
                 </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Funções / Instrumentos</label>
+                <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; background: var(--bg-body);">
+                    <?php foreach ($groupedRoles as $category => $roles): ?>
+                        <div style="margin-bottom: 12px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 2px;"><?= $category ?></div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px;">
+                                <?php foreach ($roles as $role): ?>
+                                    <label class="role-option" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; padding: 8px; border-radius: 8px; background: var(--bg-surface); border: 1px solid var(--border-color); transition: all 0.2s;">
+                                        <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox" style="accent-color: var(--primary); width: 16px; height: 16px;">
+                                        <span style="display: flex; align-items: center; gap: 6px;">
+                                            <span><?= $role['icon'] ?></span>
+                                            <span style="font-weight: 500; color: var(--text-main);"><?= $role['name'] ?></span>
+                                        </span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
 
             <!-- Campo instrument mantido como hidden para compatibilidade -->
             <input type="hidden" name="instrument" id="userInst" value="">
@@ -473,6 +532,10 @@ renderAppHeader('Membros');
         document.getElementById('formAction').value = 'add';
         document.getElementById('memberForm').reset();
         document.getElementById('userId').value = '';
+        
+        // Limpar checkboxes
+        document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
+        
         document.getElementById('memberModal').style.display = 'block';
     }
 
@@ -485,6 +548,15 @@ renderAppHeader('Membros');
         document.getElementById('userPhone').value = user.phone;
         document.getElementById('userPass').value = user.password;
         document.getElementById('userRole').value = user.role;
+
+        // Resetar e Marcar checkboxes
+        document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
+        if (user.roles && user.roles.length > 0) {
+            user.roles.forEach(role => {
+                const checkbox = document.querySelector(`.role-checkbox[value="${role.id}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
 
         closeAllMenus();
         document.getElementById('memberModal').style.display = 'block';
@@ -522,8 +594,8 @@ renderAppHeader('Membros');
     });
 </script>
 
-<!-- Roles Manager Script -->
-<script src="../assets/js/roles.js"></script>
+<!-- Roles Manager Script (Removido) -->
+
 
 <?php
 // Helper function para cor
