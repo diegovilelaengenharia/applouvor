@@ -154,6 +154,20 @@ renderAppHeader('Membros');
                             <?php if ($user['role'] === 'admin'): ?>
                                 <span style="background: var(--primary-subtle); color: var(--primary); padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800;">ADM</span>
                             <?php endif; ?>
+                            
+                            <!-- Ícones compactos das funções -->
+                            <?php if (!empty($user['roles'])): ?>
+                                <?php foreach (array_slice($user['roles'], 0, 3) as $role): ?>
+                                    <span class="role-badge compact" 
+                                          style="background: <?= htmlspecialchars($role['color']) ?>"
+                                          title="<?= htmlspecialchars($role['name']) ?>">
+                                        <span class="role-icon"><?= $role['icon'] ?></span>
+                                    </span>
+                                <?php endforeach; ?>
+                                <?php if (count($user['roles']) > 3): ?>
+                                    <span style="font-size: 0.7rem; color: var(--text-muted);">+<?= count($user['roles']) - 3 ?></span>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                         
                         <!-- Funções/Badges -->
@@ -174,26 +188,31 @@ renderAppHeader('Membros');
                         </div>
                     </div>
 
-                    <!-- Ações Rápidas (Compactas) -->
-                    <div style="display: flex; align-items: center; gap: 4px;">
-                        <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
-                            <i data-lucide="message-circle" style="width: 16px;"></i>
-                        </a>
-                        <a href="tel:<?= $user['phone'] ?>" class="ripple icon-action" title="Ligar" style="color: var(--text-muted); background: var(--bg-body);">
-                            <i data-lucide="phone" style="width: 16px;"></i>
-                        </a>
+                    <!-- Ações do Card -->
+                    <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                        <!-- Linha 1: Comunicação -->
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
+                                <i data-lucide="message-circle" style="width: 16px;"></i>
+                            </a>
+                            <a href="tel:<?= $user['phone'] ?>" class="ripple icon-action" title="Ligar" style="color: var(--text-muted); background: var(--bg-body);">
+                                <i data-lucide="phone" style="width: 16px;"></i>
+                            </a>
+                        </div>
 
                         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <!-- Botão Editar Funções -->
-                            <button onclick="rolesManager.openRolesSelector(<?= $user['id'] ?>)" class="ripple icon-action" title="Editar Funções" style="color: var(--primary); background: var(--primary-subtle);">
-                                <i data-lucide="music" style="width: 16px;"></i>
-                            </button>
-                            
-                            <!-- Menu Trigger (Admin Only) -->
-                            <div style="position: relative;">
-                                <button onclick="toggleMenu(event, 'menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
-                                    <i data-lucide="more-vertical" style="width: 16px;"></i>
+                            <!-- Linha 2: Ações Admin -->
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <!-- Botão Editar Funções -->
+                                <button onclick="rolesManager.openRolesSelector(<?= $user['id'] ?>)" class="ripple icon-action" title="Editar Funções" style="color: var(--primary); background: var(--primary-subtle);">
+                                    <i data-lucide="music" style="width: 16px;"></i>
                                 </button>
+                                
+                                <!-- Menu Trigger -->
+                                <div style="position: relative;">
+                                    <button onclick="toggleMenu(event, 'menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
+                                        <i data-lucide="more-vertical" style="width: 16px;"></i>
+                                    </button>
 
                                 <!-- Dropdown -->
                                 <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
@@ -264,22 +283,22 @@ renderAppHeader('Membros');
                 <input type="text" name="name" id="userName" required class="input-modern" placeholder="Ex: João da Silva">
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                <div>
-                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Função</label>
-                    <input type="text" name="instrument" id="userInst" class="input-modern" placeholder="Ex: Baixo">
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Permissão</label>
+                <div style="position: relative;">
+                    <select name="role" id="userRole" class="input-modern" style="appearance: none;">
+                        <option value="user">Membro</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
                 </div>
-                <div>
-                    <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Permissão</label>
-                    <div style="position: relative;">
-                        <select name="role" id="userRole" class="input-modern" style="appearance: none;">
-                            <option value="user">Membro</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
-                    </div>
-                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+                    💡 Use o botão 🎵 no card do membro para definir funções/instrumentos
+                </p>
             </div>
+
+            <!-- Campo instrument mantido como hidden para compatibilidade -->
+            <input type="hidden" name="instrument" id="userInst" value="">
 
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">WhatsApp</label>

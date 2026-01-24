@@ -38,6 +38,22 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Variante compacta - apenas ícone */
+.role-badge.compact {
+    padding: 4px 6px;
+    font-size: 0.9rem;
+    min-width: 28px;
+    justify-content: center;
+}
+
+.role-badge.compact .role-name {
+    display: none;
+}
+
+.role-badge.compact .role-icon {
+    font-size: 1rem;
+}
+
 /* === ROLE SELECTOR MODAL === */
 .roles-selector-overlay {
     position: fixed;
