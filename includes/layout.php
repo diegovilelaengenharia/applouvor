@@ -719,8 +719,8 @@ function renderAppHeader($title, $backUrl = null)
                     <i data-lucide="layout-grid"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">Gest├úo</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administra├º├úo do Minist├®rio</div>
+                    <div class="sheet-title">Gestão</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administração do Ministério</div>
                 </div>
             </div>
             <div class="sheet-grid">
@@ -734,7 +734,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="music"></i>
                     </div>
-                    Repert├│rio
+                    Repertório
                 </a>
                 <a href="membros.php" class="sheet-btn">
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
@@ -758,7 +758,7 @@ function renderAppHeader($title, $backUrl = null)
                     <i data-lucide="flame"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">Esp├¡rito</div>
+                    <div class="sheet-title">Espírito</div>
                     <div style="font-size: 0.85rem; color: var(--text-muted);">Vida Devocional</div>
                 </div>
             </div>
@@ -769,7 +769,7 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                     <div>
                         <div>Devocional</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conex├úo di├íria</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexão diária</div>
                     </div>
                 </a>
                 <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -777,8 +777,8 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="heart-handshake"></i>
                     </div>
                     <div>
-                        <div>Ora├º├úo</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercess├úo e gratid├úo</div>
+                        <div>Oração</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercessão e gratidão</div>
                     </div>
                 </a>
                 <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -786,7 +786,7 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="scroll"></i>
                     </div>
                     <div>
-                        <div>Leitura B├¡blica</div>
+                        <div>Leitura Bíblica</div>
                         <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Plano anual</div>
                     </div>
                 </a>
@@ -801,7 +801,7 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
                 <div>
                     <div class="sheet-title">Comunica</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mural e Intera├º├Áes</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mural e Interações</div>
                 </div>
             </div>
             <div class="sheet-grid">
@@ -815,7 +815,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
                         <i data-lucide="cake"></i>
                     </div>
-                    Anivers├írios
+                    Aniversários
                 </a>
             </div>
         </div>
@@ -830,7 +830,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white;">
                         <i data-lucide="home"></i>
                     </div>
-                    <span style="font-weight: 600; color:var(--primary);">In├¡cio</span>
+                    <span style="font-weight: 600; color:var(--primary);">Início</span>
                 </a>
 
                 <!-- Bot├úo GERAL (ex-Gest├úo) -->
@@ -846,7 +846,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="b-nav-icon-wrapper" style="background: #eef2ff;">
                         <i data-lucide="flame"></i>
                     </div>
-                    <span>Esp├¡rito</span>
+                    <span>Espírito</span>
                 </button>
 
                 <!-- Bot├úo COMUNICA -->
