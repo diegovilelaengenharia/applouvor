@@ -152,8 +152,8 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .members-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
+        flex-direction: column;
         gap: 8px;
         margin-bottom: 80px;
     }
@@ -162,11 +162,11 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 10px;
-        padding: 10px 8px;
+        padding: 12px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        gap: 6px;
+        gap: 12px;
         text-decoration: none;
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
@@ -175,8 +175,8 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .member-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         border-color: var(--primary);
     }
 
@@ -191,7 +191,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         font-size: 1.2rem;
         color: white;
         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        position: relative;
+        flex-shrink: 0;
     }
 
     .member-avatar img {
@@ -202,24 +202,27 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .member-info {
-        text-align: center;
-        width: 100%;
+        flex: 1;
+        min-width: 0;
     }
 
     .member-name {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 700;
         color: var(--text-main);
-        margin: 0 0 2px 0;
+        margin: 0 0 4px 0;
         line-height: 1.2;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
     }
 
     .member-roles {
         display: flex;
         flex-wrap: wrap;
-        gap: 3px;
-        justify-content: center;
-        margin-top: 4px;
+        gap: 4px;
+        margin-top: 2px;
     }
 
     .role-badge {
@@ -253,9 +256,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     .member-actions {
         display: flex;
         gap: 4px;
-        margin-top: 4px;
-        width: 100%;
-        justify-content: center;
+        flex-shrink: 0;
     }
 
     .action-btn {
@@ -500,10 +501,12 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
                 <!-- Info -->
                 <div class="member-info">
-                    <h3 class="member-name"><?= htmlspecialchars($user['name']) ?></h3>
-                    <?php if ($user['role'] === 'admin'): ?>
-                        <span class="badge-admin">ADM</span>
-                    <?php endif; ?>
+                    <div class="member-name">
+                        <?= htmlspecialchars($user['name']) ?>
+                        <?php if ($user['role'] === 'admin'): ?>
+                            <span class="badge-admin">ADM</span>
+                        <?php endif; ?>
+                    </div>
 
                     <!-- Roles -->
                     <div class="member-roles">
