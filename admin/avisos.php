@@ -1,22 +1,23 @@
 <?php
-// admin/avisos.php
+// admin/avisos.php - Redesign com visual premium
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
 checkLogin();
 
+$userId = $_SESSION['user_id'] ?? 1;
+$isAdmin = ($_SESSION['user_role'] ?? '') === 'admin';
+
 // --- LÓGICA DE POST (CRUD) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
-        $userId = $_SESSION['user_id'] ?? 1;
-
         switch ($_POST['action']) {
             case 'create':
                 $stmt = $pdo->prepare("INSERT INTO avisos (title, message, priority, type, target_audience, expires_at, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
                 $stmt->execute([
                     $_POST['title'],
-                    $_POST['message'], // HTML do Quill
+                    $_POST['message'],
                     $_POST['priority'],
                     $_POST['type'],
                     $_POST['target_audience'],
@@ -68,7 +69,7 @@ $filterType = $_GET['type'] ?? 'all';
 $search = $_GET['search'] ?? '';
 
 // Construir Query
-$sql = "SELECT a.*, u.name as author_name FROM avisos a LEFT JOIN users u ON a.created_by = u.id WHERE 1=1";
+$sql = "SELECT a.*, u.name as author_name, u.avatar as author_avatar FROM avisos a LEFT JOIN users u ON a.created_by = u.id WHERE 1=1";
 $params = [];
 
 if ($showArchived) {
@@ -76,7 +77,6 @@ if ($showArchived) {
 } elseif ($showHistory) {
     $sql .= " AND (a.archived_at IS NOT NULL OR (a.expires_at IS NOT NULL AND a.expires_at < CURDATE()))";
 } else {
-    // Default: Not archived AND (Not expired OR today <= expires_at)
     $sql .= " AND a.archived_at IS NULL AND (a.expires_at IS NULL OR a.expires_at >= CURDATE())";
 }
 
@@ -105,132 +105,284 @@ renderAppHeader('Avisos');
 <!-- Quill CSS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-    <?php
-    // Header Padrão
-    renderPageHeader('Mural de Avisos', '');
-    ?>
+<style>
+    /* Aviso Cards - Premium Design */
+    .aviso-card {
+        background: var(--bg-surface);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .aviso-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+    
+    /* Header do Card */
+    .aviso-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .aviso-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .aviso-avatar-placeholder {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+    .aviso-author-info {
+        flex: 1;
+    }
+    .aviso-author-name {
+        font-weight: 700;
+        color: var(--text-main);
+        font-size: 0.95rem;
+    }
+    .aviso-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    .aviso-type-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    
+    /* Content */
+    .aviso-content {
+        padding: 16px;
+    }
+    .aviso-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+    .aviso-text {
+        color: var(--text-body);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    .aviso-text p { margin: 0 0 8px; }
+    
+    /* Footer */
+    .aviso-footer {
+        padding: 12px 16px;
+        background: #f8fafc;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Type Badges */
+    .type-general { background: #f1f5f9; color: #64748b; }
+    .type-event { background: #eff6ff; color: #2563eb; }
+    .type-music { background: #ecfdf5; color: #059669; }
+    .type-spiritual { background: #f5f3ff; color: #7c3aed; }
+    .type-urgent { background: #fef2f2; color: #dc2626; }
+    
+    /* Priority Badges */
+    .priority-urgent {
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .priority-important {
+        background: #fef3c7;
+        color: #d97706;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    
+    /* FAB */
+    .fab-create {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fab-create:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(249, 115, 22, 0.5);
+    }
+    
+    /* Filter Tabs */
+    .filter-tabs {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        scrollbar-width: none;
+    }
+    .filter-tab {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: all 0.2s;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+    }
+    .filter-tab:hover {
+        background: var(--border-color);
+    }
+    .filter-tab.active {
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Dropdown Menu */
+    .aviso-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        border: 1px solid var(--border-color);
+        min-width: 150px;
+        z-index: 50;
+        overflow: hidden;
+    }
+    .aviso-dropdown a, .aviso-dropdown button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        color: var(--text-main);
+        text-decoration: none;
+        font-size: 0.9rem;
+        width: 100%;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+    }
+    .aviso-dropdown a:hover, .aviso-dropdown button:hover {
+        background: #f8fafc;
+    }
+    .aviso-dropdown .delete-btn {
+        color: #dc2626;
+        border-top: 1px solid var(--border-color);
+    }
+</style>
 
-<div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
+<?php renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira'); ?>
 
-    <!-- Texto Explicativo -->
-    <div style="margin-bottom: 24px;">
-        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0 0 6px 0;">
-            Central de Comunicação
-        </h2>
-        <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; max-width: 600px;">
-            Gerencie avisos importantes, escalas e eventos da equipe. Mantenha todos alinhados e informados.
+<div class="container" style="padding-top: 16px; max-width: 700px; margin: 0 auto;">
+    
+    <!-- Hero Section -->
+    <div style="text-align: center; padding: 20px 0 30px;">
+        <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);">
+            <i data-lucide="megaphone" style="color: white; width: 36px; height: 36px;"></i>
+        </div>
+        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Central de Comunicação</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto;">
+            Avisos importantes, eventos e novidades do ministério. Fique por dentro de tudo!
         </p>
     </div>
-
-
-    <!-- Filtros de Navegação -->
-    <div style="margin-bottom: 24px;">
-
-        <!-- Busca e Ações -->
-        <div style="display: flex; gap: 12px; margin-bottom: 24px; align-items: start;">
+    
+    <!-- Search Bar -->
+    <div style="margin-bottom: 20px;">
+        <form style="display: flex; gap: 10px;">
+            <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
+            <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
+            <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
             <div style="flex: 1; position: relative;">
-                <i data-lucide="search" style="position: absolute; left: 16px; top: 12px; color: var(--text-muted); width: 20px;"></i>
-                <form onsubmit="return true;" style="margin:0">
-                    <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
-                    <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
-                    <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
-                    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..."
-                        style="
-                            width: 100%; padding: 10px 12px 10px 48px; border-radius: var(--radius-md); 
-                            border: 1px solid var(--border-color); font-size: 0.95rem; outline: none; 
-                            transition: border 0.2s; background: var(--bg-surface); color: var(--text-main);
-                            box-shadow: var(--shadow-sm); height: 42px;
-                        "
-                        onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
-                </form>
+                <i data-lucide="search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; color: var(--text-muted);"></i>
+                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..." style="
+                    width: 100%; padding: 12px 12px 12px 44px; border: 1px solid var(--border-color);
+                    border-radius: 12px; font-size: 0.95rem; background: var(--bg-surface);
+                    outline: none; color: var(--text-main);
+                ">
             </div>
-            
-            <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <button onclick="openCreateModal()" class="ripple" style="
-                background: var(--primary); color: white; border: none; padding: 0 16px; height: 42px; 
-                border-radius: var(--radius-md); font-weight: 600; font-size: 0.9rem; cursor: pointer;
-                display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm);
-                white-space: nowrap;
-            ">
-                <i data-lucide="plus" width="18"></i>
-                <span>Novo Aviso</span>
-            </button>
-            <?php endif; ?>
-        </div>
-
-        <!-- Filtros (Estilo Abas/Tabs) -->
-        <style>
-            .filter-tab {
-                padding: 8px 12px; 
-                color: var(--text-muted); 
-                text-decoration: none; 
-                font-weight: 600; 
-                font-size: 0.9rem;
-                display: flex; align-items: center; gap: 6px;
-                border-bottom: 2px solid transparent;
-                transition: all 0.2s;
-                opacity: 0.7;
-            }
-            .filter-tab:hover {
-                color: var(--text-main);
-                opacity: 1;
-                background: rgba(0,0,0,0.02);
-                border-radius: 6px 6px 0 0;
-            }
-            .filter-tab.active {
-                color: var(--primary);
-                font-weight: 700;
-                border-bottom: 2px solid var(--primary);
-                opacity: 1;
-                background: transparent;
-            }
-        </style>
-        <div style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 0; scrollbar-width: none; border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
-            <?php
-            $types = [
-                'all' => ['label' => 'Todos', 'icon' => ''],
-                'general' => ['label' => 'Geral', 'icon' => '📢'],
-                'event' => ['label' => 'Eventos', 'icon' => '🎉'],
-                'music' => ['label' => 'Música', 'icon' => '🎵'],
-                'spiritual' => ['label' => 'Espiritual', 'icon' => '🙏'],
-                'urgent' => ['label' => 'Urgente', 'icon' => '🚨'],
-            ];
-            foreach ($types as $key => $data):
-                $isActive = $filterType === $key;
-                $activeClass = $isActive ? 'active' : '';
-            ?>
-                <a href="?type=<?= $key ?><?= $showArchived ? '&archived=1' : '' ?><?= $search ? '&search=' . $search : '' ?>" class="filter-tab <?= $activeClass ?>">
-                    <?php if($data['icon']): ?><span><?= $data['icon'] ?></span><?php endif; ?>
-                    <?= $data['label'] ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-
-        <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 0.85rem;">
-            <a href="?history=<?= $showHistory ? '0' : '1' ?>" class="ripple" style="
-                color: var(--text-muted); font-weight: 600; text-decoration: none; 
-                display: flex; align-items: center; gap: 4px; padding: 6px 12px; 
-                background: <?= $showHistory ? 'var(--bg-surface)' : 'transparent' ?>; 
-                border-radius: 20px; border: 1px solid <?= $showHistory ? 'var(--border-color)' : 'transparent' ?>;
-            ">
-                <i data-lucide="clock" style="width: 14px;"></i>
-                <?= $showHistory ? 'Ver Ativos' : 'Ver Histórico' ?>
-            </a>
-        </div>
-
+        </form>
     </div>
-
-    <!-- LISTA DE AVISOS (Design Profissional) -->
-    <div style="display: flex; flex-direction: column; gap: 16px;">
+    
+    <!-- Filtros por Tipo -->
+    <div class="filter-tabs">
+        <a href="?type=all<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'all' ? 'active' : '' ?>">✨ Todos</a>
+        <a href="?type=general<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'general' ? 'active' : '' ?>">📢 Geral</a>
+        <a href="?type=event<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'event' ? 'active' : '' ?>">🎉 Eventos</a>
+        <a href="?type=music<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'music' ? 'active' : '' ?>">🎵 Música</a>
+        <a href="?type=spiritual<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'spiritual' ? 'active' : '' ?>">🙏 Espiritual</a>
+        <a href="?type=urgent<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'urgent' ? 'active' : '' ?>">🚨 Urgente</a>
+    </div>
+    
+    <!-- Toggle Histórico -->
+    <div style="margin-bottom: 20px;">
+        <a href="?<?= $showHistory ? '' : 'history=1' ?><?= $filterType !== 'all' ? '&type=' . $filterType : '' ?>" style="
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+            text-decoration: none; color: var(--text-muted);
+            background: <?= $showHistory ? 'var(--bg-surface)' : 'transparent' ?>;
+            border: 1px solid <?= $showHistory ? 'var(--border-color)' : 'transparent' ?>;
+        ">
+            <i data-lucide="<?= $showHistory ? 'eye' : 'clock' ?>" style="width: 14px;"></i>
+            <?= $showHistory ? 'Ver Ativos' : 'Ver Histórico' ?>
+        </a>
+    </div>
+    
+    <!-- Feed de Avisos -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
         <?php if (count($avisos) > 0): ?>
             <?php foreach ($avisos as $aviso): 
                 // Configuração de Cores e Ícones
                 $typeConfig = [
-                    'general' => ['color' => '#64748b', 'bg' => '#f1f5f9', 'icon' => '📢', 'label' => 'Geral'],
-                    'event' =>   ['color' => '#2563eb', 'bg' => '#eff6ff', 'icon' => '🎉', 'label' => 'Evento'],
-                    'music' =>   ['color' => '#059669', 'bg' => '#ecfdf5', 'icon' => '🎵', 'label' => 'Música'],
-                    'spiritual'=>['color' => '#7c3aed', 'bg' => '#f5f3ff', 'icon' => '🙏', 'label' => 'Espiritual'],
-                    'urgent' =>  ['color' => '#dc2626', 'bg' => '#fef2f2', 'icon' => '🚨', 'label' => 'Urgente']
+                    'general' => ['color' => '#64748b', 'gradient' => 'linear-gradient(135deg, #64748b, #475569)', 'icon' => '📢', 'label' => 'Geral', 'class' => 'type-general'],
+                    'event' => ['color' => '#2563eb', 'gradient' => 'linear-gradient(135deg, #3b82f6, #2563eb)', 'icon' => '🎉', 'label' => 'Evento', 'class' => 'type-event'],
+                    'music' => ['color' => '#059669', 'gradient' => 'linear-gradient(135deg, #10b981, #059669)', 'icon' => '🎵', 'label' => 'Música', 'class' => 'type-music'],
+                    'spiritual' => ['color' => '#7c3aed', 'gradient' => 'linear-gradient(135deg, #8b5cf6, #7c3aed)', 'icon' => '🙏', 'label' => 'Espiritual', 'class' => 'type-spiritual'],
+                    'urgent' => ['color' => '#dc2626', 'gradient' => 'linear-gradient(135deg, #ef4444, #dc2626)', 'icon' => '🚨', 'label' => 'Urgente', 'class' => 'type-urgent']
                 ];
                 $tc = $typeConfig[$aviso['type']] ?? $typeConfig['general'];
 
@@ -243,302 +395,237 @@ renderAppHeader('Avisos');
                 $now = new DateTime();
                 $diff = $now->diff($createdAt);
                 
-                if ($diff->y > 0) $timeAgo = $diff->y . ' ano(s) atrás';
-                elseif ($diff->m > 0) $timeAgo = $diff->m . ' mês(es) atrás';
-                elseif ($diff->d > 0) $timeAgo = $diff->d . ' dia(s) atrás';
-                elseif ($diff->h > 0) $timeAgo = $diff->h . 'h atrás';
-                elseif ($diff->i > 0) $timeAgo = $diff->i . 'm atrás';
-                else $timeAgo = 'Agorinha';
+                if ($diff->y > 0) $timeAgo = $diff->y . ' ano(s)';
+                elseif ($diff->m > 0) $timeAgo = $diff->m . ' mês(es)';
+                elseif ($diff->d > 0) $timeAgo = $diff->d . ' dia(s)';
+                elseif ($diff->h > 0) $timeAgo = $diff->h . 'h';
+                elseif ($diff->i > 0) $timeAgo = $diff->i . 'min';
+                else $timeAgo = 'agora';
 
                 // Expiração
                 $expiryText = "";
+                $expiryClass = "";
                 if ($aviso['expires_at']) {
                     $expiresAt = new DateTime($aviso['expires_at']);
                     $daysLeft = (int)$now->diff($expiresAt)->format('%r%a');
                     
-                    if ($daysLeft < 0) $expiryText = "<span style='color:var(--text-muted)'>Expirado</span>";
-                    elseif ($daysLeft == 0) $expiryText = "<span style='color:#dc2626'>Expira hoje</span>";
-                    elseif ($daysLeft <= 3) $expiryText = "<span style='color:#d97706'>Expira em $daysLeft dias</span>";
-                    else $expiryText = "<span style='color:var(--text-muted)'>Expira em " . $expiresAt->format('d/m') . "</span>";
+                    if ($daysLeft < 0) { $expiryText = "Expirado"; $expiryClass = "color: var(--text-muted)"; }
+                    elseif ($daysLeft == 0) { $expiryText = "Expira hoje"; $expiryClass = "color: #dc2626"; }
+                    elseif ($daysLeft <= 3) { $expiryText = "Expira em $daysLeft dias"; $expiryClass = "color: #d97706"; }
+                    else { $expiryText = "Expira " . $expiresAt->format('d/m'); $expiryClass = "color: var(--text-muted)"; }
+                }
+                
+                // Avatar
+                $authorAvatar = !empty($aviso['author_avatar']) ? $aviso['author_avatar'] : null;
+                if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
+                    $authorAvatar = '../assets/uploads/' . $authorAvatar;
                 }
             ?>
-            <div class="aviso-card" style="
-                background: white; border-radius: 12px; 
-                border: 1px solid var(--border-color);
-                border-left: 4px solid <?= $tc['color'] ?>;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-                padding: 0; overflow: hidden; position: relative;
-                transition: transform 0.2s, box-shadow 0.2s;
-            ">
+            <div class="aviso-card animate-in">
                 <!-- Header -->
-                <div style="padding: 16px 16px 8px 16px; display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div style="display: flex; gap: 10px; align-items: start;">
-                        <!-- Ícone/Avatar -->
-                        <div style="
-                            width: 40px; height: 40px; border-radius: 10px; 
-                            background: <?= $tc['bg'] ?>; color: <?= $tc['color'] ?>;
-                            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-                            flex-shrink: 0;
-                        ">
-                            <?= $tc['icon'] ?>
+                <div class="aviso-header">
+                    <?php if ($authorAvatar): ?>
+                        <img src="<?= htmlspecialchars($authorAvatar) ?>" class="aviso-avatar" alt="Avatar">
+                    <?php else: ?>
+                        <div class="aviso-avatar-placeholder" style="background: <?= $tc['gradient'] ?>;">
+                            <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
                         </div>
-                        
-                        <div>
-                            <!-- Tipo e Badges -->
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                                <span style="
-                                    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-                                    color: <?= $tc['color'] ?>;
-                                ">
-                                    <?= $tc['label'] ?>
-                                </span>
-                                
-                                <?php if($isUrgent): ?>
-                                    <span style="font-size: 0.65rem; background: #fee2e2; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-weight: 700;">URGENTE</span>
-                                <?php elseif($isImportant): ?>
-                                    <span style="font-size: 0.65rem; background: #fef3c7; color: #d97706; padding: 2px 6px; border-radius: 4px; font-weight: 700;">IMPORTANTE</span>
-                                <?php endif; ?>
-
-                                <?php if($aviso['target_audience'] !== 'all'): ?>
-                                    <span style="font-size: 0.65rem; background: #f1f5f9; color: var(--text-muted); padding: 2px 6px; border-radius: 4px; font-weight: 600; display: flex; align-items: center; gap: 3px;">
-                                        <i data-lucide="users" width="10"></i> 
-                                        <?= $aviso['target_audience'] == 'admins' ? 'Líderes' : 'Equipe' ?>
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-
-                            <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">
-                                <?= htmlspecialchars($aviso['title']) ?>
-                            </h3>
+                    <?php endif; ?>
+                    
+                    <div class="aviso-author-info">
+                        <div class="aviso-author-name"><?= htmlspecialchars($aviso['author_name'] ?? 'Admin') ?></div>
+                        <div class="aviso-meta">
+                            <span class="aviso-type-badge <?= $tc['class'] ?>"><?= $tc['icon'] ?> <?= $tc['label'] ?></span>
+                            <span>• <?= $timeAgo ?></span>
                         </div>
                     </div>
-
-                    <!-- Menu Ações -->
-                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                    
+                    <?php if ($isAdmin): ?>
                     <div style="position: relative;">
-                        <button class="btn-icon ripple" onclick="toggleMenu('menu-<?= $aviso['id'] ?>')" style="padding: 4px; border-radius: 50%;">
-                            <i data-lucide="more-horizontal" style="color: var(--text-muted);"></i>
+                        <button onclick="toggleAvisoMenu('menu-<?= $aviso['id'] ?>')" style="background: none; border: none; padding: 8px; cursor: pointer; color: var(--text-muted); border-radius: 50%;">
+                            <i data-lucide="more-vertical" style="width: 18px;"></i>
                         </button>
-                        <!-- Dropdown -->
-                        <div id="menu-<?= $aviso['id'] ?>" class="dropdown-menu" style="
-                            display: none; position: absolute; right: 0; top: 100%; width: 140px;
-                            background: white; border: 1px solid var(--border-color); border-radius: 8px;
-                            box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;
-                        ">
-                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($aviso)) ?>)" style="display: flex; align-items: center; gap: 8px; padding: 10px; color: var(--text-main); text-decoration: none; font-size: 0.9rem;">
-                                <i data-lucide="edit-2" width="16"></i> Editar
+                        <div id="menu-<?= $aviso['id'] ?>" class="aviso-dropdown">
+                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($aviso)) ?>); return false;">
+                                <i data-lucide="edit-2" style="width: 16px;"></i> Editar
                             </a>
-                            <a href="avisos_actions.php?action=delete&id=<?= $aviso['id'] ?>" onclick="return confirm('Tem certeza?')" style="display: flex; align-items: center; gap: 8px; padding: 10px; color: #dc2626; text-decoration: none; font-size: 0.9rem; border-top: 1px solid var(--border-color);">
-                                <i data-lucide="trash-2" width="16"></i> Excluir
-                            </a>
+                            <?php if (!$aviso['archived_at']): ?>
+                            <form method="POST" style="margin: 0;">
+                                <input type="hidden" name="action" value="archive">
+                                <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                <button type="submit">
+                                    <i data-lucide="archive" style="width: 16px;"></i> Arquivar
+                                </button>
+                            </form>
+                            <?php else: ?>
+                            <form method="POST" style="margin: 0;">
+                                <input type="hidden" name="action" value="unarchive">
+                                <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                <button type="submit">
+                                    <i data-lucide="archive-restore" style="width: 16px;"></i> Restaurar
+                                </button>
+                            </form>
+                            <?php endif; ?>
+                            <form method="POST" style="margin: 0;" onsubmit="return confirm('Excluir este aviso permanentemente?')">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                <button type="submit" class="delete-btn">
+                                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <?php endif; ?>
                 </div>
-
-                <!-- Conteúdo / Mensagem -->
-                <div style="padding: 0 16px 16px 66px;">
-                    <div class="message-preview" style="color: var(--text-body); font-size: 0.95rem; line-height: 1.5;">
-                        <?= $aviso['message'] ?>
-                    </div>
-                </div>
-
-                <!-- Footer: Autor e Data -->
-                <div style="
-                    background: #f8fafc; padding: 10px 16px; border-top: 1px solid var(--border-color);
-                    display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);
-                ">
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <?php if (!empty($aviso['avatar'])): ?>
-                            <img src="<?= htmlspecialchars($aviso['avatar']) ?>" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover;">
-                        <?php else: ?>
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #cbd5e1; display:flex; align-items:center; justify-content:center; color:white; font-size:0.6rem; font-weight:700;">
-                                <?= substr($aviso['author_name'] ?? 'A', 0, 1) ?>
-                            </div>
+                
+                <!-- Content -->
+                <div class="aviso-content">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                        <h3 class="aviso-title" style="margin: 0;"><?= htmlspecialchars($aviso['title']) ?></h3>
+                        <?php if($isUrgent): ?>
+                            <span class="priority-urgent">🔥 URGENTE</span>
+                        <?php elseif($isImportant): ?>
+                            <span class="priority-important">⭐ IMPORTANTE</span>
                         <?php endif; ?>
-                        <span style="font-weight: 500;"><?= htmlspecialchars($aviso['author_name'] ?? 'Admin') ?></span>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <?php if($expiryText): ?>
-                            <span style="display: flex; align-items: center; gap: 4px; background:white; padding: 2px 8px; border-radius: 10px; border: 1px solid #e2e8f0;">
-                                <i data-lucide="clock" width="12"></i> <?= $expiryText ?>
+                    <div class="aviso-text"><?= $aviso['message'] ?></div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="aviso-footer">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted);">
+                        <?php if($aviso['target_audience'] !== 'all'): ?>
+                            <span style="display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 4px 10px; border-radius: 12px;">
+                                <i data-lucide="users" style="width: 12px;"></i>
+                                <?= $aviso['target_audience'] == 'admins' ? 'Líderes' : 'Equipe' ?>
                             </span>
                         <?php endif; ?>
-                        <span><?= $timeAgo ?></span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                        <?php if($expiryText): ?>
+                            <span style="display: flex; align-items: center; gap: 4px; <?= $expiryClass ?>">
+                                <i data-lucide="clock" style="width: 12px;"></i>
+                                <?= $expiryText ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <div class="empty-state">
-                <div style="background: var(--bg-surface); padding: 40px; border-radius: 16px; text-align: center; border: 1px dashed var(--border-color);">
-                    <i data-lucide="bell-off" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 16px;"></i>
-                    <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum aviso encontrado</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">Tente mudar os filtros ou crie um novo aviso.</p>
+            <!-- Empty State -->
+            <div style="text-align: center; padding: 60px 20px;">
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i data-lucide="bell-off" style="color: #f97316; width: 40px; height: 40px;"></i>
                 </div>
+                <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum aviso encontrado</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 300px; margin: 0 auto 20px;">
+                    <?= $showHistory ? 'Nenhum aviso no histórico.' : 'Não há avisos ativos no momento.' ?>
+                </p>
+                <?php if ($isAdmin): ?>
+                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                    <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
+                    Criar Aviso
+                </button>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
     </div>
-
-    <div style="height: 60px;"></div>
+    
+    <div style="height: 100px;"></div>
 </div>
 
+<!-- FAB Button -->
+<?php if ($isAdmin): ?>
+<button onclick="openCreateModal()" class="fab-create">
+    <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
+</button>
+<?php endif; ?>
 
-
-<!-- Modal Universal (Add/Edit) -->
+<!-- Modal Create/Edit -->
 <div id="avisoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
-    <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);"></div>
-
-    <div style="
-        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 600px; background: var(--bg-surface); border-radius: 24px; padding: 24px;
-        box-shadow: var(--shadow-xl); max-height: 90vh; overflow-y: auto;
-    ">
-        <h2 id="modalTitle" style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Novo Aviso</h2>
+    <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);"></div>
+    
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 550px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <h2 id="modalTitle" style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main);">📢 Novo Aviso</h2>
+            <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
+                <i data-lucide="x" style="width: 20px;"></i>
+            </button>
+        </div>
+        
         <form method="POST" id="avisoForm" onsubmit="return prepareSubmit()">
             <input type="hidden" name="action" id="formAction" value="create">
             <input type="hidden" name="id" id="avisoId">
             <input type="hidden" name="message" id="hiddenMessage">
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Título</label>
-                <input type="text" name="title" id="avisoTitle" required class="input-modern" style="
-                    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
-                    outline: none; background: var(--bg-body); color: var(--text-main);
-                ">
+            
+            <!-- Título -->
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Título</label>
+                <input type="text" name="title" id="avisoTitle" required placeholder="Ex: Ensaio especial neste sábado" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.95rem; outline: none; background: var(--bg-body);">
             </div>
-
-            <!-- SELETORES EM GRID (Dropdowns Compactos) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+            
+            <!-- Tipo e Prioridade -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                <!-- Tipo -->
+                <div>
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Tipo</label>
+                    <select name="type" id="avisoType" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                        <option value="general">📢 Geral</option>
+                        <option value="event">🎉 Evento</option>
+                        <option value="music">🎵 Música</option>
+                        <option value="spiritual">🙏 Espiritual</option>
+                        <option value="urgent">🚨 Urgente</option>
+                    </select>
+                </div>
                 
-                <!-- TIPO -->
+                <!-- Prioridade -->
                 <div>
-                    <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Tipo</label>
-                    <input type="hidden" name="type" id="avisoType">
-                    <div class="custom-dropdown" id="dropdownType">
-                        <div class="dropdown-trigger ripple">
-                            <span class="selected-label">Selecione...</span>
-                            <i data-lucide="chevron-down" width="14"></i>
-                        </div>
-                        <div class="dropdown-options">
-                            <div class="dropdown-item" data-value="general" data-label="📢 Geral" data-color="var(--text-main)">📢 Geral</div>
-                            <div class="dropdown-item" data-value="event" data-label="🎉 Evento" data-color="#1d4ed8">🎉 Evento</div>
-                            <div class="dropdown-item" data-value="music" data-label="🎵 Música" data-color="#047857">🎵 Música</div>
-                            <div class="dropdown-item" data-value="spiritual" data-label="🙏 Espiritual" data-color="#6d28d9">🙏 Espiritual</div>
-                            <div class="dropdown-item" data-value="urgent" data-label="🚨 Urgente" data-color="#b91c1c">🚨 Urgente</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PRIORIDADE -->
-                <div>
-                    <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Prioridade</label>
-                    <input type="hidden" name="priority" id="avisoPriority">
-                    <div class="custom-dropdown" id="dropdownPriority">
-                        <div class="dropdown-trigger ripple">
-                            <span class="selected-label">Selecione...</span>
-                            <i data-lucide="chevron-down" width="14"></i>
-                        </div>
-                        <div class="dropdown-options">
-                            <div class="dropdown-item" data-value="info" data-label="ℹ Info" data-color="#2563eb">ℹ Info</div>
-                            <div class="dropdown-item" data-value="important" data-label="⭐ Importante" data-color="#d97706">⭐ Importante</div>
-                            <div class="dropdown-item" data-value="urgent" data-label="🔥 Urgente" data-color="#dc2626">🔥 Urgente</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PÚBLICO -->
-                <div>
-                    <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Público</label>
-                    <input type="hidden" name="target_audience" id="avisoTarget">
-                    <div class="custom-dropdown" id="dropdownTarget">
-                        <div class="dropdown-trigger ripple">
-                            <span class="selected-label">Todos</span>
-                            <i data-lucide="chevron-down" width="14"></i>
-                        </div>
-                        <div class="dropdown-options">
-                            <div class="dropdown-item" data-value="all" data-label="Todos" data-color="var(--text-main)">Todos</div>
-                            <div class="dropdown-item" data-value="team" data-label="Equipe" data-color="var(--text-main)">Equipe</div>
-                            <div class="dropdown-item" data-value="admins" data-label="Admins" data-color="var(--text-main)">Líderes</div>
-                        </div>
-                    </div>
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Prioridade</label>
+                    <select name="priority" id="avisoPriority" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                        <option value="info">ℹ️ Normal</option>
+                        <option value="important">⭐ Importante</option>
+                        <option value="urgent">🔥 Urgente</option>
+                    </select>
                 </div>
             </div>
-
-            <!-- EXPIRAÇÃO (Full Width agora, ou abaixo) -->
-            <div style="margin-bottom: 12px;">
-                <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Validade (Opcional)</label>
-                <input type="date" name="expires_at" id="avisoExpires" style="
-                    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); 
-                    background: var(--bg-body); color: var(--text-main); font-size: 0.9rem;
-                    outline: none;
-                ">
+            
+            <!-- Público e Validade -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                <!-- Público -->
+                <div>
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Público</label>
+                    <select name="target_audience" id="avisoTarget" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                        <option value="all">👥 Todos</option>
+                        <option value="team">🎸 Equipe</option>
+                        <option value="admins">👑 Líderes</option>
+                    </select>
+                </div>
+                
+                <!-- Validade -->
+                <div>
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Expira em</label>
+                    <input type="date" name="expires_at" id="avisoExpires" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                </div>
             </div>
-
-            <style>
-                .custom-dropdown {
-                    position: relative;
-                }
-                .dropdown-trigger {
-                    width: 100%;
-                    padding: 10px;
-                    background: var(--bg-body);
-                    border: 1px solid var(--border-color);
-                    border-radius: 8px;
-                    display: flex; justify-content: space-between; align-items: center;
-                    cursor: pointer;
-                    font-size: 0.85rem; font-weight: 600; color: var(--text-main);
-                    user-select: none;
-                }
-                .dropdown-options {
-                    display: none;
-                    position: absolute; top: 100%; left: 0; right: 0;
-                    background: var(--bg-surface);
-                    border: 1px solid var(--border-color);
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                    z-index: 50;
-                    margin-top: 4px;
-                    overflow: hidden;
-                    max-height: 200px; overflow-y: auto;
-                }
-                .custom-dropdown.open .dropdown-options {
-                    display: block;
-                }
-                .dropdown-item {
-                    padding: 8px 12px;
-                    font-size: 0.85rem;
-                    cursor: pointer;
-                    transition: background 0.1s;
-                    display: flex; align-items: center; gap: 6px;
-                    color: var(--text-muted);
-                }
-                .dropdown-item:hover {
-                    background: var(--bg-body);
-                    color: var(--text-main);
-                }
-                .dropdown-item.selected {
-                    background: var(--primary-subtle, #f0fdf4);
-                    color: var(--primary, #166534);
-                    font-weight: 700;
-                }
-            </style>
-
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Mensagem</label>
-                <div id="editor" style="height: 150px; background: white; color: black !important;"></div>
+            
+            <!-- Editor de Texto -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Mensagem</label>
+                <div id="editor" style="height: 150px; background: white; border-radius: 12px;"></div>
             </div>
-
+            
+            <!-- Buttons -->
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="
-                    flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); 
-                    background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);
-                ">Cancelar</button>
-                <button type="submit" style="
-                    flex: 2; padding: 14px; border-radius: 12px; border: none; 
-                    background: var(--primary); color: white; font-weight: 700; cursor: pointer;
-                ">Salvar Aviso</button>
+                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
+                    Cancelar
+                </button>
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #f97316, #ea580c); color: white; font-weight: 700; cursor: pointer;">
+                    Publicar
+                </button>
             </div>
         </form>
     </div>
@@ -546,150 +633,67 @@ renderAppHeader('Avisos');
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Quill Init
+    // Quill Editor
     var quill = new Quill('#editor', {
         theme: 'snow',
+        placeholder: 'Escreva a mensagem do aviso...',
         modules: {
             toolbar: [
                 ['bold', 'italic', 'underline'],
-                [{
-                    'list': 'ordered'
-                }, {
-                    'list': 'bullet'
-                }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                 ['link']
             ]
         }
     });
-
-    // Helper robusto para setar valor + UI sem depender de click() simulado
-    function setSelectorValue(dropdownId, value) {
-        const dropdown = document.getElementById(dropdownId);
-        if(!dropdown) return;
-        
-        // Encontrar item alvo ou fallback para o primeiro
-        const target = dropdown.querySelector(`.dropdown-item[data-value="${value}"]`) || dropdown.querySelector('.dropdown-item'); 
-        if(!target) return;
-
-        // Extrair dados
-        const val = target.getAttribute('data-value');
-        const label = target.getAttribute('data-label');
-        const color = target.getAttribute('data-color');
-
-        // Atualizar Input Hidden (Busca pelo ID ou Sibling)
-        // Como definimos ID nos inputs hidden, vamos tentar usar o ID baseado no dropdown se possível, 
-        // mas o sibling é o padrão atual.
-        const hiddenInput = dropdown.previousElementSibling;
-        if(hiddenInput) hiddenInput.value = val;
-
-        // Atualizar Label Visível
-        const labelSpan = dropdown.querySelector('.selected-label');
-        if(labelSpan) {
-            labelSpan.innerText = label;
-            labelSpan.style.color = color || 'var(--text-main)';
-        }
-        
-        // Atualizar Estado Visual do Menu
-        dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
-        target.classList.add('selected');
-    }
-
-    function initSelectors() {
-        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
-            const trigger = dropdown.querySelector('.dropdown-trigger');
-            const hiddenInput = dropdown.previousElementSibling; // Hidden input
-            
-            // Toggle
-            trigger.addEventListener('click', (e) => {
-                e.preventDefault(); e.stopPropagation();
-                // Close others
-                document.querySelectorAll('.custom-dropdown').forEach(d => {
-                    if(d !== dropdown) d.classList.remove('open');
-                });
-                dropdown.classList.toggle('open');
-            });
-            
-            // Select Option
-            dropdown.querySelectorAll('.dropdown-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const value = item.getAttribute('data-value');
-                    
-                    // Usar o helper para garantir consistência
-                    setSelectorValue(dropdown.id, value);
-                    
-                    // Close
-                    dropdown.classList.remove('open');
-                });
-            });
-        });
-
-        // Click outside closes dropdowns
-        document.addEventListener('click', () => {
-             document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
-        });
-    }
-
-    initSelectors();
-
+    
     function prepareSubmit() {
         document.getElementById('hiddenMessage').value = quill.root.innerHTML;
         return true;
     }
-
-    // Modal
+    
     function openCreateModal() {
-        document.getElementById('modalTitle').innerText = 'Novo Aviso';
+        document.getElementById('modalTitle').innerText = '📢 Novo Aviso';
         document.getElementById('formAction').value = 'create';
         document.getElementById('avisoForm').reset();
         document.getElementById('avisoId').value = '';
         quill.setContents([]);
         
-        // Defaults
-        setSelectorValue('dropdownType', 'general');
-        setSelectorValue('dropdownPriority', 'info');
-        setSelectorValue('dropdownTarget', 'all');
-        
         document.getElementById('avisoModal').style.display = 'block';
     }
-
+    
     function openEditModal(aviso) {
-        document.getElementById('modalTitle').innerText = 'Editar Aviso';
+        document.getElementById('modalTitle').innerText = '✏️ Editar Aviso';
         document.getElementById('formAction').value = 'update';
         document.getElementById('avisoId').value = aviso.id;
         document.getElementById('avisoTitle').value = aviso.title;
-        
-        // Set Selectors
-        setSelectorValue('dropdownType', aviso.type);
-        setSelectorValue('dropdownPriority', aviso.priority);
-        setSelectorValue('dropdownTarget', aviso.target_audience || 'all');
-        
+        document.getElementById('avisoType').value = aviso.type;
+        document.getElementById('avisoPriority').value = aviso.priority;
+        document.getElementById('avisoTarget').value = aviso.target_audience || 'all';
         document.getElementById('avisoExpires').value = aviso.expires_at || '';
-
-        quill.root.innerHTML = aviso.message; // Load HTML
-
+        
+        quill.root.innerHTML = aviso.message || '';
+        
         closeAllMenus();
         document.getElementById('avisoModal').style.display = 'block';
     }
     
-
     function closeModal() {
         document.getElementById('avisoModal').style.display = 'none';
     }
-
-    // Menus
-    function toggleMenu(id) {
+    
+    // Dropdown menus
+    function toggleAvisoMenu(id) {
         closeAllMenus();
         const menu = document.getElementById(id);
         menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
-
+    
     function closeAllMenus() {
-        document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.aviso-dropdown').forEach(m => m.style.display = 'none');
     }
-
-    window.onclick = function(event) {
-        if (!event.target.matches('.btn-icon') && !event.target.closest('.btn-icon')) {
+    
+    window.onclick = function(e) {
+        if (!e.target.closest('.aviso-dropdown') && !e.target.closest('[onclick*="toggleAvisoMenu"]')) {
             closeAllMenus();
         }
     }
