@@ -153,7 +153,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
     .members-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
         margin-bottom: 80px;
     }
@@ -471,7 +471,6 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
     @media (max-width: 768px) {
         .members-grid {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 10px;
         }
     }
