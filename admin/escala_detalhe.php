@@ -112,33 +112,51 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <div style="font-size: 0.85rem; color: var(--text-muted);"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
             </div>
             
-            <!-- Botão Editar -->
+            <!-- Botão Editar AMARELO -->
             <button id="editBtn" onclick="toggleEditMode()" style="
-                padding: 10px 16px; border-radius: 10px;
-                background: var(--bg-body); border: 1px solid var(--border-color);
-                color: var(--text-main); cursor: pointer;
+                padding: 10px 18px; border-radius: 12px;
+                background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+                border: none;
+                color: white; cursor: pointer;
                 display: flex; align-items: center; gap: 6px;
-                font-weight: 600; font-size: 0.85rem;
+                font-weight: 700; font-size: 0.85rem;
                 transition: all 0.2s;
-            ">
+                box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(251, 191, 36, 0.4)'"
+               onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(251, 191, 36, 0.3)'">
                 <i data-lucide="edit-2" style="width: 16px;"></i>
                 <span>Editar</span>
             </button>
         </div>
         
-        <!-- Info Row -->
-        <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: <?= $schedule['notes'] ? '12px' : '0' ?>;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="clock" style="width: 16px; color: var(--text-muted);"></i>
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);">19:00</span>
+        <!-- Info Row Melhorada -->
+        <div style="display: flex; align-items: center; gap: 20px; padding: 16px; background: var(--bg-body); border-radius: 14px; margin-bottom: <?= $schedule['notes'] ? '16px' : '0' ?>;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="clock" style="width: 18px; color: white;"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Horário</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);">19:00</div>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="users" style="width: 16px; color: var(--text-muted);"></i>
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= count($team) ?></span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="users" style="width: 18px; color: white;"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Equipe</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><?= count($team) ?></div>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="music" style="width: 16px; color: var(--text-muted);"></i>
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= count($songs) ?></span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="music" style="width: 18px; color: white;"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Músicas</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><?= count($songs) ?></div>
+                </div>
             </div>
         </div>
         
