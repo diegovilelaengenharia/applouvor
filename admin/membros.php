@@ -294,7 +294,6 @@ renderAppHeader('Membros');
                     <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
                 </div>
                 </div>
-            </div>
 
             <!-- Campo instrument mantido como hidden para compatibilidade -->
             <input type="hidden" name="instrument" id="userInst" value="">
