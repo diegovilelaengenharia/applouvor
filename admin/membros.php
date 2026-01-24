@@ -337,13 +337,7 @@ renderAppHeader('Membros');
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        /* Radius otimizado */
         padding: 12px;
-        /* Padding reduzido de 16px */
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        /* Gap reduzido */
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
     }
@@ -352,6 +346,13 @@ renderAppHeader('Membros');
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
         border-color: var(--primary-light);
+    }
+
+    .member-card > div {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
     }
 
     .member-avatar {
