@@ -102,34 +102,54 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 .view-mode-hidden { display: none; }
 </style>
 
-<!-- Botão Editar Fixo -->
-<div style="position: fixed; bottom: 80px; right: 20px; z-index: 50;">
-    <button id="editBtn" onclick="toggleEditMode()" style="
-        width: 56px; height: 56px; border-radius: 50%;
-        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-        color: white; border: none; cursor: pointer;
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-        display: flex; align-items: center; justify-content: center;
-        transition: all 0.3s;
-    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-        <i data-lucide="edit-2" style="width: 24px;"></i>
-    </button>
-</div>
-
-<!-- Info Card -->
+<!-- Info Card Moderno -->
 <div style="max-width: 800px; margin: 0 auto 20px; padding: 0 16px;">
-    <div style="background: linear-gradient(135deg, #047857, #059669); border-radius: 16px; padding: 16px; color: white; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-            <i data-lucide="calendar" style="width: 24px;"></i>
-            <div>
-                <div style="font-weight: 700; font-size: 1.1rem;"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
-                <div style="font-size: 0.85rem; opacity: 0.9;">19:00</div>
+    <div style="background: var(--bg-surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+        <!-- Header com Botão Editar -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <div style="flex: 1;">
+                <h1 style="margin: 0 0 4px 0; font-size: 1.3rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+                <div style="font-size: 0.85rem; color: var(--text-muted);"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
+            </div>
+            
+            <!-- Botão Editar -->
+            <button id="editBtn" onclick="toggleEditMode()" style="
+                padding: 10px 16px; border-radius: 10px;
+                background: var(--bg-body); border: 1px solid var(--border-color);
+                color: var(--text-main); cursor: pointer;
+                display: flex; align-items: center; gap: 6px;
+                font-weight: 600; font-size: 0.85rem;
+                transition: all 0.2s;
+            ">
+                <i data-lucide="edit-2" style="width: 16px;"></i>
+                <span>Editar</span>
+            </button>
+        </div>
+        
+        <!-- Info Row -->
+        <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: <?= $schedule['notes'] ? '12px' : '0' ?>;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="clock" style="width: 16px; color: var(--text-muted);"></i>
+                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);">19:00</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="users" style="width: 16px; color: var(--text-muted);"></i>
+                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= count($team) ?></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="music" style="width: 16px; color: var(--text-muted);"></i>
+                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= count($songs) ?></span>
             </div>
         </div>
+        
+        <!-- Observações -->
         <?php if ($schedule['notes']): ?>
-            <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; margin-top: 12px;">
-                <div style="font-size: 0.75rem; font-weight: 600; opacity: 0.8; margin-bottom: 4px;">OBSERVAÇÕES</div>
-                <div style="font-size: 0.9rem; line-height: 1.4;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+            <div style="padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                    <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações</span>
+                </div>
+                <div style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
             </div>
         <?php endif; ?>
     </div>
@@ -301,14 +321,18 @@ function toggleEditMode() {
         // Entrar em modo edição
         document.querySelectorAll('.view-mode').forEach(el => el.classList.add('view-mode-hidden'));
         document.querySelectorAll('.edit-mode').forEach(el => el.classList.remove('edit-mode-hidden'));
-        editBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-        editBtn.innerHTML = '<i data-lucide="x" style="width: 24px;"></i>';
+        editBtn.style.background = '#ef4444';
+        editBtn.style.borderColor = '#ef4444';
+        editBtn.style.color = 'white';
+        editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
     } else {
         // Voltar para visualização
         document.querySelectorAll('.view-mode').forEach(el => el.classList.remove('view-mode-hidden'));
         document.querySelectorAll('.edit-mode').forEach(el => el.classList.add('edit-mode-hidden'));
-        editBtn.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
-        editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 24px;"></i>';
+        editBtn.style.background = 'var(--bg-body)';
+        editBtn.style.borderColor = 'var(--border-color)';
+        editBtn.style.color = 'var(--text-main)';
+        editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
         
         // Recarregar página para atualizar visualização
         location.reload();
