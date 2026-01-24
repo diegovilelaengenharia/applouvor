@@ -125,17 +125,24 @@ if ($planStarted) {
 $stmt = $pdo->prepare("SELECT month_num, day_num, verses_read, comment, note_title, completed_at FROM reading_progress WHERE user_id = ? ORDER BY completed_at DESC");
 $stmt->execute([$userId]); $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$progressMap = []; $totalChaptersRead = 0; $reportData = [];
+$progressMap = []; $totalChaptersRead = 0; $totalDaysRead = 0; $reportData = [];
 foreach($rows as $r) {
     $verses = json_decode($r['verses_read'] ?? '[]', true); if(!is_array($verses)) $verses=[];
-    if(count($verses)>0 || !empty($r['completed_at'])) $totalChaptersRead++;
+    
+    // Count individual chapters read
+    $chaptersInThisDay = count($verses);
+    $totalChaptersRead += $chaptersInThisDay;
+    
+    // Count days that have at least one chapter read
+    if($chaptersInThisDay > 0 || !empty($r['completed_at'])) $totalDaysRead++;
+    
     $k = "{$r['month_num']}_{$r['day_num']}";
     $progressMap[$k] = ['verses'=>$verses, 'comment'=>$r['comment']??'', 'title'=>$r['note_title']??'', 'date'=>$r['completed_at']];
     if(count($verses)>0 || !empty($r['comment']) || !empty($r['note_title'])) {
         $reportData[] = ['m'=>(int)$r['month_num'], 'd'=>(int)$r['day_num'], 'date'=>$r['completed_at'], 'comment'=>$r['comment'], 'title'=>$r['note_title']??''];
     }
 }
-$completionPercent = min(100, round(($totalChaptersRead / 300) * 100));
+$completionPercent = min(100, round(($totalDaysRead / 300) * 100));
 
 // --- CALCULAR STREAK E ESTATÍSTICAS ---
 $currentStreak = 0;
@@ -356,8 +363,21 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
 <div style="background: white; border-bottom: 1px solid var(--gray-200, #e5e7eb); padding: 12px 16px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
         <span style="font-size:0.7rem; text-transform:uppercase; color:var(--gray-500, #6b7280); font-weight:700; letter-spacing:0.5px;">Progresso Anual</span>
-        <div style="color:var(--gray-900, #111827); font-weight:800; font-size:1rem; line-height:1;">
-            <span style="color:var(--primary-600, #065f46);"><?= $totalChaptersRead ?></span><span style="color:var(--gray-400, #9ca3af); font-size:0.85rem; font-weight:600;">/300</span> <span style="color:var(--gray-500, #6b7280); font-size:0.8rem; font-weight:600;">(<?= $completionPercent ?>%)</span>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <!-- Dias Lidos -->
+            <div style="text-align: right;">
+                <div style="color:var(--gray-900, #111827); font-weight:800; font-size:1rem; line-height:1;">
+                    <span style="color:var(--primary-600, #065f46);"><?= $totalDaysRead ?></span><span style="color:var(--gray-400, #9ca3af); font-size:0.85rem; font-weight:600;">/300</span> <span style="color:var(--gray-500, #6b7280); font-size:0.8rem; font-weight:600;">(<?= $completionPercent ?>%)</span>
+                </div>
+                <div style="font-size:0.65rem; color:var(--gray-500, #6b7280); font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Dias</div>
+            </div>
+            <!-- Capítulos Lidos -->
+            <div style="text-align: right; border-left: 2px solid var(--gray-200, #e5e7eb); padding-left: 12px;">
+                <div style="color:var(--gray-900, #111827); font-weight:800; font-size:1rem; line-height:1;">
+                    <span style="color:var(--success, #10b981);"><?= $totalChaptersRead ?></span>
+                </div>
+                <div style="font-size:0.65rem; color:var(--gray-500, #6b7280); font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Capítulos</div>
+            </div>
         </div>
     </div>
     <div style="height: 5px; background: var(--gray-100, #f3f4f6); width: 100%; border-radius: 10px; overflow: hidden;">
