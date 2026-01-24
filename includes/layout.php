@@ -825,12 +825,34 @@ function renderAppHeader($title, $backUrl = null)
         <div class="bottom-nav-container">
             <nav class="bottom-nav-bar">
 
-                <!-- Bot├úo HOME (Primeiro) -->
-                <a href="index.php" class="b-nav-item" onclick="closeAllSheets()">
-                    <div class="b-nav-icon-wrapper" style="background: var(--primary); color: white;">
+                <style>
+                    @keyframes pulse-blue-3d {
+                        0% { box-shadow: 0 4px 0 #1e40af, 0 0 0 0 rgba(37, 99, 235, 0.7); transform: translateY(-6px) scale(1.1); }
+                        70% { box-shadow: 0 4px 0 #1e40af, 0 0 0 10px rgba(37, 99, 235, 0); transform: translateY(-6px) scale(1.15); }
+                        100% { box-shadow: 0 4px 0 #1e40af, 0 0 0 0 rgba(37, 99, 235, 0); transform: translateY(-6px) scale(1.1); }
+                    }
+                    .b-nav-item.home-3d .b-nav-icon-wrapper {
+                        background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+                        color: white !important;
+                        border: 1px solid rgba(255,255,255,0.3);
+                        animation: pulse-blue-3d 2s infinite;
+                        box-shadow: 0 4px 0 #1e40af;
+                        transform: translateY(-6px) scale(1.1);
+                        width: 32px;
+                        height: 32px;
+                    }
+                    .b-nav-item.home-3d span {
+                        font-weight: 800 !important;
+                        color: var(--primary);
+                    }
+                </style>
+
+                <!-- Botão HOME (Primeiro) com Efeito 3D Pulsante -->
+                <a href="index.php" class="b-nav-item home-3d" onclick="closeAllSheets()">
+                    <div class="b-nav-icon-wrapper">
                         <i data-lucide="home"></i>
                     </div>
-                    <span style="font-weight: 600; color:var(--primary);">Início</span>
+                    <span>Início</span>
                 </a>
 
                 <!-- Bot├úo GERAL (ex-Gest├úo) -->
