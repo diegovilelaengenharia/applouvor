@@ -332,8 +332,7 @@ renderAppHeader('Membros');
                 </div>
                 </div>
 
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Funções / Instrumentos</label>
+
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Funções / Instrumentos</label>
                 <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; background: var(--bg-body);">
