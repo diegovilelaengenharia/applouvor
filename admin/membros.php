@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit("Acesso negado. Apenas administradores podem realizar esta ação.");
         }
 
-        // Initialize variable for role processing
         $userIdRole = null;
 
         // Adicionar novo membro
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([
                 $_POST['name'],
                 $_POST['role'],
-                $_POST['instrument'], // Mantendo por compatibilidade
+                $_POST['instrument'],
                 $_POST['phone'],
                 $_POST['password']
             ]);
@@ -48,19 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($_POST['action'] === 'delete') {
             $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
             $stmt->execute([$_POST['id']]);
-            // Roles são deletadas por cascade ou irrelevantes
             header("Location: membros.php");
             exit;
         }
 
         // --- PROCESSAR FUNÇÕES (ROLES) ---
-        // Se houve adição ou edição e temos um ID de usuário
         if ($userIdRole) {
-            // Limpar funções anteriores (sempre limpa e recria para evitar complexidade)
             $stmtDel = $pdo->prepare("DELETE FROM user_roles WHERE user_id = ?");
             $stmtDel->execute([$userIdRole]);
 
-            // Se roles foram enviadas, insere as novas
             if (isset($_POST['roles']) && is_array($_POST['roles'])) {
                 $stmtIns = $pdo->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)");
                 foreach ($_POST['roles'] as $roleId) {
@@ -74,24 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Buscar TODAS as funções disponíveis para o formulário (Agrupadas)
+// Buscar TODAS as funções disponíveis
 $stmtAllRoles = $pdo->query("SELECT * FROM roles ORDER BY category, name");
 $allRoles = $stmtAllRoles->fetchAll(PDO::FETCH_ASSOC);
-
-$groupedRoles = [];
-foreach ($allRoles as $role) {
-    $catName =  ucfirst($role['category']);
-    switch($role['category']) {
-        case 'voz': $catName = 'Vozes'; break;
-        case 'cordas': $catName = 'Cordas'; break;
-        case 'teclas': $catName = 'Teclas'; break;
-        case 'percussao': $catName = 'Percussão'; break;
-        case 'sopro': $catName = 'Sopro'; break;
-        case 'outros': $catName = 'Outros'; break;
-    }
-    $groupedRoles[$catName][] = $role;
-}
-
 
 // Buscar todos os membros com suas funções
 $stmt = $pdo->query("
@@ -129,220 +109,496 @@ foreach ($users as &$user) {
 unset($user);
 
 renderAppHeader('Membros');
+renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 ?>
 
-    <?php
-    renderPageHeader('Equipe', count($users) . ' membros cadastrados');
-    ?>
+<style>
+    .members-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px;
+    }
 
-<div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
+    .search-box {
+        position: relative;
+        margin-bottom: 24px;
+    }
 
-    <div style="margin-bottom: 16px;">
-        <div style="display: none;"> <!-- Ocultando header manual antigo -->
-            <div>
-                <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Equipe</h1>
-                <p style="color: var(--text-muted); margin-top: 2px; font-size: 0.9rem;">
-                    <?= count($users) ?> membros cadastrados
-                </p>
-            </div>
-        </div>
+    .search-box input {
+        width: 100%;
+        padding: 14px 14px 14px 48px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.2s;
+        background: var(--bg-surface);
+        color: var(--text-main);
+        box-shadow: var(--shadow-sm);
+    }
 
+    .search-box input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-subtle);
+    }
 
-        <!-- Barra de Busca -->
-        <div style="position: relative;">
-            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
-            <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()"
-                style="
-                       width: 100%; padding: 12px 14px 12px 48px; border-radius: var(--radius-md); 
-                       border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
-                       transition: border 0.2s; background: var(--bg-surface); box-shadow: var(--shadow-sm);
-                       color: var(--text-main);
-                   "
-                onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
-        </div>
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        width: 20px;
+    }
+
+    .members-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 80px;
+    }
+
+    .member-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        transition: all 0.2s;
+        box-shadow: var(--shadow-sm);
+        cursor: pointer;
+        position: relative;
+    }
+
+    .member-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        border-color: var(--primary);
+    }
+
+    .member-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        position: relative;
+    }
+
+    .member-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .member-info {
+        text-align: center;
+        width: 100%;
+    }
+
+    .member-name {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 4px 0;
+        line-height: 1.2;
+    }
+
+    .member-roles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        justify-content: center;
+        margin-top: 6px;
+    }
+
+    .role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-main);
+        background: var(--bg-body);
+        border: 1px solid var(--border-color);
+    }
+
+    .role-icon {
+        font-size: 0.85rem;
+    }
+
+    .badge-admin {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 0.6rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .member-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        color: white;
+        box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-phone {
+        background: var(--bg-body);
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-edit {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-delete {
+        background: #ef4444;
+        color: white;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .fab {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        background: #166534;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
+        border: none;
+        cursor: pointer;
+        z-index: 100;
+        transition: transform 0.2s;
+    }
+
+    .fab:hover {
+        transform: scale(1.1);
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(2px);
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 450px;
+        background: var(--bg-surface);
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0 0 4px 0;
+    }
+
+    .modal-header p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-subtle);
+        background: var(--bg-surface);
+    }
+
+    .roles-container {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 12px;
+        background: var(--bg-body);
+    }
+
+    .roles-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .role-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 8px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .role-option:hover {
+        border-color: var(--primary);
+        background: var(--primary-subtle);
+    }
+
+    .role-checkbox {
+        accent-color: var(--primary);
+        width: 16px;
+        height: 16px;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .btn-cancel {
+        flex: 1;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-surface);
+        color: var(--text-muted);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-submit {
+        flex: 2;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        background: var(--text-main);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s;
+    }
+
+    .btn-submit:hover, .btn-cancel:hover {
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .members-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+    }
+</style>
+
+<div class="members-container">
+    <!-- Search Bar -->
+    <div class="search-box">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()">
     </div>
 
-    <!-- Lista de Membros (Vertical) -->
-    <div class="member-grid" style="display: flex; flex-direction: column; gap: 12px;">
-
+    <!-- Members Grid -->
+    <div class="members-grid">
         <?php foreach ($users as $user): ?>
             <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
-                <div style="display: flex; align-items: center; gap: 12px;">
+                <!-- Avatar -->
+                <div class="member-avatar" style="background: <?= generateAvatarColor($user['name']) ?>">
+                    <?php if (!empty($user['avatar'])): ?>
+                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['name']) ?>">
+                    <?php else: ?>
+                        <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                    <?php endif; ?>
+                </div>
 
-                    <!-- Avatar Compacto -->
-                    <div style="
-                        width: 42px; height: 42px; border-radius: 50%; 
-                        background: <?= generateAvatarColor($user['name']) ?>; 
-                        color: white; display: flex; align-items: center; justify-content: center;
-                        font-weight: 700; font-size: 1rem; flex-shrink: 0;
-                        box-shadow: var(--shadow-sm);
-                    ">
-                        <?php if (!empty($user['avatar'])): ?>
-                            <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                        <?php else: ?>
-                            <?= strtoupper(substr($user['name'], 0, 1)) ?>
-                        <?php endif; ?>
-                    </div>
+                <!-- Info -->
+                <div class="member-info">
+                    <h3 class="member-name"><?= htmlspecialchars($user['name']) ?></h3>
+                    <?php if ($user['role'] === 'admin'): ?>
+                        <span class="badge-admin">ADM</span>
+                    <?php endif; ?>
 
-                    <!-- Info (Nome e Função) -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <h3 class="member-name" style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <?= htmlspecialchars($user['name']) ?>
-                            </h3>
-                            <?php if ($user['role'] === 'admin'): ?>
-                                <span style="background: var(--primary-subtle); color: var(--primary); padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800;">ADM</span>
-                            <?php endif; ?>
-                            
-                            <!-- Ícones compactos das funções -->
-                            <?php if (!empty($user['roles'])): ?>
-                                <?php foreach (array_slice($user['roles'], 0, 3) as $role): ?>
-                                    <span class="role-badge compact" 
-                                          style="background: <?= htmlspecialchars($role['color']) ?>"
-                                          title="<?= htmlspecialchars($role['name']) ?>">
-                                        <span class="role-icon"><?= $role['icon'] ?></span>
-                                    </span>
-                                <?php endforeach; ?>
-                                <?php if (count($user['roles']) > 3): ?>
-                                    <span style="font-size: 0.7rem; color: var(--text-muted);">+<?= count($user['roles']) - 3 ?></span>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <!-- Funções/Badges -->
-                        <div class="member-roles">
-                            <?php if (!empty($user['roles'])): ?>
-                                <?php foreach ($user['roles'] as $role): ?>
-                                    <span class="role-badge <?= $role['is_primary'] ? 'primary' : '' ?>" 
-                                          style="background: <?= htmlspecialchars($role['color']) ?>">
-                                        <span class="role-icon"><?= $role['icon'] ?></span>
-                                        <span><?= htmlspecialchars($role['name']) ?></span>
-                                    </span>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <span style="color: var(--text-muted); font-size: 0.75rem;">
-                                    <?= htmlspecialchars($user['instrument'] ?: 'Sem função definida') ?>
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-
-                    <!-- Ações do Card -->
-                    <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-                        <!-- Linha 1: Comunicação -->
-                        <div style="display: flex; align-items: center; gap: 4px;">
-                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
-                                <i data-lucide="message-circle" style="width: 16px;"></i>
-                            </a>
-                            <a href="tel:<?= $user['phone'] ?>" class="ripple icon-action" title="Ligar" style="color: var(--text-muted); background: var(--bg-body);">
-                                <i data-lucide="phone" style="width: 16px;"></i>
-                            </a>
-                        </div>
-
-                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <!-- Linha 2: Ações Admin -->
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <!-- (Botão de Funções removido por solicitação) -->
-
-                                
-                                <!-- Menu Trigger -->
-                                <div style="position: relative;">
-                                    <button onclick="toggleMenu(event, 'menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
-                                        <i data-lucide="more-vertical" style="width: 16px;"></i>
-                                    </button>
-
-                                <!-- Dropdown -->
-                                <div id="menu-<?= $user['id'] ?>" class="dropdown-menu" style="
-                                    display: none; position: absolute; right: 0; top: 32px; 
-                                    background: var(--bg-surface); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
-                                    border: 1px solid var(--border-color); width: 140px; z-index: 50; overflow: hidden;
-                                ">
-                                    <button onclick='openEditModal(<?= json_encode($user) ?>)' style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: var(--text-main); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                        <i data-lucide="edit-3" style="width: 14px;"></i> Editar
-                                    </button>
-                                    <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                                        <button type="submit" style="width: 100%; text-align: left; padding: 10px; background: transparent; border: none; color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; cursor: pointer; border-top: 1px solid var(--border-color);">
-                                            <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Roles -->
+                    <div class="member-roles">
+                        <?php 
+                        if (!empty($user['roles'])): 
+                            $uniqueRoles = [];
+                            $seen = [];
+                            foreach ($user['roles'] as $r) {
+                                if (!in_array($r['name'], $seen)) {
+                                    $seen[] = $r['name'];
+                                    $uniqueRoles[] = $r;
+                                }
+                            }
+                            foreach ($uniqueRoles as $role): 
+                        ?>
+                            <span class="role-badge" style="border-left: 3px solid <?= $role['color'] ?>;">
+                                <span class="role-icon"><?= $role['icon'] ?></span>
+                                <span><?= htmlspecialchars($role['name']) ?></span>
+                            </span>
+                        <?php 
+                            endforeach;
+                        else: 
+                        ?>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">
+                                <?= htmlspecialchars($user['instrument'] ?: 'Sem função') ?>
+                            </span>
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <!-- Actions -->
+                <div class="member-actions">
+                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="action-btn btn-whatsapp" title="WhatsApp">
+                        <i data-lucide="message-circle" style="width: 18px;"></i>
+                    </a>
+                    
+                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                        <button onclick='openEditModal(<?= json_encode($user) ?>)' class="action-btn btn-edit" title="Editar">
+                            <i data-lucide="edit-3" style="width: 18px;"></i>
+                        </button>
+                        <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                            <button type="submit" class="action-btn btn-delete" title="Excluir">
+                                <i data-lucide="trash-2" style="width: 18px;"></i>
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                </div>
             </div>
         <?php endforeach; ?>
-
     </div>
-
-    <div style="height: 60px;"></div>
-
-    <!-- Floating Action Button (Admin Only) -->
-    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-        <button onclick="openAddModal()" class="ripple" style="
-            position: fixed; bottom: 32px; right: 24px;
-            background: #166534; color: white; padding: 16px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
-            border: none; cursor: pointer; z-index: 50; transition: transform 0.2s;
-        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
-            </svg>
-        </button>
-    <?php endif; ?>
 </div>
 
-<!-- MODAL ADD/EDIT -->
-<div id="memberModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
-    <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);"></div>
+<!-- FAB (Admin Only) -->
+<?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+    <button onclick="openAddModal()" class="fab">
+        <i data-lucide="plus" style="width: 28px;"></i>
+    </button>
+<?php endif; ?>
 
-    <div style="
-        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 450px; background: var(--bg-surface); border-radius: 24px; padding: 32px;
-        box-shadow: var(--shadow-md);
-        max-height: 90vh; overflow-y: auto;
-    ">
-        <div style="margin-bottom: 24px; text-align: center;">
-            <h2 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Novo Membro</h2>
-            <p style="color: var(--text-muted); margin-top: 4px;">Gerencie as informações de acesso</p>
+<!-- Modal Add/Edit -->
+<div id="memberModal" class="modal" onclick="if(event.target === this) closeModal()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Novo Membro</h2>
+            <p>Gerencie as informações de acesso</p>
         </div>
 
         <form method="POST" id="memberForm">
             <input type="hidden" name="action" id="formAction" value="add">
             <input type="hidden" name="id" id="userId">
 
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Nome Completo</label>
-                <input type="text" name="name" id="userName" required class="input-modern" placeholder="Ex: João da Silva">
+            <div class="form-group">
+                <label class="form-label">Nome Completo</label>
+                <input type="text" name="name" id="userName" required class="form-input" placeholder="Ex: João da Silva">
             </div>
 
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Permissão</label>
-                <div style="position: relative;">
-                    <select name="role" id="userRole" class="input-modern" style="appearance: none;">
-                        <option value="user">Membro</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                    <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--text-muted); pointer-events: none;"></i>
-                </div>
-                </div>
+            <div class="form-group">
+                <label class="form-label">Permissão</label>
+                <select name="role" id="userRole" class="form-input">
+                    <option value="user">Membro</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
 
-
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Funções / Instrumentos</label>
-                <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; background: var(--bg-body);">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px;">
+            <div class="form-group">
+                <label class="form-label">Funções / Instrumentos</label>
+                <div class="roles-container">
+                    <div class="roles-grid">
                         <?php foreach ($allRoles as $role): ?>
-                            <label class="role-option" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; padding: 8px; border-radius: 8px; background: var(--bg-surface); border: 1px solid var(--border-color); transition: all 0.2s;">
-                                <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox" style="accent-color: var(--primary); width: 16px; height: 16px;">
+                            <label class="role-option">
+                                <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox">
                                 <span style="display: flex; align-items: center; gap: 6px;">
                                     <span><?= $role['icon'] ?></span>
-                                    <span style="font-weight: 500; color: var(--text-main);"><?= $role['name'] ?></span>
+                                    <span style="font-weight: 500; font-size: 0.85rem;"><?= $role['name'] ?></span>
                                 </span>
                             </label>
                         <?php endforeach; ?>
@@ -350,166 +606,28 @@ renderAppHeader('Membros');
                 </div>
             </div>
 
-            <!-- Campo instrument mantido como hidden para compatibilidade -->
             <input type="hidden" name="instrument" id="userInst" value="">
 
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">WhatsApp</label>
-                <input type="text" name="phone" id="userPhone" class="input-modern" placeholder="(37) 99999-9999">
+            <div class="form-group">
+                <label class="form-label">WhatsApp</label>
+                <input type="text" name="phone" id="userPhone" class="form-input" placeholder="(37) 99999-9999">
             </div>
 
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Senha de Acesso</label>
-                <input type="text" name="password" id="userPass" required class="input-modern" placeholder="4 dígitos para login">
+            <div class="form-group">
+                <label class="form-label">Senha de Acesso</label>
+                <input type="text" name="password" id="userPass" required class="form-input" placeholder="4 dígitos para login">
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
             </div>
 
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="
-                    flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); 
-                    color: var(--text-muted); font-weight: 600; cursor: pointer;
-                ">Cancelar</button>
-                <button type="submit" style="
-                    flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--text-main); 
-                    color: white; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm);
-                ">Salvar</button>
+            <div class="modal-actions">
+                <button type="button" onclick="closeModal()" class="btn-cancel">Cancelar</button>
+                <button type="submit" class="btn-submit">Salvar</button>
             </div>
-
         </form>
     </div>
 </div>
 
-<style>
-    .member-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .member-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px; /* Aumentei um pouco padding para lista */
-        transition: all 0.2s;
-        box-shadow: var(--shadow-sm);
-        max-width: 800px; /* Limitar largura em telas grandes se quiser, ou 100% */
-        width: 100%;
-        margin: 0 auto;
-    }
-
-    .member-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--primary-light);
-    }
-
-    .member-card > div {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        width: 100%;
-    }
-
-    .member-avatar {
-        width: 42px;
-        /* Reduzido de 48px */
-        height: 42px;
-        border-radius: 10px;
-        /* Radius avatar otimizado */
-        background-color: var(--bg-body);
-        background-size: cover;
-        background-position: center;
-        flex-shrink: 0;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 1rem;
-        box-shadow: var(--shadow-sm);
-    }
-
-    .member-info h3 {
-        font-size: 0.95rem;
-        /* Fonte reduzida */
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 2px;
-        line-height: 1.2;
-        margin: 0;
-    }
-
-    .member-role {
-        font-size: 0.75rem;
-        /* Fonte reduzida */
-        color: var(--text-muted);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .icon-action {
-        width: 32px;
-        /* Ícone de ação compacto */
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        transition: background 0.2s;
-        text-decoration: none;
-    }
-
-    .icon-action:hover {
-        filter: brightness(0.95);
-    }
-
-    /* Modal Mobile Otimizado */
-    .modal-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90%;
-        max-width: 400px;
-        /* Max width reduzido */
-        background: var(--bg-surface);
-        border-radius: 20px;
-        /* Radius modal */
-        padding: 24px;
-        /* Padding modal reduzido */
-        box-shadow: var(--shadow-md);
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .input-modern {
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        font-size: 1rem;
-        color: var(--text-main);
-        outline: none;
-        transition: all 0.2s;
-        background: var(--bg-body);
-    }
-
-    .input-modern:focus {
-        background: var(--bg-surface);
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary-light);
-    }
-</style>
-
 <script>
-    // Gerador de cores para avatar
-    // (O PHP já cuida disso no server side rendering, mas se precisar no JS, ok)
-
-    // Filtro de Busca
     function filterMembers() {
         const term = document.getElementById('memberSearch').value.toLowerCase();
         const cards = document.querySelectorAll('.member-card');
@@ -518,23 +636,19 @@ renderAppHeader('Membros');
             const name = card.getAttribute('data-name');
             const role = card.getAttribute('data-role');
             if (name.includes(term) || role.includes(term)) {
-                card.style.display = 'block';
+                card.style.display = 'flex';
             } else {
                 card.style.display = 'none';
             }
         });
     }
 
-    // Modal Logic
     function openAddModal() {
         document.getElementById('modalTitle').innerText = 'Novo Membro';
         document.getElementById('formAction').value = 'add';
         document.getElementById('memberForm').reset();
         document.getElementById('userId').value = '';
-        
-        // Limpar checkboxes
         document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
-        
         document.getElementById('memberModal').style.display = 'block';
     }
 
@@ -548,7 +662,6 @@ renderAppHeader('Membros');
         document.getElementById('userPass').value = user.password;
         document.getElementById('userRole').value = user.role;
 
-        // Resetar e Marcar checkboxes
         document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
         if (user.roles && user.roles.length > 0) {
             user.roles.forEach(role => {
@@ -557,49 +670,16 @@ renderAppHeader('Membros');
             });
         }
 
-        closeAllMenus();
         document.getElementById('memberModal').style.display = 'block';
     }
 
     function closeModal() {
         document.getElementById('memberModal').style.display = 'none';
     }
-
-    // Dropdown Logic
-    function toggleMenu(e, id) {
-        if(e) e.stopPropagation();
-        
-        // Se este j├í est├í aberto, fecha todos. Se n├úo, fecha e abre este.
-        const menu = document.getElementById(id);
-        const isVisible = menu.style.display === 'block';
-        
-        closeAllMenus();
-        
-        if (!isVisible) {
-            menu.style.display = 'block';
-        }
-    }
-
-    function closeAllMenus() {
-        document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    document.addEventListener('click', function(e) {
-        // Se n├úo clicou em um bot├úo de menu ou dentro de um menu, fecha tudo
-        if (!e.target.closest('.icon-action') && !e.target.closest('.dropdown-menu')) {
-            closeAllMenus();
-        }
-    });
 </script>
 
-<!-- Roles Manager Script (Removido) -->
-
-
 <?php
-// Helper function para cor
-function generateAvatarColor($name)
-{
+function generateAvatarColor($name) {
     $colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
     $index = crc32($name) % count($colors);
     return $colors[$index];
