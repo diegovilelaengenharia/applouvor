@@ -24,7 +24,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
     <a href="?tab=pastas" class="ripple" style="
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
         <?= $tab == 'pastas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
-    ">Pastas</a>
+    ">TAG's</a>
     <a href="?tab=artistas" class="ripple" style="
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
         <?= $tab == 'artistas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
@@ -177,7 +177,15 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             $tags = [];
         }
     ?>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+            <style>
+                @media (min-width: 768px) {
+                    .pastas-grid {
+                        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+                    }
+                }
+            </style>
+            <div class="pastas-grid" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
             <?php foreach ($tags as $tag):
                 // Cor de fundo mais suave baseada na cor da tag
                 $bgHex = $tag['color'] ?? '#047857';
@@ -256,14 +264,15 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             ">
                     <i data-lucide="plus" style="width: 24px;"></i>
                 </div>
-                <div style="font-weight: 600; font-size: 0.9rem;">Nova Pasta</div>
+                <div style="font-weight: 600; font-size: 0.9rem;">Nova TAG</div>
             </a>
 
             <?php if (empty($tags)): ?>
                 <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
-                    <p>Nenhuma pasta encontrada.</p>
+                    <p>Nenhuma TAG encontrada.</p>
                 </div>
             <?php endif; ?>
+            </div>
         </div>
     <?php endif; ?>
 
@@ -327,7 +336,15 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             $tones = [];
         }
     ?>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px;">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+            <style>
+                @media (min-width: 768px) {
+                    .tons-grid {
+                        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+                    }
+                }
+            </style>
+            <div class="tons-grid" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
             <?php foreach ($tones as $toneItem):
                 $toneName = $toneItem['name'];
                 $bgHex = $toneColors[$toneName] ?? '#047857';
@@ -381,6 +398,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
                     <p>Nenhum tom encontrado no repertório.</p>
                 </div>
             <?php endif; ?>
+            </div>
         </div>
     <?php endif; ?>
 </div>
