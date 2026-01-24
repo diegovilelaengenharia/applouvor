@@ -86,8 +86,33 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             ">Anteriores</button>
     </div>
 
-    <!-- Right Controls: View Toggle & Filter & Stats -->
+    <!-- Right Controls: Add Button, View Toggle & Filter -->
     <div style="display: flex; gap: 12px; align-items: center;">
+    
+        <!-- Botão Adicionar Escala -->
+        <a href="escala_adicionar.php" class="ripple" style="
+            background: linear-gradient(135deg, #166534, #15803d); 
+            color: white; 
+            border: none; 
+            padding: 10px 16px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(22, 101, 52, 0.3);
+            transition: all 0.2s;
+            text-decoration: none;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(22, 101, 52, 0.4)'"
+            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(22, 101, 52, 0.3)'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+            </svg>
+            <span>Nova Escala</span>
+        </a>
 
         <!-- View Switcher -->
         <div style="background: white; border: 1px solid #e2e8f0; padding: 4px; border-radius: 14px; display: flex; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
@@ -393,19 +418,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     </div>
 </div>
 
-<!-- Floating Action Button -->
-<a href="escala_adicionar.php" class="ripple" style="
-        position: fixed; bottom: 32px; right: 24px;
-        background: #166534; color: white; padding: 16px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
-        text-decoration: none; z-index: 50; transition: transform 0.2s;
-    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14" />
-        <path d="M12 5v14" />
-    </svg>
-</a>
+
 
 
 <!-- FILTER SHEET (CORRIGIDO E RESTAURADO) -->
