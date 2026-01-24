@@ -144,15 +144,18 @@ foreach($rows as $r) {
 }
 $completionPercent = min(100, round(($totalDaysRead / 300) * 100));
 
-// --- CALCULAR STREAK E ESTATÍSTICAS ---
+// --- CALCULAR STREAK E ESTATÍSTICAS MOTIVACIONAIS ---
 $currentStreak = 0;
-$bestStreak = 0; // Pode ser implementado salvando no banco futuramente
+$bestStreak = 0;
 $today = new DateTime(); 
 $today->setTime(0,0,0);
 
-// Verificar streak retroativo
+// Verificar streak retroativo e calcular melhor sequência
 $checkDate = clone $today;
 $streakCount = 0;
+$tempStreak = 0;
+$allStreaks = [];
+
 // Verifica até 365 dias para trás
 for($i=0; $i<365; $i++) {
     $foundReading = false;
@@ -167,6 +170,7 @@ for($i=0; $i<365; $i++) {
     
     if($foundReading) {
         $streakCount++;
+        $tempStreak++;
         $checkDate->modify('-1 day');
     } else {
         // Se for hoje e não leu, não quebra o streak de ontem
@@ -174,10 +178,74 @@ for($i=0; $i<365; $i++) {
             $checkDate->modify('-1 day');
             continue;
         }
+        // Salvar streak atual e resetar
+        if($tempStreak > 0) {
+            $allStreaks[] = $tempStreak;
+            $tempStreak = 0;
+        }
         break;
     }
 }
+// Adicionar último streak se existir
+if($tempStreak > 0) $allStreaks[] = $tempStreak;
+
 $currentStreak = $streakCount;
+$bestStreak = !empty($allStreaks) ? max($allStreaks) : $currentStreak;
+
+// --- PROJEÇÕES E RITMO DE LEITURA ---
+$daysInPlan = $planStarted ? max(1, $daysPassed) : 1;
+$avgChaptersPerDay = $totalChaptersRead / $daysInPlan;
+$avgDaysPerDay = $totalDaysRead / $daysInPlan;
+
+// Meta ideal: 300 dias em 365 dias = ~0.82 dias/dia, ou ~3 capítulos/dia
+$idealDaysPerDay = 300 / 365;
+$idealChaptersPerDay = 3.0;
+
+// Dias restantes para completar
+$daysRemaining = 300 - $totalDaysRead;
+
+// Projeção de conclusão (baseada no ritmo atual)
+$estimatedDaysToComplete = $avgDaysPerDay > 0 ? ceil($daysRemaining / $avgDaysPerDay) : 999;
+$estimatedCompletionDate = null;
+if($planStarted && $avgDaysPerDay > 0 && $estimatedDaysToComplete < 999) {
+    $estimatedCompletionDate = (new DateTime())->modify("+{$estimatedDaysToComplete} days")->format('d/m/Y');
+}
+
+// Comparação com meta
+$paceComparison = $avgDaysPerDay >= $idealDaysPerDay ? 'adiantado' : 'no ritmo';
+if($avgDaysPerDay < ($idealDaysPerDay * 0.7)) $paceComparison = 'pode acelerar';
+
+// --- MENSAGENS MOTIVACIONAIS DINÂMICAS ---
+$motivationalMessages = [
+    0 => "🌱 Você começou! Cada jornada começa com um passo. Continue firme!",
+    10 => "💪 Incrível! Você já leu {$totalChaptersRead} capítulos. A persistência está valendo a pena!",
+    25 => "🌟 Você está no caminho certo! Já completou 1/4 da jornada!",
+    50 => "✨ Mais da metade concluída! Sua dedicação é inspiradora!",
+    75 => "🎯 Quase lá! Você está tão perto de completar esta jornada!",
+    90 => "🏆 Reta final! Você é um exemplo de perseverança!"
+];
+
+$currentMessage = $motivationalMessages[0];
+foreach($motivationalMessages as $threshold => $message) {
+    if($completionPercent >= $threshold) {
+        $currentMessage = $message;
+    }
+}
+
+// --- CONQUISTAS E BADGES ---
+$achievements = [];
+if($currentStreak >= 7) $achievements[] = ['icon' => '🔥', 'text' => '7 dias seguidos!'];
+if($currentStreak >= 30) $achievements[] = ['icon' => '💎', 'text' => '30 dias seguidos!'];
+if($totalChaptersRead >= 50) $achievements[] = ['icon' => '📚', 'text' => '50 capítulos!'];
+if($totalChaptersRead >= 100) $achievements[] = ['icon' => '⭐', 'text' => '100 capítulos!'];
+if($totalDaysRead >= 30) $achievements[] = ['icon' => '📅', 'text' => '1 mês completo!'];
+if($totalDaysRead >= 90) $achievements[] = ['icon' => '🎊', 'text' => '3 meses!'];
+if($completionPercent >= 25) $achievements[] = ['icon' => '🥉', 'text' => '25% concluído!'];
+if($completionPercent >= 50) $achievements[] = ['icon' => '🥈', 'text' => '50% concluído!'];
+if($completionPercent >= 75) $achievements[] = ['icon' => '🥇', 'text' => '75% concluído!'];
+
+// Média de Leitura (Capítulos / Dias passados desde o início)
+$avgChapters = round($avgChaptersPerDay, 1);
 
 // Média de Leitura (Capítulos / Dias passados desde o início)
 $daysSinceStart = max(1, $daysPassed);
@@ -359,30 +427,137 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
     .stat-value.fire { color: #f59e0b; }
 </style>
 
-<!-- INFO BAR -->
-<div style="background: white; border-bottom: 1px solid var(--gray-200, #e5e7eb); padding: 12px 16px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span style="font-size:0.7rem; text-transform:uppercase; color:var(--gray-500, #6b7280); font-weight:700; letter-spacing:0.5px;">Progresso Anual</span>
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <!-- Dias Lidos -->
-            <div style="text-align: right;">
-                <div style="color:var(--gray-900, #111827); font-weight:800; font-size:1rem; line-height:1;">
-                    <span style="color:var(--primary-600, #065f46);"><?= $totalDaysRead ?></span><span style="color:var(--gray-400, #9ca3af); font-size:0.85rem; font-weight:600;">/300</span> <span style="color:var(--gray-500, #6b7280); font-size:0.8rem; font-weight:600;">(<?= $completionPercent ?>%)</span>
-                </div>
-                <div style="font-size:0.65rem; color:var(--gray-500, #6b7280); font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Dias</div>
-            </div>
-            <!-- Capítulos Lidos -->
-            <div style="text-align: right; border-left: 2px solid var(--gray-200, #e5e7eb); padding-left: 12px;">
-                <div style="color:var(--gray-900, #111827); font-weight:800; font-size:1rem; line-height:1;">
-                    <span style="color:var(--success, #10b981);"><?= $totalChaptersRead ?></span>
-                </div>
-                <div style="font-size:0.65rem; color:var(--gray-500, #6b7280); font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Capítulos</div>
+<!-- INFO BAR - ESTATÍSTICAS MOTIVACIONAIS -->
+<div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-bottom: 2px solid var(--primary-500, #047857); padding: 16px;">
+    <!-- Título e Mensagem Motivacional -->
+    <div style="text-align: center; margin-bottom: 16px;">
+        <div style="font-size:0.75rem; text-transform:uppercase; color:var(--primary-700, #064e3b); font-weight:700; letter-spacing:0.5px; margin-bottom: 8px;">
+            📊 Progresso Anual
+        </div>
+        <div style="background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--primary-200, #a7f3d0); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div style="font-size: 0.9rem; color: var(--primary-800, #065f46); font-weight: 600; line-height: 1.4;">
+                <?= $currentMessage ?>
             </div>
         </div>
     </div>
-    <div style="height: 5px; background: var(--gray-100, #f3f4f6); width: 100%; border-radius: 10px; overflow: hidden;">
-        <div style="height: 100%; background: linear-gradient(90deg, var(--primary-500, #047857), var(--primary-600, #065f46)); width: <?= $completionPercent ?>%; border-radius: 10px;"></div>
+
+    <!-- Métricas Principais em Grid -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px;">
+        <!-- Dias Lidos -->
+        <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid var(--primary-200, #a7f3d0);">
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-600, #065f46); line-height: 1;">
+                <?= $totalDaysRead ?><span style="font-size: 0.9rem; color: var(--gray-400, #9ca3af); font-weight: 600;">/300</span>
+            </div>
+            <div style="font-size: 0.65rem; color: var(--gray-600, #4b5563); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px;">
+                📅 Dias Lidos
+            </div>
+            <div style="font-size: 0.75rem; color: var(--primary-600, #065f46); font-weight: 700; margin-top: 2px;">
+                <?= $completionPercent ?>%
+            </div>
+        </div>
+
+        <!-- Capítulos Lidos -->
+        <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid var(--success-200, #bbf7d0);">
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--success-600, #16a34a); line-height: 1;">
+                <?= $totalChaptersRead ?>
+            </div>
+            <div style="font-size: 0.65rem; color: var(--gray-600, #4b5563); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px;">
+                📖 Capítulos
+            </div>
+            <div style="font-size: 0.75rem; color: var(--success-600, #16a34a); font-weight: 700; margin-top: 2px;">
+                <?= $avgChapters ?> cap/dia
+            </div>
+        </div>
+
+        <!-- Sequência Atual -->
+        <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid #fed7aa;">
+            <div style="font-size: 1.5rem; font-weight: 800; color: #ea580c; line-height: 1;">
+                <?= $currentStreak ?>
+            </div>
+            <div style="font-size: 0.65rem; color: var(--gray-600, #4b5563); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px;">
+                🔥 Sequência
+            </div>
+            <div style="font-size: 0.75rem; color: #ea580c; font-weight: 700; margin-top: 2px;">
+                dias seguidos
+            </div>
+        </div>
+
+        <!-- Melhor Sequência -->
+        <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid #fde68a;">
+            <div style="font-size: 1.5rem; font-weight: 800; color: #d97706; line-height: 1;">
+                <?= $bestStreak ?>
+            </div>
+            <div style="font-size: 0.65rem; color: var(--gray-600, #4b5563); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px;">
+                ⭐ Recorde
+            </div>
+            <div style="font-size: 0.75rem; color: #d97706; font-weight: 700; margin-top: 2px;">
+                melhor série
+            </div>
+        </div>
     </div>
+
+    <!-- Barra de Progresso Visual -->
+    <div style="background: white; padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--primary-200, #a7f3d0);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: var(--gray-600, #4b5563);">Progresso</span>
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-600, #065f46);"><?= $completionPercent ?>%</span>
+        </div>
+        <div style="height: 8px; background: var(--gray-100, #f3f4f6); width: 100%; border-radius: 10px; overflow: hidden; position: relative;">
+            <div style="height: 100%; background: linear-gradient(90deg, #10b981, #047857); width: <?= $completionPercent ?>%; border-radius: 10px; transition: width 0.5s ease;"></div>
+            <!-- Marcos visuais -->
+            <div style="position: absolute; left: 25%; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,0.1);"></div>
+            <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,0.1);"></div>
+            <div style="position: absolute; left: 75%; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,0.1);"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <span style="font-size: 0.6rem; color: var(--gray-400, #9ca3af);">0%</span>
+            <span style="font-size: 0.6rem; color: var(--gray-400, #9ca3af);">25%</span>
+            <span style="font-size: 0.6rem; color: var(--gray-400, #9ca3af);">50%</span>
+            <span style="font-size: 0.6rem; color: var(--gray-400, #9ca3af);">75%</span>
+            <span style="font-size: 0.6rem; color: var(--gray-400, #9ca3af);">100%</span>
+        </div>
+    </div>
+
+    <!-- Projeções -->
+    <?php if($estimatedCompletionDate): ?>
+    <div style="background: white; padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #ddd6fe;">
+        <div style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+            <div style="flex: 1;">
+                <div style="font-size: 0.65rem; color: var(--gray-500, #6b7280); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">
+                    📅 Previsão de Conclusão
+                </div>
+                <div style="font-size: 0.85rem; color: #7c3aed; font-weight: 700; margin-top: 2px;">
+                    <?= $estimatedCompletionDate ?>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.65rem; color: var(--gray-500, #6b7280); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">
+                    ⏱️ Dias Restantes
+                </div>
+                <div style="font-size: 0.85rem; color: #7c3aed; font-weight: 700; margin-top: 2px;">
+                    <?= $daysRemaining ?> dias
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Conquistas -->
+    <?php if(!empty($achievements)): ?>
+    <div style="background: white; padding: 10px 12px; border-radius: 10px; border: 1px solid #fef3c7;">
+        <div style="font-size: 0.7rem; color: var(--gray-600, #4b5563); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">
+            🏆 Conquistas Desbloqueadas
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <?php foreach(array_slice($achievements, 0, 6) as $achievement): ?>
+            <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 6px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; color: #92400e; border: 1px solid #fbbf24; display: flex; align-items: center; gap: 4px;">
+                <span><?= $achievement['icon'] ?></span>
+                <span><?= $achievement['text'] ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
 </div>
 
 <!-- STATS MODAL (Hidden by default) -->
