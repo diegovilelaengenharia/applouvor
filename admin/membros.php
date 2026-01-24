@@ -154,19 +154,19 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     .members-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 8px;
         margin-bottom: 80px;
     }
 
     .member-card {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px 12px;
+        border-radius: 10px;
+        padding: 10px 8px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 6px;
         text-decoration: none;
         transition: all 0.2s;
         box-shadow: var(--shadow-sm);
@@ -181,16 +181,16 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .member-avatar {
-        width: 64px;
-        height: 64px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         color: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         position: relative;
     }
 
@@ -207,28 +207,28 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .member-name {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 700;
         color: var(--text-main);
-        margin: 0 0 4px 0;
+        margin: 0 0 2px 0;
         line-height: 1.2;
     }
 
     .member-roles {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
+        gap: 3px;
         justify-content: center;
-        margin-top: 6px;
+        margin-top: 4px;
     }
 
     .role-badge {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 0.7rem;
+        gap: 3px;
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-size: 0.65rem;
         font-weight: 600;
         color: var(--text-main);
         background: var(--bg-body);
@@ -236,15 +236,15 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .role-icon {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
 
     .badge-admin {
         background: linear-gradient(135deg, #f59e0b, #d97706);
         color: white;
-        padding: 2px 6px;
-        border-radius: 8px;
-        font-size: 0.6rem;
+        padding: 1px 5px;
+        border-radius: 6px;
+        font-size: 0.55rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -252,19 +252,19 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
     .member-actions {
         display: flex;
-        gap: 6px;
-        margin-top: 8px;
+        gap: 4px;
+        margin-top: 4px;
         width: 100%;
         justify-content: center;
     }
 
     .action-btn {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
+        border-radius: 7px;
         border: none;
         cursor: pointer;
         transition: all 0.2s;
@@ -537,18 +537,18 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                 <!-- Actions -->
                 <div class="member-actions">
                     <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="action-btn btn-whatsapp" title="WhatsApp">
-                        <i data-lucide="message-circle" style="width: 18px;"></i>
+                        <i data-lucide="message-circle" style="width: 16px;"></i>
                     </a>
                     
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <button onclick='openEditModal(<?= json_encode($user) ?>)' class="action-btn btn-edit" title="Editar">
-                            <i data-lucide="edit-3" style="width: 18px;"></i>
+                            <i data-lucide="edit-3" style="width: 16px;"></i>
                         </button>
                         <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= $user['id'] ?>">
                             <button type="submit" class="action-btn btn-delete" title="Excluir">
-                                <i data-lucide="trash-2" style="width: 18px;"></i>
+                                <i data-lucide="trash-2" style="width: 16px;"></i>
                             </button>
                         </form>
                     <?php endif; ?>
