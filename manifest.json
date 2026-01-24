@@ -1,18 +1,19 @@
 {
-    "name": "Louvor PIB Oliveira",
-    "short_name": "Louvor PIB",
+    "name": "App Louvor PIB",
+    "short_name": "App Louvor PIB",
     "description": "App de Gestão do Ministério de Louvor PIB Oliveira",
     "start_url": "./index.php",
-    "scope": ".",
+    "scope": "./",
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "theme_color": "#047857",
     "icons": [
         {
             "src": "assets/images/logo-black.png",
             "sizes": "192x192 512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ]
 }

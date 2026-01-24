@@ -79,11 +79,16 @@ function renderAppHeader($title, $backUrl = null)
         <meta property="og:description" content="Gest├úo de escalas, repert├│rio e minist├®rio de louvor da PIB Oliveira.">
         <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss├¡vel -->
         <meta property="og:url" content="https://app.piboliveira.com.br/">
+        
+        <!-- PWA Meta Tags -->
         <meta name="theme-color" content="#047857">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="App Louvor PIB">
+        <meta name="mobile-web-app-capable" content="yes">
         <meta name="view-transition" content="same-origin">
         <link rel="manifest" href="/manifest.json">
-        <meta name="view-transition" content="same-origin">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="apple-touch-icon" href="assets/images/logo-black.png">
 
         <!-- ├ìcones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
