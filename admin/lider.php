@@ -579,6 +579,21 @@ try {
                 <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
             </div>
         </a>
+
+        <!-- Estatísticas Engajamento (NOVO) -->
+        <a href="stats_equipe.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #eff6ff; color: #3b82f6; padding: 10px; border-radius: 10px;">
+                 <i data-lucide="activity" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Engajamento</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Equipe</div>
+            </div>
+        </a>
     </div>
 
     <!-- 3. Criar Novo -->

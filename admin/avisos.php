@@ -106,38 +106,86 @@ renderAppHeader('Avisos');
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <?php
-    // Header Limpo
-    renderPageHeader('Mural de Avisos', 'Comunicação oficial e agenda');
+    // Header Padrão
+    renderPageHeader('Mural de Avisos', '');
     ?>
 
-<div class="container" style="padding-top: 24px; max-width: 800px; margin: 0 auto;">
+<div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
 
-    <!-- Header Principal (Removido, substituído acima) -->
+    <!-- Texto Explicativo -->
+    <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0 0 6px 0;">
+            Central de Comunicação
+        </h2>
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; max-width: 600px;">
+            Gerencie avisos importantes, escalas e eventos da equipe. Mantenha todos alinhados e informados.
+        </p>
+    </div>
 
 
     <!-- Filtros de Navegação -->
     <div style="margin-bottom: 24px;">
 
-        <!-- Busca -->
-        <div style="margin-bottom: 16px; position: relative;">
-            <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
-            <form onsubmit="return true;"> <!-- Submit via GET padrão -->
-                <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
-                <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
-                <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
-                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..."
-                    style="
-                        width: 100%; padding: 12px 12px 12px 48px; border-radius: var(--radius-md); 
-                        border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
-                        transition: border 0.2s; background: var(--bg-surface); color: var(--text-main);
-                        box-shadow: var(--shadow-sm);
-                    "
-                    onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
-            </form>
+        <!-- Busca e Ações -->
+        <div style="display: flex; gap: 12px; margin-bottom: 24px; align-items: start;">
+            <div style="flex: 1; position: relative;">
+                <i data-lucide="search" style="position: absolute; left: 16px; top: 12px; color: var(--text-muted); width: 20px;"></i>
+                <form onsubmit="return true;" style="margin:0">
+                    <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
+                    <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
+                    <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
+                    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..."
+                        style="
+                            width: 100%; padding: 10px 12px 10px 48px; border-radius: var(--radius-md); 
+                            border: 1px solid var(--border-color); font-size: 0.95rem; outline: none; 
+                            transition: border 0.2s; background: var(--bg-surface); color: var(--text-main);
+                            box-shadow: var(--shadow-sm); height: 42px;
+                        "
+                        onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
+                </form>
+            </div>
+            
+            <?php if ($_SESSION['user_role'] === 'admin'): ?>
+            <button onclick="openCreateModal()" class="ripple" style="
+                background: var(--primary); color: white; border: none; padding: 0 16px; height: 42px; 
+                border-radius: var(--radius-md); font-weight: 600; font-size: 0.9rem; cursor: pointer;
+                display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm);
+                white-space: nowrap;
+            ">
+                <i data-lucide="plus" width="18"></i>
+                <span>Novo Aviso</span>
+            </button>
+            <?php endif; ?>
         </div>
 
-        <!-- Categorias (Filtros Rápidos) -->
-        <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
+        <!-- Filtros (Estilo Abas/Tabs) -->
+        <style>
+            .filter-tab {
+                padding: 8px 12px; 
+                color: var(--text-muted); 
+                text-decoration: none; 
+                font-weight: 600; 
+                font-size: 0.9rem;
+                display: flex; align-items: center; gap: 6px;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s;
+                opacity: 0.7;
+            }
+            .filter-tab:hover {
+                color: var(--text-main);
+                opacity: 1;
+                background: rgba(0,0,0,0.02);
+                border-radius: 6px 6px 0 0;
+            }
+            .filter-tab.active {
+                color: var(--primary);
+                font-weight: 700;
+                border-bottom: 2px solid var(--primary);
+                opacity: 1;
+                background: transparent;
+            }
+        </style>
+        <div style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 0; scrollbar-width: none; border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
             <?php
             $types = [
                 'all' => ['label' => 'Todos', 'icon' => ''],
@@ -149,18 +197,11 @@ renderAppHeader('Avisos');
             ];
             foreach ($types as $key => $data):
                 $isActive = $filterType === $key;
-                $bg = $isActive ? 'var(--primary)' : 'var(--bg-surface)';
-                $color = $isActive ? 'white' : 'var(--text-muted)';
-                $border = $isActive ? 'var(--primary)' : 'var(--border-color)';
+                $activeClass = $isActive ? 'active' : '';
             ?>
-                <a href="?type=<?= $key ?><?= $showArchived ? '&archived=1' : '' ?><?= $search ? '&search=' . $search : '' ?>" class="ripple" style="
-                    white-space: nowrap; padding: 8px 16px; border-radius: 20px; 
-                    background: <?= $bg ?>; color: <?= $color ?>; 
-                    border: 1px solid <?= $border ?>;
-                    text-decoration: none; font-size: 0.85rem; font-weight: 600;
-                    display: flex; align-items: center; gap: 6px;
-                ">
-                    <?= $data['icon'] ?> <?= $data['label'] ?>
+                <a href="?type=<?= $key ?><?= $showArchived ? '&archived=1' : '' ?><?= $search ? '&search=' . $search : '' ?>" class="filter-tab <?= $activeClass ?>">
+                    <?php if($data['icon']): ?><span><?= $data['icon'] ?></span><?php endif; ?>
+                    <?= $data['label'] ?>
                 </a>
             <?php endforeach; ?>
         </div>
@@ -179,128 +220,171 @@ renderAppHeader('Avisos');
 
     </div>
 
-    <!-- Lista de Avisos -->
+    <!-- LISTA DE AVISOS (Design Profissional) -->
     <div style="display: flex; flex-direction: column; gap: 16px;">
-        <?php if (empty($avisos)): ?>
-            <div style="text-align: center; padding: 48px; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: var(--shadow-sm);">
-                <i data-lucide="inbox" style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5;"></i>
-                <p>Nenhum aviso encontrado.</p>
-            </div>
-        <?php endif; ?>
+        <?php if (count($avisos) > 0): ?>
+            <?php foreach ($avisos as $aviso): 
+                // Configuração de Cores e Ícones
+                $typeConfig = [
+                    'general' => ['color' => '#64748b', 'bg' => '#f1f5f9', 'icon' => '📢', 'label' => 'Geral'],
+                    'event' =>   ['color' => '#2563eb', 'bg' => '#eff6ff', 'icon' => '🎉', 'label' => 'Evento'],
+                    'music' =>   ['color' => '#059669', 'bg' => '#ecfdf5', 'icon' => '🎵', 'label' => 'Música'],
+                    'spiritual'=>['color' => '#7c3aed', 'bg' => '#f5f3ff', 'icon' => '🙏', 'label' => 'Espiritual'],
+                    'urgent' =>  ['color' => '#dc2626', 'bg' => '#fef2f2', 'icon' => '🚨', 'label' => 'Urgente']
+                ];
+                $tc = $typeConfig[$aviso['type']] ?? $typeConfig['general'];
 
-        <?php foreach ($avisos as $aviso):
-            $priorityColors = [
-                'urgent' => ['bg' => '#fef2f2', 'text' => '#dc2626', 'border' => '#fecaca', 'label' => 'Urgente'],
-                'important' => ['bg' => '#fffbeb', 'text' => '#d97706', 'border' => '#fde68a', 'label' => 'Importante'],
-                'info' => ['bg' => '#eff6ff', 'text' => '#2563eb', 'border' => '#bfdbfe', 'label' => 'Info'],
-            ];
-            $pStyle = $priorityColors[$aviso['priority']] ?? $priorityColors['info'];
-            
-            // Labels de Audience
-            $audLabels = ['all'=>'Todos', 'admins'=>'Líderes', 'team'=>'Equipe', 'leaders'=>'Líderes'];
-            $audLabel = $audLabels[$aviso['target_audience'] ?? 'all'] ?? 'Todos';
-            
-            $isExpired = !empty($aviso['expires_at']) && strtotime($aviso['expires_at']) < time();
-            $opacity = $isExpired ? '0.6' : '1';
-        ?>
-            <div class="notice-card" style="opacity: <?= $opacity ?>; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 16px; position: relative; box-shadow: var(--shadow-sm);">
+                // Prioridade
+                $isUrgent = $aviso['priority'] === 'urgent';
+                $isImportant = $aviso['priority'] === 'important';
+                
+                // Data Relativa
+                $createdAt = new DateTime($aviso['created_at']);
+                $now = new DateTime();
+                $diff = $now->diff($createdAt);
+                
+                if ($diff->y > 0) $timeAgo = $diff->y . ' ano(s) atrás';
+                elseif ($diff->m > 0) $timeAgo = $diff->m . ' mês(es) atrás';
+                elseif ($diff->d > 0) $timeAgo = $diff->d . ' dia(s) atrás';
+                elseif ($diff->h > 0) $timeAgo = $diff->h . 'h atrás';
+                elseif ($diff->i > 0) $timeAgo = $diff->i . 'm atrás';
+                else $timeAgo = 'Agorinha';
 
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                    <div style="display: flex; gap: 6px;">
-                        <span style="
-                            background: <?= $pStyle['bg'] ?>; color: <?= $pStyle['text'] ?>; border: 1px solid <?= $pStyle['border'] ?>;
-                            padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+                // Expiração
+                $expiryText = "";
+                if ($aviso['expires_at']) {
+                    $expiresAt = new DateTime($aviso['expires_at']);
+                    $daysLeft = (int)$now->diff($expiresAt)->format('%r%a');
+                    
+                    if ($daysLeft < 0) $expiryText = "<span style='color:var(--text-muted)'>Expirado</span>";
+                    elseif ($daysLeft == 0) $expiryText = "<span style='color:#dc2626'>Expira hoje</span>";
+                    elseif ($daysLeft <= 3) $expiryText = "<span style='color:#d97706'>Expira em $daysLeft dias</span>";
+                    else $expiryText = "<span style='color:var(--text-muted)'>Expira em " . $expiresAt->format('d/m') . "</span>";
+                }
+            ?>
+            <div class="aviso-card" style="
+                background: white; border-radius: 12px; 
+                border: 1px solid var(--border-color);
+                border-left: 4px solid <?= $tc['color'] ?>;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+                padding: 0; overflow: hidden; position: relative;
+                transition: transform 0.2s, box-shadow 0.2s;
+            ">
+                <!-- Header -->
+                <div style="padding: 16px 16px 8px 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="display: flex; gap: 10px; align-items: start;">
+                        <!-- Ícone/Avatar -->
+                        <div style="
+                            width: 40px; height: 40px; border-radius: 10px; 
+                            background: <?= $tc['bg'] ?>; color: <?= $tc['color'] ?>;
+                            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+                            flex-shrink: 0;
                         ">
-                            <?= $pStyle['label'] ?>
-                        </span>
-                        <?php if($aviso['target_audience'] !== 'all'): ?>
-                            <span style="
-                                background: #f3f4f6; color: #4b5563; border: 1px solid #e5e7eb;
-                                padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600;
-                            ">
-                                <i data-lucide="users" width="10" style="display:inline; vertical-align:middle;"></i> <?= $audLabel ?>
-                            </span>
-                        <?php endif; ?>
-                         <?php if($isExpired): ?>
-                            <span style="background: #e5e7eb; color: #374151; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">EXPIRADO</span>
-                        <?php endif; ?>
+                            <?= $tc['icon'] ?>
+                        </div>
+                        
+                        <div>
+                            <!-- Tipo e Badges -->
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                                <span style="
+                                    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+                                    color: <?= $tc['color'] ?>;
+                                ">
+                                    <?= $tc['label'] ?>
+                                </span>
+                                
+                                <?php if($isUrgent): ?>
+                                    <span style="font-size: 0.65rem; background: #fee2e2; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-weight: 700;">URGENTE</span>
+                                <?php elseif($isImportant): ?>
+                                    <span style="font-size: 0.65rem; background: #fef3c7; color: #d97706; padding: 2px 6px; border-radius: 4px; font-weight: 700;">IMPORTANTE</span>
+                                <?php endif; ?>
+
+                                <?php if($aviso['target_audience'] !== 'all'): ?>
+                                    <span style="font-size: 0.65rem; background: #f1f5f9; color: var(--text-muted); padding: 2px 6px; border-radius: 4px; font-weight: 600; display: flex; align-items: center; gap: 3px;">
+                                        <i data-lucide="users" width="10"></i> 
+                                        <?= $aviso['target_audience'] == 'admins' ? 'Líderes' : 'Equipe' ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main); line-height: 1.3;">
+                                <?= htmlspecialchars($aviso['title']) ?>
+                            </h3>
+                        </div>
                     </div>
 
-                    <?php if ($_SESSION['user_role'] === 'admin'): ?>
-                        <div style="position: relative;">
-                            <button onclick="toggleMenu('menu-<?= $aviso['id'] ?>')" class="btn-icon ripple" style="color: var(--text-muted); padding: 4px;">
-                                <i data-lucide="more-horizontal" style="width: 20px;"></i>
-                            </button>
-                            <!-- Menu Dropdown -->
-                            <div id="menu-<?= $aviso['id'] ?>" class="dropdown-menu" style="
-                                display: none; position: absolute; right: 0; 
-                                background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
-                                box-shadow: var(--shadow-md); width: 140px; z-index: 10;
-                            ">
-                                <button onclick='openEditModal(<?= json_encode($aviso) ?>)' style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-main);">
-                                    <i data-lucide="edit-3" style="width: 14px;"></i> Editar
-                                </button>
-
-                                <form method="POST" style="margin:0;">
-                                    <input type="hidden" name="action" value="<?= $showArchived ? 'unarchive' : 'archive' ?>">
-                                    <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted);">
-                                        <i data-lucide="<?= $showArchived ? 'rotate-ccw' : 'archive' ?>" style="width: 14px;"></i> <?= $showArchived ? 'Desarquivar' : 'Arquivar' ?>
-                                    </button>
-                                </form>
-
-                                <form method="POST" onsubmit="return confirm('Excluir?')" style="margin:0;">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" style="width: 100%; padding: 10px; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #ef4444; border-top: 1px solid var(--border-color);">
-                                        <i data-lucide="trash-2" style="width: 14px;"></i> Excluir
-                                    </button>
-                                </form>
-                            </div>
+                    <!-- Menu Ações -->
+                     <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                    <div style="position: relative;">
+                        <button class="btn-icon ripple" onclick="toggleMenu('menu-<?= $aviso['id'] ?>')" style="padding: 4px; border-radius: 50%;">
+                            <i data-lucide="more-horizontal" style="color: var(--text-muted);"></i>
+                        </button>
+                        <!-- Dropdown -->
+                        <div id="menu-<?= $aviso['id'] ?>" class="dropdown-menu" style="
+                            display: none; position: absolute; right: 0; top: 100%; width: 140px;
+                            background: white; border: 1px solid var(--border-color); border-radius: 8px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;
+                        ">
+                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($aviso)) ?>)" style="display: flex; align-items: center; gap: 8px; padding: 10px; color: var(--text-main); text-decoration: none; font-size: 0.9rem;">
+                                <i data-lucide="edit-2" width="16"></i> Editar
+                            </a>
+                            <a href="avisos_actions.php?action=delete&id=<?= $aviso['id'] ?>" onclick="return confirm('Tem certeza?')" style="display: flex; align-items: center; gap: 8px; padding: 10px; color: #dc2626; text-decoration: none; font-size: 0.9rem; border-top: 1px solid var(--border-color);">
+                                <i data-lucide="trash-2" width="16"></i> Excluir
+                            </a>
                         </div>
+                    </div>
                     <?php endif; ?>
                 </div>
 
-                <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 8px 0;">
-                    <?= htmlspecialchars($aviso['title']) ?>
-                </h2>
-
-                <div class="ql-editor" style="padding: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; max-height: 200px; overflow: hidden; position: relative;">
-                    <?= $aviso['message'] ?> <!-- HTML Seguro vindo do Quill -->
+                <!-- Conteúdo / Mensagem -->
+                <div style="padding: 0 16px 16px 66px;">
+                    <div class="message-preview" style="color: var(--text-body); font-size: 0.95rem; line-height: 1.5;">
+                        <?= $aviso['message'] ?>
+                    </div>
                 </div>
 
-                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted);">
+                <!-- Footer: Autor e Data -->
+                <div style="
+                    background: #f8fafc; padding: 10px 16px; border-top: 1px solid var(--border-color);
+                    display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);
+                ">
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <i data-lucide="user" style="width: 12px;"></i>
-                        <?= htmlspecialchars($aviso['author_name'] ?: 'Admin') ?>
+                        <?php if (!empty($aviso['avatar'])): ?>
+                            <img src="<?= htmlspecialchars($aviso['avatar']) ?>" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover;">
+                        <?php else: ?>
+                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #cbd5e1; display:flex; align-items:center; justify-content:center; color:white; font-size:0.6rem; font-weight:700;">
+                                <?= substr($aviso['author_name'] ?? 'A', 0, 1) ?>
+                            </div>
+                        <?php endif; ?>
+                        <span style="font-weight: 500;"><?= htmlspecialchars($aviso['author_name'] ?? 'Admin') ?></span>
                     </div>
-                    <div>
-                        <?= date('d/m H:i', strtotime($aviso['created_at'])) ?>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <?php if($expiryText): ?>
+                            <span style="display: flex; align-items: center; gap: 4px; background:white; padding: 2px 8px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                                <i data-lucide="clock" width="12"></i> <?= $expiryText ?>
+                            </span>
+                        <?php endif; ?>
+                        <span><?= $timeAgo ?></span>
                     </div>
                 </div>
-
             </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="empty-state">
+                <div style="background: var(--bg-surface); padding: 40px; border-radius: 16px; text-align: center; border: 1px dashed var(--border-color);">
+                    <i data-lucide="bell-off" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 16px;"></i>
+                    <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum aviso encontrado</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Tente mudar os filtros ou crie um novo aviso.</p>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 
     <div style="height: 60px;"></div>
 </div>
 
-<?php if ($_SESSION['user_role'] === 'admin'): ?>
-    <!-- Floating Action Button -->
-    <button onclick="openCreateModal()" class="ripple" style="
-        position: fixed; bottom: 32px; right: 24px;
-        background: #166534; color: white; padding: 16px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
-        border: none; cursor: pointer; z-index: 50; transition: transform 0.2s;
-    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
-        </svg>
-    </button>
-<?php endif; ?>
+
 
 <!-- Modal Universal (Add/Edit) -->
 <div id="avisoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
@@ -325,54 +409,121 @@ renderAppHeader('Avisos');
                 ">
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <!-- SELETORES EM GRID (Dropdowns Compactos) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                
+                <!-- TIPO -->
                 <div>
-                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Tipo</label>
-                    <select name="type" id="avisoType" style="
-                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
-                        background: var(--bg-body); color: var(--text-main);
-                    ">
-                        <option value="general">Geral</option>
-                        <option value="event">Evento</option>
-                        <option value="music">Música</option>
-                        <option value="spiritual">Espiritual</option>
-                        <option value="urgent">Urgente</option>
-                    </select>
+                    <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Tipo</label>
+                    <input type="hidden" name="type" id="avisoType">
+                    <div class="custom-dropdown" id="dropdownType">
+                        <div class="dropdown-trigger ripple">
+                            <span class="selected-label">Selecione...</span>
+                            <i data-lucide="chevron-down" width="14"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-item" data-value="general" data-label="📢 Geral" data-color="var(--text-main)">📢 Geral</div>
+                            <div class="dropdown-item" data-value="event" data-label="🎉 Evento" data-color="#1d4ed8">🎉 Evento</div>
+                            <div class="dropdown-item" data-value="music" data-label="🎵 Música" data-color="#047857">🎵 Música</div>
+                            <div class="dropdown-item" data-value="spiritual" data-label="🙏 Espiritual" data-color="#6d28d9">🙏 Espiritual</div>
+                            <div class="dropdown-item" data-value="urgent" data-label="🚨 Urgente" data-color="#b91c1c">🚨 Urgente</div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- PRIORIDADE -->
                 <div>
-                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Prioridade</label>
-                    <select name="priority" id="avisoPriority" style="
-                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
-                        background: var(--bg-body); color: var(--text-main);
-                    ">
-                        <option value="info">Info</option>
-                        <option value="important">Importante</option>
-                        <option value="urgent">Urgente</option>
-                    </select>
+                    <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Prioridade</label>
+                    <input type="hidden" name="priority" id="avisoPriority">
+                    <div class="custom-dropdown" id="dropdownPriority">
+                        <div class="dropdown-trigger ripple">
+                            <span class="selected-label">Selecione...</span>
+                            <i data-lucide="chevron-down" width="14"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-item" data-value="info" data-label="ℹ Info" data-color="#2563eb">ℹ Info</div>
+                            <div class="dropdown-item" data-value="important" data-label="⭐ Importante" data-color="#d97706">⭐ Importante</div>
+                            <div class="dropdown-item" data-value="urgent" data-label="🔥 Urgente" data-color="#dc2626">🔥 Urgente</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PÚBLICO -->
+                <div>
+                    <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Público</label>
+                    <input type="hidden" name="target_audience" id="avisoTarget">
+                    <div class="custom-dropdown" id="dropdownTarget">
+                        <div class="dropdown-trigger ripple">
+                            <span class="selected-label">Todos</span>
+                            <i data-lucide="chevron-down" width="14"></i>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-item" data-value="all" data-label="Todos" data-color="var(--text-main)">Todos</div>
+                            <div class="dropdown-item" data-value="team" data-label="Equipe" data-color="var(--text-main)">Equipe</div>
+                            <div class="dropdown-item" data-value="admins" data-label="Admins" data-color="var(--text-main)">Líderes</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- NEW FIELDS: Audience & Expiration -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                <div>
-                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Público-Alvo</label>
-                    <select name="target_audience" id="avisoTarget" style="
-                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
-                        background: var(--bg-body); color: var(--text-main);
-                    ">
-                        <option value="all">Todos</option>
-                        <option value="team">Equipe Louvor</option>
-                        <option value="admins">Apenas Líderes</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Expira em (Opcional)</label>
-                    <input type="date" name="expires_at" id="avisoExpires" style="
-                        width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); 
-                        background: var(--bg-body); color: var(--text-main);
-                    ">
-                </div>
+            <!-- EXPIRAÇÃO (Full Width agora, ou abaixo) -->
+            <div style="margin-bottom: 12px;">
+                <label class="form-label" style="display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Validade (Opcional)</label>
+                <input type="date" name="expires_at" id="avisoExpires" style="
+                    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); 
+                    background: var(--bg-body); color: var(--text-main); font-size: 0.9rem;
+                    outline: none;
+                ">
             </div>
+
+            <style>
+                .custom-dropdown {
+                    position: relative;
+                }
+                .dropdown-trigger {
+                    width: 100%;
+                    padding: 10px;
+                    background: var(--bg-body);
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    display: flex; justify-content: space-between; align-items: center;
+                    cursor: pointer;
+                    font-size: 0.85rem; font-weight: 600; color: var(--text-main);
+                    user-select: none;
+                }
+                .dropdown-options {
+                    display: none;
+                    position: absolute; top: 100%; left: 0; right: 0;
+                    background: var(--bg-surface);
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                    z-index: 50;
+                    margin-top: 4px;
+                    overflow: hidden;
+                    max-height: 200px; overflow-y: auto;
+                }
+                .custom-dropdown.open .dropdown-options {
+                    display: block;
+                }
+                .dropdown-item {
+                    padding: 8px 12px;
+                    font-size: 0.85rem;
+                    cursor: pointer;
+                    transition: background 0.1s;
+                    display: flex; align-items: center; gap: 6px;
+                    color: var(--text-muted);
+                }
+                .dropdown-item:hover {
+                    background: var(--bg-body);
+                    color: var(--text-main);
+                }
+                .dropdown-item.selected {
+                    background: var(--primary-subtle, #f0fdf4);
+                    color: var(--primary, #166534);
+                    font-weight: 700;
+                }
+            </style>
 
             <div class="form-group" style="margin-bottom: 24px;">
                 <label class="form-label" style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Mensagem</label>
@@ -411,6 +562,76 @@ renderAppHeader('Avisos');
         }
     });
 
+    // Helper robusto para setar valor + UI sem depender de click() simulado
+    function setSelectorValue(dropdownId, value) {
+        const dropdown = document.getElementById(dropdownId);
+        if(!dropdown) return;
+        
+        // Encontrar item alvo ou fallback para o primeiro
+        const target = dropdown.querySelector(`.dropdown-item[data-value="${value}"]`) || dropdown.querySelector('.dropdown-item'); 
+        if(!target) return;
+
+        // Extrair dados
+        const val = target.getAttribute('data-value');
+        const label = target.getAttribute('data-label');
+        const color = target.getAttribute('data-color');
+
+        // Atualizar Input Hidden (Busca pelo ID ou Sibling)
+        // Como definimos ID nos inputs hidden, vamos tentar usar o ID baseado no dropdown se possível, 
+        // mas o sibling é o padrão atual.
+        const hiddenInput = dropdown.previousElementSibling;
+        if(hiddenInput) hiddenInput.value = val;
+
+        // Atualizar Label Visível
+        const labelSpan = dropdown.querySelector('.selected-label');
+        if(labelSpan) {
+            labelSpan.innerText = label;
+            labelSpan.style.color = color || 'var(--text-main)';
+        }
+        
+        // Atualizar Estado Visual do Menu
+        dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+        target.classList.add('selected');
+    }
+
+    function initSelectors() {
+        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+            const trigger = dropdown.querySelector('.dropdown-trigger');
+            const hiddenInput = dropdown.previousElementSibling; // Hidden input
+            
+            // Toggle
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault(); e.stopPropagation();
+                // Close others
+                document.querySelectorAll('.custom-dropdown').forEach(d => {
+                    if(d !== dropdown) d.classList.remove('open');
+                });
+                dropdown.classList.toggle('open');
+            });
+            
+            // Select Option
+            dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = item.getAttribute('data-value');
+                    
+                    // Usar o helper para garantir consistência
+                    setSelectorValue(dropdown.id, value);
+                    
+                    // Close
+                    dropdown.classList.remove('open');
+                });
+            });
+        });
+
+        // Click outside closes dropdowns
+        document.addEventListener('click', () => {
+             document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
+        });
+    }
+
+    initSelectors();
+
     function prepareSubmit() {
         document.getElementById('hiddenMessage').value = quill.root.innerHTML;
         return true;
@@ -423,6 +644,12 @@ renderAppHeader('Avisos');
         document.getElementById('avisoForm').reset();
         document.getElementById('avisoId').value = '';
         quill.setContents([]);
+        
+        // Defaults
+        setSelectorValue('dropdownType', 'general');
+        setSelectorValue('dropdownPriority', 'info');
+        setSelectorValue('dropdownTarget', 'all');
+        
         document.getElementById('avisoModal').style.display = 'block';
     }
 
@@ -431,11 +658,12 @@ renderAppHeader('Avisos');
         document.getElementById('formAction').value = 'update';
         document.getElementById('avisoId').value = aviso.id;
         document.getElementById('avisoTitle').value = aviso.title;
-        document.getElementById('avisoType').value = aviso.type;
-        document.getElementById('avisoPriority').value = aviso.priority;
         
-        // New Fields
-        document.getElementById('avisoTarget').value = aviso.target_audience || 'all';
+        // Set Selectors
+        setSelectorValue('dropdownType', aviso.type);
+        setSelectorValue('dropdownPriority', aviso.priority);
+        setSelectorValue('dropdownTarget', aviso.target_audience || 'all');
+        
         document.getElementById('avisoExpires').value = aviso.expires_at || '';
 
         quill.root.innerHTML = aviso.message; // Load HTML
@@ -443,6 +671,7 @@ renderAppHeader('Avisos');
         closeAllMenus();
         document.getElementById('avisoModal').style.display = 'block';
     }
+    
 
     function closeModal() {
         document.getElementById('avisoModal').style.display = 'none';

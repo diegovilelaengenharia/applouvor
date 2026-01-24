@@ -16,7 +16,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
 ?>
 
 <!-- Tabs Navegação -->
-<div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 600px; margin-left: auto; margin-right: auto;">
+<div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; margin: 0 16px 24px 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
     <a href="?tab=musicas" class="ripple" style="
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
         <?= $tab == 'musicas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
@@ -29,6 +29,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
         flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
         <?= $tab == 'artistas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
     ">Artistas</a>
+    <a href="?tab=tons" class="ripple" style="
+        flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+        <?= $tab == 'tons' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
+    ">Tons</a>
 </div>
 
 <!-- Conteúdo das Tabs -->
@@ -49,6 +53,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
 
     <?php if ($tab === 'musicas'):
         $tagId = $_GET['tag_id'] ?? null;
+        $tone = $_GET['tone'] ?? null;
         try {
             if ($tagId) {
                 // Busca por Tag
@@ -61,6 +66,11 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
                     LIMIT 50";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute(['tagId' => $tagId]);
+            } elseif ($tone) {
+                // Busca por Tom
+                $sql = "SELECT * FROM songs WHERE tone = :tone ORDER BY title ASC LIMIT 50";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['tone' => $tone]);
             } else {
                 // Busca Normal
                 $sql = "SELECT * FROM songs WHERE title LIKE :q OR artist LIKE :q ORDER BY title ASC LIMIT 50";
@@ -91,6 +101,29 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
                     </a>
                 </div>
             <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($tone):
+            // Cores dos tons
+            $toneColors = [
+                'C' => '#ef4444', 'C#' => '#f97316', 'Db' => '#f97316',
+                'D' => '#f59e0b', 'D#' => '#84cc16', 'Eb' => '#84cc16',
+                'E' => '#22c55e', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
+                'G' => '#3b82f6', 'G#' => '#6366f1', 'Ab' => '#6366f1',
+                'A' => '#8b5cf6', 'A#' => '#a855f7', 'Bb' => '#a855f7',
+                'B' => '#ec4899'
+            ];
+            $toneColor = $toneColors[$tone] ?? '#047857';
+        ?>
+            <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; background: <?= $toneColor ?>15; padding: 12px 16px; border-radius: 12px; border: 1px solid <?= $toneColor ?>30;">
+                <div style="display: flex; align-items: center; gap: 8px; color: <?= $toneColor ?>; font-weight: 700;">
+                    <i data-lucide="music" style="width: 20px;"></i>
+                    Tom: <?= htmlspecialchars($tone) ?>
+                </div>
+                <a href="repertorio.php?tab=musicas" style="color: <?= $toneColor ?>; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                    <i data-lucide="x" style="width: 16px;"></i> Limpar
+                </a>
+            </div>
         <?php endif; ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($songs as $song): ?>
@@ -269,6 +302,83 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             <?php if (empty($artists)): ?>
                 <div style="text-align: center; padding: 40px; color: #94a3b8;">
                     <p>Nenhum artista encontrado.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Conteúdo: Tons -->
+    <?php if ($tab === 'tons'):
+        // Cores dos tons
+        $toneColors = [
+            'C' => '#ef4444', 'C#' => '#f97316', 'Db' => '#f97316',
+            'D' => '#f59e0b', 'D#' => '#84cc16', 'Eb' => '#84cc16',
+            'E' => '#22c55e', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
+            'G' => '#3b82f6', 'G#' => '#6366f1', 'Ab' => '#6366f1',
+            'A' => '#8b5cf6', 'A#' => '#a855f7', 'Bb' => '#a855f7',
+            'B' => '#ec4899'
+        ];
+        
+        try {
+            $sql = "SELECT tone as name, COUNT(*) as count FROM songs WHERE tone IS NOT NULL AND tone != '' GROUP BY tone ORDER BY tone ASC";
+            $stmt = $pdo->query($sql);
+            $tones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $tones = [];
+        }
+    ?>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px;">
+            <?php foreach ($tones as $toneItem):
+                $toneName = $toneItem['name'];
+                $bgHex = $toneColors[$toneName] ?? '#047857';
+            ?>
+                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneName) ?>" class="ripple" style="
+                background: var(--bg-surface); 
+                border-radius: var(--radius-lg); 
+                padding: 20px; 
+                text-decoration: none; 
+                border: 1px solid var(--border-color);
+                display: flex; 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 12px; 
+                transition: transform 0.2s, box-shadow 0.2s;
+                position: relative;
+                overflow: hidden;
+                box-shadow: var(--shadow-sm);
+            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
+
+                    <!-- Barra de cor lateral -->
+                    <div style="
+                    position: absolute; left: 0; top: 0; bottom: 0; width: 6px; 
+                    background: <?= $bgHex ?>;
+                "></div>
+
+                    <div style="
+                    width: 44px; height: 44px; 
+                    background: <?= $bgHex ?>20; /* 20% opacidade */
+                    border-radius: 12px; 
+                    color: <?= $bgHex ?>;
+                    display: flex; align-items: center; justify-content: center;
+                ">
+                        <i data-lucide="music" style="width: 24px;"></i>
+                    </div>
+
+                    <div style="width: 100%;">
+                        <div style="font-weight: 800; color: var(--text-main); font-size: 1.2rem; margin-bottom: 4px; line-height: 1.2;">
+                            <?= htmlspecialchars($toneName) ?>
+                        </div>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: var(--bg-body); padding: 4px 10px; border-radius: 20px; display: inline-block;">
+                            <?= $toneItem['count'] ?> músicas
+                        </div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+
+            <?php if (empty($tones)): ?>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
+                    <p>Nenhum tom encontrado no repertório.</p>
                 </div>
             <?php endif; ?>
         </div>

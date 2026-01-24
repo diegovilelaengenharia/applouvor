@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address_street = trim($_POST['address_street']);
         $address_number = trim($_POST['address_number']);
         $address_neighborhood = trim($_POST['address_neighborhood']);
+        $birth_date = !empty($_POST['birth_date']) ? $_POST['birth_date'] : null;
 
         // Upload de Avatar
         $avatar_path = null;
@@ -49,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$error) {
-            $sql = "UPDATE users SET name = ?, email = ?, phone = ?, address_street = ?, address_number = ?, address_neighborhood = ?";
-            $params = [$name, $email, $phone, $address_street, $address_number, $address_neighborhood];
+            $sql = "UPDATE users SET name = ?, email = ?, phone = ?, address_street = ?, address_number = ?, address_neighborhood = ?, birth_date = ?";
+            $params = [$name, $email, $phone, $address_street, $address_number, $address_neighborhood, $birth_date];
 
             if ($avatar_path) {
                 $sql .= ", avatar = ?";
@@ -181,6 +182,15 @@ renderAppHeader('Meu Perfil');
                         Telefone / WhatsApp
                     </label>
                     <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>"
+                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
+                </div>
+
+                <div style="border-top: 1px solid var(--border-color); padding: 12px;">
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
+                        Data de Nascimento
+                    </label>
+                    <input type="date" name="birth_date" value="<?= htmlspecialchars($user['birth_date'] ?? '') ?>"
                         style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>

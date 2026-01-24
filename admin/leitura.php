@@ -753,6 +753,14 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
             <?php endif; ?>
         </div>
         
+        <!-- Search Filter -->
+        <?php if(!empty($reportData)): ?>
+        <div style="margin-bottom: 20px; position: relative;">
+            <i data-lucide="search" width="18" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-400, #9ca3af);"></i>
+            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anotações (título, conteúdo, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--gray-300, #d1d5db); border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+        </div>
+        <?php endif; ?>
+        
         <style>
             #export-menu button:hover {
                 background: var(--gray-50, #f9fafb);
@@ -1109,6 +1117,45 @@ function toggleExportMenu() {
     const menu = document.getElementById('export-menu');
     menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
     lucide.createIcons();
+}
+
+function filterDiary() {
+    const input = document.getElementById('diary-search');
+    const filter = input.value.toLowerCase();
+    const weeks = document.querySelectorAll('[id^="week-content-"]').length;
+    
+    // Get all weeks
+    for (let i = 1; i <= weeks; i++) {
+        const weekContent = document.getElementById(`week-content-${i}`);
+        const weekButton = weekContent.previousElementSibling;
+        const entries = weekContent.children;
+        let hasVisibleEntry = false;
+        
+        // Check each entry
+        for (let entry of entries) {
+            const text = entry.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                entry.style.display = 'block';
+                hasVisibleEntry = true;
+            } else {
+                entry.style.display = 'none';
+            }
+        }
+        
+        // Show/hide week based on matching entries
+        if (hasVisibleEntry) {
+            weekButton.style.display = 'flex';
+            // Auto expand if searching
+            if (filter.length > 0) {
+                weekContent.style.display = 'block';
+                const icon = document.getElementById(`week-icon-${i}`);
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            }
+        } else {
+            weekButton.style.display = 'none';
+            weekContent.style.display = 'none';
+        }
+    }
 }
 
 // Close export menu when clicking outside

@@ -77,12 +77,14 @@ try {
 } catch (Exception $e) {
 }
 
-// 3. Aniversariantes (Quantidade no mês)
-$niverCount = 0;
+// 3. Aniversariantes (Lista do Mês)
+$aniversariantes = [];
 try {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE())");
-    $niverCount = $stmt->fetchColumn();
+    $stmt = $pdo->query("SELECT name, DAY(birth_date) as dia, avatar FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE()) ORDER BY dia ASC");
+    $aniversariantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $niverCount = count($aniversariantes);
 } catch (Exception $e) {
+    $niverCount = 0;
 }
 
 // Saudação baseada no horário
@@ -207,44 +209,54 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         color: var(--text-muted);
         border: 1px dashed var(--border-color);
     }
-
-    /* Stats Grid */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .stat-card {
-        background: var(--bg-surface);
-        border-radius: 12px;
-        padding: 12px;
-        border: 1px solid var(--border-color);
-        text-align: center;
-        transition: transform 0.2s;
-    }
-
-    .stat-card:active {
-        transform: scale(0.98);
-    }
-
-    .stat-value {
-        font-size: 1.6rem;
-        font-weight: 800;
-        line-height: 1;
-        margin-bottom: 2px;
-        color: var(--text-main);
-    }
-
-    .stat-label {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        font-weight: 600;
-    }
 </style>
 
 <div style="max-width: 600px; margin: 0 auto;">
+
+    <!-- MINHAS ESCALAS -->
+    <div class="section-title">
+        <span>Minhas escalas <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= $nextSchedule ? '1' : '0' ?>)</span></span>
+        <a href="escalas.php?mine=1" class="section-action">Ver todas</a>
+    </div>
+
+    <?php if ($nextSchedule):
+        $date = new DateTime($nextSchedule['event_date']);
+        $monthName = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
+    ?>
+        <a href="escala_detalhe.php?id=<?= $nextSchedule['id'] ?>" class="feed-card">
+            <!-- Date Box -->
+            <div style="
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                width: 50px; height: 56px; background: #f1f5f9; border-radius: 10px;
+                color: var(--text-main); text-align: center; line-height: 1; flex-shrink: 0;
+            ">
+                <span style="font-size: 1.1rem; font-weight: 800;"><?= $date->format('d') ?></span>
+                <span style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding-top: 2px;"><?= $monthName ?></span>
+            </div>
+
+            <div style="flex: 1;">
+                <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-muted); font-size: 0.85rem;">
+                    <!-- Mini Avatars (Simulated) -->
+                    <div style="display: flex; padding-left: 8px;">
+                        <span style="width: 20px; height: 20px; border-radius: 50%; background: #cbd5e1; border: 2px solid white; margin-left: -8px;"></span>
+                        <span style="width: 20px; height: 20px; border-radius: 50%; background: #94a3b8; border: 2px solid white; margin-left: -8px;"></span>
+                        <span style="width: 20px; height: 20px; border-radius: 50%; background: #64748b; border: 2px solid white; margin-left: -8px;"></span>
+                    </div>
+                    <span>• <?= $saudacao == 'Bom dia' ? 'Manhã' : 'Noite' ?></span>
+                </div>
+            </div>
+
+            <div style="color: var(--text-muted);">
+                <i data-lucide="chevron-right" style="width: 20px;"></i>
+            </div>
+        </a>
+    <?php else: ?>
+        <div class="empty-state">
+            <i data-lucide="calendar-off" style="width: 20px;"></i>
+            <span style="font-size: 0.9rem;">Lista vazia.</span>
+        </div>
+    <?php endif; ?>
 
     <!-- AVISOS -->
     <div class="section-title">
@@ -481,56 +493,6 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     </a>
 
 
-
-
-
-
-    <!-- MINHAS ESCALAS -->
-    <div class="section-title">
-        <span>Minhas escalas <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= $nextSchedule ? '1' : '0' ?>)</span></span>
-        <a href="escalas.php?mine=1" class="section-action">Ver todas</a>
-    </div>
-
-    <?php if ($nextSchedule):
-        $date = new DateTime($nextSchedule['event_date']);
-        $monthName = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
-    ?>
-        <a href="escala_detalhe.php?id=<?= $nextSchedule['id'] ?>" class="feed-card">
-            <!-- Date Box -->
-            <div style="
-                display: flex; flex-direction: column; align-items: center; justify-content: center;
-                width: 50px; height: 56px; background: #f1f5f9; border-radius: 10px;
-                color: var(--text-main); text-align: center; line-height: 1; flex-shrink: 0;
-            ">
-                <span style="font-size: 1.1rem; font-weight: 800;"><?= $date->format('d') ?></span>
-                <span style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding-top: 2px;"><?= $monthName ?></span>
-            </div>
-
-            <div style="flex: 1;">
-                <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
-                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-muted); font-size: 0.85rem;">
-                    <!-- Mini Avatars (Simulated) -->
-                    <div style="display: flex; padding-left: 8px;">
-                        <span style="width: 20px; height: 20px; border-radius: 50%; background: #cbd5e1; border: 2px solid white; margin-left: -8px;"></span>
-                        <span style="width: 20px; height: 20px; border-radius: 50%; background: #94a3b8; border: 2px solid white; margin-left: -8px;"></span>
-                        <span style="width: 20px; height: 20px; border-radius: 50%; background: #64748b; border: 2px solid white; margin-left: -8px;"></span>
-                    </div>
-                    <span>• <?= $saudacao == 'Bom dia' ? 'Manhã' : 'Noite' ?></span>
-                </div>
-            </div>
-
-            <div style="color: var(--text-muted);">
-                <i data-lucide="chevron-right" style="width: 20px;"></i>
-            </div>
-        </a>
-    <?php else: ?>
-        <div class="empty-state">
-            <i data-lucide="calendar-off" style="width: 20px;"></i>
-            <span style="font-size: 0.9rem;">Lista vazia.</span>
-        </div>
-    <?php endif; ?>
-
-
     <!-- ANIVERSARIANTES -->
     <div class="section-title">
         <span>Aniversariantes <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= $niverCount ?>)</span></span>
@@ -538,24 +500,29 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     </div>
 
     <?php if ($niverCount > 0): ?>
-        <a href="aniversarios.php" class="feed-card" style="background: #fdf2f8; border-color: #fbcfe8;">
-            <div class="feed-icon" style="background: #fbcfe8; color: #db2777;">
-                <i data-lucide="cake"></i>
-            </div>
-            <div>
-                <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #be185d;"><?= $niverCount ?> aniversariantes</h4>
-                <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: #db2777;">
-                    Celebre a vida dos irmãos este mês!
-                </p>
-            </div>
-        </a>
+        <div style="display: grid; gap: 8px;">
+        <?php foreach ($aniversariantes as $niver): ?>
+            <a href="aniversarios.php" class="feed-card" style="padding: 12px; margin-bottom: 0;">
+                <div style="width: 40px; height: 40px; background: #fdf2f8; border-radius: 50%; color: #db2777; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #fbcfe8;">
+                    <span style="font-weight: 800; font-size: 0.95rem; line-height: 1;"><?= $niver['dia'] ?></span>
+                </div>
+                <div>
+                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">
+                        <?= htmlspecialchars($niver['name']) ?>
+                    </h4>
+                    <span style="font-size: 0.75rem; color: #db2777;">Parabéns! 🎉</span>
+                </div>
+                <div style="margin-left: auto; color: var(--text-muted);">
+                    <i data-lucide="chevron-right" width="16"></i>
+                </div>
+            </a>
+        <?php endforeach; ?>
+        </div>
     <?php else: ?>
         <div class="empty-state">
             <i data-lucide="party-popper" style="width: 20px;"></i>
             <span style="font-size: 0.9rem;">Lista vazia.</span>
         </div>
     <?php endif; ?>
-
-
 
     <?php renderAppFooter(); ?>
