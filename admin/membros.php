@@ -54,8 +54,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Buscar todos os membros
-$users = $pdo->query("SELECT * FROM users ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
+// Buscar todos os membros com suas funções
+$stmt = $pdo->query("
+    SELECT u.*, 
+           GROUP_CONCAT(
+               CONCAT(r.id, ':', r.name, ':', r.icon, ':', r.color, ':', IFNULL(ur.is_primary, 0))
+               ORDER BY ur.is_primary DESC, r.name
+               SEPARATOR '||'
+           ) as roles_data
+    FROM users u
+    LEFT JOIN user_roles ur ON u.id = ur.user_id
+    LEFT JOIN roles r ON ur.role_id = r.id
+    GROUP BY u.id
+    ORDER BY u.name ASC
+");
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Processar funções para cada usuário
+foreach ($users as &$user) {
+    $user['roles'] = [];
+    if (!empty($user['roles_data'])) {
+        $rolesArray = explode('||', $user['roles_data']);
+        foreach ($rolesArray as $roleStr) {
+            list($id, $name, $icon, $color, $isPrimary) = explode(':', $roleStr);
+            $user['roles'][] = [
+                'id' => $id,
+                'name' => $name,
+                'icon' => $icon,
+                'color' => $color,
+                'is_primary' => (bool)$isPrimary
+            ];
+        }
+    }
+}
+unset($user);
 
 renderAppHeader('Membros');
 ?>
@@ -123,12 +155,25 @@ renderAppHeader('Membros');
                                 <span style="background: var(--primary-subtle); color: var(--primary); padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800;">ADM</span>
                             <?php endif; ?>
                         </div>
-                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            <?= htmlspecialchars($user['instrument'] ?: 'Membro') ?>
-                        </p>
+                        
+                        <!-- Funções/Badges -->
+                        <div class="member-roles">
+                            <?php if (!empty($user['roles'])): ?>
+                                <?php foreach ($user['roles'] as $role): ?>
+                                    <span class="role-badge <?= $role['is_primary'] ? 'primary' : '' ?>" 
+                                          style="background: <?= htmlspecialchars($role['color']) ?>">
+                                        <span class="role-icon"><?= $role['icon'] ?></span>
+                                        <span><?= htmlspecialchars($role['name']) ?></span>
+                                    </span>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <span style="color: var(--text-muted); font-size: 0.75rem;">
+                                    <?= htmlspecialchars($user['instrument'] ?: 'Sem função definida') ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
-                    <!-- Ações Rápidas (Compactas) -->
                     <!-- Ações Rápidas (Compactas) -->
                     <div style="display: flex; align-items: center; gap: 4px;">
                         <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="ripple icon-action" title="WhatsApp" style="color: #25D366; background: #ecfdf5;">
@@ -139,6 +184,11 @@ renderAppHeader('Membros');
                         </a>
 
                         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <!-- Botão Editar Funções -->
+                            <button onclick="rolesManager.openRolesSelector(<?= $user['id'] ?>)" class="ripple icon-action" title="Editar Funções" style="color: var(--primary); background: var(--primary-subtle);">
+                                <i data-lucide="music" style="width: 16px;"></i>
+                            </button>
+                            
                             <!-- Menu Trigger (Admin Only) -->
                             <div style="position: relative;">
                                 <button onclick="toggleMenu(event, 'menu-<?= $user['id'] ?>')" class="ripple icon-action" style="color: var(--text-muted); background: transparent;">
@@ -453,6 +503,9 @@ renderAppHeader('Membros');
         }
     });
 </script>
+
+<!-- Roles Manager Script -->
+<script src="/assets/js/roles.js"></script>
 
 <?php
 // Helper function para cor

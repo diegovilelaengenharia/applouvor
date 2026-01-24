@@ -16,6 +16,9 @@
 /* Dark Mode */
 @import url('dark-mode.css');
 
+/* Roles System */
+@import url('roles.css');
+
 
 /* PWA Fullscreen Adjustments */
 html {
