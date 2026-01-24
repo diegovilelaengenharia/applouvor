@@ -461,7 +461,7 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
         
         <!-- Botão de Estatísticas -->
         <button onclick="document.getElementById('modal-detailed-stats').style.display='flex'" class="ripple" style="
-            background: linear-gradient(135deg, #047857, #059669); 
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
             color: white; 
             border: none; 
             padding: 12px 16px; 
@@ -472,12 +472,12 @@ renderPageHeader('Plano de Leitura Bíblica Anual', 'Louvor PIB Oliveira');
             gap: 8px;
             font-weight: 700;
             font-size: 0.85rem;
-            box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
             transition: all 0.2s;
             flex-shrink: 0;
             margin-left: 16px;
-        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(4, 120, 87, 0.4)'"
-            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(4, 120, 87, 0.3)'">
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)'"
+            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.3)'">
             <i data-lucide="bar-chart-2" style="width: 18px;"></i>
             <span>Estatísticas</span>
         </button>

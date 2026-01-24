@@ -86,7 +86,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             ">Anteriores</button>
     </div>
 
-    <!-- Right Controls: Add Button, View Toggle & Filter -->
+    <!-- Right Controls: Add Button, Stats, View Toggle & Filter -->
     <div style="display: flex; gap: 12px; align-items: center;">
     
         <!-- Botão Adicionar Escala -->
@@ -112,6 +112,28 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 <path d="M12 5v14" />
             </svg>
             <span>Nova Escala</span>
+        </a>
+        
+        <!-- Botão Estatísticas de Escalas -->
+        <a href="escalas_stats.php" class="ripple" style="
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+            color: white; 
+            border: none; 
+            padding: 10px 16px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+            transition: all 0.2s;
+            text-decoration: none;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)'"
+            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.3)'">
+            <i data-lucide="bar-chart-2" style="width: 18px;"></i>
+            <span>Estatísticas</span>
         </a>
 
         <!-- View Switcher -->

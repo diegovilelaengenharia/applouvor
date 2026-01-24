@@ -11,19 +11,31 @@ renderAppHeader('Repertório');
 
 
 $rightAction = '
-    <a href="musica_adicionar.php" class="ripple" style="
-        display: flex; align-items: center; gap: 8px; padding: 8px 16px; 
-        background: var(--primary); color: white; border-radius: 10px; 
-        text-decoration: none; font-weight: 600; font-size: 0.9rem;
-        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3); transition: all 0.2s;
-    " onmouseover="this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 4px 12px rgba(4, 120, 87, 0.4)\'"
-        onmouseout="this.style.transform=\'none\'; this.style.boxShadow=\'0 2px 8px rgba(4, 120, 87, 0.3)\'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
-        </svg>
-        <span>Música</span>
-    </a>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <a href="musica_adicionar.php" class="ripple" style="
+            display: flex; align-items: center; gap: 8px; padding: 8px 16px; 
+            background: var(--primary); color: white; border-radius: 10px; 
+            text-decoration: none; font-weight: 600; font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3); transition: all 0.2s;
+        " onmouseover="this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 4px 12px rgba(4, 120, 87, 0.4)\'"
+            onmouseout="this.style.transform=\'none\'; this.style.boxShadow=\'0 2px 8px rgba(4, 120, 87, 0.3)\'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+            </svg>
+            <span>+ Música</span>
+        </a>
+        <a href="repertorio_stats.php" class="ripple" style="
+            display: flex; align-items: center; gap: 8px; padding: 8px 16px; 
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-radius: 10px; 
+            text-decoration: none; font-weight: 600; font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3); transition: all 0.2s;
+        " onmouseover="this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 4px 12px rgba(139, 92, 246, 0.4)\'"
+            onmouseout="this.style.transform=\'none\'; this.style.boxShadow=\'0 2px 8px rgba(139, 92, 246, 0.3)\'">
+            <i data-lucide="bar-chart-2" style="width: 18px;"></i>
+            <span>Estatísticas</span>
+        </a>
+    </div>
 ';
 
 renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
