@@ -11,31 +11,119 @@ renderAppHeader('Repertório');
 
 
 $rightAction = '
-    <div style="display: flex; gap: 8px; align-items: center;">
-        <a href="musica_adicionar.php" class="ripple" style="
-            display: flex; align-items: center; gap: 8px; padding: 8px 16px; 
-            background: var(--primary); color: white; border-radius: 10px; 
-            text-decoration: none; font-weight: 600; font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3); transition: all 0.2s;
-        " onmouseover="this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 4px 12px rgba(4, 120, 87, 0.4)\'"
-            onmouseout="this.style.transform=\'none\'; this.style.boxShadow=\'0 2px 8px rgba(4, 120, 87, 0.3)\'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
+    <div style="position: relative;">
+        <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="ripple" style="
+            width: 48px; height: 48px; 
+            background: white; 
+            border: 1px solid #e2e8f0; 
+            color: #64748b; 
+            border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="1"/>
+                <circle cx="12" cy="5" r="1"/>
+                <circle cx="12" cy="19" r="1"/>
             </svg>
-            <span>+ Música</span>
-        </a>
-        <a href="repertorio_stats.php" class="ripple" style="
-            display: flex; align-items: center; gap: 8px; padding: 8px 16px; 
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-radius: 10px; 
-            text-decoration: none; font-weight: 600; font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3); transition: all 0.2s;
-        " onmouseover="this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 4px 12px rgba(139, 92, 246, 0.4)\'"
-            onmouseout="this.style.transform=\'none\'; this.style.boxShadow=\'0 2px 8px rgba(139, 92, 246, 0.3)\'">
-            <i data-lucide="bar-chart-2" style="width: 18px;"></i>
-            <span>Estatísticas</span>
-        </a>
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div id="options-menu" style="
+            display: none;
+            position: absolute;
+            top: 56px;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            z-index: 1000;
+            overflow: hidden;
+        ">
+            <a href="musica_adicionar.php" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                text-decoration: none;
+                color: #0f172a;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: background 0.2s;
+                border-bottom: 1px solid #f1f5f9;
+            " onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'white\'">
+                <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: linear-gradient(135deg, #166534, #15803d);
+                    color: white;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
+                    </svg>
+                </div>
+                <span>Nova Música</span>
+            </a>
+            <a href="repertorio_stats.php" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                text-decoration: none;
+                color: #0f172a;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: background 0.2s;
+            " onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'white\'">
+                <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                    color: white;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                    <i data-lucide="bar-chart-2" style="width: 18px;"></i>
+                </div>
+                <span>Estatísticas</span>
+            </a>
+        </div>
     </div>
+    
+    <script>
+        function toggleOptionsMenu() {
+            const menu = document.getElementById(\'options-menu\');
+            const btn = document.getElementById(\'options-menu-btn\');
+            if (menu.style.display === \'none\' || menu.style.display === \'\') {
+                menu.style.display = \'block\';
+                btn.style.background = \'#f1f5f9\';
+            } else {
+                menu.style.display = \'none\';
+                btn.style.background = \'white\';
+            }
+        }
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener(\'click\', function(event) {
+            const menu = document.getElementById(\'options-menu\');
+            const btn = document.getElementById(\'options-menu-btn\');
+            if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = \'none\';
+                btn.style.background = \'white\';
+            }
+        });
+    </script>
 ';
 
 renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
