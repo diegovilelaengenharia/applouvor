@@ -177,102 +177,77 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             $tags = [];
         }
     ?>
-        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
-            <style>
-                @media (min-width: 768px) {
-                    .pastas-grid {
-                        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
-                    }
-                }
-            </style>
-            <div class="pastas-grid" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($tags as $tag):
-                // Cor de fundo mais suave baseada na cor da tag
                 $bgHex = $tag['color'] ?? '#047857';
-                // Converter hex para rgb para usar opacidade se necessário, ou usar direto
             ?>
                 <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="ripple" style="
-                background: var(--bg-surface); 
-                border-radius: var(--radius-lg); 
-                padding: 20px; 
-                text-decoration: none; 
-                border: 1px solid var(--border-color);
-                display: flex; 
-                flex-direction: column; 
-                align-items: flex-start; 
-                gap: 12px; 
-                transition: transform 0.2s, box-shadow 0.2s;
-                position: relative;
-                overflow: hidden;
-                box-shadow: var(--shadow-sm);
-            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
-
-                    <!-- Barra de cor lateral -->
+                display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
+                border-radius: var(--radius-lg); background: var(--bg-surface); border: 1px solid var(--border-color);
+                box-shadow: var(--shadow-sm); transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
+                onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)'">
+                    
+                    <!-- Ícone da TAG -->
                     <div style="
-                    position: absolute; left: 0; top: 0; bottom: 0; width: 6px; 
-                    background: <?= $bgHex ?>;
-                "></div>
-
-                    <div style="
-                    width: 44px; height: 44px; 
-                    background: <?= $bgHex ?>20; /* 20% opacidade */
-                    border-radius: 12px; 
-                    color: <?= $bgHex ?>;
-                    display: flex; align-items: center; justify-content: center;
-                ">
+                        width: 48px; height: 48px; 
+                        background: <?= $bgHex ?>20;
+                        border-radius: 12px; 
+                        color: <?= $bgHex ?>;
+                        display: flex; align-items: center; justify-content: center;
+                        flex-shrink: 0;
+                    ">
                         <i data-lucide="folder-heart" style="width: 24px;"></i>
                     </div>
 
-                    <div style="width: 100%;">
-                        <div style="font-weight: 800; color: var(--text-main); font-size: 1rem; margin-bottom: 4px; line-height: 1.2;">
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 2px;">
                             <?= htmlspecialchars($tag['name']) ?>
                         </div>
                         <?php if (!empty($tag['description'])): ?>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px;">
+                            <div style="color: var(--text-muted); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <?= htmlspecialchars($tag['description']) ?>
                             </div>
+                        <?php else: ?>
+                            <div style="color: var(--text-muted); font-size: 0.85rem;">
+                                <?= $tag['count'] ?> músicas
+                            </div>
                         <?php endif; ?>
-                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: var(--bg-body); padding: 4px 10px; border-radius: 20px; display: inline-block;">
-                            <?= $tag['count'] ?> músicas
-                        </div>
                     </div>
+
+                    <!-- Barra lateral colorida -->
+                    <div style="
+                        width: 4px; height: 48px; 
+                        background: <?= $bgHex ?>; 
+                        border-radius: 4px;
+                        flex-shrink: 0;
+                    "></div>
                 </a>
             <?php endforeach; ?>
 
             <!-- Botão para gerenciar tags -->
             <a href="classificacoes.php" class="ripple" style="
-            background: var(--bg-body); 
-            border-radius: var(--radius-lg); 
-            padding: 20px; 
-            text-decoration: none; 
-            border: 2px dashed var(--border-color);
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 12px; 
-            color: var(--text-muted);
-            transition: all 0.2s;
-        ">
-                <div style="
-                width: 44px; height: 44px; 
-                background: var(--bg-surface); 
-                border-radius: 50%; 
-                display: flex; align-items: center; justify-content: center;
-                box-shadow: var(--shadow-sm);
+                display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
+                border-radius: var(--radius-lg); background: var(--bg-body); border: 2px dashed var(--border-color);
+                transition: all 0.2s; color: var(--text-muted);
             ">
+                <div style="
+                    width: 48px; height: 48px; 
+                    background: var(--bg-surface); 
+                    border-radius: 50%; 
+                    display: flex; align-items: center; justify-content: center;
+                    box-shadow: var(--shadow-sm);
+                ">
                     <i data-lucide="plus" style="width: 24px;"></i>
                 </div>
-                <div style="font-weight: 600; font-size: 0.9rem;">Nova TAG</div>
+                <div style="font-weight: 600; font-size: 0.95rem;">Nova TAG</div>
             </a>
 
             <?php if (empty($tags)): ?>
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
+                <div style="text-align: center; padding: 40px; color: #94a3b8;">
                     <p>Nenhuma TAG encontrada.</p>
                 </div>
             <?php endif; ?>
-            </div>
         </div>
     <?php endif; ?>
 
@@ -336,69 +311,54 @@ renderPageHeader('Repertório', 'Gestão de Músicas', $rightAction);
             $tones = [];
         }
     ?>
-        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
-            <style>
-                @media (min-width: 768px) {
-                    .tons-grid {
-                        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-                    }
-                }
-            </style>
-            <div class="tons-grid" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($tones as $toneItem):
                 $toneName = $toneItem['name'];
                 $bgHex = $toneColors[$toneName] ?? '#047857';
             ?>
                 <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneName) ?>" class="ripple" style="
-                background: var(--bg-surface); 
-                border-radius: var(--radius-lg); 
-                padding: 20px; 
-                text-decoration: none; 
-                border: 1px solid var(--border-color);
-                display: flex; 
-                flex-direction: column; 
-                align-items: flex-start; 
-                gap: 12px; 
-                transition: transform 0.2s, box-shadow 0.2s;
-                position: relative;
-                overflow: hidden;
-                box-shadow: var(--shadow-sm);
-            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
-
-                    <!-- Barra de cor lateral -->
+                display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
+                border-radius: var(--radius-lg); background: var(--bg-surface); border: 1px solid var(--border-color);
+                box-shadow: var(--shadow-sm); transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
+                onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)'">
+                    
+                    <!-- Ícone do Tom -->
                     <div style="
-                    position: absolute; left: 0; top: 0; bottom: 0; width: 6px; 
-                    background: <?= $bgHex ?>;
-                "></div>
-
-                    <div style="
-                    width: 44px; height: 44px; 
-                    background: <?= $bgHex ?>20; /* 20% opacidade */
-                    border-radius: 12px; 
-                    color: <?= $bgHex ?>;
-                    display: flex; align-items: center; justify-content: center;
-                ">
+                        width: 48px; height: 48px; 
+                        background: <?= $bgHex ?>20;
+                        border-radius: 12px; 
+                        color: <?= $bgHex ?>;
+                        display: flex; align-items: center; justify-content: center;
+                        flex-shrink: 0;
+                    ">
                         <i data-lucide="music" style="width: 24px;"></i>
                     </div>
 
-                    <div style="width: 100%;">
-                        <div style="font-weight: 800; color: var(--text-main); font-size: 1.2rem; margin-bottom: 4px; line-height: 1.2;">
-                            <?= htmlspecialchars($toneName) ?>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 2px;">
+                            Tom <?= htmlspecialchars($toneName) ?>
                         </div>
-                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: var(--bg-body); padding: 4px 10px; border-radius: 20px; display: inline-block;">
+                        <div style="color: var(--text-muted); font-size: 0.85rem;">
                             <?= $toneItem['count'] ?> músicas
                         </div>
                     </div>
+
+                    <!-- Barra lateral colorida -->
+                    <div style="
+                        width: 4px; height: 48px; 
+                        background: <?= $bgHex ?>; 
+                        border-radius: 4px;
+                        flex-shrink: 0;
+                    "></div>
                 </a>
             <?php endforeach; ?>
 
             <?php if (empty($tones)): ?>
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
+                <div style="text-align: center; padding: 40px; color: #94a3b8;">
                     <p>Nenhum tom encontrado no repertório.</p>
                 </div>
             <?php endif; ?>
-            </div>
         </div>
     <?php endif; ?>
 </div>
