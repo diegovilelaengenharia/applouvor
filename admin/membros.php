@@ -162,8 +162,8 @@ renderAppHeader('Membros');
         </div>
     </div>
 
-    <!-- Grid de Cards -->
-    <div class="member-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+    <!-- Lista de Membros (Vertical) -->
+    <div class="member-grid" style="display: flex; flex-direction: column; gap: 12px;">
 
         <?php foreach ($users as $user): ?>
             <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
