@@ -43,6 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
+            // Check if verses is empty and there are no comments/title
+            $versesArray = is_array($decoded) ? $decoded : [];
+            $hasVerses = count($versesArray) > 0;
+            $hasComment = !empty($comment);
+            $hasTitle = !empty($title);
+            
+            // If nothing is marked and no comments, DELETE the record
+            if (!$hasVerses && !$hasComment && !$hasTitle) {
+                $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?")
+                    ->execute([$userId, $m, $d]);
+                echo json_encode(['success' => true, 'deleted' => true]);
+                exit;
+            }
+            
+            // Otherwise, save/update the record
             if ($comment !== null || $title !== null) {
                 // Ensure text fields are not excessively long (basic sanity check)
                 if ($comment && strlen($comment) > 5000) $comment = substr($comment, 0, 5000);
