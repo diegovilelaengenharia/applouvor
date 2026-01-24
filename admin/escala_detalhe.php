@@ -1,5 +1,5 @@
 <?php
-// admin/escala_detalhe.php - Visualização e Edição
+// admin/escala_detalhe.php - Versão Otimizada
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
@@ -77,9 +77,9 @@ $stmtUsers->execute([$id]);
 $team = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
 $teamIds = array_column($team, 'user_id');
 
-// Buscar Músicas
+// Buscar Músicas com TODAS as tags
 $stmtSongs = $pdo->prepare("
-    SELECT ss.*, s.id as song_id, s.title, s.artist, s.tone, s.bpm
+    SELECT ss.*, s.id as song_id, s.title, s.artist, s.tone, s.bpm, s.category, s.tag
     FROM schedule_songs ss
     JOIN songs s ON ss.song_id = s.id
     WHERE ss.schedule_id = ?
@@ -91,7 +91,7 @@ $songIds = array_column($songs, 'song_id');
 
 // Buscar TODOS para edição
 $allUsers = $pdo->query("SELECT id, name, instrument, avatar_color FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-$allSongs = $pdo->query("SELECT id, title, artist, tone, bpm FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
+$allSongs = $pdo->query("SELECT id, title, artist, tone, bpm, category, tag FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
 
 renderAppHeader('Escala');
 renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m/Y'));
@@ -158,15 +158,15 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 <!-- Content -->
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px 100px;">
     
-    <!-- PARTICIPANTES -->
-    <div style="margin-bottom: 24px;">
-        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="users" style="width: 20px; color: var(--primary);"></i>
-            Participantes (<?= count($team) ?>)
-        </h3>
-        
-        <!-- Modo Visualização -->
-        <div id="view-participantes" class="view-mode">
+    <!-- MODO VISUALIZAÇÃO -->
+    <div id="view-mode" class="view-mode">
+        <!-- PARTICIPANTES -->
+        <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="users" style="width: 20px; color: var(--primary);"></i>
+                Participantes (<?= count($team) ?>)
+            </h3>
+            
             <?php if (empty($team)): ?>
                 <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
                     <i data-lucide="user-plus" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
@@ -192,49 +192,13 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             <?php endif; ?>
         </div>
         
-        <!-- Modo Edição -->
-        <div id="edit-participantes" class="edit-mode edit-mode-hidden">
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <?php foreach ($allUsers as $user): 
-                    $isSelected = in_array($user['id'], $teamIds);
-                ?>
-                    <label style="
-                        display: flex; align-items: center; gap: 12px; padding: 12px;
-                        background: var(--bg-surface); border-radius: 12px;
-                        border: 2px solid <?= $isSelected ? 'var(--primary)' : 'var(--border-color)' ?>;
-                        cursor: pointer; transition: all 0.2s;
-                    " class="member-item" data-user-id="<?= $user['id'] ?>">
-                        <input type="checkbox" 
-                               <?= $isSelected ? 'checked' : '' ?>
-                               onchange="toggleMember(<?= $user['id'] ?>, this)"
-                               style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
-                        <div style="
-                            width: 40px; height: 40px; border-radius: 50%;
-                            background: <?= $user['avatar_color'] ?: '#e2e8f0' ?>;
-                            color: white; display: flex; align-items: center; justify-content: center;
-                            font-weight: 700; font-size: 1rem;
-                        ">
-                            <?= strtoupper(substr($user['name'], 0, 1)) ?>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);"><?= htmlspecialchars($user['name']) ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
-                        </div>
-                    </label>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
-    
-    <!-- REPERTÓRIO -->
-    <div>
-        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="music" style="width: 20px; color: var(--primary);"></i>
-            Repertório (<?= count($songs) ?>)
-        </h3>
-        
-        <!-- Modo Visualização -->
-        <div id="view-repertorio" class="view-mode">
+        <!-- REPERTÓRIO -->
+        <div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="music" style="width: 20px; color: var(--primary);"></i>
+                Repertório (<?= count($songs) ?>)
+            </h3>
+            
             <?php if (empty($songs)): ?>
                 <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
                     <i data-lucide="music-2" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
@@ -250,20 +214,30 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                             <div style="flex: 1;">
                                 <h4 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></h4>
                                 <p style="margin: 0 0 10px 0; font-size: 0.85rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></p>
-                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <?php if ($song['category']): ?>
+                                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dbeafe;">
+                                            <?= htmlspecialchars($song['category']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($song['tag']): ?>
+                                        <span style="background: #f0fdf4; color: #16a34a; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dcfce7;">
+                                            <?= htmlspecialchars($song['tag']) ?>
+                                        </span>
+                                    <?php endif; ?>
                                     <?php if ($song['tone']): ?>
-                                        <span style="background: #fff7ed; color: #ea580c; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; border: 1px solid #ffedd5;">
+                                        <span style="background: #fff7ed; color: #ea580c; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #ffedd5;">
                                             TOM: <?= $song['tone'] ?>
                                         </span>
                                     <?php endif; ?>
                                     <?php if ($song['bpm']): ?>
-                                        <span style="background: #f0fdf4; color: #16a34a; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; border: 1px solid #dcfce7;">
+                                        <span style="background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fee2e2;">
                                             <?= $song['bpm'] ?> BPM
                                         </span>
                                     <?php endif; ?>
                                     <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
                                         background: #fef2f2; color: #ef4444; text-decoration: none;
-                                        padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fee2e2;
+                                        padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fee2e2;
                                         display: inline-flex; align-items: center; gap: 4px;
                                     ">
                                         <i data-lucide="youtube" style="width: 12px;"></i> YouTube
@@ -275,36 +249,86 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
             <?php endif; ?>
         </div>
-        
-        <!-- Modo Edição -->
-        <div id="edit-repertorio" class="edit-mode edit-mode-hidden">
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <?php foreach ($allSongs as $song): 
-                    $isSelected = in_array($song['id'], $songIds);
-                ?>
-                    <label style="
-                        display: flex; align-items: center; gap: 12px; padding: 12px;
-                        background: var(--bg-surface); border-radius: 12px;
-                        border: 2px solid <?= $isSelected ? 'var(--primary)' : 'var(--border-color)' ?>;
-                        cursor: pointer; transition: all 0.2s;
-                    " class="song-item" data-song-id="<?= $song['id'] ?>">
-                        <input type="checkbox" 
-                               <?= $isSelected ? 'checked' : '' ?>
-                               onchange="toggleSong(<?= $song['id'] ?>, this)"
-                               style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;"><?= htmlspecialchars($song['artist']) ?></div>
-                            <?php if ($song['tone']): ?>
-                                <div style="margin-top: 6px;">
-                                    <span style="background: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
-                                        TOM: <?= $song['tone'] ?>
-                                    </span>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </label>
-                <?php endforeach; ?>
+    </div>
+    
+    <!-- MODO EDIÇÃO com 2 Colunas e Busca -->
+    <div id="edit-mode" class="edit-mode edit-mode-hidden">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Coluna Participantes -->
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Participantes</h4>
+                <input type="text" id="searchMembers" placeholder="Buscar participante..." onkeyup="filterMembers()" style="
+                    width: 100%; padding: 10px 12px; border: 1px solid var(--border-color);
+                    border-radius: 10px; font-size: 0.85rem; margin-bottom: 12px;
+                    background: var(--bg-surface);
+                ">
+                <div id="membersList" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;">
+                    <?php foreach ($allUsers as $user): 
+                        $isSelected = in_array($user['id'], $teamIds);
+                    ?>
+                        <label class="member-filter-item" data-name="<?= strtolower($user['name']) ?>" style="
+                            display: flex; align-items: center; gap: 10px; padding: 10px;
+                            background: var(--bg-surface); border-radius: 10px;
+                            border: 2px solid <?= $isSelected ? 'var(--primary)' : 'var(--border-color)' ?>;
+                            cursor: pointer; transition: all 0.2s;
+                        ">
+                            <input type="checkbox" 
+                                   <?= $isSelected ? 'checked' : '' ?>
+                                   onchange="toggleMember(<?= $user['id'] ?>, this)"
+                                   style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+                            <div style="
+                                width: 32px; height: 32px; border-radius: 50%;
+                                background: <?= $user['avatar_color'] ?: '#e2e8f0' ?>;
+                                color: white; display: flex; align-items: center; justify-content: center;
+                                font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+                            ">
+                                <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-weight: 600; font-size: 0.8rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($user['name']) ?></div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
+                            </div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            
+            <!-- Coluna Repertório -->
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Repertório</h4>
+                <input type="text" id="searchSongs" placeholder="Buscar música..." onkeyup="filterSongs()" style="
+                    width: 100%; padding: 10px 12px; border: 1px solid var(--border-color);
+                    border-radius: 10px; font-size: 0.85rem; margin-bottom: 12px;
+                    background: var(--bg-surface);
+                ">
+                <div id="songsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;">
+                    <?php foreach ($allSongs as $song): 
+                        $isSelected = in_array($song['id'], $songIds);
+                    ?>
+                        <label class="song-filter-item" data-title="<?= strtolower($song['title']) ?>" data-artist="<?= strtolower($song['artist']) ?>" style="
+                            display: flex; align-items: center; gap: 10px; padding: 10px;
+                            background: var(--bg-surface); border-radius: 10px;
+                            border: 2px solid <?= $isSelected ? 'var(--primary)' : 'var(--border-color)' ?>;
+                            cursor: pointer; transition: all 0.2s;
+                        ">
+                            <input type="checkbox" 
+                                   <?= $isSelected ? 'checked' : '' ?>
+                                   onchange="toggleSong(<?= $song['id'] ?>, this)"
+                                   style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-weight: 600; font-size: 0.8rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['artist']) ?></div>
+                                <?php if ($song['tone']): ?>
+                                    <div style="margin-top: 4px;">
+                                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                            <?= $song['tone'] ?>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
     </div>
@@ -316,19 +340,21 @@ let editMode = false;
 function toggleEditMode() {
     editMode = !editMode;
     const editBtn = document.getElementById('editBtn');
+    const viewMode = document.getElementById('view-mode');
+    const editModeEl = document.getElementById('edit-mode');
     
     if (editMode) {
         // Entrar em modo edição
-        document.querySelectorAll('.view-mode').forEach(el => el.classList.add('view-mode-hidden'));
-        document.querySelectorAll('.edit-mode').forEach(el => el.classList.remove('edit-mode-hidden'));
+        viewMode.classList.add('view-mode-hidden');
+        editModeEl.classList.remove('edit-mode-hidden');
         editBtn.style.background = '#ef4444';
         editBtn.style.borderColor = '#ef4444';
         editBtn.style.color = 'white';
         editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
     } else {
         // Voltar para visualização
-        document.querySelectorAll('.view-mode').forEach(el => el.classList.remove('view-mode-hidden'));
-        document.querySelectorAll('.edit-mode').forEach(el => el.classList.add('edit-mode-hidden'));
+        viewMode.classList.remove('view-mode-hidden');
+        editModeEl.classList.add('edit-mode-hidden');
         editBtn.style.background = 'var(--bg-body)';
         editBtn.style.borderColor = 'var(--border-color)';
         editBtn.style.color = 'var(--text-main)';
@@ -344,8 +370,27 @@ function toggleEditMode() {
     }
 }
 
+function filterMembers() {
+    const search = document.getElementById('searchMembers').value.toLowerCase();
+    const items = document.querySelectorAll('.member-filter-item');
+    items.forEach(item => {
+        const name = item.getAttribute('data-name');
+        item.style.display = name.includes(search) ? 'flex' : 'none';
+    });
+}
+
+function filterSongs() {
+    const search = document.getElementById('searchSongs').value.toLowerCase();
+    const items = document.querySelectorAll('.song-filter-item');
+    items.forEach(item => {
+        const title = item.getAttribute('data-title');
+        const artist = item.getAttribute('data-artist');
+        item.style.display = (title.includes(search) || artist.includes(search)) ? 'flex' : 'none';
+    });
+}
+
 function toggleMember(userId, checkbox) {
-    const label = checkbox.closest('.member-item');
+    const label = checkbox.closest('.member-filter-item');
     
     fetch('escala_detalhe.php?id=<?= $id ?>', {
         method: 'POST',
@@ -363,7 +408,7 @@ function toggleMember(userId, checkbox) {
 }
 
 function toggleSong(songId, checkbox) {
-    const label = checkbox.closest('.song-item');
+    const label = checkbox.closest('.song-filter-item');
     
     fetch('escala_detalhe.php?id=<?= $id ?>', {
         method: 'POST',
