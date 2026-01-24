@@ -133,8 +133,8 @@ foreach($rows as $r) {
     $chaptersInThisDay = count($verses);
     $totalChaptersRead += $chaptersInThisDay;
     
-    // Count days that have at least one chapter read
-    if($chaptersInThisDay > 0 || !empty($r['completed_at'])) $totalDaysRead++;
+    // Count days that have at least one chapter read (ONLY if verses array has items)
+    if($chaptersInThisDay > 0) $totalDaysRead++;
     
     $k = "{$r['month_num']}_{$r['day_num']}";
     $progressMap[$k] = ['verses'=>$verses, 'comment'=>$r['comment']??'', 'title'=>$r['note_title']??'', 'date'=>$r['completed_at']];
