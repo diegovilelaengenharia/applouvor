@@ -86,54 +86,32 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             ">Anteriores</button>
     </div>
 
-    <!-- Right Controls: Add Button, Stats, View Toggle & Filter -->
+    <!-- Right Controls: Add Button, View Toggle & Filter -->
     <div style="display: flex; gap: 12px; align-items: center;">
     
-        <!-- Botão Adicionar Escala -->
+        <!-- Botão Adicionar Escala (Simplificado) -->
         <a href="escala_adicionar.php" class="ripple" style="
             background: linear-gradient(135deg, #166534, #15803d); 
             color: white; 
             border: none; 
-            padding: 10px 16px; 
-            border-radius: 10px; 
+            width: 48px;
+            height: 48px;
+            border-radius: 14px; 
             cursor: pointer; 
             display: flex; 
             align-items: center; 
-            gap: 8px;
+            justify-content: center;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 1.5rem;
             box-shadow: 0 2px 8px rgba(22, 101, 52, 0.3);
             transition: all 0.2s;
             text-decoration: none;
         " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(22, 101, 52, 0.4)'"
             onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(22, 101, 52, 0.3)'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14" />
                 <path d="M12 5v14" />
             </svg>
-            <span>Nova Escala</span>
-        </a>
-        
-        <!-- Botão Estatísticas de Escalas -->
-        <a href="escalas_stats.php" class="ripple" style="
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
-            color: white; 
-            border: none; 
-            padding: 10px 16px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
-            transition: all 0.2s;
-            text-decoration: none;
-        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)'"
-            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.3)'">
-            <i data-lucide="bar-chart-2" style="width: 18px;"></i>
-            <span>Estatísticas</span>
         </a>
 
         <!-- View Switcher -->
@@ -174,33 +152,21 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             </button>
         </div>
 
-        <!-- Filter Button -->
+        <!-- Filter Button (Simplificado) -->
         <button onclick="openSheet('filterSheet')" class="ripple" style="
             width: 48px; height: 48px; 
-            background: <?= $activeFilters > 0 ? '#dcfce7' : 'white' ?>; 
-            border: <?= $activeFilters > 0 ? '1px solid #166534' : '1px solid #e2e8f0' ?>; 
-            color: <?= $activeFilters > 0 ? '#166534' : '#64748b' ?>; 
+            background: white; 
+            border: 1px solid #e2e8f0; 
+            color: #64748b; 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            position: relative;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             transition: all 0.2s;
         ">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
             </svg>
-            <?php if ($activeFilters > 0): ?>
-                <span style="
-                    position: absolute; top: -6px; right: -6px; 
-                    background: #166534; color: white; 
-                    font-size: 0.7rem; font-weight: 700; 
-                    width: 20px; height: 20px; 
-                    border-radius: 50%; 
-                    display: flex; align-items: center; justify-content: center;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                "><?= $activeFilters ?></span>
-            <?php endif; ?>
         </button>
 
     </div>
