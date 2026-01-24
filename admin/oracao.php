@@ -9,54 +9,63 @@ checkLogin();
 $userId = $_SESSION['user_id'] ?? 1;
 $userName = $_SESSION['user_name'] ?? 'Usuário';
 
+// Verificar se tabelas existem
+$tableExists = true;
+try {
+    $pdo->query("SELECT 1 FROM prayer_requests LIMIT 1");
+} catch (PDOException $e) {
+    $tableExists = false;
+}
+
 // --- LÓGICA DE POST (CRUD) ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($tableExists && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'create':
-                $stmt = $pdo->prepare("INSERT INTO prayer_requests (user_id, title, description, category, is_urgent, is_anonymous, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
-                $stmt->execute([
-                    $userId,
-                    $_POST['title'],
-                    $_POST['description'],
-                    $_POST['category'],
-                    isset($_POST['is_urgent']) ? 1 : 0,
-                    isset($_POST['is_anonymous']) ? 1 : 0
-                ]);
-                header('Location: oracao.php?success=created');
-                exit;
+        try {
+            switch ($_POST['action']) {
+                case 'create':
+                    $stmt = $pdo->prepare("INSERT INTO prayer_requests (user_id, title, description, category, is_urgent, is_anonymous, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+                    $stmt->execute([
+                        $userId,
+                        $_POST['title'],
+                        $_POST['description'],
+                        $_POST['category'],
+                        isset($_POST['is_urgent']) ? 1 : 0,
+                        isset($_POST['is_anonymous']) ? 1 : 0
+                    ]);
+                    header('Location: oracao.php?success=created');
+                    exit;
 
-            case 'pray':
-                // Verificar se já orou
-                $check = $pdo->prepare("SELECT id FROM prayer_interactions WHERE prayer_id = ? AND user_id = ? AND type = 'pray'");
-                $check->execute([$_POST['prayer_id'], $userId]);
-                if (!$check->fetch()) {
-                    $stmt = $pdo->prepare("INSERT INTO prayer_interactions (prayer_id, user_id, type, created_at) VALUES (?, ?, 'pray', NOW())");
+                case 'pray':
+                    $check = $pdo->prepare("SELECT id FROM prayer_interactions WHERE prayer_id = ? AND user_id = ? AND type = 'pray'");
+                    $check->execute([$_POST['prayer_id'], $userId]);
+                    if (!$check->fetch()) {
+                        $stmt = $pdo->prepare("INSERT INTO prayer_interactions (prayer_id, user_id, type, created_at) VALUES (?, ?, 'pray', NOW())");
+                        $stmt->execute([$_POST['prayer_id'], $userId]);
+                        $pdo->prepare("UPDATE prayer_requests SET prayer_count = prayer_count + 1 WHERE id = ?")->execute([$_POST['prayer_id']]);
+                    }
+                    header('Location: oracao.php#prayer-' . $_POST['prayer_id']);
+                    exit;
+
+                case 'comment':
+                    $stmt = $pdo->prepare("INSERT INTO prayer_interactions (prayer_id, user_id, type, comment, created_at) VALUES (?, ?, 'comment', ?, NOW())");
+                    $stmt->execute([$_POST['prayer_id'], $userId, $_POST['comment']]);
+                    header('Location: oracao.php#prayer-' . $_POST['prayer_id']);
+                    exit;
+
+                case 'answered':
+                    $stmt = $pdo->prepare("UPDATE prayer_requests SET is_answered = 1, answered_at = NOW() WHERE id = ? AND user_id = ?");
                     $stmt->execute([$_POST['prayer_id'], $userId]);
-                    
-                    // Incrementar contador
-                    $pdo->prepare("UPDATE prayer_requests SET prayer_count = prayer_count + 1 WHERE id = ?")->execute([$_POST['prayer_id']]);
-                }
-                header('Location: oracao.php#prayer-' . $_POST['prayer_id']);
-                exit;
+                    header('Location: oracao.php?success=answered');
+                    exit;
 
-            case 'comment':
-                $stmt = $pdo->prepare("INSERT INTO prayer_interactions (prayer_id, user_id, type, comment, created_at) VALUES (?, ?, 'comment', ?, NOW())");
-                $stmt->execute([$_POST['prayer_id'], $userId, $_POST['comment']]);
-                header('Location: oracao.php#prayer-' . $_POST['prayer_id']);
-                exit;
-
-            case 'answered':
-                $stmt = $pdo->prepare("UPDATE prayer_requests SET is_answered = 1, answered_at = NOW() WHERE id = ? AND user_id = ?");
-                $stmt->execute([$_POST['prayer_id'], $userId]);
-                header('Location: oracao.php?success=answered');
-                exit;
-
-            case 'delete':
-                $stmt = $pdo->prepare("DELETE FROM prayer_requests WHERE id = ? AND user_id = ?");
-                $stmt->execute([$_POST['prayer_id'], $userId]);
-                header('Location: oracao.php?success=deleted');
-                exit;
+                case 'delete':
+                    $stmt = $pdo->prepare("DELETE FROM prayer_requests WHERE id = ? AND user_id = ?");
+                    $stmt->execute([$_POST['prayer_id'], $userId]);
+                    header('Location: oracao.php?success=deleted');
+                    exit;
+            }
+        } catch (PDOException $e) {
+            // Silently fail
         }
     }
 }
@@ -66,30 +75,37 @@ $filterCategory = $_GET['category'] ?? 'all';
 $showAnswered = isset($_GET['answered']) && $_GET['answered'] === '1';
 
 // Buscar pedidos
-$sql = "SELECT p.*, u.name as author_name, u.avatar as author_avatar,
-        (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'pray') as pray_count,
-        (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'comment') as comment_count
-        FROM prayer_requests p 
-        LEFT JOIN users u ON p.user_id = u.id 
-        WHERE 1=1";
-$params = [];
+$prayers = [];
+if ($tableExists) {
+    try {
+        $sql = "SELECT p.*, u.name as author_name, u.avatar as author_avatar,
+                (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'pray') as pray_count,
+                (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'comment') as comment_count
+                FROM prayer_requests p 
+                LEFT JOIN users u ON p.user_id = u.id 
+                WHERE 1=1";
+        $params = [];
 
-if ($showAnswered) {
-    $sql .= " AND p.is_answered = 1";
-} else {
-    $sql .= " AND p.is_answered = 0";
+        if ($showAnswered) {
+            $sql .= " AND p.is_answered = 1";
+        } else {
+            $sql .= " AND p.is_answered = 0";
+        }
+
+        if ($filterCategory !== 'all') {
+            $sql .= " AND p.category = ?";
+            $params[] = $filterCategory;
+        }
+
+        $sql .= " ORDER BY p.is_urgent DESC, p.created_at DESC";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        $prayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $prayers = [];
+    }
 }
-
-if ($filterCategory !== 'all') {
-    $sql .= " AND p.category = ?";
-    $params[] = $filterCategory;
-}
-
-$sql .= " ORDER BY p.is_urgent DESC, p.created_at DESC";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-$prayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Verificar se usuário já orou por cada pedido
 function userPrayed($pdo, $prayerId, $userId) {
@@ -319,7 +335,22 @@ renderAppHeader('Pedidos de Oração');
         </p>
     </div>
     
-    <!-- Filtros por Categoria -->
+    <?php if (!$tableExists): ?>
+    <!-- Setup Required Message -->
+    <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 16px; margin-bottom: 20px;">
+        <div style="background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <i data-lucide="database" style="color: #f59e0b; width: 30px; height: 30px;"></i>
+        </div>
+        <h3 style="color: #92400e; margin-bottom: 8px; font-weight: 700;">Configuração Necessária</h3>
+        <p style="color: #a16207; font-size: 0.9rem; max-width: 350px; margin: 0 auto 20px;">
+            Para usar o Mural de Oração, é necessário criar as tabelas no banco de dados.
+        </p>
+        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);">
+            <i data-lucide="settings" style="width: 18px;"></i>
+            Executar Setup
+        </a>
+    </div>
+    <?php else: ?>
     <div class="filter-tabs">
         <a href="?category=all" class="filter-tab <?= $filterCategory === 'all' ? 'active' : '' ?>">🙏 Todos</a>
         <a href="?category=health" class="filter-tab <?= $filterCategory === 'health' ? 'active' : '' ?>">❤️ Saúde</a>
@@ -504,6 +535,7 @@ renderAppHeader('Pedidos de Oração');
             </div>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
     
     <div style="height: 100px;"></div>
 </div>
