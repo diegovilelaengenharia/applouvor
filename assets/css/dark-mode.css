@@ -104,6 +104,22 @@ body.dark-mode .sidebar-header {
     border-bottom-color: var(--border-color);
 }
 
+body.dark-mode .logo-area {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .logo-area span {
+    color: var(--primary-green) !important;
+}
+
+body.dark-mode .logo-area img {
+    filter: brightness(0) invert(1);
+}
+
+body.dark-mode .sidebar-nav {
+    background: transparent;
+}
+
 body.dark-mode .nav-item {
     color: var(--text-secondary);
 }
@@ -116,6 +132,110 @@ body.dark-mode .nav-item:hover {
 body.dark-mode .nav-item.active {
     background: var(--primary-light);
     color: var(--primary-green-light);
+}
+
+body.dark-mode .nav-item svg {
+    color: var(--text-muted);
+}
+
+body.dark-mode .nav-item:hover svg {
+    color: var(--text-primary);
+}
+
+body.dark-mode .nav-item.active svg {
+    color: var(--primary-green-light) !important;
+}
+
+/* Sidebar specific nav items */
+body.dark-mode .nav-item.nav-primary:hover,
+body.dark-mode .nav-item.nav-primary.active {
+    background-color: var(--primary-light);
+    color: var(--primary-green-light);
+}
+
+body.dark-mode .nav-item.nav-emerald:hover,
+body.dark-mode .nav-item.nav-emerald.active {
+    background-color: var(--primary-light);
+    color: var(--primary-green-light);
+}
+
+body.dark-mode .nav-item.nav-spiritual:hover,
+body.dark-mode .nav-item.nav-spiritual.active {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+}
+
+body.dark-mode .nav-item.nav-communication:hover,
+body.dark-mode .nav-item.nav-communication.active {
+    background-color: #7c2d12;
+    color: #fed7aa;
+}
+
+body.dark-mode .nav-item.nav-communication.nav-pink:hover,
+body.dark-mode .nav-item.nav-communication.nav-pink.active {
+    background-color: #831843;
+    color: #fbcfe8;
+}
+
+body.dark-mode .nav-divider {
+    background: var(--border-color);
+}
+
+body.dark-mode .sidebar-text {
+    color: var(--text-muted);
+}
+
+/* Sidebar Footer */
+body.dark-mode .sidebar-footer {
+    background: var(--bg-tertiary);
+    border-top-color: var(--border-color);
+}
+
+body.dark-mode .user-profile-integrated {
+    color: var(--text-primary);
+}
+
+body.dark-mode .profile-link:hover {
+    background: var(--bg-primary);
+}
+
+body.dark-mode .user-avatar-compact {
+    border-color: var(--border-color);
+}
+
+body.dark-mode .u-name {
+    color: var(--text-primary);
+}
+
+body.dark-mode .u-role {
+    color: var(--text-muted);
+}
+
+body.dark-mode .action-icon-subtle {
+    color: var(--text-muted);
+}
+
+body.dark-mode .action-icon-subtle:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Sidebar Overlay */
+body.dark-mode .sidebar-overlay {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* Sidebar Scrollbar */
+body.dark-mode .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body.dark-mode .sidebar::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+body.dark-mode .sidebar:hover::-webkit-scrollbar-thumb {
+    background: var(--border-color);
 }
 
 /* Bottom Navigation */
@@ -730,7 +850,7 @@ body.dark-mode .fab {
     body.dark-mode .mobile-header {
         background: var(--bg-secondary);
     }
-    
+
     body.dark-mode #app-content {
         background: var(--bg-primary);
     }
@@ -742,6 +862,7 @@ body.dark-mode .fab {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
