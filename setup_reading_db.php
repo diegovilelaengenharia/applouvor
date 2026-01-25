@@ -1,6 +1,27 @@
-<?php
-// setup_reading_db.php
+// setup_reading_db.php - Setup protegido
+require_once 'includes/auth.php';
 require_once 'includes/db.php';
+require_once 'includes/layout.php';
+
+// Proteção: Apenas Admin
+checkAdmin();
+
+// Verificar se tabela já existe
+$tableExists = false;
+try {
+    $pdo->query("SELECT 1 FROM reading_progress LIMIT 1");
+    $tableExists = true;
+} catch (PDOException $e) {}
+
+if ($tableExists) {
+    echo "<div style='font-family:sans-serif; text-align:center; padding:50px;'>
+            <div style='font-size:3rem; margin-bottom:10px;'>✅</div>
+            <h2>Setup Já Realizado</h2>
+            <p>As tabelas de leitura bíblica já existem no banco de dados.</p>
+            <a href='admin/leitura.php' style='background:#3b82f6; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold;'>Voltar para Leitura</a>
+          </div>";
+    exit;
+}
 
 try {
     $pdo->exec("

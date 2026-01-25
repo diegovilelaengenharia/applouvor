@@ -1,0 +1,34 @@
+# ======================================
+# App Louvor - .gitignore
+# ======================================
+
+# Dependências
+/vendor/
+/node_modules/
+
+# Arquivos de configuração sensíveis
+# IMPORTANTE: config.php contém credenciais do banco
+# includes/config.php
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+error_log
+
+# Uploads de usuários (opcional - descomente se não quiser versionar)
+# assets/uploads/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.cache
