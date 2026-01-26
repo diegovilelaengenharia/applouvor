@@ -1,5 +1,7 @@
 // admin/js/escala_detalhe.js
 let editMode = false;
+let pendingMembers = new Set(); // IDs dos membros selecionados
+let pendingSongs = new Set();   // IDs das músicas selecionadas
 
 function openModal(id) {
     const el = document.getElementById(id);
@@ -30,6 +32,9 @@ function toggleEditMode() {
             viewMode.classList.add('view-mode-hidden');
             editModeEl.classList.remove('edit-mode-hidden');
 
+            // Inicializar sets com membros e músicas atuais
+            initializePendingData();
+
             // Mostrar botão Salvar
             if (saveBtn) {
                 saveBtn.style.display = 'flex';
@@ -41,7 +46,7 @@ function toggleEditMode() {
             editBtn.style.color = 'white';
             editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
         } else {
-            // Sair do modo edição
+            // Sair do modo edição (cancelar)
             viewMode.classList.remove('view-mode-hidden');
             editModeEl.classList.add('edit-mode-hidden');
 
@@ -66,6 +71,24 @@ function toggleEditMode() {
     }
 }
 
+function initializePendingData() {
+    // Inicializar com membros atuais
+    pendingMembers.clear();
+    document.querySelectorAll('[id^="member-chip-"]').forEach(chip => {
+        const userId = chip.id.replace('member-chip-', '');
+        pendingMembers.add(parseInt(userId));
+    });
+
+    // Inicializar com músicas atuais
+    pendingSongs.clear();
+    document.querySelectorAll('[id^="song-chip-"]').forEach(chip => {
+        const songId = chip.id.replace('song-chip-', '');
+        pendingSongs.add(parseInt(songId));
+    });
+
+    console.log('Dados inicializados:', { members: Array.from(pendingMembers), songs: Array.from(pendingSongs) });
+}
+
 function filterMembers() {
     const search = document.getElementById('searchMembers').value.toLowerCase();
     const items = document.querySelectorAll('.member-filter-item');
@@ -87,31 +110,37 @@ function filterSongs() {
 
 function toggleMember(userId, checkbox) {
     if (checkbox) {
+        // Modo modal
         const label = checkbox.closest('.member-filter-item');
         const userName = label.querySelector('div > div').textContent;
         const userInitial = userName.charAt(0).toUpperCase();
         const avatarColor = label.querySelector('div[style*="border-radius: 50%"]').style.background;
 
-        fetchAction('toggle_member', userId, () => {
-            if (checkbox.checked) {
-                label.style.borderColor = 'var(--primary)';
-                // Adicionar chip na lista de participantes
-                addMemberChip(userId, userName, userInitial, avatarColor);
-            } else {
-                label.style.borderColor = 'var(--border-color)';
-                // Remover chip da lista de participantes
-                removeMemberChip(userId);
-            }
-            updateMemberCount();
-        });
+        if (checkbox.checked) {
+            label.style.borderColor = 'var(--primary)';
+            pendingMembers.add(userId);
+            addMemberChip(userId, userName, userInitial, avatarColor);
+        } else {
+            label.style.borderColor = 'var(--border-color)';
+            pendingMembers.delete(userId);
+            removeMemberChip(userId);
+        }
+        updateMemberCount();
     } else {
         // Modo resumo (clique no X do chip)
-        fetchAction('toggle_member', userId, null);
+        pendingMembers.delete(userId);
+        updateMemberCount();
     }
 }
 
 function addMemberChip(userId, userName, userInitial, avatarColor) {
-    const container = document.querySelector('#edit-mode .edit-mode-hidden + div[style*="flex-wrap"]');
+    const editModeDiv = document.getElementById('edit-mode');
+    if (!editModeDiv) return;
+
+    const participantesCard = editModeDiv.querySelector('div[style*="background: var(--bg-surface)"]');
+    if (!participantesCard) return;
+
+    const container = participantesCard.querySelector('div[style*="flex-wrap"]');
     if (!container) return;
 
     // Verificar se já existe
@@ -137,37 +166,50 @@ function removeMemberChip(userId) {
 }
 
 function updateMemberCount() {
-    const count = document.querySelectorAll('[id^="member-chip-"]').length;
-    const badge = document.querySelector('#edit-mode h3 + span');
+    const count = pendingMembers.size;
+    const editModeDiv = document.getElementById('edit-mode');
+    if (!editModeDiv) return;
+
+    const participantesCard = editModeDiv.querySelector('div[style*="background: var(--bg-surface)"]');
+    if (!participantesCard) return;
+
+    const badge = participantesCard.querySelector('span[style*="border-radius: 20px"]');
     if (badge) badge.textContent = `${count} selecionados`;
 }
 
 function toggleSong(songId, checkbox) {
     if (checkbox) {
+        // Modo modal
         const label = checkbox.closest('.song-filter-item');
         const songTitle = label.querySelector('div > div:first-child').textContent;
         const songArtist = label.querySelector('div > div:last-child').textContent;
 
-        fetchAction('toggle_song', songId, () => {
-            if (checkbox.checked) {
-                label.style.borderColor = 'var(--primary)';
-                // Adicionar música na lista
-                addSongChip(songId, songTitle, songArtist);
-            } else {
-                label.style.borderColor = 'var(--border-color)';
-                // Remover música da lista
-                removeSongChip(songId);
-            }
-            updateSongCount();
-        });
+        if (checkbox.checked) {
+            label.style.borderColor = 'var(--primary)';
+            pendingSongs.add(songId);
+            addSongChip(songId, songTitle, songArtist);
+        } else {
+            label.style.borderColor = 'var(--border-color)';
+            pendingSongs.delete(songId);
+            removeSongChip(songId);
+        }
+        updateSongCount();
     } else {
         // Modo resumo (clique no X)
-        fetchAction('toggle_song', songId, null);
+        pendingSongs.delete(songId);
+        updateSongCount();
     }
 }
 
 function addSongChip(songId, songTitle, songArtist) {
-    const container = document.querySelector('#edit-mode > div:last-child > div[style*="flex-direction: column"]');
+    const editModeDiv = document.getElementById('edit-mode');
+    if (!editModeDiv) return;
+
+    const cards = editModeDiv.querySelectorAll('div[style*="background: var(--bg-surface)"]');
+    const repertorioCard = cards[cards.length - 1];
+    if (!repertorioCard) return;
+
+    const container = repertorioCard.querySelector('div[style*="flex-direction: column"]');
     if (!container) return;
 
     // Verificar se já existe
@@ -202,27 +244,51 @@ function removeSongChip(songId) {
 }
 
 function updateSongCount() {
-    const count = document.querySelectorAll('[id^="song-chip-"]').length;
-    const badge = document.querySelector('#edit-mode > div:last-child h3 + span');
+    const count = pendingSongs.size;
+    const editModeDiv = document.getElementById('edit-mode');
+    if (!editModeDiv) return;
+
+    const cards = editModeDiv.querySelectorAll('div[style*="background: var(--bg-surface)"]');
+    const repertorioCard = cards[cards.length - 1];
+    if (!repertorioCard) return;
+
+    const badge = repertorioCard.querySelector('span[style*="border-radius: 20px"]');
     if (badge) badge.textContent = `${count} selecionadas`;
 }
 
-function fetchAction(action, id, callback) {
-    const param = action === 'toggle_member' ? 'user_id' : 'song_id';
+function saveAllChanges() {
+    console.log('Salvando mudanças:', { members: Array.from(pendingMembers), songs: Array.from(pendingSongs) });
 
-    const formData = new URLSearchParams();
-    formData.append('ajax', '1');
-    formData.append('action', action);
-    formData.append(param, id);
+    // Criar formulário e enviar
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `escala_detalhe.php?id=${window.SCHEDULE_ID}`;
 
-    fetch('escala_detalhe.php?id=' + window.SCHEDULE_ID, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString()
-    })
-        .then(r => r.json())
-        .then(data => {
-            if (callback) callback();
-        })
-        .catch(err => console.error('Erro na requisição AJAX:', err));
+    // Adicionar membros
+    pendingMembers.forEach(userId => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'members[]';
+        input.value = userId;
+        form.appendChild(input);
+    });
+
+    // Adicionar músicas
+    pendingSongs.forEach(songId => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'songs[]';
+        input.value = songId;
+        form.appendChild(input);
+    });
+
+    // Adicionar flag de salvamento
+    const saveFlag = document.createElement('input');
+    saveFlag.type = 'hidden';
+    saveFlag.name = 'save_changes';
+    saveFlag.value = '1';
+    form.appendChild(saveFlag);
+
+    document.body.appendChild(form);
+    form.submit();
 }
