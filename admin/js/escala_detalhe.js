@@ -18,16 +18,21 @@ function toggleEditMode() {
         const editBtn = document.getElementById('editBtn');
         const viewMode = document.getElementById('view-mode');
         const editModeEl = document.getElementById('edit-mode');
-        
+        const saveBar = document.getElementById('save-changes-bar');
+
         if (!editBtn || !viewMode || !editModeEl) {
             console.error('Elementos UI críticos não encontrados');
             return;
         }
-        
+
         if (editMode) {
             viewMode.classList.add('view-mode-hidden');
             editModeEl.classList.remove('edit-mode-hidden');
-            
+            if (saveBar) {
+                saveBar.classList.remove('edit-mode-hidden');
+                saveBar.style.display = 'block';
+            }
+
             editBtn.style.background = '#ef4444';
             editBtn.style.borderColor = '#ef4444';
             editBtn.style.color = 'white';
@@ -35,15 +40,19 @@ function toggleEditMode() {
         } else {
             viewMode.classList.remove('view-mode-hidden');
             editModeEl.classList.add('edit-mode-hidden');
-            
+            if (saveBar) {
+                saveBar.classList.add('edit-mode-hidden');
+                saveBar.style.display = 'none';
+            }
+
             editBtn.style.background = 'var(--bg-body)';
             editBtn.style.borderColor = 'var(--border-color)';
             editBtn.style.color = 'var(--text-main)';
             editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
-            
+
             setTimeout(() => window.location.reload(), 50);
         }
-        
+
         if (typeof lucide !== 'undefined') lucide.createIcons();
     } catch (err) {
         console.error('Erro no toggleEditMode:', err);
@@ -74,8 +83,8 @@ function toggleMember(userId, checkbox) {
     if (checkbox) {
         const label = checkbox.closest('.member-filter-item');
         fetchAction('toggle_member', userId, () => {
-             if (checkbox.checked) label.style.borderColor = 'var(--primary)';
-             else label.style.borderColor = 'var(--border-color)';
+            if (checkbox.checked) label.style.borderColor = 'var(--primary)';
+            else label.style.borderColor = 'var(--border-color)';
         });
     } else {
         fetchAction('toggle_member', userId, null);
@@ -83,11 +92,11 @@ function toggleMember(userId, checkbox) {
 }
 
 function toggleSong(songId, checkbox) {
-     if (checkbox) {
+    if (checkbox) {
         const label = checkbox.closest('.song-filter-item');
         fetchAction('toggle_song', songId, () => {
-             if (checkbox.checked) label.style.borderColor = 'var(--primary)';
-             else label.style.borderColor = 'var(--border-color)';
+            if (checkbox.checked) label.style.borderColor = 'var(--primary)';
+            else label.style.borderColor = 'var(--border-color)';
         });
     } else {
         fetchAction('toggle_song', songId, null);
@@ -96,7 +105,7 @@ function toggleSong(songId, checkbox) {
 
 function fetchAction(action, id, callback) {
     const param = action === 'toggle_member' ? 'user_id' : 'song_id';
-    
+
     const formData = new URLSearchParams();
     formData.append('ajax', '1');
     formData.append('action', action);
@@ -104,12 +113,12 @@ function fetchAction(action, id, callback) {
 
     fetch('escala_detalhe.php?id=' + window.SCHEDULE_ID, {
         method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData.toString()
     })
-    .then(r => r.json())
-    .then(data => {
-        if (callback) callback();
-    })
-    .catch(err => console.error('Erro na requisição AJAX:', err));
+        .then(r => r.json())
+        .then(data => {
+            if (callback) callback();
+        })
+        .catch(err => console.error('Erro na requisição AJAX:', err));
 }
