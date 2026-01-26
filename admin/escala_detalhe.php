@@ -423,7 +423,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         </div>
 
         <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
-            <button onclick="closeModal('modal-members'); location.reload();" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
+            <button onclick="closeModal('modal-members')" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
         </div>
     </div>
 </div>
@@ -458,7 +458,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         </div>
 
         <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
-            <button onclick="closeModal('modal-songs'); location.reload();" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
+            <button onclick="closeModal('modal-songs')" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
         </div>
     </div>
 </div>
