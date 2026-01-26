@@ -452,6 +452,8 @@ function renderAppHeader($title, $backUrl = null)
                         </a>
                     <?php endif; ?>
 
+
+
                     <!-- L├¡der Button (Admin only) -->
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">

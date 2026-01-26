@@ -270,6 +270,72 @@ foreach($rows as $r) {
     }
 }
 
+// USER DATA & FAVORITE TIME STATS
+$stmtUser = $pdo->prepare("SELECT name, birth_date FROM users WHERE id = ?");
+$stmtUser->execute([$userId]);
+$userDataDB = $stmtUser->fetch(PDO::FETCH_ASSOC);
+$userName = $userDataDB['name'] ?? 'Usuário';
+$userBirthDate = $userDataDB['birth_date'] ?? null;
+
+// Calculate Favorite Time & Distributions
+// 3-hour intervals: 00-03, 03-06, 06-09, 09-12, 12-15, 15-18, 18-21, 21-00
+$timeSlots = [
+    '00h - 03h' => 0, '03h - 06h' => 0, '06h - 09h' => 0, '09h - 12h' => 0,
+    '12h - 15h' => 0, '15h - 18h' => 0, '18h - 21h' => 0, '21h - 00h' => 0
+];
+$weekdayStats = [0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0]; // 0=Dom, 6=Sab
+$mapWeekdays = [0=>'Dom', 1=>'Seg', 2=>'Ter', 3=>'Qua', 4=>'Qui', 5=>'Sex', 6=>'Sáb'];
+$hoursLog = [];
+
+foreach($rows as $r) {
+    if(!empty($r['completed_at'])) {
+        $timestamp = strtotime($r['completed_at']);
+        $h = (int)date('H', $timestamp);
+        $w = (int)date('w', $timestamp);
+        
+        // Time Slots (3h buckets)
+        if ($h < 3) $timeSlots['00h - 03h']++;
+        elseif ($h < 6) $timeSlots['03h - 06h']++;
+        elseif ($h < 9) $timeSlots['06h - 09h']++;
+        elseif ($h < 12) $timeSlots['09h - 12h']++;
+        elseif ($h < 15) $timeSlots['12h - 15h']++;
+        elseif ($h < 18) $timeSlots['15h - 18h']++;
+        elseif ($h < 21) $timeSlots['18h - 21h']++;
+        else $timeSlots['21h - 00h']++;
+        
+        // Weekday
+        $weekdayStats[$w]++;
+        
+        $hoursLog[] = $h;
+    }
+}
+
+// Find Max Favorite Time
+$favoriteTime = '';
+$maxCount = 0;
+foreach($timeSlots as $slot => $count) {
+    if($count > $maxCount) { $maxCount = $count; $favoriteTime = $slot; }
+}
+if($maxCount === 0) $favoriteTime = '---';
+
+// Prepare data for JS
+$jsTimeDist = [];
+$totalTimeReads = array_sum($timeSlots);
+foreach($timeSlots as $k=>$v) {
+    // Only include if count > 0 for display compacting
+    if($v > 0) {
+        $pct = $totalTimeReads > 0 ? round(($v/$totalTimeReads)*100) : 0;
+        $jsTimeDist[] = ['label'=>$k, 'count'=>$v, 'pct'=>$pct];
+    }
+}
+
+$jsWeekDist = [];
+$totalWeekReads = array_sum($weekdayStats);
+foreach($weekdayStats as $k=>$v) {
+    $pct = $totalWeekReads > 0 ? round(($v/$totalWeekReads)*100) : 0;
+    $jsWeekDist[] = ['label'=>$mapWeekdays[$k], 'count'=>$v, 'pct'=>$pct];
+}
+
 $completionPercent = min(100, round(($totalDaysRead / $totalPlanDays) * 100));
 
 // Streak & Motivation logic (Same as before)
@@ -336,7 +402,12 @@ $currentMessage = $motivationalMessages[0];
 foreach($motivationalMessages as $t => $msg) if($completionPercent >= $t) $currentMessage = $msg;
 
 // Render View
+// Render View
 renderAppHeader('Leitura Bíblica'); 
+
+
+
+
 renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 ?>
 
@@ -372,42 +443,43 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
     /* Modals & Utils */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    .config-fullscreen { position: fixed; inset: 0; background: #f8fafc; z-index: 99999; display: none; flex-direction: column; }
+    
+    /* MODAL CONFIG: Embedded Style */
+    .config-fullscreen { 
+        position: fixed; 
+        top: 0; bottom: 0; right: 0; left: 0; 
+        background: #f8fafc; 
+        z-index: 100; /* Lower than sidebar (usually > 100) check if needed, but sidebar takes space */
+        display: none; 
+        flex-direction: column; 
+    }
+    @media(min-width: 1024px) {
+        .config-fullscreen { left: 280px; } /* Respect Sidebar */
+    }
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-top: 1px solid #e5e7eb; padding: 10px; z-index: 200; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 800px; margin: 0 auto; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
     @media(min-width: 1024px) { .bottom-bar { left: 280px; } }
-    .action-btn { background: white; border: 1px solid #e5e7eb; padding: 10px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-    .icon-box { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
-    .icon-box.purple { background: #f3e8ff; color: #9333ea; } .icon-box.blue { background: #e0f2fe; color: #0284c7; }
+    
+    .action-btn {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.95rem;
+        cursor: pointer; transition: all 0.2s; width: 100%; text-decoration: none;
+    }
+    .action-btn:active { transform: scale(0.98); }
+    
+    .btn-orange-light {
+        background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;
+        box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.1), 0 2px 4px -1px rgba(234, 88, 12, 0.06);
+    }
+    .btn-orange-light:hover { background: #ffedd5; border-color: #fdba74; }
+
+    .btn-blue-light {
+        background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
+    }
+    .btn-blue-light:hover { background: #dbeafe; border-color: #93c5fd; }
 </style>
 
-<!-- HEADER STATS -->
-<div style="background: white; border-bottom: 1px solid #e5e7eb; padding: 12px 16px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div>
-                <div style="font-size:1rem; font-weight:800; color:#1f2937;">
-                    <span style="color:#059669"><?= $totalDaysRead ?></span><span style="color:#9ca3af; font-size:0.8rem">/<?= $totalPlanDays ?></span>
-                </div>
-                <div style="font-size:0.65rem; color:#6b7280; font-weight:700; text-transform:uppercase;">Dias</div>
-            </div>
-            <div style="border-left: 2px solid #e5e7eb; padding-left: 16px;">
-                 <div style="font-size:1rem; font-weight:800; color:#10b981"><?= $totalChaptersRead ?></div>
-                 <div style="font-size:0.65rem; color:#6b7280; font-weight:700; text-transform:uppercase;">Caps</div>
-            </div>
-            <div style="border-left: 2px solid #e5e7eb; padding-left: 16px;">
-                 <div style="font-size:1rem; font-weight:800; color:#ea580c">🔥 <?= $currentStreak ?></div>
-                 <div style="font-size:0.65rem; color:#6b7280; font-weight:700; text-transform:uppercase;">Streak</div>
-            </div>
-        </div>
-        <button onclick="document.getElementById('modal-stats').style.display='flex'" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed); color:white; border:none; width:48px; height:48px; border-radius:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(124,58,237,0.3);">
-            <i data-lucide="bar-chart-2" width="20"></i>
-        </button>
-    </div>
-    <!-- Progress Bar -->
-    <div style="height: 6px; background: #f3f4f6; width: 100%; border-radius: 10px; overflow: hidden; position: relative;">
-        <div style="height: 100%; background: #10b981; width: <?= $completionPercent ?>%; border-radius: 10px; transition: width 0.5s ease;"></div>
-    </div>
-</div>
+
 
 <!-- CALENDAR STRIP -->
 <div style="position: relative; background: white; border-bottom: 1px solid #e5e7eb;">
@@ -418,21 +490,30 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <!-- MAIN CONTENT -->
 <div style="max-width: 800px; margin: 0 auto; padding: 16px;">
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-        <div>
-            <div style="font-size: 0.7rem; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Leitura de Hoje</div>
-            <h1 id="day-title" style="margin: 0; font-size: 1.4rem; font-weight: 800; color: #111827;">Carregando...</h1>
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+
+
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Leitura de Hoje</div>
+                <h1 id="day-title" style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #111827; letter-spacing: -0.5px;">Carregando...</h1>
+            </div>
+            <div id="status-badge-container"></div>
         </div>
-        <div id="status-badge-container"></div>
     </div>
     
     <div id="verses-list"></div>
 </div>
 
 <!-- BOTTOM BAR -->
+<!-- BOTTOM BAR -->
 <div class="bottom-bar">
-    <button class="action-btn" onclick="openNoteModal()"><div class="icon-box purple"><i data-lucide="pen-line" width="18"></i></div><span style="font-size:0.7rem; font-weight:600; color:#374151">Anotação</span></button>
-    <button class="action-btn" onclick="openConfig()"><div class="icon-box blue"><i data-lucide="settings" width="18"></i></div><span style="font-size:0.7rem; font-weight:600; color:#374151">Opções</span></button>
+    <button class="action-btn btn-orange-light" onclick="openNoteModal()">
+        <i data-lucide="pen-line" width="18"></i> Anotar
+    </button>
+    <button class="action-btn btn-blue-light" onclick="openConfig('diario')">
+        <i data-lucide="book" width="18"></i> Meu Diário
+    </button>
 </div>
 <div id="save-toast" style="position:fixed; top:90px; left:50%; transform:translateX(-50%); background:#1e293b; color:white; padding:8px 16px; border-radius:20px; opacity:0; pointer-events:none; z-index:2000; transition:opacity 0.3s; display:flex; align-items:center; gap:8px;"><i data-lucide="check" width="14"></i> Salvo auto</div>
 
@@ -547,7 +628,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <div 
                     id="note-desc-input" 
                     contenteditable="true" 
-                    style="width: 100%; min-height: 180px; max-height: 300px; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:0.95rem; line-height:1.6; color:#334155;"
+                    style="width: 100%; min-height: 120px; max-height: 60vh; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:0.95rem; line-height:1.6; color:#334155;"
                     data-placeholder="Digite aqui... Use a barra de ferramentas para formatar o texto."
                 ></div>
             </div>
@@ -619,127 +700,39 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 </div>
 
 
-<!-- STATS DASHBOARD MODAL -->
-<div id="modal-stats" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'">
-    <div style="background: white; width: 95%; max-width: 650px; border-radius: 20px; padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
-        <!-- Header -->
-        <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fff;">
-            <div>
-                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #111827;">Meu Progresso</h2>
-                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #6b7280;"><?= $selectedPlanType == 'chronological' ? 'Plano Cronológico' : ($selectedPlanType == 'mcheyne' ? 'Plano M\'Cheyne' : 'Plano Navigators') ?></p>
-            </div>
-            <button onclick="document.getElementById('modal-stats').style.display='none'" style="border: none; background: #f3f4f6; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #4b5563;">
-                <i data-lucide="x" width="20"></i>
-            </button>
-        </div>
 
-        <div style="overflow-y: auto; padding: 24px;">
-            <!-- Motivation Banner -->
-            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 16px; color: white; margin-bottom: 24px; position: relative; overflow: hidden;">
-                <div style="position: absolute; right: -10px; top: -10px; opacity: 0.2; transform: rotate(15deg);">
-                    <i data-lucide="trophy" width="100" height="100"></i>
-                </div>
-                <p style="margin: 0; font-weight: 600; font-size: 0.95rem; opacity: 0.9; margin-bottom: 8px;">Mensagem do Dia</p>
-                <p style="margin: 0; font-size: 1.1rem; font-weight: 700; line-height: 1.4;">"<?= $currentMessage ?>"</p>
-            </div>
-
-            <!-- Main Metrics Grid -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                <!-- Completion Card -->
-                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                    <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center;">
-                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e5e7eb" stroke-width="3.8" />
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#6366f1" stroke-width="3.8" stroke-dasharray="<?= $completionPercent ?>, 100" style="transition: stroke-dasharray 1s ease 0s;" />
-                        </svg>
-                        <div style="position: absolute; font-weight: 800; font-size: 1.2rem; color: #1f2937;"><?= $completionPercent ?>%</div>
-                    </div>
-                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Concluído</div>
-                </div>
-
-                <!-- Streak Card -->
-                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                    <div style="background: #fff7ed; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ea580c; margin-bottom: 12px;">
-                        <i data-lucide="flame" width="24"></i>
-                    </div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: #ea580c; line-height: 1;"><?= $currentStreak ?></div>
-                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280; margin-bottom: 4px;">Dias Seguidos</div>
-                    <div style="font-size: 0.7rem; color: #9ca3af;">Recorde: <span style="font-weight: 700; color: #ea580c;"><?= $bestStreak ?></span></div>
-                </div>
-
-                <!-- Pace Card -->
-                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                    <div style="background: #ecfdf5; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
-                        <i data-lucide="book-open" width="24"></i>
-                    </div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: #059669; line-height: 1;"><?= $avgChapters ?></div>
-                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (Média)</div>
-                </div>
-            </div>
-
-            <!-- Activity Chart (Last 7 Days) -->
-            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
-                <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="bar-chart-2" width="16"></i> Atividade (Últimos 7 Dias)
-                </h4>
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 120px; gap: 8px;">
-                    <?php 
-                    $maxVal = 0; foreach($activityChart as $d) $maxVal = max($maxVal, $d['count']);
-                    $maxVal = max($maxVal, 5); // Minimum scale
-                    foreach($activityChart as $day): 
-                        $h = ($day['count'] / $maxVal) * 100;
-                        $color = $day['count'] > 0 ? '#6366f1' : '#f1f5f9';
-                    ?>
-                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                        <div style="width: 100%; background: #f1f5f9; border-radius: 6px; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden;">
-                            <div style="width: 100%; height: <?= $h ?>%; background: <?= $color ?>; border-radius: 6px; transition: height 0.5s;"></div>
-                        </div>
-                        <span style="font-size: 0.7rem; font-weight: 600; color: #6b7280;"><?= $day['label'] ?></span>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <!-- Detailed Stats Table -->
-            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
-                <div style="padding: 16px 20px; border-bottom: 1px solid #f3f4f6; font-weight: 700; font-size: 0.9rem; color: #374151;">Detalhes da Jornada</div>
-                <div style="padding: 0 20px;">
-                    <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
-                        <span style="color: #6b7280; font-size: 0.9rem;">Dias Restantes</span>
-                        <span style="font-weight: 600; color: #111827;"><?= $daysRemaining ?></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
-                        <span style="color: #6b7280; font-size: 0.9rem;">Total Lido</span>
-                        <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> capítulos</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 14px 0;">
-                        <span style="color: #6b7280; font-size: 0.9rem;">Previsão de Término</span>
-                        <span style="font-weight: 700; color: #6366f1;"><?= $estimatedFinishDate ? $estimatedFinishDate : '---' ?></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- CONFIG MODAL WITH TABS -->
 <div id="modal-config" class="config-fullscreen">
     <div class="config-header" style="background: white; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin:0; font-size: 1.25rem; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="settings" width="24"></i> Configurações
-        </h2>
-        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer; color: #6b7280; padding: 4px;">
-            <i data-lucide="x" width="24"></i>
-        </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background: #f3f4f6; color: #374151; width: 32px; height: 32px; border-radius: 8px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="chevron-left" width="20"></i>
+            </button>
+            <h2 style="margin:0; font-size: 1.25rem; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
+                Configurações
+            </h2>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="window.location.reload()" style="border:none; background: #f3f4f6; color: #374151; padding: 8px 12px; border-radius: 8px; cursor:pointer; display:flex; align-items:center; gap: 6px; font-size: 0.85rem; font-weight: 600;">
+                <i data-lucide="refresh-cw" width="16"></i> Atualizar
+            </button>
+            <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer; color: #6b7280; padding: 4px;">
+                <i data-lucide="x" width="24"></i>
+            </button>
+        </div>
     </div>
     
     <!-- Tabs -->
-    <div class="config-tabs" style="display: flex; background: white; border-bottom: 1px solid #e5e7eb; padding: 0 20px;">
-        <div class="tab-btn active" onclick="switchConfigTab('geral')" id="tab-geral" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s;">
+    <div class="config-tabs" style="display: flex; background: white; border-bottom: 1px solid #e5e7eb; padding: 0 20px; overflow-x: auto;">
+        <div class="tab-btn active" onclick="switchConfigTab('geral')" id="tab-geral" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
             <i data-lucide="sliders" width="16" style="display: inline; margin-right: 6px;"></i> Geral
         </div>
-        <div class="tab-btn" onclick="switchConfigTab('diario')" id="tab-diario" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s;">
+        <div class="tab-btn" onclick="switchConfigTab('estatisticas')" id="tab-estatisticas" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+            <i data-lucide="bar-chart-2" width="16" style="display: inline; margin-right: 6px;"></i> Estatísticas
+        </div>
+        <div class="tab-btn" onclick="switchConfigTab('diario')" id="tab-diario" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
             <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Meu Diário
         </div>
     </div>
@@ -770,6 +763,150 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <button onclick="resetPlan()" style="width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
             <i data-lucide="trash-2" width="16" style="display: inline; vertical-align: middle; margin-right: 6px;"></i> Resetar Todo Progresso
         </button>
+    </div>
+
+    <!-- TAB: ESTATÍSTICAS -->
+    <div id="content-estatisticas" class="config-content" style="display:none; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
+        <!-- Reports Section -->
+        <div style="margin-bottom: 24px; display: flex; justify-content: flex-end;">
+            <button onclick="exportDiary('pdf')" style="padding: 10px 16px; background: white; color: #374151; border: 1px solid #d1d5db; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                <i data-lucide="file-text" width="16"></i> Baixar Relatório Completo
+            </button>
+        </div>
+
+        <!-- Motivation Banner -->
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 16px; color: white; margin-bottom: 24px; position: relative; overflow: hidden;">
+            <div style="position: absolute; right: -10px; top: -10px; opacity: 0.2; transform: rotate(15deg);">
+                <i data-lucide="trophy" width="100" height="100"></i>
+            </div>
+            <p style="margin: 0; font-weight: 600; font-size: 0.95rem; opacity: 0.9; margin-bottom: 8px;">Mensagem do Dia</p>
+            <p style="margin: 0; font-size: 1.1rem; font-weight: 700; line-height: 1.4;">"<?= $currentMessage ?>"</p>
+        </div>
+
+        <!-- Main Metrics Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <!-- Completion Card -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e5e7eb" stroke-width="3.8" />
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#6366f1" stroke-width="3.8" stroke-dasharray="<?= $completionPercent ?>, 100" style="transition: stroke-dasharray 1s ease 0s;" />
+                    </svg>
+                    <div style="position: absolute; font-weight: 800; font-size: 1.2rem; color: #1f2937;"><?= $completionPercent ?>%</div>
+                </div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Concluído</div>
+            </div>
+
+            <!-- Streak Card -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                <div style="background: #fff7ed; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ea580c; margin-bottom: 12px;">
+                    <i data-lucide="flame" width="24"></i>
+                </div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #ea580c; line-height: 1;"><?= $currentStreak ?></div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280; margin-bottom: 4px;">Dias Seguidos</div>
+                <div style="font-size: 0.7rem; color: #9ca3af;">Recorde: <span style="font-weight: 700; color: #ea580c;"><?= $bestStreak ?></span></div>
+            </div>
+
+            <!-- Pace Card -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                <div style="background: #ecfdf5; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
+                    <i data-lucide="book-open" width="24"></i>
+                </div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #059669; line-height: 1;"><?= $avgChapters ?></div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (Média)</div>
+            </div>
+        </div>
+
+        <!-- HABIT ANALYSIS CHARTS -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <!-- Weekday Distribution -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="calendar-check" width="16"></i> Frequência Semanal
+                </h4>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100px; gap: 6px;">
+                    <?php foreach($jsWeekDist as $wd): 
+                        $h = max(10, $wd['pct']); 
+                        $bg = $wd['pct'] > 0 ? '#8b5cf6' : '#f1f5f9';
+                        $txt = $wd['pct'] > 0 ? '#4c1d95' : '#94a3b8';
+                    ?>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                        <input type="hidden" value="<?= $wd['count'] ?> leituras">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: flex-end;">
+                             <div style="width: 100%; height: <?= $h ?>%; background: <?= $bg ?>; border-radius: 4px; transition: height 0.3s; position: relative;"></div>
+                        </div>
+                        <span style="font-size: 0.65rem; font-weight: 700; color: <?= $txt ?>;"><?= substr($wd['label'],0,3) ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            
+            <!-- Time Distribution -->
+             <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="clock" width="16"></i> Horários Preferidos
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <?php foreach($jsTimeDist as $td): 
+                         if($td['pct'] == 0 && $totalTimeReads > 0) continue; // Skip empty if we have data
+                         $w = max(5, $td['pct']);
+                    ?>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="width: 70px; font-size: 0.75rem; font-weight: 600; color: #64748b;"><?= $td['label'] ?></span>
+                        <div style="flex: 1; height: 24px; background: #f1f5f9; border-radius: 6px; overflow: hidden; position: relative;">
+                            <div style="width: <?= $w ?>%; height: 100%; background: #10b981; border-radius: 6px;"></div>
+                        </div>
+                        <span style="width: 30px; font-size: 0.75rem; font-weight: 700; color: #111827; text-align: right;"><?= $td['count'] ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                    <?php if($totalTimeReads == 0): ?>
+                        <div style="text-align: center; color: #94a3b8; font-size: 0.8rem; padding: 10px;">Sem dados ainda</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Chart (Last 7 Days) -->
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+            <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="bar-chart-2" width="16"></i> Atividade (Últimos 7 Dias)
+            </h4>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 120px; gap: 8px;">
+                <?php 
+                $maxVal = 0; foreach($activityChart as $d) $maxVal = max($maxVal, $d['count']);
+                $maxVal = max($maxVal, 5); // Minimum scale
+                foreach($activityChart as $day): 
+                    $h = ($day['count'] / $maxVal) * 100;
+                    $color = $day['count'] > 0 ? '#6366f1' : '#f1f5f9';
+                ?>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <div style="width: 100%; background: #f1f5f9; border-radius: 6px; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden;">
+                        <div style="width: 100%; height: <?= $h ?>%; background: <?= $color ?>; border-radius: 6px; transition: height 0.5s;"></div>
+                    </div>
+                    <span style="font-size: 0.7rem; font-weight: 600; color: #6b7280;"><?= $day['label'] ?></span>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Detailed Stats Table -->
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid #f3f4f6; font-weight: 700; font-size: 0.9rem; color: #374151;">Detalhes da Jornada</div>
+            <div style="padding: 0 20px;">
+                <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
+                    <span style="color: #6b7280; font-size: 0.9rem;">Dias Restantes</span>
+                    <span style="font-weight: 600; color: #111827;"><?= $daysRemaining ?></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
+                    <span style="color: #6b7280; font-size: 0.9rem;">Total Lido</span>
+                    <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> capítulos</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 14px 0;">
+                    <span style="color: #6b7280; font-size: 0.9rem;">Previsão de Término</span>
+                    <span style="font-weight: 700; color: #6366f1;"><?= $estimatedFinishDate ? $estimatedFinishDate : '---' ?></span>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- TAB: MEU DIÁRIO -->
@@ -817,10 +954,17 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; border-radius: 2px;
             }
             
-            .group-header { position: relative; padding: 20px 0 10px 0; background: #f8fafc; z-index: 1; }
+            .group-header { 
+                position: relative; padding: 20px 0 10px 0; background: #f8fafc; z-index: 1; cursor: pointer; user-select: none;
+                transition: opacity 0.2s;
+            }
+            .group-header:hover { opacity: 0.8; }
+            .group-header .toggle-icon { transition: transform 0.3s; }
+            .group-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+            
             .month-label { 
                 font-size: 1.2rem; font-weight: 800; color: #1e293b; text-transform: capitalize; 
-                display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+                display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;
             }
             .week-label {
                 font-size: 0.85rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px;
@@ -876,26 +1020,43 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 $mLabel = $monthsPT[(int)$d->format('n')] . ' ' . $d->format('Y');
                 $wLabel = 'Semana ' . $d->format('W');
                 
-                if($mLabel !== $currentMonthLabel || $wLabel !== $currentWeekLabel):
-                    if($mLabel !== $currentMonthLabel): ?>
-                        <div class="group-header">
-                            <div class="month-label"><i data-lucide="calendar" width="20" style="color:#6366f1;"></i> <?= $mLabel ?></div>
-                            <div class="week-label"><?= $wLabel ?></div>
+                // MONTH HEADER
+                if($mLabel !== $currentMonthLabel): ?>
+                    <div class="group-header month-header" onclick="toggleGroup(this, 'month')" style="padding-top:24px; padding-bottom:12px; border-bottom:1px solid #e2e8f0; margin-bottom:12px;">
+                        <div class="month-label" style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                            <div style="display:flex; align-items:center; gap:8px; font-size:1.1rem; font-weight:800; color:#1e293b;">
+                                <i data-lucide="calendar" width="20" style="color:#6366f1;"></i> <?= $mLabel ?>
+                            </div>
+                            <i data-lucide="chevron-down" class="toggle-icon" width="20" style="color:#94a3b8;"></i>
                         </div>
-                    <?php elseif($wLabel !== $currentWeekLabel): ?>
-                         <div class="group-header">
-                            <div class="week-label" style="padding-top:10px;"><?= $wLabel ?></div>
-                        </div>
-                    <?php endif;
+                    </div>
+                <?php 
                     $currentMonthLabel = $mLabel;
+                    $currentWeekLabel = ''; // Reset week label on new month
+                endif; 
+                
+                // WEEK HEADER
+                if($wLabel !== $currentWeekLabel): ?>
+                    <div class="group-header week-header" onclick="toggleGroup(this, 'week')" style="margin-left:8px; padding:10px 0; cursor:pointer; display:flex; align-items:center; gap:8px;">
+                        <div class="week-label" style="margin:0; font-size:0.85rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;"><?= $wLabel ?></div>
+                         <i data-lucide="chevron-down" class="toggle-icon" width="14" style="color:#cbd5e1;"></i>
+                    </div>
+                <?php 
                     $currentWeekLabel = $wLabel;
-                endif;
-            ?>
+                endif; 
+                ?>
+                
             <div class="diary-card" data-search-content="<?= strtolower(htmlspecialchars($rep['title'] ?? '') . ' ' . strip_tags($rep['comment'] ?? '') . ' ' . date('d/m/Y', strtotime($rep['date']))) ?>">
-                <div class="diary-date">
-                    <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \à\s H:i') ?>
-                     <span style="width: 4px; height: 4px; background: #cbd5e1; border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
-                     Dia <?= $rep['d'] ?>
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <div class="diary-date">
+                        <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \à\s H:i') ?>
+                         <span style="width: 4px; height: 4px; background: #cbd5e1; border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
+                         Dia <?= $rep['d'] ?>
+                    </div>
+                    
+                    <button onclick="shareEntry('<?= addslashes($rep['title']??'Leitura do Dia') ?>', '<?= $d->format('d/m/Y') ?>', `<?= addslashes(str_replace(["\r", "\n"], ' ', strip_tags($rep['comment'] ?? ''))) ?>`)" class="ripple" style="background:transparent; border:none; cursor:pointer; padding:8px; border-radius:50%; color:#6b7280; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" title="Compartilhar">
+                        <i data-lucide="share-2" width="18"></i>
+                    </button>
                 </div>
                 
                 <?php if($rep['title']): ?>
@@ -920,7 +1081,17 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 // --- FRONTEND LOGIC ---
 const serverData = <?= json_encode($progressMap) ?>;
 const planType = "<?= $selectedPlanType ?>";
-const startDateStr = "<?= $startDateStr ?>"; // e.g., "2026-01-26"
+const startDateStr = "<?= $startDateStr ?>"; 
+const userData = {
+    name: "<?= addslashes($userName) ?>",
+    birthDate: "<?= $userBirthDate ?>",
+    favoriteTime: "<?= $favoriteTime ?>"
+};
+const statsData = {
+    week: <?= json_encode($jsWeekDist) ?>,
+    time: <?= json_encode($jsTimeDist) ?>
+};
+
 // Initial State
 let currentMonth = <?= $currentPlanMonth ?>;
 let currentDay = <?= $currentPlanDay ?>;
@@ -1039,7 +1210,24 @@ function renderCalendar() {
 }
 
 function loadDay(m, d) {
-    document.getElementById('day-title').innerText = `Dia ${d} de ${getMonthName(m)}`;
+    // GENERIC TITLE: "Dia X" or "Leitura do Dia X"
+    // We can try to calculate the absolute day if generic, or just stick to m/d
+    let displayTitle = '';
+    
+    if (planType === 'navigators') {
+        const absoluteDay = ((m-1)*25) + d;
+        displayTitle = `Dia ${absoluteDay}`;
+    } else {
+        // For 365 days, we can try to find the absolute day or just "Dia d do Mês m"
+        // User requested generic. "Dia X" is best.
+        let absoluteDay = 0;
+        for(let i=1; i<m; i++) absoluteDay += monthDaysRef[i];
+        absoluteDay += d;
+        displayTitle = `Dia ${absoluteDay}`;
+    }
+    
+    document.getElementById('day-title').innerText = displayTitle;
+    
     const list = document.getElementById('verses-list');
     const badge = document.getElementById('status-badge-container');
     list.innerHTML = '';
@@ -1147,7 +1335,58 @@ function getMonthName(m) {
 }
 
 // Settings & Notes Functions
-function openConfig() { document.getElementById('modal-config').style.display = 'flex'; }
+function openConfig(defaultTab = 'geral') { 
+    document.getElementById('modal-config').style.display = 'flex';
+    switchConfigTab(defaultTab);
+}
+
+// Collapsible Logic
+function toggleGroup(header, type) {
+    header.classList.toggle('collapsed');
+    let content = header.nextElementSibling;
+    
+    // Determine loop condition based on type
+    // If Month: stop at next Month Header
+    // If Week: stop at next Week Header OR Month Header
+    
+    while(content) {
+        if(type === 'month') {
+            if(content.classList.contains('month-header')) break; // Stop at next month
+            
+            // Toggle EVERYTHING inside the month
+            if(header.classList.contains('collapsed')) {
+                // Save state? No, simply hide everything
+                content.setAttribute('data-visible-state', content.style.display);
+                content.style.display = 'none';
+            } else {
+                // Restore? Or just Block?
+                // If we want to restore exact state, we need to check sub-headers.
+                // Simple approach: Show all headers. Show Cards IF their parent week is not collapsed.
+                // BUT, week headers themselves might be collapsed.
+                
+                // Let's simplified approach: When expanding Month, expand EVERYTHING? 
+                // Or respect collapsed weeks?
+                // Hard to respect collapsed weeks in a flat list without saving state on every element.
+                
+                // Reset to visible standard
+                if(content.classList.contains('week-header') || content.classList.contains('diary-card')) {
+                     content.style.display = 'block';
+                     content.classList.remove('collapsed'); // Expand weeks too for simplicity
+                }
+            }
+        } 
+        else if(type === 'week') {
+            if(content.classList.contains('week-header') || content.classList.contains('month-header')) break;
+            
+            // Toggle only cards in this week
+            if(content.classList.contains('diary-card')) {
+                content.style.display = header.classList.contains('collapsed') ? 'none' : 'block';
+            }
+        }
+        
+        content = content.nextElementSibling;
+    }
+}
 
 // Rich Text Editor Functions
 function formatText(command) {
@@ -1307,13 +1546,31 @@ function filterDiary() {
     });
 }
 
+// --- SHARING FUNCTIONALITY ---
+async function shareEntry(title, dateStr, content) {
+    const tempDiv = document.createElement("div"); tempDiv.innerHTML = content;
+    const cleanContent = tempDiv.innerText;
+    const shareText = `📅 *Diário de Leitura*\n🗓️ ${dateStr}\n\n📖 *${title}*\n"${cleanContent}"\n\n_Compartilhado via App Louvor PIB_`;
+
+    if (navigator.share) {
+        try { await navigator.share({ title: 'Diário de Leitura', text: shareText }); } catch (err) { console.log('Error sharing:', err); }
+    } else {
+        navigator.clipboard.writeText(shareText).then(() => {
+            const toast = document.getElementById('save-toast');
+            toast.innerHTML = '<i data-lucide="copy" width="14"></i> Copiado para área de transferência!';
+            toast.style.opacity = 1;
+            setTimeout(() => toast.style.opacity = 0, 3000);
+        });
+    }
+}
+
 // Export Diary Function
 function exportDiary(format) {
     // Close menu
     document.getElementById('export-menu').style.display = 'none';
     
     // Get all diary entries
-    const entries = document.querySelectorAll('.diary-entry');
+    const entries = document.querySelectorAll('.diary-card');
     if (entries.length === 0) {
         alert('Nenhuma anotação para exportar.');
         return;
@@ -1322,9 +1579,9 @@ function exportDiary(format) {
     const dateStr = new Date().toISOString().split('T')[0];
     
     if (format === 'word') {
-        exportAsWord(entries, dateStr);
+        exportAsWordNew(entries, dateStr);
     } else if (format === 'pdf') {
-        exportAsPDF(entries, dateStr);
+        exportAsPDFNew(entries, dateStr);
     }
 }
 
@@ -1483,6 +1740,120 @@ function showExportSuccess(format) {
         setTimeout(() => toast.innerHTML = '<i data-lucide="check" width="14"></i> Salvo auto', 300);
     }, 2500);
     lucide.createIcons();
+}
+
+
+function getExportStyles() {
+    return `
+    <style>
+        @page { size: A4; margin: 25mm 20mm; }
+        body { font-family: 'Times New Roman', Times, serif; color: #111; line-height: 1.5; font-size: 11pt; }
+        .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 30px; }
+        .church-name { font-size: 10pt; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 5px; }
+        .doc-title { font-size: 24pt; font-weight: bold; color: #000; margin: 0; }
+        .user-info { margin-bottom: 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
+        .user-detail { font-size: 12pt; }
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #eee; }
+        .stat-item { text-align: center; }
+        .stat-val { font-size: 18pt; font-weight: bold; color: #333; }
+        .stat-lbl { font-size: 8pt; text-transform: uppercase; color: #666; letter-spacing: 0.5px; margin-top: 5px; }
+        .entry { margin-bottom: 25px; page-break-inside: avoid; border-left: 3px solid #eee; padding-left: 15px; }
+        .entry-meta { font-size: 10pt; color: #666; margin-bottom: 5px; font-style: italic; display: flex; justify-content: space-between; }
+        .entry-title { font-size: 14pt; font-weight: bold; color: #000; margin-bottom: 8px; }
+        .entry-content { text-align: justify; white-space: pre-wrap; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 8pt; text-align: center; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>`;
+}
+
+function exportAsWordNew(entries, dateStr) {
+    let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
+    html += '<head><meta charset="utf-8"><title>Diário de Leitura Bíblica</title>' + getExportStyles() + '</head><body>';
+    
+    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Diário de Leitura Bíblica</h1></div>';
+    
+    const age = userData.birthDate ? new Date().getFullYear() - new Date(userData.birthDate).getFullYear() : '---';
+    const birthFormatted = userData.birthDate ? new Date(userData.birthDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '---';
+    
+    html += `<div class="user-info">
+        <div class="user-detail"><strong>Nome:</strong> ${userData.name}</div>
+        <div class="user-detail"><strong>Nascimento:</strong> ${birthFormatted} (${age} anos)</div>
+        <div class="user-detail"><strong>Gerado em:</strong> ${new Date().toLocaleDateString('pt-BR')}</div>
+    </div>`;
+    
+    html += `<div class="stats-grid">
+        <div class="stat-item"><div class="stat-val"><?= $totalDaysRead ?></div><div class="stat-lbl">Dias</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Capítulos</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Sequência</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Concluído</div></div>
+        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Horário Fav.</div></div>
+    </div>`;
+    
+    entries.forEach(entry => {
+        const dateTxt = entry.querySelector('.diary-date').textContent.trim(); 
+        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem título';
+        const content = entry.querySelector('.diary-content') ? entry.querySelector('.diary-content').innerHTML : '';
+        html += `<div class="entry"><div class="entry-meta">${dateTxt}</div><div class="entry-title">${title}</div><div class="entry-content">${content}</div></div>`;
+    });
+    
+    html += '</body></html>';
+    const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `Diario_Leitura_${userData.name.replace(/\s+/g,'_')}_${dateStr}.doc`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    showExportSuccess('Word');
+}
+
+function exportAsPDFNew(entries, dateStr) {
+    let w = window.open('', '_blank');
+    let html = '<html><head><meta charset="utf-8"><title>Diário PDF</title>' + getExportStyles() + '</head><body>';
+    
+    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Diário de Leitura Bíblica</h1></div>';
+    
+    const age = userData.birthDate ? new Date().getFullYear() - new Date(userData.birthDate).getFullYear() : '---';
+    const birthFormatted = userData.birthDate ? new Date(userData.birthDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '---';
+    
+    html += `<div class="user-info">
+        <div class="user-detail"><strong>Nome:</strong> ${userData.name}</div>
+        <div class="user-detail"><strong>Nascimento:</strong> ${birthFormatted} (${age} anos)</div>
+        <div class="user-detail"><strong>Plano:</strong> ${planType.charAt(0).toUpperCase() + planType.slice(1)}</div>
+    </div>`;
+    
+    html += `<div class="stats-grid">
+        <div class="stat-item"><div class="stat-val"><?= $totalDaysRead ?></div><div class="stat-lbl">Dias</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Capítulos</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Streak</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Concluído</div></div>
+        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Horário Fav.</div></div>
+    </div>`;
+
+    // Add Advanced Stats Block
+    html += `<div style="margin-bottom: 20px; border: 1px solid #eee; background: #fdfdfd; padding: 10px; border-radius: 5px;">
+        <h3 style="font-size: 12pt; margin: 0 0 10px 0; color: #555;">Análise de Hábitos</h3>
+        <div style="display: flex; gap: 20px;">
+             <!-- Time Dist -->
+             <div style="flex: 1;">
+                <div style="font-size: 8pt; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Por Período</div>
+                ${statsData.time.map(t => `<div style="display: flex; justify-content: space-between; font-size: 8pt; margin-bottom: 2px;"><span>${t.label}</span><span>${t.count}</span></div>`).join('')}
+             </div>
+             <!-- Week Dist -->
+             <div style="flex: 1;">
+                <div style="font-size: 8pt; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Por Dia da Semana</div>
+                ${statsData.week.map(w => `<div style="display: flex; justify-content: space-between; font-size: 8pt; margin-bottom: 2px;"><span>${w.label}</span><span>${w.count}</span></div>`).join('')}
+             </div>
+        </div>
+    </div>`;
+    
+    entries.forEach(entry => {
+        const dateTxt = entry.querySelector('.diary-date').textContent.trim();
+        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem título';
+        const content = entry.querySelector('.diary-content') ? entry.querySelector('.diary-content').innerHTML : '';
+        html += `<div class="entry"><div class="entry-meta">${dateTxt}</div><div class="entry-title">${title}</div><div class="entry-content">${content}</div></div>`;
+    });
+    
+    html += `<div class="footer">Gerado em ${new Date().toLocaleString('pt-BR')} • App Louvor PIB Oliveira</div></body></html>`;
+    
+    w.document.write(html); w.document.close();
+    w.onload = function() { w.print(); setTimeout(()=>w.close(), 1000); };
 }
 
 function resetPlan() {
