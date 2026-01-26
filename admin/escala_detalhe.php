@@ -453,20 +453,21 @@ let editMode = false;
 </div>
 
 <script>
+const SCHEDULE_ID = <?= json_encode($id) ?>;
 let editMode = false;
 
 function openModal(id) {
-    document.getElementById(id).style.display = 'flex';
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
 }
 
 function closeModal(id) {
-    document.getElementById(id).style.display = 'none';
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
 }
 
-
-
 function toggleEditMode() {
-    console.log('Toggle Edit Mode clicado');
+    console.log('Toggle Edit Mode acionado'); 
     try {
         editMode = !editMode;
         const editBtn = document.getElementById('editBtn');
@@ -474,7 +475,7 @@ function toggleEditMode() {
         const editModeEl = document.getElementById('edit-mode');
         
         if (!editBtn || !viewMode || !editModeEl) {
-            console.error('Elementos de UI não encontrados', {editBtn, viewMode, editModeEl});
+            console.error('Elementos UI críticos não encontrados');
             return;
         }
         
@@ -495,17 +496,15 @@ function toggleEditMode() {
             editBtn.style.color = 'var(--text-main)';
             editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
             
-            // Pequeno delay para garantir que UI atualizou antes do reload
-            setTimeout(() => location.reload(), 100);
+            setTimeout(() => window.location.reload(), 50);
         }
         
         if (typeof lucide !== 'undefined') lucide.createIcons();
-    } catch (e) {
-        console.error('Erro ao alternar modo de edição:', e);
-        alert('Erro ao alternar modo. Veja o console.');
+    } catch (err) {
+        console.error('Erro no toggleEditMode:', err);
+        alert('Erro ao ativar edição. Verifique o console.');
     }
 }
-
 
 function filterMembers() {
     const search = document.getElementById('searchMembers').value.toLowerCase();
@@ -526,32 +525,18 @@ function filterSongs() {
     });
 }
 
-
 function toggleMember(userId, checkbox) {
     if (checkbox) {
-        // Modo modal com checkbox
+        // Modo modal
         const label = checkbox.closest('.member-filter-item');
         fetchAction('toggle_member', userId, () => {
              if (checkbox.checked) label.style.borderColor = 'var(--primary)';
              else label.style.borderColor = 'var(--border-color)';
         });
     } else {
-        // Modo resumo (clique no X)
+        // Modo resumo
         fetchAction('toggle_member', userId, null);
     }
-}
-
-function fetchAction(action, id, callback) {
-    const param = action === 'toggle_member' ? 'user_id' : 'song_id';
-    fetch('escala_detalhe.php?id=<?= $id ?>', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `ajax=1&action=${action}&${param}=${id}`
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (callback) callback();
-    });
 }
 
 function toggleSong(songId, checkbox) {
@@ -563,9 +548,29 @@ function toggleSong(songId, checkbox) {
              else label.style.borderColor = 'var(--border-color)';
         });
     } else {
-        // Resumo X
+        // Modo resumo
         fetchAction('toggle_song', songId, null);
     }
+}
+
+function fetchAction(action, id, callback) {
+    const param = action === 'toggle_member' ? 'user_id' : 'song_id';
+    
+    const formData = new URLSearchParams();
+    formData.append('ajax', '1');
+    formData.append('action', action);
+    formData.append(param, id);
+
+    fetch('escala_detalhe.php?id=' + SCHEDULE_ID, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formData.toString()
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (callback) callback();
+    })
+    .catch(err => console.error('Erro na requisição AJAX:', err));
 }
 </script>
 
