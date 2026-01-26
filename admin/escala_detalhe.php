@@ -463,6 +463,7 @@ function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
+
 function toggleEditMode() {
     editMode = !editMode;
     const editBtn = document.getElementById('editBtn');
@@ -488,7 +489,6 @@ function toggleEditMode() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
-
 function filterMembers() {
     const search = document.getElementById('searchMembers').value.toLowerCase();
     const items = document.querySelectorAll('.member-filter-item');
@@ -507,6 +507,7 @@ function filterSongs() {
         item.style.display = (title.includes(search) || artist.includes(search)) ? 'flex' : 'none';
     });
 }
+
 
 function toggleMember(userId, checkbox) {
     if (checkbox) {
