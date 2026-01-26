@@ -1,0 +1,4046 @@
+[
+  {
+    "day_number": 1,
+    "theme": "A Criação",
+    "display_date": "Dia 1",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 2,
+    "theme": "A Queda da Humanidade",
+    "display_date": "Dia 2",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 4,
+        "chapter_end": 7,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 3,
+    "theme": "O Dilúvio",
+    "display_date": "Dia 3",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 8,
+        "chapter_end": 11,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 4,
+    "theme": "A Provação de Jó (caps 1-4)",
+    "display_date": "Dia 4",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 5,
+    "theme": "A Provação de Jó (caps 5-8)",
+    "display_date": "Dia 5",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 5,
+        "chapter_end": 8,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 6,
+    "theme": "A Provação de Jó (caps 9-12)",
+    "display_date": "Dia 6",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 9,
+        "chapter_end": 12,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 7,
+    "theme": "A Provação de Jó (caps 13-16)",
+    "display_date": "Dia 7",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 13,
+        "chapter_end": 16,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 8,
+    "theme": "A Provação de Jó (caps 17-20)",
+    "display_date": "Dia 8",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 17,
+        "chapter_end": 20,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 9,
+    "theme": "A Provação de Jó (caps 21-24)",
+    "display_date": "Dia 9",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 21,
+        "chapter_end": 24,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 10,
+    "theme": "A Provação de Jó (caps 25-28)",
+    "display_date": "Dia 10",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 25,
+        "chapter_end": 28,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 11,
+    "theme": "A Provação de Jó (caps 29-32)",
+    "display_date": "Dia 11",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 29,
+        "chapter_end": 32,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 12,
+    "theme": "A Provação de Jó (caps 33-36)",
+    "display_date": "Dia 12",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 33,
+        "chapter_end": 36,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 13,
+    "theme": "A Provação de Jó (caps 37-40)",
+    "display_date": "Dia 13",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 37,
+        "chapter_end": 40,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 14,
+    "theme": "A Provação de Jó (caps 41-42)",
+    "display_date": "Dia 14",
+    "passages": [
+      {
+        "book": "Jó",
+        "chapter_start": 41,
+        "chapter_end": 42,
+        "note": "Era Patriarcal"
+      }
+    ]
+  },
+  {
+    "day_number": 15,
+    "theme": "O Chamado de Abraão",
+    "display_date": "Dia 15",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 12,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 16,
+    "theme": "Hagar e Ismael",
+    "display_date": "Dia 16",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 17,
+    "theme": "Sodoma e Gomorra",
+    "display_date": "Dia 17",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 18,
+    "theme": "O Sacrifício de Isaque",
+    "display_date": "Dia 18",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 19,
+    "theme": "Morte de Abraão",
+    "display_date": "Dia 19",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 25,
+        "chapter_end": 28,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 20,
+    "theme": "Jacó e Labão",
+    "display_date": "Dia 20",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 29,
+        "chapter_end": 31,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 21,
+    "theme": "Jacó luta com Deus",
+    "display_date": "Dia 21",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 32,
+        "chapter_end": 34,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 22,
+    "theme": "José vendido",
+    "display_date": "Dia 22",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 35,
+        "chapter_end": 37,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 23,
+    "theme": "Judá e Tamar",
+    "display_date": "Dia 23",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 38,
+        "chapter_end": 40,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 24,
+    "theme": "José no Egito",
+    "display_date": "Dia 24",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 41,
+        "chapter_end": 42,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 25,
+    "theme": "A Reunião da Família",
+    "display_date": "Dia 25",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 43,
+        "chapter_end": 45,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 26,
+    "theme": "Jacó no Egito",
+    "display_date": "Dia 26",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 46,
+        "chapter_end": 47,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 27,
+    "theme": "A Bênção de Jacó",
+    "display_date": "Dia 27",
+    "passages": [
+      {
+        "book": "Gênesis",
+        "chapter_start": 48,
+        "chapter_end": 50,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 28,
+    "theme": "A Libertação do Egito (Êxodo 1-3)",
+    "display_date": "Dia 28",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 29,
+    "theme": "A Libertação do Egito (Êxodo 4-6)",
+    "display_date": "Dia 29",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 30,
+    "theme": "A Libertação do Egito (Êxodo 7-9)",
+    "display_date": "Dia 30",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 31,
+    "theme": "A Libertação do Egito (Êxodo 10-12)",
+    "display_date": "Dia 31",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 32,
+    "theme": "A Libertação do Egito (Êxodo 13-15)",
+    "display_date": "Dia 32",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 33,
+    "theme": "A Libertação do Egito (Êxodo 16-18)",
+    "display_date": "Dia 33",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 34,
+    "theme": "A Libertação do Egito (Êxodo 19-21)",
+    "display_date": "Dia 34",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 35,
+    "theme": "A Libertação do Egito (Êxodo 22-24)",
+    "display_date": "Dia 35",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 36,
+    "theme": "A Libertação do Egito (Êxodo 25-27)",
+    "display_date": "Dia 36",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 25,
+        "chapter_end": 27,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 37,
+    "theme": "A Libertação do Egito (Êxodo 28-30)",
+    "display_date": "Dia 37",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 28,
+        "chapter_end": 30,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 38,
+    "theme": "A Libertação do Egito (Êxodo 31-33)",
+    "display_date": "Dia 38",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 31,
+        "chapter_end": 33,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 39,
+    "theme": "A Libertação do Egito (Êxodo 34-36)",
+    "display_date": "Dia 39",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 34,
+        "chapter_end": 36,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 40,
+    "theme": "A Libertação do Egito (Êxodo 37-39)",
+    "display_date": "Dia 40",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 37,
+        "chapter_end": 39,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 41,
+    "theme": "A Libertação do Egito (Êxodo 40-40)",
+    "display_date": "Dia 41",
+    "passages": [
+      {
+        "book": "Êxodo",
+        "chapter_start": 40,
+        "chapter_end": 40,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 42,
+    "theme": "Santidade e Leis (Levítico 1-3)",
+    "display_date": "Dia 42",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 43,
+    "theme": "Santidade e Leis (Levítico 4-6)",
+    "display_date": "Dia 43",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 44,
+    "theme": "Santidade e Leis (Levítico 7-9)",
+    "display_date": "Dia 44",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 45,
+    "theme": "Santidade e Leis (Levítico 10-12)",
+    "display_date": "Dia 45",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 46,
+    "theme": "Santidade e Leis (Levítico 13-15)",
+    "display_date": "Dia 46",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 47,
+    "theme": "Santidade e Leis (Levítico 16-18)",
+    "display_date": "Dia 47",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 48,
+    "theme": "Santidade e Leis (Levítico 19-21)",
+    "display_date": "Dia 48",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 49,
+    "theme": "Santidade e Leis (Levítico 22-24)",
+    "display_date": "Dia 49",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 50,
+    "theme": "Santidade e Leis (Levítico 25-27)",
+    "display_date": "Dia 50",
+    "passages": [
+      {
+        "book": "Levítico",
+        "chapter_start": 25,
+        "chapter_end": 27,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 51,
+    "theme": "A Jornada no Deserto (Números 1-3)",
+    "display_date": "Dia 51",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 52,
+    "theme": "A Jornada no Deserto (Números 4-6)",
+    "display_date": "Dia 52",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 53,
+    "theme": "A Jornada no Deserto (Números 7-9)",
+    "display_date": "Dia 53",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 54,
+    "theme": "A Jornada no Deserto (Números 10-12)",
+    "display_date": "Dia 54",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 55,
+    "theme": "A Jornada no Deserto (Números 13-15)",
+    "display_date": "Dia 55",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 56,
+    "theme": "A Jornada no Deserto (Números 16-18)",
+    "display_date": "Dia 56",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 57,
+    "theme": "A Jornada no Deserto (Números 19-21)",
+    "display_date": "Dia 57",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 58,
+    "theme": "A Jornada no Deserto (Números 22-24)",
+    "display_date": "Dia 58",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 59,
+    "theme": "A Jornada no Deserto (Números 25-27)",
+    "display_date": "Dia 59",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 25,
+        "chapter_end": 27,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 60,
+    "theme": "A Jornada no Deserto (Números 28-30)",
+    "display_date": "Dia 60",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 28,
+        "chapter_end": 30,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 61,
+    "theme": "A Jornada no Deserto (Números 31-33)",
+    "display_date": "Dia 61",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 31,
+        "chapter_end": 33,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 62,
+    "theme": "A Jornada no Deserto (Números 34-36)",
+    "display_date": "Dia 62",
+    "passages": [
+      {
+        "book": "Números",
+        "chapter_start": 34,
+        "chapter_end": 36,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 63,
+    "theme": "A Segunda Lei (Deuteronômio 1-3)",
+    "display_date": "Dia 63",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 64,
+    "theme": "A Segunda Lei (Deuteronômio 4-6)",
+    "display_date": "Dia 64",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 65,
+    "theme": "A Segunda Lei (Deuteronômio 7-9)",
+    "display_date": "Dia 65",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 66,
+    "theme": "A Segunda Lei (Deuteronômio 10-12)",
+    "display_date": "Dia 66",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 67,
+    "theme": "A Segunda Lei (Deuteronômio 13-15)",
+    "display_date": "Dia 67",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 68,
+    "theme": "A Segunda Lei (Deuteronômio 16-18)",
+    "display_date": "Dia 68",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 69,
+    "theme": "A Segunda Lei (Deuteronômio 19-21)",
+    "display_date": "Dia 69",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 70,
+    "theme": "A Segunda Lei (Deuteronômio 22-24)",
+    "display_date": "Dia 70",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 71,
+    "theme": "A Segunda Lei (Deuteronômio 25-27)",
+    "display_date": "Dia 71",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 25,
+        "chapter_end": 27,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 72,
+    "theme": "A Segunda Lei (Deuteronômio 28-30)",
+    "display_date": "Dia 72",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 28,
+        "chapter_end": 30,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 73,
+    "theme": "A Segunda Lei (Deuteronômio 31-33)",
+    "display_date": "Dia 73",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 31,
+        "chapter_end": 33,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 74,
+    "theme": "A Segunda Lei (Deuteronômio 34-34)",
+    "display_date": "Dia 74",
+    "passages": [
+      {
+        "book": "Deuteronômio",
+        "chapter_start": 34,
+        "chapter_end": 34,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 75,
+    "theme": "A Conquista de Canaã (Josué 1-3)",
+    "display_date": "Dia 75",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 76,
+    "theme": "A Conquista de Canaã (Josué 4-6)",
+    "display_date": "Dia 76",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 77,
+    "theme": "A Conquista de Canaã (Josué 7-9)",
+    "display_date": "Dia 77",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 78,
+    "theme": "A Conquista de Canaã (Josué 10-12)",
+    "display_date": "Dia 78",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 79,
+    "theme": "A Conquista de Canaã (Josué 13-15)",
+    "display_date": "Dia 79",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 80,
+    "theme": "A Conquista de Canaã (Josué 16-18)",
+    "display_date": "Dia 80",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 81,
+    "theme": "A Conquista de Canaã (Josué 19-21)",
+    "display_date": "Dia 81",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 82,
+    "theme": "A Conquista de Canaã (Josué 22-24)",
+    "display_date": "Dia 82",
+    "passages": [
+      {
+        "book": "Josué",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 83,
+    "theme": "O Ciclo dos Juízes (Juízes 1-3)",
+    "display_date": "Dia 83",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 84,
+    "theme": "O Ciclo dos Juízes (Juízes 4-6)",
+    "display_date": "Dia 84",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 85,
+    "theme": "O Ciclo dos Juízes (Juízes 7-9)",
+    "display_date": "Dia 85",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 86,
+    "theme": "O Ciclo dos Juízes (Juízes 10-12)",
+    "display_date": "Dia 86",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 87,
+    "theme": "O Ciclo dos Juízes (Juízes 13-15)",
+    "display_date": "Dia 87",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 88,
+    "theme": "O Ciclo dos Juízes (Juízes 16-18)",
+    "display_date": "Dia 88",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 89,
+    "theme": "O Ciclo dos Juízes (Juízes 19-21)",
+    "display_date": "Dia 89",
+    "passages": [
+      {
+        "book": "Juízes",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 90,
+    "theme": "A História de Rute",
+    "display_date": "Dia 90",
+    "passages": [
+      {
+        "book": "Rute",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": "Tempo dos Juízes"
+      }
+    ]
+  },
+  {
+    "day_number": 91,
+    "theme": "Samuel e Saul (1 Samuel 1-3)",
+    "display_date": "Dia 91",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 92,
+    "theme": "Samuel e Saul (1 Samuel 4-6)",
+    "display_date": "Dia 92",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 93,
+    "theme": "Samuel e Saul (1 Samuel 7-9)",
+    "display_date": "Dia 93",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 94,
+    "theme": "Samuel e Saul (1 Samuel 10-12)",
+    "display_date": "Dia 94",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 95,
+    "theme": "Samuel e Saul (1 Samuel 13-15)",
+    "display_date": "Dia 95",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 96,
+    "theme": "Davi unge Saul e Golias",
+    "display_date": "Dia 96",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 16,
+        "chapter_end": 17,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 97,
+    "theme": "Davi foge de Saul",
+    "display_date": "Dia 97",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 18,
+        "chapter_end": 19,
+        "note": null
+      },
+      {
+        "book": "Salmos",
+        "chapter_start": 59,
+        "chapter_end": 59,
+        "note": "Salmo de Davi quando vigiado"
+      }
+    ]
+  },
+  {
+    "day_number": 98,
+    "theme": "Davi em Gate",
+    "display_date": "Dia 98",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 21,
+        "chapter_end": 21,
+        "note": null
+      },
+      {
+        "book": "Salmos",
+        "chapter_start": 56,
+        "chapter_end": 56,
+        "note": "Em Gate"
+      },
+      {
+        "book": "Salmos",
+        "chapter_start": 34,
+        "chapter_end": 34,
+        "note": "Fingindo loucura"
+      }
+    ]
+  },
+  {
+    "day_number": 99,
+    "theme": "A Perseguição de Saul (1 Samuel 22-24)",
+    "display_date": "Dia 99",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 100,
+    "theme": "A Perseguição de Saul (1 Samuel 25-27)",
+    "display_date": "Dia 100",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 25,
+        "chapter_end": 27,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 101,
+    "theme": "A Perseguição de Saul (1 Samuel 28-30)",
+    "display_date": "Dia 101",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 28,
+        "chapter_end": 30,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 102,
+    "theme": "A Perseguição de Saul (1 Samuel 31-31)",
+    "display_date": "Dia 102",
+    "passages": [
+      {
+        "book": "1 Samuel",
+        "chapter_start": 31,
+        "chapter_end": 31,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 103,
+    "theme": "Davi Rei e a Arca",
+    "display_date": "Dia 103",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 1,
+        "chapter_end": 6,
+        "note": null
+      },
+      {
+        "book": "Salmos",
+        "chapter_start": 24,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 104,
+    "theme": "Vitórias de Davi (2 Samuel 7-8)",
+    "display_date": "Dia 104",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 7,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 105,
+    "theme": "Vitórias de Davi (2 Samuel 9-10)",
+    "display_date": "Dia 105",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 9,
+        "chapter_end": 10,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 106,
+    "theme": "Davi e Bate-Seba",
+    "display_date": "Dia 106",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 11,
+        "chapter_end": 12,
+        "note": null
+      },
+      {
+        "book": "Salmos",
+        "chapter_start": 51,
+        "chapter_end": 51,
+        "note": "Confissão de Davi"
+      }
+    ]
+  },
+  {
+    "day_number": 107,
+    "theme": "O Fim do Reino de Davi (2 Samuel 13-15)",
+    "display_date": "Dia 107",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 108,
+    "theme": "O Fim do Reino de Davi (2 Samuel 16-18)",
+    "display_date": "Dia 108",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 109,
+    "theme": "O Fim do Reino de Davi (2 Samuel 19-21)",
+    "display_date": "Dia 109",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 110,
+    "theme": "O Fim do Reino de Davi (2 Samuel 22-24)",
+    "display_date": "Dia 110",
+    "passages": [
+      {
+        "book": "2 Samuel",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 111,
+    "theme": "Cântico dos Cânticos (Cantares 1-8)",
+    "display_date": "Dia 111",
+    "passages": [
+      {
+        "book": "Cantares",
+        "chapter_start": 1,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 112,
+    "theme": "Sabedoria de Salomão (Provérbios 1-3)",
+    "display_date": "Dia 112",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 113,
+    "theme": "Sabedoria de Salomão (Provérbios 4-6)",
+    "display_date": "Dia 113",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 114,
+    "theme": "Sabedoria de Salomão (Provérbios 7-9)",
+    "display_date": "Dia 114",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 115,
+    "theme": "Sabedoria de Salomão (Provérbios 10-12)",
+    "display_date": "Dia 115",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 116,
+    "theme": "Sabedoria de Salomão (Provérbios 13-15)",
+    "display_date": "Dia 116",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 117,
+    "theme": "Sabedoria de Salomão (Provérbios 16-18)",
+    "display_date": "Dia 117",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 118,
+    "theme": "Sabedoria de Salomão (Provérbios 19-21)",
+    "display_date": "Dia 118",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 119,
+    "theme": "Sabedoria de Salomão (Provérbios 22-24)",
+    "display_date": "Dia 119",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 22,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 120,
+    "theme": "Sabedoria de Salomão (Provérbios 25-27)",
+    "display_date": "Dia 120",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 25,
+        "chapter_end": 27,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 121,
+    "theme": "Sabedoria de Salomão (Provérbios 28-30)",
+    "display_date": "Dia 121",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 28,
+        "chapter_end": 30,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 122,
+    "theme": "Sabedoria de Salomão (Provérbios 31-31)",
+    "display_date": "Dia 122",
+    "passages": [
+      {
+        "book": "Provérbios",
+        "chapter_start": 31,
+        "chapter_end": 31,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 123,
+    "theme": "Vaidade de Vaidades (Eclesiastes 1-12)",
+    "display_date": "Dia 123",
+    "passages": [
+      {
+        "book": "Eclesiastes",
+        "chapter_start": 1,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 124,
+    "theme": "Salomão e Elias (1 Reis 1-3)",
+    "display_date": "Dia 124",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 125,
+    "theme": "Salomão e Elias (1 Reis 4-6)",
+    "display_date": "Dia 125",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 126,
+    "theme": "Salomão e Elias (1 Reis 7-9)",
+    "display_date": "Dia 126",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 127,
+    "theme": "Salomão e Elias (1 Reis 10-12)",
+    "display_date": "Dia 127",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 128,
+    "theme": "Salomão e Elias (1 Reis 13-15)",
+    "display_date": "Dia 128",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 129,
+    "theme": "Salomão e Elias (1 Reis 16-18)",
+    "display_date": "Dia 129",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 16,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 130,
+    "theme": "Salomão e Elias (1 Reis 19-21)",
+    "display_date": "Dia 130",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 19,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 131,
+    "theme": "Salomão e Elias (1 Reis 22-22)",
+    "display_date": "Dia 131",
+    "passages": [
+      {
+        "book": "1 Reis",
+        "chapter_start": 22,
+        "chapter_end": 22,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 132,
+    "theme": "Ministério de Eliseu (2 Reis 1-3)",
+    "display_date": "Dia 132",
+    "passages": [
+      {
+        "book": "2 Reis",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 133,
+    "theme": "Ministério de Eliseu (2 Reis 4-6)",
+    "display_date": "Dia 133",
+    "passages": [
+      {
+        "book": "2 Reis",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 134,
+    "theme": "Ministério de Eliseu (2 Reis 7-9)",
+    "display_date": "Dia 134",
+    "passages": [
+      {
+        "book": "2 Reis",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 135,
+    "theme": "Ministério de Eliseu (2 Reis 10-12)",
+    "display_date": "Dia 135",
+    "passages": [
+      {
+        "book": "2 Reis",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 136,
+    "theme": "Ministério de Eliseu (2 Reis 13-13)",
+    "display_date": "Dia 136",
+    "passages": [
+      {
+        "book": "2 Reis",
+        "chapter_start": 13,
+        "chapter_end": 13,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 137,
+    "theme": "Jonas em Nínive",
+    "display_date": "Dia 137",
+    "passages": [
+      {
+        "book": "Jonas",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": "Reinado de Jeroboão II"
+      }
+    ]
+  },
+  {
+    "day_number": 138,
+    "theme": "Profecia contra Israel (Amós 1-3)",
+    "display_date": "Dia 138",
+    "passages": [
+      {
+        "book": "Amós",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 139,
+    "theme": "Profecia contra Israel (Amós 4-6)",
+    "display_date": "Dia 139",
+    "passages": [
+      {
+        "book": "Amós",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 140,
+    "theme": "Profecia contra Israel (Amós 7-9)",
+    "display_date": "Dia 140",
+    "passages": [
+      {
+        "book": "Amós",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 141,
+    "theme": "O Amor de Deus (Oseias 1-3)",
+    "display_date": "Dia 141",
+    "passages": [
+      {
+        "book": "Oseias",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 142,
+    "theme": "O Amor de Deus (Oseias 4-6)",
+    "display_date": "Dia 142",
+    "passages": [
+      {
+        "book": "Oseias",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 143,
+    "theme": "O Amor de Deus (Oseias 7-9)",
+    "display_date": "Dia 143",
+    "passages": [
+      {
+        "book": "Oseias",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 144,
+    "theme": "O Amor de Deus (Oseias 10-12)",
+    "display_date": "Dia 144",
+    "passages": [
+      {
+        "book": "Oseias",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 145,
+    "theme": "O Amor de Deus (Oseias 13-14)",
+    "display_date": "Dia 145",
+    "passages": [
+      {
+        "book": "Oseias",
+        "chapter_start": 13,
+        "chapter_end": 14,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 146,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 1-4)",
+    "display_date": "Dia 146",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 147,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 5-8)",
+    "display_date": "Dia 147",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 5,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 148,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 9-12)",
+    "display_date": "Dia 148",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 9,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 149,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 13-16)",
+    "display_date": "Dia 149",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 13,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 150,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 17-20)",
+    "display_date": "Dia 150",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 17,
+        "chapter_end": 20,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 151,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 21-24)",
+    "display_date": "Dia 151",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 21,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 152,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 25-28)",
+    "display_date": "Dia 152",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 25,
+        "chapter_end": 28,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 153,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 29-32)",
+    "display_date": "Dia 153",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 29,
+        "chapter_end": 32,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 154,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 33-36)",
+    "display_date": "Dia 154",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 33,
+        "chapter_end": 36,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 155,
+    "theme": "O Livro do Juízo (Isaías) (Isaías 37-39)",
+    "display_date": "Dia 155",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 37,
+        "chapter_end": 39,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 156,
+    "theme": "Juízo e Esperança (Miqueias 1-7)",
+    "display_date": "Dia 156",
+    "passages": [
+      {
+        "book": "Miqueias",
+        "chapter_start": 1,
+        "chapter_end": 7,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 157,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 40-43)",
+    "display_date": "Dia 157",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 40,
+        "chapter_end": 43,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 158,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 44-47)",
+    "display_date": "Dia 158",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 44,
+        "chapter_end": 47,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 159,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 48-51)",
+    "display_date": "Dia 159",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 48,
+        "chapter_end": 51,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 160,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 52-55)",
+    "display_date": "Dia 160",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 52,
+        "chapter_end": 55,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 161,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 56-59)",
+    "display_date": "Dia 161",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 56,
+        "chapter_end": 59,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 162,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 60-63)",
+    "display_date": "Dia 162",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 60,
+        "chapter_end": 63,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 163,
+    "theme": "O Livro do Consolo (Isaías) (Isaías 64-66)",
+    "display_date": "Dia 163",
+    "passages": [
+      {
+        "book": "Isaías",
+        "chapter_start": 64,
+        "chapter_end": 66,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 164,
+    "theme": "Queda de Nínive (Naum 1-3)",
+    "display_date": "Dia 164",
+    "passages": [
+      {
+        "book": "Naum",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 165,
+    "theme": "O Dia do Senhor (Sofonias 1-3)",
+    "display_date": "Dia 165",
+    "passages": [
+      {
+        "book": "Sofonias",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 166,
+    "theme": "O Justo viverá da fé (Habacuque 1-3)",
+    "display_date": "Dia 166",
+    "passages": [
+      {
+        "book": "Habacuque",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 167,
+    "theme": "O Profeta Chorão (Jeremias 1-4)",
+    "display_date": "Dia 167",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 168,
+    "theme": "O Profeta Chorão (Jeremias 5-8)",
+    "display_date": "Dia 168",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 5,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 169,
+    "theme": "O Profeta Chorão (Jeremias 9-12)",
+    "display_date": "Dia 169",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 9,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 170,
+    "theme": "O Profeta Chorão (Jeremias 13-16)",
+    "display_date": "Dia 170",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 13,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 171,
+    "theme": "O Profeta Chorão (Jeremias 17-20)",
+    "display_date": "Dia 171",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 17,
+        "chapter_end": 20,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 172,
+    "theme": "O Profeta Chorão (Jeremias 21-24)",
+    "display_date": "Dia 172",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 21,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 173,
+    "theme": "O Profeta Chorão (Jeremias 25-28)",
+    "display_date": "Dia 173",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 25,
+        "chapter_end": 28,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 174,
+    "theme": "O Profeta Chorão (Jeremias 29-32)",
+    "display_date": "Dia 174",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 29,
+        "chapter_end": 32,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 175,
+    "theme": "O Profeta Chorão (Jeremias 33-36)",
+    "display_date": "Dia 175",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 33,
+        "chapter_end": 36,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 176,
+    "theme": "O Profeta Chorão (Jeremias 37-40)",
+    "display_date": "Dia 176",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 37,
+        "chapter_end": 40,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 177,
+    "theme": "O Profeta Chorão (Jeremias 41-44)",
+    "display_date": "Dia 177",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 41,
+        "chapter_end": 44,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 178,
+    "theme": "O Profeta Chorão (Jeremias 45-48)",
+    "display_date": "Dia 178",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 45,
+        "chapter_end": 48,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 179,
+    "theme": "O Profeta Chorão (Jeremias 49-52)",
+    "display_date": "Dia 179",
+    "passages": [
+      {
+        "book": "Jeremias",
+        "chapter_start": 49,
+        "chapter_end": 52,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 180,
+    "theme": "A Queda de Jerusalém",
+    "display_date": "Dia 180",
+    "passages": [
+      {
+        "book": "2 Reis",
+        "chapter_start": 24,
+        "chapter_end": 25,
+        "note": null
+      },
+      {
+        "book": "Lamentações",
+        "chapter_start": 1,
+        "chapter_end": 5,
+        "note": "Lamento por Jerusalém"
+      }
+    ]
+  },
+  {
+    "day_number": 181,
+    "theme": "Visões no Exílio (Ezequiel 1-4)",
+    "display_date": "Dia 181",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 182,
+    "theme": "Visões no Exílio (Ezequiel 5-8)",
+    "display_date": "Dia 182",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 5,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 183,
+    "theme": "Visões no Exílio (Ezequiel 9-12)",
+    "display_date": "Dia 183",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 9,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 184,
+    "theme": "Visões no Exílio (Ezequiel 13-16)",
+    "display_date": "Dia 184",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 13,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 185,
+    "theme": "Visões no Exílio (Ezequiel 17-20)",
+    "display_date": "Dia 185",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 17,
+        "chapter_end": 20,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 186,
+    "theme": "Visões no Exílio (Ezequiel 21-24)",
+    "display_date": "Dia 186",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 21,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 187,
+    "theme": "Visões no Exílio (Ezequiel 25-28)",
+    "display_date": "Dia 187",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 25,
+        "chapter_end": 28,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 188,
+    "theme": "Visões no Exílio (Ezequiel 29-32)",
+    "display_date": "Dia 188",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 29,
+        "chapter_end": 32,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 189,
+    "theme": "Visões no Exílio (Ezequiel 33-36)",
+    "display_date": "Dia 189",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 33,
+        "chapter_end": 36,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 190,
+    "theme": "Visões no Exílio (Ezequiel 37-40)",
+    "display_date": "Dia 190",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 37,
+        "chapter_end": 40,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 191,
+    "theme": "Visões no Exílio (Ezequiel 41-44)",
+    "display_date": "Dia 191",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 41,
+        "chapter_end": 44,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 192,
+    "theme": "Visões no Exílio (Ezequiel 45-48)",
+    "display_date": "Dia 192",
+    "passages": [
+      {
+        "book": "Ezequiel",
+        "chapter_start": 45,
+        "chapter_end": 48,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 193,
+    "theme": "Daniel na Babilônia (Daniel 1-2)",
+    "display_date": "Dia 193",
+    "passages": [
+      {
+        "book": "Daniel",
+        "chapter_start": 1,
+        "chapter_end": 2,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 194,
+    "theme": "Daniel na Babilônia (Daniel 3-4)",
+    "display_date": "Dia 194",
+    "passages": [
+      {
+        "book": "Daniel",
+        "chapter_start": 3,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 195,
+    "theme": "Daniel na Babilônia (Daniel 5-6)",
+    "display_date": "Dia 195",
+    "passages": [
+      {
+        "book": "Daniel",
+        "chapter_start": 5,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 196,
+    "theme": "Daniel na Babilônia (Daniel 7-8)",
+    "display_date": "Dia 196",
+    "passages": [
+      {
+        "book": "Daniel",
+        "chapter_start": 7,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 197,
+    "theme": "Daniel na Babilônia (Daniel 9-10)",
+    "display_date": "Dia 197",
+    "passages": [
+      {
+        "book": "Daniel",
+        "chapter_start": 9,
+        "chapter_end": 10,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 198,
+    "theme": "Daniel na Babilônia (Daniel 11-12)",
+    "display_date": "Dia 198",
+    "passages": [
+      {
+        "book": "Daniel",
+        "chapter_start": 11,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 199,
+    "theme": "O Retorno e o Templo",
+    "display_date": "Dia 199",
+    "passages": [
+      {
+        "book": "Esdras",
+        "chapter_start": 1,
+        "chapter_end": 6,
+        "note": null
+      },
+      {
+        "book": "Salmos",
+        "chapter_start": 126,
+        "chapter_end": 126,
+        "note": "Cântico dos Degraus"
+      }
+    ]
+  },
+  {
+    "day_number": 200,
+    "theme": "Reconstrução do Templo (Ageu 1-2)",
+    "display_date": "Dia 200",
+    "passages": [
+      {
+        "book": "Ageu",
+        "chapter_start": 1,
+        "chapter_end": 2,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 201,
+    "theme": "Visões de Zacarias (Zacarias 1-4)",
+    "display_date": "Dia 201",
+    "passages": [
+      {
+        "book": "Zacarias",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 202,
+    "theme": "Visões de Zacarias (Zacarias 5-8)",
+    "display_date": "Dia 202",
+    "passages": [
+      {
+        "book": "Zacarias",
+        "chapter_start": 5,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 203,
+    "theme": "Visões de Zacarias (Zacarias 9-12)",
+    "display_date": "Dia 203",
+    "passages": [
+      {
+        "book": "Zacarias",
+        "chapter_start": 9,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 204,
+    "theme": "Visões de Zacarias (Zacarias 13-14)",
+    "display_date": "Dia 204",
+    "passages": [
+      {
+        "book": "Zacarias",
+        "chapter_start": 13,
+        "chapter_end": 14,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 205,
+    "theme": "Providência de Deus (Ester 1-3)",
+    "display_date": "Dia 205",
+    "passages": [
+      {
+        "book": "Ester",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 206,
+    "theme": "Providência de Deus (Ester 4-6)",
+    "display_date": "Dia 206",
+    "passages": [
+      {
+        "book": "Ester",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 207,
+    "theme": "Providência de Deus (Ester 7-9)",
+    "display_date": "Dia 207",
+    "passages": [
+      {
+        "book": "Ester",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 208,
+    "theme": "Providência de Deus (Ester 10-10)",
+    "display_date": "Dia 208",
+    "passages": [
+      {
+        "book": "Ester",
+        "chapter_start": 10,
+        "chapter_end": 10,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 209,
+    "theme": "A Reforma de Esdras (Esdras 7-10)",
+    "display_date": "Dia 209",
+    "passages": [
+      {
+        "book": "Esdras",
+        "chapter_start": 7,
+        "chapter_end": 10,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 210,
+    "theme": "Reconstrução dos Muros (Neemias 1-3)",
+    "display_date": "Dia 210",
+    "passages": [
+      {
+        "book": "Neemias",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 211,
+    "theme": "Reconstrução dos Muros (Neemias 4-6)",
+    "display_date": "Dia 211",
+    "passages": [
+      {
+        "book": "Neemias",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 212,
+    "theme": "Reconstrução dos Muros (Neemias 7-9)",
+    "display_date": "Dia 212",
+    "passages": [
+      {
+        "book": "Neemias",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 213,
+    "theme": "Reconstrução dos Muros (Neemias 10-12)",
+    "display_date": "Dia 213",
+    "passages": [
+      {
+        "book": "Neemias",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 214,
+    "theme": "Reconstrução dos Muros (Neemias 13-13)",
+    "display_date": "Dia 214",
+    "passages": [
+      {
+        "book": "Neemias",
+        "chapter_start": 13,
+        "chapter_end": 13,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 215,
+    "theme": "O Último Profeta (Malaquias 1-4)",
+    "display_date": "Dia 215",
+    "passages": [
+      {
+        "book": "Malaquias",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 216,
+    "theme": "O Verbo e o Nascimento",
+    "display_date": "Dia 216",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 1,
+        "chapter_end": 1,
+        "note": null
+      },
+      {
+        "book": "Lucas",
+        "chapter_start": 1,
+        "chapter_end": 1,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 217,
+    "theme": "Nascimento de Jesus",
+    "display_date": "Dia 217",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 2,
+        "chapter_end": 2,
+        "note": null
+      },
+      {
+        "book": "Mateus",
+        "chapter_start": 1,
+        "chapter_end": 2,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 218,
+    "theme": "O Rei Jesus (Mateus) (Mateus 3-5)",
+    "display_date": "Dia 218",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 3,
+        "chapter_end": 5,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 219,
+    "theme": "O Rei Jesus (Mateus) (Mateus 6-8)",
+    "display_date": "Dia 219",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 6,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 220,
+    "theme": "O Rei Jesus (Mateus) (Mateus 9-11)",
+    "display_date": "Dia 220",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 9,
+        "chapter_end": 11,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 221,
+    "theme": "O Rei Jesus (Mateus) (Mateus 12-14)",
+    "display_date": "Dia 221",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 12,
+        "chapter_end": 14,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 222,
+    "theme": "O Rei Jesus (Mateus) (Mateus 15-17)",
+    "display_date": "Dia 222",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 15,
+        "chapter_end": 17,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 223,
+    "theme": "O Rei Jesus (Mateus) (Mateus 18-20)",
+    "display_date": "Dia 223",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 18,
+        "chapter_end": 20,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 224,
+    "theme": "O Rei Jesus (Mateus) (Mateus 21-23)",
+    "display_date": "Dia 224",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 21,
+        "chapter_end": 23,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 225,
+    "theme": "O Rei Jesus (Mateus) (Mateus 24-26)",
+    "display_date": "Dia 225",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 24,
+        "chapter_end": 26,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 226,
+    "theme": "O Rei Jesus (Mateus) (Mateus 27-28)",
+    "display_date": "Dia 226",
+    "passages": [
+      {
+        "book": "Mateus",
+        "chapter_start": 27,
+        "chapter_end": 28,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 227,
+    "theme": "O Servo Jesus (Marcos) (Marcos 1-3)",
+    "display_date": "Dia 227",
+    "passages": [
+      {
+        "book": "Marcos",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 228,
+    "theme": "O Servo Jesus (Marcos) (Marcos 4-6)",
+    "display_date": "Dia 228",
+    "passages": [
+      {
+        "book": "Marcos",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 229,
+    "theme": "O Servo Jesus (Marcos) (Marcos 7-9)",
+    "display_date": "Dia 229",
+    "passages": [
+      {
+        "book": "Marcos",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 230,
+    "theme": "O Servo Jesus (Marcos) (Marcos 10-12)",
+    "display_date": "Dia 230",
+    "passages": [
+      {
+        "book": "Marcos",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 231,
+    "theme": "O Servo Jesus (Marcos) (Marcos 13-15)",
+    "display_date": "Dia 231",
+    "passages": [
+      {
+        "book": "Marcos",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 232,
+    "theme": "O Servo Jesus (Marcos) (Marcos 16-16)",
+    "display_date": "Dia 232",
+    "passages": [
+      {
+        "book": "Marcos",
+        "chapter_start": 16,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 233,
+    "theme": "O Homem Jesus (Lucas) (Lucas 3-5)",
+    "display_date": "Dia 233",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 3,
+        "chapter_end": 5,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 234,
+    "theme": "O Homem Jesus (Lucas) (Lucas 6-8)",
+    "display_date": "Dia 234",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 6,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 235,
+    "theme": "O Homem Jesus (Lucas) (Lucas 9-11)",
+    "display_date": "Dia 235",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 9,
+        "chapter_end": 11,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 236,
+    "theme": "O Homem Jesus (Lucas) (Lucas 12-14)",
+    "display_date": "Dia 236",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 12,
+        "chapter_end": 14,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 237,
+    "theme": "O Homem Jesus (Lucas) (Lucas 15-17)",
+    "display_date": "Dia 237",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 15,
+        "chapter_end": 17,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 238,
+    "theme": "O Homem Jesus (Lucas) (Lucas 18-20)",
+    "display_date": "Dia 238",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 18,
+        "chapter_end": 20,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 239,
+    "theme": "O Homem Jesus (Lucas) (Lucas 21-23)",
+    "display_date": "Dia 239",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 21,
+        "chapter_end": 23,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 240,
+    "theme": "O Homem Jesus (Lucas) (Lucas 24-24)",
+    "display_date": "Dia 240",
+    "passages": [
+      {
+        "book": "Lucas",
+        "chapter_start": 24,
+        "chapter_end": 24,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 241,
+    "theme": "O Deus Jesus (João) (João 2-4)",
+    "display_date": "Dia 241",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 2,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 242,
+    "theme": "O Deus Jesus (João) (João 5-7)",
+    "display_date": "Dia 242",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 5,
+        "chapter_end": 7,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 243,
+    "theme": "O Deus Jesus (João) (João 8-10)",
+    "display_date": "Dia 243",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 8,
+        "chapter_end": 10,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 244,
+    "theme": "O Deus Jesus (João) (João 11-13)",
+    "display_date": "Dia 244",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 11,
+        "chapter_end": 13,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 245,
+    "theme": "O Deus Jesus (João) (João 14-16)",
+    "display_date": "Dia 245",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 14,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 246,
+    "theme": "O Deus Jesus (João) (João 17-19)",
+    "display_date": "Dia 246",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 17,
+        "chapter_end": 19,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 247,
+    "theme": "O Deus Jesus (João) (João 20-21)",
+    "display_date": "Dia 247",
+    "passages": [
+      {
+        "book": "João",
+        "chapter_start": 20,
+        "chapter_end": 21,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 248,
+    "theme": "O Início da Igreja",
+    "display_date": "Dia 248",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 249,
+    "theme": "Estêvão e a Perseguição",
+    "display_date": "Dia 249",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 5,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 250,
+    "theme": "Conversão de Saulo",
+    "display_date": "Dia 250",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 9,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 251,
+    "theme": "Pedro e Cornélio",
+    "display_date": "Dia 251",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 252,
+    "theme": "Primeira Viagem Missionária",
+    "display_date": "Dia 252",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 13,
+        "chapter_end": 14,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 253,
+    "theme": "Carta aos Gálatas",
+    "display_date": "Dia 253",
+    "passages": [
+      {
+        "book": "Gálatas",
+        "chapter_start": 1,
+        "chapter_end": 6,
+        "note": "Escrito após 1ª Viagem"
+      }
+    ]
+  },
+  {
+    "day_number": 254,
+    "theme": "Concílio de Jerusalém",
+    "display_date": "Dia 254",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 15,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 255,
+    "theme": "Filipos e Tessalônica",
+    "display_date": "Dia 255",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 17,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 256,
+    "theme": "Epístolas de Paulo (1 Tessalonicenses 1-5)",
+    "display_date": "Dia 256",
+    "passages": [
+      {
+        "book": "1 Tessalonicenses",
+        "chapter_start": 1,
+        "chapter_end": 5,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 257,
+    "theme": "Epístolas de Paulo (2 Tessalonicenses 1-3)",
+    "display_date": "Dia 257",
+    "passages": [
+      {
+        "book": "2 Tessalonicenses",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 258,
+    "theme": "Terceira Viagem (Éfeso)",
+    "display_date": "Dia 258",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 19,
+        "chapter_end": 19,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 259,
+    "theme": "Carta aos Coríntios (1 Coríntios 1-3)",
+    "display_date": "Dia 259",
+    "passages": [
+      {
+        "book": "1 Coríntios",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 260,
+    "theme": "Carta aos Coríntios (1 Coríntios 4-6)",
+    "display_date": "Dia 260",
+    "passages": [
+      {
+        "book": "1 Coríntios",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 261,
+    "theme": "Carta aos Coríntios (1 Coríntios 7-9)",
+    "display_date": "Dia 261",
+    "passages": [
+      {
+        "book": "1 Coríntios",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 262,
+    "theme": "Carta aos Coríntios (1 Coríntios 10-12)",
+    "display_date": "Dia 262",
+    "passages": [
+      {
+        "book": "1 Coríntios",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 263,
+    "theme": "Carta aos Coríntios (1 Coríntios 13-15)",
+    "display_date": "Dia 263",
+    "passages": [
+      {
+        "book": "1 Coríntios",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 264,
+    "theme": "Carta aos Coríntios (1 Coríntios 16-16)",
+    "display_date": "Dia 264",
+    "passages": [
+      {
+        "book": "1 Coríntios",
+        "chapter_start": 16,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 265,
+    "theme": "Carta aos Coríntios (2 Coríntios 1-3)",
+    "display_date": "Dia 265",
+    "passages": [
+      {
+        "book": "2 Coríntios",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 266,
+    "theme": "Carta aos Coríntios (2 Coríntios 4-6)",
+    "display_date": "Dia 266",
+    "passages": [
+      {
+        "book": "2 Coríntios",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 267,
+    "theme": "Carta aos Coríntios (2 Coríntios 7-9)",
+    "display_date": "Dia 267",
+    "passages": [
+      {
+        "book": "2 Coríntios",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 268,
+    "theme": "Carta aos Coríntios (2 Coríntios 10-12)",
+    "display_date": "Dia 268",
+    "passages": [
+      {
+        "book": "2 Coríntios",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 269,
+    "theme": "Carta aos Coríntios (2 Coríntios 13-13)",
+    "display_date": "Dia 269",
+    "passages": [
+      {
+        "book": "2 Coríntios",
+        "chapter_start": 13,
+        "chapter_end": 13,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 270,
+    "theme": "A Teologia de Paulo (Romanos 1-3)",
+    "display_date": "Dia 270",
+    "passages": [
+      {
+        "book": "Romanos",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 271,
+    "theme": "A Teologia de Paulo (Romanos 4-6)",
+    "display_date": "Dia 271",
+    "passages": [
+      {
+        "book": "Romanos",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 272,
+    "theme": "A Teologia de Paulo (Romanos 7-9)",
+    "display_date": "Dia 272",
+    "passages": [
+      {
+        "book": "Romanos",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 273,
+    "theme": "A Teologia de Paulo (Romanos 10-12)",
+    "display_date": "Dia 273",
+    "passages": [
+      {
+        "book": "Romanos",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 274,
+    "theme": "A Teologia de Paulo (Romanos 13-15)",
+    "display_date": "Dia 274",
+    "passages": [
+      {
+        "book": "Romanos",
+        "chapter_start": 13,
+        "chapter_end": 15,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 275,
+    "theme": "A Teologia de Paulo (Romanos 16-16)",
+    "display_date": "Dia 275",
+    "passages": [
+      {
+        "book": "Romanos",
+        "chapter_start": 16,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 276,
+    "theme": "Retorno e Prisão",
+    "display_date": "Dia 276",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 20,
+        "chapter_end": 23,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 277,
+    "theme": "Paulo perante Governadores",
+    "display_date": "Dia 277",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 24,
+        "chapter_end": 26,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 278,
+    "theme": "Viagem a Roma e Naufrágio",
+    "display_date": "Dia 278",
+    "passages": [
+      {
+        "book": "Atos",
+        "chapter_start": 27,
+        "chapter_end": 28,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 279,
+    "theme": "Cartas da Prisão (Efésios 1-6)",
+    "display_date": "Dia 279",
+    "passages": [
+      {
+        "book": "Efésios",
+        "chapter_start": 1,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 280,
+    "theme": "Cartas da Prisão (Filipenses 1-4)",
+    "display_date": "Dia 280",
+    "passages": [
+      {
+        "book": "Filipenses",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 281,
+    "theme": "Cartas da Prisão (Colossenses 1-4)",
+    "display_date": "Dia 281",
+    "passages": [
+      {
+        "book": "Colossenses",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 282,
+    "theme": "Filemom",
+    "display_date": "Dia 282",
+    "passages": [
+      {
+        "book": "Filemom",
+        "chapter_start": 1,
+        "chapter_end": 1,
+        "note": "Cartas da Prisão"
+      }
+    ]
+  },
+  {
+    "day_number": 283,
+    "theme": "Cartas Pastorais (1 Timóteo 1-6)",
+    "display_date": "Dia 283",
+    "passages": [
+      {
+        "book": "1 Timóteo",
+        "chapter_start": 1,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 284,
+    "theme": "Cartas Pastorais (Tito 1-3)",
+    "display_date": "Dia 284",
+    "passages": [
+      {
+        "book": "Tito",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 285,
+    "theme": "Cartas Gerais (1 Pedro 1-5)",
+    "display_date": "Dia 285",
+    "passages": [
+      {
+        "book": "1 Pedro",
+        "chapter_start": 1,
+        "chapter_end": 5,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 286,
+    "theme": "Cartas Gerais (2 Pedro 1-3)",
+    "display_date": "Dia 286",
+    "passages": [
+      {
+        "book": "2 Pedro",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 287,
+    "theme": "Última carta de Paulo (2 Timóteo 1-4)",
+    "display_date": "Dia 287",
+    "passages": [
+      {
+        "book": "2 Timóteo",
+        "chapter_start": 1,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 288,
+    "theme": "A Superioridade de Cristo (Hebreus 1-3)",
+    "display_date": "Dia 288",
+    "passages": [
+      {
+        "book": "Hebreus",
+        "chapter_start": 1,
+        "chapter_end": 3,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 289,
+    "theme": "A Superioridade de Cristo (Hebreus 4-6)",
+    "display_date": "Dia 289",
+    "passages": [
+      {
+        "book": "Hebreus",
+        "chapter_start": 4,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 290,
+    "theme": "A Superioridade de Cristo (Hebreus 7-9)",
+    "display_date": "Dia 290",
+    "passages": [
+      {
+        "book": "Hebreus",
+        "chapter_start": 7,
+        "chapter_end": 9,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 291,
+    "theme": "A Superioridade de Cristo (Hebreus 10-12)",
+    "display_date": "Dia 291",
+    "passages": [
+      {
+        "book": "Hebreus",
+        "chapter_start": 10,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 292,
+    "theme": "A Superioridade de Cristo (Hebreus 13-13)",
+    "display_date": "Dia 292",
+    "passages": [
+      {
+        "book": "Hebreus",
+        "chapter_start": 13,
+        "chapter_end": 13,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 293,
+    "theme": "A Fé Prática (Tiago 1-5)",
+    "display_date": "Dia 293",
+    "passages": [
+      {
+        "book": "Tiago",
+        "chapter_start": 1,
+        "chapter_end": 5,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 294,
+    "theme": "As Cartas de João (1 João 1-5)",
+    "display_date": "Dia 294",
+    "passages": [
+      {
+        "book": "1 João",
+        "chapter_start": 1,
+        "chapter_end": 5,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 295,
+    "theme": "2 e 3 João + Judas",
+    "display_date": "Dia 295",
+    "passages": [
+      {
+        "book": "2 João",
+        "chapter_start": 1,
+        "chapter_end": 1,
+        "note": null
+      },
+      {
+        "book": "3 João",
+        "chapter_start": 1,
+        "chapter_end": 1,
+        "note": null
+      },
+      {
+        "book": "Judas",
+        "chapter_start": 1,
+        "chapter_end": 1,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 296,
+    "theme": "A Revelação Final (Apocalipse 1-2)",
+    "display_date": "Dia 296",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 1,
+        "chapter_end": 2,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 297,
+    "theme": "A Revelação Final (Apocalipse 3-4)",
+    "display_date": "Dia 297",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 3,
+        "chapter_end": 4,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 298,
+    "theme": "A Revelação Final (Apocalipse 5-6)",
+    "display_date": "Dia 298",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 5,
+        "chapter_end": 6,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 299,
+    "theme": "A Revelação Final (Apocalipse 7-8)",
+    "display_date": "Dia 299",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 7,
+        "chapter_end": 8,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 300,
+    "theme": "A Revelação Final (Apocalipse 9-10)",
+    "display_date": "Dia 300",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 9,
+        "chapter_end": 10,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 301,
+    "theme": "A Revelação Final (Apocalipse 11-12)",
+    "display_date": "Dia 301",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 11,
+        "chapter_end": 12,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 302,
+    "theme": "A Revelação Final (Apocalipse 13-14)",
+    "display_date": "Dia 302",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 13,
+        "chapter_end": 14,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 303,
+    "theme": "A Revelação Final (Apocalipse 15-16)",
+    "display_date": "Dia 303",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 15,
+        "chapter_end": 16,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 304,
+    "theme": "A Revelação Final (Apocalipse 17-18)",
+    "display_date": "Dia 304",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 17,
+        "chapter_end": 18,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 305,
+    "theme": "A Revelação Final (Apocalipse 19-20)",
+    "display_date": "Dia 305",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 19,
+        "chapter_end": 20,
+        "note": null
+      }
+    ]
+  },
+  {
+    "day_number": 306,
+    "theme": "A Revelação Final (Apocalipse 21-22)",
+    "display_date": "Dia 306",
+    "passages": [
+      {
+        "book": "Apocalipse",
+        "chapter_start": 21,
+        "chapter_end": 22,
+        "note": null
+      }
+    ]
+  }
+]
