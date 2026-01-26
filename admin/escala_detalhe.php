@@ -464,30 +464,48 @@ function closeModal(id) {
 }
 
 
+
 function toggleEditMode() {
-    editMode = !editMode;
-    const editBtn = document.getElementById('editBtn');
-    const viewMode = document.getElementById('view-mode');
-    const editModeEl = document.getElementById('edit-mode');
-    
-    if (editMode) {
-        viewMode.classList.add('view-mode-hidden');
-        editModeEl.classList.remove('edit-mode-hidden');
-        editBtn.style.background = '#ef4444';
-        editBtn.style.borderColor = '#ef4444';
-        editBtn.style.color = 'white';
-        editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
-    } else {
-        viewMode.classList.remove('view-mode-hidden');
-        editModeEl.classList.add('edit-mode-hidden');
-        editBtn.style.background = 'var(--bg-body)';
-        editBtn.style.borderColor = 'var(--border-color)';
-        editBtn.style.color = 'var(--text-main)';
-        editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
-        location.reload();
+    console.log('Toggle Edit Mode clicado');
+    try {
+        editMode = !editMode;
+        const editBtn = document.getElementById('editBtn');
+        const viewMode = document.getElementById('view-mode');
+        const editModeEl = document.getElementById('edit-mode');
+        
+        if (!editBtn || !viewMode || !editModeEl) {
+            console.error('Elementos de UI não encontrados', {editBtn, viewMode, editModeEl});
+            return;
+        }
+        
+        if (editMode) {
+            viewMode.classList.add('view-mode-hidden');
+            editModeEl.classList.remove('edit-mode-hidden');
+            
+            editBtn.style.background = '#ef4444';
+            editBtn.style.borderColor = '#ef4444';
+            editBtn.style.color = 'white';
+            editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
+        } else {
+            viewMode.classList.remove('view-mode-hidden');
+            editModeEl.classList.add('edit-mode-hidden');
+            
+            editBtn.style.background = 'var(--bg-body)';
+            editBtn.style.borderColor = 'var(--border-color)';
+            editBtn.style.color = 'var(--text-main)';
+            editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
+            
+            // Pequeno delay para garantir que UI atualizou antes do reload
+            setTimeout(() => location.reload(), 100);
+        }
+        
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    } catch (e) {
+        console.error('Erro ao alternar modo de edição:', e);
+        alert('Erro ao alternar modo. Veja o console.');
     }
-    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
+
 
 function filterMembers() {
     const search = document.getElementById('searchMembers').value.toLowerCase();
