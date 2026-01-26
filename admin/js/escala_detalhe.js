@@ -16,9 +16,9 @@ function toggleEditMode() {
     try {
         editMode = !editMode;
         const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
         const viewMode = document.getElementById('view-mode');
         const editModeEl = document.getElementById('edit-mode');
-        const saveBar = document.getElementById('save-changes-bar');
 
         if (!editBtn || !viewMode || !editModeEl) {
             console.error('Elementos UI críticos não encontrados');
@@ -26,28 +26,34 @@ function toggleEditMode() {
         }
 
         if (editMode) {
+            // Entrar no modo edição
             viewMode.classList.add('view-mode-hidden');
             editModeEl.classList.remove('edit-mode-hidden');
-            if (saveBar) {
-                saveBar.classList.remove('edit-mode-hidden');
-                saveBar.style.display = 'block';
+
+            // Mostrar botão Salvar
+            if (saveBtn) {
+                saveBtn.style.display = 'flex';
             }
 
+            // Mudar botão Editar para Cancelar (vermelho)
             editBtn.style.background = '#ef4444';
-            editBtn.style.borderColor = '#ef4444';
+            editBtn.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.3)';
             editBtn.style.color = 'white';
             editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
         } else {
+            // Sair do modo edição
             viewMode.classList.remove('view-mode-hidden');
             editModeEl.classList.add('edit-mode-hidden');
-            if (saveBar) {
-                saveBar.classList.add('edit-mode-hidden');
-                saveBar.style.display = 'none';
+
+            // Esconder botão Salvar
+            if (saveBtn) {
+                saveBtn.style.display = 'none';
             }
 
-            editBtn.style.background = 'var(--bg-body)';
-            editBtn.style.borderColor = 'var(--border-color)';
-            editBtn.style.color = 'var(--text-main)';
+            // Restaurar botão Editar (amarelo)
+            editBtn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+            editBtn.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.3)';
+            editBtn.style.color = 'white';
             editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
 
             setTimeout(() => window.location.reload(), 50);
