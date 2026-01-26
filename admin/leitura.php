@@ -661,6 +661,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 // --- FRONTEND LOGIC ---
 const serverData = <?= json_encode($progressMap) ?>;
 const planType = "<?= $selectedPlanType ?>";
+const startDateStr = "<?= $startDateStr ?>"; // e.g., "2026-01-26"
 // Initial State
 let currentMonth = <?= $currentPlanMonth ?>;
 let currentDay = <?= $currentPlanDay ?>;
@@ -719,6 +720,9 @@ function renderCalendar() {
     el.innerHTML = '';
     const months = ["", "JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
     
+    // Parse start date
+    const startDate = new Date(startDateStr + 'T00:00:00');
+    
     // Determine how many days in CURRENT VIEWED month
     // Navigators: 25. Others: dynamic based on monthDaysRef
     let limit = 25;
@@ -730,6 +734,35 @@ function renderCalendar() {
         const key = `${currentMonth}_${d}`;
         const info = dataState[key];
         
+        // Calculate the actual calendar date for this plan day
+        // For Navigators: month/day is already correct (Month 1 Day 1 = first day)
+        // For 365-day plans: need to calculate from start_date
+        let actualDate;
+        let displayMonth, displayDay;
+        
+        if (planType === 'navigators') {
+            // Navigators: Calculate based on month and day within that month
+            // Month 1 Day 1 = start_date + 0 days
+            // Month 1 Day 2 = start_date + 1 day
+            // Month 2 Day 1 = start_date + 25 days
+            const dayOffset = ((currentMonth - 1) * 25) + (d - 1);
+            actualDate = new Date(startDate);
+            actualDate.setDate(startDate.getDate() + dayOffset);
+        } else {
+            // 365-day plans: Calculate absolute day number from month/day
+            let absoluteDay = 0;
+            for (let m = 1; m < currentMonth; m++) {
+                absoluteDay += monthDaysRef[m];
+            }
+            absoluteDay += d;
+            
+            actualDate = new Date(startDate);
+            actualDate.setDate(startDate.getDate() + absoluteDay - 1);
+        }
+        
+        displayMonth = months[actualDate.getMonth() + 1];
+        displayDay = actualDate.getDate();
+        
         // Check completion based on ADAPTED plan data
         const planVerses = (myPlanData && myPlanData[currentMonth] && myPlanData[currentMonth][d-1]) ? myPlanData[currentMonth][d-1] : [];
         const isDone = planVerses.length > 0 && (info?.verses?.length || 0) >= planVerses.length;
@@ -739,7 +772,7 @@ function renderCalendar() {
         div.className = `cal-item ${currentDay === d ? 'active' : ''} ${isDone ? 'done' : ''}`;
         div.onclick = () => { currentDay = d; renderCalendar(); loadDay(currentMonth, d); };
         
-        div.innerHTML = `<div class="cal-month">${months[currentMonth]}</div><div class="cal-num">${d}</div>`;
+        div.innerHTML = `<div class="cal-month">${displayMonth}</div><div class="cal-num">${displayDay}</div>`;
         el.appendChild(div);
         
         if(currentDay === d) setTimeout(() => div.scrollIntoView({behavior:'smooth', inline:'center'}), 100);
