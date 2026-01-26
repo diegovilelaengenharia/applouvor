@@ -393,6 +393,76 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     </div>
 </div>
 
+<!-- MODAL PARTICIPANTES -->
+<div id="modal-members" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-surface); width: 90%; max-width: 500px; height: 80vh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Gerenciar Equipe</h3>
+            <button onclick="closeModal('modal-members')" style="background:none; border:none; cursor:pointer; padding: 4px;"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div style="padding: 12px; background: var(--bg-body);">
+             <input type="text" id="searchMembers" placeholder="Buscar participante..." onkeyup="filterMembers()" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; background: var(--bg-surface); outline: none;">
+        </div>
+
+        <div id="membersList" style="flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+             <?php foreach ($allUsers as $user): 
+                $isSelected = in_array($user['id'], $teamIds);
+             ?>
+                <label class="member-filter-item" data-name="<?= strtolower($user['name']) ?>" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s;">
+                    <input type="checkbox" <?= $isSelected ? 'checked' : '' ?> onchange="toggleMember(<?= $user['id'] ?>, this)" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: <?= $user['avatar_color'] ?: '#e2e8f0' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+                        <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);"><?= htmlspecialchars($user['name']) ?></div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
+                    </div>
+                </label>
+             <?php endforeach; ?>
+        </div>
+
+        <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
+            <button onclick="closeModal('modal-members'); location.reload();" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REPERTÓRIO -->
+<div id="modal-songs" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-surface); width: 90%; max-width: 500px; height: 80vh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Gerenciar Repertório</h3>
+            <button onclick="closeModal('modal-songs')" style="background:none; border:none; cursor:pointer; padding: 4px;"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div style="padding: 12px; background: var(--bg-body);">
+             <input type="text" id="searchSongs" placeholder="Buscar música..." onkeyup="filterSongs()" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; background: var(--bg-surface); outline: none;">
+        </div>
+
+        <div id="songsList" style="flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+             <?php foreach ($allSongs as $song): 
+                $isSelected = in_array($song['id'], $songIds);
+             ?>
+                <label class="song-filter-item" data-title="<?= strtolower($song['title']) ?>" data-artist="<?= strtolower($song['artist']) ?>" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s;">
+                    <input type="checkbox" <?= $isSelected ? 'checked' : '' ?> onchange="toggleSong(<?= $song['id'] ?>, this)" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></div>
+                    </div>
+                    <?php if ($song['tone']): ?>
+                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fed7aa; white-space: nowrap;"><?= $song['tone'] ?></span>
+                    <?php endif; ?>
+                </label>
+             <?php endforeach; ?>
+        </div>
+
+        <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
+            <button onclick="closeModal('modal-songs'); location.reload();" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
+        </div>
+    </div>
+</div>
+
 <script>
     window.SCHEDULE_ID = <?= json_encode($id) ?>;
 </script>
