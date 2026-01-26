@@ -289,10 +289,39 @@ for($i=0; $i<365; $i++) {
 if($tempStreak>0) $allStreaks[] = $tempStreak;
 $currentStreak = $streakCount; $bestStreak = !empty($allStreaks) ? max($allStreaks) : $currentStreak;
 
+// Last 7 Days Activity
+$activityChart = [];
+for($i=6; $i>=0; $i--) {
+    $d = clone $now;
+    $d->modify("-$i days");
+    $dStr = $d->format('Y-m-d');
+    $chaptersOnDate = 0;
+    foreach($rows as $r) {
+        if(substr($r['completed_at'], 0, 10) === $dStr) {
+             $versesRead = json_decode($r['verses_read'] ?? '[]', true);
+             if(is_array($versesRead)) $chaptersOnDate += count($versesRead);
+        }
+    }
+    $activityChart[] = ['label' => $d->format('d/m'), 'count' => $chaptersOnDate];
+}
+
 // Predictions
 $daysInPlan = max(1, $daysPassed);
 $avgChapters = round($totalChaptersRead / $daysInPlan, 1);
 $daysRemaining = $totalPlanDays - $totalDaysRead;
+
+// Prediction based on pace
+$pace = ($daysPassed > 0) ? ($totalDaysRead / $daysPassed) : 0; // Plan days completed per real day
+$estimatedFinishDate = null;
+if ($pace > 0 && $daysRemaining > 0) {
+    $realDaysNeeded = $daysRemaining / $pace;
+    $estDate = clone $now;
+    $estDate->modify("+" . round($realDaysNeeded) . " days");
+    $estimatedFinishDate = $estDate->format('d/m/Y');
+} elseif ($daysRemaining <= 0) {
+    $estimatedFinishDate = "Concluído!";
+}
+
 
 // Messages
 $motivationalMessages = [
@@ -590,36 +619,109 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 </div>
 
 
-<!-- STATS MODAL -->
+<!-- STATS DASHBOARD MODAL -->
 <div id="modal-stats" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'">
-    <div style="background: white; width: 95%; max-width: 500px; border-radius: 20px; padding: 24px;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <h2 style="margin:0; font-size:1.4rem;">Estatísticas</h2>
-            <button onclick="document.getElementById('modal-stats').style.display='none'" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
+    <div style="background: white; width: 95%; max-width: 650px; border-radius: 20px; padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
+        <!-- Header -->
+        <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fff;">
+            <div>
+                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #111827;">Meu Progresso</h2>
+                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #6b7280;"><?= $selectedPlanType == 'chronological' ? 'Plano Cronológico' : ($selectedPlanType == 'mcheyne' ? 'Plano M\'Cheyne' : 'Plano Navigators') ?></p>
+            </div>
+            <button onclick="document.getElementById('modal-stats').style.display='none'" style="border: none; background: #f3f4f6; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #4b5563;">
+                <i data-lucide="x" width="20"></i>
+            </button>
         </div>
-        <div style="background: #ecfdf5; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
-            <p style="margin:0; color: #065f46; font-weight: 600; text-align: center;">"<?= $currentMessage ?>"</p>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-             <div style="background: #f8fafc; padding: 16px; border-radius: 12px; text-align: center;">
-                 <div style="font-size: 1.8rem; font-weight: 800; color: #1f2937;"><?= $completionPercent ?>%</div>
-                 <div style="font-size: 0.7rem; color: #6b7280; font-weight: 700; text-transform: uppercase;">Concluído</div>
-             </div>
-             <div style="background: #f8fafc; padding: 16px; border-radius: 12px; text-align: center;">
-                 <div style="font-size: 1.8rem; font-weight: 800; color: #ea580c;"><?= $currentStreak ?></div>
-                 <div style="font-size: 0.7rem; color: #6b7280; font-weight: 700; text-transform: uppercase;">Dias Seguidos</div>
-             </div>
-             <div style="background: #f8fafc; padding: 16px; border-radius: 12px; text-align: center;">
-                 <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;"><?= $avgChapters ?></div>
-                 <div style="font-size: 0.7rem; color: #6b7280; font-weight: 700; text-transform: uppercase;">Capítulos/Dia</div>
-             </div>
-             <div style="background: #f8fafc; padding: 16px; border-radius: 12px; text-align: center;">
-                 <div style="font-size: 1.8rem; font-weight: 800; color: #6366f1;"><?= max(0, $daysRemaining) ?></div>
-                 <div style="font-size: 0.7rem; color: #6b7280; font-weight: 700; text-transform: uppercase;">Dias Restantes</div>
-             </div>
+
+        <div style="overflow-y: auto; padding: 24px;">
+            <!-- Motivation Banner -->
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 16px; color: white; margin-bottom: 24px; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -10px; top: -10px; opacity: 0.2; transform: rotate(15deg);">
+                    <i data-lucide="trophy" width="100" height="100"></i>
+                </div>
+                <p style="margin: 0; font-weight: 600; font-size: 0.95rem; opacity: 0.9; margin-bottom: 8px;">Mensagem do Dia</p>
+                <p style="margin: 0; font-size: 1.1rem; font-weight: 700; line-height: 1.4;">"<?= $currentMessage ?>"</p>
+            </div>
+
+            <!-- Main Metrics Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <!-- Completion Card -->
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e5e7eb" stroke-width="3.8" />
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#6366f1" stroke-width="3.8" stroke-dasharray="<?= $completionPercent ?>, 100" style="transition: stroke-dasharray 1s ease 0s;" />
+                        </svg>
+                        <div style="position: absolute; font-weight: 800; font-size: 1.2rem; color: #1f2937;"><?= $completionPercent ?>%</div>
+                    </div>
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Concluído</div>
+                </div>
+
+                <!-- Streak Card -->
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <div style="background: #fff7ed; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ea580c; margin-bottom: 12px;">
+                        <i data-lucide="flame" width="24"></i>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #ea580c; line-height: 1;"><?= $currentStreak ?></div>
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280; margin-bottom: 4px;">Dias Seguidos</div>
+                    <div style="font-size: 0.7rem; color: #9ca3af;">Recorde: <span style="font-weight: 700; color: #ea580c;"><?= $bestStreak ?></span></div>
+                </div>
+
+                <!-- Pace Card -->
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <div style="background: #ecfdf5; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
+                        <i data-lucide="book-open" width="24"></i>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #059669; line-height: 1;"><?= $avgChapters ?></div>
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (Média)</div>
+                </div>
+            </div>
+
+            <!-- Activity Chart (Last 7 Days) -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+                <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="bar-chart-2" width="16"></i> Atividade (Últimos 7 Dias)
+                </h4>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 120px; gap: 8px;">
+                    <?php 
+                    $maxVal = 0; foreach($activityChart as $d) $maxVal = max($maxVal, $d['count']);
+                    $maxVal = max($maxVal, 5); // Minimum scale
+                    foreach($activityChart as $day): 
+                        $h = ($day['count'] / $maxVal) * 100;
+                        $color = $day['count'] > 0 ? '#6366f1' : '#f1f5f9';
+                    ?>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                        <div style="width: 100%; background: #f1f5f9; border-radius: 6px; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden;">
+                            <div style="width: 100%; height: <?= $h ?>%; background: <?= $color ?>; border-radius: 6px; transition: height 0.5s;"></div>
+                        </div>
+                        <span style="font-size: 0.7rem; font-weight: 600; color: #6b7280;"><?= $day['label'] ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Detailed Stats Table -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+                <div style="padding: 16px 20px; border-bottom: 1px solid #f3f4f6; font-weight: 700; font-size: 0.9rem; color: #374151;">Detalhes da Jornada</div>
+                <div style="padding: 0 20px;">
+                    <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
+                        <span style="color: #6b7280; font-size: 0.9rem;">Dias Restantes</span>
+                        <span style="font-weight: 600; color: #111827;"><?= $daysRemaining ?></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
+                        <span style="color: #6b7280; font-size: 0.9rem;">Total Lido</span>
+                        <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> capítulos</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 14px 0;">
+                        <span style="color: #6b7280; font-size: 0.9rem;">Previsão de Término</span>
+                        <span style="font-weight: 700; color: #6366f1;"><?= $estimatedFinishDate ? $estimatedFinishDate : '---' ?></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <!-- CONFIG MODAL WITH TABS -->
 <div id="modal-config" class="config-fullscreen">
@@ -705,42 +807,56 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <?php endif; ?>
         
         <style>
-            #export-menu button:hover {
-                background: #f9fafb;
+            #export-menu button:hover { background: #f9fafb; }
+            .tab-btn.active { color: #6366f1 !important; border-bottom-color: #6366f1 !important; }
+            .tab-btn:hover { color: #374151; }
+            
+            /* Modern Timeline & Cards */
+            .timeline-container { position: relative; padding-left: 20px; }
+            .timeline-container::before {
+                content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; border-radius: 2px;
             }
-            .tab-btn.active {
-                color: #6366f1 !important;
-                border-bottom-color: #6366f1 !important;
+            
+            .group-header { position: relative; padding: 20px 0 10px 0; background: #f8fafc; z-index: 1; }
+            .month-label { 
+                font-size: 1.2rem; font-weight: 800; color: #1e293b; text-transform: capitalize; 
+                display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
             }
-            .tab-btn:hover {
-                color: #374151;
+            .week-label {
+                font-size: 0.85rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px;
+                padding-left: 4px; margin-bottom: 12px;
             }
-            .diary-entry {
-                background: white;
-                border: 1px solid #e5e7eb;
-                border-radius: 12px;
-                padding: 20px;
-                margin-bottom: 16px;
-                transition: all 0.2s;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            
+            .diary-card {
+                background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+                border: 1px solid white;
+                transition: transform 0.2s, box-shadow 0.2s;
+                position: relative;
             }
-            .diary-entry:hover {
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-                transform: translateY(-2px);
+            .diary-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08); }
+            
+            .diary-card::before {
+                content: ''; position: absolute; left: -26px; top: 24px; width: 14px; height: 14px;
+                background: #6366f1; border: 3px solid #f8fafc; border-radius: 50%; box-shadow: 0 2px 4px rgba(99,102,241,0.3);
             }
+            
+            .diary-date { font-size: 0.8rem; color: #64748b; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+            
+            .diary-title { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 10px 0; line-height: 1.4; }
+            .diary-content { color: #334155; line-height: 1.6; font-size: 0.95rem; }
+            
             .diary-content b, .diary-content strong { font-weight: 700; }
             .diary-content i, .diary-content em { font-style: italic; }
             .diary-content u { text-decoration: underline; }
-            .diary-content strike { text-decoration: line-through; }
             .diary-content ul, .diary-content ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
             .diary-content li { margin-bottom: 4px; }
             .diary-content a { color: #6366f1; text-decoration: underline; }
-            .diary-content a:hover { color: #4f46e5; }
         </style>
         
         <?php if(empty($reportData)): ?>
         <!-- Empty State -->
-        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 1px solid #e5e7eb;">
+        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 1px solid #e5e7eb; margin-top: 20px;">
             <div style="background: #f3f4f6; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #9ca3af;">
                 <i data-lucide="book-open" width="40"></i>
             </div>
@@ -749,31 +865,45 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
         <?php else: ?>
         <!-- Diary Entries Timeline -->
-        <div id="diary-entries-container" style="display: flex; flex-direction: column; gap: 0;">
-        <?php foreach($reportData as $rep): ?>
-            <div class="diary-entry" data-search-content="<?= strtolower(htmlspecialchars($rep['title'] ?? '') . ' ' . strip_tags($rep['comment'] ?? '') . ' ' . date('d/m/Y', strtotime($rep['date']))) ?>">
-                <!-- Header -->
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                    <div>
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
-                            <?= date('d/m/Y às H:i', strtotime($rep['date'])) ?>
+        <div id="diary-entries-container" class="timeline-container">
+        <?php 
+            $currentMonthLabel = '';
+            $currentWeekLabel = '';
+            $monthsPT = [1=>'Janeiro', 2=>'Fevereiro', 3=>'Março', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro'];
+            
+            foreach($reportData as $rep): 
+                $d = new DateTime($rep['date']);
+                $mLabel = $monthsPT[(int)$d->format('n')] . ' ' . $d->format('Y');
+                $wLabel = 'Semana ' . $d->format('W');
+                
+                if($mLabel !== $currentMonthLabel || $wLabel !== $currentWeekLabel):
+                    if($mLabel !== $currentMonthLabel): ?>
+                        <div class="group-header">
+                            <div class="month-label"><i data-lucide="calendar" width="20" style="color:#6366f1;"></i> <?= $mLabel ?></div>
+                            <div class="week-label"><?= $wLabel ?></div>
                         </div>
-                        <div style="display: inline-flex; align-items: center; gap: 4px; background: #e0e7ff; color: #4338ca; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                            <i data-lucide="bookmark" width="12"></i> Dia <?= $rep['d'] ?> - Mês <?= $rep['m'] ?>
+                    <?php elseif($wLabel !== $currentWeekLabel): ?>
+                         <div class="group-header">
+                            <div class="week-label" style="padding-top:10px;"><?= $wLabel ?></div>
                         </div>
-                    </div>
+                    <?php endif;
+                    $currentMonthLabel = $mLabel;
+                    $currentWeekLabel = $wLabel;
+                endif;
+            ?>
+            <div class="diary-card" data-search-content="<?= strtolower(htmlspecialchars($rep['title'] ?? '') . ' ' . strip_tags($rep['comment'] ?? '') . ' ' . date('d/m/Y', strtotime($rep['date']))) ?>">
+                <div class="diary-date">
+                    <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \à\s H:i') ?>
+                     <span style="width: 4px; height: 4px; background: #cbd5e1; border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
+                     Dia <?= $rep['d'] ?>
                 </div>
                 
-                <!-- Title -->
                 <?php if($rep['title']): ?>
-                <h4 style="margin: 0 0 12px 0; font-size: 1.05rem; font-weight: 700; color: #111827;">
-                    <?= htmlspecialchars($rep['title']) ?>
-                </h4>
+                <h4 class="diary-title"><?= htmlspecialchars($rep['title']) ?></h4>
                 <?php endif; ?>
                 
-                <!-- Content with HTML rendering -->
                 <?php if($rep['comment']): ?>
-                <div class="diary-content" style="color: #374151; line-height: 1.6; font-size: 0.9rem;">
+                <div class="diary-content" style="margin-top: 8px;">
                     <?= $rep['comment'] ?>
                 </div>
                 <?php endif; ?>
@@ -1141,14 +1271,38 @@ document.addEventListener('click', function(e) {
 function filterDiary() {
     const input = document.getElementById('diary-search');
     const filter = input.value.toLowerCase();
-    const entries = document.querySelectorAll('.diary-entry');
+    const cards = document.querySelectorAll('.diary-card');
     
-    entries.forEach(entry => {
-        const searchContent = entry.getAttribute('data-search-content');
+    // 1. Filter Cards
+    cards.forEach(card => {
+        const searchContent = card.getAttribute('data-search-content');
         if (searchContent.includes(filter)) {
-            entry.style.display = 'block';
+            card.style.display = 'block';
+            card.classList.add('visible-card');
         } else {
-            entry.style.display = 'none';
+            card.style.display = 'none';
+            card.classList.remove('visible-card');
+        }
+    });
+
+    // 2. Handle Group Headers
+    const container = document.getElementById('diary-entries-container');
+    if(!container) return;
+    
+    const children = Array.from(container.children);
+    
+    children.forEach((child, index) => {
+        if(child.classList.contains('group-header')) {
+            let visibleSiblings = false;
+            for(let i = index + 1; i < children.length; i++) {
+                const sibling = children[i];
+                if(sibling.classList.contains('group-header')) break;
+                if(sibling.classList.contains('visible-card')) {
+                    visibleSiblings = true;
+                    break;
+                }
+            }
+            child.style.display = visibleSiblings ? 'block' : 'none';
         }
     });
 }
@@ -1218,14 +1372,17 @@ function exportAsWord(entries, dateStr) {
     
     // Entries
     entries.forEach((entry) => {
-        const dateEl = entry.querySelector('div[style*="text-transform: uppercase"]');
-        const dayEl = entry.querySelector('div[style*="background: #e0e7ff"]');
-        const titleEl = entry.querySelector('h4');
+        const dateEl = entry.querySelector('.diary-date');
+        const titleEl = entry.querySelector('.diary-title');
         const contentEl = entry.querySelector('.diary-content');
         
         html += '<div class="entry">';
-        if (dateEl) html += `<div class="date">${dateEl.textContent.trim()}</div>`;
-        if (dayEl) html += `<div class="day-badge">${dayEl.textContent.trim()}</div>`;
+        if (dateEl) {
+             // Remove potential icon text if present (e.g. from alt text or similar, though svg usually empty)
+             // We can just take the text text content
+             const cleanDate = dateEl.innerText.trim();
+             html += `<div class="date">${cleanDate}</div>`;
+        }
         if (titleEl) html += `<div class="title">${titleEl.textContent.trim()}</div>`;
         if (contentEl) html += `<div class="content">${contentEl.innerHTML}</div>`;
         html += '</div>';
