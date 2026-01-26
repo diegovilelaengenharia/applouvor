@@ -377,6 +377,18 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     </div>
 </div>
 
+<!-- Botão Salvar Alterações (fixo no modo edição) -->
+<div id="save-changes-bar" class="edit-mode-hidden" style="position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid var(--border-color); padding: 16px; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); z-index: 1000; display: none;">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 12px;">
+        <button onclick="toggleEditMode()" style="flex: 1; padding: 14px; background: var(--bg-body); border: 2px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-weight: 700; cursor: pointer; font-size: 1rem;">
+            Cancelar
+        </button>
+        <button onclick="location.reload()" style="flex: 2; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+            ✓ Salvar Alterações
+        </button>
+    </div>
+</div>
+
 <script>
 let editMode = false;
 
