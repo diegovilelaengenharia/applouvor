@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 renderAppHeader('Nova Escala');
+renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
 ?>
 
 <style>
@@ -45,29 +46,10 @@ renderAppHeader('Nova Escala');
     .compact-container {
         max-width: 700px;
         margin: 0 auto;
-        padding: 16px 12px 80px 12px;
+        padding: 16px 12px 140px 12px; /* Aumentado padding bottom para acomodar barra flutuante + navbar */
     }
 
-    .header-bar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-    }
-
-    .btn-back {
-        width: 40px; height: 40px; border-radius: 12px;
-        border: 1px solid var(--border-color); background: var(--bg-surface);
-        color: var(--text-muted); display: flex; align-items: center; justify-content: center;
-        transition: all 0.2s; box-shadow: var(--shadow-sm); text-decoration: none;
-    }
-
-    .page-title {
-        font-size: var(--font-display); font-weight: 800;
-        background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
-        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-        margin: 0;
-    }
+    /* .header-bar e .page-title removidos pois agora usamos renderPageHeader padrão */
 
     /* Wizard Progress */
     .wizard-progress {
@@ -158,25 +140,39 @@ renderAppHeader('Nova Escala');
     }
     .select-item input { accent-color: var(--primary); width: 18px; height: 18px; }
 
-    /* Bottom Actions */
+    /* Bottom Actions Mobile Fix */
     .actions-bar {
-        position: fixed; bottom: 0; left: 0; right: 0;
-        background: var(--bg-surface); border-top: 1px solid var(--border-color);
-        padding: 12px 16px; display: flex; gap: 12px; z-index: 50;
-        padding-bottom: max(12px, env(safe-area-inset-bottom));
+        position: fixed; 
+        bottom: 80px; /* Acima da navbar inferior (aprox 70-80px) */
+        left: 0; 
+        right: 0;
+        background: var(--bg-surface); 
+        border-top: 1px solid var(--border-color);
+        padding: 12px 16px; 
+        display: flex; 
+        gap: 12px; 
+        z-index: 50;
+        /* Remover padding-bottom extra do safe-area aqui pois já temos margem do bottom */
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
     }
-    @media(min-width: 1024px) {
-        .actions-bar { position: static; border: none; padding: 0; margin-top: 24px; background: none; }
+    
+    @media(min-width: 1025px) {
+        .actions-bar { 
+            position: static; 
+            border: none; 
+            padding: 0; 
+            margin-top: 24px; 
+            background: none; 
+            box-shadow: none;
+            bottom: auto;
+        }
     }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 
 <div class="compact-container">
-    <div class="header-bar">
-        <a href="escalas.php" class="btn-back"><i data-lucide="arrow-left" style="width: 20px;"></i></a>
-        <h1 class="page-title">Nova Escala</h1>
-    </div>
+    <!-- Header removido, usando padrão renderPageHeader -->
 
     <!-- Wizard Progress -->
     <div class="wizard-progress">
