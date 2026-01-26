@@ -117,29 +117,45 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 <!-- Info Card Moderno -->
 <div style="max-width: 800px; margin: 0 auto 20px; padding: 0 16px;">
     <div style="background: var(--bg-surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-        <!-- Header com Botão Editar -->
+        <!-- Header com Botões -->
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
                 <h1 style="margin: 0 0 4px 0; font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;"><?= htmlspecialchars($schedule['event_type']) ?></h1>
                 <div style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
             </div>
             
-            <!-- Botão Editar AMARELO -->
-            <button id="editBtn" onclick="toggleEditMode()" style="
-                padding: 10px 18px; border-radius: 12px;
-                background: linear-gradient(135deg, #fbbf24, #f59e0b); 
-                border: none;
-                color: white; cursor: pointer;
-                display: flex; align-items: center; gap: 6px;
-                display: flex; align-items: center; gap: 6px;
-                font-weight: 700; font-size: var(--font-body-sm);
-                transition: all 0.2s;
-                box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(251, 191, 36, 0.4)'"
-               onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(251, 191, 36, 0.3)'">
-                <i data-lucide="edit-2" style="width: 16px;"></i>
-                <span>Editar</span>
-            </button>
+            <!-- Botões de Ação -->
+            <div style="display: flex; gap: 8px;">
+                <!-- Botão Salvar (visível apenas no modo edição) -->
+                <button id="saveBtn" onclick="location.reload()" style="
+                    padding: 10px 18px; border-radius: 12px;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    border: none; color: white; cursor: pointer;
+                    display: none; align-items: center; gap: 6px;
+                    font-weight: 700; font-size: var(--font-body-sm);
+                    transition: all 0.2s;
+                    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.4)'"
+                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(16, 185, 129, 0.3)'">
+                    <i data-lucide="check" style="width: 16px;"></i>
+                    <span>Salvar</span>
+                </button>
+                
+                <!-- Botão Editar/Cancelar -->
+                <button id="editBtn" onclick="toggleEditMode()" style="
+                    padding: 10px 18px; border-radius: 12px;
+                    background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+                    border: none; color: white; cursor: pointer;
+                    display: flex; align-items: center; gap: 6px;
+                    font-weight: 700; font-size: var(--font-body-sm);
+                    transition: all 0.2s;
+                    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(251, 191, 36, 0.4)'"
+                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(251, 191, 36, 0.3)'">
+                    <i data-lucide="edit-2" style="width: 16px;"></i>
+                    <span>Editar</span>
+                </button>
+            </div>
         </div>
         
         <!-- Info Row Compacta (Ícones reduzidos) -->
