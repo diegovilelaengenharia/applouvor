@@ -1,0 +1,300 @@
+﻿<?php
+// admin/leitura.php
+
+
+require_once '../includes/auth.php';
+require_once '../includes/layout.php';
+
+checkLogin(); 
+
+// AUTOLOAD: T├¡tulo na Tabela
+try {
+    $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'note_title'");
+    if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN note_title VARCHAR(255) DEFAULT NULL");
+} catch(Exception $e) { /* Ignore */ }
+
+// BACKEND: Logic
+$userId = $_SESSION['user_id'];
+$now = new DateTime();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+    $action = $_POST['action'] ?? '';
+
+    if ($action === 'save_settings') {
+        try {
+            $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_start_date', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")->execute([$userId, $_POST['start_date']]);
+            echo json_encode(['success' => true]);
+        } catch (Exception $e) { echo json_encode(['success'=>false]); }
+        exit;
+    }
+    if ($action === 'save_progress') {
+        $m = (int)$_POST['month']; 
+        $d = (int)$_POST['day']; 
+        $comment = $_POST['comment'] ?? null; 
+        $title = $_POST['note_title'] ?? null; 
+        $versesRaw = $_POST['verses'] ?? '[]';
+
+        // Validate JSON
+        $decoded = json_decode($versesRaw);
+        if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
+            echo json_encode(['success'=>false, 'error'=>'Invalid JSON data']);
+            exit;
+        }
+
+        try {
+            // Check if verses is empty and there are no comments/title
+            $versesArray = is_array($decoded) ? $decoded : [];
+            $hasVerses = count($versesArray) > 0;
+            $hasComment = !empty($comment);
+            $hasTitle = !empty($title);
+            
+            // If nothing is marked and no comments, DELETE the record
+            if (!$hasVerses && !$hasComment && !$hasTitle) {
+                $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?")
+                    ->execute([$userId, $m, $d]);
+                echo json_encode(['success' => true, 'deleted' => true]);
+                exit;
+            }
+            
+            // Otherwise, save/update the record
+            if ($comment !== null || $title !== null) {
+                // Ensure text fields are not excessively long (basic sanity check)
+                if ($comment && strlen($comment) > 5000) $comment = substr($comment, 0, 5000);
+                if ($title && strlen($title) > 255) $title = substr($title, 0, 255);
+
+                $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at"; 
+                $vals = "VALUES (?, ?, ?, ?, NOW()"; 
+                $updates = "verses_read = VALUES(verses_read), completed_at = NOW()"; 
+                $params = [$userId, $m, $d, $versesRaw];
+                
+                if($comment !== null) { $sql .= ", comment"; $vals .= ", ?"; $updates .= ", comment = VALUES(comment)"; $params[] = $comment; }
+                if($title !== null) { $sql .= ", note_title"; $vals .= ", ?"; $updates .= ", note_title = VALUES(note_title)"; $params[] = $title; }
+                
+                $sql .= ") $vals) ON DUPLICATE KEY UPDATE $updates";
+            } else {
+                 $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at) VALUES (?, ?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE verses_read = VALUES(verses_read), completed_at = NOW()";
+                $params = [$userId, $m, $d, $versesRaw];
+            }
+            $pdo->prepare($sql)->execute($params);
+            echo json_encode(['success' => true]);
+        } catch (Exception $e) { 
+            // Return actual error only if strictly necessary, otherwise generic
+            error_log($e->getMessage()); // Log error on server
+            echo json_encode(['success'=>false, 'error'=>'Database error']); 
+        }
+        exit;
+    }
+
+    if ($action === 'reset_plan') { 
+        // Delete reading progress
+        $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ?")->execute([$userId]); 
+        // Delete user settings (pauses the plan)
+        $pdo->prepare("DELETE FROM user_settings WHERE user_id = ?")->execute([$userId]); 
+        echo json_encode(['success'=>true]); 
+        exit; 
+    }
+    
+    if ($action === 'start_plan') {
+        // Set start date to today
+        $today = date('Y-m-d');
+        $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_start_date', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")->execute([$userId, $today]);
+        echo json_encode(['success'=>true, 'date'=>$today]); 
+        exit;
+    }
+}
+
+$stmt = $pdo->prepare("SELECT setting_key, setting_value FROM user_settings WHERE user_id = ?"); $stmt->execute([$userId]); $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+$startDateStr = $settings['reading_plan_start_date'] ?? null;
+$planStarted = !empty($startDateStr); // Check if plan has been started
+
+
+// Only calculate if plan has started
+if ($planStarted) {
+    $start = new DateTime($startDateStr); $start->setTime(0,0,0); $now->setTime(0,0,0);
+    $diff = $start->diff($now); $daysPassed = $diff->invert ? -1*$diff->days : $diff->days;
+    $planDayIndex = max(1, $daysPassed + 1);
+    $currentPlanMonth = floor(($planDayIndex - 1) / 25) + 1; $currentPlanDay = (($planDayIndex - 1) % 25) + 1;
+    if($currentPlanMonth>12){ $currentPlanMonth=12; $currentPlanDay=25; }
+} else {
+    // Plan not started - default to month 1, day 1
+    $currentPlanMonth = 1;
+    $currentPlanDay = 1;
+}
+
+$stmt = $pdo->prepare("SELECT month_num, day_num, verses_read, comment, note_title, completed_at FROM reading_progress WHERE user_id = ? ORDER BY completed_at DESC");
+$stmt->execute([$userId]); $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$progressMap = []; $totalChaptersRead = 0; $totalDaysRead = 0; $reportData = [];
+foreach($rows as $r) {
+    $verses = json_decode($r['verses_read'] ?? '[]', true); if(!is_array($verses)) $verses=[];
+    
+    // Count individual chapters read
+    $chaptersInThisDay = count($verses);
+    $totalChaptersRead += $chaptersInThisDay;
+    
+    // Count days that have at least one chapter read (ONLY if verses array has items)
+    if($chaptersInThisDay > 0) $totalDaysRead++;
+    
+    $k = "{$r['month_num']}_{$r['day_num']}";
+    $progressMap[$k] = ['verses'=>$verses, 'comment'=>$r['comment']??'', 'title'=>$r['note_title']??'', 'date'=>$r['completed_at']];
+    if(count($verses)>0 || !empty($r['comment']) || !empty($r['note_title'])) {
+        $reportData[] = ['m'=>(int)$r['month_num'], 'd'=>(int)$r['day_num'], 'date'=>$r['completed_at'], 'comment'=>$r['comment'], 'title'=>$r['note_title']??''];
+    }
+}
+$completionPercent = min(100, round(($totalDaysRead / 300) * 100));
+
+// --- CALCULAR STREAK E ESTAT├ìSTICAS MOTIVACIONAIS ---
+$currentStreak = 0;
+$bestStreak = 0;
+$today = new DateTime(); 
+$today->setTime(0,0,0);
+
+// Verificar streak retroativo e calcular melhor sequ├¬ncia
+$checkDate = clone $today;
+$streakCount = 0;
+$tempStreak = 0;
+$allStreaks = [];
+
+// Verifica at├® 365 dias para tr├ís
+for($i=0; $i<365; $i++) {
+    $foundReading = false;
+    foreach($reportData as $rep) {
+        $rDate = new DateTime($rep['date']);
+        $rDate->setTime(0,0,0);
+        if($rDate == $checkDate) {
+            $foundReading = true;
+            break;
+        }
+    }
+    
+    if($foundReading) {
+        $streakCount++;
+        $tempStreak++;
+        $checkDate->modify('-1 day');
+    } else {
+        // Se for hoje e n├úo leu, n├úo quebra o streak de ontem
+        if($i === 0) {
+            $checkDate->modify('-1 day');
+            continue;
+        }
+        // Salvar streak atual e resetar
+        if($tempStreak > 0) {
+            $allStreaks[] = $tempStreak;
+            $tempStreak = 0;
+        }
+        break;
+    }
+}
+// Adicionar ├║ltimo streak se existir
+if($tempStreak > 0) $allStreaks[] = $tempStreak;
+
+$currentStreak = $streakCount;
+$bestStreak = !empty($allStreaks) ? max($allStreaks) : $currentStreak;
+
+// --- PROJE├ç├òES E RITMO DE LEITURA ---
+$daysInPlan = $planStarted ? max(1, $daysPassed) : 1;
+$avgChaptersPerDay = $totalChaptersRead / $daysInPlan;
+$avgDaysPerDay = $totalDaysRead / $daysInPlan;
+
+// Meta ideal: 300 dias em 365 dias = ~0.82 dias/dia, ou ~3 cap├¡tulos/dia
+$idealDaysPerDay = 300 / 365;
+$idealChaptersPerDay = 3.0;
+
+// Dias restantes para completar
+$daysRemaining = 300 - $totalDaysRead;
+
+// Proje├º├úo de conclus├úo (baseada no ritmo atual)
+$estimatedDaysToComplete = $avgDaysPerDay > 0 ? ceil($daysRemaining / $avgDaysPerDay) : 999;
+$estimatedCompletionDate = null;
+if($planStarted && $avgDaysPerDay > 0 && $estimatedDaysToComplete < 999) {
+    $estimatedCompletionDate = (new DateTime())->modify("+{$estimatedDaysToComplete} days")->format('d/m/Y');
+}
+
+// Compara├º├úo com meta
+$paceComparison = $avgDaysPerDay >= $idealDaysPerDay ? 'adiantado' : 'no ritmo';
+if($avgDaysPerDay < ($idealDaysPerDay * 0.7)) $paceComparison = 'pode acelerar';
+
+// --- MENSAGENS MOTIVACIONAIS DIN├éMICAS ---
+$motivationalMessages = [
+    0 => "­ƒî▒ Voc├¬ come├ºou! Cada jornada come├ºa com um passo. Continue firme!",
+    10 => "­ƒÆ¬ Incr├¡vel! Voc├¬ j├í leu {$totalChaptersRead} cap├¡tulos. A persist├¬ncia est├í valendo a pena!",
+    25 => "­ƒîƒ Voc├¬ est├í no caminho certo! J├í completou 1/4 da jornada!",
+    50 => "Ô£¿ Mais da metade conclu├¡da! Sua dedica├º├úo ├® inspiradora!",
+    75 => "­ƒÄ» Quase l├í! Voc├¬ est├í t├úo perto de completar esta jornada!",
+    90 => "­ƒÅå Reta final! Voc├¬ ├® um exemplo de perseveran├ºa!"
+];
+
+$currentMessage = $motivationalMessages[0];
+foreach($motivationalMessages as $threshold => $message) {
+    if($completionPercent >= $threshold) {
+        $currentMessage = $message;
+    }
+}
+
+// --- CONQUISTAS E BADGES ---
+$achievements = [];
+if($currentStreak >= 7) $achievements[] = ['icon' => '­ƒöÑ', 'text' => '7 dias seguidos!'];
+if($currentStreak >= 30) $achievements[] = ['icon' => '­ƒÆÄ', 'text' => '30 dias seguidos!'];
+if($totalChaptersRead >= 50) $achievements[] = ['icon' => '­ƒôÜ', 'text' => '50 cap├¡tulos!'];
+if($totalChaptersRead >= 100) $achievements[] = ['icon' => 'Ô¡É', 'text' => '100 cap├¡tulos!'];
+if($totalDaysRead >= 30) $achievements[] = ['icon' => '­ƒôà', 'text' => '1 m├¬s completo!'];
+if($totalDaysRead >= 90) $achievements[] = ['icon' => '­ƒÄè', 'text' => '3 meses!'];
+if($completionPercent >= 25) $achievements[] = ['icon' => '­ƒÑë', 'text' => '25% conclu├¡do!'];
+if($completionPercent >= 50) $achievements[] = ['icon' => '­ƒÑê', 'text' => '50% conclu├¡do!'];
+if($completionPercent >= 75) $achievements[] = ['icon' => '­ƒÑç', 'text' => '75% conclu├¡do!'];
+
+// M├®dia de Leitura (Cap├¡tulos / Dias passados desde o in├¡cio)
+$avgChapters = round($avgChaptersPerDay, 1);
+
+// M├®dia de Leitura (Cap├¡tulos / Dias passados desde o in├¡cio)
+$daysSinceStart = max(1, $daysPassed);
+$avgChapters = round($totalChaptersRead / $daysSinceStart, 1);
+// --------------------------------------
+
+// RENDER: Mobile Header & Layout
+renderAppHeader('Leitura B├¡blica'); 
+renderPageHeader('Plano de Leitura B├¡blica Anual', 'Louvor PIB Oliveira');
+?>
+
+<!-- FRONTEND -->
+<script src="../assets/js/reading_plan_data.js?v=<?= time() ?>"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+    :root {
+        --primary: #6366f1; --primary-soft: #e0e7ff; --success: #10b981; --success-soft: #d1fae5;
+        --warning: #f59e0b; --warning-soft: #fef3c7; --surface: #ffffff; --bg: #f8fafc;
+        --text: #1e293b; --text-light: #64748b; --border: #e2e8f0;
+    }
+    body { background-color: var(--gray-50, #f8fafc); color: var(--gray-900, #1e293b); padding-bottom: 70px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+    /* Calendar Strip */
+    .cal-strip {
+        display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important;
+        gap: 8px; overflow-x: auto; padding: 10px 12px;
+        background: white; border-bottom: 1px solid var(--gray-200, #e5e7eb);
+        scrollbar-width: none;
+    }
+    .cal-strip::-webkit-scrollbar { display: none; }
+    .cal-item {
+        min-width: 56px; height: 68px; border-radius: 12px; background: var(--gray-100, #f3f4f6); border: 2px solid transparent; 
+        display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s;
+    }
+    .cal-month { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--gray-500, #6b7280); letter-spacing: 0.5px; }
+    .cal-num { font-size: 1.25rem; font-weight: 800; color: var(--gray-800, #1f2937); }
+    /* ACTIVE STATE */
+    .cal-item.active { background: white; border-color: var(--primary-500, #047857); box-shadow: 0 2px 8px rgba(4, 120, 87, 0.15); }
+    .cal-item.active .cal-num { color: var(--primary-600, #065f46); }
+    .cal-item.active .cal-month { color: var(--primary-600, #065f46); }
+    
+    /* DONE STATE */
+    .cal-item.done { background: var(--success-light, #d1fae5); border-color: transparent !important; }
+    .cal-item.done .cal-num { color: var(--success-dark, #047857); }
+    .cal-item.done .cal-month { color: var(--success-dark, #047857); }
+    .cal-item.active.done { border-color: var(--success, #10b981) !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2); }
+
+    /* PARTIAL/PENDING STATE (Yellow) */
+    .cal-item.partial { background: var(--warning-light, #fef3c7); border-color: transparent; }
+    .cal-item.partial .cal-num { color: var(--warning-dark, #d97706); }
+    .cal-item.partial .cal-month { color: var(--warning-dark, #d97706); }

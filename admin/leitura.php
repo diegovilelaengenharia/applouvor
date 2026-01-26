@@ -1,5 +1,6 @@
 <?php
 // admin/leitura.php
+header('Content-Type: text/html; charset=UTF-8');
 require_once '../includes/auth.php';
 require_once '../includes/layout.php';
 
@@ -408,20 +409,186 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <!-- INCLUDES: Modals -->
 <!-- Note Modal, Stats Modal etc are defined in previous versions. I'll include minified versions for brevity as they are unchanged logic mostly. -->
-<!-- NOTE MODAL -->
+<!-- NOTE MODAL WITH RICH TEXT EDITOR -->
 <div id="modal-note" class="modal-overlay">
-    <div style="background: white; width: 95%; max-width: 600px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;">
-        <div style="padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fff7ed;">
-            <h3 style="margin:0; color:#c2410c; font-weight:700; display:flex; gap:8px; align-items:center;"><i data-lucide="pen-line" width="18"></i> Anotação</h3>
-            <button onclick="document.getElementById('modal-note').style.display='none'" style="border:none; background:none; cursor:pointer;"><i data-lucide="x" width="20"></i></button>
+    <div style="background: white; width: 95%; max-width: 700px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;">
+        <div style="padding: 16px 24px; background: #fff7ed; border-bottom: 1px solid #fed7aa; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #c2410c; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="pen-line" width="20"></i> Anotação
+            </h3>
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; cursor: pointer; color: #9ca3af; padding: 4px;">
+                <i data-lucide="x" width="20"></i>
+            </button>
         </div>
-        <div style="padding: 20px; overflow-y: auto;">
-            <input type="text" id="note-title-input" placeholder="Título..." style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; font-weight: 600;">
-            <textarea id="note-desc-input" placeholder="Escreva sua reflexão..." style="width: 100%; min-height: 200px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; resize: vertical; font-family: inherit;"></textarea>
-            <button onclick="saveNote()" style="width: 100%; padding: 14px; background: #f97316; color: white; border: none; border-radius: 8px; font-weight: 700; margin-top: 16px; cursor: pointer;">Salvar</button>
+        <div style="padding: 20px 24px; overflow-y: auto; flex: 1;">
+            <!-- Title Input -->
+            <input type="text" id="note-title-input" placeholder="Título da anotação..." style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
+            
+            <!-- Rich Text Editor -->
+            <div style="border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: white;">
+                <!-- Toolbar -->
+                <div style="display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap;">
+                    <!-- Text Formatting -->
+                    <button type="button" onclick="formatText('bold')" class="editor-btn" title="Negrito">
+                        <i data-lucide="bold" width="16"></i>
+                    </button>
+                    <button type="button" onclick="formatText('italic')" class="editor-btn" title="Itálico">
+                        <i data-lucide="italic" width="16"></i>
+                    </button>
+                    <button type="button" onclick="formatText('underline')" class="editor-btn" title="Sublinhado">
+                        <i data-lucide="underline" width="16"></i>
+                    </button>
+                    <button type="button" onclick="formatText('strikeThrough')" class="editor-btn" title="Tachado">
+                        <i data-lucide="strikethrough" width="16"></i>
+                    </button>
+                    
+                    <div style="width:1px; height:20px; background:#e2e8f0; margin:0 4px;"></div>
+                    
+                    <!-- Lists -->
+                    <button type="button" onclick="formatText('insertUnorderedList')" class="editor-btn" title="Lista">
+                        <i data-lucide="list" width="16"></i>
+                    </button>
+                    <button type="button" onclick="formatText('insertOrderedList')" class="editor-btn" title="Lista numerada">
+                        <i data-lucide="list-ordered" width="16"></i>
+                    </button>
+                    
+                    <div style="width:1px; height:20px; background:#e2e8f0; margin:0 4px;"></div>
+                    
+                    <!-- Link -->
+                    <button type="button" onclick="insertLink()" class="editor-btn" title="Inserir link">
+                        <i data-lucide="link" width="16"></i>
+                    </button>
+                    
+                    <!-- Emoji Picker -->
+                    <div style="position: relative;">
+                        <button type="button" id="emoji-btn" onclick="toggleEmojiPicker()" class="editor-btn" title="Emoji">
+                            <i data-lucide="smile" width="16"></i>
+                        </button>
+                        <div id="emoji-picker" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-width: 280px;">
+                            <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;">
+                                <!-- Spiritual -->
+                                <button type="button" onclick="insertEmoji('🙏')" class="emoji-btn">🙏</button>
+                                <button type="button" onclick="insertEmoji('✝️')" class="emoji-btn">✝️</button>
+                                <button type="button" onclick="insertEmoji('⛪')" class="emoji-btn">⛪</button>
+                                <button type="button" onclick="insertEmoji('📖')" class="emoji-btn">📖</button>
+                                <button type="button" onclick="insertEmoji('📿')" class="emoji-btn">📿</button>
+                                <button type="button" onclick="insertEmoji('🕊️')" class="emoji-btn">🕊️</button>
+                                <button type="button" onclick="insertEmoji('🌈')" class="emoji-btn">🌈</button>
+                                <button type="button" onclick="insertEmoji('☀️')" class="emoji-btn">☀️</button>
+                                <button type="button" onclick="insertEmoji('🌙')" class="emoji-btn">🌙</button>
+                                <!-- Music & Worship -->
+                                <button type="button" onclick="insertEmoji('🎵')" class="emoji-btn">🎵</button>
+                                <button type="button" onclick="insertEmoji('🎶')" class="emoji-btn">🎶</button>
+                                <button type="button" onclick="insertEmoji('🎤')" class="emoji-btn">🎤</button>
+                                <button type="button" onclick="insertEmoji('🎸')" class="emoji-btn">🎸</button>
+                                <button type="button" onclick="insertEmoji('🎹')" class="emoji-btn">🎹</button>
+                                <button type="button" onclick="insertEmoji('🥁')" class="emoji-btn">🥁</button>
+                                <button type="button" onclick="insertEmoji('🎺')" class="emoji-btn">🎺</button>
+                                <!-- Nature -->
+                                <button type="button" onclick="insertEmoji('🌺')" class="emoji-btn">🌺</button>
+                                <button type="button" onclick="insertEmoji('🌸')" class="emoji-btn">🌸</button>
+                                <button type="button" onclick="insertEmoji('🌼')" class="emoji-btn">🌼</button>
+                                <button type="button" onclick="insertEmoji('🌻')" class="emoji-btn">🌻</button>
+                                <button type="button" onclick="insertEmoji('🌹')" class="emoji-btn">🌹</button>
+                                <button type="button" onclick="insertEmoji('🌿')" class="emoji-btn">🌿</button>
+                                <button type="button" onclick="insertEmoji('🍃')" class="emoji-btn">🍃</button>
+                                <button type="button" onclick="insertEmoji('🌱')" class="emoji-btn">🌱</button>
+                                <!-- Hearts & Emotions -->
+                                <button type="button" onclick="insertEmoji('❤️')" class="emoji-btn">❤️</button>
+                                <button type="button" onclick="insertEmoji('💛')" class="emoji-btn">💛</button>
+                                <button type="button" onclick="insertEmoji('💚')" class="emoji-btn">💚</button>
+                                <button type="button" onclick="insertEmoji('💙')" class="emoji-btn">💙</button>
+                                <button type="button" onclick="insertEmoji('💜')" class="emoji-btn">💜</button>
+                                <button type="button" onclick="insertEmoji('🤍')" class="emoji-btn">🤍</button>
+                                <button type="button" onclick="insertEmoji('😊')" class="emoji-btn">😊</button>
+                                <button type="button" onclick="insertEmoji('😇')" class="emoji-btn">😇</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="width:1px; height:20px; background:#e2e8f0; margin:0 4px;"></div>
+                    
+                    <!-- Clear Formatting -->
+                    <button type="button" onclick="formatText('removeFormat')" class="editor-btn" title="Limpar formatação">
+                        <i data-lucide="eraser" width="16"></i>
+                    </button>
+                </div>
+                
+                <!-- Rich Text Editor Content -->
+                <div 
+                    id="note-desc-input" 
+                    contenteditable="true" 
+                    style="width: 100%; min-height: 180px; max-height: 300px; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:0.95rem; line-height:1.6; color:#334155;"
+                    data-placeholder="Digite aqui... Use a barra de ferramentas para formatar o texto."
+                ></div>
+            </div>
+            
+            <style>
+                .editor-btn {
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 6px;
+                    padding: 6px 8px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s;
+                    color: #64748b;
+                }
+                .editor-btn:hover {
+                    background: #f8fafc;
+                    border-color: #cbd5e1;
+                    color: #334155;
+                }
+                .editor-btn:active {
+                    transform: scale(0.95);
+                    background: #f1f5f9;
+                }
+                
+                .emoji-btn {
+                    background: white;
+                    border: 1px solid transparent;
+                    border-radius: 4px;
+                    padding: 6px;
+                    cursor: pointer;
+                    font-size: 1.2rem;
+                    transition: all 0.2s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .emoji-btn:hover {
+                    background: #f8fafc;
+                    border-color: #e2e8f0;
+                    transform: scale(1.1);
+                }
+                
+                /* Placeholder for contenteditable */
+                #note-desc-input:empty:before {
+                    content: attr(data-placeholder);
+                    color: #94a3b8;
+                    font-style: italic;
+                }
+                
+                /* Styling for formatted content */
+                #note-desc-input b, #note-desc-input strong { font-weight: 700; }
+                #note-desc-input i, #note-desc-input em { font-style: italic; }
+                #note-desc-input u { text-decoration: underline; }
+                #note-desc-input strike { text-decoration: line-through; }
+                #note-desc-input ul, #note-desc-input ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
+                #note-desc-input li { margin-bottom: 4px; }
+                #note-desc-input a { color: #047857; text-decoration: underline; cursor: pointer; }
+                #note-desc-input a:hover { color: #065f46; }
+            </style>
+        </div>
+        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 12px;">
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
+            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: #f97316; color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anotação</button>
         </div>
     </div>
 </div>
+
 
 <!-- STATS MODAL -->
 <div id="modal-stats" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'">
@@ -689,15 +856,60 @@ function getMonthName(m) {
 
 // Settings & Notes Functions
 function openConfig() { document.getElementById('modal-config').style.display = 'flex'; }
+
+// Rich Text Editor Functions
+function formatText(command) {
+    document.execCommand(command, false, null);
+    document.getElementById('note-desc-input').focus();
+}
+
+function toggleEmojiPicker() {
+    const picker = document.getElementById('emoji-picker');
+    picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+}
+
+function insertEmoji(emoji) {
+    const editor = document.getElementById('note-desc-input');
+    editor.focus();
+    document.execCommand('insertText', false, emoji);
+    toggleEmojiPicker();
+}
+
+function insertLink() {
+    const url = prompt('Digite o URL do link:', 'https://');
+    if (url && url !== 'https://') {
+        const selection = window.getSelection();
+        if (selection.toString()) {
+            document.execCommand('createLink', false, url);
+        } else {
+            document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" style="color:#047857; text-decoration:underline;">${url}</a>`);
+        }
+        document.getElementById('note-desc-input').focus();
+    }
+}
+
+// Close emoji picker when clicking outside
+document.addEventListener('click', function(e) {
+    const picker = document.getElementById('emoji-picker');
+    const emojiBtn = document.getElementById('emoji-btn');
+    if (picker && !picker.contains(e.target) && e.target !== emojiBtn && !emojiBtn.contains(e.target)) {
+        picker.style.display = 'none';
+    }
+});
+
 function openNoteModal() {
     const key = `${currentMonth}_${currentDay}`;
     document.getElementById('note-title-input').value = dataState[key]?.title || '';
-    document.getElementById('note-desc-input').value = dataState[key]?.comment || '';
+    // Use innerHTML for contenteditable div
+    document.getElementById('note-desc-input').innerHTML = dataState[key]?.comment || '';
     document.getElementById('modal-note').style.display = 'flex';
+    lucide.createIcons();
 }
+
 function saveNote() {
     const t = document.getElementById('note-title-input').value;
-    const c = document.getElementById('note-desc-input').value;
+    // Get HTML content from contenteditable div
+    const c = document.getElementById('note-desc-input').innerHTML;
     const key = `${currentMonth}_${currentDay}`;
     if(!dataState[key]) dataState[key] = { verses:[] };
     dataState[key].title = t;
@@ -713,7 +925,16 @@ function saveNote() {
     fetch('leitura.php', { method: 'POST', body: f });
     
     document.getElementById('modal-note').style.display = 'none';
-    alert('Anotação Salva!');
+    
+    // Show toast instead of alert
+    const toast = document.getElementById('save-toast');
+    toast.innerHTML = '<i data-lucide="check" width="14"></i> Anotação salva!';
+    toast.style.opacity = 1;
+    setTimeout(() => {
+        toast.style.opacity = 0;
+        setTimeout(() => toast.innerHTML = '<i data-lucide="check" width="14"></i> Salvo auto', 300);
+    }, 2000);
+    lucide.createIcons();
 }
 function saveSettings() {
     const f = new FormData();
