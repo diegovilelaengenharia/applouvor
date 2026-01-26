@@ -120,8 +120,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <!-- Header com Botão Editar -->
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
-                <h1 style="margin: 0 0 4px 0; font-size: var(--font-h1); font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-                <div style="font-size: var(--font-body-sm); color: var(--text-muted);"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
+                <h1 style="margin: 0 0 4px 0; font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+                <div style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
             </div>
             
             <!-- Botão Editar AMARELO -->
@@ -320,112 +320,148 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         </div>
     </div>
     
-    <!-- MODO EDIÇÃO com 2 Colunas e Busca -->
+    <!-- MODO EDIÇÃO OTIMIZADO -->
     <div id="edit-mode" class="edit-mode edit-mode-hidden">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <!-- Coluna Participantes -->
-            <div>
-                <h4 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Participantes</h4>
-                <input type="text" id="searchMembers" placeholder="Buscar participante..." onkeyup="filterMembers()" style="
-                    width: 100%; padding: 10px 12px; border: 1px solid var(--border-color);
-                    border-radius: 10px; font-size: var(--font-body-sm); margin-bottom: 12px;
-                    background: var(--bg-surface);
-                ">
-                <div id="membersList" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;">
-                    <?php foreach ($allUsers as $user): 
-                        $isSelected = in_array($user['id'], $teamIds);
-                    ?>
-                        <label class="member-filter-item" data-name="<?= strtolower($user['name']) ?>" style="
-                            display: flex; align-items: center; gap: 10px; padding: 10px;
-                            background: var(--bg-surface); border-radius: 10px;
-                            border: 2px solid <?= $isSelected ? 'var(--primary)' : 'var(--border-color)' ?>;
-                            cursor: pointer; transition: all 0.2s;
-                        ">
-                            <input type="checkbox" 
-                                   <?= $isSelected ? 'checked' : '' ?>
-                                   onchange="toggleMember(<?= $user['id'] ?>, this)"
-                                   style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
-                            <div style="
-                                width: 32px; height: 32px; border-radius: 50%;
-                                background: <?= $user['avatar_color'] ?: '#e2e8f0' ?>;
-                                color: white; display: flex; align-items: center; justify-content: center;
-                                font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
-                            ">
-                                <?= strtoupper(substr($user['name'], 0, 1)) ?>
-                            </div>
-                            <div style="flex: 1; min-width: 0;">
-                                <div style="font-weight: 600; font-size: var(--font-body-sm); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($user['name']) ?></div>
-                                <div style="display: flex; gap: 4px; margin-top: 2px;">
-                                    <?php 
-                                    $uRoles = $userRoles[$user['id']] ?? [];
-                                    if (empty($uRoles) && $user['instrument']) {
-                                        echo '<span style="font-size: var(--font-caption); color: var(--text-muted);">' . htmlspecialchars($user['instrument']) . '</span>';
-                                    } else {
-                                        foreach ($uRoles as $role): 
-                                    ?>
-                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="
-                                            display: inline-flex; align-items: center; justify-content: center;
-                                            background: <?= $role['color'] ?>20; 
-                                            color: <?= $role['color'] ?>;
-                                            border: 1px solid <?= $role['color'] ?>40;
-                                            border-radius: 4px; padding: 2px 4px; font-size: 0.75rem;
-                                        ">
-                                            <?= $role['icon'] ?>
-                                        </span>
-                                    <?php 
-                                        endforeach; 
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
+        
+        <!-- Participantes Card -->
+        <div style="background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">Participantes</h3>
+                <span style="background: var(--bg-body); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted);"><?= count($team) ?> selecionados</span>
             </div>
             
-            <!-- Coluna Repertório -->
-            <div>
-                <h4 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Repertório</h4>
-                <input type="text" id="searchSongs" placeholder="Buscar música..." onkeyup="filterSongs()" style="
-                    width: 100%; padding: 10px 12px; border: 1px solid var(--border-color);
-                    border-radius: 10px; font-size: var(--font-body-sm); margin-bottom: 12px;
-                    background: var(--bg-surface);
-                ">
-                <div id="songsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;">
-                    <?php foreach ($allSongs as $song): 
-                        $isSelected = in_array($song['id'], $songIds);
-                    ?>
-                        <label class="song-filter-item" data-title="<?= strtolower($song['title']) ?>" data-artist="<?= strtolower($song['artist']) ?>" style="
-                            display: flex; align-items: center; gap: 10px; padding: 10px;
-                            background: var(--bg-surface); border-radius: 10px;
-                            border: 2px solid <?= $isSelected ? 'var(--primary)' : 'var(--border-color)' ?>;
-                            cursor: pointer; transition: all 0.2s;
-                        ">
-                            <input type="checkbox" 
-                                   <?= $isSelected ? 'checked' : '' ?>
-                                   onchange="toggleSong(<?= $song['id'] ?>, this)"
-                                   style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
-                            <div style="flex: 1; min-width: 0;">
-                                <div style="font-weight: 600; font-size: var(--font-body-sm); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
-                                <div style="font-size: var(--font-caption); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['artist']) ?></div>
-                                <?php if ($song['tone']): ?>
-                                    <div style="margin-top: 4px;">
-                                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 6px; border-radius: 4px; font-size: var(--font-caption); font-weight: 700;">
-                                            <?= $song['tone'] ?>
-                                        </span>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                <?php foreach ($team as $member): ?>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border-color);">
+                         <div style="width: 24px; height: 24px; border-radius: 50%; background: <?= $member['avatar_color'] ?: '#ccc' ?>; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">
+                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                         </div>
+                         <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($member['name']) ?></span>
+                         <button onclick="toggleMember(<?= $member['user_id'] ?>, null); this.parentElement.remove();" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 0 0 0 4px; display: flex;"><i data-lucide="x" style="width: 14px;"></i></button>
+                    </div>
+                <?php endforeach; ?>
+                <?php if(empty($team)): ?><span style="color: var(--text-muted); font-style: italic;">Nenhum participante.</span><?php endif; ?>
             </div>
+
+            <button onclick="openModal('modal-members')" style="width: 100%; padding: 14px; background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; color: var(--primary); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+                <i data-lucide="user-plus" style="width: 20px;"></i> Gerenciar Participantes
+            </button>
+        </div>
+
+        <!-- Músicas Card -->
+         <div style="background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);">Repertório</h3>
+                <span style="background: var(--bg-body); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted);"><?= count($songs) ?> selecionadas</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+                <?php foreach ($songs as $idx => $song): ?>
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border-color);">
+                         <div style="width: 24px; height: 24px; background: #ddd; color: #555; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;"><?= $idx+1 ?></div>
+                         <div style="flex: 1;">
+                            <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></div>
+                         </div>
+                         <button onclick="toggleSong(<?= $song['song_id'] ?>, null); this.parentElement.remove();" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 4px; display: flex;"><i data-lucide="trash-2" style="width: 16px;"></i></button>
+                    </div>
+                <?php endforeach; ?>
+                 <?php if(empty($songs)): ?><span style="color: var(--text-muted); font-style: italic;">Nenhuma música.</span><?php endif; ?>
+            </div>
+
+            <button onclick="openModal('modal-songs')" style="width: 100%; padding: 14px; background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; color: var(--primary); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+                <i data-lucide="music-4" style="width: 20px;"></i> Gerenciar Repertório
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let editMode = false;
+
+</style>
+
+<!-- MODAL PARTICIPANTES -->
+<div id="modal-members" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-surface); width: 90%; max-width: 500px; height: 80vh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Gerenciar Equipe</h3>
+            <button onclick="closeModal('modal-members')" style="background:none; border:none; cursor:pointer; padding: 4px;"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div style="padding: 12px; background: var(--bg-body);">
+             <input type="text" id="searchMembers" placeholder="Buscar participante..." onkeyup="filterMembers()" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; background: var(--bg-surface); outline: none;">
+        </div>
+
+        <div id="membersList" style="flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+             <?php foreach ($allUsers as $user): 
+                $isSelected = in_array($user['id'], $teamIds);
+             ?>
+                <label class="member-filter-item" data-name="<?= strtolower($user['name']) ?>" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s;">
+                    <input type="checkbox" <?= $isSelected ? 'checked' : '' ?> onchange="toggleMember(<?= $user['id'] ?>, this)" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: <?= $user['avatar_color'] ?: '#e2e8f0' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+                        <?= strtoupper(substr($user['name'], 0, 1)) ?>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);"><?= htmlspecialchars($user['name']) ?></div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
+                    </div>
+                </label>
+             <?php endforeach; ?>
+        </div>
+
+        <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
+            <button onclick="closeModal('modal-members'); location.reload();" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REPERTÓRIO -->
+<div id="modal-songs" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-surface); width: 90%; max-width: 500px; height: 80vh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Gerenciar Repertório</h3>
+            <button onclick="closeModal('modal-songs')" style="background:none; border:none; cursor:pointer; padding: 4px;"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div style="padding: 12px; background: var(--bg-body);">
+             <input type="text" id="searchSongs" placeholder="Buscar música..." onkeyup="filterSongs()" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; background: var(--bg-surface); outline: none;">
+        </div>
+
+        <div id="songsList" style="flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+             <?php foreach ($allSongs as $song): 
+                $isSelected = in_array($song['id'], $songIds);
+             ?>
+                <label class="song-filter-item" data-title="<?= strtolower($song['title']) ?>" data-artist="<?= strtolower($song['artist']) ?>" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s;">
+                    <input type="checkbox" <?= $isSelected ? 'checked' : '' ?> onchange="toggleSong(<?= $song['id'] ?>, this)" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></div>
+                    </div>
+                    <?php if ($song['tone']): ?>
+                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fed7aa; white-space: nowrap;"><?= $song['tone'] ?></span>
+                    <?php endif; ?>
+                </label>
+             <?php endforeach; ?>
+        </div>
+
+        <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
+            <button onclick="closeModal('modal-songs'); location.reload();" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
         </div>
     </div>
 </div>
 
 <script>
 let editMode = false;
+
+function openModal(id) {
+    document.getElementById(id).style.display = 'flex';
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+}
 
 function toggleEditMode() {
     editMode = !editMode;
@@ -434,7 +470,6 @@ function toggleEditMode() {
     const editModeEl = document.getElementById('edit-mode');
     
     if (editMode) {
-        // Entrar em modo edição
         viewMode.classList.add('view-mode-hidden');
         editModeEl.classList.remove('edit-mode-hidden');
         editBtn.style.background = '#ef4444';
@@ -442,23 +477,17 @@ function toggleEditMode() {
         editBtn.style.color = 'white';
         editBtn.innerHTML = '<i data-lucide="x" style="width: 16px;"></i><span>Cancelar</span>';
     } else {
-        // Voltar para visualização
         viewMode.classList.remove('view-mode-hidden');
         editModeEl.classList.add('edit-mode-hidden');
         editBtn.style.background = 'var(--bg-body)';
         editBtn.style.borderColor = 'var(--border-color)';
         editBtn.style.color = 'var(--text-main)';
         editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';
-        
-        // Recarregar página para atualizar visualização
         location.reload();
     }
-    
-    // Re-render Lucide icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
+
 
 function filterMembers() {
     const search = document.getElementById('searchMembers').value.toLowerCase();
@@ -480,39 +509,44 @@ function filterSongs() {
 }
 
 function toggleMember(userId, checkbox) {
-    const label = checkbox.closest('.member-filter-item');
-    
+    if (checkbox) {
+        // Modo modal com checkbox
+        const label = checkbox.closest('.member-filter-item');
+        fetchAction('toggle_member', userId, () => {
+             if (checkbox.checked) label.style.borderColor = 'var(--primary)';
+             else label.style.borderColor = 'var(--border-color)';
+        });
+    } else {
+        // Modo resumo (clique no X)
+        fetchAction('toggle_member', userId, null);
+    }
+}
+
+function fetchAction(action, id, callback) {
+    const param = action === 'toggle_member' ? 'user_id' : 'song_id';
     fetch('escala_detalhe.php?id=<?= $id ?>', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: 'ajax=1&action=toggle_member&user_id=' + userId
+        body: `ajax=1&action=${action}&${param}=${id}`
     })
     .then(r => r.json())
     .then(data => {
-        if (data.status === 'added') {
-            label.style.borderColor = 'var(--primary)';
-        } else {
-            label.style.borderColor = 'var(--border-color)';
-        }
+        if (callback) callback();
     });
 }
 
 function toggleSong(songId, checkbox) {
-    const label = checkbox.closest('.song-filter-item');
-    
-    fetch('escala_detalhe.php?id=<?= $id ?>', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: 'ajax=1&action=toggle_song&song_id=' + songId
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.status === 'added') {
-            label.style.borderColor = 'var(--primary)';
-        } else {
-            label.style.borderColor = 'var(--border-color)';
-        }
-    });
+     if (checkbox) {
+        // Modal
+        const label = checkbox.closest('.song-filter-item');
+        fetchAction('toggle_song', songId, () => {
+             if (checkbox.checked) label.style.borderColor = 'var(--primary)';
+             else label.style.borderColor = 'var(--border-color)';
+        });
+    } else {
+        // Resumo X
+        fetchAction('toggle_song', songId, null);
+    }
 }
 </script>
 
