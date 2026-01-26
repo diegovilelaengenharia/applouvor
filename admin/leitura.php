@@ -621,14 +621,29 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     </div>
 </div>
 
-<!-- CONFIG MODAL -->
+<!-- CONFIG MODAL WITH TABS -->
 <div id="modal-config" class="config-fullscreen">
-    <div class="config-header" style="background: white; padding: 16px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between;">
-        <h2 style="margin:0;">Configurações</h2>
-        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none;"><i data-lucide="x"></i></button>
+    <div class="config-header" style="background: white; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin:0; font-size: 1.25rem; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="settings" width="24"></i> Configurações
+        </h2>
+        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer; color: #6b7280; padding: 4px;">
+            <i data-lucide="x" width="24"></i>
+        </button>
     </div>
-    <div style="padding: 20px; max-width: 600px; margin: 0 auto;">
-        
+    
+    <!-- Tabs -->
+    <div class="config-tabs" style="display: flex; background: white; border-bottom: 1px solid #e5e7eb; padding: 0 20px;">
+        <div class="tab-btn active" onclick="switchConfigTab('geral')" id="tab-geral" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s;">
+            <i data-lucide="sliders" width="16" style="display: inline; margin-right: 6px;"></i> Geral
+        </div>
+        <div class="tab-btn" onclick="switchConfigTab('diario')" id="tab-diario" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s;">
+            <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Meu Diário
+        </div>
+    </div>
+    
+    <!-- TAB: GERAL -->
+    <div id="content-geral" class="config-content" style="padding: 20px; max-width: 600px; margin: 0 auto; width: 100%;">
         <!-- Change Plan Section -->
         <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
             <h3 style="margin-top: 0;">Plano Atual</h3>
@@ -654,7 +669,121 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <i data-lucide="trash-2" width="16" style="display: inline; vertical-align: middle; margin-right: 6px;"></i> Resetar Todo Progresso
         </button>
     </div>
+    
+    <!-- TAB: MEU DIÁRIO -->
+    <div id="content-diario" class="config-content" style="display:none; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
+        <!-- Export Button with Dropdown -->
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Minhas Anotações</h3>
+            <?php if(!empty($reportData)): ?>
+            <div style="position: relative;">
+                <button onclick="toggleExportMenu()" id="export-btn" class="ripple" style="padding: 10px 16px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                    <i data-lucide="download" width="16"></i> Exportar Diário <i data-lucide="chevron-down" width="14"></i>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div id="export-menu" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 4px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; min-width: 180px; overflow: hidden;">
+                    <button onclick="exportDiary('word')" style="width: 100%; padding: 10px 16px; border: none; background: white; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #374151; transition: all 0.2s; border-bottom: 1px solid #f3f4f6;">
+                        <i data-lucide="file-text" width="16" style="color: #2563eb;"></i>
+                        <span style="font-weight: 600;">Exportar como Word</span>
+                    </button>
+                    <button onclick="exportDiary('pdf')" style="width: 100%; padding: 10px 16px; border: none; background: white; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #374151; transition: all 0.2s;">
+                        <i data-lucide="file" width="16" style="color: #dc2626;"></i>
+                        <span style="font-weight: 600;">Exportar como PDF</span>
+                    </button>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        
+        <!-- Search Filter -->
+        <?php if(!empty($reportData)): ?>
+        <div style="margin-bottom: 20px; position: relative;">
+            <i data-lucide="search" width="18" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anotações (título, conteúdo, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+        </div>
+        <?php endif; ?>
+        
+        <style>
+            #export-menu button:hover {
+                background: #f9fafb;
+            }
+            .tab-btn.active {
+                color: #6366f1 !important;
+                border-bottom-color: #6366f1 !important;
+            }
+            .tab-btn:hover {
+                color: #374151;
+            }
+            .diary-entry {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 16px;
+                transition: all 0.2s;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+            .diary-entry:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                transform: translateY(-2px);
+            }
+            .diary-content b, .diary-content strong { font-weight: 700; }
+            .diary-content i, .diary-content em { font-style: italic; }
+            .diary-content u { text-decoration: underline; }
+            .diary-content strike { text-decoration: line-through; }
+            .diary-content ul, .diary-content ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
+            .diary-content li { margin-bottom: 4px; }
+            .diary-content a { color: #6366f1; text-decoration: underline; }
+            .diary-content a:hover { color: #4f46e5; }
+        </style>
+        
+        <?php if(empty($reportData)): ?>
+        <!-- Empty State -->
+        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <div style="background: #f3f4f6; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #9ca3af;">
+                <i data-lucide="book-open" width="40"></i>
+            </div>
+            <h3 style="margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Nenhuma anotação ainda</h3>
+            <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">Comece a registrar suas reflexões sobre as leituras bíblicas!</p>
+        </div>
+        <?php else: ?>
+        <!-- Diary Entries Timeline -->
+        <div id="diary-entries-container" style="display: flex; flex-direction: column; gap: 0;">
+        <?php foreach($reportData as $rep): ?>
+            <div class="diary-entry" data-search-content="<?= strtolower(htmlspecialchars($rep['title'] ?? '') . ' ' . strip_tags($rep['comment'] ?? '') . ' ' . date('d/m/Y', strtotime($rep['date']))) ?>">
+                <!-- Header -->
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+                            <?= date('d/m/Y às H:i', strtotime($rep['date'])) ?>
+                        </div>
+                        <div style="display: inline-flex; align-items: center; gap: 4px; background: #e0e7ff; color: #4338ca; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
+                            <i data-lucide="bookmark" width="12"></i> Dia <?= $rep['d'] ?> - Mês <?= $rep['m'] ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Title -->
+                <?php if($rep['title']): ?>
+                <h4 style="margin: 0 0 12px 0; font-size: 1.05rem; font-weight: 700; color: #111827;">
+                    <?= htmlspecialchars($rep['title']) ?>
+                </h4>
+                <?php endif; ?>
+                
+                <!-- Content with HTML rendering -->
+                <?php if($rep['comment']): ?>
+                <div class="diary-content" style="color: #374151; line-height: 1.6; font-size: 0.9rem;">
+                    <?= $rep['comment'] ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </div>
 </div>
+
 
 
 <script>
@@ -978,6 +1107,227 @@ function saveSettings() {
         if(d.success) window.location.reload();
     });
 }
+
+// Tab Switching for Config Modal
+function switchConfigTab(tabName) {
+    // Remove active class from all tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.config-content').forEach(content => content.style.display = 'none');
+    
+    // Add active class to clicked tab
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+    document.getElementById(`content-${tabName}`).style.display = 'block';
+    
+    lucide.createIcons();
+}
+
+// Toggle Export Menu
+function toggleExportMenu() {
+    const menu = document.getElementById('export-menu');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    lucide.createIcons();
+}
+
+// Close export menu when clicking outside
+document.addEventListener('click', function(e) {
+    const menu = document.getElementById('export-menu');
+    const btn = document.getElementById('export-btn');
+    if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+// Filter Diary Entries
+function filterDiary() {
+    const input = document.getElementById('diary-search');
+    const filter = input.value.toLowerCase();
+    const entries = document.querySelectorAll('.diary-entry');
+    
+    entries.forEach(entry => {
+        const searchContent = entry.getAttribute('data-search-content');
+        if (searchContent.includes(filter)) {
+            entry.style.display = 'block';
+        } else {
+            entry.style.display = 'none';
+        }
+    });
+}
+
+// Export Diary Function
+function exportDiary(format) {
+    // Close menu
+    document.getElementById('export-menu').style.display = 'none';
+    
+    // Get all diary entries
+    const entries = document.querySelectorAll('.diary-entry');
+    if (entries.length === 0) {
+        alert('Nenhuma anotação para exportar.');
+        return;
+    }
+    
+    const dateStr = new Date().toISOString().split('T')[0];
+    
+    if (format === 'word') {
+        exportAsWord(entries, dateStr);
+    } else if (format === 'pdf') {
+        exportAsPDF(entries, dateStr);
+    }
+}
+
+// Export as Word (.docx)
+function exportAsWord(entries, dateStr) {
+    // Build HTML content with statistics header
+    let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
+    html += '<head><meta charset="utf-8"><title>Diário de Leitura Bíblica</title>';
+    html += '<style>';
+    html += 'body{font-family:Arial,sans-serif;line-height:1.6;padding:20px;}';
+    html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
+    html += '.stats-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;}';
+    html += '.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px;}';
+    html += '.stat-item{text-align:center;padding:10px;background:white;border-radius:6px;}';
+    html += '.stat-value{font-size:24px;font-weight:bold;color:#111827;}';
+    html += '.stat-label{font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600;margin-top:4px;}';
+    html += '.entry{margin-bottom:30px;padding:20px;border:1px solid #e5e7eb;border-radius:8px;page-break-inside:avoid;}';
+    html += '.date{color:#6b7280;font-size:11px;text-transform:uppercase;font-weight:bold;letter-spacing:0.5px;}';
+    html += '.day-badge{background:#e0e7ff;color:#4338ca;padding:4px 8px;border-radius:4px;font-size:11px;display:inline-block;margin:5px 0;font-weight:600;}';
+    html += '.title{font-weight:bold;font-size:16px;margin:10px 0;color:#111827;}';
+    html += '.content{color:#374151;margin-top:10px;line-height:1.7;}';
+    html += 'a{color:#6366f1;text-decoration:underline;}';
+    html += 'b,strong{font-weight:700;}i,em{font-style:italic;}u{text-decoration:underline;}strike{text-decoration:line-through;}';
+    html += 'ul,ol{margin-left:20px;}li{margin-bottom:4px;}';
+    html += '</style></head><body>';
+    
+    // Header
+    html += '<h1>📖 DIÁRIO DE LEITURA BÍBLICA</h1>';
+    html += '<p style="color:#6b7280;margin-bottom:10px;">Louvor PIB Oliveira</p>';
+    
+    // Statistics Box
+    html += '<div class="stats-box">';
+    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;">📊 Estatísticas do Plano</div>';
+    html += '<div class="stats-grid">';
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalDaysRead ?></div><div class="stat-label">Dias Lidos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Capítulos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequência</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Concluído</div></div>`;
+    html += '</div>';
+    html += `<div style="margin-top:15px;font-size:13px;color:#6b7280;">`;
+    html += `<strong>Plano:</strong> <?= ucfirst($selectedPlanType) ?> | `;
+    html += `<strong>Início:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
+    html += `<strong>Total de Anotações:</strong> ${entries.length}`;
+    html += `</div></div>`;
+    
+    // Entries
+    entries.forEach((entry) => {
+        const dateEl = entry.querySelector('div[style*="text-transform: uppercase"]');
+        const dayEl = entry.querySelector('div[style*="background: #e0e7ff"]');
+        const titleEl = entry.querySelector('h4');
+        const contentEl = entry.querySelector('.diary-content');
+        
+        html += '<div class="entry">';
+        if (dateEl) html += `<div class="date">${dateEl.textContent.trim()}</div>`;
+        if (dayEl) html += `<div class="day-badge">${dayEl.textContent.trim()}</div>`;
+        if (titleEl) html += `<div class="title">${titleEl.textContent.trim()}</div>`;
+        if (contentEl) html += `<div class="content">${contentEl.innerHTML}</div>`;
+        html += '</div>';
+    });
+    
+    html += '</body></html>';
+    
+    // Download
+    const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `diario-leitura-biblica-${dateStr}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showExportSuccess('Word');
+}
+
+// Export as PDF
+function exportAsPDF(entries, dateStr) {
+    let printWindow = window.open('', '_blank');
+    let html = '<html><head><meta charset="utf-8"><title>Diário de Leitura Bíblica</title>';
+    html += '<style>';
+    html += '@media print{@page{margin:20mm;}}';
+    html += 'body{font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:800px;margin:0 auto;padding:20px;}';
+    html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
+    html += '.stats-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;page-break-inside:avoid;}';
+    html += '.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px;}';
+    html += '.stat-item{text-align:center;padding:10px;background:white;border-radius:6px;border:1px solid #e5e7eb;}';
+    html += '.stat-value{font-size:20px;font-weight:bold;color:#111827;}';
+    html += '.stat-label{font-size:10px;color:#6b7280;text-transform:uppercase;font-weight:600;margin-top:4px;}';
+    html += '.entry{margin-bottom:25px;padding:15px;border:1px solid #e5e7eb;border-radius:8px;page-break-inside:avoid;}';
+    html += '.date{color:#6b7280;font-size:11px;text-transform:uppercase;font-weight:bold;letter-spacing:0.5px;}';
+    html += '.day-badge{background:#e0e7ff;color:#4338ca;padding:4px 8px;border-radius:4px;font-size:11px;display:inline-block;margin:5px 0;font-weight:600;}';
+    html += '.title{font-weight:bold;font-size:15px;margin:10px 0;color:#111827;}';
+    html += '.content{color:#374151;margin-top:10px;font-size:14px;line-height:1.7;}';
+    html += 'a{color:#6366f1;text-decoration:underline;}';
+    html += 'strong,b{font-weight:700;}em,i{font-style:italic;}u{text-decoration:underline;}strike{text-decoration:line-through;}';
+    html += 'ul,ol{margin-left:20px;}li{margin-bottom:4px;}';
+    html += '</style></head><body>';
+    
+    // Header
+    html += '<h1>📖 DIÁRIO DE LEITURA BÍBLICA</h1>';
+    html += '<p style="color:#6b7280;margin-bottom:10px;font-size:14px;">Louvor PIB Oliveira</p>';
+    
+    // Statistics Box
+    html += '<div class="stats-box">';
+    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;font-size:14px;">📊 Estatísticas do Plano</div>';
+    html += '<div class="stats-grid">';
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalDaysRead ?></div><div class="stat-label">Dias Lidos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Capítulos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequência</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Concluído</div></div>`;
+    html += '</div>';
+    html += `<div style="margin-top:15px;font-size:12px;color:#6b7280;">`;
+    html += `<strong>Plano:</strong> <?= ucfirst($selectedPlanType) ?> | `;
+    html += `<strong>Início:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
+    html += `<strong>Total de Anotações:</strong> ${entries.length}`;
+    html += `</div></div>`;
+    
+    // Entries
+    entries.forEach((entry) => {
+        const dateEl = entry.querySelector('div[style*="text-transform: uppercase"]');
+        const dayEl = entry.querySelector('div[style*="background: #e0e7ff"]');
+        const titleEl = entry.querySelector('h4');
+        const contentEl = entry.querySelector('.diary-content');
+        
+        html += '<div class="entry">';
+        if (dateEl) html += `<div class="date">${dateEl.textContent.trim()}</div>`;
+        if (dayEl) html += `<div class="day-badge">${dayEl.textContent.trim()}</div>`;
+        if (titleEl) html += `<div class="title">${titleEl.textContent.trim()}</div>`;
+        if (contentEl) html += `<div class="content">${contentEl.innerHTML}</div>`;
+        html += '</div>';
+    });
+    
+    html += '</body></html>';
+    
+    printWindow.document.write(html);
+    printWindow.document.close();
+    
+    // Wait for content to load then trigger print
+    printWindow.onload = function() {
+        printWindow.print();
+        showExportSuccess('PDF');
+    };
+}
+
+// Show Export Success Toast
+function showExportSuccess(format) {
+    const toast = document.getElementById('save-toast');
+    toast.innerHTML = `<i data-lucide="check" width="14"></i> Diário exportado como ${format} com sucesso!`;
+    toast.style.opacity = 1;
+    setTimeout(() => {
+        toast.style.opacity = 0;
+        setTimeout(() => toast.innerHTML = '<i data-lucide="check" width="14"></i> Salvo auto', 300);
+    }, 2500);
+    lucide.createIcons();
+}
+
 function resetPlan() {
     if(confirm('Tem certeza? Isso apagará TODO o progresso e não pode ser desfeito.')) {
         const f = new FormData(); f.append('action', 'reset_plan');
