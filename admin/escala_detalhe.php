@@ -127,7 +127,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             <!-- Botões de Ação -->
             <div style="display: flex; gap: 8px;">
                 <!-- Botão Salvar (visível apenas no modo edição) -->
-                <button id="saveBtn" onclick="location.reload()" style="
+                <button id="saveBtn" onclick="saveAllChanges()" style="
                     padding: 10px 18px; border-radius: 12px;
                     background: linear-gradient(135deg, #10b981, #059669);
                     border: none; color: white; cursor: pointer;
