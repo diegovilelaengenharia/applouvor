@@ -17,8 +17,8 @@ renderPageHeader('Agenda', 'Louvor PIB Oliveira');
         <div style="background: linear-gradient(135deg, #E6F4EA 0%, #D4E9E2 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
             <i data-lucide="calendar" style="color: var(--primary-green); width: 40px; height: 40px;"></i>
         </div>
-        <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: 1.1rem; font-weight: 700;">Agenda do Ministério</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto; font-size: 0.9rem;">
+        <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: var(--font-h3); font-weight: 700;">Agenda do Ministério</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto; font-size: var(--font-body);">
             Visualize e gerencie todos os eventos e compromissos do ministério de louvor.
         </p>
 
@@ -28,15 +28,15 @@ renderPageHeader('Agenda', 'Louvor PIB Oliveira');
             <div style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-sm);">
                 <div style="display: flex; gap: 12px; align-items: center;">
                     <div style="background: var(--primary-50); padding: 8px; border-radius: 10px; text-align: center; min-width: 44px;">
-                        <div style="font-size: 1.1rem; font-weight: 800; color: var(--primary-600); line-height: 1;">20</div>
-                        <div style="font-size: 0.6rem; color: var(--primary-600); font-weight: 600; text-transform: uppercase;">JAN</div>
+                        <div style="font-size: var(--font-h3); font-weight: 800; color: var(--primary-600); line-height: 1;">20</div>
+                        <div style="font-size: var(--font-caption); color: var(--primary-600); font-weight: 600; text-transform: uppercase;">JAN</div>
                     </div>
                     <div style="flex: 1;">
-                        <h4 style="margin: 0 0 2px; font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Culto Tema Especial</h4>
-                        <p style="margin: 0 0 6px; font-size: 0.75rem; color: var(--text-secondary);">19:00 - Templo Principal</p>
+                        <h4 style="margin: 0 0 2px; font-size: var(--font-body); font-weight: 700; color: var(--text-primary);">Culto Tema Especial</h4>
+                        <p style="margin: 0 0 6px; font-size: var(--font-caption); color: var(--text-secondary);">19:00 - Templo Principal</p>
                         <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            <span style="background: var(--primary-50); color: var(--primary-600); padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 600;">Culto</span>
-                            <span style="background: var(--warning-light); color: var(--warning-dark); padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 600;">Importante</span>
+                            <span style="background: var(--primary-50); color: var(--primary-600); padding: 2px 6px; border-radius: 6px; font-size: var(--font-caption); font-weight: 600;">Culto</span>
+                            <span style="background: var(--warning-light); color: var(--warning-dark); padding: 2px 6px; border-radius: 6px; font-size: var(--font-caption); font-weight: 600;">Importante</span>
                         </div>
                     </div>
                 </div>
@@ -44,8 +44,6 @@ renderPageHeader('Agenda', 'Louvor PIB Oliveira');
 
             <!-- Coming Soon Note -->
             <div style="background: var(--info-light); border: 1px solid var(--info); border-radius: 10px; padding: 12px; text-align: center;">
-                <p style="margin: 0; color: var(--info-dark); font-size: 0.8rem; font-weight: 500;">
-                    <i data-lucide="info" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
                     Funcionalidade em desenvolvimento
                 </p>
             </div>

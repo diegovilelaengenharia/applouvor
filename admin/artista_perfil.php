@@ -65,8 +65,8 @@ renderPageHeader($artistName, 'Perfil do Artista');
                 ">
                     <?= strtoupper(substr($artistName, 0, 1)) ?>
                 </div>
-                <h1 style="margin: 0 0 8px 0; font-size: 1.5rem; font-weight: 700;"><?= htmlspecialchars($artistName) ?></h1>
-                <div style="font-size: 0.9rem; opacity: 0.9;"><?= $totalSongs ?> música<?= $totalSongs != 1 ? 's' : '' ?> no repertório</div>
+                <h1 style="margin: 0 0 8px 0; font-size: var(--font-display); font-weight: 700;"><?= htmlspecialchars($artistName) ?></h1>
+                <div style="font-size: var(--font-body); opacity: 0.9;"><?= $totalSongs ?> música<?= $totalSongs != 1 ? 's' : '' ?> no repertório</div>
             </div>
             
             <!-- Botão Editar -->
@@ -75,7 +75,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
                 background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
                 color: white; cursor: pointer;
                 display: flex; align-items: center; gap: 6px;
-                font-weight: 600; font-size: 0.85rem;
+                font-weight: 600; font-size: var(--font-body-sm);
                 transition: all 0.2s;
             ">
                 <i data-lucide="edit-2" style="width: 16px;"></i>
@@ -86,16 +86,16 @@ renderPageHeader($artistName, 'Perfil do Artista');
         <!-- Stats Row -->
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
             <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 700;"><?= $totalSongs ?></div>
-                <div style="font-size: 0.75rem; opacity: 0.8;">Músicas</div>
+                <div style="font-size: var(--font-h1); font-weight: 700;"><?= $totalSongs ?></div>
+                <div style="font-size: var(--font-caption); opacity: 0.8;">Músicas</div>
             </div>
             <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 700;"><?= $avgBpm ?: '-' ?></div>
-                <div style="font-size: 0.75rem; opacity: 0.8;">BPM Médio</div>
+                <div style="font-size: var(--font-h1); font-weight: 700;"><?= $avgBpm ?: '-' ?></div>
+                <div style="font-size: var(--font-caption); opacity: 0.8;">BPM Médio</div>
             </div>
             <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 700;"><?= $mostUsedTone ?></div>
-                <div style="font-size: 0.75rem; opacity: 0.8;">Tom Mais Usado</div>
+                <div style="font-size: var(--font-h1); font-weight: 700;"><?= $mostUsedTone ?></div>
+                <div style="font-size: var(--font-caption); opacity: 0.8;">Tom Mais Usado</div>
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
 
 <!-- Músicas -->
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px 100px;">
-    <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;">
+    <h3 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;">
         <i data-lucide="music" style="width: 20px; color: var(--primary);"></i>
         Músicas
     </h3>
@@ -111,7 +111,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
     <?php if (empty($songs)): ?>
         <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
             <i data-lucide="music-2" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Nenhuma música encontrada</p>
+            <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhuma música encontrada</p>
         </div>
     <?php else: ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -127,25 +127,25 @@ renderPageHeader($artistName, 'Perfil do Artista');
                             width: 48px; height: 48px; border-radius: 10px;
                             background: linear-gradient(135deg, #8b5cf6, #7c3aed);
                             color: white; display: flex; align-items: center; justify-content: center;
-                            font-weight: 700; font-size: 1.2rem; flex-shrink: 0;
+                            font-weight: 700; font-size: var(--font-h2); flex-shrink: 0;
                         ">
                             <i data-lucide="music" style="width: 24px;"></i>
                         </div>
                         <div style="flex: 1;">
-                            <h4 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></h4>
+                            <h4 style="margin: 0 0 4px 0; font-size: var(--font-h3); font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></h4>
                             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
                                 <?php if ($song['category']): ?>
-                                    <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #dbeafe;">
+                                    <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #dbeafe;">
                                         <?= htmlspecialchars($song['category']) ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($song['tone']): ?>
-                                    <span style="background: #fff7ed; color: #ea580c; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #ffedd5;">
+                                    <span style="background: #fff7ed; color: #ea580c; padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #ffedd5;">
                                         TOM: <?= $song['tone'] ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($song['bpm']): ?>
-                                    <span style="background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fee2e2;">
+                                    <span style="background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fee2e2;">
                                         <?= $song['bpm'] ?> BPM
                                     </span>
                                 <?php endif; ?>
@@ -163,8 +163,8 @@ renderPageHeader($artistName, 'Perfil do Artista');
 <div id="editModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
     <div style="background: white; width: 90%; max-width: 500px; border-radius: 20px; padding: 24px; animation: slideUp 0.3s ease;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="margin: 0; font-size: 1.2rem; color: #1e293b;">Editar Artista</h3>
-            <button onclick="closeEditModal()" style="background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer;">&times;</button>
+            <h3 style="margin: 0; font-size: var(--font-h2); color: #1e293b;">Editar Artista</h3>
+            <button onclick="closeEditModal()" style="background: none; border: none; font-size: var(--font-display); color: #94a3b8; cursor: pointer;">&times;</button>
         </div>
         
         <form method="POST">
@@ -174,16 +174,16 @@ renderPageHeader($artistName, 'Perfil do Artista');
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">Nome do Artista</label>
                 <input type="text" name="new_name" value="<?= htmlspecialchars($artistName) ?>" required style="
                     width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px;
-                    font-size: 1rem; outline: none;
+                    font-size: var(--font-body); outline: none;
                 " onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#d1d5db'">
             </div>
             
             <div style="background: #fffbeb; padding: 12px; border-radius: 8px; border: 1px solid #fef3c7; margin-bottom: 20px;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                     <i data-lucide="alert-triangle" style="width: 16px; color: #f59e0b;"></i>
-                    <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">ATENÇÃO</span>
+                    <span style="font-size: var(--font-body-sm); font-weight: 700; color: #f59e0b;">ATENÇÃO</span>
                 </div>
-                <p style="margin: 0; font-size: 0.85rem; color: #78350f;">
+                <p style="margin: 0; font-size: var(--font-body-sm); color: #78350f;">
                     Alterar o nome do artista irá atualizar <strong>todas as <?= $totalSongs ?> música<?= $totalSongs != 1 ? 's' : '' ?></strong> deste artista.
                 </p>
             </div>

@@ -120,8 +120,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <!-- Header com Botão Editar -->
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
-                <h1 style="margin: 0 0 4px 0; font-size: 1.3rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-                <div style="font-size: 0.85rem; color: var(--text-muted);"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
+                <h1 style="margin: 0 0 4px 0; font-size: var(--font-h1); font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+                <div style="font-size: var(--font-body-sm); color: var(--text-muted);"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
             </div>
             
             <!-- Botão Editar AMARELO -->
@@ -131,7 +131,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 border: none;
                 color: white; cursor: pointer;
                 display: flex; align-items: center; gap: 6px;
-                font-weight: 700; font-size: 0.85rem;
+                display: flex; align-items: center; gap: 6px;
+                font-weight: 700; font-size: var(--font-body-sm);
                 transition: all 0.2s;
                 box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
             " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(251, 191, 36, 0.4)'"
@@ -148,8 +149,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <i data-lucide="clock" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
-                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Horário</div>
-                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);">19:00</div>
+                    <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Horário</div>
+                    <div style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);">19:00</div>
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
@@ -157,8 +158,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <i data-lucide="users" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
-                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Equipe</div>
-                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);"><?= count($team) ?></div>
+                    <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Equipe</div>
+                    <div style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);"><?= count($team) ?></div>
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
@@ -166,8 +167,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <i data-lucide="music" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
-                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Músicas</div>
-                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);"><?= count($songs) ?></div>
+                    <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Músicas</div>
+                    <div style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);"><?= count($songs) ?></div>
                 </div>
             </div>
         </div>
@@ -192,7 +193,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     <div id="view-mode" class="view-mode">
         <!-- PARTICIPANTES -->
         <div style="margin-bottom: 24px;">
-            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="users" style="width: 20px; color: var(--primary);"></i>
                 Participantes (<?= count($team) ?>)
             </h3>
@@ -200,7 +201,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             <?php if (empty($team)): ?>
                 <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
                     <i data-lucide="user-plus" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Nenhum participante escalado</p>
+                    <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhum participante escalado</p>
                 </div>
             <?php else: ?>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;">
@@ -219,22 +220,22 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                 width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px;
                                 background: <?= $member['avatar_color'] ?: '#e2e8f0' ?>;
                                 color: white; display: flex; align-items: center; justify-content: center;
-                                font-weight: 700; font-size: 1.2rem;
+                                font-weight: 700; font-size: var(--font-h2);
                                 box-shadow: 0 2px 6px rgba(0,0,0,0.08);
                             ">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
-                                <div style="font-weight: 700; font-size: 0.85rem; color: #1f2937; margin-bottom: 3px;"><?= htmlspecialchars($member['name']) ?></div>
+                                <div style="font-weight: 700; font-size: var(--font-body-sm); color: #1f2937; margin-bottom: 3px;"><?= htmlspecialchars($member['name']) ?></div>
                                 <div style="display: flex; justify-content: center; gap: 4px; flex-wrap: wrap;">
                                     <?php 
                                     $mRoles = $userRoles[$member['user_id']] ?? [];
                                     if (empty($mRoles) && $member['instrument']) {
                                         // Fallback legacy
-                                        echo '<span style="font-size: 0.7rem; color: #6b7280; font-weight: 500;">' . htmlspecialchars($member['instrument']) . '</span>';
+                                        echo '<span style="font-size: var(--font-caption); color: #6b7280; font-weight: 500;">' . htmlspecialchars($member['instrument']) . '</span>';
                                     } else {
                                         foreach ($mRoles as $role): 
                                     ?>
-                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 0.85rem; cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
+                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: var(--font-body-sm); cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
                                     <?php 
                                         endforeach; 
                                     }
@@ -248,7 +249,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         
         <!-- REPERTÓRIO -->
         <div>
-            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="music" style="width: 20px; color: var(--primary);"></i>
                 Repertório (<?= count($songs) ?>)
             </h3>
@@ -256,7 +257,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             <?php if (empty($songs)): ?>
                 <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
                     <i data-lucide="music-2" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Nenhuma música selecionada</p>
+                    <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhuma música selecionada</p>
                 </div>
             <?php else: ?>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -276,33 +277,33 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                     background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
                                     border-radius: 8px; 
                                     display: flex; align-items: center; justify-content: center;
-                                    font-size: 0.85rem; font-weight: 800; color: white;
+                                    font-size: var(--font-body-sm); font-weight: 800; color: white;
                                     box-shadow: 0 2px 6px rgba(139, 92, 246, 0.25);
                                 ">
                                     <?= $index + 1 ?>
                                 </div>
                                 <div style="flex: 1;">
-                                    <h4 style="margin: 0 0 3px 0; font-size: 0.95rem; font-weight: 700; color: #1f2937;"><?= htmlspecialchars($song['title']) ?></h4>
-                                    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
+                                    <h4 style="margin: 0 0 3px 0; font-size: var(--font-body); font-weight: 700; color: #1f2937;"><?= htmlspecialchars($song['title']) ?></h4>
+                                    <p style="margin: 0 0 10px 0; font-size: var(--font-body-sm); color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
                                     <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
                                         <?php if ($song['category']): ?>
-                                            <span style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #bfdbfe;">
+                                            <span style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">
                                                 <?= htmlspecialchars($song['category']) ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['tone']): ?>
-                                            <span style="background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fed7aa;">
+                                            <span style="background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fed7aa;">
                                                 <?= $song['tone'] ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['bpm']): ?>
-                                            <span style="background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fecaca;">
+                                            <span style="background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fecaca;">
                                                 <?= $song['bpm'] ?> BPM
                                             </span>
                                         <?php endif; ?>
                                         <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
                                             background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #ef4444; text-decoration: none;
-                                            padding: 4px 10px; border-radius: 7px; font-size: 0.7rem; font-weight: 700; border: 1px solid #fecaca;
+                                            padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fecaca;
                                             display: inline-flex; align-items: center; gap: 3px;
                                             transition: all 0.2s;
                                         " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 2px 6px rgba(239, 68, 68, 0.2)'" 
@@ -324,10 +325,10 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
             <!-- Coluna Participantes -->
             <div>
-                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Participantes</h4>
+                <h4 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Participantes</h4>
                 <input type="text" id="searchMembers" placeholder="Buscar participante..." onkeyup="filterMembers()" style="
                     width: 100%; padding: 10px 12px; border: 1px solid var(--border-color);
-                    border-radius: 10px; font-size: 0.85rem; margin-bottom: 12px;
+                    border-radius: 10px; font-size: var(--font-body-sm); margin-bottom: 12px;
                     background: var(--bg-surface);
                 ">
                 <div id="membersList" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;">
@@ -353,12 +354,12 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                 <?= strtoupper(substr($user['name'], 0, 1)) ?>
                             </div>
                             <div style="flex: 1; min-width: 0;">
-                                <div style="font-weight: 600; font-size: 0.8rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($user['name']) ?></div>
+                                <div style="font-weight: 600; font-size: var(--font-body-sm); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($user['name']) ?></div>
                                 <div style="display: flex; gap: 4px; margin-top: 2px;">
                                     <?php 
                                     $uRoles = $userRoles[$user['id']] ?? [];
                                     if (empty($uRoles) && $user['instrument']) {
-                                        echo '<span style="font-size: 0.7rem; color: var(--text-muted);">' . htmlspecialchars($user['instrument']) . '</span>';
+                                        echo '<span style="font-size: var(--font-caption); color: var(--text-muted);">' . htmlspecialchars($user['instrument']) . '</span>';
                                     } else {
                                         foreach ($uRoles as $role): 
                                     ?>
@@ -384,10 +385,10 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             
             <!-- Coluna Repertório -->
             <div>
-                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Repertório</h4>
+                <h4 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0;">Repertório</h4>
                 <input type="text" id="searchSongs" placeholder="Buscar música..." onkeyup="filterSongs()" style="
                     width: 100%; padding: 10px 12px; border: 1px solid var(--border-color);
-                    border-radius: 10px; font-size: 0.85rem; margin-bottom: 12px;
+                    border-radius: 10px; font-size: var(--font-body-sm); margin-bottom: 12px;
                     background: var(--bg-surface);
                 ">
                 <div id="songsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;">
@@ -405,11 +406,11 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                    onchange="toggleSong(<?= $song['id'] ?>, this)"
                                    style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
                             <div style="flex: 1; min-width: 0;">
-                                <div style="font-weight: 600; font-size: 0.8rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
-                                <div style="font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['artist']) ?></div>
+                                <div style="font-weight: 600; font-size: var(--font-body-sm); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['title']) ?></div>
+                                <div style="font-size: var(--font-caption); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($song['artist']) ?></div>
                                 <?php if ($song['tone']): ?>
                                     <div style="margin-top: 4px;">
-                                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 6px; border-radius: 4px; font-size: var(--font-caption); font-weight: 700;">
                                             <?= $song['tone'] ?>
                                         </span>
                                     </div>

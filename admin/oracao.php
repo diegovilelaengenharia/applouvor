@@ -173,7 +173,7 @@ renderAppHeader('Pedidos de Oração');
         justify-content: center;
         color: white;
         font-weight: 700;
-        font-size: 1rem;
+        font-size: var(--font-h3);
     }
     
     /* Content */
@@ -181,7 +181,7 @@ renderAppHeader('Pedidos de Oração');
         padding: 16px;
     }
     .prayer-title {
-        font-size: 1.05rem;
+        font-size: var(--font-h3);
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 8px;
@@ -191,7 +191,7 @@ renderAppHeader('Pedidos de Oração');
     }
     .prayer-description {
         color: var(--text-body);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
         line-height: 1.6;
     }
     
@@ -212,7 +212,7 @@ renderAppHeader('Pedidos de Oração');
         gap: 6px;
         padding: 8px 16px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s;
@@ -234,7 +234,7 @@ renderAppHeader('Pedidos de Oração');
     .category-badge {
         padding: 4px 10px;
         border-radius: 12px;
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         font-weight: 600;
         text-transform: uppercase;
     }
@@ -281,7 +281,7 @@ renderAppHeader('Pedidos de Oração');
     .filter-tab {
         padding: 8px 16px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         color: var(--text-muted);
         text-decoration: none;
@@ -329,8 +329,8 @@ renderAppHeader('Pedidos de Oração');
         <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);">
             <i data-lucide="heart-handshake" style="color: white; width: 36px; height: 36px;"></i>
         </div>
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Mural de Oração</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto;">
+        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Mural de Oração</h2>
+        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
             Compartilhe seus pedidos e interceda pelos irmãos. Unidos em oração!
         </p>
     </div>
@@ -342,7 +342,7 @@ renderAppHeader('Pedidos de Oração');
             <i data-lucide="database" style="color: #f59e0b; width: 30px; height: 30px;"></i>
         </div>
         <h3 style="color: #92400e; margin-bottom: 8px; font-weight: 700;">Configuração Necessária</h3>
-        <p style="color: #a16207; font-size: 0.9rem; max-width: 350px; margin: 0 auto 20px;">
+        <p style="color: #a16207; font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
             Para usar o Mural de Oração, é necessário criar as tabelas no banco de dados.
         </p>
         <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);">
@@ -364,7 +364,7 @@ renderAppHeader('Pedidos de Oração');
     <div style="margin-bottom: 20px;">
         <a href="?<?= $showAnswered ? '' : 'answered=1' ?><?= $filterCategory !== 'all' ? '&category=' . $filterCategory : '' ?>" style="
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+            padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
             text-decoration: none; color: <?= $showAnswered ? '#10b981' : 'var(--text-muted)' ?>;
             background: <?= $showAnswered ? '#dcfce7' : 'transparent' ?>;
             border: 1px solid <?= $showAnswered ? '#10b981' : 'transparent' ?>;
@@ -426,19 +426,19 @@ renderAppHeader('Pedidos de Oração');
                     <?php endif; ?>
                     
                     <div style="flex: 1;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($authorName) ?></div>
-                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted);">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-body);"><?= htmlspecialchars($authorName) ?></div>
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: var(--font-caption); color: var(--text-muted);">
                             <span class="category-badge <?= $cat['class'] ?>"><?= $cat['icon'] ?> <?= $cat['label'] ?></span>
                             <span>• <?= $timeAgo ?></span>
                         </div>
                     </div>
                     
                     <?php if ($prayer['is_answered']): ?>
-                        <div style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;">
+                        <div style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
                             ✓ RESPONDIDA
                         </div>
                     <?php elseif ($prayer['is_urgent']): ?>
-                        <div style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;">
+                        <div style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
                             🔥 URGENTE
                         </div>
                     <?php endif; ?>
@@ -464,7 +464,7 @@ renderAppHeader('Pedidos de Oração');
                             </button>
                         </form>
                         
-                        <button onclick="toggleComments('comments-<?= $prayer['id'] ?>')" style="background: none; border: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <button onclick="toggleComments('comments-<?= $prayer['id'] ?>')" style="background: none; border: none; color: var(--text-muted); font-size: var(--font-body-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                             <i data-lucide="message-circle" style="width: 16px;"></i>
                             <?= count($comments) ?>
                         </button>
@@ -474,7 +474,7 @@ renderAppHeader('Pedidos de Oração');
                     <form method="POST" style="margin: 0;">
                         <input type="hidden" name="action" value="answered">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                        <button type="submit" style="background: #dcfce7; color: #16a34a; border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+                        <button type="submit" style="background: #dcfce7; color: #16a34a; border: none; padding: 6px 12px; border-radius: 12px; font-size: var(--font-body-sm); font-weight: 600; cursor: pointer;">
                             ✓ Marcar respondida
                         </button>
                     </form>
@@ -493,13 +493,13 @@ renderAppHeader('Pedidos de Oração');
                         <?php if ($commentAvatar): ?>
                             <img src="<?= htmlspecialchars($commentAvatar) ?>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="">
                         <?php else: ?>
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: #666;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
                                 <?= strtoupper(substr($comment['name'] ?? 'U', 0, 1)) ?>
                             </div>
                         <?php endif; ?>
                         <div style="flex: 1;">
-                            <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);"><?= htmlspecialchars($comment['name'] ?? 'Membro') ?></span>
-                            <p style="margin: 4px 0 0; font-size: 0.9rem; color: var(--text-body);"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                            <span style="font-weight: 600; font-size: var(--font-body-sm); color: var(--text-main);"><?= htmlspecialchars($comment['name'] ?? 'Membro') ?></span>
+                            <p style="margin: 4px 0 0; font-size: var(--font-body); color: var(--text-body);"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -508,7 +508,7 @@ renderAppHeader('Pedidos de Oração');
                     <form method="POST" style="display: flex; gap: 8px; margin-top: 12px;">
                         <input type="hidden" name="action" value="comment">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                        <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: 0.9rem; outline: none;">
+                        <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: var(--font-body); outline: none;">
                         <button type="submit" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                             <i data-lucide="send" style="width: 16px;"></i>
                         </button>
@@ -523,7 +523,7 @@ renderAppHeader('Pedidos de Oração');
                     <i data-lucide="heart-handshake" style="color: #f59e0b; width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;"><?= $showAnswered ? 'Nenhuma oração respondida' : 'Nenhum pedido ainda' ?></h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 300px; margin: 0 auto 20px;">
+                <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                     <?= $showAnswered ? 'As orações respondidas aparecerão aqui.' : 'Seja o primeiro a compartilhar um pedido de oração!' ?>
                 </p>
                 <?php if (!$showAnswered): ?>
@@ -552,7 +552,7 @@ renderAppHeader('Pedidos de Oração');
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main);">🙏 Novo Pedido de Oração</h2>
+            <h2 style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: var(--text-main);">🙏 Novo Pedido de Oração</h2>
             <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
                 <i data-lucide="x" style="width: 20px;"></i>
             </button>
@@ -563,49 +563,49 @@ renderAppHeader('Pedidos de Oração');
             
             <!-- Título -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Título do Pedido</label>
-                <input type="text" name="title" required placeholder="Ex: Oração pela saúde do meu pai" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.95rem; outline: none; background: var(--bg-body);">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título do Pedido</label>
+                <input type="text" name="title" required placeholder="Ex: Oração pela saúde do meu pai" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
             </div>
             
             <!-- Descrição -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Descrição (opcional)</label>
-                <textarea name="description" rows="3" placeholder="Compartilhe mais detalhes se desejar..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.95rem; outline: none; background: var(--bg-body); resize: vertical;"></textarea>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Descrição (opcional)</label>
+                <textarea name="description" rows="3" placeholder="Compartilhe mais detalhes se desejar..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body); resize: vertical;"></textarea>
             </div>
             
             <!-- Categoria -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 0.9rem;">Categoria</label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: var(--font-body);">Categoria</label>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
                     <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
                         <input type="radio" name="category" value="health" style="display: none;">
-                        <span style="font-size: 1.3rem;">❤️</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Saúde</span>
+                        <span style="font-size: var(--font-display);">❤️</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Saúde</span>
                     </label>
                     <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
                         <input type="radio" name="category" value="family" style="display: none;">
-                        <span style="font-size: 1.3rem;">👨‍👩‍👧</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Família</span>
+                        <span style="font-size: var(--font-display);">👨‍👩‍👧</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Família</span>
                     </label>
                     <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
                         <input type="radio" name="category" value="work" style="display: none;">
-                        <span style="font-size: 1.3rem;">💼</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Trabalho</span>
+                        <span style="font-size: var(--font-display);">💼</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Trabalho</span>
                     </label>
                     <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
                         <input type="radio" name="category" value="spiritual" style="display: none;">
-                        <span style="font-size: 1.3rem;">✨</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Espiritual</span>
+                        <span style="font-size: var(--font-display);">✨</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Espiritual</span>
                     </label>
                     <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
                         <input type="radio" name="category" value="gratitude" style="display: none;">
-                        <span style="font-size: 1.3rem;">🙌</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Gratidão</span>
+                        <span style="font-size: var(--font-display);">🙌</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Gratidão</span>
                     </label>
                     <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
                         <input type="radio" name="category" value="other" checked style="display: none;">
-                        <span style="font-size: 1.3rem;">🙏</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Outros</span>
+                        <span style="font-size: var(--font-display);">🙏</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Outros</span>
                     </label>
                 </div>
             </div>
@@ -614,11 +614,11 @@ renderAppHeader('Pedidos de Oração');
             <div style="margin-bottom: 20px; display: flex; gap: 16px; flex-wrap: wrap;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" name="is_urgent" style="width: 18px; height: 18px; accent-color: #dc2626;">
-                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
+                    <span style="font-size: var(--font-body); font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
                 </label>
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" name="is_anonymous" style="width: 18px; height: 18px; accent-color: #64748b;">
-                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
+                    <span style="font-size: var(--font-body); font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
                 </label>
             </div>
             

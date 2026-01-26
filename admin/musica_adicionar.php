@@ -124,7 +124,7 @@ renderAppHeader('Adicionar Música');
     }
 
     .page-title {
-        font-size: 1.5rem;
+        font-size: var(--font-display);
         font-weight: 800;
         background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
         -webkit-background-clip: text;
@@ -154,7 +154,7 @@ renderAppHeader('Adicionar Música');
     }
 
     .card-title {
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         font-weight: 800;
         color: var(--card-color, var(--text-muted));
         text-transform: uppercase;
@@ -172,7 +172,7 @@ renderAppHeader('Adicionar Música');
 
     .form-group { margin-bottom: 0; }
     .form-label {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         font-weight: 600;
         color: var(--text-secondary);
         margin-bottom: 6px;
@@ -186,7 +186,7 @@ renderAppHeader('Adicionar Música');
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-main);
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         transition: all 0.2s;
         font-weight: 500;
     }
@@ -213,7 +213,7 @@ renderAppHeader('Adicionar Música');
         display: inline-flex; align-items: center; gap: 8px;
         padding: 8px 14px; border-radius: 20px;
         background: var(--bg-body); border: 1px solid var(--border-color);
-        font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+        font-size: var(--font-body-sm); font-weight: 600; color: var(--text-muted);
         cursor: pointer; transition: all 0.2s; user-select: none;
     }
     .tag-pill-compact:hover { border-color: var(--primary-light); color: var(--primary); background: var(--bg-surface); }
@@ -236,7 +236,7 @@ renderAppHeader('Adicionar Música');
 
     .btn-action {
         display: flex; align-items: center; justify-content: center; gap: 8px;
-        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.95rem;
+        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: var(--font-body);
         cursor: pointer; transition: all 0.2s; width: 100%;
     }
     .btn-primary {
@@ -370,7 +370,7 @@ renderAppHeader('Adicionar Música');
             <div style="border-top: 1px dashed var(--border-color); margin-top: 20px; padding-top: 20px;">
                 <label class="form-label" style="margin-bottom: 12px; color: var(--text-main);">Outras Referências</label>
                 <div id="customFieldsList"></div>
-                <button type="button" onclick="addCustomFieldUI()" class="btn-secondary" style="background:none; border:none; padding: 0; color: var(--primary); font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                <button type="button" onclick="addCustomFieldUI()" class="btn-secondary" style="background:none; border:none; padding: 0; color: var(--primary); font-size: var(--font-body-sm); display: flex; align-items: center; gap: 6px;">
                     <i data-lucide="plus-circle" style="width: 16px;"></i> Adicionar Referência Personalizada
                 </button>
             </div>
@@ -383,7 +383,7 @@ renderAppHeader('Adicionar Música');
                     <i data-lucide="folder" style="width: 14px;"></i>
                     Classificação
                 </div>
-                 <a href="classificacoes.php" target="_blank" style="color: var(--card-color); text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
+                 <a href="classificacoes.php" target="_blank" style="color: var(--card-color); text-decoration: none; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px;">
                     <i data-lucide="settings" style="width: 12px;"></i> Gerenciar
                 </a>
             </div>

@@ -42,10 +42,10 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         </h3>
         <div class="settings-card" style="text-align: center; padding: 24px;">
             <img src="../assets/img/logo_pib_black.png" style="height: 48px; opacity: 0.8; margin-bottom: 12px;">
-            <div style="font-weight: 700; color: var(--text-primary); font-size: 1rem;">App Louvor PIB</div>
-            <div style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">Versão 1.1.0 (Beta)</div>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: var(--font-h3);">App Louvor PIB</div>
+            <div style="color: var(--text-secondary); font-size: var(--font-body-sm); margin-bottom: 16px;">Versão 1.1.0 (Beta)</div>
 
-            <div style="font-size: 0.8rem; color: #94a3b8; line-height: 1.5;">
+            <div style="font-size: var(--font-caption); color: #94a3b8; line-height: 1.5;">
                 Desenvolvido para organizar e potencializar<br>o ministério de louvor da PIB Oliveira.
                 <br><br>
                 <strong>Desenvolvedor:</strong> Diego Vilela
@@ -66,7 +66,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .settings-title {
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 700;
         color: var(--text-muted);
         text-transform: uppercase;
@@ -98,7 +98,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     }
 
     .form-group label {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         font-weight: 600;
         color: var(--text-muted);
     }
@@ -111,7 +111,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         color: var(--text-main);
         outline: none;
         transition: all 0.2s;
-        font-size: 0.9rem;
+        font-size: var(--font-body);
     }
 
     .form-input.disabled {
@@ -136,7 +136,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         cursor: pointer;
         margin-top: 8px;
         text-align: center;
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         box-shadow: var(--shadow-sm);
         transition: all 0.2s;
     }
@@ -157,7 +157,7 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
         color: var(--text-muted);
         text-decoration: none;
         font-weight: 600;
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         transition: all 0.2s;
         background: transparent;
     }
@@ -208,11 +208,11 @@ renderPageHeader('Ajustes e Preferências', 'Personalize sua experiência');
     .switch-label {
         font-weight: 600;
         color: var(--text-main);
-        font-size: 0.9rem;
+        font-size: var(--font-body);
     }
 
     .switch-desc {
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
     }
 

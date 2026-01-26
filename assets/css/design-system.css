@@ -18,6 +18,7 @@
     /* 13px - Secondary text */
     --font-caption: 0.75rem;
     /* 12px - Meta info */
+    --font-small: 0.75rem;
 
     --font-regular: 400;
     --font-medium: 500;

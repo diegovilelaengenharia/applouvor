@@ -96,7 +96,7 @@ renderAppHeader('Detalhes do Membro');
     }
 
     .stat-value {
-        font-size: 1.25rem;
+        font-size: var(--font-h1);
         font-weight: 800;
         color: var(--primary);
         margin-bottom: 2px;
@@ -104,7 +104,7 @@ renderAppHeader('Detalhes do Membro');
     }
 
     .stat-label {
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         color: var(--text-secondary);
         font-weight: 600;
         text-transform: uppercase;
@@ -140,7 +140,7 @@ renderAppHeader('Detalhes do Membro');
         flex: 1;
         text-align: center;
         padding: 8px;
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         color: var(--text-secondary);
         background: transparent;
@@ -163,7 +163,7 @@ renderAppHeader('Detalhes do Membro');
     }
 
     .form-label {
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         color: var(--text-secondary);
         margin-bottom: 4px;
@@ -171,7 +171,7 @@ renderAppHeader('Detalhes do Membro');
     }
 
     .form-input {
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         padding: 10px;
         border-radius: 8px;
         border: 1px solid var(--border-subtle);
@@ -237,18 +237,18 @@ renderAppHeader('Detalhes do Membro');
             display: inline-flex; align-items: center; justify-content: center; 
             margin-bottom: 8px;
             backdrop-filter: blur(4px);
-            font-size: 1.5rem; font-weight: 800; color: white;
+            font-size: var(--font-display); font-weight: 800; color: white;
             border: 2px solid rgba(255,255,255,0.3);
         ">
             <?= strtoupper(substr($member['name'], 0, 1)) ?>
         </div>
-        <h1 style="color: white; margin: 0; font-size: 1.25rem; font-weight: 800; line-height: 1.2;">
+        <h1 style="color: white; margin: 0; font-size: var(--font-h1); font-weight: 800; line-height: 1.2;">
             <?= htmlspecialchars($member['name']) ?>
             <?php if ($member['role'] === 'admin'): ?>
-                <span style="background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 8px; font-size: 0.6rem; vertical-align: middle; font-weight: 600;">ADMIN</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 8px; font-size: var(--font-caption); vertical-align: middle; font-weight: 600;">ADMIN</span>
             <?php endif; ?>
         </h1>
-        <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-size: var(--font-body-sm); display: flex; align-items: center; justify-content: center; gap: 10px;">
             <span style="display: flex; align-items: center; gap: 4px;">
                 <i data-lucide="music" style="width: 12px;"></i>
                 <?= htmlspecialchars($member['instrument'] ?: 'Não definido') ?>
@@ -313,7 +313,7 @@ renderAppHeader('Detalhes do Membro');
         <?php if (empty($schedules)): ?>
             <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
                 <i data-lucide="calendar-x" style="width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.5;"></i>
-                <p style="font-size: 0.85rem;">Nenhuma escala encontrada.</p>
+                <p style="font-size: var(--font-body-sm);">Nenhuma escala encontrada.</p>
             </div>
         <?php else: ?>
             <?php foreach ($schedules as $schedule):
@@ -322,10 +322,10 @@ renderAppHeader('Detalhes do Membro');
                 <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="history-item">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 2px;">
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: var(--font-body); margin-bottom: 2px;">
                                 <?= htmlspecialchars($schedule['event_type']) ?>
                             </div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                            <div style="font-size: var(--font-caption); color: var(--text-secondary);">
                                 <?= $date->format('d/m/Y') ?> • <?= $schedule['total_songs'] ?> música<?= $schedule['total_songs'] != 1 ? 's' : '' ?>
                             </div>
                         </div>
@@ -339,7 +339,7 @@ renderAppHeader('Detalhes do Membro');
     <!-- Tab: Dados -->
     <div style="display: <?= $activeTab === 'dados' ? 'block' : 'none' ?>;">
         <?php if (isset($_GET['updated'])): ?>
-            <div style="background: #DCFCE7; color: #166534; padding: 10px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: 0.85rem; font-weight: 600; border: 1px solid #bbf7d0;">
+            <div style="background: #DCFCE7; color: #166534; padding: 10px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: var(--font-body-sm); font-weight: 600; border: 1px solid #bbf7d0;">
                 ✓ Dados atualizados!
             </div>
         <?php endif; ?>
@@ -371,7 +371,7 @@ renderAppHeader('Detalhes do Membro');
 
                 <button type="submit" class="ripple" style="
                     width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px;
-                    background: var(--primary); color: white; font-weight: 700; font-size: 0.9rem;
+                    background: var(--primary); color: white; font-weight: 700; font-size: var(--font-body);
                     display: flex; align-items: center; justify-content: center; gap: 8px;
                 ">
                     <i data-lucide="save" style="width: 16px;"></i> Salvar Alterações

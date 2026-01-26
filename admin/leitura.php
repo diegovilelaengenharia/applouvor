@@ -116,61 +116,227 @@ $selectedPlanType = $settings['reading_plan_type'] ?? null;
 $planStarted = !empty($startDateStr) && !empty($selectedPlanType);
 
 // --- SELECTION SCREEN IF NO PLAN ---
+// --- SELECTION SCREEN IF NO PLAN ---
 if (!$planStarted) {
+    // 1. Render Headers
     renderAppHeader('Novo Plano');
+    renderPageHeader('Escolha seu Plano', 'Jornada Bíblica 2026');
     ?>
     <style>
-        body { background: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .welcome-container { max-width: 600px; margin: 40px auto; padding: 20px; }
-        .plan-card {
-            background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-bottom: 16px;
-            cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+        /* Compact Design System for Selection */
+        .selection-container {
+            max-width: 800px; /* Wider for Grid */
+            margin: 0 auto;
+            padding: 12px; /* Mobile first padding */
         }
-        .plan-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border-color: #6366f1; }
-        .plan-card.selected { border: 2px solid #6366f1; background: #e0e7ff; }
-        .plan-icon { width: 48px; height: 48px; background: #e0e7ff; color: #4338ca; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
-        .plan-title { font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
-        .plan-desc { font-size: 0.85rem; color: #64748b; line-height: 1.5; }
-        .badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; background: #f1f5f9; color: #475569; display: inline-block; margin-top: 8px; }
-    </style>
-    <div class="welcome-container">
-        <h1 style="font-size: 1.8rem; font-weight: 800; color: #1e293b; margin-bottom: 8px;">Bem-vindo(a)! 👋</h1>
-        <p style="color: #64748b; margin-bottom: 32px;">Escolha um plano de leitura para guiar sua jornada bíblica este ano.</p>
         
-        <div id="plan-selection">
+        .plan-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .plan-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .plan-card {
+            background: var(--bg-surface, white);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary, #047857);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .plan-card.selected {
+            border: 2px solid var(--primary, #047857);
+            background: var(--primary-subtle, #ecfdf5);
+        }
+        
+        .plan-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .plan-content { flex: 1; }
+
+        .plan-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main, #1e293b);
+            margin-bottom: 4px;
+        }
+
+        .plan-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted, #64748b);
+            line-height: 1.4;
+        }
+
+        .plan-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            align-self: flex-start;
+            margin-top: auto; /* Push to bottom if needed */
+        }
+
+        /* Action Bar (Sticky Bottom style on mobile, inline on desktop) */
+        .action-bar {
+            background: var(--bg-surface, white);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        @media(min-width: 640px) {
+            .action-bar { flex-direction: row; align-items: center; justify-content: space-between; }
+        }
+
+        .date-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .date-input {
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 8px;
+            padding: 10px;
+            font-family: inherit;
+            color: var(--text-main);
+            background: var(--bg-body);
+            font-size: 0.9rem;
+            outline: none;
+            width: 100%;
+        }
+        @media(min-width: 640px) { .date-input { width: auto; } }
+
+        .btn-start {
+            background: var(--primary, #047857);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.5;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        @media(min-width: 640px) { .btn-start { width: auto; } }
+        
+        .btn-start.active { opacity: 1; pointer-events: auto; }
+        .btn-start:active { transform: scale(0.98); }
+
+    </style>
+
+    <div class="selection-container animate-in">
+        
+        <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">
+            Selecione um roteiro para guiar sua leitura bíblica este ano. 
+            Você pode alterar o ritmo a qualquer momento nas configurações.
+        </p>
+        
+        <div class="plan-grid">
             <!-- Navigators -->
             <div class="plan-card" onclick="selectPlan('navigators', this)">
-                <div class="plan-icon"><i data-lucide="compass" width="24"></i></div>
-                <div class="plan-title">Plano Navigators</div>
-                <div class="plan-desc">Plano equilibrado de 300 dias (25 dias/mês). Cobre toda a Bíblia com flexibilidade para dias livres.</div>
-                <div class="badge">Mais Popular</div>
+                <div class="plan-icon" style="background: #e0e7ff; color: #4338ca;">
+                    <i data-lucide="compass"></i>
+                </div>
+                <div class="plan-content">
+                    <div class="plan-title">Navigators</div>
+                    <div class="plan-desc">25 dias/mês. Flexibilidade máxima para dias corridos.</div>
+                </div>
+                <div class="plan-badge">Equilibrado</div>
             </div>
             
             <!-- Cronológico -->
             <div class="plan-card" onclick="selectPlan('chronological', this)">
-                <div class="plan-icon" style="background: #dcfce7; color: #15803d;"><i data-lucide="clock" width="24"></i></div>
-                <div class="plan-title">Plano Cronológico</div>
-                <div class="plan-desc">Leia os eventos na ordem em que aconteceram. Uma jornada histórica de 365 dias pela narrativa bíblica.</div>
-                <div class="badge">Histórico</div>
+                <div class="plan-icon" style="background: #dcfce7; color: #15803d;">
+                    <i data-lucide="clock"></i>
+                </div>
+                <div class="plan-content">
+                    <div class="plan-title">Cronológico</div>
+                    <div class="plan-desc">Leia os fatos na ordem histórica em que ocorreram.</div>
+                </div>
+                <div class="plan-badge">Histórico</div>
             </div>
             
             <!-- M'Cheyne -->
             <div class="plan-card" onclick="selectPlan('mcheyne', this)">
-                <div class="plan-icon" style="background: #fef3c7; color: #b45309;"><i data-lucide="book-open" width="24"></i></div>
-                <div class="plan-title">Plano M'Cheyne</div>
-                <div class="plan-desc">Clássico e intensivo. Leia o Antigo Testamento 1x e Novo Testamento + Salmos 2x em 365 dias.</div>
-                <div class="badge">Intensivo</div>
+                <div class="plan-icon" style="background: #fef3c7; color: #b45309;">
+                    <i data-lucide="book-open"></i>
+                </div>
+                <div class="plan-content">
+                    <div class="plan-title">M'Cheyne</div>
+                    <div class="plan-desc">Intensivo. AT 1x e NT+Salmos 2x ao ano.</div>
+                </div>
+                <div class="plan-badge">Intensivo</div>
             </div>
         </div>
 
-        <div style="margin-top: 32px; background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Data de Início</label>
-            <input type="date" id="start-date" value="<?= date('Y-m-d') ?>" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; outline: none;">
+        <div class="action-bar">
+            <div class="date-group">
+                <label style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">Início:</label>
+                <input type="date" id="start-date" class="date-input" value="<?= date('Y-m-d') ?>">
+            </div>
+            
+            <button id="start-btn" class="btn-start" onclick="confirmStart()">
+                <span>Confirmar Plano</span>
+                <i data-lucide="arrow-right" width="18"></i>
+            </button>
         </div>
 
-        <button id="start-btn" onclick="confirmStart()" style="margin-top: 24px; width: 100%; padding: 16px; background: #6366f1; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; opacity: 0.5; pointer-events: none; transition: all 0.2s;">
-            Iniciar Jornada
-        </button>
+        <!-- Help Info -->
+        <div style="margin-top: 24px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div style="display: flex; gap: 10px; align-items: start; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px;">
+                <i data-lucide="smartphone" style="width: 18px; color: var(--text-muted); margin-top: 2px;"></i>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    <strong>App PWA</strong><br>Adicione à tela inicial para acesso rápido diário.
+                </div>
+            </div>
+             <div style="display: flex; gap: 10px; align-items: start; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px;">
+                <i data-lucide="bell" style="width: 18px; color: var(--text-muted); margin-top: 2px;"></i>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    <strong>Lembretes</strong><br>Você receberá notificações para manter o ritmo.
+                </div>
+            </div>
+        </div>
     </div>
     
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -180,19 +346,26 @@ if (!$planStarted) {
         
         function selectPlan(id, el) {
             selectedPlan = id;
+            
+            // Visual Update
             document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
+            
+            // Button Update
             const btn = document.getElementById('start-btn');
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-            btn.innerText = 'Iniciar Jornada';
+            btn.classList.add('active');
+            btn.innerHTML = `<span>Iniciar ${id.charAt(0).toUpperCase() + id.slice(1)}</span> <i data-lucide='arrow-right' width='18'></i>`;
+            lucide.createIcons();
         }
         
         function confirmStart() {
             if(!selectedPlan) return;
             const date = document.getElementById('start-date').value;
             const btn = document.getElementById('start-btn');
-            btn.innerText = 'Configurando...';
+            
+            // Loading State
+            btn.style.opacity = '0.7';
+            btn.innerHTML = `<span class='loader'></span> Configurando...`;
             
             const f = new FormData();
             f.append('action', 'select_plan');
@@ -203,11 +376,16 @@ if (!$planStarted) {
                 .then(r => r.json())
                 .then(d => {
                     if(d.success) window.location.reload();
-                    else alert('Erro ao salvar: ' + d.error);
+                    else {
+                        alert('Erro ao salvar: ' + d.error);
+                        btn.innerHTML = `<span>Tentar Novamente</span>`;
+                        btn.classList.add('active');
+                    }
                 });
         }
     </script>
     <?php
+    renderAppFooter(); // Ensure footer is closed properly if needed
     exit;
 }
 
@@ -418,20 +596,20 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 <style>
     /* ... (CSS preserved from original, added adjustments for 31 days columns if needed) ... */
     :root { --primary: #6366f1; --primary-soft: #e0e7ff; --success: #10b981; }
-    body { background-color: #f8fafc; color: #1e293b; padding-bottom: 70px; font-family: -apple-system, sans-serif; }
+    /* body { background-color: #f8fafc; color: #1e293b; padding-bottom: 70px; font-family: -apple-system, sans-serif; } */
     
     /* Calendar Strip & Items */
     .cal-strip { display: flex !important; gap: 8px; overflow-x: auto; padding: 10px 12px; background: white; border-bottom: 1px solid #e2e8f0; scrollbar-width: none; }
     .cal-strip::-webkit-scrollbar { display: none; }
     .cal-item { min-width: 56px; height: 68px; border-radius: 12px; background: #f3f4f6; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s; }
-    .cal-month { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #6b7280; }
-    .cal-num { font-size: 1.25rem; font-weight: 800; color: #1f2937; }
+    .cal-month { font-size: var(--font-caption); font-weight: 700; text-transform: uppercase; color: #6b7280; }
+    .cal-num { font-size: var(--font-h1); font-weight: 800; color: #1f2937; }
     .cal-item.active { background: white; border-color: #047857; box-shadow: 0 2px 8px rgba(4,120,87,0.15); }
     .cal-item.active .cal-num, .cal-item.active .cal-month { color: #065f46; }
     .cal-item.done { background: #d1fae5; }
     .cal-item.done .cal-num { color: #047857; }
     .cal-item.partial { background: #fef3c7; }
-    .cal-progress { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 4px; line-height: 1; }
+    .cal-progress { font-size: var(--font-caption); color: #64748b; font-weight: 600; margin-top: 4px; line-height: 1; }
     .cal-item.done .cal-progress { color: #047857; }
     
     /* Verse Cards */
@@ -439,7 +617,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     .verse-card.read { background: #d1fae5; border-color: #d1fae5; }
     .check-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
     .verse-card.read .check-icon { background: #10b981; border-color: #10b981; color: white; }
-    .btn-read-link { background: #047857; color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; }
+    .btn-read-link { background: #047857; color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px; }
 
     /* Modals & Utils */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -461,7 +639,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     
     .action-btn {
         display: flex; align-items: center; justify-content: center; gap: 8px;
-        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.95rem;
+        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: var(--font-body);
         cursor: pointer; transition: all 0.2s; width: 100%; text-decoration: none;
     }
     .action-btn:active { transform: scale(0.98); }
@@ -495,8 +673,8 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
         <div style="display: flex; justify-content: space-between; align-items: start;">
             <div>
-                <div style="font-size: 0.7rem; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Leitura de Hoje</div>
-                <h1 id="day-title" style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #111827; letter-spacing: -0.5px;">Carregando...</h1>
+                <div style="font-size: var(--font-caption); font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Leitura de Hoje</div>
+                <h1 id="day-title" style="margin: 0; font-size: var(--font-display); font-weight: 800; color: #111827; letter-spacing: -0.5px;">Carregando...</h1>
             </div>
             <div id="status-badge-container"></div>
         </div>
@@ -523,7 +701,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 <div id="modal-note" class="modal-overlay">
     <div style="background: white; width: 95%; max-width: 700px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;">
         <div style="padding: 16px 24px; background: #fff7ed; border-bottom: 1px solid #fed7aa; display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #c2410c; display: flex; align-items: center; gap: 8px;">
+            <h3 style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: #c2410c; display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="pen-line" width="20"></i> Anotação
             </h3>
             <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; cursor: pointer; color: #9ca3af; padding: 4px;">
@@ -532,7 +710,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
         <div style="padding: 20px 24px; overflow-y: auto; flex: 1;">
             <!-- Title Input -->
-            <input type="text" id="note-title-input" placeholder="Título da anotação..." style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
+            <input type="text" id="note-title-input" placeholder="Título da anotação..." style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
             
             <!-- Rich Text Editor -->
             <div style="border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: white;">
@@ -628,7 +806,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <div 
                     id="note-desc-input" 
                     contenteditable="true" 
-                    style="width: 100%; min-height: 120px; max-height: 60vh; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:0.95rem; line-height:1.6; color:#334155;"
+                    style="width: 100%; min-height: 120px; max-height: 60vh; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:var(--font-body); line-height:1.6; color:#334155;"
                     data-placeholder="Digite aqui... Use a barra de ferramentas para formatar o texto."
                 ></div>
             </div>
@@ -662,7 +840,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     border-radius: 4px;
                     padding: 6px;
                     cursor: pointer;
-                    font-size: 1.2rem;
+                    font-size: var(--font-h2);
                     transition: all 0.2s;
                     display: flex;
                     align-items: center;
@@ -710,7 +888,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background: #f3f4f6; color: #374151; width: 32px; height: 32px; border-radius: 8px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
                 <i data-lucide="chevron-left" width="20"></i>
             </button>
-            <h2 style="margin:0; font-size: 1.25rem; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
+            <h2 style="margin:0; font-size: var(--font-h1); font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
                 Configurações
             </h2>
         </div>

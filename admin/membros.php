@@ -129,7 +129,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         padding: 14px 14px 14px 48px;
         border-radius: 12px;
         border: 1px solid var(--border-color);
-        font-size: 1rem;
+        font-size: var(--font-body);
         outline: none;
         transition: all 0.2s;
         background: var(--bg-surface);
@@ -188,7 +188,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        font-size: 1.2rem;
+        font-size: var(--font-h1);
         color: white;
         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         flex-shrink: 0;
@@ -207,7 +207,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .member-name {
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         font-weight: 700;
         color: var(--text-main);
         margin: 0 0 4px 0;
@@ -231,7 +231,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         gap: 3px;
         padding: 2px 6px;
         border-radius: 5px;
-        font-size: 0.65rem;
+        font-size: var(--font-caption);
         font-weight: 600;
         color: var(--text-main);
         background: var(--bg-body);
@@ -239,7 +239,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .role-icon {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
     }
 
     .badge-admin {
@@ -247,7 +247,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         color: white;
         padding: 1px 5px;
         border-radius: 6px;
-        font-size: 0.55rem;
+        font-size: 0.65rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -357,7 +357,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .modal-header h2 {
-        font-size: 1.5rem;
+        font-size: var(--font-display);
         font-weight: 800;
         color: var(--text-main);
         margin: 0 0 4px 0;
@@ -365,7 +365,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
     .modal-header p {
         color: var(--text-muted);
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         margin: 0;
     }
 
@@ -375,7 +375,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
     .form-label {
         display: block;
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         font-weight: 600;
         color: var(--text-main);
         margin-bottom: 8px;
@@ -388,7 +388,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-main);
-        font-size: 1rem;
+        font-size: var(--font-body);
         transition: all 0.2s;
     }
 
@@ -530,7 +530,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                             endforeach;
                         else: 
                         ?>
-                            <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">
+                            <span style="font-size: var(--font-caption); color: var(--text-muted); font-style: italic;">
                                 <?= htmlspecialchars($user['instrument'] ?: 'Sem função') ?>
                             </span>
                         <?php endif; ?>
@@ -602,7 +602,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                                 <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox">
                                 <span style="display: flex; align-items: center; gap: 6px;">
                                     <span><?= $role['icon'] ?></span>
-                                    <span style="font-weight: 500; font-size: 0.85rem;"><?= $role['name'] ?></span>
+                                    <span style="font-weight: 500; font-size: var(--font-body-sm);"><?= $role['name'] ?></span>
                                 </span>
                             </label>
                         <?php endforeach; ?>

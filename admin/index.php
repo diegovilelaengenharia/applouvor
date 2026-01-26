@@ -118,16 +118,16 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         <div style="background: #fee2e2; color: #dc2626; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
             <i data-lucide="alert-triangle" width="24"></i>
         </div>
-        <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 800; color: #1f2937;">Aviso Urgente</h3>
-        <p style="margin: 0 0 16px 0; font-size: 1rem; font-weight: 700; color: #374151;">
+        <h3 style="margin: 0 0 8px 0; font-size: var(--font-h1); font-weight: 800; color: #1f2937;">Aviso Urgente</h3>
+        <p style="margin: 0 0 16px 0; font-size: var(--font-h3); font-weight: 700; color: #374151;">
             <?= htmlspecialchars($popupAviso['title']) ?>
         </p>
-        <div style="text-align: left; background: #f9fafb; padding: 12px; border-radius: 8px; font-size: 0.9rem; color: #4b5563; margin-bottom: 20px; max-height: 200px; overflow-y: auto;">
+        <div style="text-align: left; background: #f9fafb; padding: 12px; border-radius: 8px; font-size: var(--font-body); color: #4b5563; margin-bottom: 20px; max-height: 200px; overflow-y: auto;">
             <?= $popupAviso['message'] ?>
         </div>
         <button onclick="closeUrgentModal()" style="
             width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 12px;
-            font-weight: 700; font-size: 1rem; cursor: pointer;
+            font-weight: 700; font-size: var(--font-h3); cursor: pointer;
         ">
             Entendido
         </button>
@@ -151,7 +151,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
 <!-- Estilos da Nova Home (Vertical Feed) -->
 <style>
     .section-title {
-        font-size: 1rem;
+        font-size: var(--font-h3);
         font-weight: 700;
         color: var(--text-main);
         margin: 20px 0 10px 0;
@@ -161,7 +161,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     }
 
     .section-action {
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         color: var(--primary);
         text-decoration: none;
         font-weight: 600;
@@ -194,7 +194,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 1.1rem;
+        font-size: var(--font-h2);
         font-weight: 700;
     }
 
@@ -215,7 +215,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
 
     <!-- MINHAS ESCALAS -->
     <div class="section-title">
-        <span>Minhas escalas <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= $nextSchedule ? '1' : '0' ?>)</span></span>
+        <span>Minhas escalas <span style="font-size: var(--font-body-sm); color: var(--text-muted); font-weight: 500;">(<?= $nextSchedule ? '1' : '0' ?>)</span></span>
         <a href="escalas.php?mine=1" class="section-action">Ver todas</a>
     </div>
 
@@ -230,13 +230,13 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
                 width: 50px; height: 56px; background: #f1f5f9; border-radius: 10px;
                 color: var(--text-main); text-align: center; line-height: 1; flex-shrink: 0;
             ">
-                <span style="font-size: 1.1rem; font-weight: 800;"><?= $date->format('d') ?></span>
-                <span style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding-top: 2px;"><?= $monthName ?></span>
+                <span style="font-size: var(--font-h2); font-weight: 800;"><?= $date->format('d') ?></span>
+                <span style="font-size: var(--font-caption); font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding-top: 2px;"><?= $monthName ?></span>
             </div>
 
             <div style="flex: 1;">
-                <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
-                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-muted); font-size: 0.85rem;">
+                <h4 style="margin: 0; font-size: var(--font-h3); font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-muted); font-size: var(--font-body-sm);">
                     <!-- Mini Avatars (Simulated) -->
                     <div style="display: flex; padding-left: 8px;">
                         <span style="width: 20px; height: 20px; border-radius: 50%; background: #cbd5e1; border: 2px solid white; margin-left: -8px;"></span>
@@ -254,13 +254,13 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     <?php else: ?>
         <div class="empty-state">
             <i data-lucide="calendar-off" style="width: 20px;"></i>
-            <span style="font-size: 0.9rem;">Lista vazia.</span>
+            <span style="font-size: var(--font-body);">Lista vazia.</span>
         </div>
     <?php endif; ?>
 
     <!-- AVISOS -->
     <div class="section-title">
-        <span>Avisos <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= $totalAvisos ?>)</span></span>
+        <span>Avisos <span style="font-size: var(--font-body-sm); color: var(--text-muted); font-weight: 500;">(<?= $totalAvisos ?>)</span></span>
         <?php if ($totalAvisos > 0): ?>
             <a href="avisos.php" class="section-action">Ver todos</a>
         <?php endif; ?>
@@ -288,13 +288,13 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
                 <i data-lucide="<?= $topAviso['type'] === 'event' ? 'calendar' : ($topAviso['priority'] === 'urgent' ? 'alert-triangle' : 'bell') ?>"></i>
             </div>
             <div>
-                <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: <?= $st['text_title'] ?>; display: flex; align-items: center; gap: 6px;">
+                <h4 style="margin: 0; font-size: var(--font-h3); font-weight: 700; color: <?= $st['text_title'] ?>; display: flex; align-items: center; gap: 6px;">
                     <?= htmlspecialchars($topAviso['title']) ?>
                     <?php if($topAviso['priority'] === 'urgent'): ?>
-                        <span style="font-size: 0.65rem; background: #dc2626; color: white; padding: 2px 6px; border-radius: 4px;">URGENTE</span>
+                        <span style="font-size: var(--font-caption); background: #dc2626; color: white; padding: 2px 6px; border-radius: 4px;">URGENTE</span>
                     <?php endif; ?>
                 </h4>
-                <div style="margin: 4px 0 0 0; font-size: 0.9rem; color: <?= $st['text_body'] ?>; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                <div style="margin: 4px 0 0 0; font-size: var(--font-body); color: <?= $st['text_body'] ?>; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                     <?= strip_tags($topAviso['message']) ?>
                 </div>
             </div>
@@ -302,7 +302,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     <?php else: ?>
         <div class="empty-state">
             <i data-lucide="bell-off" style="width: 20px;"></i>
-            <span style="font-size: 0.9rem">Lista vazia.</span>
+            <span style="font-size: var(--font-body)">Lista vazia.</span>
         </div>
     <?php endif; ?>
 
@@ -444,8 +444,8 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         <!-- Header do Card: Dia e Ícone de Status -->
         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
             <div>
-                <h4 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main);">Dia <?= $curD ?></h4>
-                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                <h4 style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: var(--text-main);">Dia <?= $curD ?></h4>
+                <div style="font-size: var(--font-body-sm); color: var(--text-muted); margin-top: 2px;">
                     <?= $incentivo ?>
                 </div>
             </div>
@@ -477,7 +477,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
                     border: 1px solid <?= $isRead ? '#bbf7d0' : '#e2e8f0' ?>;
                 ">
                     <i data-lucide="<?= $vIcon ?>" width="16" color="<?= $isRead ? '#16a34a' : '#cbd5e1' ?>"></i>
-                    <span style="font-size: 0.9rem; font-weight: 600; color: <?= $vColor ?>; text-decoration: <?= $textDecor ?>;">
+                    <span style="font-size: var(--font-body); font-weight: 600; color: <?= $vColor ?>; text-decoration: <?= $textDecor ?>;">
                         <?= $verse ?>
                     </span>
                 </div>
@@ -486,7 +486,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         
         <!-- Botão de Ação -->
         <div style="margin-top: 12px; text-align: center;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: var(--primary);">
+            <span style="font-size: var(--font-body-sm); font-weight: 600; color: var(--primary);">
                 <?= $readCount ?> de <?= $totalCount ?> lidos
             </span>
         </div>
@@ -495,7 +495,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
 
     <!-- ANIVERSARIANTES -->
     <div class="section-title">
-        <span>Aniversariantes <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(<?= $niverCount ?>)</span></span>
+        <span>Aniversariantes <span style="font-size: var(--font-body-sm); color: var(--text-muted); font-weight: 500;">(<?= $niverCount ?>)</span></span>
         <a href="aniversarios.php" class="section-action">Ver todos</a>
     </div>
 
@@ -504,13 +504,13 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
         <?php foreach ($aniversariantes as $niver): ?>
             <a href="aniversarios.php" class="feed-card" style="padding: 12px; margin-bottom: 0;">
                 <div style="width: 40px; height: 40px; background: #fdf2f8; border-radius: 50%; color: #db2777; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #fbcfe8;">
-                    <span style="font-weight: 800; font-size: 0.95rem; line-height: 1;"><?= $niver['dia'] ?></span>
+                    <span style="font-weight: 800; font-size: var(--font-body); line-height: 1;"><?= $niver['dia'] ?></span>
                 </div>
                 <div>
-                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-main);">
+                    <h4 style="margin: 0; font-size: var(--font-body); font-weight: 700; color: var(--text-main);">
                         <?= htmlspecialchars($niver['name']) ?>
                     </h4>
-                    <span style="font-size: 0.75rem; color: #db2777;">Parabéns! 🎉</span>
+                    <span style="font-size: var(--font-caption); color: #db2777;">Parabéns! 🎉</span>
                 </div>
                 <div style="margin-left: auto; color: var(--text-muted);">
                     <i data-lucide="chevron-right" width="16"></i>
@@ -521,7 +521,7 @@ renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
     <?php else: ?>
         <div class="empty-state">
             <i data-lucide="party-popper" style="width: 20px;"></i>
-            <span style="font-size: 0.9rem;">Lista vazia.</span>
+            <span style="font-size: var(--font-body);">Lista vazia.</span>
         </div>
     <?php endif; ?>
 

@@ -18,19 +18,19 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 <div style="display: flex; align-items: center; gap: 12px; margin: 0 16px 24px 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
     <div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; flex: 1;">
         <a href="?tab=musicas" class="ripple" style="
-            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: var(--font-body); font-weight: 600; transition: all 0.2s;
             <?= $tab == 'musicas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
         ">Músicas</a>
         <a href="?tab=pastas" class="ripple" style="
-            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: var(--font-body); font-weight: 600; transition: all 0.2s;
             <?= $tab == 'pastas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
         ">TAG's</a>
         <a href="?tab=artistas" class="ripple" style="
-            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: var(--font-body); font-weight: 600; transition: all 0.2s;
             <?= $tab == 'artistas' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
         ">Artistas</a>
         <a href="?tab=tons" class="ripple" style="
-            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            flex: 1; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: var(--font-body); font-weight: 600; transition: all 0.2s;
             <?= $tab == 'tons' ? 'background: var(--bg-surface); color: var(--primary); box-shadow: var(--shadow-sm);' : 'color: var(--text-muted);' ?>
         ">Tons</a>
     </div>
@@ -77,7 +77,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 text-decoration: none;
                 color: #0f172a;
                 font-weight: 600;
-                font-size: 0.9rem;
+                font-size: var(--font-body);
                 transition: background 0.2s;
                 border-bottom: 1px solid #f1f5f9;
             " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
@@ -106,7 +106,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 text-decoration: none;
                 color: #0f172a;
                 font-weight: 600;
-                font-size: 0.9rem;
+                font-size: var(--font-body);
                 transition: background 0.2s;
             " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
                 <div style="
@@ -160,7 +160,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <i data-lucide="search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
             <input type="text" name="q" placeholder="Buscar música, artista..." value="<?= htmlspecialchars($search) ?>" style="
                 width: 100%; padding: 12px 14px 12px 48px; border-radius: var(--radius-md); 
-                border: 1px solid var(--border-color); font-size: 1rem; outline: none; 
+                border: 1px solid var(--border-color); font-size: var(--font-body); outline: none; 
                 transition: border 0.2s; background: var(--bg-surface); color: var(--text-main);
                 box-shadow: var(--shadow-sm);
             " onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'">
@@ -212,7 +212,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                         <i data-lucide="folder-open" style="width: 20px;"></i>
                         Pasta: <?= htmlspecialchars($currentTag['name']) ?>
                     </div>
-                    <a href="repertorio.php?tab=musicas" style="color: <?= $currentTag['color'] ?>; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                    <a href="repertorio.php?tab=musicas" style="color: <?= $currentTag['color'] ?>; text-decoration: none; font-size: var(--font-body-sm); font-weight: 600;">
                         <i data-lucide="x" style="width: 16px;"></i> Limpar
                     </a>
                 </div>
@@ -236,7 +236,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     <i data-lucide="music" style="width: 20px;"></i>
                     Tom: <?= htmlspecialchars($tone) ?>
                 </div>
-                <a href="repertorio.php?tab=musicas" style="color: <?= $toneColor ?>; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                <a href="repertorio.php?tab=musicas" style="color: <?= $toneColor ?>; text-decoration: none; font-size: var(--font-body-sm); font-weight: 600;">
                     <i data-lucide="x" style="width: 16px;"></i> Limpar
                 </a>
             </div>
@@ -261,15 +261,15 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     "></div>
 
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;"><?= htmlspecialchars($song['title']) ?></div>
-                        <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1px;"><?= htmlspecialchars($song['artist']) ?></div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;"><?= htmlspecialchars($song['title']) ?></div>
+                        <div style="color: var(--text-muted); font-size: var(--font-body-sm); margin-top: 1px;"><?= htmlspecialchars($song['artist']) ?></div>
                     </div>
 
                     <div style="text-align: right; min-width: 50px;">
-                        <div style="font-size: 0.7rem; font-weight: 700; color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 6px; display: inline-block;">
+                        <div style="font-size: var(--font-caption); font-weight: 700; color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 6px; display: inline-block;">
                             <?= $song['tone'] ?: '-' ?>
                         </div>
-                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">BPM: <?= $song['bpm'] ?: '-' ?></div>
+                        <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">BPM: <?= $song['bpm'] ?: '-' ?></div>
                     </div>
                 </a>
             <?php endforeach; ?>
@@ -317,15 +317,15 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     </div>
 
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 2px;">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-h3); margin-bottom: 2px;">
                             <?= htmlspecialchars($tag['name']) ?>
                         </div>
                         <?php if (!empty($tag['description'])): ?>
-                            <div style="color: var(--text-muted); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <div style="color: var(--text-muted); font-size: var(--font-body-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <?= htmlspecialchars($tag['description']) ?>
                             </div>
                         <?php else: ?>
-                            <div style="color: var(--text-muted); font-size: 0.85rem;">
+                            <div style="color: var(--text-muted); font-size: var(--font-body-sm);">
                                 <?= $tag['count'] ?> músicas
                             </div>
                         <?php endif; ?>
@@ -356,7 +356,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 ">
                     <i data-lucide="plus" style="width: 24px;"></i>
                 </div>
-                <div style="font-weight: 600; font-size: 0.95rem;">Nova TAG</div>
+                <div style="font-weight: 600; font-size: var(--font-body);">Nova TAG</div>
             </a>
 
             <?php if (empty($tags)): ?>
@@ -392,8 +392,8 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 "></div>
 
                     <div style="flex: 1;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><?= htmlspecialchars($artist['name']) ?></div>
-                        <div style="color: var(--text-muted); font-size: 0.85rem;"><?= $artist['count'] ?> músicas</div>
+                        <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-h3);"><?= htmlspecialchars($artist['name']) ?></div>
+                        <div style="color: var(--text-muted); font-size: var(--font-body-sm);"><?= $artist['count'] ?> músicas</div>
                     </div>
 
                     <i data-lucide="chevron-right" style="width: 20px; color: var(--text-muted);"></i>
@@ -452,10 +452,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     </div>
 
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 2px;">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-h3); margin-bottom: 2px;">
                             Tom <?= htmlspecialchars($toneName) ?>
                         </div>
-                        <div style="color: var(--text-muted); font-size: 0.85rem;">
+                        <div style="color: var(--text-muted); font-size: var(--font-body-sm);">
                             <?= $toneItem['count'] ?> músicas
                         </div>
                     </div>

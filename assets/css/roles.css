@@ -16,7 +16,7 @@
     gap: 4px;
     padding: 4px 10px;
     border-radius: 12px;
-    font-size: 0.75rem;
+    font-size: var(--font-small);
     font-weight: 600;
     color: white;
     background: var(--primary-green);
@@ -29,7 +29,7 @@
 }
 
 .role-badge .role-icon {
-    font-size: 0.9rem;
+    font-size: var(--font-body);
     line-height: 1;
 }
 
@@ -41,7 +41,7 @@
 /* Variante compacta - apenas ícone */
 .role-badge.compact {
     padding: 4px 6px;
-    font-size: 0.9rem;
+    font-size: var(--font-body);
     min-width: 28px;
     justify-content: center;
 }
@@ -51,7 +51,7 @@
 }
 
 .role-badge.compact .role-icon {
-    font-size: 1rem;
+    font-size: var(--font-h3);
 }
 
 /* === ROLE SELECTOR MODAL === */
@@ -110,7 +110,7 @@
 }
 
 .roles-selector-title {
-    font-size: 1.25rem;
+    font-size: var(--font-h1);
     font-weight: 700;
     color: var(--text-primary);
 }
@@ -147,7 +147,7 @@
 }
 
 .role-category-title {
-    font-size: 0.85rem;
+    font-size: var(--font-body-sm);
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -194,13 +194,13 @@
 }
 
 .role-item-icon {
-    font-size: 2rem;
+    font-size: var(--font-display);
     line-height: 1;
     transition: transform 0.2s;
 }
 
 .role-item-name {
-    font-size: 0.8rem;
+    font-size: var(--font-body-sm);
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -228,7 +228,7 @@
     background: var(--primary-green);
     color: white;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: var(--font-body);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -246,7 +246,7 @@
     background: transparent;
     color: var(--text-secondary);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--font-body);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -300,10 +300,10 @@ body.dark-mode .role-item.selected {
     }
 
     .role-item-icon {
-        font-size: 1.5rem;
+        font-size: var(--font-display);
     }
 
     .role-item-name {
-        font-size: 0.7rem;
+        font-size: var(--font-small);
     }
 }

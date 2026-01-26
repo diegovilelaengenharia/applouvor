@@ -144,21 +144,25 @@ renderAppHeader('Avisos');
         justify-content: center;
         color: white;
         font-weight: 700;
-        font-size: 1rem;
+        color: white;
+        font-weight: 700;
+        font-size: var(--font-h3);
     }
     .aviso-author-info {
         flex: 1;
     }
     .aviso-author-name {
         font-weight: 700;
+        font-weight: 700;
         color: var(--text-main);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
     }
     .aviso-meta {
         display: flex;
         align-items: center;
+        align-items: center;
         gap: 8px;
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         color: var(--text-muted);
     }
     .aviso-type-badge {
@@ -166,8 +170,9 @@ renderAppHeader('Avisos');
         align-items: center;
         gap: 4px;
         padding: 2px 8px;
+        padding: 2px 8px;
         border-radius: 12px;
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         font-weight: 600;
     }
     
@@ -176,14 +181,14 @@ renderAppHeader('Avisos');
         padding: 16px;
     }
     .aviso-title {
-        font-size: 1.1rem;
+        font-size: var(--font-h2);
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 8px;
     }
     .aviso-text {
         color: var(--text-body);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
         line-height: 1.6;
     }
     .aviso-text p { margin: 0 0 8px; }
@@ -211,7 +216,7 @@ renderAppHeader('Avisos');
         color: #dc2626;
         padding: 3px 8px;
         border-radius: 6px;
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         font-weight: 700;
         text-transform: uppercase;
     }
@@ -220,7 +225,7 @@ renderAppHeader('Avisos');
         color: #d97706;
         padding: 3px 8px;
         border-radius: 6px;
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         font-weight: 700;
         text-transform: uppercase;
     }
@@ -261,7 +266,7 @@ renderAppHeader('Avisos');
     .filter-tab {
         padding: 8px 16px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         color: var(--text-muted);
         text-decoration: none;
@@ -300,7 +305,7 @@ renderAppHeader('Avisos');
         padding: 12px 16px;
         color: var(--text-main);
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         width: 100%;
         background: none;
         border: none;
@@ -325,8 +330,8 @@ renderAppHeader('Avisos');
         <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);">
             <i data-lucide="megaphone" style="color: white; width: 36px; height: 36px;"></i>
         </div>
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Central de Comunicação</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto;">
+        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Central de Comunicação</h2>
+        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
             Avisos importantes, eventos e novidades do ministério. Fique por dentro de tudo!
         </p>
     </div>
@@ -341,7 +346,7 @@ renderAppHeader('Avisos');
                 <i data-lucide="search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; color: var(--text-muted);"></i>
                 <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..." style="
                     width: 100%; padding: 12px 12px 12px 44px; border: 1px solid var(--border-color);
-                    border-radius: 12px; font-size: 0.95rem; background: var(--bg-surface);
+                    border-radius: 12px; font-size: var(--font-body); background: var(--bg-surface);
                     outline: none; color: var(--text-main);
                 ">
             </div>
@@ -362,7 +367,7 @@ renderAppHeader('Avisos');
     <div style="margin-bottom: 20px;">
         <a href="?<?= $showHistory ? '' : 'history=1' ?><?= $filterType !== 'all' ? '&type=' . $filterType : '' ?>" style="
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+            padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
             text-decoration: none; color: var(--text-muted);
             background: <?= $showHistory ? 'var(--bg-surface)' : 'transparent' ?>;
             border: 1px solid <?= $showHistory ? 'var(--border-color)' : 'transparent' ?>;
@@ -494,7 +499,7 @@ renderAppHeader('Avisos');
                 
                 <!-- Footer -->
                 <div class="aviso-footer">
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted);">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: var(--font-body-sm); color: var(--text-muted);">
                         <?php if($aviso['target_audience'] !== 'all'): ?>
                             <span style="display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 4px 10px; border-radius: 12px;">
                                 <i data-lucide="users" style="width: 12px;"></i>
@@ -503,7 +508,7 @@ renderAppHeader('Avisos');
                         <?php endif; ?>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: var(--font-body-sm); color: var(--text-muted);">
                         <?php if($expiryText): ?>
                             <span style="display: flex; align-items: center; gap: 4px; <?= $expiryClass ?>">
                                 <i data-lucide="clock" style="width: 12px;"></i>
@@ -521,7 +526,7 @@ renderAppHeader('Avisos');
                     <i data-lucide="bell-off" style="color: #f97316; width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum aviso encontrado</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 300px; margin: 0 auto 20px;">
+                <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                     <?= $showHistory ? 'Nenhum aviso no histórico.' : 'Não há avisos ativos no momento.' ?>
                 </p>
                 <?php if ($isAdmin): ?>
@@ -551,7 +556,7 @@ renderAppHeader('Avisos');
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 550px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 id="modalTitle" style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main);">📢 Novo Aviso</h2>
+            <h2 id="modalTitle" style="margin: 0; font-size: var(--font-h1); font-weight: 800; color: var(--text-main);">📢 Novo Aviso</h2>
             <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
                 <i data-lucide="x" style="width: 20px;"></i>
             </button>
@@ -564,16 +569,16 @@ renderAppHeader('Avisos');
             
             <!-- Título -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Título</label>
-                <input type="text" name="title" id="avisoTitle" required placeholder="Ex: Ensaio especial neste sábado" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.95rem; outline: none; background: var(--bg-body);">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título</label>
+                <input type="text" name="title" id="avisoTitle" required placeholder="Ex: Ensaio especial neste sábado" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
             </div>
             
             <!-- Tipo e Prioridade -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                 <!-- Tipo -->
                 <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Tipo</label>
-                    <select name="type" id="avisoType" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Tipo</label>
+                    <select name="type" id="avisoType" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
                         <option value="general">📢 Geral</option>
                         <option value="event">🎉 Evento</option>
                         <option value="music">🎵 Música</option>
@@ -584,8 +589,8 @@ renderAppHeader('Avisos');
                 
                 <!-- Prioridade -->
                 <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Prioridade</label>
-                    <select name="priority" id="avisoPriority" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Prioridade</label>
+                    <select name="priority" id="avisoPriority" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
                         <option value="info">ℹ️ Normal</option>
                         <option value="important">⭐ Importante</option>
                         <option value="urgent">🔥 Urgente</option>
@@ -597,8 +602,8 @@ renderAppHeader('Avisos');
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                 <!-- Público -->
                 <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Público</label>
-                    <select name="target_audience" id="avisoTarget" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Público</label>
+                    <select name="target_audience" id="avisoTarget" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
                         <option value="all">👥 Todos</option>
                         <option value="team">🎸 Equipe</option>
                         <option value="admins">👑 Líderes</option>
@@ -607,14 +612,14 @@ renderAppHeader('Avisos');
                 
                 <!-- Validade -->
                 <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Expira em</label>
-                    <input type="date" name="expires_at" id="avisoExpires" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; background: var(--bg-body); color: var(--text-main);">
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Expira em</label>
+                    <input type="date" name="expires_at" id="avisoExpires" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
                 </div>
             </div>
             
             <!-- Editor de Texto -->
             <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Mensagem</label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Mensagem</label>
                 <div id="editor" style="height: 150px; background: white; border-radius: 12px;"></div>
             </div>
             

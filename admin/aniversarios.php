@@ -88,7 +88,7 @@ renderAppHeader('Aniversariantes');
         justify-content: center;
         color: white;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: var(--font-h2);
         flex-shrink: 0;
     }
     
@@ -103,12 +103,12 @@ renderAppHeader('Aniversariantes');
         box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
     }
     .birthday-date .day {
-        font-size: 1.3rem;
+        font-size: var(--font-h1);
         font-weight: 800;
         line-height: 1;
     }
     .birthday-date .month {
-        font-size: 0.65rem;
+        font-size: var(--font-caption);
         text-transform: uppercase;
         font-weight: 600;
         opacity: 0.9;
@@ -121,11 +121,11 @@ renderAppHeader('Aniversariantes');
     .birthday-name {
         font-weight: 700;
         color: var(--text-main);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
         margin-bottom: 2px;
     }
     .birthday-role {
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         color: var(--text-muted);
     }
     
@@ -150,7 +150,7 @@ renderAppHeader('Aniversariantes');
         justify-content: center;
     }
     .month-title {
-        font-size: 1rem;
+        font-size: var(--font-h3);
         font-weight: 700;
         color: var(--text-main);
     }
@@ -159,7 +159,7 @@ renderAppHeader('Aniversariantes');
         color: var(--text-muted);
         padding: 4px 10px;
         border-radius: 20px;
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         font-weight: 600;
     }
     
@@ -175,7 +175,7 @@ renderAppHeader('Aniversariantes');
     .filter-tab {
         padding: 10px 18px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         color: var(--text-muted);
         text-decoration: none;
@@ -204,8 +204,8 @@ renderAppHeader('Aniversariantes');
         <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);">
             <i data-lucide="cake" style="color: white; width: 36px; height: 36px;"></i>
         </div>
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Parabéns para Você! 🎂</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto;">
+        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Parabéns para Você! 🎂</h2>
+        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
             Celebre com os irmãos que fazem aniversário. Uma família abençoada!
         </p>
     </div>
@@ -217,7 +217,7 @@ renderAppHeader('Aniversariantes');
                 <i data-lucide="calendar-heart" style="color: #f59e0b; width: 40px; height: 40px;"></i>
             </div>
             <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhuma data cadastrada</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 300px; margin: 0 auto 20px;">
+            <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                 Cadastre a data de nascimento dos membros para ver os aniversários.
             </p>
             <a href="membros.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none;">
@@ -236,7 +236,7 @@ renderAppHeader('Aniversariantes');
                 </div>
                 <span class="month-title"><?= $mesNomes[$mesAtual] ?></span>
                 <span class="month-count"><?= count($aniversariantesMesAtual) ?> pessoa(s)</span>
-                <span style="margin-left: auto; font-size: 0.8rem; color: var(--primary); font-weight: 600;">Este mês! 🎉</span>
+                <span style="margin-left: auto; font-size: var(--font-body-sm); color: var(--primary); font-weight: 600;">Este mês! 🎉</span>
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -272,14 +272,14 @@ renderAppHeader('Aniversariantes');
                         <div class="birthday-name">
                             <?= htmlspecialchars($niver['name']) ?>
                             <?php if ($niver['isToday']): ?>
-                                <span style="font-size: 1rem;">🎂</span>
+                                <span style="font-size: var(--font-h3);">🎂</span>
                             <?php endif; ?>
                         </div>
                         <div class="birthday-role"><?= htmlspecialchars($niver['instrument'] ?? 'Membro') ?></div>
                     </div>
                     
                     <?php if ($niver['isToday']): ?>
-                        <div style="background: white; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #f59e0b; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div style="background: white; padding: 6px 12px; border-radius: 20px; font-size: var(--font-caption); font-weight: 700; color: #f59e0b; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                             HOJE! 🎉
                         </div>
                     <?php else: ?>

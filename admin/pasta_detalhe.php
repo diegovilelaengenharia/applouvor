@@ -89,7 +89,7 @@ renderAppHeader($tag['name']);
     <div style="position: absolute; top: 16px; left: 16px;">
         <a href="repertorio.php?tab=pastas" style="
             color: white; text-decoration: none; display: flex; align-items: center; gap: 4px; 
-            font-weight: 600; background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 16px; font-size: 0.8rem;
+            font-weight: 600; background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 16px; font-size: var(--font-body-sm);
             backdrop-filter: blur(4px);
         ">
             <i data-lucide="arrow-left" style="width: 14px;"></i> Voltar
@@ -111,8 +111,8 @@ renderAppHeader($tag['name']);
         <i data-lucide="folder-open" style="width: 28px; height: 28px; color: white;"></i>
     </div>
 
-    <h1 style="margin: 0; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($tag['name']) ?></h1>
-    <p style="margin-top: 4px; font-size: 0.85rem; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <h1 style="margin: 0; font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($tag['name']) ?></h1>
+    <p style="margin-top: 4px; font-size: var(--font-body-sm); opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
         <?= htmlspecialchars($tag['description']) ?: count($songs) . ' músicas' ?>
     </p>
 </div>
@@ -124,12 +124,12 @@ renderAppHeader($tag['name']);
             <div style="background: var(--bg-surface); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
                 <i data-lucide="music" style="width: 28px; color: var(--text-muted);"></i>
             </div>
-            <h3 style="color: var(--text-primary); font-size: 1rem; margin-bottom: 6px;">Pasta Vazia</h3>
-            <p style="color: var(--text-secondary); font-size: 0.85rem;">Nenhuma música vinculada.</p>
-            <a href="repertorio.php" style="display: inline-block; margin-top: 12px; color: <?= $tag['color'] ?: '#047857' ?>; font-weight: 700; font-size: 0.9rem;">Ir para Repertório</a>
+            <h3 style="color: var(--text-primary); font-size: var(--font-h3); margin-bottom: 6px;">Pasta Vazia</h3>
+            <p style="color: var(--text-secondary); font-size: var(--font-body-sm);">Nenhuma música vinculada.</p>
+            <a href="repertorio.php" style="display: inline-block; margin-top: 12px; color: <?= $tag['color'] ?: '#047857' ?>; font-weight: 700; font-size: var(--font-body);">Ir para Repertório</a>
         </div>
     <?php else: ?>
-        <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Músicas (<?= count($songs) ?>)</h3>
+        <h3 style="margin-bottom: 12px; font-size: var(--font-body-sm); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Músicas (<?= count($songs) ?>)</h3>
 
         <?php foreach ($songs as $song): ?>
             <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="song-card ripple">
@@ -137,10 +137,10 @@ renderAppHeader($tag['name']);
                     <i data-lucide="music" style="width: 20px;"></i>
                 </div>
                 <div style="flex: 1;">
-                    <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 2px;">
+                    <div style="font-weight: 600; color: var(--text-primary); font-size: var(--font-body); margin-bottom: 2px;">
                         <?= htmlspecialchars($song['title']) ?>
                     </div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                    <div style="font-size: var(--font-caption); color: var(--text-secondary);">
                         <?= htmlspecialchars($song['artist']) ?>
                         <?php if ($song['tone']): ?> • <strong style="color: var(--primary);"><?= $song['tone'] ?></strong><?php endif; ?>
                     </div>

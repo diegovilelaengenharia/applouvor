@@ -209,7 +209,7 @@ renderAppHeader('Editar Música');
     }
 
     .page-title {
-        font-size: 1.5rem;
+        font-size: var(--font-display);
         font-weight: 800;
         background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
         -webkit-background-clip: text;
@@ -243,7 +243,7 @@ renderAppHeader('Editar Música');
     }
 
     .card-title {
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         font-weight: 800;
         color: var(--card-color, var(--text-muted));
         text-transform: uppercase;
@@ -273,7 +273,7 @@ renderAppHeader('Editar Música');
     }
 
     .form-label {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         font-weight: 600;
         color: var(--text-secondary);
         margin-bottom: 6px;
@@ -287,7 +287,7 @@ renderAppHeader('Editar Música');
         border: 1px solid var(--border-color);
         background: var(--bg-body);
         color: var(--text-main);
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         transition: all 0.2s;
         font-weight: 500;
     }
@@ -380,7 +380,7 @@ renderAppHeader('Editar Música');
     }
 
     .modal-title {
-        font-size: 1.25rem;
+        font-size: var(--font-h1);
         font-weight: 800;
         color: var(--text-main);
         margin: 0;
@@ -582,8 +582,8 @@ renderAppHeader('Editar Música');
                         <i data-lucide="folder" style="width: 20px;"></i>
                     </div>
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main);"><?= htmlspecialchars($tag['name']) ?></div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
+                        <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($tag['name']) ?></div>
+                        <div style="font-size: var(--font-body-sm); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
                     </div>
                     <div style="display: flex; gap: 4px;">
                         <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="btn-close" style="width: 32px; height: 32px;">
@@ -599,7 +599,7 @@ renderAppHeader('Editar Música');
 
         <!-- Formulário de Nova/Editor -->
         <div style="background: var(--bg-body); border-radius: 16px; padding: 16px;">
-            <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px;" id="tagFormTitle">Nova Classificação</h4>
+            <h4 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 12px;" id="tagFormTitle">Nova Classificação</h4>
 
             <input type="hidden" id="editingTagId" value="">
 

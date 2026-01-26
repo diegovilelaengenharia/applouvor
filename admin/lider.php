@@ -194,7 +194,7 @@ try {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.9rem;
+        font-size: var(--font-body);
     }
 
     .kpi-icon i {
@@ -203,7 +203,7 @@ try {
     }
 
     .kpi-value {
-        font-size: 1.15rem;
+        font-size: var(--font-h2);
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
@@ -211,7 +211,7 @@ try {
     }
 
     .kpi-label {
-        font-size: 0.65rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
         font-weight: 600;
         text-transform: uppercase;
@@ -219,7 +219,7 @@ try {
     }
 
     .kpi-subtitle {
-        font-size: 0.65rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
         margin-top: 2px;
     }
@@ -234,7 +234,7 @@ try {
     }
 
     .section-header h2 {
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
@@ -261,7 +261,7 @@ try {
     }
 
     .chart-title {
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 6px;
@@ -296,7 +296,7 @@ try {
     }
 
     .create-btn span {
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         font-weight: 600;
         color: var(--text-main);
     }
@@ -359,21 +359,21 @@ try {
         color: white;
         padding: 2px 6px;
         border-radius: 10px;
-        font-size: 0.55rem;
+        font-size: var(--font-caption);
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .stats-card-body h3 {
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
     }
 
     .stats-card-body p {
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
         margin: 2px 0 0 0;
     }
@@ -392,14 +392,14 @@ try {
     }
 
     .metric-value {
-        font-size: 1rem;
+        font-size: var(--font-h3);
         font-weight: 800;
         color: var(--text-main);
         line-height: 1;
     }
 
     .metric-label {
-        font-size: 0.6rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
         font-weight: 600;
     }
@@ -420,7 +420,7 @@ try {
         background: white;
         border-radius: 6px;
         margin-bottom: 4px;
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
     }
 
     .alert-item:last-child {
@@ -440,7 +440,7 @@ try {
         gap: 8px;
         padding: 6px;
         border-bottom: 1px solid var(--border-color);
-        font-size: 0.8rem;
+        font-size: var(--font-body-sm);
     }
 
     .activity-item:last-child {
@@ -474,7 +474,7 @@ try {
         }
 
         .section-header h2 {
-            font-size: 0.85rem;
+            font-size: var(--font-body-sm);
         }
     }
 </style>
@@ -503,8 +503,8 @@ try {
                 <i data-lucide="users" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Equipe</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Gerenciar</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Equipe</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Gerenciar</div>
             </div>
         </a>
 
@@ -518,8 +518,8 @@ try {
                 <i data-lucide="megaphone" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Avisos</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Comunicados</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Avisos</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Comunicados</div>
             </div>
         </a>
 
@@ -533,8 +533,8 @@ try {
                 <i data-lucide="calendar-x" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Ausências</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Equipe</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Ausências</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Equipe</div>
             </div>
         </a>
     </div>
@@ -560,8 +560,8 @@ try {
                 <i data-lucide="bar-chart-2" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Escalas</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Escalas</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
             </div>
         </a>
 
@@ -575,8 +575,8 @@ try {
                  <i data-lucide="music-2" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Repertório</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Repertório</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
             </div>
         </a>
 
@@ -590,8 +590,8 @@ try {
                  <i data-lucide="activity" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Engajamento</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Equipe</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Engajamento</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Equipe</div>
             </div>
         </a>
     </div>
@@ -617,8 +617,8 @@ try {
                 <i data-lucide="calendar-plus" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Escala</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Agendar Nova</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Escala</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Agendar Nova</div>
             </div>
         </a>
 
@@ -632,8 +632,8 @@ try {
                 <i data-lucide="music" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Música</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Cadastrar</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Música</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Cadastrar</div>
             </div>
         </a>
 
@@ -647,8 +647,8 @@ try {
                 <i data-lucide="bell-plus" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">Aviso</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Publicar</div>
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Aviso</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Publicar</div>
             </div>
         </a>
     </div>
@@ -694,7 +694,7 @@ try {
                     </div>
                     <div style="flex: 1;">
                         <div style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($activity['titulo']) ?></div>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">
+                        <div style="font-size: var(--font-body-sm); color: var(--text-muted);">
                             <?= ucfirst($activity['tipo']) ?> • <?= date('d/m/Y H:i', strtotime($activity['created_at'])) ?>
                         </div>
                     </div>
@@ -704,7 +704,7 @@ try {
             <?php if (count($recent_activities) > 5): ?>
                 <button onclick="showAllActivities(this)" style="
                     width: 100%; padding: 12px; background: transparent; border: none; border-top: 1px solid var(--border-color);
-                    color: var(--primary); font-weight: 600; cursor: pointer; font-size: 0.9rem;
+                    color: var(--primary); font-weight: 600; cursor: pointer; font-size: var(--font-body);
                     display: flex; align-items: center; justify-content: center; gap: 6px;
                 ">
                     Ver mais atividades <i data-lucide="chevron-down" style="width: 16px;"></i>

@@ -85,14 +85,14 @@ renderAppHeader('Meu Perfil');
 
     <!-- Mensagens de Feedback -->
     <?php if ($success): ?>
-        <div style="background: var(--primary-subtle); color: var(--primary); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--primary-light); font-size: 0.9rem;">
+        <div style="background: var(--primary-subtle); color: var(--primary); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--primary-light); font-size: var(--font-body);">
             <i data-lucide="check-circle" style="width: 18px;"></i>
             <?= $success ?>
         </div>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <div style="background: #FEF2F2; color: #DC2626; padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid #FECACA; font-size: 0.9rem;">
+        <div style="background: #FEF2F2; color: #DC2626; padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid #FECACA; font-size: var(--font-body);">
             <i data-lucide="alert-circle" style="width: 18px;"></i>
             <?= $error ?>
         </div>
@@ -142,14 +142,14 @@ renderAppHeader('Meu Perfil');
                 <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="this.form.submit()">
             </div>
 
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 2px;">
+            <h2 style="font-size: var(--font-h2); font-weight: 700; color: #0f172a; margin-bottom: 2px;">
                 <?= htmlspecialchars($user['name']) ?>
             </h2>
-            <p style="color: #64748b; font-size: 0.9rem;">
+            <p style="color: #64748b; font-size: var(--font-body);">
                 <?= htmlspecialchars($user['email'] ?? '') ?>
             </p>
 
-            <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: #f1f5f9; border-radius: 20px; font-size: 0.75rem; color: #475569; font-weight: 600;">
+            <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: #f1f5f9; border-radius: 20px; font-size: var(--font-caption); color: #475569; font-weight: 600;">
                 <i data-lucide="user" style="width: 12px;"></i>
                 Membro da Equipe
             </div>
@@ -157,41 +157,41 @@ renderAppHeader('Meu Perfil');
 
         <!-- Section: Identidade -->
         <div style="margin-bottom: 16px;">
-            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="id-card" style="width: 16px; color: var(--text-muted);"></i>
                 Identidade
             </h3>
 
             <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden;">
                 <div style="padding: 12px;">
-                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Nome Completo</label>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Nome Completo</label>
                     <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
 
                 <div style="border-top: 1px solid var(--border-color); padding: 12px;">
-                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">E-mail</label>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">E-mail</label>
                     <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
 
                 <div style="border-top: 1px solid var(--border-color); padding: 12px;">
-                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
                         Telefone / WhatsApp
                     </label>
                     <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
 
                 <div style="border-top: 1px solid var(--border-color); padding: 12px;">
-                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
                         Data de Nascimento
                     </label>
                     <input type="date" name="birth_date" value="<?= htmlspecialchars($user['birth_date'] ?? '') ?>"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
             </div>
@@ -199,7 +199,7 @@ renderAppHeader('Meu Perfil');
 
         <!-- Section: Endereço -->
         <div style="margin-bottom: 24px;">
-            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="map-pin" style="width: 16px; color: var(--text-muted);"></i>
                 Endereço
             </h3>
@@ -207,24 +207,24 @@ renderAppHeader('Meu Perfil');
             <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 12px; display: flex; flex-direction: column; gap: 12px;">
 
                 <div>
-                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Rua / Logradouro</label>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Rua / Logradouro</label>
                     <input type="text" name="address_street" value="<?= htmlspecialchars($user['address_street'] ?? '') ?>" placeholder="Ex: Av. Maracanã"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
 
                 <div style="display: flex; gap: 12px;">
                     <div style="flex: 1;">
-                        <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Número</label>
+                        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Número</label>
                         <input type="text" name="address_number" value="<?= htmlspecialchars($user['address_number'] ?? '') ?>" placeholder="123"
-                            style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                            style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                             onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                     </div>
 
                     <div style="flex: 2;">
-                        <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Bairro</label>
+                        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Bairro</label>
                         <input type="text" name="address_neighborhood" value="<?= htmlspecialchars($user['address_neighborhood'] ?? '') ?>" placeholder="Centro"
-                            style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
+                            style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                             onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                     </div>
                 </div>
@@ -240,7 +240,7 @@ renderAppHeader('Meu Perfil');
             border: none; 
             padding: 14px; 
             border-radius: var(--radius-lg); 
-            font-size: 0.95rem; 
+            font-size: var(--font-body); 
             font-weight: 700; 
             display: flex; 
             align-items: center; 

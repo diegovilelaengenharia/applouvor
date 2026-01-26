@@ -92,14 +92,14 @@
 }
 
 .card-title {
-    font-size: 0.95rem;
+    font-size: var(--font-body);
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;
 }
 
 .card-subtitle {
-    font-size: 0.8rem;
+    font-size: var(--font-body-sm);
     color: var(--text-secondary);
     margin: 0;
 }
@@ -110,7 +110,7 @@
     right: 12px;
     background: var(--gradient-vibrant);
     color: white;
-    font-size: 0.7rem;
+    font-size: var(--font-small);
     font-weight: 700;
     padding: 4px 8px;
     border-radius: 12px;
@@ -183,7 +183,7 @@
 }
 
 .hero-subtitle {
-    font-size: 0.8rem;
+    font-size: var(--font-body-sm);
     opacity: 0.85;
     font-weight: 400;
     position: relative;
@@ -197,7 +197,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.85rem;
+    font-size: var(--font-body-sm);
     position: relative;
     z-index: 1;
 }
@@ -216,7 +216,7 @@
     border-radius: 12px;
     padding: 14px 28px;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: var(--font-h3);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -262,7 +262,7 @@
     border-radius: 12px;
     padding: 14px 28px;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: var(--font-h3);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -333,13 +333,13 @@
 }
 
 .stat-label {
-    font-size: 0.8rem;
+    font-size: var(--font-body-sm);
     color: var(--text-secondary);
     margin-bottom: 4px;
 }
 
 .stat-value {
-    font-size: 1.5rem;
+    font-size: var(--font-display);
     font-weight: 800;
     color: var(--text-primary);
 }
@@ -348,7 +348,7 @@
 .badge-notification {
     background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
     color: white;
-    font-size: 0.7rem;
+    font-size: var(--font-small);
     font-weight: 700;
     padding: 4px 8px;
     border-radius: 12px;
@@ -377,7 +377,7 @@
     justify-content: center;
     color: white;
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: var(--font-body-sm);
     transition: all 0.3s ease;
 }
 
@@ -399,7 +399,7 @@
 }
 
 .section-title {
-    font-size: 1.2rem;
+    font-size: var(--font-h1);
     font-weight: 700;
     color: var(--text-primary);
     display: flex;
@@ -408,7 +408,7 @@
 }
 
 .section-action {
-    font-size: 0.85rem;
+    font-size: var(--font-body-sm);
     color: var(--primary-blue);
     font-weight: 600;
     cursor: pointer;
@@ -448,14 +448,14 @@
 }
 
 .schedule-day {
-    font-size: 1.5rem;
+    font-size: var(--font-display);
     font-weight: 800;
     color: var(--primary-blue);
     line-height: 1;
 }
 
 .schedule-month {
-    font-size: 0.7rem;
+    font-size: var(--font-small);
     color: var(--text-secondary);
     text-transform: uppercase;
     font-weight: 600;
@@ -466,14 +466,14 @@
 }
 
 .schedule-title {
-    font-size: 0.95rem;
+    font-size: var(--font-body);
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 4px;
 }
 
 .schedule-time {
-    font-size: 0.8rem;
+    font-size: var(--font-body-sm);
     color: var(--text-secondary);
     display: flex;
     align-items: center;
@@ -483,7 +483,7 @@
 .schedule-status {
     padding: 6px 12px;
     border-radius: 8px;
-    font-size: 0.75rem;
+    font-size: var(--font-small);
     font-weight: 700;
 }
 
@@ -526,20 +526,20 @@
 }
 
 .avatar-placeholder {
-    font-size: 2.5rem;
+    font-size: var(--font-display);
     font-weight: 700;
     color: var(--primary-green);
 }
 
 .settings-name {
-    font-size: 1.5rem;
+    font-size: var(--font-display);
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 4px;
 }
 
 .settings-role {
-    font-size: 0.9rem;
+    font-size: var(--font-body);
     color: var(--text-secondary);
 }
 
@@ -548,7 +548,7 @@
 }
 
 .settings-section-title {
-    font-size: 0.85rem;
+    font-size: var(--font-body-sm);
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -611,14 +611,14 @@
 }
 
 .settings-title {
-    font-size: 1rem;
+    font-size: var(--font-h3);
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 2px;
 }
 
 .settings-subtitle {
-    font-size: 0.85rem;
+    font-size: var(--font-body-sm);
     color: var(--text-muted);
 }
 

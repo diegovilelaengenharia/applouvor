@@ -76,12 +76,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     <div style="background: #e2e8f0; padding: 4px; border-radius: 14px; display: flex; gap: 2px;">
         <button onclick="switchTab('future')" id="btn-future" class="ripple" style="
                 border: none; background: white; color: #0f172a; 
-                padding: 10px 24px; border-radius: 10px; font-weight: 700; font-size: 0.9rem;
+                padding: 10px 24px; border-radius: 10px; font-weight: 700; font-size: var(--font-body);
                 box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
             ">Próximas</button>
         <button onclick="switchTab('past')" id="btn-past" class="ripple" style="
                 border: none; background: transparent; color: #64748b; 
-                padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+                padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: var(--font-body);
                 cursor: pointer; transition: all 0.2s;
             ">Anteriores</button>
     </div>
@@ -102,7 +102,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             align-items: center; 
             justify-content: center;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: var(--font-display);
             box-shadow: 0 2px 8px rgba(22, 101, 52, 0.3);
             transition: all 0.2s;
             text-decoration: none;
@@ -222,22 +222,22 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 min-width: 52px; padding: 6px 10px; border-radius: 8px; 
                                 text-align: center; border: 1px solid <?= $isToday ? 'rgba(4, 120, 87, 0.1)' : 'transparent' ?>;
                             ">
-                                <div style="font-weight: 700; font-size: 1.1rem; line-height: 1;"><?= $date->format('d') ?></div>
-                                <div style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; margin-top: 2px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                                <div style="font-weight: 700; font-size: var(--font-h2); line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: var(--font-caption); font-weight: 600; text-transform: uppercase; margin-top: 2px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                             </div>
 
                             <!-- Infos do Evento -->
                             <div style="flex: 1; min-width: 0;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <h3 style="margin: 0; font-size: var(--font-h3); font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <?= htmlspecialchars($schedule['event_type']) ?>
                                     </h3>
                                     <?php if ($isToday): ?>
-                                        <span style="font-size: 0.65rem; color: white; background: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700;">HOJE</span>
+                                        <span style="font-size: var(--font-caption); color: white; background: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700;">HOJE</span>
                                     <?php endif; ?>
                                 </div>
 
-                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 12px; font-size: var(--font-body-sm); color: var(--text-muted); margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center; gap: 4px;">
                                         <i data-lucide="clock" style="width: 14px;"></i> <?= $date->format('H:i') ?>
                                     </div>
@@ -260,7 +260,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                                 border: 2px solid var(--bg-surface); background: <?= $p['avatar_color'] ?: '#cbd5e1' ?>;
                                                 margin-left: -8px; z-index: <?= $zIndex ?>;
                                                 display: flex; align-items: center; justify-content: center;
-                                                color: white; font-size: 0.6rem; font-weight: 700; overflow: hidden;
+                                                color: white; font-size: 0.65rem; font-weight: 700; overflow: hidden;
                                             ">
                                                 <?php if ($photoUrl): ?>
                                                     <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover;">
@@ -270,11 +270,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                             </div>
                                         <?php endforeach; ?>
                                         <?php if ($extraCount > 0): ?>
-                                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-left: 6px;">+<?= $extraCount ?></div>
+                                            <div style="font-size: var(--font-caption); color: var(--text-muted); margin-left: 6px;">+<?= $extraCount ?></div>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
-                                    <span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">Equipe não definida</span>
+                                    <span style="font-size: var(--font-body-sm); color: var(--text-muted); font-style: italic;">Equipe não definida</span>
                                 <?php endif; ?>
 
                             </div>
@@ -310,16 +310,16 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 color: <?= $isToday ? 'var(--primary)' : 'var(--text-muted)' ?>;
                                 padding: 8px 12px; border-radius: 8px; text-align: center; min-width: 50px;
                             ">
-                                <div style="font-weight: 700; font-size: 1.1rem; line-height: 1;"><?= $date->format('d') ?></div>
-                                <div style="font-size: 0.65rem; text-transform: uppercase;"><?= strtoupper($date->format('M')) ?></div>
+                                <div style="font-weight: 700; font-size: var(--font-h2); line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: var(--font-caption); text-transform: uppercase;"><?= strtoupper($date->format('M')) ?></div>
                             </div>
 
                             <div>
-                                <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: var(--text-main);">
+                                <h3 style="margin: 0; font-size: var(--font-h3); font-weight: 600; color: var(--text-main);">
                                     <?= htmlspecialchars($schedule['event_type']) ?>
-                                    <?php if ($isToday): ?><span style="font-size: 0.7rem; color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 4px; margin-left: 6px;">HOJE</span><?php endif; ?>
+                                    <?php if ($isToday): ?><span style="font-size: var(--font-caption); color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 4px; margin-left: 6px;">HOJE</span><?php endif; ?>
                                 </h3>
-                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                                <div style="font-size: var(--font-body-sm); color: var(--text-muted); margin-top: 2px;">
                                     <?= $date->format('H:i') ?> • PIB Oliveira
                                 </div>
                             </div>
@@ -354,11 +354,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         opacity: 0.75;
                     ">
                         <div style="text-align: center; min-width: 40px; color: var(--text-muted);">
-                            <div style="font-weight: 700; font-size: 1rem;"><?= $date->format('d/m') ?></div>
+                            <div style="font-weight: 700; font-size: var(--font-h3);"><?= $date->format('d/m') ?></div>
                         </div>
                         <div style="flex: 1;">
                             <div style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted);">Realizado</div>
+                            <div style="font-size: var(--font-body-sm); color: var(--text-muted);">Realizado</div>
                         </div>
                         <i data-lucide="chevron-right" style="width: 18px; color: var(--border-color);"></i>
                     </a>
@@ -390,7 +390,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         animation: slideUp 0.3s ease-out;
     ">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1e293b;">Filtrar Escalas</h3>
+            <h3 style="margin: 0; font-size: var(--font-h1); font-weight: 700; color: #1e293b;">Filtrar Escalas</h3>
             <button onclick="closeSheet('filterSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: #64748b;">
                 <i data-lucide="x" style="width: 24px;"></i>
             </button>
@@ -409,7 +409,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
             <!-- Tipo de Evento -->
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 8px;">Tipo de Evento</label>
+                <label style="display: block; font-size: var(--font-body); font-weight: 600; color: #64748b; margin-bottom: 8px;">Tipo de Evento</label>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <?php
                     $types = ['Culto Domingo a Noite', 'Ensaio', 'Culto Jovem', 'Especial'];
@@ -419,7 +419,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         <label style="cursor: pointer;">
                             <input type="radio" name="type" value="<?= $t ?>" <?= $active ? 'checked' : '' ?> style="display: none;">
                             <div style="
-                                padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+                                padding: 8px 16px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
                                 background: <?= $active ? '#dcfce7' : 'white' ?>;
                                 color: <?= $active ? '#166534' : '#64748b' ?>;
                                 border: 1px solid <?= $active ? '#166534' : '#e2e8f0' ?>;
@@ -440,7 +440,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 ">Limpar</a>
                 <button type="submit" style="
                     flex: 2; padding: 14px; border: none; background: #166534; 
-                    color: white; font-weight: 700; border-radius: 12px; font-size: 1rem;
+                    color: white; font-weight: 700; border-radius: 12px; font-size: var(--font-h3);
                     box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2); cursor: pointer;
                 ">Aplicar Filtros</button>
             </div>

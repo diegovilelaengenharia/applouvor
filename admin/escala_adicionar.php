@@ -63,7 +63,7 @@ renderAppHeader('Nova Escala');
     }
 
     .page-title {
-        font-size: 1.5rem; font-weight: 800;
+        font-size: var(--font-display); font-weight: 800;
         background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
         -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         margin: 0;
@@ -99,7 +99,7 @@ renderAppHeader('Nova Escala');
         border-color: var(--primary); background: var(--primary); color: white;
     }
 
-    .step-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+    .step-label { font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); }
     .step-item.active .step-label { color: var(--primary); }
 
     /* Form Card Styles */
@@ -117,7 +117,7 @@ renderAppHeader('Nova Escala');
     }
 
     .card-title {
-        font-size: 0.85rem; font-weight: 800; color: var(--card-color, var(--text-main));
+        font-size: var(--font-body-sm); font-weight: 800; color: var(--card-color, var(--text-main));
         text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;
         display: flex; align-items: center; gap: 8px;
     }
@@ -126,7 +126,7 @@ renderAppHeader('Nova Escala');
     .input-clean {
         width: 100%; padding: 12px 14px; border-radius: 10px;
         border: 1px solid var(--border-color); background: var(--bg-body);
-        color: var(--text-main); font-size: 0.95rem; outline: none; transition: all 0.2s;
+        color: var(--text-main); font-size: var(--font-body); outline: none; transition: all 0.2s;
     }
     .input-clean:focus {
         border-color: var(--card-color); background: var(--bg-surface);
@@ -139,7 +139,7 @@ renderAppHeader('Nova Escala');
     .radio-box {
         padding: 16px; border: 1px solid var(--border-color); border-radius: 12px;
         text-align: center; cursor: pointer; transition: all 0.2s;
-        background: var(--bg-body); color: var(--text-muted); font-weight: 600; font-size: 0.9rem;
+        background: var(--bg-body); color: var(--text-muted); font-weight: 600; font-size: var(--font-body);
     }
     .radio-option input:checked + .radio-box {
         background: var(--primary-subtle); border-color: var(--primary);
@@ -201,7 +201,7 @@ renderAppHeader('Nova Escala');
             <div class="card-title"><i data-lucide="calendar" style="width: 16px;"></i> Informações</div>
             
             <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);">Data do Evento</label>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: var(--font-body-sm); color: var(--text-secondary);">Data do Evento</label>
                 <div style="position: relative;">
                     <input type="date" name="event_date" id="event_date" class="input-clean" value="<?= date('Y-m-d') ?>" required>
                     <i data-lucide="calendar-days" style="position: absolute; right: 12px; top: 12px; color: var(--text-muted); width: 18px; pointer-events: none;"></i>
@@ -209,7 +209,7 @@ renderAppHeader('Nova Escala');
             </div>
 
             <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);">Tipo de Evento</label>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: var(--font-body-sm); color: var(--text-secondary);">Tipo de Evento</label>
                 <div class="radio-grid">
                     <label class="radio-option">
                         <input type="radio" name="event_type" value="Culto Domingo a Noite" checked onchange="toggleCustomEventType()">
@@ -234,7 +234,7 @@ renderAppHeader('Nova Escala');
             </div>
 
             <div>
-                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);">Observações</label>
+                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: var(--font-body-sm); color: var(--text-secondary);">Observações</label>
                 <textarea name="notes" class="input-clean" rows="3" placeholder="Ex: Ceia, Visitante Especial..."></textarea>
             </div>
         </div>
@@ -253,8 +253,8 @@ renderAppHeader('Nova Escala');
                     <label class="select-item" data-search="<?= strtolower($user['name']) ?>">
                         <input type="checkbox" name="members[]" value="<?= $user['id'] ?>">
                         <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);"><?= htmlspecialchars($user['name']) ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
+                            <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($user['name']) ?></div>
+                            <div style="font-size: var(--font-body-sm); color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
                         </div>
                     </label>
                 <?php endforeach; ?>
@@ -275,8 +275,8 @@ renderAppHeader('Nova Escala');
                     <label class="select-item" data-search="<?= strtolower($song['title'] . ' ' . $song['artist']) ?>">
                         <input type="checkbox" name="songs[]" value="<?= $song['id'] ?>">
                         <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?> <span style="margin: 0 4px; color: var(--border-color);">|</span> <strong style="color:var(--primary);"><?= $song['tone'] ?></strong></div>
+                            <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></div>
+                            <div style="font-size: var(--font-body-sm); color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?> <span style="margin: 0 4px; color: var(--border-color);">|</span> <strong style="color:var(--primary);"><?= $song['tone'] ?></strong></div>
                         </div>
                     </label>
                 <?php endforeach; ?>
@@ -294,7 +294,7 @@ renderAppHeader('Nova Escala');
             ">Próximo</button>
 
             <button type="submit" id="btn-finish" style="
-                flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #047857, #065f46); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25); font-size: 0.95rem;
+                flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #047857, #065f46); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25); font-size: var(--font-body);
             ">Finalizar Escala</button>
         </div>
 

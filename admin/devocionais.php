@@ -188,7 +188,7 @@ renderAppHeader('Devocionais');
         justify-content: center;
         color: white;
         font-weight: 700;
-        font-size: 1rem;
+        font-size: var(--font-h3);
     }
     .dev-author-info {
         flex: 1;
@@ -196,13 +196,13 @@ renderAppHeader('Devocionais');
     .dev-author-name {
         font-weight: 700;
         color: var(--text-main);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
     }
     .dev-meta {
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 0.8rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
     }
     .dev-type-badge {
@@ -211,7 +211,7 @@ renderAppHeader('Devocionais');
         gap: 4px;
         padding: 2px 8px;
         border-radius: 12px;
-        font-size: 0.7rem;
+        font-size: var(--font-caption);
         font-weight: 600;
     }
     
@@ -220,14 +220,14 @@ renderAppHeader('Devocionais');
         padding: 16px;
     }
     .dev-title {
-        font-size: 1.1rem;
+        font-size: var(--font-h2);
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 8px;
     }
     .dev-text {
         color: var(--text-body);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
         line-height: 1.6;
     }
     .dev-text p { margin: 0 0 8px; }
@@ -266,7 +266,7 @@ renderAppHeader('Devocionais');
         padding: 0 16px 16px;
     }
     .dev-tag {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         padding: 4px 10px;
         border-radius: 20px;
         font-weight: 600;
@@ -290,7 +290,7 @@ renderAppHeader('Devocionais');
         background: none;
         border: none;
         color: var(--text-muted);
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         cursor: pointer;
         padding: 6px 10px;
@@ -332,16 +332,16 @@ renderAppHeader('Devocionais');
     }
     .comment-author {
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         color: var(--text-main);
     }
     .comment-text {
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         color: var(--text-body);
         margin: 2px 0;
     }
     .comment-time {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
     }
     .comment-form {
@@ -354,7 +354,7 @@ renderAppHeader('Devocionais');
         padding: 10px 14px;
         border: 1px solid var(--border-color);
         border-radius: 24px;
-        font-size: 0.9rem;
+        font-size: var(--font-body);
         outline: none;
         background: white;
     }
@@ -410,7 +410,7 @@ renderAppHeader('Devocionais');
     .filter-tab {
         padding: 8px 16px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 600;
         color: var(--text-muted);
         text-decoration: none;
@@ -438,8 +438,8 @@ renderAppHeader('Devocionais');
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
             <i data-lucide="book-heart" style="color: white; width: 36px; height: 36px;"></i>
         </div>
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Devocionais da Comunidade</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto;">
+        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Devocionais da Comunidade</h2>
+        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
             Compartilhe reflexões, versículos e momentos com Deus. Edifique e seja edificado!
         </p>
     </div>
@@ -510,13 +510,13 @@ renderAppHeader('Devocionais');
                             <i data-lucide="more-vertical" style="width: 18px;"></i>
                         </button>
                         <div id="menu-<?= $dev['id'] ?>" class="dev-dropdown" style="display: none; position: absolute; right: 0; top: 100%; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-color); min-width: 140px; z-index: 50;">
-                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($dev)) ?>)" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: var(--text-main); text-decoration: none; font-size: 0.9rem;">
+                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($dev)) ?>)" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: var(--text-main); text-decoration: none; font-size: var(--font-body);">
                                 <i data-lucide="edit-2" style="width: 16px;"></i> Editar
                             </a>
                             <form method="POST" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja excluir?')">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $dev['id'] ?>">
-                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: #dc2626; background: none; border: none; border-top: 1px solid var(--border-color); font-size: 0.9rem; cursor: pointer; text-align: left;">
+                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: #dc2626; background: none; border: none; border-top: 1px solid var(--border-color); font-size: var(--font-body-sm); cursor: pointer; text-align: left;">
                                     <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
                                 </button>
                             </form>
@@ -616,7 +616,7 @@ renderAppHeader('Devocionais');
                         <?php if ($commentAvatar): ?>
                             <img src="<?= htmlspecialchars($commentAvatar) ?>" class="comment-avatar" alt="">
                         <?php else: ?>
-                            <div class="comment-avatar" style="background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: #666;">
+                            <div class="comment-avatar" style="background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
                                 <?= strtoupper(substr($comment['author_name'] ?? 'U', 0, 1)) ?>
                             </div>
                         <?php endif; ?>
@@ -647,7 +647,7 @@ renderAppHeader('Devocionais');
                     <i data-lucide="book-open" style="color: #667eea; width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum devocional ainda</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 300px; margin: 0 auto 20px;">
+                <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                     Seja o primeiro a compartilhar uma reflexão com a comunidade!
                 </p>
                 <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
@@ -673,7 +673,7 @@ renderAppHeader('Devocionais');
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 550px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 id="modalTitle" style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main);">✨ Nova Devocional</h2>
+            <h2 id="modalTitle" style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: var(--text-main);">✨ Nova Devocional</h2>
             <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
                 <i data-lucide="x" style="width: 20px;"></i>
             </button>
@@ -686,65 +686,65 @@ renderAppHeader('Devocionais');
             
             <!-- Título -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Título</label>
-                <input type="text" name="title" id="devTitle" required placeholder="Ex: A paz que excede o entendimento" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.95rem; outline: none; background: var(--bg-body);">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título</label>
+                <input type="text" name="title" id="devTitle" required placeholder="Ex: A paz que excede o entendimento" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
             </div>
             
             <!-- Tipo de Mídia -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 0.9rem;">Tipo de Conteúdo</label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: var(--font-body-sm);">Tipo de Conteúdo</label>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
                     <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
                         <input type="radio" name="media_type" value="text" checked style="display: none;">
-                        <span style="font-size: 1.5rem;">📝</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Texto</span>
+                        <span style="font-size: var(--font-display);">📝</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Texto</span>
                     </label>
                     <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
                         <input type="radio" name="media_type" value="video" style="display: none;">
-                        <span style="font-size: 1.5rem;">🎬</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Vídeo</span>
+                        <span style="font-size: var(--font-display);">🎬</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Vídeo</span>
                     </label>
                     <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
                         <input type="radio" name="media_type" value="audio" style="display: none;">
-                        <span style="font-size: 1.5rem;">🎵</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Áudio</span>
+                        <span style="font-size: var(--font-display);">🎵</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Áudio</span>
                     </label>
                     <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
                         <input type="radio" name="media_type" value="link" style="display: none;">
-                        <span style="font-size: 1.5rem;">🔗</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Link</span>
+                        <span style="font-size: var(--font-display);">🔗</span>
+                        <span style="font-size: var(--font-caption); font-weight: 600;">Link</span>
                     </label>
                 </div>
             </div>
             
             <!-- URL de Mídia (condicional) -->
             <div id="mediaUrlField" style="margin-bottom: 16px; display: none;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">
                     <span id="mediaUrlLabel">URL do Vídeo</span>
                 </label>
-                <input type="url" name="media_url" id="devMediaUrl" placeholder="https://youtube.com/watch?v=..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.95rem; outline: none; background: var(--bg-body);">
-                <p id="mediaUrlHint" style="margin: 6px 0 0; font-size: 0.8rem; color: var(--text-muted);">Cole o link do YouTube, Vimeo, etc.</p>
+                <input type="url" name="media_url" id="devMediaUrl" placeholder="https://youtube.com/watch?v=..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
+                <p id="mediaUrlHint" style="margin: 6px 0 0; font-size: var(--font-caption); color: var(--text-muted);">Cole o link do YouTube, Vimeo, etc.</p>
             </div>
             
             <!-- Editor de Texto -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.9rem;">Conteúdo</label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Conteúdo</label>
                 <div id="editor" style="height: 150px; background: white; border-radius: 12px;"></div>
             </div>
             
             <!-- Tags -->
             <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 0.9rem;">Tags (opcional)</label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: var(--font-body);">Tags (opcional)</label>
                 <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                     <?php foreach ($allTags as $tag): ?>
                     <label style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; cursor: pointer; transition: all 0.2s; background: <?= $tag['color'] ?>15; border: 1px solid <?= $tag['color'] ?>40;">
                         <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" style="display: none;" class="tag-checkbox">
-                        <span style="color: <?= $tag['color'] ?>; font-size: 0.85rem; font-weight: 600;"><?= htmlspecialchars($tag['name']) ?></span>
+                        <span style="color: <?= $tag['color'] ?>; font-size: var(--font-body-sm); font-weight: 600;"><?= htmlspecialchars($tag['name']) ?></span>
                     </label>
                     <?php endforeach; ?>
                 </div>
                 <?php if (empty($allTags)): ?>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Nenhuma tag disponível. Crie tags no Repertório primeiro.</p>
+                <p style="color: var(--text-muted); font-size: var(--font-body-sm);">Nenhuma tag disponível. Crie tags no Repertório primeiro.</p>
                 <?php endif; ?>
             </div>
             

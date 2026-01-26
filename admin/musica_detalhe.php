@@ -43,7 +43,7 @@ renderAppHeader('Detalhes da Música');
     }
 
     .info-section-title {
-        font-size: 0.85rem;
+        font-size: var(--font-body-sm);
         font-weight: 700;
         color: var(--text-muted);
         text-transform: uppercase;
@@ -65,13 +65,13 @@ renderAppHeader('Detalhes da Música');
     }
 
     .info-label {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
         margin-bottom: 4px;
     }
 
     .info-value {
-        font-size: 1.1rem;
+        font-size: var(--font-h3);
         font-weight: 700;
         color: var(--primary);
     }
@@ -111,11 +111,11 @@ renderAppHeader('Detalhes da Música');
     .link-title {
         font-weight: 700;
         color: var(--text-main);
-        font-size: 0.95rem;
+        font-size: var(--font-body);
     }
 
     .link-url {
-        font-size: 0.75rem;
+        font-size: var(--font-caption);
         color: var(--text-muted);
         white-space: nowrap;
         overflow: hidden;
@@ -158,7 +158,7 @@ renderAppHeader('Detalhes da Música');
             padding: 12px 16px;
             text-decoration: none;
             color: #1e293b;
-            font-size: 0.9rem;
+            font-size: var(--font-body-sm);
             font-weight: 500;
             transition: background 0.2s;
         " onmouseover="this.style.backgroundColor=\'#f1f5f9\'" onmouseout="this.style.backgroundColor=\'transparent\'">
@@ -173,7 +173,7 @@ renderAppHeader('Detalhes da Música');
                 border: none;
                 background: transparent;
                 color: #ef4444;
-                font-size: 0.9rem;
+                font-size: var(--font-body-sm);
                 font-weight: 500;
                 cursor: pointer;
                 text-align: left;
@@ -216,8 +216,8 @@ document.addEventListener(\'click\', function(e) {
     ">
             <i data-lucide="music" style="width: 24px; height: 24px; color: white;"></i>
         </div>
-        <h1 style="color: #1e293b; margin: 12px 0 2px 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
-        <p style="color: #64748b; margin: 0; font-weight: 500; font-size: 0.9rem;"><?= htmlspecialchars($song['artist']) ?></p>
+        <h1 style="color: #1e293b; margin: 12px 0 2px 0; font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
+        <p style="color: #64748b; margin: 0; font-weight: 500; font-size: var(--font-body);"><?= htmlspecialchars($song['artist']) ?></p>
     </div>
 
 
@@ -254,7 +254,7 @@ document.addEventListener(\'click\', function(e) {
                 color: <?= $tagColor ?>; 
                 padding: 6px 12px; 
                 border-radius: 20px; 
-                font-size: 0.8rem; 
+                font-size: var(--font-body-sm); 
                 font-weight: 700;
                 border: 1px solid <?= $tagColor ?>30;
             "><?= htmlspecialchars($tag['name']) ?></span>
@@ -274,7 +274,7 @@ document.addEventListener(\'click\', function(e) {
                 </div>
                 <div style="flex: 1;">
                     <div style="font-weight: 600; color: #1e293b;">Letra</div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_letra'] ?: 'Não cadastrado' ?></div>
+                    <div style="font-size: var(--font-caption); color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_letra'] ?: 'Não cadastrado' ?></div>
                 </div>
                 <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
             </a>
@@ -287,7 +287,7 @@ document.addEventListener(\'click\', function(e) {
                 </div>
                 <div style="flex: 1;">
                     <div style="font-weight: 600; color: #1e293b;">Cifra</div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_cifra'] ?: 'Não cadastrado' ?></div>
+                    <div style="font-size: var(--font-caption); color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_cifra'] ?: 'Não cadastrado' ?></div>
                 </div>
                 <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
             </a>
@@ -300,7 +300,7 @@ document.addEventListener(\'click\', function(e) {
                 </div>
                 <div style="flex: 1;">
                     <div style="font-weight: 600; color: #1e293b;">Áudio</div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_audio'] ?: 'Não cadastrado' ?></div>
+                    <div style="font-size: var(--font-caption); color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_audio'] ?: 'Não cadastrado' ?></div>
                 </div>
                 <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
             </a>
@@ -313,7 +313,7 @@ document.addEventListener(\'click\', function(e) {
                 </div>
                 <div style="flex: 1;">
                     <div style="font-weight: 600; color: #1e293b;">Vídeo</div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_video'] ?: 'Não cadastrado' ?></div>
+                    <div style="font-size: var(--font-caption); color: #94a3b8; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;"><?= $song['link_video'] ?: 'Não cadastrado' ?></div>
                 </div>
                 <i data-lucide="external-link" style="width: 16px; color: #cbd5e1;"></i>
             </a>
@@ -327,7 +327,7 @@ document.addEventListener(\'click\', function(e) {
             <div class="info-section-title">Tags</div>
             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                 <?php foreach (explode(',', $song['tags']) as $tag): ?>
-                    <span style="padding: 6px 12px; background: rgba(139, 92, 246, 0.1); color: #8B5CF6; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                    <span style="padding: 6px 12px; background: rgba(139, 92, 246, 0.1); color: #8B5CF6; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;">
                         <?= htmlspecialchars(trim($tag)) ?>
                     </span>
                 <?php endforeach; ?>
