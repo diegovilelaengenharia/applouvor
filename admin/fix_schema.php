@@ -1,70 +1,42 @@
 <?php
-require_once __DIR__ . '/../includes/db.php';
+// admin/fix_schema.php
+require_once '../includes/db.php';
 
-try {
-    echo "Verificando schema da tabela users...\n";
-
-    // 1. Adicionar email
+function addColumn($pdo, $table, $column, $definition) {
     try {
-        $pdo->exec("ALTER TABLE users ADD COLUMN email VARCHAR(100) NULL AFTER name");
-        echo "Coluna 'email' adicionada.\n";
+        $pdo->exec("ALTER TABLE $table ADD COLUMN $column $definition");
+        echo "✅ Coluna '$column' adicionada com sucesso em '$table'.<br>";
     } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'Duplicate column') !== false) {
-            echo "Coluna 'email' já existe.\n";
+        if (strpos($e->getMessage(), 'Duplicate column') !== false || strpos($e->getMessage(), '1060') !== false) {
+            echo "ℹ️ Coluna '$column' já existe em '$table'.<br>";
         } else {
-            echo "Erro ao adicionar email: " . $e->getMessage() . "\n";
+            echo "❌ Erro ao adicionar '$column': " . $e->getMessage() . "<br>";
         }
     }
-
-    // 2. Adicionar address_street
-    try {
-        $pdo->exec("ALTER TABLE users ADD COLUMN address_street VARCHAR(255) NULL");
-        echo "Coluna 'address_street' adicionada.\n";
-    } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'Duplicate column') !== false) {
-            echo "Coluna 'address_street' já existe.\n";
-        } else {
-            echo "Erro ao adicionar address_street: " . $e->getMessage() . "\n";
-        }
-    }
-
-    // 3. Adicionar address_number
-    try {
-        $pdo->exec("ALTER TABLE users ADD COLUMN address_number VARCHAR(20) NULL");
-        echo "Coluna 'address_number' adicionada.\n";
-    } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'Duplicate column') !== false) {
-            echo "Coluna 'address_number' já existe.\n";
-        } else {
-            echo "Erro ao adicionar address_number: " . $e->getMessage() . "\n";
-        }
-    }
-
-    // 4. Adicionar address_neighborhood
-    try {
-        $pdo->exec("ALTER TABLE users ADD COLUMN address_neighborhood VARCHAR(100) NULL");
-        echo "Coluna 'address_neighborhood' adicionada.\n";
-    } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'Duplicate column') !== false) {
-            echo "Coluna 'address_neighborhood' já existe.\n";
-        } else {
-            echo "Erro ao adicionar address_neighborhood: " . $e->getMessage() . "\n";
-        }
-    }
-
-    // 5. Adicionar avatar
-    try {
-        $pdo->exec("ALTER TABLE users ADD COLUMN avatar VARCHAR(255) NULL");
-        echo "Coluna 'avatar' adicionada.\n";
-    } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'Duplicate column') !== false) {
-            echo "Coluna 'avatar' já existe.\n";
-        } else {
-            echo "Erro ao adicionar avatar: " . $e->getMessage() . "\n";
-        }
-    }
-
-    echo "Schema verificado com sucesso.\n";
-} catch (Exception $e) {
-    echo "Erro fatal: " . $e->getMessage() . "\n";
 }
+
+echo "<h3>Iniciando verificação do banco de dados...</h3>";
+
+// 1. Adicionar observation
+addColumn($pdo, 'user_unavailability', 'observation', 'TEXT DEFAULT NULL');
+
+// 2. Adicionar audio_path
+addColumn($pdo, 'user_unavailability', 'audio_path', 'VARCHAR(255) DEFAULT NULL');
+
+// 3. Adicionar replacement_id (casos antigos)
+addColumn($pdo, 'user_unavailability', 'replacement_id', 'INT DEFAULT NULL');
+
+// 4. Garantir diretório de uploads
+$uploadDir = '../uploads/audio';
+if (!file_exists($uploadDir)) {
+    if (mkdir($uploadDir, 0777, true)) {
+        echo "✅ Diretório 'uploads/audio' criado.<br>";
+    } else {
+        echo "❌ Falha ao criar diretório 'uploads/audio'. Verifique permissões.<br>";
+    }
+} else {
+    echo "ℹ️ Diretório 'uploads/audio' já existe.<br>";
+}
+
+echo "<h3>Concluído! Tente registrar a ausência novamente.</h3>";
+?>

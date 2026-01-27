@@ -21,9 +21,11 @@ function toggleEditMode() {
         const saveBtn = document.getElementById('saveBtn');
         const viewMode = document.getElementById('view-mode');
         const editModeEl = document.getElementById('edit-mode');
+        const manageInfoBtn = document.getElementById('btn-manage-info');
 
         if (!editBtn || !viewMode || !editModeEl) {
             console.error('Elementos UI críticos não encontrados');
+            console.log('editBtn:', editBtn, 'viewMode:', viewMode, 'editModeEl:', editModeEl);
             return;
         }
 
@@ -32,13 +34,16 @@ function toggleEditMode() {
             viewMode.classList.add('view-mode-hidden');
             editModeEl.classList.remove('edit-mode-hidden');
 
+            // Garantir styles manuais para override
+            viewMode.style.display = 'none';
+            editModeEl.style.display = 'block';
+
             // Inicializar sets com membros e músicas atuais
             initializePendingData();
 
-            // Mostrar botão Salvar
-            if (saveBtn) {
-                saveBtn.style.display = 'flex';
-            }
+            // Mostrar botão Salvar e Gerenciar
+            if (saveBtn) saveBtn.style.display = 'flex';
+            if (manageInfoBtn) manageInfoBtn.style.display = 'flex';
 
             // Mudar botão Editar para Cancelar (vermelho)
             editBtn.style.background = '#ef4444';
@@ -50,10 +55,13 @@ function toggleEditMode() {
             viewMode.classList.remove('view-mode-hidden');
             editModeEl.classList.add('edit-mode-hidden');
 
-            // Esconder botão Salvar
-            if (saveBtn) {
-                saveBtn.style.display = 'none';
-            }
+            // Garantir styles manuais
+            viewMode.style.display = 'block';
+            editModeEl.style.display = 'none';
+
+            // Esconder botão Salvar e Gerenciar
+            if (saveBtn) saveBtn.style.display = 'none';
+            if (manageInfoBtn) manageInfoBtn.style.display = 'none';
 
             // Restaurar botão Editar (amarelo)
             editBtn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
@@ -304,6 +312,38 @@ function saveAllChanges() {
         form.appendChild(input);
     });
 
+    // Adicionar dados da escala (Do Modal)
+    // Se o usuário não abriu o modal, precisamos pegar os valores originais do display ou hidden inputs se existissem.
+    // Mas como removemos os hidden inputs do PHP, precisamos confiar que os inputs do modal estão lá (eles são criados no HTML do PHP).
+    const eventName = document.getElementById('modal-event-name').value;
+    const eventDate = document.getElementById('modal-event-date').value;
+    const eventTime = document.getElementById('modal-event-time').value;
+    const eventNotes = document.getElementById('modal-event-notes').value;
+
+    const inputName = document.createElement('input');
+    inputName.type = 'hidden';
+    inputName.name = 'event_type';
+    inputName.value = eventName;
+    form.appendChild(inputName);
+
+    const inputDate = document.createElement('input');
+    inputDate.type = 'hidden';
+    inputDate.name = 'event_date';
+    inputDate.value = eventDate;
+    form.appendChild(inputDate);
+
+    const inputTime = document.createElement('input');
+    inputTime.type = 'hidden';
+    inputTime.name = 'event_time';
+    inputTime.value = eventTime;
+    form.appendChild(inputTime);
+
+    const inputNotes = document.createElement('input');
+    inputNotes.type = 'hidden';
+    inputNotes.name = 'notes';
+    inputNotes.value = eventNotes;
+    form.appendChild(inputNotes);
+
     // Adicionar flag de salvamento
     const saveFlag = document.createElement('input');
     saveFlag.type = 'hidden';
@@ -313,4 +353,39 @@ function saveAllChanges() {
 
     document.body.appendChild(form);
     form.submit();
+}
+
+function updateEventInfoFromModal() {
+    // Pegar valores do modal
+    const name = document.getElementById('modal-event-name').value;
+    const date = document.getElementById('modal-event-date').value;
+    const time = document.getElementById('modal-event-time').value;
+    const notes = document.getElementById('modal-event-notes').value;
+
+    // Atualizar UI
+    document.getElementById('display-event-name').textContent = name;
+
+    // Formatar data para exibição (Simples dia/mês/ano)
+    if (date) {
+        const parts = date.split('-');
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        const diaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][d.getDay()];
+        document.getElementById('display-event-date').textContent = `${diaSemana}, ${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    // Horário
+    document.getElementById('display-event-time').textContent = time;
+
+    // Notas
+    const notesContainer = document.getElementById('display-notes-container');
+    const notesText = document.getElementById('display-notes-text');
+    if (notes) {
+        notesContainer.style.display = 'block';
+        notesText.innerHTML = notes.replace(/\n/g, '<br>'); // Simples nl2br
+    } else {
+        notesContainer.style.display = 'none';
+        notesText.textContent = '';
+    }
+
+    closeModal('modal-event');
 }

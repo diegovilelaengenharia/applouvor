@@ -15,6 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
     try {
         $pdo->beginTransaction();
         
+        // 0. Atualizar Dados da Escala (Nome, Data, Hora)
+        // 0. Atualizar Dados da Escala (Nome, Data, Hora, Notas)
+        if (isset($_POST['event_type']) && isset($_POST['event_date']) && isset($_POST['event_time'])) {
+            $notes = $_POST['notes'] ?? ''; // Pegar notas se existir
+            $stmtUpdateSchedule = $pdo->prepare("UPDATE schedules SET event_type = ?, event_date = ?, event_time = ?, notes = ? WHERE id = ?");
+            $stmtUpdateSchedule->execute([$_POST['event_type'], $_POST['event_date'], $_POST['event_time'], $notes, $id]);
+        }
+        
         // 1. Atualizar Membros
         // Remover todos os atuais
         $stmtDelMembers = $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?");
@@ -121,8 +129,11 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <!-- Header com Botões -->
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
-                <h1 style="margin: 0 0 4px 0; font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-                <div style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
+                <!-- Modo Visualização (Edição via Modal agora) -->
+                <div>
+                    <h1 id="display-event-name" style="margin: 0 0 4px 0; font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+                    <div id="display-event-date" style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
+                </div>
             </div>
             
             <!-- Botões de Ação -->
@@ -167,7 +178,9 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
                 <div>
                     <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Horário</div>
-                    <div style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);">19:00</div>
+                    <div id="display-event-time" style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);">
+                        <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
+                    </div>
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
@@ -190,16 +203,35 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             </div>
         </div>
         
+
+        
         <!-- Observações -->
         <?php if ($schedule['notes']): ?>
-            <div style="padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
+            <div id="display-notes-container" style="padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                     <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
                     <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações</span>
                 </div>
-                <div style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+                <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+            </div>
+        <?php else: ?>
+            <div id="display-notes-container" style="display: none; padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                    <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações</span>
+                </div>
+                <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"></div>
             </div>
         <?php endif; ?>
+
+        <!-- Botão Gerenciar Informações (Modo Edição) -->
+        <button id="btn-manage-info" class="edit-mode-item" onclick="openModal('modal-event')" style="
+            display: none; width: 100%; margin-top: 16px; padding: 12px; 
+            background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; 
+            color: var(--primary); font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+        ">
+            <i data-lucide="settings-2" style="width: 20px;"></i> Gerenciar Informações
+        </button>
     </div>
 </div>
 
@@ -460,6 +492,48 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 
         <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
             <button onclick="closeModal('modal-songs')" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Seleção</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EVENT DETAILS (Nome, Data, Hora, Notas) -->
+<div id="modal-event" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-surface); width: 90%; max-width: 500px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+        <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Editar Informações</h3>
+            <button onclick="closeModal('modal-event')" style="background:none; border:none; cursor:pointer; padding: 4px;"><i data-lucide="x"></i></button>
+        </div>
+        
+        <div style="padding: 20px; display: flex; flex-direction: column; gap: 16px; background: var(--bg-body);">
+            
+            <!-- Nome -->
+            <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Nome do Evento</label>
+                <input type="text" id="modal-event-name" value="<?= htmlspecialchars($schedule['event_type']) ?>" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 1rem;">
+            </div>
+
+            <!-- Data e Hora -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Data</label>
+                    <input type="date" id="modal-event-date" value="<?= $schedule['event_date'] ?>" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 1rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Horário</label>
+                    <input type="time" id="modal-event-time" value="<?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 1rem;">
+                </div>
+            </div>
+
+            <!-- Notas -->
+            <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Observações (Opcional)</label>
+                <textarea id="modal-event-notes" rows="3" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem; resize: vertical;"><?= htmlspecialchars($schedule['notes'] ?? '') ?></textarea>
+            </div>
+
+        </div>
+
+        <div style="padding: 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
+            <button onclick="updateEventInfoFromModal()" style="width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Concluir Alterações</button>
         </div>
     </div>
 </div>

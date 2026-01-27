@@ -90,29 +90,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     <div style="display: flex; gap: 12px; align-items: center;">
     
         <!-- Botão Adicionar Escala (Simplificado) -->
-        <a href="escala_adicionar.php" class="ripple" style="
-            background: linear-gradient(135deg, #166534, #15803d); 
-            color: white; 
-            border: none; 
-            width: 48px;
-            height: 48px;
-            border-radius: 14px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-weight: 700;
-            font-size: var(--font-display);
-            box-shadow: 0 2px 8px rgba(22, 101, 52, 0.3);
-            transition: all 0.2s;
-            text-decoration: none;
-        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(22, 101, 52, 0.4)'"
-            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(22, 101, 52, 0.3)'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
-            </svg>
-        </a>
+
 
         <!-- Filter Button (Simplificado) -->
         <button onclick="openSheet('filterSheet')" class="ripple" style="
@@ -146,7 +124,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 </div>
                 <h3 style="color: #334155; margin-bottom: 8px;">Tudo tranquilo por aqui</h3>
                 <p style="color: #94a3b8;">Nenhuma escala agendada para os próximos dias.</p>
-                <a href="escala_adicionar.php" style="display: inline-block; margin-top: 24px; color: #166534; font-weight: 600; text-decoration: none;">+ Adicionar Escala</a>
+
             </div>
         <?php else: ?>
 
@@ -239,7 +217,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
                                 <div style="display: flex; align-items: center; gap: 12px; font-size: var(--font-body-sm); color: var(--text-muted); margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center; gap: 4px;">
-                                        <i data-lucide="clock" style="width: 14px;"></i> <?= $date->format('H:i') ?>
+                                        <i data-lucide="clock" style="width: 14px;"></i> <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                     </div>
                                     <?php if ($totalParticipants > 0): ?>
                                         <div style="display: flex; align-items: center; gap: 4px;">
@@ -320,7 +298,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     <?php if ($isToday): ?><span style="font-size: var(--font-caption); color: var(--primary); background: var(--primary-subtle); padding: 2px 6px; border-radius: 4px; margin-left: 6px;">HOJE</span><?php endif; ?>
                                 </h3>
                                 <div style="font-size: var(--font-body-sm); color: var(--text-muted); margin-top: 2px;">
-                                    <?= $date->format('H:i') ?> • PIB Oliveira
+                                    <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?> • PIB Oliveira
                                 </div>
                             </div>
                         </div>

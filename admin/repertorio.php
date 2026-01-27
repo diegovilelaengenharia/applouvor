@@ -69,35 +69,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             z-index: 1000;
             overflow: hidden;
         ">
-            <a href="musica_adicionar.php" style="
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 12px 16px;
-                text-decoration: none;
-                color: #0f172a;
-                font-weight: 600;
-                font-size: var(--font-body);
-                transition: background 0.2s;
-                border-bottom: 1px solid #f1f5f9;
-            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                <div style="
-                    width: 32px;
-                    height: 32px;
-                    background: linear-gradient(135deg, #166534, #15803d);
-                    color: white;
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14" />
-                        <path d="M12 5v14" />
-                    </svg>
-                </div>
-                <span>Nova Música</span>
-            </a>
+
             <a href="repertorio_stats.php" style="
                 display: flex;
                 align-items: center;

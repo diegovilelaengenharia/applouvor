@@ -493,6 +493,21 @@ try {
     <div class="create-grid" style="
         display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
     ">
+        <!-- Escalas (Gestão Total) - NOVO -->
+        <a href="escalas_gestao.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #eff6ff; color: #3b82f6; padding: 10px; border-radius: 10px;">
+                <i data-lucide="calendar-range" style="width: 20px;"></i>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Escalas</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Gestão Total</div>
+            </div>
+        </a>
+
         <!-- Equipe -->
         <a href="membros.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
@@ -550,35 +565,9 @@ try {
     <div class="create-grid" style="
         display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
     ">
-         <!-- Estatísticas Escalas -->
-        <a href="escalas_stats.php" class="create-btn" style="
-            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
-        ">
-            <div style="background: #f5f3ff; color: #8b5cf6; padding: 10px; border-radius: 10px;">
-                <i data-lucide="bar-chart-2" style="width: 20px;"></i>
-            </div>
-             <div style="text-align: center;">
-                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Escalas</div>
-                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
-            </div>
-        </a>
 
-        <!-- Estatísticas Repertório -->
-        <a href="repertorio_stats.php" class="create-btn" style="
-            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
-        ">
-            <div style="background: #ecfdf5; color: #10b981; padding: 10px; border-radius: 10px;">
-                 <i data-lucide="music-2" style="width: 20px;"></i>
-            </div>
-             <div style="text-align: center;">
-                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Repertório</div>
-                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Ver Dados</div>
-            </div>
-        </a>
+
+
 
         <!-- Estatísticas Engajamento (NOVO) -->
         <a href="stats_equipe.php" class="create-btn" style="
