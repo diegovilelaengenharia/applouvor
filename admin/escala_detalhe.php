@@ -227,26 +227,27 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         
 
         
-        <!-- Observações -->
-        <?php if ($schedule['notes']): ?>
+        <!-- Observações (Apenas para Administradores) -->
+        <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
             <div id="display-notes-container" style="padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                     <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações</span>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações do Líder</span>
                 </div>
                 <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
             </div>
-        <?php else: ?>
+        <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
             <div id="display-notes-container" style="display: none; padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                     <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações</span>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações do Líder</span>
                 </div>
                 <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"></div>
             </div>
         <?php endif; ?>
 
-        <!-- Botão Gerenciar Informações (Modo Edição) -->
+        <!-- Botão Gerenciar Informações (Modo Edição - Apenas Admin) -->
+        <?php if ($_SESSION['user_role'] === 'admin'): ?>
         <button id="btn-manage-info" class="edit-mode-item" onclick="openModal('modal-event')" style="
             display: none; width: 100%; margin-top: 16px; padding: 12px; 
             background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; 
@@ -254,6 +255,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         ">
             <i data-lucide="settings-2" style="width: 20px;"></i> Gerenciar Informações
         </button>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -310,13 +312,6 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <div style="background: #fef3c7; color: #92400e; padding: 8px 14px; border-radius: 8px; font-size: 0.8125rem; font-weight: 600; white-space: nowrap;">
                         Sem substituto
                     </div>
-                    <?php endif; ?>
-
-                    <!-- Áudio (se houver) -->
-                    <?php if ($absence['audio_path']): ?>
-                    <button onclick="playAudio('<?= htmlspecialchars($absence['audio_path']) ?>')" style="background: #eff6ff; color: #1e40af; border: none; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Ouvir explicação">
-                        <i data-lucide="volume-2" style="width: 18px;"></i>
-                    </button>
                     <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
