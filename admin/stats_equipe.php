@@ -210,9 +210,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden; box-shadow: var(--shadow-sm);">
         <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
             <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Atividade Detalhada</h3>
-            <button onclick="window.print()" style="background: transparent; border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--text-muted);">
-                <i data-lucide="printer" style="width: 16px;"></i> Imprimir
-            </button>
+
         </div>
 
         <div style="overflow-x: auto;">
