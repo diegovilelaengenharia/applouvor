@@ -297,7 +297,6 @@ if (!empty($currentUser['avatar'])) {
         color: #c2410c;
     }
 
-    /* Aniversários specific (Pink) */
     .nav-item.nav-communication.nav-pink svg {
         color: #ec4899;
     }
@@ -311,6 +310,22 @@ if (!empty($currentUser['avatar'])) {
     .nav-item.nav-communication.nav-pink:hover svg,
     .nav-item.nav-communication.nav-pink.active svg {
         color: #be185d;
+    }
+
+    /* Indicadores (Blue) */
+    .nav-item.nav-indicators svg {
+        color: #3b82f6;
+    }
+
+    .nav-item.nav-indicators:hover,
+    .nav-item.nav-indicators.active {
+        background-color: #eff6ff;
+        color: #1e40af;
+    }
+
+    .nav-item.nav-indicators:hover svg,
+    .nav-item.nav-indicators.active svg {
+        color: #1e40af;
     }
 
 
