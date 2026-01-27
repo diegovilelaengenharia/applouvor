@@ -386,6 +386,68 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         color: var(--text-main);
         margin: 0;
     }
+
+    /* Button Styles */
+    .btn-link {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        font-size: var(--font-body-sm);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .btn-link:hover {
+        background: var(--primary-subtle);
+        transform: translateY(-1px);
+    }
+
+    .btn-close {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .btn-close:hover {
+        background: var(--bg-body);
+        border-color: var(--text-muted);
+        transform: scale(1.05);
+    }
+
+    .btn-primary-full {
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+        border: none;
+        color: white;
+        font-weight: 700;
+        font-size: var(--font-body);
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary-full:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+    }
 </style>
 
 <div class="compact-container">
@@ -651,7 +713,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 </div>
             </div>
 
-            <button type="button" onclick="saveTagInline()" class="btn-action btn-primary" style="width: 100%;">
+            <button type="button" onclick="saveTagInline()" class="btn-primary-full">
                 <span id="saveButtonText">Criar Classificação</span>
             </button>
         </div>
