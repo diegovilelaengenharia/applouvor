@@ -190,7 +190,18 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             </div>
         <?php endif; ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
-            <?php foreach ($songs as $song): ?>
+            <?php foreach ($songs as $song): 
+                // Buscar tags desta música
+                $stmtSongTags = $pdo->prepare("
+                    SELECT t.id, t.name, t.color 
+                    FROM tags t
+                    JOIN song_tags st ON t.id = st.tag_id
+                    WHERE st.song_id = ?
+                    ORDER BY t.name
+                ");
+                $stmtSongTags->execute([$song['id']]);
+                $songTags = $stmtSongTags->fetchAll(PDO::FETCH_ASSOC);
+            ?>
                 <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="ripple" style="
                     display: flex; align-items: center; gap: 12px; text-decoration: none; 
                     padding: 10px; /* Padding reduzido */
@@ -211,6 +222,17 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     <div style="flex: 1; min-width: 0;">
                         <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;"><?= htmlspecialchars($song['title']) ?></div>
                         <div style="color: var(--text-muted); font-size: var(--font-body-sm); margin-top: 1px;"><?= htmlspecialchars($song['artist']) ?></div>
+                        
+                        <!-- Tags -->
+                        <?php if (!empty($songTags)): ?>
+                        <div style="display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap;">
+                            <?php foreach ($songTags as $tag): ?>
+                            <span style="background: <?= $tag['color'] ?>20; color: <?= $tag['color'] ?>; padding: 2px 6px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600; border: 1px solid <?= $tag['color'] ?>40;">
+                                <?= htmlspecialchars($tag['name']) ?>
+                            </span>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
                     </div>
 
                     <div style="text-align: right; min-width: 50px;">
