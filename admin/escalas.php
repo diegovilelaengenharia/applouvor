@@ -175,6 +175,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $stmtCount->execute([$schedule['id']]);
                     $totalParticipants = $stmtCount->fetchColumn();
                     $extraCount = max(0, $totalParticipants - 5);
+
+                    // Buscar ausências que coincidem com esta data
+                    $stmtAbsences = $pdo->prepare("
+                        SELECT 
+                            u.name as absent_member,
+                            r.name as replacement_name
+                        FROM user_unavailability ua
+                        JOIN users u ON ua.user_id = u.id
+                        LEFT JOIN users r ON ua.replacement_id = r.id
+                        WHERE :event_date BETWEEN ua.start_date AND ua.end_date
+                    ");
+                    $stmtAbsences->execute(['event_date' => $schedule['event_date']]);
+                    $absences = $stmtAbsences->fetchAll(PDO::FETCH_ASSOC);
+                    $hasAbsences = count($absences) > 0;
                 ?>
 
                     <!-- Card de Evento Compacto -->
@@ -253,6 +267,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     </div>
                                 <?php else: ?>
                                     <span style="font-size: var(--font-body-sm); color: var(--text-muted); font-style: italic;">Equipe não definida</span>
+                                <?php endif; ?>
+
+                                <!-- Badge de Ausências -->
+                                <?php if ($hasAbsences): ?>
+                                <div style="display: inline-flex; align-items: center; gap: 6px; background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-top: 8px;">
+                                    <i data-lucide="alert-circle" style="width: 14px;"></i>
+                                    <?= count($absences) ?> ausência<?= count($absences) > 1 ? 's' : '' ?>
+                                    <?php 
+                                    $withReplacement = array_filter($absences, fn($a) => !empty($a['replacement_name']));
+                                    if (count($withReplacement) > 0): 
+                                    ?>
+                                        • <?= count($withReplacement) ?> com substituto<?= count($withReplacement) > 1 ? 's' : '' ?>
+                                    <?php endif; ?>
+                                </div>
                                 <?php endif; ?>
 
                             </div>

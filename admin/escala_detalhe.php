@@ -102,6 +102,28 @@ $songIds = array_column($songs, 'song_id');
 $allUsers = $pdo->query("SELECT id, name, instrument, avatar_color FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 $allSongs = $pdo->query("SELECT id, title, artist, tone, bpm, category FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
 
+// Buscar ausências que coincidem com esta escala
+$stmtAbsences = $pdo->prepare("
+    SELECT 
+        u.id as user_id,
+        u.name,
+        u.avatar_color,
+        u.instrument,
+        ua.reason,
+        ua.audio_path,
+        r.id as replacement_id,
+        r.name as replacement_name,
+        r.avatar_color as replacement_color,
+        r.instrument as replacement_instrument
+    FROM user_unavailability ua
+    JOIN users u ON ua.user_id = u.id
+    LEFT JOIN users r ON ua.replacement_id = r.id
+    WHERE :event_date BETWEEN ua.start_date AND ua.end_date
+    ORDER BY u.name
+");
+$stmtAbsences->execute(['event_date' => $schedule['event_date']]);
+$absences = $stmtAbsences->fetchAll(PDO::FETCH_ASSOC);
+
 // --- Buscar Funções (Roles) de TODOS os usuários ---
 $stmtRoles = $pdo->query("
     SELECT ur.user_id, r.name, r.icon, r.color, ur.is_primary 
@@ -240,6 +262,68 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     
     <!-- MODO VISUALIZAÇÃO -->
     <div id="view-mode" class="view-mode">
+        <!-- AUSÊNCIAS CADASTRADAS -->
+        <?php if (!empty($absences)): ?>
+        <div style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #fecaca; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="alert-circle" style="width: 18px; color: white;"></i>
+                </div>
+                <div>
+                    <h3 style="margin: 0; color: #dc2626; font-size: 1.125rem; font-weight: 700;">Ausências Cadastradas</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: #991b1b; font-weight: 500;"><?= count($absences) ?> membro<?= count($absences) > 1 ? 's' : '' ?> não poderá<?= count($absences) > 1 ? 'ão' : '' ?> participar</p>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <?php foreach ($absences as $absence): ?>
+                <div style="background: white; border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                    <!-- Avatar do Ausente -->
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: <?= $absence['avatar_color'] ?: '#cbd5e1' ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.125rem; flex-shrink: 0;">
+                        <?= strtoupper(substr($absence['name'], 0, 2)) ?>
+                    </div>
+
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;"><?= htmlspecialchars($absence['name']) ?></div>
+                        <div style="font-size: 0.8125rem; color: #64748b; margin-top: 2px;"><?= htmlspecialchars($absence['instrument'] ?: 'Membro') ?></div>
+                        <?php if ($absence['reason']): ?>
+                        <div style="font-size: 0.8125rem; color: #94a3b8; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+                            <i data-lucide="info" style="width: 12px;"></i>
+                            <?= htmlspecialchars($absence['reason']) ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Substituto (se houver) -->
+                    <?php if ($absence['replacement_id']): ?>
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f0fdf4; border-radius: 10px; border: 1px solid #bbf7d0;">
+                        <i data-lucide="arrow-right" style="width: 18px; color: #16a34a;"></i>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: <?= $absence['replacement_color'] ?: '#cbd5e1' ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; border: 2px solid #16a34a;">
+                            <?= strtoupper(substr($absence['replacement_name'], 0, 2)) ?>
+                        </div>
+                        <div style="min-width: 0;">
+                            <div style="font-weight: 700; color: #16a34a; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($absence['replacement_name']) ?></div>
+                            <div style="font-size: 0.75rem; color: #15803d;"><?= htmlspecialchars($absence['replacement_instrument'] ?: 'Substituto') ?></div>
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    <div style="background: #fef3c7; color: #92400e; padding: 8px 14px; border-radius: 8px; font-size: 0.8125rem; font-weight: 600; white-space: nowrap;">
+                        Sem substituto
+                    </div>
+                    <?php endif; ?>
+
+                    <!-- Áudio (se houver) -->
+                    <?php if ($absence['audio_path']): ?>
+                    <button onclick="playAudio('<?= htmlspecialchars($absence['audio_path']) ?>')" style="background: #eff6ff; color: #1e40af; border: none; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Ouvir explicação">
+                        <i data-lucide="volume-2" style="width: 18px;"></i>
+                    </button>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <!-- PARTICIPANTES -->
         <div style="margin-bottom: 24px;">
             <h3 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
