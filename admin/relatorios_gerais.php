@@ -481,29 +481,41 @@ $mvpMembers = array_slice($engagementData, 0, 5);
 
 // --- 3. RENDER LOGIC ---
 if ($isPrintMode) {
-    // PRINT VIEW (Clean)
-    // PRINT VIEW (Clean)
+    // PRINT VIEW (Ultra Complete)
     ?>
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
-        <title>Relatório Analítico Completo</title>
+        <title>Relatório Analítico Ultra Completo</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
         <script src="https://unpkg.com/lucide@latest"></script>
         <style>
-             body { font-family: 'Inter', sans-serif; padding: 40px; max-width: 210mm; margin: 0 auto; color: #1e293b; background: white;}
-             @media print { body { padding: 0; margin: 10mm; } .no-print { display: none; } }
-             h3 { border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-top: 30px; font-size: 14px; text-transform: uppercase; color: #0f172a; }
-             table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 20px; }
-             th { text-align: left; background: #f8fafc; padding: 6px; font-weight: 700; color: #64748b; }
-             td { padding: 6px; border-bottom: 1px solid #f1f5f9; }
-             .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-             .stat-box { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
-             .badge { padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 10px; }
+             body { font-family: 'Inter', sans-serif; padding: 30px; max-width: 210mm; margin: 0 auto; color: #1e293b; background: white; font-size: 10px; line-height: 1.4;}
+             @media print { body { padding: 0; margin: 8mm; font-size: 9px; } .no-print { display: none; } @page { margin: 10mm; } }
+             h1 { font-size: 22px; margin: 0 0 4px 0; color: #0f172a; }
+             h2 { font-size: 14px; margin: 25px 0 12px 0; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; color: #0f172a; text-transform: uppercase; font-weight: 800; page-break-after: avoid; }
+             h3 { font-size: 11px; margin: 15px 0 8px 0; font-weight: 700; color: #64748b; page-break-after: avoid; }
+             table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 15px; page-break-inside: avoid; }
+             th { text-align: left; background: #f8fafc; padding: 5px 6px; font-weight: 700; color: #64748b; border-bottom: 1px solid #cbd5e1; }
+             td { padding: 5px 6px; border-bottom: 1px solid #f1f5f9; }
+             .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+             .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+             .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+             .stat-box { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+             .stat-box:last-child { border-bottom: none; }
+             .kpi-card { border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; text-align: center; page-break-inside: avoid; }
+             .kpi-value { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+             .kpi-label { font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+             .badge { padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 8px; display: inline-block; }
+             .section { margin-bottom: 30px; page-break-inside: avoid; }
+             .alert-box { padding: 10px; border-radius: 6px; margin-bottom: 15px; page-break-inside: avoid; }
+             .podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin: 20px 0; page-break-inside: avoid; }
+             .podium-item { text-align: center; }
+             .podium-bar { border-radius: 6px 6px 0 0; padding: 10px 8px; color: white; font-weight: 800; }
         </style>
     </head>
-    <body class="print-preview">
+    <body>
         <div class="no-print" style="margin-bottom: 20px; text-align: right;">
             <button onclick="window.print()" style="padding: 10px 20px; cursor: pointer; background: #0f172a; color: white; border: none; border-radius: 6px; font-weight: 600;">
                 <i data-lucide="printer" style="width: 16px; margin-right: 5px; vertical-align: middle;"></i> Salvar como PDF / Imprimir
@@ -511,109 +523,486 @@ if ($isPrintMode) {
             <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; margin-left: 10px;">Fechar</button>
         </div>
 
-        <div style="margin-bottom: 40px;">
-            <h1 style="margin: 0; font-size: 24px;">Relatório Analítico Avançado</h1>
-            <p style="margin: 4px 0 0; color: #64748b; font-size: 12px; font-weight: 600;">PIB Oliveira • Ministério de Louvor • <?= $titlePeriod ?></p>
+        <!-- HEADER -->
+        <div style="margin-bottom: 30px;">
+            <h1>Relatório Analítico Ultra Completo</h1>
+            <p style="margin: 4px 0 0; color: #64748b; font-size: 11px; font-weight: 600;">PIB Oliveira • Ministério de Louvor • <?= $titlePeriod ?></p>
         </div>
 
-        <!-- KPIs -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px;">
+        <!-- KPIs PRINCIPAIS -->
+        <div class="grid-4">
             <?php 
                 $kpis = [
                     ['Escalas', $kpi_scales, '#3b82f6'],
-                    ['Adesão', $message = $rate_confirmed . '%', '#10b981'],
+                    ['Adesão', $rate_confirmed . '%', '#10b981'],
                     ['Músicas', $kpi_songs, '#ec4899'],
                     ['Capítulos', number_format($kpi_chapters), '#8b5cf6']
                 ];
                 foreach($kpis as $k): ?>
-                <div style="border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; border-left: 4px solid <?= $k[2] ?>;">
-                    <div style="font-size: 24px; font-weight: 800;"><?= $k[1] ?></div>
-                    <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;"><?= $k[0] ?></div>
+                <div class="kpi-card" style="border-left: 3px solid <?= $k[2] ?>;">
+                    <div class="kpi-value" style="color: <?= $k[2] ?>;"><?= $k[1] ?></div>
+                    <div class="kpi-label"><?= $k[0] ?></div>
                 </div>
             <?php endforeach; ?>
         </div>
 
-        <!-- SECTION 1: EQUIPE -->
-        <h3>Análise de Equipe</h3>
-        <div class="grid-2">
-            <div>
-                <h4 style="font-size: 12px; margin-bottom: 10px;">Duplas Mais Frequentes</h4>
-                <?php foreach($topPairs as $p): ?>
-                <div class="stat-box">
-                    <span><?= $p['p1'] ?> & <?= $p['p2'] ?></span>
-                    <b><?= $p['qtd'] ?>x</b>
+        <!-- SEÇÃO 1: ANÁLISE DE ESCALAS -->
+        <div class="section">
+            <h2>📈 Análise de Escalas</h2>
+            
+            <div class="grid-2">
+                <!-- Taxa de Confirmação -->
+                <div>
+                    <h3>Taxa de Confirmação por Membro</h3>
+                    <table>
+                        <thead><tr><th>Membro</th><th style="text-align: center;">Confirmadas</th><th style="text-align: center;">Taxa</th></tr></thead>
+                        <tbody>
+                        <?php foreach(array_slice($memberConfirmRate, 0, 10) as $m): ?>
+                            <tr>
+                                <td><b><?= $m['name'] ?></b></td>
+                                <td style="text-align: center;"><?= $m['confirmed'] ?>/<?= $m['total_invites'] ?></td>
+                                <td style="text-align: center;">
+                                    <span class="badge" style="background: <?= $m['rate'] >= 80 ? '#10b981' : ($m['rate'] >= 60 ? '#f59e0b' : '#ef4444') ?>; color: white;">
+                                        <?= $m['rate'] ?>%
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endforeach; ?>
-            </div>
-            <div>
-                 <h4 style="font-size: 12px; margin-bottom: 10px;">Recusas de Escala</h4>
-                 <?php foreach($topDeclines as $d): ?>
-                 <div class="stat-box">
-                    <span><?= $d['name'] ?></span>
-                    <span style="color: #ef4444; font-weight: 700;"><?= $d['qtd'] ?></span>
+
+                <!-- Membros Mais Escalados -->
+                <div>
+                    <h3>Membros Mais Escalados</h3>
+                    <table>
+                        <thead><tr><th>Membro</th><th style="text-align: center;">Escalas</th></tr></thead>
+                        <tbody>
+                        <?php foreach(array_slice($memberScaleCount, 0, 10) as $m): ?>
+                            <tr>
+                                <td><b><?= $m['name'] ?></b></td>
+                                <td style="text-align: center; font-weight: 700; color: #3b82f6;"><?= $m['qtd'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endforeach; ?>
             </div>
+
+            <div class="grid-2">
+                <!-- Duplas Mais Frequentes -->
+                <div>
+                    <h3>Duplas Mais Frequentes</h3>
+                    <?php foreach(array_slice($topPairs, 0, 8) as $p): ?>
+                    <div class="stat-box">
+                        <span><?= $p['p1'] ?> & <?= $p['p2'] ?></span>
+                        <b style="color: #3b82f6;"><?= $p['qtd'] ?>x</b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Substituições Frequentes -->
+                <?php if(!empty($substitutions)): ?>
+                <div>
+                    <h3>Substituições Mais Frequentes</h3>
+                    <?php foreach(array_slice($substitutions, 0, 8) as $s): ?>
+                    <div class="stat-box">
+                        <span style="font-size: 9px;"><?= $s['substituido'] ?> → <?= $s['substituto'] ?></span>
+                        <b style="color: #3b82f6;"><?= $s['vezes'] ?>x</b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Tendência Temporal -->
+            <?php if(!empty($scaleTrend)): ?>
+            <div>
+                <h3>Tendência Temporal (Escalas por Mês)</h3>
+                <div style="display: flex; align-items: flex-end; gap: 4px; height: 60px; border-bottom: 1px solid #cbd5e1;">
+                    <?php 
+                    $maxTrend = max(array_column($scaleTrend, 'qtd')) ?: 1;
+                    foreach($scaleTrend as $t): 
+                        $height = ($t['qtd'] / $maxTrend) * 100;
+                    ?>
+                    <div style="flex: 1; background: #3b82f6; border-radius: 3px 3px 0 0; height: <?= max($height, 5) ?>%; position: relative;">
+                        <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: 700;"><?= $t['qtd'] ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 7px; color: #94a3b8; margin-top: 3px;">
+                    <?php foreach($scaleTrend as $t): ?>
+                    <span><?= $t['month'] ?></span>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
 
-        <!-- SECTION 2: REPERTÓRIO -->
-        <h3>Análise Musical</h3>
-        <div class="grid-2">
-            <div>
-                <h4 style="font-size: 12px; margin-bottom: 10px;">Músicas Top 10</h4>
-                 <table><tbody>
-                 <?php foreach($topSongs as $s): ?>
-                    <tr><td><?= $s['title'] ?> <span style="color:#94a3b8; font-size:9px"><?= $s['artist'] ?></span></td><td style="text-align:right"><b><?= $s['qtd'] ?></b></td></tr>
-                 <?php endforeach; ?>
-                 </tbody></table>
+        <!-- SEÇÃO 2: ANÁLISE DE REPERTÓRIO -->
+        <div class="section" style="page-break-before: always;">
+            <h2>🎵 Análise de Repertório</h2>
+            
+            <div class="grid-2">
+                <!-- Top 10 Músicas -->
+                <div>
+                    <h3>Top 10 Músicas Mais Tocadas</h3>
+                    <table>
+                        <thead><tr><th>#</th><th>Música</th><th style="text-align: center;">Vezes</th></tr></thead>
+                        <tbody>
+                        <?php foreach($topSongs as $idx => $s): ?>
+                            <tr>
+                                <td style="color: #94a3b8; font-weight: 700;"><?= $idx+1 ?></td>
+                                <td>
+                                    <div style="font-weight: 600;"><?= $s['title'] ?></div>
+                                    <div style="font-size: 8px; color: #94a3b8;"><?= $s['artist'] ?></div>
+                                </td>
+                                <td style="text-align: center; font-weight: 700; color: #ec4899;"><?= $s['qtd'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Rotação & BPM -->
+                <div>
+                    <h3>Rotação de Músicas</h3>
+                    <?php if(!empty($songRotation)): ?>
+                    <table>
+                        <thead><tr><th>Frequência</th><th style="text-align: center;">Músicas</th></tr></thead>
+                        <tbody>
+                        <?php foreach($songRotation as $sr): ?>
+                            <tr>
+                                <td><b><?= $sr['faixa'] ?></b></td>
+                                <td style="text-align: center; font-weight: 700;"><?= $sr['musicas'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php endif; ?>
+
+                    <?php if($bpmStats && $bpmStats['bpm_medio']): ?>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 6px; border: 1px solid #bae6fd; text-align: center;">
+                        <div style="font-size: 8px; color: #0369a1; font-weight: 600; margin-bottom: 3px;">BPM MÉDIO</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #0c4a6e;"><?= round($bpmStats['bpm_medio']) ?></div>
+                        <div style="font-size: 8px; color: #0369a1;">Min: <?= $bpmStats['bpm_min'] ?> | Max: <?= $bpmStats['bpm_max'] ?></div>
+                    </div>
+                    <?php endif; ?>
+                </div>
             </div>
-            <div>
-                 <h4 style="font-size: 12px; margin-bottom: 10px;">Artistas & Tons</h4>
-                 <div style="margin-bottom: 20px;">
-                     <?php foreach($topArtists as $a): ?>
-                     <div class="stat-box"><span><?= $a['artist'] ?></span><b><?= $a['qtd'] ?></b></div>
-                     <?php endforeach; ?>
-                 </div>
-                 <h4 style="font-size: 12px; margin-bottom: 10px;">Tons Mais Usados</h4>
-                 <div style="display: flex; gap: 8px;">
-                     <?php foreach($topTones as $t): ?>
-                     <span style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-size: 11px;"><b><?= $t['tone'] ?></b> (<?= $t['qtd'] ?>)</span>
-                     <?php endforeach; ?>
-                 </div>
+
+            <div class="grid-3">
+                <!-- Top Artistas -->
+                <div>
+                    <h3>Top Artistas</h3>
+                    <?php foreach(array_slice($topArtists, 0, 8) as $a): ?>
+                    <div class="stat-box">
+                        <span><?= $a['artist'] ?></span>
+                        <b><?= $a['qtd'] ?>x</b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Tons Preferidos -->
+                <div>
+                    <h3>Tons Mais Usados</h3>
+                    <?php foreach(array_slice($topTones, 0, 8) as $t): ?>
+                    <div class="stat-box">
+                        <span><b><?= $t['tone'] ?></b></span>
+                        <span><?= $t['qtd'] ?>x</span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <h3>Tags Mais Usadas</h3>
+                    <?php foreach(array_slice($topTags, 0, 8) as $t): ?>
+                    <div class="stat-box">
+                        <span><?= $t['name'] ?></span>
+                        <b><?= $t['qtd'] ?></b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
+
+            <!-- Completude do Repertório -->
+            <?php if($repertoireCompleteness && $repertoireCompleteness['total'] > 0): ?>
+            <div>
+                <h3>Completude do Repertório (Links Disponíveis)</h3>
+                <div class="grid-4">
+                    <?php 
+                    $links = [
+                        ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => '#3b82f6'],
+                        ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#10b981'],
+                        ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => '#f59e0b'],
+                        ['label' => 'Vídeo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
+                    ];
+                    foreach($links as $link):
+                        $pct = round(($link['count'] / $repertoireCompleteness['total']) * 100);
+                    ?>
+                    <div class="kpi-card" style="border-left: 3px solid <?= $link['color'] ?>;">
+                        <div class="kpi-value" style="color: <?= $link['color'] ?>;"><?= $pct ?>%</div>
+                        <div class="kpi-label"><?= $link['label'] ?></div>
+                        <div style="font-size: 8px; color: #94a3b8; margin-top: 2px;"><?= $link['count'] ?>/<?= $repertoireCompleteness['total'] ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Músicas Esquecidas -->
+            <?php if(!empty($forgottenSongs)): ?>
+            <div class="alert-box" style="background: #fef2f2; border: 1px solid #fee2e2;">
+                <h3 style="color: #dc2626; margin-top: 0;">⚠️ Músicas Esquecidas (Não tocadas há 90+ dias)</h3>
+                <div class="grid-2">
+                    <?php foreach(array_slice($forgottenSongs, 0, 10) as $fs): ?>
+                    <div class="stat-box">
+                        <div>
+                            <div style="font-weight: 600; font-size: 9px;"><?= $fs['title'] ?></div>
+                            <div style="font-size: 8px; color: #94a3b8;"><?= $fs['artist'] ?></div>
+                        </div>
+                        <span style="color: #dc2626; font-weight: 700; font-size: 9px;"><?= $fs['dias_atras'] ?> dias</span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
 
-        <!-- SECTION 3: ESPIRITUAL -->
-        <h3>Vida Espiritual</h3>
-        <div class="grid-2">
-            <div>
-                <h4 style="font-size: 12px; margin-bottom: 10px;">Leitura por Membro</h4>
-                <table><thead><tr><th>Membro</th><th>Plano</th><th>Caps.</th></tr></thead><tbody>
-                <?php foreach($spiritualData as $sd): ?>
-                    <tr>
-                        <td><?= $sd['name'] ?></td>
-                        <td style="font-size: 9px;"><?= ucfirst($sd['plan']) ?></td>
-                        <td><b><?= $sd['chapters_period'] ?></b></td>
-                    </tr>
+        <!-- SEÇÃO 3: ANÁLISE DE LEITURAS BÍBLICAS -->
+        <div class="section" style="page-break-before: always;">
+            <h2>📖 Análise de Leituras Bíblicas</h2>
+            
+            <div class="grid-3">
+                <!-- KPIs de Leitura -->
+                <div class="kpi-card" style="border-left: 3px solid #8b5cf6;">
+                    <div class="kpi-value" style="color: #8b5cf6;"><?= $adherenceRate ?>%</div>
+                    <div class="kpi-label">Taxa de Adesão</div>
+                    <div style="font-size: 8px; color: #94a3b8; margin-top: 2px;"><?= $adherenceData['leitores_ativos'] ?>/<?= $adherenceData['total_usuarios'] ?> membros</div>
+                </div>
+
+                <?php if(!empty($planComparison)): ?>
+                <?php foreach($planComparison as $pc): ?>
+                <div class="kpi-card" style="border-left: 3px solid #8b5cf6;">
+                    <div class="kpi-value" style="color: #8b5cf6;"><?= $pc['capitulos'] ?></div>
+                    <div class="kpi-label"><?= $pc['plano'] ?></div>
+                    <div style="font-size: 8px; color: #94a3b8; margin-top: 2px;">capítulos lidos</div>
+                </div>
                 <?php endforeach; ?>
-                </tbody></table>
+                <?php endif; ?>
             </div>
-             <div>
-                <h4 style="font-size: 12px; margin-bottom: 10px;">Horário de Leitura (Top 3)</h4>
-                <?php 
+
+            <div class="grid-2">
+                <!-- Ranking de Leitores -->
+                <div>
+                    <h3>🏆 Top 10 Leitores</h3>
+                    <table>
+                        <thead><tr><th>#</th><th>Membro</th><th style="text-align: center;">Capítulos</th></tr></thead>
+                        <tbody>
+                        <?php foreach($topReaders as $idx => $r): ?>
+                            <tr>
+                                <td style="font-weight: 700; color: <?= $idx < 3 ? '#f59e0b' : '#94a3b8' ?>;"><?= $idx+1 ?></td>
+                                <td><b><?= $r['name'] ?></b></td>
+                                <td style="text-align: center; font-weight: 700; color: #8b5cf6;"><?= $r['total_capitulos'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Leitura por Membro (Todos) -->
+                <div>
+                    <h3>Status de Leitura (Todos os Membros)</h3>
+                    <table>
+                        <thead><tr><th>Membro</th><th>Plano</th><th style="text-align: center;">Caps.</th></tr></thead>
+                        <tbody>
+                        <?php foreach($spiritualData as $sd): ?>
+                            <tr>
+                                <td><?= $sd['name'] ?></td>
+                                <td style="font-size: 8px; color: #64748b;"><?= ucfirst($sd['plan']) ?></td>
+                                <td style="text-align: center; font-weight: 700;"><?= $sd['chapters_period'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Horários e Dias -->
+            <div class="grid-2">
+                <div>
+                    <h3>Horários Mais Comuns de Leitura</h3>
+                    <?php 
                     $hoursSorted = $readingHours; 
                     arsort($hoursSorted);
                     $i=0;
                     foreach($hoursSorted as $h => $q): 
-                        if($i++ >= 5) break;
+                        if($i++ >= 8) break;
                         $periodo = $h >= 6 && $h < 12 ? 'Manhã' : ($h >= 12 && $h < 18 ? 'Tarde' : ($h >= 18 && $h < 23 ? 'Noite' : 'Madrugada'));
-                ?>
-                 <div class="stat-box">
-                    <span><?= str_pad($h, 2, '0', STR_PAD_LEFT) ?>:00 - <?= str_pad($h+1, 2, '0', STR_PAD_LEFT) ?>:00 (<?= $periodo ?>)</span>
-                    <b><?= $q ?> caps</b>
+                    ?>
+                    <div class="stat-box">
+                        <span><?= str_pad($h, 2, '0', STR_PAD_LEFT) ?>:00 - <?= str_pad($h+1, 2, '0', STR_PAD_LEFT) ?>:00 (<?= $periodo ?>)</span>
+                        <b><?= $q ?> caps</b>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
+
+                <div>
+                    <h3>Dias da Semana com Mais Leituras</h3>
+                    <?php if(!empty($weekdayReading)): ?>
+                    <?php foreach($weekdayReading as $wd): ?>
+                    <div class="stat-box">
+                        <span><?= $wd['dia_semana'] ?></span>
+                        <b><?= $wd['qtd'] ?> caps</b>
+                    </div>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
+        </div>
+
+        <!-- SEÇÃO 4: ANÁLISE DE AUSÊNCIAS -->
+        <?php if($totalAbsences > 0): ?>
+        <div class="section" style="page-break-before: always;">
+            <h2>⚠️ Análise de Ausências</h2>
+            
+            <!-- KPIs de Ausências -->
+            <div class="grid-3">
+                <div class="kpi-card" style="border-left: 3px solid #f59e0b;">
+                    <div class="kpi-value" style="color: #f59e0b;"><?= $totalAbsences ?></div>
+                    <div class="kpi-label">Total de Ausências</div>
+                </div>
+
+                <div class="kpi-card" style="border-left: 3px solid #10b981;">
+                    <div class="kpi-value" style="color: #10b981;"><?= $substitutionRate ?>%</div>
+                    <div class="kpi-label">Com Substituto</div>
+                </div>
+
+                <div class="kpi-card" style="border-left: 3px solid #3b82f6;">
+                    <div class="kpi-value" style="color: #3b82f6;"><?= $audioRate ?>%</div>
+                    <div class="kpi-label">Com Áudio Explicativo</div>
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <!-- Membros com Mais Ausências -->
+                <div>
+                    <h3>Membros com Mais Ausências</h3>
+                    <?php foreach(array_slice($topAbsentMembers, 0, 10) as $m): ?>
+                    <div class="stat-box">
+                        <span><?= $m['name'] ?></span>
+                        <b style="color: #f59e0b;"><?= $m['qtd'] ?>x</b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Motivos Mais Comuns -->
+                <?php if(!empty($topAbsenceReasons)): ?>
+                <div>
+                    <h3>Motivos Mais Comuns</h3>
+                    <?php foreach($topAbsenceReasons as $r): ?>
+                    <div class="stat-box">
+                        <span style="font-size: 9px;"><?= $r['reason'] ?></span>
+                        <b><?= $r['qtd'] ?>x</b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+
+                <!-- Membros que Mais Substituem -->
+                <?php if(!empty($topSubstitutes)): ?>
+                <div>
+                    <h3>🦸 Membros que Mais Substituem</h3>
+                    <?php foreach($topSubstitutes as $s): ?>
+                    <div class="stat-box">
+                        <span><?= $s['name'] ?></span>
+                        <b style="color: #10b981;"><?= $s['vezes'] ?>x</b>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <!-- SEÇÃO 5: ANÁLISES CRUZADAS & MVPs -->
+        <div class="section" style="page-break-before: always;">
+            <h2>🏆 Análises Cruzadas & Membros MVP</h2>
+            
+            <!-- Pódio MVP -->
+            <div>
+                <h3 style="text-align: center; margin-bottom: 15px;">Top 5 Membros MVP (Maior Engajamento)</h3>
+                <div class="podium">
+                    <?php foreach($mvpMembers as $idx => $mvp): 
+                        $heights = [90, 110, 80, 70, 60];
+                        $colors = ['#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e'];
+                        $medals = ['🥇', '🥈', '🥉', '4º', '5º'];
+                    ?>
+                    <div class="podium-item">
+                        <div class="podium-bar" style="width: 50px; height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>;">
+                            <div style="font-size: 14px; margin-bottom: 2px;"><?= $medals[$idx] ?></div>
+                            <div style="font-size: 16px; font-weight: 800;"><?= $mvp['engagement_score'] ?></div>
+                            <div style="font-size: 7px; opacity: 0.9;">pts</div>
+                        </div>
+                        <div style="margin-top: 5px; font-weight: 700; font-size: 9px; color: #0f172a;"><?= $mvp['name'] ?></div>
+                        <div style="font-size: 7px; color: #64748b;"><?= $mvp['instrument'] ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Tabela Completa de Engajamento -->
+            <div>
+                <h3>Score de Engajamento (Todos os Membros)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Membro</th>
+                            <th>Instrumento</th>
+                            <th style="text-align: center;">Escalas</th>
+                            <th style="text-align: center;">Capítulos</th>
+                            <th style="text-align: center;">Ausências</th>
+                            <th style="text-align: center;">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($engagementData as $member): ?>
+                        <tr>
+                            <td><b><?= $member['name'] ?></b></td>
+                            <td style="font-size: 8px; color: #64748b;"><?= $member['instrument'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: #3b82f6;"><?= $member['escalas_confirmadas'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: #8b5cf6;"><?= $member['capitulos_lidos'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#10b981' ?>;"><?= $member['ausencias'] ?></td>
+                            <td style="text-align: center;">
+                                <span class="badge" style="background: <?= $member['engagement_score'] >= 70 ? '#10b981' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>; color: white; font-size: 9px; padding: 3px 8px;">
+                                    <?= $member['engagement_score'] ?>
+                                </span>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Legenda do Score -->
+            <div style="margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 9px; font-weight: 700; margin-bottom: 5px; color: #64748b;">COMO É CALCULADO O SCORE DE ENGAJAMENTO:</div>
+                <div style="font-size: 8px; line-height: 1.6; color: #475569;">
+                    • <b>40 pontos</b> baseados em escalas confirmadas (proporcional ao membro mais escalado)<br>
+                    • <b>40 pontos</b> baseados em capítulos lidos (proporcional ao maior leitor)<br>
+                    • <b>-5 pontos</b> por ausência (máximo -20 pontos)<br>
+                    • <span style="color: #10b981; font-weight: 700;">70-100 pts</span> = Excelente | 
+                    <span style="color: #f59e0b; font-weight: 700;">40-69 pts</span> = Moderado | 
+                    <span style="color: #ef4444; font-weight: 700;">0-39 pts</span> = Precisa melhorar
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 8px; color: #94a3b8;">
+            <p style="margin: 0;">Relatório gerado em <?= date('d/m/Y \à\s H:i') ?> • PIB Oliveira - Ministério de Louvor</p>
+            <p style="margin: 4px 0 0;">Sistema de Gestão de Escalas e Repertório v2.0</p>
         </div>
 
         <script>lucide.createIcons();</script>
@@ -622,6 +1011,7 @@ if ($isPrintMode) {
     <?php
     exit;
 }
+
 
 // --- STANDARD VIEW ---
 renderAppHeader('Indicadores Avançados');
