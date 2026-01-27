@@ -348,12 +348,12 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
                 <?php foreach ($team as $member): ?>
-                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <div id="member-chip-<?= $member['user_id'] ?>" style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border-color);">
                          <div style="width: 24px; height: 24px; border-radius: 50%; background: <?= $member['avatar_color'] ?: '#ccc' ?>; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                          </div>
                          <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($member['name']) ?></span>
-                         <button onclick="toggleMember(<?= $member['user_id'] ?>, null); this.parentElement.remove();" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 0 0 0 4px; display: flex;"><i data-lucide="x" style="width: 14px;"></i></button>
+                         <button onclick="toggleMember(<?= $member['user_id'] ?>, null)" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 0 0 0 4px; display: flex;"><i data-lucide="x" style="width: 14px;"></i></button>
                     </div>
                 <?php endforeach; ?>
                 <?php if(empty($team)): ?><span style="color: var(--text-muted); font-style: italic;">Nenhum participante.</span><?php endif; ?>
@@ -373,13 +373,13 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             
             <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
                 <?php foreach ($songs as $idx => $song): ?>
-                    <div style="display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <div id="song-chip-<?= $song['song_id'] ?>" style="display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border-color);">
                          <div style="width: 24px; height: 24px; background: #ddd; color: #555; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;"><?= $idx+1 ?></div>
                          <div style="flex: 1;">
                             <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
                             <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></div>
                          </div>
-                         <button onclick="toggleSong(<?= $song['song_id'] ?>, null); this.parentElement.remove();" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 4px; display: flex;"><i data-lucide="trash-2" style="width: 16px;"></i></button>
+                         <button onclick="toggleSong(<?= $song['song_id'] ?>, null)" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 4px; display: flex;"><i data-lucide="trash-2" style="width: 16px;"></i></button>
                     </div>
                 <?php endforeach; ?>
                  <?php if(empty($songs)): ?><span style="color: var(--text-muted); font-style: italic;">Nenhuma música.</span><?php endif; ?>
