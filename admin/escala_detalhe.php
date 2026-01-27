@@ -9,46 +9,47 @@ if (!$id) {
     exit;
 }
 
-// --- API AJAX para salvamento automático ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
-    header('Content-Type: application/json');
+// --- Processamento do Salvamento em Lote ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
     
-    if ($_POST['action'] === 'toggle_member') {
-        $userId = $_POST['user_id'];
-        $check = $pdo->prepare("SELECT * FROM schedule_users WHERE schedule_id = ? AND user_id = ?");
-        $check->execute([$id, $userId]);
+    try {
+        $pdo->beginTransaction();
         
-        if ($check->fetch()) {
-            $stmt = $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ? AND user_id = ?");
-            $stmt->execute([$id, $userId]);
-            echo json_encode(['status' => 'removed']);
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO schedule_users (schedule_id, user_id) VALUES (?, ?)");
-            $stmt->execute([$id, $userId]);
-            echo json_encode(['status' => 'added']);
-        }
-        exit;
-    }
-    
-    if ($_POST['action'] === 'toggle_song') {
-        $songId = $_POST['song_id'];
-        $check = $pdo->prepare("SELECT * FROM schedule_songs WHERE schedule_id = ? AND song_id = ?");
-        $check->execute([$id, $songId]);
+        // 1. Atualizar Membros
+        // Remover todos os atuais
+        $stmtDelMembers = $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?");
+        $stmtDelMembers->execute([$id]);
         
-        if ($check->fetch()) {
-            $stmt = $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ? AND song_id = ?");
-            $stmt->execute([$id, $songId]);
-            echo json_encode(['status' => 'removed']);
-        } else {
-            $stmtOrder = $pdo->prepare("SELECT MAX(position) FROM schedule_songs WHERE schedule_id = ?");
-            $stmtOrder->execute([$id]);
-            $lastOrder = $stmtOrder->fetchColumn() ?: 0;
-            
-            $stmt = $pdo->prepare("INSERT INTO schedule_songs (schedule_id, song_id, position) VALUES (?, ?, ?)");
-            $stmt->execute([$id, $songId, $lastOrder + 1]);
-            echo json_encode(['status' => 'added']);
+        // Inserir os novos
+        if (isset($_POST['members']) && is_array($_POST['members'])) {
+            $stmtAddMember = $pdo->prepare("INSERT INTO schedule_users (schedule_id, user_id) VALUES (?, ?)");
+            foreach ($_POST['members'] as $userId) {
+                $stmtAddMember->execute([$id, $userId]);
+            }
         }
+        
+        // 2. Atualizar Músicas
+        // Remover todas as atuais
+        $stmtDelSongs = $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ?");
+        $stmtDelSongs->execute([$id]);
+        
+        // Inserir as novas com posição
+        if (isset($_POST['songs']) && is_array($_POST['songs'])) {
+            $stmtAddSong = $pdo->prepare("INSERT INTO schedule_songs (schedule_id, song_id, position) VALUES (?, ?, ?)");
+            foreach ($_POST['songs'] as $pos => $songId) {
+                $stmtAddSong->execute([$id, $songId, $pos + 1]);
+            }
+        }
+        
+        $pdo->commit();
+        
+        // Redirecionar para limpar o POST e mostrar sucesso
+        header("Location: escala_detalhe.php?id=$id&success=1");
         exit;
+        
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        die("Erro ao salvar mudanças: " . $e->getMessage());
     }
 }
 
@@ -309,12 +310,12 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                         <?php endif; ?>
                                         <?php if ($song['tone']): ?>
                                             <span style="background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fed7aa;">
-                                                <?= $song['tone'] ?>
+                                                <?= htmlspecialchars($song['tone']) ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['bpm']): ?>
                                             <span style="background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fecaca;">
-                                                <?= $song['bpm'] ?> BPM
+                                                <?= htmlspecialchars($song['bpm']) ?> BPM
                                             </span>
                                         <?php endif; ?>
                                         <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
@@ -451,7 +452,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                         <div style="font-size: 0.85rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></div>
                     </div>
                     <?php if ($song['tone']): ?>
-                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fed7aa; white-space: nowrap;"><?= $song['tone'] ?></span>
+                        <span style="background: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fed7aa; white-space: nowrap;"><?= htmlspecialchars($song['tone']) ?></span>
                     <?php endif; ?>
                 </label>
              <?php endforeach; ?>

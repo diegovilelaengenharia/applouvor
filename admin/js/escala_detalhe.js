@@ -259,6 +259,28 @@ function updateSongCount() {
 function saveAllChanges() {
     console.log('Salvando mudanças:', { members: Array.from(pendingMembers), songs: Array.from(pendingSongs) });
 
+    // Feedback visual de carregamento
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.style.opacity = '0.7';
+        saveBtn.style.cursor = 'wait';
+        saveBtn.innerHTML = '<i data-lucide="loader-2" class="spin-icon"></i><span>Salvando...</span>';
+
+        // Adicionar estilo da animação se não existir
+        if (!document.getElementById('spinner-style')) {
+            const style = document.createElement('style');
+            style.id = 'spinner-style';
+            style.textContent = `
+                @keyframes spin { to { transform: rotate(360deg); } }
+                .spin-icon { animation: spin 1s linear infinite; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
     // Criar formulário e enviar
     const form = document.createElement('form');
     form.method = 'POST';
