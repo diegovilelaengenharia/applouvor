@@ -70,31 +70,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             overflow: hidden;
         ">
 
-            <a href="repertorio_stats.php" style="
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 12px 16px;
-                text-decoration: none;
-                color: #0f172a;
-                font-weight: 600;
-                font-size: var(--font-body);
-                transition: background 0.2s;
-            " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                <div style="
-                    width: 32px;
-                    height: 32px;
-                    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-                    color: white;
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                ">
-                    <i data-lucide="bar-chart-2" style="width: 18px;"></i>
-                </div>
-                <span>Estatísticas</span>
-            </a>
+
         </div>
     </div>
 </div>

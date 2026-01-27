@@ -439,18 +439,10 @@ function renderAppHeader($title, $backUrl = null)
                 <!-- Right Side: Stats + L├¡der + Avatar -->
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <!-- Stats Button (Repertorio only) -->
-                    <?php if (strpos($_SERVER['PHP_SELF'], 'repertorio.php') !== false): ?>
-                        <a href="repertorio_stats.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #047857, #059669); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3);">
-                            <i data-lucide="bar-chart-2" style="color: white; width: 20px;"></i>
-                        </a>
-                    <?php endif; ?>
+
 
                     <!-- Stats Button (Escalas only) -->
-                    <?php if (strpos($_SERVER['PHP_SELF'], 'escalas.php') !== false): ?>
-                        <a href="escalas_stats.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);">
-                            <i data-lucide="bar-chart-2" style="color: white; width: 20px;"></i>
-                        </a>
-                    <?php endif; ?>
+
 
 
 
