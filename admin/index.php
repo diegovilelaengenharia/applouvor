@@ -98,7 +98,7 @@ if ($hora >= 5 && $hora < 12) {
 }
 $nomeUser = explode(' ', $_SESSION['user_name'])[0];
 
-renderAppHeader('Início');
+renderAppHeader('Visão Geral');
 renderPageHeader('Visão Geral', 'Confira o que temos para hoje');
 ?>
 

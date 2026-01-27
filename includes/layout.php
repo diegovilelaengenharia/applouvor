@@ -480,21 +480,46 @@ function renderAppHeader($title, $backUrl = null)
 
                         <!-- Mobile Dropdown -->
                         <div id="mobileProfileDropdown" style="
-                            display: none; position: absolute; top: 48px; right: 0; 
+                            display: none; position: absolute; top: 54px; right: 0; 
                             background: var(--bg-surface); border-radius: 16px; 
-                            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
-                            min-width: 240px; z-index: 2000; border: 1px solid var(--border-color);
-                            overflow: hidden;
-                         ">
-                            <div style="padding: 16px; text-align: center; border-bottom: 1px solid var(--border-color);">
-                                <div style="font-weight: 600; color: var(--text-main);"><?= $_layoutUser['name'] ?></div>
-                                <a href="perfil.php" style="font-size: 0.8rem; color: var(--primary); text-decoration: none;">Ver perfil</a>
+                            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
+                            min-width: 260px; z-index: 2000; border: 1px solid var(--border-color); overflow: hidden;
+                            animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                            transform-origin: top right;
+                        ">
+                            <!-- Header do Card -->
+                            <div style="padding: 24px 20px; text-align: center; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
+                                <div style="width: 72px; height: 72px; margin: 0 auto 12px auto; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                                    <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="font-weight: 800; color: var(--text-main); font-size: 1.05rem; margin-bottom: 4px;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                                <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Membro da Equipe</span>
                             </div>
-                            <div style="padding: 8px;">
+
+                            <!-- Menu Itens -->
+                            <div style="padding: 12px;">
+                                <a href="perfil.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
+                                        <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <span style="font-weight: 500;">Meu Perfil</span>
+                                </a>
+
+                                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                                    <a href="lider.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                        <div style="background: #fff7ed; padding: 8px; border-radius: 8px; display: flex; color: #d97706;">
+                                            <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <span style="font-weight: 500;">Painel do Líder</span>
+                                    </a>
+                                <?php endif; ?>
+
                                 <!-- Dark Mode Toggle -->
-                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; color: var(--text-main); font-size: 0.9rem;">
-                                    <i data-lucide="moon" style="width: 18px;"></i>
-                                    <span>Modo Escuro</span>
+                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
+                                        <i data-lucide="moon" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <span style="font-weight: 500;">Modo Escuro</span>
                                     <div style="margin-left: auto;">
                                         <label class="toggle-switch-mini">
                                             <input type="checkbox" id="darkModeToggleMobile" onchange="toggleThemeMode()">
@@ -502,9 +527,14 @@ function renderAppHeader($title, $backUrl = null)
                                         </label>
                                     </div>
                                 </div>
-                                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
-                                <a href="../logout.php" style="display: block; padding: 10px 12px; color: #ef4444; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;">
-                                    <i data-lucide="log-out" style="width: 18px;"></i> Sair
+
+                                <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
+
+                                <a href="../logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #ef4444; font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #fee2e2; padding: 8px; border-radius: 8px; display: flex; color: #ef4444;">
+                                        <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <span style="font-weight: 600;">Sair da Conta</span>
                                 </a>
                             </div>
                         </div>
@@ -1199,9 +1229,14 @@ function renderAppHeader($title, $backUrl = null)
                 }
 
                 document.addEventListener('click', function(e) {
-                    const dropdown = document.getElementById('headerProfileDropdown');
-                    if (dropdown && dropdown.style.display === 'block') {
-                        dropdown.style.display = 'none';
+                    const headerDropdown = document.getElementById('headerProfileDropdown');
+                    const mobileDropdown = document.getElementById('mobileProfileDropdown');
+                    
+                    if (headerDropdown && headerDropdown.style.display === 'block') {
+                        headerDropdown.style.display = 'none';
+                    }
+                    if (mobileDropdown && mobileDropdown.style.display === 'block') {
+                        mobileDropdown.style.display = 'none';
                     }
                 });
             </script>
