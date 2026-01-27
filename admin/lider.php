@@ -493,20 +493,7 @@ try {
     <div class="create-grid" style="
         display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
     ">
-        <!-- Escalas (Gestão Total) - NOVO -->
-        <a href="escalas_gestao.php" class="create-btn" style="
-            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
-        ">
-            <div style="background: #eff6ff; color: #3b82f6; padding: 10px; border-radius: 10px;">
-                <i data-lucide="calendar-range" style="width: 20px;"></i>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Escalas</div>
-                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Gestão Total</div>
-            </div>
-        </a>
+
 
         <!-- Equipe -->
         <a href="membros.php" class="create-btn" style="
@@ -565,11 +552,7 @@ try {
     <div class="create-grid" style="
         display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 32px;
     ">
-
-
-
-
-        <!-- Estatísticas Engajamento (NOVO) -->
+        <!-- Estatísticas Engajamento -->
         <a href="stats_equipe.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -581,6 +564,21 @@ try {
              <div style="text-align: center;">
                 <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Engajamento</div>
                 <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Equipe</div>
+            </div>
+        </a>
+
+        <!-- Relatório Completo (Indicadores) -->
+        <a href="relatorios_gerais.php?print=true" target="_blank" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #fdf2f8; color: #db2777; padding: 10px; border-radius: 10px;">
+                 <i data-lucide="pie-chart" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Indicadores</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Relatório Geral</div>
             </div>
         </a>
     </div>

@@ -1174,6 +1174,33 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             .diary-content ul, .diary-content ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
             .diary-content li { margin-bottom: 4px; }
             .diary-content a { color: #6366f1; text-decoration: underline; }
+            
+            /* Truncation Logic */
+            .diary-content.truncated {
+                max-height: 120px;
+                overflow: hidden;
+                mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+                -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            }
+            .read-more-btn {
+                width: 100%;
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-top: none;
+                padding: 8px;
+                color: #6366f1;
+                font-weight: 600;
+                font-size: 0.85rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                border-radius: 0 0 12px 12px;
+                margin-top: 0;
+                transition: background 0.2s;
+            }
+            .read-more-btn:hover { background: #f1f5f9; }
         </style>
         
         <?php if(empty($reportData)): ?>
@@ -1241,10 +1268,19 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <h4 class="diary-title"><?= htmlspecialchars($rep['title']) ?></h4>
                 <?php endif; ?>
                 
-                <?php if($rep['comment']): ?>
-                <div class="diary-content" style="margin-top: 8px;">
+                <?php if($rep['comment']): 
+                    $cleanComment = strip_tags($rep['comment']);
+                    $isLong = mb_strlen($cleanComment) > 300 || substr_count($cleanComment, "\n") > 4;
+                    $uniqueId = 'diary-' . $rep['m'] . '-' . $rep['d'];
+                ?>
+                <div class="diary-content <?= $isLong ? 'truncated' : '' ?>" id="<?= $uniqueId ?>" style="margin-top: 8px;">
                     <?= $rep['comment'] ?>
                 </div>
+                <?php if($isLong): ?>
+                    <button onclick="toggleDiaryExpanded('<?= $uniqueId ?>', this)" class="read-more-btn">
+                        Ver tudo <i data-lucide="chevron-down" width="14"></i>
+                    </button>
+                <?php endif; ?>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
@@ -1598,6 +1634,20 @@ function insertLink() {
 }
 
 // Close emoji picker when clicking outside
+function toggleDiaryExpanded(id, btn) {
+    const el = document.getElementById(id);
+    if(el.classList.contains('truncated')) {
+        el.classList.remove('truncated');
+        btn.innerHTML = 'Ver menos <i data-lucide="chevron-up" width="14"></i>';
+        lucide.createIcons();
+    } else {
+        el.classList.add('truncated');
+        btn.innerHTML = 'Ver tudo <i data-lucide="chevron-down" width="14"></i>';
+        lucide.createIcons();
+        // Scroll back to card top if needed
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
 document.addEventListener('click', function(e) {
     const picker = document.getElementById('emoji-picker');
     const emojiBtn = document.getElementById('emoji-btn');
