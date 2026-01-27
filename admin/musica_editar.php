@@ -538,10 +538,43 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 
         <!-- Botões de Ação -->
         <div style="display: flex; gap: 12px; padding-bottom: 80px;">
-            <a href="musica_detalhe.php?id=<?= $id ?>" class="btn-action btn-secondary" style="flex: 1; text-decoration: none;">
+            <a href="musica_detalhe.php?id=<?= $id ?>" style="
+                flex: 1; 
+                text-decoration: none; 
+                padding: 14px 20px; 
+                border-radius: 12px; 
+                background: var(--bg-surface); 
+                border: 1px solid var(--border-color); 
+                color: var(--text-main); 
+                font-weight: 600; 
+                font-size: var(--font-body);
+                text-align: center;
+                transition: all 0.2s;
+                box-shadow: var(--shadow-sm);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)'">
                 Cancelar
             </a>
-            <button type="submit" class="btn-action btn-primary" style="flex: 2;">
+            <button type="submit" style="
+                flex: 2; 
+                padding: 14px 20px; 
+                border-radius: 12px; 
+                background: linear-gradient(135deg, var(--primary) 0%, #059669 100%); 
+                border: none; 
+                color: white; 
+                font-weight: 700; 
+                font-size: var(--font-body);
+                cursor: pointer;
+                transition: all 0.2s;
+                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(4, 120, 87, 0.4)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(4, 120, 87, 0.3)'">
                 <i data-lucide="save" style="width: 20px;"></i>
                 Salvar Alterações
             </button>
