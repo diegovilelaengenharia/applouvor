@@ -169,6 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 renderAppHeader('Editar Música');
+renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 ?>
 
 <style>
@@ -388,14 +389,6 @@ renderAppHeader('Editar Música');
 </style>
 
 <div class="compact-container">
-    <!-- Header -->
-    <div class="header-bar">
-        <a href="musica_detalhe.php?id=<?= $id ?>" class="btn-back">
-            <i data-lucide="arrow-left" style="width: 20px;"></i>
-        </a>
-        <h1 class="page-title">Editar Música</h1>
-    </div>
-
     <form method="POST">
         <!-- Card 1: Informações Principais -->
         <div class="form-card" style="--card-color: #3b82f6; --focus-shadow: rgba(59, 130, 246, 0.1);">
