@@ -113,6 +113,45 @@ if ($hora >= 5 && $hora < 12) {
 }
 $nomeUser = explode(' ', $_SESSION['user_name'])[0];
 
+// 5. Buscar configurações de dashboard do usuário
+require_once '../includes/dashboard_cards.php';
+$userDashboardSettings = [];
+try {
+    $stmt = $pdo->prepare("
+        SELECT card_id, is_visible, display_order 
+        FROM user_dashboard_settings 
+        WHERE user_id = ? AND is_visible = TRUE
+        ORDER BY display_order ASC
+    ");
+    $stmt->execute([$userId]);
+    $userDashboardSettings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Se não houver configurações, usar padrão
+    if (empty($userDashboardSettings)) {
+        $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversariantes', 'devocional', 'oracao'];
+        foreach ($defaultCards as $index => $cardId) {
+            $userDashboardSettings[] = [
+                'card_id' => $cardId,
+                'is_visible' => true,
+                'display_order' => $index + 1
+            ];
+        }
+    }
+} catch (Exception $e) {
+    // Fallback para cards padrão em caso de erro
+    $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversariantes', 'devocional', 'oracao'];
+    foreach ($defaultCards as $index => $cardId) {
+        $userDashboardSettings[] = [
+            'card_id' => $cardId,
+            'is_visible' => true,
+            'display_order' => $index + 1
+        ];
+    }
+}
+
+// Obter definições completas dos cards
+$allCardsDefinitions = getAllAvailableCards();
+
 renderAppHeader('Visão Geral');
 ?>
 
@@ -371,158 +410,29 @@ renderAppHeader('Visão Geral');
     <!-- QUICK ACCESS GRID -->
     <div class="quick-access-grid">
         
-        <!-- Card: Escalas -->
-        <a href="escalas.php" class="access-card card-blue">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Escalas</h3>
-                <p class="card-info">
-                    <?php if ($nextSchedule): 
-                        $date = new DateTime($nextSchedule['event_date']);
-                        echo $date->format('d/m') . ' - ' . htmlspecialchars($nextSchedule['event_type']);
-                    else: ?>
-                        Nenhuma escala próxima
-                    <?php endif; ?>
-                </p>
-            </div>
-            <?php if ($totalSchedules > 0): ?>
-                <span class="card-badge"><?= $totalSchedules ?></span>
-            <?php endif; ?>
-        </a>
-
-        <!-- Card: Repertório -->
-        <a href="repertorio.php" class="access-card card-purple">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="music" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Repertório</h3>
-                <p class="card-info">
-                    <?php if ($ultimaMusica): ?>
-                        <?= htmlspecialchars($ultimaMusica['title']) ?>
-                    <?php else: ?>
-                        Nenhuma música cadastrada
-                    <?php endif; ?>
-                </p>
-            </div>
-            <?php if ($totalMusicas > 0): ?>
-                <span class="card-badge"><?= $totalMusicas ?></span>
-            <?php endif; ?>
-        </a>
-
-        <!-- Card: Plano de Leitura -->
         <?php
-        require_once '../includes/reading_plan.php';
+        // Renderizar cards dinamicamente conforme configurações do usuário
+        require_once '../includes/dashboard_render.php';
         
-        $stmtSet = $pdo->prepare("SELECT setting_value FROM user_settings WHERE user_id = ? AND setting_key = 'reading_plan_start_date'");
-        $stmtSet->execute([$userId]);
-        $sDate = $stmtSet->fetchColumn() ?: date('Y-01-01');
+        // Preparar dados para renderização
+        $renderData = [
+            'pdo' => $pdo,
+            'userId' => $userId,
+            'nextSchedule' => $nextSchedule,
+            'totalSchedules' => $totalSchedules,
+            'ultimaMusica' => $ultimaMusica,
+            'totalMusicas' => $totalMusicas,
+            'ultimoAviso' => $ultimoAviso,
+            'unreadCount' => $unreadCount,
+            'niverCount' => $niverCount
+        ];
         
-        $startDateTime = new DateTime($sDate);
-        $nowDateTime = new DateTime();
-        $startDateTime->setTime(0,0,0); 
-        $nowDateTime->setTime(0,0,0);
-        
-        $daysSinceStart = (int)$startDateTime->diff($nowDateTime)->format('%r%a');
-        $planDayExpected = max(1, $daysSinceStart + 1); 
-        
-        $stmtProg = $pdo->prepare("SELECT month_num, day_num, verses_read FROM reading_progress WHERE user_id = ?");
-        $stmtProg->execute([$userId]);
-        $userProgress = [];
-        while($row = $stmtProg->fetch(PDO::FETCH_ASSOC)) {
-            $userProgress["{$row['month_num']}-{$row['day_num']}"] = json_decode($row['verses_read'], true) ?? [];
+        // Loop pelos cards configurados pelo usuário
+        foreach ($userDashboardSettings as $setting) {
+            renderDashboardCard($setting['card_id'], $renderData);
         }
-        
-        $displayDayGlobal = 1;
-        for ($d = 1; $d <= 365; $d++) {
-            $m = floor(($d - 1) / 25) + 1;
-            $dayInMonth = (($d - 1) % 25) + 1;
-            $dayVerses = $bibleReadingPlan[$m][$dayInMonth-1] ?? [];
-            $totalVersesCount = count($dayVerses);
-            $readVersesCount = count($userProgress["$m-$dayInMonth"] ?? []);
-            
-            if ($readVersesCount < $totalVersesCount) {
-                $displayDayGlobal = $d;
-                break;
-            }
-        }
-        
-        $curM = floor(($displayDayGlobal - 1) / 25) + 1;
-        $curD = (($displayDayGlobal - 1) % 25) + 1;
-        $targetVerses = $bibleReadingPlan[$curM][$curD-1] ?? [];
-        $readVersesList = $userProgress["$curM-$curD"] ?? [];
-        $readCount = count($readVersesList);
-        $totalCount = count($targetVerses);
-        $percentage = ($totalCount > 0) ? round(($readCount / $totalCount) * 100) : 0;
         ?>
-        <a href="leitura.php" class="access-card card-green">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="book-open" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Leitura</h3>
-                <p class="card-info">
-                    Dia <?= $curD ?> - <?= $readCount ?>/<?= $totalCount ?> lidos
-                </p>
-            </div>
-            <?php if ($percentage > 0): ?>
-                <span class="card-badge"><?= $percentage ?>%</span>
-            <?php endif; ?>
-        </a>
-
-        <!-- Card: Avisos -->
-        <a href="avisos.php" class="access-card card-orange">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="bell" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Avisos</h3>
-                <p class="card-info">
-                    <?php if ($totalAvisos > 0): ?>
-                        <?= htmlspecialchars($ultimoAviso) ?>
-                    <?php else: ?>
-                        Nenhum aviso novo
-                    <?php endif; ?>
-                </p>
-            </div>
-            <?php if ($unreadCount > 0): ?>
-                <span class="card-badge"><?= $unreadCount ?></span>
-            <?php endif; ?>
-        </a>
-
-        <!-- Card: Aniversariantes -->
-        <a href="aniversarios.php" class="access-card card-pink">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="cake" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Aniversariantes</h3>
-                <p class="card-info">
-                    <?php if ($niverCount > 0): ?>
-                        <?= $niverCount ?> aniversariante<?= $niverCount > 1 ? 's' : '' ?> este mês
-                    <?php else: ?>
-                        Nenhum aniversariante
-                    <?php endif; ?>
-                </p>
-            </div>
-            <?php if ($niverCount > 0): ?>
-                <span class="card-badge"><?= $niverCount ?></span>
-            <?php endif; ?>
-        </a>
-
-        <!-- Card: Devocional -->
-        <a href="devocional.php" class="access-card card-cyan">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="sunrise" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Devocional</h3>
-                <p class="card-info">Reflexão diária</p>
-            </div>
-        </a>
-
+        
         <!-- Card: Oração -->
         <a href="oracao.php" class="access-card card-violet">
             <div>
