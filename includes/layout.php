@@ -588,7 +588,7 @@ function renderAppHeader($title, $backUrl = null)
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 6px;
+                gap: 2px; /* Reduzido de 6px */
                 background: none;
                 border: none;
                 color: var(--text-muted);
@@ -596,7 +596,7 @@ function renderAppHeader($title, $backUrl = null)
                 font-weight: 600;
                 cursor: pointer;
                 transition: transform 0.2s, color 0.2s;
-                padding: 4px 12px;
+                padding: 8px 20px; /* Aumentado de 4px 12px para área de clique maior */
                 border-radius: 12px;
             }
 
