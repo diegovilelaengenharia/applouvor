@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS user_dashboard_settings (
     is_visible BOOLEAN DEFAULT TRUE,
     display_order INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY unique_user_card (user_id, card_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_user_visible (user_id, is_visible),
