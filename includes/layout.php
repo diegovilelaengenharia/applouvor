@@ -237,8 +237,8 @@ function renderAppHeader($title, $backUrl = null)
             .mobile-header {
                 display: none;
                 align-items: center;
-                gap: 16px;
-                padding: 16px 20px;
+                gap: 12px;
+                padding: 12px 16px;
                 background: var(--bg-surface);
                 position: sticky;
                 top: 0;
@@ -564,7 +564,7 @@ function renderAppHeader($title, $backUrl = null)
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
                 border-top: 1px solid var(--border-color);
-                padding: 12px 16px 12px 16px;
+                padding: 8px 12px 8px 12px;
                 /* Reduced bottom padding */
                 padding-bottom: max(12px, env(safe-area-inset-bottom));
                 /* Respect notch but default to tight */
@@ -766,6 +766,12 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                     Indisponibilidades
                 </a>
+                <a href="agenda.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
+                        <i data-lucide="calendar-clock"></i>
+                    </div>
+                    Agenda
+                </a>
             </div>
         </div>
 
@@ -834,6 +840,12 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="cake"></i>
                     </div>
                     Aniversários
+                </a>
+                <a href="chat.php" class="sheet-btn">
+                    <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+                    Chat
                 </a>
             </div>
         </div>

@@ -39,14 +39,14 @@ if (!empty($currentUser['avatar'])) {
 
 <div id="app-sidebar" class="sidebar">
     <!-- Cabeçalho Sidebar com Logo (Clicável para Recolher) -->
-    <div onclick="toggleSidebarDesktop()" style="padding: 24px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" title="Expandir/Recolher Menu">
+    <div onclick="toggleSidebarDesktop()" style="padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" title="Expandir/Recolher Menu">
         <div class="logo-area" style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
             <!-- Logo Imagem -->
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color:#047857;">PIB Oliveira</span>
-                <span class="sidebar-text" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">App Louvor</span>
+                <span class="sidebar-text" style="color:#047857; font-size: 0.95rem;">PIB Oliveira</span>
+                <span class="sidebar-text" style="font-size: 0.7rem; color: #64748b; font-weight: 600;">App Louvor</span>
             </div>
         </div>
     </div>
@@ -241,7 +241,7 @@ if (!empty($currentUser['avatar'])) {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px 16px;
+        padding: 10px 12px;
         /* Touch target melhor */
         border-radius: 8px;
         color: var(--sidebar-text);
