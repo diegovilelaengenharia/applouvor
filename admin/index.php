@@ -243,6 +243,18 @@ renderAppHeader('Visão Geral');
         background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
         border: 1px solid #fb923c;
     }
+    .card-pink { 
+        background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        border: 1px solid #f9a8d4;
+    }
+    .card-cyan { 
+        background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+        border: 1px solid #67e8f9;
+    }
+    .card-violet { 
+        background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+        border: 1px solid #d8b4fe;
+    }
 
     .card-icon {
         width: 40px;
@@ -265,6 +277,9 @@ renderAppHeader('Visão Geral');
     .card-purple .card-icon { color: #7c3aed; }
     .card-green .card-icon { color: #059669; }
     .card-orange .card-icon { color: #ea580c; }
+    .card-pink .card-icon { color: #db2777; }
+    .card-cyan .card-icon { color: #0891b2; }
+    .card-violet .card-icon { color: #7c3aed; }
 
     .card-title {
         font-size: var(--font-body);
@@ -346,11 +361,7 @@ renderAppHeader('Visão Geral');
 </style>
 
 <div style="max-width: 600px; margin: 0 auto;">
-    
-    <!-- HERO SECTION -->
-    <div class="hero-section">
-        <h1 class="hero-greeting"><?= $saudacao ?></h1>
-    </div>
+
 
     <!-- QUICK ACCESS GRID -->
     <div class="quick-access-grid">
@@ -476,34 +487,49 @@ renderAppHeader('Visão Geral');
             <?php endif; ?>
         </a>
 
+        <!-- Card: Aniversariantes -->
+        <a href="aniversarios.php" class="access-card card-pink">
+            <div>
+                <div class="card-icon">
+                    <i data-lucide="cake" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="card-title">Aniversariantes</h3>
+                <p class="card-info">
+                    <?php if ($niverCount > 0): ?>
+                        <?= $niverCount ?> aniversariante<?= $niverCount > 1 ? 's' : '' ?> este mês
+                    <?php else: ?>
+                        Nenhum aniversariante
+                    <?php endif; ?>
+                </p>
+            </div>
+            <?php if ($niverCount > 0): ?>
+                <span class="card-badge"><?= $niverCount ?></span>
+            <?php endif; ?>
+        </a>
+
+        <!-- Card: Devocional -->
+        <a href="devocional.php" class="access-card card-cyan">
+            <div>
+                <div class="card-icon">
+                    <i data-lucide="sunrise" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="card-title">Devocional</h3>
+                <p class="card-info">Reflexão diária</p>
+            </div>
+        </a>
+
+        <!-- Card: Oração -->
+        <a href="oracao.php" class="access-card card-violet">
+            <div>
+                <div class="card-icon">
+                    <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="card-title">Oração</h3>
+                <p class="card-info">Pedidos e intercessão</p>
+            </div>
+        </a>
+
     </div>
 
-
-
-    <!-- DESTAQUES: Aniversariantes -->
-    <?php if ($niverCount > 0): ?>
-        <div class="section-title">
-            <span>Aniversariantes do Mês</span>
-            <a href="aniversarios.php" class="section-action">Ver todos</a>
-        </div>
-        
-        <?php 
-        $maxNivers = min(3, $niverCount);
-        for ($i = 0; $i < $maxNivers; $i++): 
-            $niver = $aniversariantes[$i];
-        ?>
-            <a href="aniversarios.php" class="highlight-card" style="margin-bottom: 8px;">
-                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); border-radius: 12px; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-weight: 800; font-size: var(--font-h3); line-height: 1;"><?= $niver['dia'] ?></span>
-                </div>
-                <div style="flex: 1;">
-                    <h4 style="margin: 0; font-size: var(--font-body); font-weight: 700; color: var(--text-main);">
-                        <?= htmlspecialchars($niver['name']) ?>
-                    </h4>
-                    <span style="font-size: var(--font-caption); color: #db2777;">Parabéns! 🎉</span>
-                </div>
-            </a>
-        <?php endfor; ?>
-    <?php endif; ?>
 
 <?php renderAppFooter(); ?>
