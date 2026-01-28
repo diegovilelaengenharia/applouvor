@@ -482,7 +482,7 @@ function renderAppHeader($title, $backUrl = null)
                             display: none; position: absolute; top: 54px; right: 0; 
                             background: var(--bg-surface); border-radius: 16px; 
                             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-                            min-width: 260px; z-index: 2000; border: 1px solid var(--border-color); overflow: hidden;
+                            min-width: 200px; z-index: 2000; border: 1px solid var(--border-color); overflow: hidden;
                             animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
                             transform-origin: top right;
                         ">
@@ -498,43 +498,42 @@ function renderAppHeader($title, $backUrl = null)
                             </div>
                             <!-- Compacted Header Mobile -->
 
-                            <!-- Menu Itens -->
-                            <div style="padding: 12px;">
-                                <a href="perfil.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
-                                        <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                            <div style="padding: 8px;">
+                                <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
+                                        <i data-lucide="user" style="width: 16px; height: 16px;"></i>
                                     </div>
                                     <span style="font-weight: 500;">Meu Perfil</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                                    <a href="lider.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                        <div style="background: #fff7ed; padding: 8px; border-radius: 8px; display: flex; color: #d97706;">
-                                            <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
+                                    <a href="lider.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                        <div style="background: #fff7ed; padding: 6px; border-radius: 6px; display: flex; color: #d97706;">
+                                            <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
                                         </div>
                                         <span style="font-weight: 500;">Painel do Líder</span>
                                     </a>
                                 <?php endif; ?>
 
                                 <!-- Dark Mode Toggle -->
-                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
-                                        <i data-lucide="moon" style="width: 18px; height: 18px;"></i>
+                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
+                                        <i data-lucide="moon" style="width: 16px; height: 16px;"></i>
                                     </div>
                                     <span style="font-weight: 500;">Modo Escuro</span>
                                     <div style="margin-left: auto;">
-                                        <label class="toggle-switch-mini">
+                                        <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
                                             <input type="checkbox" id="darkModeToggleMobile" onchange="toggleThemeMode()">
                                             <span class="slider-mini round"></span>
                                         </label>
                                     </div>
                                 </div>
 
-                                <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
+                                <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
 
-                                <a href="../logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #ef4444; font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #fee2e2; padding: 8px; border-radius: 8px; display: flex; color: #ef4444;">
-                                        <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+                                <a href="../logout.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: #ef4444; font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #fee2e2; padding: 6px; border-radius: 6px; display: flex; color: #ef4444;">
+                                        <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
                                     </div>
                                     <span style="font-weight: 600;">Sair da Conta</span>
                                 </a>
@@ -1158,7 +1157,7 @@ function renderAppHeader($title, $backUrl = null)
                     display: none; position: absolute; top: 54px; right: 0; 
                     background: var(--bg-surface); border-radius: 16px; 
                     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-                    min-width: 260px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
+                    min-width: 200px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
                     animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
                     transform-origin: top right;
                 ">
@@ -1174,61 +1173,58 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                     <!-- Compacted Header Desktop -->
 
-                    <!-- Menu Itens -->
-                    <div style="padding: 12px;">
-                        <a href="perfil.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            </div>
-                            <span style="font-weight: 500;">Meu Perfil</span>
-                        </a>
+                            <div style="padding: 8px;">
+                                <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                            <circle cx="12" cy="7" r="4" />
+                                        </svg>
+                                    </div>
+                                    <span style="font-weight: 500;">Meu Perfil</span>
+                                </a>
 
-                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <a href="lider.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                <div style="background: #fff7ed; padding: 8px; border-radius: 8px; display: flex; color: #d97706;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
-                                        <path d="M5 16v4h14v-4" />
-                                    </svg>
+                                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                                    <a href="lider.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                        <div style="background: #fff7ed; padding: 6px; border-radius: 6px; display: flex; color: #d97706;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
+                                                <path d="M5 16v4h14v-4" />
+                                            </svg>
+                                        </div>
+                                        <span style="font-weight: 500;">Painel do Líder</span>
+                                    </a>
+                                <?php endif; ?>
+
+                                <!-- Dark Mode Toggle -->
+                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                                        </svg>
+                                    </div>
+                                    <span style="font-weight: 500;">Modo Escuro</span>
+                                    <div style="margin-left: auto;">
+                                        <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
+                                            <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
+                                            <span class="slider-mini round"></span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <span style="font-weight: 500;">Painel do Líder</span>
-                            </a>
-                        <?php endif; ?>
 
+                                <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
 
-
-                        <!-- Dark Mode Toggle -->
-                        <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; color: var(--text-main); font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; display: flex; color: #64748b;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-                                </svg>
+                                <a href="../logout.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: #ef4444; font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #fee2e2; padding: 6px; border-radius: 6px; display: flex; color: #ef4444;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                            <polyline points="16 17 21 12 16 7" />
+                                            <line x1="21" x2="9" y1="12" y2="12" />
+                                        </svg>
+                                    </div>
+                                    <span style="font-weight: 600;">Sair da Conta</span>
+                                </a>
                             </div>
-                            <span style="font-weight: 500;">Modo Escuro</span>
-                            <div style="margin-left: auto;">
-                                <label class="toggle-switch-mini">
-                                    <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
-                                    <span class="slider-mini round"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
-
-                        <a href="../logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: #ef4444; font-size: 0.9rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
-                            <div style="background: #fee2e2; padding: 8px; border-radius: 8px; display: flex; color: #ef4444;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                    <polyline points="16 17 21 12 16 7" />
-                                    <line x1="21" x2="9" y1="12" y2="12" />
-                                </svg>
-                            </div>
-                            <span style="font-weight: 600;">Sair da Conta</span>
-                        </a>
-                    </div>
                 </div>
             </div>
 
