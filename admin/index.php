@@ -163,19 +163,19 @@ renderAppHeader('Visão Geral');
 <style>
     /* Hero Section */
     .hero-section {
-        background: linear-gradient(135deg, #047857 0%, #059669 100%);
-        padding: 32px 20px;
-        margin: -20px -20px 24px -20px;
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        padding: 24px 20px;
+        margin: -20px -20px 20px -20px;
         color: white;
-        border-radius: 0 0 24px 24px;
-        box-shadow: 0 10px 30px rgba(4, 120, 87, 0.2);
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
     }
 
     .hero-greeting {
-        font-size: var(--font-h1);
-        font-weight: 800;
-        margin: 0 0 8px 0;
-        letter-spacing: -0.02em;
+        font-size: var(--font-h2);
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.01em;
     }
 
     .hero-subtitle {
@@ -188,20 +188,20 @@ renderAppHeader('Visão Geral');
     .quick-access-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-        margin-bottom: 32px;
+        gap: 12px;
+        margin-bottom: 24px;
     }
 
     .access-card {
         position: relative;
-        padding: 20px;
-        border-radius: 20px;
+        padding: 16px;
+        border-radius: 16px;
         text-decoration: none;
-        color: white;
+        color: #1f2937;
         overflow: hidden;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        min-height: 140px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        min-height: 110px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -214,7 +214,7 @@ renderAppHeader('Visão Geral');
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         transition: left 0.5s;
     }
 
@@ -226,25 +226,48 @@ renderAppHeader('Visão Geral');
         left: 100%;
     }
 
-    .card-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-    .card-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
-    .card-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .card-orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    /* Cores Pastéis Suaves */
+    .card-blue { 
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border: 1px solid #93c5fd;
+    }
+    .card-purple { 
+        background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+        border: 1px solid #c4b5fd;
+    }
+    .card-green { 
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border: 1px solid #6ee7b7;
+    }
+    .card-orange { 
+        background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+        border: 1px solid #fb923c;
+    }
 
     .card-icon {
-        width: 48px;
-        height: 48px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 14px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
+    .card-icon i {
+        color: currentColor;
+    }
+
+    .card-blue .card-icon { color: #2563eb; }
+    .card-purple .card-icon { color: #7c3aed; }
+    .card-green .card-icon { color: #059669; }
+    .card-orange .card-icon { color: #ea580c; }
+
     .card-title {
-        font-size: var(--font-h3);
+        font-size: var(--font-body);
         font-weight: 700;
         margin: 0 0 4px 0;
         letter-spacing: -0.01em;
@@ -252,29 +275,29 @@ renderAppHeader('Visão Geral');
 
     .card-info {
         font-size: var(--font-body-sm);
-        opacity: 0.9;
+        opacity: 0.75;
         margin: 0;
-        line-height: 1.4;
+        line-height: 1.3;
     }
 
     .card-badge {
         position: absolute;
-        top: 16px;
-        right: 16px;
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(10px);
-        padding: 4px 10px;
-        border-radius: 12px;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 3px 8px;
+        border-radius: 10px;
         font-size: var(--font-caption);
         font-weight: 700;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: inherit;
     }
 
     .section-title {
         font-size: var(--font-h3);
         font-weight: 700;
         color: var(--text-main);
-        margin: 0 0 16px 0;
+        margin: 0 0 12px 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -289,11 +312,11 @@ renderAppHeader('Visão Geral');
 
     .highlight-card {
         background: var(--bg-surface);
-        border-radius: 16px;
-        padding: 16px;
+        border-radius: 14px;
+        padding: 14px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow-sm);
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -307,8 +330,8 @@ renderAppHeader('Visão Geral');
     }
 
     .highlight-icon {
-        width: 48px;
-        height: 48px;
+        width: 44px;
+        height: 44px;
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -317,8 +340,8 @@ renderAppHeader('Visão Geral');
     }
 
     @media (max-width: 375px) {
-        .quick-access-grid { gap: 12px; }
-        .access-card { min-height: 130px; padding: 16px; }
+        .quick-access-grid { gap: 10px; }
+        .access-card { min-height: 100px; padding: 14px; }
     }
 </style>
 
@@ -326,8 +349,7 @@ renderAppHeader('Visão Geral');
     
     <!-- HERO SECTION -->
     <div class="hero-section">
-        <h1 class="hero-greeting"><?= $saudacao ?>, <?= $nomeUser ?>!</h1>
-        <p class="hero-subtitle">Confira suas atividades e acesse rapidamente o que precisa</p>
+        <h1 class="hero-greeting"><?= $saudacao ?></h1>
     </div>
 
     <!-- QUICK ACCESS GRID -->
@@ -456,77 +478,11 @@ renderAppHeader('Visão Geral');
 
     </div>
 
-    <!-- DESTAQUES: Próxima Escala -->
-    <?php if ($nextSchedule): 
-        $date = new DateTime($nextSchedule['event_date']);
-        $monthName = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
-    ?>
-        <div class="section-title">
-            <span>Próxima Escala</span>
-            <a href="escalas.php" class="section-action">Ver todas</a>
-        </div>
-        
-        <a href="escala_detalhe.php?id=<?= $nextSchedule['id'] ?>" class="highlight-card">
-            <div style="
-                display: flex; flex-direction: column; align-items: center; justify-content: center;
-                width: 50px; height: 56px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
-                border-radius: 12px; color: white; text-align: center; line-height: 1; flex-shrink: 0;
-            ">
-                <span style="font-size: var(--font-h2); font-weight: 800;"><?= $date->format('d') ?></span>
-                <span style="font-size: var(--font-caption); font-weight: 700; text-transform: uppercase; padding-top: 2px;"><?= $monthName ?></span>
-            </div>
 
-            <div style="flex: 1;">
-                <h4 style="margin: 0; font-size: var(--font-h3); font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
-                <div style="font-size: var(--font-body-sm); color: var(--text-muted); margin-top: 4px;">
-                    <?= $date->format('H:i') ?> • <?= $nextSchedule['location'] ?? 'Local não definido' ?>
-                </div>
-            </div>
-
-            <div style="color: var(--text-muted);">
-                <i data-lucide="chevron-right" style="width: 20px;"></i>
-            </div>
-        </a>
-    <?php endif; ?>
-
-    <!-- DESTAQUES: Aviso Importante -->
-    <?php if ($totalAvisos > 0 && (!$popupAviso || $avisos[0]['priority'] !== 'urgent')): 
-        $topAviso = $avisos[0];
-        $pColors = [
-            'urgent' => ['bg' => '#fef2f2', 'icon_bg' => '#ef4444'],
-            'important' => ['bg' => '#fffbeb', 'icon_bg' => '#f59e0b'],
-            'info' => ['bg' => '#fff7ed', 'icon_bg' => '#fb923c'],
-            'event' => ['bg' => '#f0f9ff', 'icon_bg' => '#0ea5e9'],
-            'general' => ['bg' => '#f8fafc', 'icon_bg' => '#cbd5e1'],
-        ];
-        
-        $typeKey = $topAviso['priority'] === 'urgent' ? 'urgent' : ($topAviso['priority'] === 'important' ? 'important' : 'info');
-        if($topAviso['type'] === 'event') $typeKey = 'event';
-        $st = $pColors[$typeKey] ?? $pColors['general'];
-    ?>
-        <div class="section-title" style="margin-top: 24px;">
-            <span>Avisos Recentes</span>
-            <a href="avisos.php" class="section-action">Ver todos</a>
-        </div>
-        
-        <a href="avisos.php" class="highlight-card" style="background: <?= $st['bg'] ?>;">
-            <div class="highlight-icon" style="background: <?= $st['icon_bg'] ?>; color: white;">
-                <i data-lucide="<?= $topAviso['type'] === 'event' ? 'calendar' : 'bell' ?>" style="width: 24px;"></i>
-            </div>
-            <div style="flex: 1;">
-                <h4 style="margin: 0; font-size: var(--font-h3); font-weight: 700; color: var(--text-main);">
-                    <?= htmlspecialchars($topAviso['title']) ?>
-                </h4>
-                <div style="margin: 4px 0 0 0; font-size: var(--font-body-sm); color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                    <?= strip_tags($topAviso['message']) ?>
-                </div>
-            </div>
-        </a>
-    <?php endif; ?>
 
     <!-- DESTAQUES: Aniversariantes -->
     <?php if ($niverCount > 0): ?>
-        <div class="section-title" style="margin-top: 24px;">
+        <div class="section-title">
             <span>Aniversariantes do Mês</span>
             <a href="aniversarios.php" class="section-action">Ver todos</a>
         </div>
