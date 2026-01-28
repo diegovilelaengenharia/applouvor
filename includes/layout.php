@@ -760,12 +760,6 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                     Repertório
                 </a>
-                <a href="membros.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
-                        <i data-lucide="users"></i>
-                    </div>
-                    Membros
-                </a>
                 <a href="indisponibilidade.php" class="sheet-btn">
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="calendar-x"></i>

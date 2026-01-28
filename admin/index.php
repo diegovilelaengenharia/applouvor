@@ -226,34 +226,37 @@ renderAppHeader('Visão Geral');
         left: 100%;
     }
 
-    /* Cores Pastéis Suaves */
+    /* Cores seguindo padrão da barra de navegação */
+    /* GESTÃO (Verde) - Escalas, Repertório */
     .card-blue { 
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-        border: 1px solid #93c5fd;
-    }
-    .card-purple { 
-        background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
-        border: 1px solid #c4b5fd;
-    }
-    .card-green { 
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
         border: 1px solid #6ee7b7;
     }
-    .card-orange { 
-        background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
-        border: 1px solid #fb923c;
+    .card-purple { 
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 1px solid #6ee7b7;
     }
-    .card-pink { 
-        background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-        border: 1px solid #f9a8d4;
+    /* ESPÍRITO (Índigo) - Leitura, Devocional, Oração */
+    .card-green { 
+        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        border: 1px solid #a5b4fc;
     }
     .card-cyan { 
-        background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
-        border: 1px solid #67e8f9;
+        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        border: 1px solid #a5b4fc;
     }
     .card-violet { 
-        background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-        border: 1px solid #d8b4fe;
+        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        border: 1px solid #a5b4fc;
+    }
+    /* COMUNICA (Laranja) - Avisos, Aniversariantes */
+    .card-orange { 
+        background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        border: 1px solid #fdba74;
+    }
+    .card-pink { 
+        background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        border: 1px solid #fdba74;
     }
 
     .card-icon {
@@ -273,13 +276,13 @@ renderAppHeader('Visão Geral');
         color: currentColor;
     }
 
-    .card-blue .card-icon { color: #2563eb; }
-    .card-purple .card-icon { color: #7c3aed; }
-    .card-green .card-icon { color: #059669; }
+    .card-blue .card-icon { color: #047857; }
+    .card-purple .card-icon { color: #047857; }
+    .card-green .card-icon { color: #4338ca; }
     .card-orange .card-icon { color: #ea580c; }
-    .card-pink .card-icon { color: #db2777; }
-    .card-cyan .card-icon { color: #0891b2; }
-    .card-violet .card-icon { color: #7c3aed; }
+    .card-pink .card-icon { color: #ea580c; }
+    .card-cyan .card-icon { color: #4338ca; }
+    .card-violet .card-icon { color: #4338ca; }
 
     .card-title {
         font-size: var(--font-body);
@@ -359,6 +362,8 @@ renderAppHeader('Visão Geral');
         .access-card { min-height: 100px; padding: 14px; }
     }
 </style>
+
+<?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
 
 <div style="max-width: 600px; margin: 0 auto;">
 
