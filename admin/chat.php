@@ -124,6 +124,7 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             overflow-y: auto;
             overflow-x: hidden;
             padding: 16px;
+            padding-bottom: 80px; /* Espaço para o input fixo */
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -131,98 +132,15 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             scroll-behavior: auto; 
             -webkit-overflow-scrolling: touch;
         }
-
-        .message-row {
-            display: flex;
-            width: 100%;
-            margin-bottom: 2px;
-        }
-
-        .message-row.own {
-            justify-content: flex-end;
-        }
-
-        .message-bubble {
-            max-width: 80%;
-            padding: 6px 7px 8px 9px;
-            border-radius: 7.5px;
-            font-size: 0.95rem;
-            line-height: 1.3;
-            position: relative;
-            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-            word-wrap: break-word;
-        }
-
-        /* Others Message */
-        .message-row:not(.own) .message-bubble {
-            background-color: #ffffff;
-            border-top-left-radius: 0;
-            margin-left: 8px; /* Space for triangle */
-        }
         
-        .message-row:not(.own) .message-bubble::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -8px;
-            width: 0;
-            height: 0;
-            border: 8px solid transparent;
-            border-top-color: #ffffff;
-            border-right-color: #ffffff;
-            border-bottom: 0;
-            margin-left: 0;
-        }
-
-        /* Own Message */
-        .message-row.own .message-bubble {
-            background-color: #d9fdd3; /* WhatsApp Light Green */
-            border-top-right-radius: 0;
-            margin-right: 8px;
-        }
-
-        .message-row.own .message-bubble::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: -8px;
-            width: 0;
-            height: 0;
-            border: 8px solid transparent;
-            border-top-color: #d9fdd3;
-            border-left-color: #d9fdd3;
-            border-bottom: 0;
-            margin-right: 0;
-        }
-
-        .msg-author-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-            display: block;
-        }
-
-        .msg-text {
-            color: #111b21;
-            white-space: pre-wrap;
-        }
-
-        .msg-meta {
-            float: right;
-            margin-left: 8px;
-            margin-top: 6px;
-            font-size: 0.68rem;
-            color: rgba(17, 27, 33, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            line-height: 1;
-            position: relative;
-            top: 4px;
-        }
+        /* ... Styles intermediários ... */
 
         /* INPUT AREA */
         .input-container {
+            position: fixed; /* Fixar no rodapé */
+            bottom: 0;
+            left: 0;
+            right: 0;
             flex-shrink: 0;
             padding: 8px 10px;
             background-color: #f0f2f5;
@@ -230,7 +148,8 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             align-items: flex-end; /* Align bottom for multiline */
             gap: 8px;
             padding-bottom: max(8px, env(safe-area-inset-bottom));
-            z-index: 10;
+            z-index: 1000; /* Z-index alto */
+            box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
         }
 
         .input-box {
