@@ -1024,10 +1024,7 @@ function renderAppHeader($title, $backUrl = null)
                         return;
                     }
 
-                    // ... OU Abrir Chat se sidebar fechada e NÃO estiver no chat
-                    if (diff < -swipeThreshold && !isSidebarOpen && !isChatPage) {
-                        window.location.href = 'chat.php';
-                    }
+                    // Se sidebar fechada, deixar o Drawer Logic (mais abaixo) lidar com o Chat
                 }
 
                 function toggleSidebar() {
