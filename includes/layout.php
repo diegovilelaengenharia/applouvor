@@ -1007,15 +1007,26 @@ function renderAppHeader($title, $backUrl = null)
                 });
 
                 function handleSidebarSwipe() {
-                    const swipeThreshold = 100; // Swipe mais longo para evitar acidentes
+                    const swipeThreshold = 80; // Sensibilidade do swipe
                     const diff = touchEndX - touchStartX;
                     const isSidebarOpen = sidebar.classList.contains('active');
+                    const isChatPage = window.location.pathname.includes('chat.php');
 
+                    // Swipe Right (Esquerda -> Direita): Abrir Sidebar
+                    // Apenas se começar perto da borda esquerda (< 50px) e sidebar fechada
                     if (diff > swipeThreshold && touchStartX < 50 && !isSidebarOpen) {
                         toggleSidebar();
                     }
+                    
+                    // Swipe Left (Direita -> Esquerda): Fechar Sidebar se aberta...
                     if (diff < -swipeThreshold && isSidebarOpen) {
                         toggleSidebar();
+                        return;
+                    }
+
+                    // ... OU Abrir Chat se sidebar fechada e NÃO estiver no chat
+                    if (diff < -swipeThreshold && !isSidebarOpen && !isChatPage) {
+                        window.location.href = 'chat.php';
                     }
                 }
 
