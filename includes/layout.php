@@ -1323,9 +1323,62 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Main Script & Gestures (Legacy includes kept) -->
         <script src="/assets/js/main.js"></script>
         <script src="/assets/js/gestures.js"></script>
-    </body>
+    <!-- PWA Install Script (Global) -->
+    <script>
+        // Check for Service Worker Support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js') // Absolute path
+                    .then(reg => console.log('SW Registered!', reg))
+                    .catch(err => console.log('SW Registration Failed', err));
+            });
+        }
 
-    </html>
+        // Install Button Logic
+        let deferredPrompt;
+        const btnInstall = document.getElementById('btnInstallSidebar'); // Target button in Sidebar
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('Install prompt captured (Layout)');
+            
+            // Show button if hidden
+            if (btnInstall) {
+                 btnInstall.style.display = 'flex';
+                 const textSpan = btnInstall.querySelector('.sidebar-text');
+                 if(textSpan) textSpan.textContent = 'Instalar App';
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+             console.log('App Installed');
+             if (btnInstall) btnInstall.style.display = 'none';
+        });
+
+        // Function called by the button
+        window.installPWA = async function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                }
+            } else {
+                // Manual Instructions
+                const userAgent = navigator.userAgent.toLowerCase();
+                 // iOS
+                if (/iphone|ipad|ipod/.test(userAgent)) {
+                     alert('📱 Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com seta)\n2. Role para baixo e toque em "Adicionar à Tela de Início"');
+                } else {
+                    // Android / Other fallback
+                    alert('📱 Para instalar:\n\nToque no menu do navegador (3 pontinhos) e selecione "Instalar aplicativo" ou "Adicionar à tela inicial".');
+                }
+            }
+        };
+    </script>
+</body>
+</html>
 <?php
     }
 
