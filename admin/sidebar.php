@@ -99,7 +99,7 @@ if (!empty($currentUser['avatar'])) {
                 <path d="M3 10h18" />
                 <path d="m2 2 20 20" />
             </svg>
-            <span class="sidebar-text">Ausências de Escala</span>
+            <span class="sidebar-text">Ausências</span>
         </a>
 
         <a href="agenda.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'active' : '' ?>">
