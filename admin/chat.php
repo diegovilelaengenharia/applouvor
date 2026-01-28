@@ -1,5 +1,5 @@
 <?php
-// admin/chat.php - Versão Style WhatsApp
+// admin/chat.php - Versão Style WhatsApp Final com Ajustes
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 
@@ -124,20 +124,109 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             overflow-y: auto;
             overflow-x: hidden;
             padding: 16px;
-            padding-bottom: 80px; /* Espaço para o input fixo */
+            padding-bottom: 80px; /* Space for input fixed */
             display: flex;
             flex-direction: column;
             gap: 4px;
-            /* Scroll smooth */
             scroll-behavior: auto; 
             -webkit-overflow-scrolling: touch;
         }
+
+        .message-row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+        .message-row.own {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 6px 7px 8px 9px;
+            border-radius: 7.5px;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            position: relative;
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+            word-wrap: break-word;
+            display: inline-block; /* Permite float do meta */
+        }
+
+        /* Others Message */
+        .message-row:not(.own) .message-bubble {
+            background-color: #ffffff;
+            border-top-left-radius: 0;
+            margin-left: 8px; /* Space for triangle */
+        }
         
-        /* ... Styles intermediários ... */
+        .message-row:not(.own) .message-bubble::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -8px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-top-color: #ffffff;
+            border-right-color: #ffffff;
+            border-bottom: 0;
+            margin-left: 0;
+        }
+
+        /* Own Message */
+        .message-row.own .message-bubble {
+            background-color: #d9fdd3; /* WhatsApp Light Green */
+            border-top-right-radius: 0;
+            margin-right: 8px;
+        }
+
+        .message-row.own .message-bubble::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -8px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-top-color: #d9fdd3;
+            border-left-color: #d9fdd3;
+            border-bottom: 0;
+            margin-right: 0;
+        }
+
+        .msg-author-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .msg-text {
+            color: #111b21;
+            white-space: pre-wrap;
+        }
+
+        .msg-meta {
+            float: right;
+            margin-left: 10px;
+            margin-top: 4px;
+            margin-bottom: -4px;
+            font-size: 0.68rem;
+            color: rgba(17, 27, 33, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            line-height: 1;
+            /* vertical-align: bottom; Removido pois é flex */
+            position: relative;
+            top: 2px;
+        }
 
         /* INPUT AREA */
         .input-container {
-            position: fixed; /* Fixar no rodapé */
+            position: fixed; /* Fixed bottom */
             bottom: 0;
             left: 0;
             right: 0;
@@ -148,7 +237,7 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             align-items: flex-end; /* Align bottom for multiline */
             gap: 8px;
             padding-bottom: max(8px, env(safe-area-inset-bottom));
-            z-index: 1000; /* Z-index alto */
+            z-index: 1000;
             box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
         }
 
@@ -223,7 +312,7 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
 <body>
     <div class="chat-wrapper">
         <div class="chat-header">
-            <button class="back-btn" onclick="window.location.href='index.php'">
+            <button class="back-btn" onclick="window.history.length > 2 ? window.history.back() : window.location.href='index.php'">
                 <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
             </button>
             <div class="header-info">
@@ -262,7 +351,7 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
                             <span class="msg-meta">
                                 <?= $time ?>
                                 <?php if($isOwn): ?>
-                                    <i data-lucide="check-check" style="width: 14px; color: #53bdeb;"></i>
+                                    <i data-lucide="check-check" style="width: 15px; color: #53bdeb;"></i>
                                 <?php endif; ?>
                             </span>
                         </div>
@@ -341,9 +430,6 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
                 });
 
                 if (response.ok) {
-                    // Success (o loadMessages vai confirmar e substituir ou duplicar, 
-                    // ideal seria substituir o temp, mas o loadMessages lida via ID)
-                    // Para simplificar, vamos remover o temporário quando carregar o real
                     tempDiv.remove(); 
                     loadMessages();
                 } else {
@@ -385,13 +471,12 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
                         <span class="msg-text">${msg.message.replace(/\n/g, '<br>')}</span>
                         <span class="msg-meta">
                             ${time}
-                            ${isOwn ? '<i data-lucide="check-check" style="width: 14px; color: #53bdeb;"></i>' : ''}
+                            ${isOwn ? '<i data-lucide="check-check" style="width: 15px; color: #53bdeb;"></i>' : ''}
                         </span>
                     </div>`;
                     
                     messageDiv.innerHTML = html;
 
-                    // Remover empty state se existir
                     const emptyState = messagesArea.querySelector('.empty-state');
                     if (emptyState) emptyState.remove();
 
@@ -412,12 +497,33 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
         // Inicializar ícones
         lucide.createIcons();
 
-        // Fix para teclado no mobile (scroll to bottom quando focar)
+        // Fix para teclado no mobile
         messageInput.addEventListener('focus', () => {
             setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
                 messagesArea.scrollTop = messagesArea.scrollHeight;
             }, 300);
         });
+
+        // Swipe Right to Go Back (Gestures simples para voltar)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (touchEndX - touchStartX > 100 && touchStartX < 50) {
+                // Swipe from left edge -> Back
+                window.history.back();
+            }
+        }
     </script>
 </body>
 </html>
