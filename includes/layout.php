@@ -1050,13 +1050,165 @@ function renderAppHeader($title, $backUrl = null)
                         }
                     }
                 }
+        <!-- Chat Drawer (Iframe) -->
+        <div id="chat-drawer">
+            <iframe id="chat-frame" src="about:blank"></iframe>
+        </div>
+
+        <style>
+            #chat-drawer {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                background: #efeae2;
+                z-index: 2500;
+                transform: translateX(100%);
+                transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1);
+                will-change: transform;
+                box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            }
+            #chat-drawer.open {
+                transform: translateX(0);
+            }
+            #chat-drawer.dragging {
+                transition: none;
+            }
+            #chat-frame {
+                width: 100%;
+                height: 100%;
+                border: none;
+                display: block;
+            }
+        </style>
+
+        <!-- Sidebar & Gestures Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // ... (Initializations) ...
+                const sidebar = document.getElementById('app-sidebar');
+                const chatDrawer = document.getElementById('chat-drawer');
+                const chatFrame = document.getElementById('chat-frame');
+                let chatLoaded = false;
+
+                // TOUCH LOGIC
+                let touchStartX = 0;
+                let touchCurrentX = 0;
+                let isDraggingChat = false;
+                let isDraggingSidebar = false;
+                
+                // OPEN CHAT (Drag Left from Right Edge)
+                document.addEventListener('touchstart', e => {
+                    touchStartX = e.touches[0].clientX;
+                    
+                    // Zone Checks
+                    const screenW = window.innerWidth;
+                    
+                    // Right Edge (Open Chat)
+                    if (touchStartX > screenW - 50 && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
+                        isDraggingChat = true;
+                        chatDrawer.classList.add('dragging');
+                        // Load chat if needed
+                        if (!chatLoaded) {
+                            chatFrame.src = 'chat.php';
+                            chatLoaded = true;
+                        }
+                    }
+                }, {passive: true});
+
+                document.addEventListener('touchmove', e => {
+                    if (!isDraggingChat) return;
+                    
+                    touchCurrentX = e.touches[0].clientX;
+                    const diff = touchCurrentX - touchStartX; // Negative when dragging left
+                    
+                    // Logic: transform starts at 100% (hidden right). 
+                    // We want to reduce translateX from 100% to 0%.
+                    // 100% = screenW px.
+                    // Drawer moves left.
+                    
+                    if (diff < 0) {
+                        // Dragging In
+                        // Translate should be: 100% + diff (pixels)
+                        // But CSS uses usually %. Let's use pixels for performance or % 
+                        // Easier: translateX( calc(100% + diff px) )
+                        // Since diff is negative, it subtracts.
+                        
+                        // Limit to 0 (fully open)
+                        // Actually, we want to map [ScreenW -> 0]
+                        const percentage = 100 + (diff / window.innerWidth * 100);
+                        const clamped = Math.max(0, percentage);
+                        chatDrawer.style.transform = `translateX(${clamped}%)`;
+                    }
+                }, {passive: true});
+
+                document.addEventListener('touchend', e => {
+                    if (isDraggingChat) {
+                        isDraggingChat = false;
+                        chatDrawer.classList.remove('dragging');
+                        chatDrawer.style.transform = ''; // Clear inline style to revert to class
+
+                        // Decision
+                        const diff = touchCurrentX - touchStartX;
+                        if (diff < -80) { // Dragged enough left
+                            openChatDrawer();
+                        } else {
+                            closeChatDrawer();
+                        }
+                    }
+                });
+
+                // Functions to be called globally or via Child
+                window.openChatDrawer = function() {
+                    chatDrawer.classList.add('open');
+                    if (!chatLoaded) {
+                        chatFrame.src = 'chat.php';
+                        chatLoaded = true;
+                    }
+                };
+
+                window.closeChatDrawer = function() {
+                    chatDrawer.classList.remove('open');
+                };
+
+                // Listen to messages from Iframe (for closing drag)
+                window.addEventListener('message', (event) => {
+                    if (event.data.type === 'chatDrag') {
+                        // Dragging from INSIDE iframe
+                        // deltaX is negative when dragging left (no op), positive when dragging right (close)
+                        const { status, deltaX, screenWidth } = event.data;
+                        
+                        if (status === 'start') {
+                            chatDrawer.classList.add('dragging');
+                        } else if (status === 'move') {
+                            if (deltaX > 0) { // Dragging Right -> Close
+                                const percentage = (deltaX / screenWidth * 100);
+                                chatDrawer.style.transform = `translateX(${percentage}%)`;
+                            }
+                        } else if (status === 'end') {
+                            chatDrawer.classList.remove('dragging');
+                            chatDrawer.style.transform = '';
+                            if (deltaX > 80) { // Dragged enough right
+                                closeChatDrawer();
+                            } else {
+                                chatDrawer.classList.add('open'); // Snap back open
+                            }
+                        }
+                    }
+                    if (event.data === 'closeChat') {
+                        closeChatDrawer();
+                    }
+                });
+
+                // ... Keep existing sidebar logic if needed or replace ...
+                // Sidebar Logic (Legacy + Refined)
+                // ... (Copiar lógica de sidebar simples se necessário, ou deixar a antiga funcionar em paralelo se não conflitar)
             });
         </script>
-
-        <!-- Main Script (Dark Mode & Global Logic) -->
+        
+        <!-- Main Script & Gestures (Legacy includes kept) -->
         <script src="/assets/js/main.js"></script>
-
-        <!-- Gestures Script -->
         <script src="/assets/js/gestures.js"></script>
     </body>
 
