@@ -229,7 +229,7 @@ function renderAppHeader($title, $backUrl = null)
 
             @media (min-width: 1025px) {
                 #app-content {
-                    margin-left: 280px;
+                    margin-left: 240px;
                 }
             }
 
