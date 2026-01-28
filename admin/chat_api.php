@@ -9,14 +9,37 @@ $userId = $_SESSION['user_id'] ?? 1;
 
 // GET: Buscar mensagens
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $stmt = $pdo->query("
-        SELECT cm.*, u.name as user_name, u.avatar 
-        FROM chat_messages cm
-        JOIN users u ON cm.user_id = u.id
-        ORDER BY cm.created_at DESC
-        LIMIT 50
-    ");
-    $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
+    // Se tiver parâmetro 'since', buscar apenas mensagens novas
+    $since = isset($_GET['since']) ? (int)$_GET['since'] : 0;
+    
+    if ($since > 0) {
+        // Buscar apenas mensagens DEPOIS do ID especificado
+        $stmt = $pdo->prepare("
+            SELECT cm.*, u.name as user_name, u.avatar 
+            FROM chat_messages cm
+            JOIN users u ON cm.user_id = u.id
+            WHERE cm.id > ?
+            ORDER BY cm.created_at ASC
+        ");
+        $stmt->execute([$since]);
+    } else {
+        // Buscar todas as mensagens recentes (primeira carga)
+        $stmt = $pdo->query("
+            SELECT cm.*, u.name as user_name, u.avatar 
+            FROM chat_messages cm
+            JOIN users u ON cm.user_id = u.id
+            ORDER BY cm.created_at DESC
+            LIMIT 100
+        ");
+    }
+    
+    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Se foi busca inicial (sem since), inverter ordem
+    if ($since === 0) {
+        $messages = array_reverse($messages);
+    }
+    
     echo json_encode($messages);
     exit;
 }
