@@ -1188,7 +1188,8 @@ function renderAppHeader($title, $backUrl = null)
                 window.openChatDrawer = function() {
                     chatDrawer.classList.add('open');
                     if (!chatLoaded) {
-                        chatFrame.src = 'admin/chat.php';
+                        const isInAdmin = window.location.pathname.includes('/admin/');
+                        chatFrame.src = isInAdmin ? 'chat.php' : 'admin/chat.php';
                         chatLoaded = true;
                     }
                 };
@@ -1237,12 +1238,14 @@ function renderAppHeader($title, $backUrl = null)
                     const screenW = window.innerWidth;
                     
                     // Right Edge (Open Chat)
+                    // Start drag if near right edge AND nothing else is open
                     if (touchStartX > screenW - 50 && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
                         isDraggingChat = true;
                         chatDrawer.classList.add('dragging');
-                        // Load chat if needed
                         if (!chatLoaded) {
-                            chatFrame.src = 'chat.php';
+                            // Determine correct path relative to current location
+                            const isInAdmin = window.location.pathname.includes('/admin/');
+                            chatFrame.src = isInAdmin ? 'chat.php' : 'admin/chat.php';
                             chatLoaded = true;
                         }
                     }
