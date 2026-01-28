@@ -169,15 +169,7 @@ if (!empty($currentUser['avatar'])) {
     <!-- 3. Rodapé Integrado -->
     <!-- 3. Rodapé Integrado (REMOVIDO REQUISIÇÃO USUARIO) -->
     <!-- Perfil movido para o Header Superior -->
-        <!-- PWA Install Button -->
-        <div id="btnInstallSidebar" onclick="window.installPWA()" class="nav-item" style="cursor: pointer; color: #059669; background: #ecfdf5; border: 1px dashed #059669; margin: 12px 12px; justify-content: center; display: none;">
-             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="16" height="16" x="4" y="2" rx="2" ry="2"/>
-                <path d="M12 12v6"/>
-                <path d="m15 15-3 3-3-3"/>
-            </svg>
-            <span class="sidebar-text">Instalar App</span>
-        </div>
+
 
     <!-- Créditos do Desenvolvedor -->
     <div class="sidebar-credits" style="margin-top: auto; padding: 20px; text-align: center; font-size: 0.65rem; color: #94a3b8; border-top: 1px solid #f1f5f9;">
