@@ -521,9 +521,9 @@ if (!empty($currentUser['avatar'])) {
     @media (max-width: 1024px) {
         .sidebar {
             transform: translateX(-100%);
-            width: 85%;
-            /* Largura mais confortável no mobile */
-            max-width: 320px;
+            width: 200px;
+            /* Largura Ultra Compacta via USER FEEDBACK */
+            max-width: 80%;
         }
 
         .sidebar.open {
