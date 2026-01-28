@@ -571,7 +571,8 @@ function renderAppHeader($title, $backUrl = null)
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
                 border-top: 1px solid var(--border-color);
-                padding: 8px 12px 8px 12px;
+                padding: 6px 12px;
+                /* Reduced bottom padding even more (-15%) */
                 /* Reduced bottom padding */
                 padding-bottom: max(12px, env(safe-area-inset-bottom));
                 /* Respect notch but default to tight */
