@@ -537,4 +537,7 @@ renderAppHeader('Visão Geral');
     </div>
 
 
+<!-- Script de Personalização de Dashboard -->
+<script src="js/dashboard-customization.js"></script>
+
 <?php renderAppFooter(); ?>
