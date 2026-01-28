@@ -51,5 +51,4 @@ CROSS JOIN (
     UNION ALL SELECT 'playlists', FALSE, 21
     UNION ALL SELECT 'artistas', FALSE, 22
     UNION ALL SELECT 'classificacoes', FALSE, 23
-) as cards
-ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP;
+) as cards;
