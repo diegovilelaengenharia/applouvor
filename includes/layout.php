@@ -487,13 +487,16 @@ function renderAppHeader($title, $backUrl = null)
                             transform-origin: top right;
                         ">
                             <!-- Header do Card -->
-                            <div style="padding: 24px 20px; text-align: center; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
-                                <div style="width: 72px; height: 72px; margin: 0 auto 12px auto; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                            <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
+                                <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0;">
                                     <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
-                                <div style="font-weight: 800; color: var(--text-main); font-size: 1.05rem; margin-bottom: 4px;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                                <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Membro da Equipe</span>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                                    <div style="font-size: 0.75rem; color: #047857; font-weight: 500;">Membro da Equipe</div>
+                                </div>
                             </div>
+                            <!-- Compacted Header Mobile -->
 
                             <!-- Menu Itens -->
                             <div style="padding: 12px;">
@@ -1160,13 +1163,16 @@ function renderAppHeader($title, $backUrl = null)
                     transform-origin: top right;
                 ">
                     <!-- Header do Card -->
-                    <div style="padding: 24px 20px; text-align: center; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
-                        <div style="width: 72px; height: 72px; margin: 0 auto 12px auto; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
+                        <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0;">
                             <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <div style="font-weight: 800; color: var(--text-main); font-size: 1.05rem; margin-bottom: 4px;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                        <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Membro da Equipe</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                            <div style="font-size: 0.75rem; color: #047857; font-weight: 500;">Membro da Equipe</div>
+                        </div>
                     </div>
+                    <!-- Compacted Header Desktop -->
 
                     <!-- Menu Itens -->
                     <div style="padding: 12px;">
