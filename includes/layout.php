@@ -455,7 +455,7 @@ function renderAppHeader($title, $backUrl = null)
 
                     <!-- Settings Button (Home only) -->
                     <?php if ($isHome): ?>
-                        <button onclick="openCustomizationModal()" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; flex-shrink:0; cursor: pointer; color: var(--text-muted); box-shadow: var(--shadow-sm);">
+                        <button onclick="openDashboardCustomization()" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; flex-shrink:0; cursor: pointer; color: var(--text-muted); box-shadow: var(--shadow-sm);">
                             <i data-lucide="settings" style="width: 20px;"></i>
                         </button>
                     <?php endif; ?>
