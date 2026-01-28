@@ -1123,24 +1123,22 @@ function renderAppHeader($title, $backUrl = null)
                 let chatLoaded = false;
 
                 // TOUCH LOGIC
-                let touchStartX = 0;
-                let touchCurrentX = 0;
+                let touchStartX = 0; 
+                let chatTouchStartX = 0;
+                let chatTouchCurrentX = 0;
                 let isDraggingChat = false;
                 
                 // OPEN CHAT (Drag Left from Right Edge)
                 document.addEventListener('touchstart', e => {
-                    // if (e.touches.length > 1) return; 
-                    touchStartX = e.touches[0].clientX;
-                    
-                    const screenW = window.innerWidth;
-                    const hitZone = Math.max(70, screenW * 0.15); // Hitbox maior
+                    chatTouchStartX = e.touches[0].screenX;
+                    const screenW = window.screen.width;
+                    const hitZone = Math.max(70, screenW * 0.15);
 
                     // Right Edge (Open Chat)
-                    if (touchStartX > screenW - hitZone && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
+                    if (chatTouchStartX > screenW - hitZone && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
                         isDraggingChat = true;
                         chatDrawer.classList.add('dragging');
                         if (!chatLoaded) {
-                             // Determine correct path relative to current location
                             const isInAdmin = window.location.pathname.includes('/admin/');
                             chatFrame.src = isInAdmin ? 'chat.php' : 'admin/chat.php';
                             chatLoaded = true;
@@ -1151,11 +1149,12 @@ function renderAppHeader($title, $backUrl = null)
                 document.addEventListener('touchmove', e => {
                     if (!isDraggingChat) return;
                     
-                    touchCurrentX = e.touches[0].clientX;
-                    const diff = touchCurrentX - touchStartX; 
+                    chatTouchCurrentX = e.touches[0].screenX;
+                    const diff = chatTouchCurrentX - chatTouchStartX; 
                     
                     if (diff < 0) { // Dragging Left
-                        const percentage = 100 + (diff / window.innerWidth * 100);
+                        const width = window.screen.width;
+                        const percentage = 100 + (diff / width * 100);
                         const clamped = Math.max(0, percentage);
                         chatDrawer.style.transform = `translateX(${clamped}%)`;
                     }
@@ -1167,8 +1166,8 @@ function renderAppHeader($title, $backUrl = null)
                         chatDrawer.classList.remove('dragging');
                         chatDrawer.style.transform = '';
 
-                        const diff = touchCurrentX - touchStartX;
-                        if (diff < -80) { // Dragged enough
+                        const diff = (e.changedTouches[0].screenX) - chatTouchStartX;
+                        if (diff < -60) { // Dragged enough
                             openChatDrawer();
                         } else {
                             closeChatDrawer();
