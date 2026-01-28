@@ -1132,26 +1132,20 @@ function renderAppHeader($title, $backUrl = null)
                 
                 // OPEN CHAT (Drag Left from Right Edge)
                 document.addEventListener('touchstart', e => {
-                    if (e.touches.length > 1) return;
+                    // if (e.touches.length > 1) return; 
                     touchStartX = e.touches[0].clientX;
                     
                     const screenW = window.innerWidth;
-                    
+                    const hitZone = Math.max(70, screenW * 0.15); // Hitbox maior
+
                     // Right Edge (Open Chat)
-                    // Start drag if near right edge AND nothing else is open
-                    if (touchStartX > screenW - 50 && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
+                    if (touchStartX > screenW - hitZone && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
                         isDraggingChat = true;
                         chatDrawer.classList.add('dragging');
                         if (!chatLoaded) {
-                            chatFrame.src = 'chat.php'; // Path relative to admin or root? layout is included in multiple places.
-                            // layout.php is usually included. If inside admin, relative is fine. If root, might break.
-                            // Let's assume most usage is within admin/ or root. Using absolute path is safer.
-                            chatFrame.src = '/admin/chat.php'; // Adjust if project structure differs. Base user path seems to be root involved.
-                            // Checking user info: user is in .../05. App Louvor/
-                            // layout.php is in includes/layout.php
-                            // chat.php is in admin/chat.php
-                            // Ideally use absolute path from webroot.
-                            chatFrame.src = 'admin/chat.php'; // Trying relative first
+                             // Determine correct path relative to current location
+                            const isInAdmin = window.location.pathname.includes('/admin/');
+                            chatFrame.src = isInAdmin ? 'chat.php' : 'admin/chat.php';
                             chatLoaded = true;
                         }
                     }
