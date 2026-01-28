@@ -1328,7 +1328,7 @@ function renderAppHeader($title, $backUrl = null)
         // Check for Service Worker Support
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js') // Absolute path
+                navigator.serviceWorker.register('/sw.js')
                     .then(reg => console.log('SW Registered!', reg))
                     .catch(err => console.log('SW Registration Failed', err));
             });
@@ -1336,14 +1336,21 @@ function renderAppHeader($title, $backUrl = null)
 
         // Install Button Logic
         let deferredPrompt;
-        const btnInstall = document.getElementById('btnInstallSidebar'); // Target button in Sidebar
+        const btnInstall = document.getElementById('btnInstallSidebar');
+
+        // Check if app is already installed (Standalone mode)
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+        // Show button if NOT installed
+        if (btnInstall && !isStandalone) {
+             btnInstall.style.display = 'flex';
+        }
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             console.log('Install prompt captured (Layout)');
             
-            // Show button if hidden
             if (btnInstall) {
                  btnInstall.style.display = 'flex';
                  const textSpan = btnInstall.querySelector('.sidebar-text');
@@ -1356,7 +1363,6 @@ function renderAppHeader($title, $backUrl = null)
              if (btnInstall) btnInstall.style.display = 'none';
         });
 
-        // Function called by the button
         window.installPWA = async function() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
@@ -1365,7 +1371,7 @@ function renderAppHeader($title, $backUrl = null)
                     deferredPrompt = null;
                 }
             } else {
-                // Manual Instructions
+                // Manual Instructions Validation
                 const userAgent = navigator.userAgent.toLowerCase();
                  // iOS
                 if (/iphone|ipad|ipod/.test(userAgent)) {
