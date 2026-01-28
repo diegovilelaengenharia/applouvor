@@ -238,7 +238,7 @@ function renderAppHeader($title, $backUrl = null)
                 display: none;
                 align-items: center;
                 gap: 12px;
-                padding: 12px 16px;
+                padding: 10px 14px;
                 background: var(--bg-surface);
                 position: sticky;
                 top: 0;
@@ -1058,7 +1058,7 @@ function renderAppHeader($title, $backUrl = null)
 ?>
     <header class="desktop-only-header" style="
             background: var(--bg-surface); 
-            padding: 16px; 
+            padding: 12px 16px; 
             margin: -20px -20px 24px -20px; 
             display: flex; 
             align-items: center; 
