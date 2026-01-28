@@ -1206,7 +1206,7 @@ function renderAppHeader($title, $backUrl = null)
                         } else if (status === 'end') {
                             chatDrawer.classList.remove('dragging');
                             chatDrawer.style.transform = '';
-                            if (deltaX > 80) { 
+                            if (deltaX > 50) { // Easier close (was 80)
                                 closeChatDrawer();
                             } else {
                                 chatDrawer.classList.add('open'); 
