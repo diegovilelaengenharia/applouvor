@@ -54,21 +54,26 @@ try {
     $ultimoAviso = '';
 }
 
-// 2. Escalas
+// 2. Escalas (Próxima + Detalhes)
 $nextSchedule = null;
 $totalSchedules = 0;
 try {
+    // Buscar próxima escala com Event Type
     $stmt = $pdo->prepare("
-        SELECT s.* 
+        SELECT s.*,
+               (SELECT r.name FROM schedule_users su 
+                LEFT JOIN roles r ON su.role_id = r.id 
+                WHERE su.schedule_id = s.id AND su.user_id = ? LIMIT 1) as my_role
         FROM schedules s
         JOIN schedule_users su ON s.id = su.schedule_id
         WHERE su.user_id = ? AND s.event_date >= CURDATE()
         ORDER BY s.event_date ASC
         LIMIT 1
     ");
-    $stmt->execute([$userId]);
+    $stmt->execute([$userId, $userId]);
     $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
     
+    // Contagem total
     $stmtCount = $pdo->prepare("
         SELECT COUNT(*) 
         FROM schedules s
@@ -80,26 +85,52 @@ try {
 } catch (Exception $e) {
 }
 
-// 3. Repertório
+// 3. Repertório (Última + Tom + Contagem)
 $totalMusicas = 0;
 $ultimaMusica = null;
 try {
     $stmt = $pdo->query("SELECT COUNT(*) FROM songs");
     $totalMusicas = $stmt->fetchColumn();
     
-    $stmt = $pdo->query("SELECT title, artist FROM songs ORDER BY created_at DESC LIMIT 1");
+    // Buscar última musica com tom
+    $stmt = $pdo->query("SELECT title, artist, tone FROM songs ORDER BY created_at DESC LIMIT 1");
     $ultimaMusica = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
 }
 
-// 4. Aniversariantes
-$aniversariantes = [];
+// 4. Membros (Stats - Vocais vs Instrumentistas)
+$totalMembros = 0;
+$statsMembros = ['vocals' => 0, 'instrumentalists' => 0];
 try {
-    $stmt = $pdo->query("SELECT name, DAY(birth_date) as dia, avatar FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE()) ORDER BY dia ASC");
-    $aniversariantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $niverCount = count($aniversariantes);
+    $stmt = $pdo->query("SELECT COUNT(*) FROM users");
+    $totalMembros = $stmt->fetchColumn();
+
+    // Tentar inferir stats simples (Isso pode variar dependendo de como as roles est├úo no DB)
+    // Assumindo que role 'Vocal' ou instrumento 'Voz' identifica vocal
+    $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%'");
+    $statsMembros['vocals'] = $stmtV->fetchColumn();
+    $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals']; // Simplificado
 } catch (Exception $e) {
-    $niverCount = 0;
+}
+
+// 5. Aniversariantes (Próximo)
+$aniversariantesCount = 0;
+$proximoAniversariante = null;
+try {
+    // Contagem Mês
+    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE())");
+    $aniversariantesCount = $stmt->fetchColumn();
+
+    // Próximo a partir de hoje
+    $stmtProx = $pdo->query("
+        SELECT name, DAY(birth_date) as dia 
+        FROM users 
+        WHERE MONTH(birth_date) = MONTH(CURRENT_DATE()) AND DAY(birth_date) >= DAY(CURRENT_DATE())
+        ORDER BY dia ASC 
+        LIMIT 1
+    ");
+    $proximoAniversariante = $stmtProx->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
 }
 
 // Saudação
@@ -424,7 +455,10 @@ renderAppHeader('Visão Geral');
             'totalMusicas' => $totalMusicas,
             'ultimoAviso' => $ultimoAviso,
             'unreadCount' => $unreadCount,
-            'niverCount' => $niverCount
+            'niverCount' => $aniversariantesCount,
+            'proximoNiver' => $proximoAniversariante,
+            'totalMembros' => $totalMembros,
+            'statsMembros' => $statsMembros
         ];
         
         // Loop pelos cards configurados pelo usuário

@@ -920,13 +920,7 @@ function renderAppHeader($title, $backUrl = null)
                     <span>Comunica</span>
                 </button>
 
-                <!-- Botão CHAT -->
-                <a href="chat.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #8b5cf6;">
-                    <div class="b-nav-icon-wrapper" style="background: #f5f3ff;">
-                        <i data-lucide="message-circle"></i>
-                    </div>
-                    <span>Chat</span>
-                </a>
+
 
             </nav>
         </div>
