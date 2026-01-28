@@ -898,8 +898,43 @@ function renderAppHeader($title, $backUrl = null)
                     <span>Comunica</span>
                 </button>
 
+                <!-- Botão AGENDA (NOVO) -->
+                <a href="agenda.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #047857;">
+                    <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    <span>Agenda</span>
+                </a>
+
+                <!-- Botão CHAT (NOVO) -->
+                <a href="chat.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #8b5cf6;">
+                    <div class="b-nav-icon-wrapper" style="background: #f5f3ff;">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+                    <span>Chat</span>
+                </a>
+
+                <!-- Botão PERSONALIZAR (NOVO - Apenas Mobile) -->
+                <?php if (basename($_SERVER['PHP_SELF']) == 'index.php'): ?>
+                <button class="b-nav-item mobile-only" onclick="openCustomizationModal(); closeAllSheets();" style="color: #64748b;">
+                    <div class="b-nav-icon-wrapper" style="background: #f1f5f9;">
+                        <i data-lucide="settings"></i>
+                    </div>
+                    <span>Config</span>
+                </button>
+                <?php endif; ?>
+
             </nav>
         </div>
+
+        <style>
+            /* Esconder botão de personalização no desktop */
+            @media (min-width: 1025px) {
+                .b-nav-item.mobile-only {
+                    display: none;
+                }
+            }
+        </style>
 
         <script>
             function toggleSheet(sheetId, btn) {
