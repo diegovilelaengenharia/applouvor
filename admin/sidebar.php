@@ -184,7 +184,7 @@ if (!empty($currentUser['avatar'])) {
 <style>
     /* VARIÁVEIS LOCAIS (Compatíveis com Modo Moderate) */
     :root {
-        --sidebar-width: 210px;
+        --sidebar-width: 190px;
         --sidebar-collapsed-width: 88px;
         --sidebar-bg: #ffffff;
         --sidebar-text: #475569;
@@ -575,7 +575,7 @@ if (!empty($currentUser['avatar'])) {
         if (!isDesktop()) return;
         sidebar.classList.toggle('collapsed');
         const isCollapsed = sidebar.classList.contains('collapsed');
-        if (content) content.style.marginLeft = isCollapsed ? '88px' : '210px';
+        if (content) content.style.marginLeft = isCollapsed ? '88px' : '190px';
         localStorage.setItem('sidebarCollapsed', isCollapsed);
     }
 
@@ -593,7 +593,7 @@ if (!empty($currentUser['avatar'])) {
                 if (content) content.style.marginLeft = '88px';
             } else {
                 sidebar.classList.remove('collapsed');
-                if (content) content.style.marginLeft = '210px';
+                if (content) content.style.marginLeft = '190px';
             }
         }
 
