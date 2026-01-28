@@ -280,8 +280,8 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
                     <span>Toque para ver dados do grupo</span>
                 </div>
             </div>
-            <button class="back-btn">
-                 <i data-lucide="more-vertical" style="width: 24px;"></i>
+            <button class="back-btn" onclick="window.parent.closeChatDrawer()">
+                 <i data-lucide="x" style="width: 24px;"></i>
             </button>
         </div>
 
