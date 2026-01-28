@@ -505,7 +505,6 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             }, 300);
         });
 
-        // Swipe Right to Go Back (Gestures simples para voltar)
         let touchStartX = 0;
         let touchEndX = 0;
         
@@ -519,8 +518,10 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
         }, {passive: true});
 
         function handleSwipe() {
-            if (touchEndX - touchStartX > 100 && touchStartX < 50) {
-                // Swipe from left edge -> Back
+            const diff = touchEndX - touchStartX;
+            // Swipe Right (Esquerda -> Direita) -> Voltar/Fechar
+            // Removida restrição de borda para facilitar o uso
+            if (diff > 80) { 
                 window.history.back();
             }
         }
