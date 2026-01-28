@@ -181,8 +181,11 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
         .input-container {
             position: fixed; /* Fixed bottom */
             bottom: 0;
-            left: 0;
-            right: 0;
+            left: 50%; /* Center horiz */
+            transform: translateX(-50%); /* Pull back to center */
+            right: auto; /* Reset right */
+            width: 100%;
+            max-width: 600px; /* Match wrapper max-width */
             flex-shrink: 0;
             padding: 8px 10px;
             background-color: #f0f2f5;
