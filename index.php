@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transform: scale(0.98);
         }
 
-        /* Install Button - Outline Style, Same Size */
+        /* Install Button - Premium Style */
         .install-wrapper {
             width: 100%;
             margin-top: 12px;
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button.btn-install {
             width: 100%;
             padding: 16px;
-            background: transparent;
+            background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
             color: var(--primary);
             border: 2px solid var(--primary);
             border-radius: 16px;
@@ -215,13 +215,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
             gap: 8px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 1;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+        }
+
+        button.btn-install::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        button.btn-install:hover::before {
+            left: 100%;
         }
 
         button.btn-install:hover {
-            background: var(--primary-light);
-            transform: translateY(-1px);
+            background: var(--primary);
+            color: var(--bg);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(4, 120, 87, 0.25);
+        }
+
+        button.btn-install:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(4, 120, 87, 0.2);
+        }
+
+        /* Pulse animation for install button */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(4, 120, 87, 0.3);
+            }
+        }
+
+        button.btn-install:not(.installed) {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Installed state */
+        button.btn-install.installed {
+            background: var(--input-bg);
+            color: var(--text-muted);
+            border-color: var(--border);
+            cursor: default;
+            box-shadow: none;
+            animation: none;
+        }
+
+        button.btn-install.installed:hover {
+            background: var(--input-bg);
+            color: var(--text-muted);
+            transform: none;
+            box-shadow: none;
         }
 
         .error {
@@ -313,8 +369,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="install-wrapper">
             <button class="btn-install" id="btnInstall">
-                <i data-lucide="download" style="width: 16px;"></i>
-                Instalar App
+                <i data-lucide="smartphone" style="width: 18px;"></i>
+                <span id="installText">Instalar App</span>
             </button>
         </div>
 
@@ -352,44 +408,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // PWA Logic
         let deferredPrompt;
         const btnInstall = document.getElementById('btnInstall');
+        const installText = document.getElementById('installText');
         const iosModal = document.getElementById('ios-modal');
 
         // Detect iOS
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
+        // Check if already installed
         if (isStandalone) {
-            // If already installed, we might hide the button or change text
-            btnInstall.innerHTML = '<i data-lucide="check"></i> App Instalado';
-            btnInstall.style.pointerEvents = 'none';
-            btnInstall.style.opacity = '0.5';
+            btnInstall.classList.add('installed');
+            btnInstall.innerHTML = '<i data-lucide="check-circle" style="width: 18px;"></i><span>App Instalado</span>';
+            btnInstall.disabled = true;
             lucide.createIcons();
         }
 
+        // Listen for install prompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Button is already visible, just prepared
+            console.log('Install prompt captured');
         });
 
+        // Handle install button click
         btnInstall.addEventListener('click', async () => {
+            // iOS devices - show manual instructions
             if (isIos && !isStandalone) {
                 toggleIOS();
                 return;
             }
 
+            // If we have the install prompt (Android Chrome, Edge, etc)
             if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const {
-                    outcome
-                } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            } else {
-                // If clicked but no prompt available (desktop chrome, firefox, or already installed)
-                if (!isStandalone) {
-                    alert('Para instalar: Utilize o menu do seu navegador e procure por "Instalar App" ou "Adicionar à Tela Inicial".');
+                try {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    
+                    if (outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                        btnInstall.classList.add('installed');
+                        btnInstall.innerHTML = '<i data-lucide="check-circle" style="width: 18px;"></i><span>App Instalado</span>';
+                        btnInstall.disabled = true;
+                        lucide.createIcons();
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    
+                    deferredPrompt = null;
+                } catch (err) {
+                    console.error('Error showing install prompt:', err);
                 }
+            } else if (!isStandalone) {
+                // No install prompt available - show browser-specific instructions
+                const userAgent = navigator.userAgent.toLowerCase();
+                let message = '';
+                
+                if (userAgent.includes('chrome')) {
+                    message = '📱 Para instalar:\n\n1. Toque no menu (⋮) no canto superior direito\n2. Selecione "Instalar app" ou "Adicionar à tela inicial"';
+                } else if (userAgent.includes('firefox')) {
+                    message = '📱 Para instalar:\n\n1. Toque no ícone de casa com +\n2. Ou use o menu e selecione "Instalar"';
+                } else if (userAgent.includes('safari')) {
+                    message = '📱 Para instalar:\n\n1. Toque no botão Compartilhar (□↑)\n2. Selecione "Adicionar à Tela de Início"';
+                } else {
+                    message = '📱 Para instalar:\n\nUtilize o menu do seu navegador e procure por "Instalar App" ou "Adicionar à Tela Inicial"';
+                }
+                
+                alert(message);
             }
+        });
+
+        // Listen for successful installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('App successfully installed');
+            btnInstall.classList.add('installed');
+            btnInstall.innerHTML = '<i data-lucide="check-circle" style="width: 18px;"></i><span>App Instalado</span>';
+            btnInstall.disabled = true;
+            lucide.createIcons();
         });
 
         function toggleIOS() {
