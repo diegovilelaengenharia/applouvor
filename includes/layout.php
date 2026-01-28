@@ -1178,6 +1178,21 @@ function renderAppHeader($title, $backUrl = null)
 
                 window.openChatDrawer = function() {
                     chatDrawer.classList.add('open');
+                    
+                    // Overlay Logic
+                    let overlay = document.getElementById('chat-overlay');
+                    if (!overlay) {
+                        overlay = document.createElement('div');
+                        overlay.id = 'chat-overlay';
+                        overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2400;opacity:0;transition:opacity 0.3s;';
+                        overlay.onclick = closeChatDrawer;
+                        document.body.appendChild(overlay);
+                        // Trigger reflow
+                        void overlay.offsetWidth;
+                    }
+                    overlay.style.display = 'block';
+                    setTimeout(() => overlay.style.opacity = '1', 10);
+
                     if (!chatLoaded) {
                         const isInAdmin = window.location.pathname.includes('/admin/');
                         chatFrame.src = isInAdmin ? 'chat.php' : 'admin/chat.php';
@@ -1187,6 +1202,11 @@ function renderAppHeader($title, $backUrl = null)
 
                 window.closeChatDrawer = function() {
                     chatDrawer.classList.remove('open');
+                    const overlay = document.getElementById('chat-overlay');
+                    if (overlay) {
+                        overlay.style.opacity = '0';
+                        setTimeout(() => overlay.style.display = 'none', 300);
+                    }
                 };
 
                 window.addEventListener('message', (event) => {
