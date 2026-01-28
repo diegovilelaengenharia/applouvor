@@ -1083,6 +1083,39 @@ function renderAppHeader($title, $backUrl = null)
             }
         </style>
 
+        <!-- Chat Drawer (Iframe) -->
+        <div id="chat-drawer">
+            <iframe id="chat-frame" src="about:blank"></iframe>
+        </div>
+
+        <style>
+            #chat-drawer {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                background: #efeae2;
+                z-index: 2500;
+                transform: translateX(100%);
+                transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1);
+                will-change: transform;
+                box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            }
+            #chat-drawer.open {
+                transform: translateX(0);
+            }
+            #chat-drawer.dragging {
+                transition: none;
+            }
+            #chat-frame {
+                width: 100%;
+                height: 100%;
+                border: none;
+                display: block;
+            }
+        </style>
+
         <!-- Sidebar & Gestures Script -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -1091,6 +1124,104 @@ function renderAppHeader($title, $backUrl = null)
                 const chatDrawer = document.getElementById('chat-drawer');
                 const chatFrame = document.getElementById('chat-frame');
                 let chatLoaded = false;
+
+                // TOUCH LOGIC
+                let touchStartX = 0;
+                let touchCurrentX = 0;
+                let isDraggingChat = false;
+                
+                // OPEN CHAT (Drag Left from Right Edge)
+                document.addEventListener('touchstart', e => {
+                    if (e.touches.length > 1) return;
+                    touchStartX = e.touches[0].clientX;
+                    
+                    const screenW = window.innerWidth;
+                    
+                    // Right Edge (Open Chat)
+                    // Start drag if near right edge AND nothing else is open
+                    if (touchStartX > screenW - 50 && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
+                        isDraggingChat = true;
+                        chatDrawer.classList.add('dragging');
+                        if (!chatLoaded) {
+                            chatFrame.src = 'chat.php'; // Path relative to admin or root? layout is included in multiple places.
+                            // layout.php is usually included. If inside admin, relative is fine. If root, might break.
+                            // Let's assume most usage is within admin/ or root. Using absolute path is safer.
+                            chatFrame.src = '/admin/chat.php'; // Adjust if project structure differs. Base user path seems to be root involved.
+                            // Checking user info: user is in .../05. App Louvor/
+                            // layout.php is in includes/layout.php
+                            // chat.php is in admin/chat.php
+                            // Ideally use absolute path from webroot.
+                            chatFrame.src = 'admin/chat.php'; // Trying relative first
+                            chatLoaded = true;
+                        }
+                    }
+                }, {passive: true});
+
+                document.addEventListener('touchmove', e => {
+                    if (!isDraggingChat) return;
+                    
+                    touchCurrentX = e.touches[0].clientX;
+                    const diff = touchCurrentX - touchStartX; 
+                    
+                    if (diff < 0) { // Dragging Left
+                        const percentage = 100 + (diff / window.innerWidth * 100);
+                        const clamped = Math.max(0, percentage);
+                        chatDrawer.style.transform = `translateX(${clamped}%)`;
+                    }
+                }, {passive: true});
+
+                document.addEventListener('touchend', e => {
+                    if (isDraggingChat) {
+                        isDraggingChat = false;
+                        chatDrawer.classList.remove('dragging');
+                        chatDrawer.style.transform = '';
+
+                        const diff = touchCurrentX - touchStartX;
+                        if (diff < -80) { // Dragged enough
+                            openChatDrawer();
+                        } else {
+                            closeChatDrawer();
+                        }
+                    }
+                });
+
+                window.openChatDrawer = function() {
+                    chatDrawer.classList.add('open');
+                    if (!chatLoaded) {
+                        chatFrame.src = 'admin/chat.php';
+                        chatLoaded = true;
+                    }
+                };
+
+                window.closeChatDrawer = function() {
+                    chatDrawer.classList.remove('open');
+                };
+
+                window.addEventListener('message', (event) => {
+                    if (event.data.type === 'chatDrag') {
+                        const { status, deltaX, screenWidth } = event.data;
+                        
+                        if (status === 'start') {
+                            chatDrawer.classList.add('dragging');
+                        } else if (status === 'move') {
+                            if (deltaX > 0) { // Dragging Right -> Close
+                                const percentage = (deltaX / screenWidth * 100);
+                                chatDrawer.style.transform = `translateX(${percentage}%)`;
+                            }
+                        } else if (status === 'end') {
+                            chatDrawer.classList.remove('dragging');
+                            chatDrawer.style.transform = '';
+                            if (deltaX > 80) { 
+                                closeChatDrawer();
+                            } else {
+                                chatDrawer.classList.add('open'); 
+                            }
+                        }
+                    }
+                    if (event.data === 'closeChat') {
+                        closeChatDrawer();
+                    }
+                });
 
                 // TOUCH LOGIC
                 let touchStartX = 0;

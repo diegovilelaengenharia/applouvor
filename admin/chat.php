@@ -505,26 +505,42 @@ $messages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
             }, 300);
         });
 
+        // Swipe to Close Logic (1:1 Drag Communication)
         let touchStartX = 0;
-        let touchEndX = 0;
         
         document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
+            if (e.touches.length > 1) return;
+            touchStartX = e.touches[0].clientX;
+            // Notify parent drag started
+            window.parent.postMessage({ type: 'chatDrag', status: 'start' }, '*');
+        }, {passive: true});
+
+        document.addEventListener('touchmove', e => {
+            if (e.touches.length > 1) return;
+            const currentX = e.touches[0].clientX;
+            const deltaX = currentX - touchStartX;
+            
+            // Only care about Dragging Right (Positive Delta)
+            if (deltaX > 0) {
+                window.parent.postMessage({ 
+                    type: 'chatDrag', 
+                    status: 'move', 
+                    deltaX: deltaX,
+                    screenWidth: window.innerWidth
+                }, '*');
+            }
         }, {passive: true});
 
         document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
+            const touchEndX = e.changedTouches[0].clientX;
+            const deltaX = touchEndX - touchStartX;
+            
+            window.parent.postMessage({ 
+                type: 'chatDrag', 
+                status: 'end', 
+                deltaX: deltaX 
+            }, '*');
         }, {passive: true});
-
-        function handleSwipe() {
-            const diff = touchEndX - touchStartX;
-            // Swipe Right (Esquerda -> Direita) -> Voltar/Fechar
-            // Removida restrição de borda para facilitar o uso
-            if (diff > 80) { 
-                window.history.back();
-            }
-        }
     </script>
 </body>
 </html>
