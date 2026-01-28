@@ -174,6 +174,11 @@ if (!empty($currentUser['avatar'])) {
     <!-- 3. Rodapé Integrado -->
     <!-- 3. Rodapé Integrado (REMOVIDO REQUISIÇÃO USUARIO) -->
     <!-- Perfil movido para o Header Superior -->
+    <!-- Créditos do Desenvolvedor -->
+    <div class="sidebar-credits" style="margin-top: auto; padding: 20px; text-align: center; font-size: 0.65rem; color: #94a3b8; border-top: 1px solid #f1f5f9;">
+        <span class="sidebar-text" style="display: block; margin-bottom: 2px;">Desenvolvido por</span>
+        <span class="sidebar-text" style="font-weight: 600; color: #64748b; font-size: 0.7rem;">Diego T. N. Vilela</span>
+    </div>
 </div>
 
 <style>
