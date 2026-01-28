@@ -1080,38 +1080,7 @@ function renderAppHeader($title, $backUrl = null)
             }
         </style>
 
-        <!-- Chat Drawer (Iframe) -->
-        <div id="chat-drawer">
-            <iframe id="chat-frame" src="about:blank"></iframe>
-        </div>
 
-        <style>
-            #chat-drawer {
-                position: fixed;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                width: 100%;
-                background: #efeae2;
-                z-index: 2500;
-                transform: translateX(100%);
-                transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1);
-                will-change: transform;
-                box-shadow: -5px 0 25px rgba(0,0,0,0.15);
-            }
-            #chat-drawer.open {
-                transform: translateX(0);
-            }
-            #chat-drawer.dragging {
-                transition: none;
-            }
-            #chat-frame {
-                width: 100%;
-                height: 100%;
-                border: none;
-                display: block;
-            }
-        </style>
 
         <!-- Sidebar & Gestures Script -->
         <script>
