@@ -1203,71 +1203,103 @@ function renderAppHeader($title, $backUrl = null)
                     }
                 });
 
-                // TOUCH LOGIC
-                let touchStartX = 0;
-                let touchCurrentX = 0;
+                // TOUCH LOGIC - REFATORADO (ClientX + Swipe Open/Close)
+                let chatTouchStartX = 0;
+                let chatTouchCurrentX = 0;
                 let isDraggingChat = false;
-                let isDraggingSidebar = false;
                 
-                // OPEN CHAT (Drag Left from Right Edge)
                 document.addEventListener('touchstart', e => {
-                    touchStartX = e.touches[0].clientX;
-                    
-                    // Zone Checks
+                    const touchX = e.touches[0].clientX;
                     const screenW = window.innerWidth;
+                    const isOpen = chatDrawer.classList.contains('open');
+
+                    // 1. ABRIR: Swipe da Direita (Se fechado)
+                    // Zona de ativação: 15% da borda direita ou 70px
+                    const hitZone = Math.max(70, screenW * 0.15);
+                    const isRightEdge = touchX > (screenW - hitZone);
                     
-                    // Right Edge (Open Chat)
-                    // Start drag if near right edge AND nothing else is open
-                    if (touchStartX > screenW - 50 && !chatDrawer.classList.contains('open') && !sidebar.classList.contains('active')) {
+                    // Condição Abrir: Borda direita + Chat Fechado + Sidebar Fechada
+                    if (isRightEdge && !isOpen && !sidebar.classList.contains('active')) {
                         isDraggingChat = true;
+                        chatTouchStartX = touchX;
                         chatDrawer.classList.add('dragging');
+                        
                         if (!chatLoaded) {
-                            // Determine correct path relative to current location
                             const isInAdmin = window.location.pathname.includes('/admin/');
                             chatFrame.src = isInAdmin ? 'chat.php' : 'admin/chat.php';
                             chatLoaded = true;
                         }
                     }
+
+                    // 2. FECHAR: Swipe da Esquerda p/ Direita (Se aberto)
+                    // Permitir arrastar de qualquer lugar se já estiver aberto
+                    if (isOpen) {
+                        isDraggingChat = true;
+                        chatTouchStartX = touchX;
+                        chatDrawer.classList.add('dragging');
+                    }
+
                 }, {passive: true});
 
                 document.addEventListener('touchmove', e => {
                     if (!isDraggingChat) return;
                     
-                    touchCurrentX = e.touches[0].clientX;
-                    const diff = touchCurrentX - touchStartX; // Negative when dragging left
-                    
-                    // Logic: transform starts at 100% (hidden right). 
-                    // We want to reduce translateX from 100% to 0%.
-                    // 100% = screenW px.
-                    // Drawer moves left.
-                    
-                    if (diff < 0) {
-                        // Dragging In
-                        // Translate should be: 100% + diff (pixels)
-                        // But CSS uses usually %. Let's use pixels for performance or % 
-                        // Easier: translateX( calc(100% + diff px) )
-                        // Since diff is negative, it subtracts.
-                        
-                        // Limit to 0 (fully open)
-                        // Actually, we want to map [ScreenW -> 0]
-                        const percentage = 100 + (diff / window.innerWidth * 100);
-                        const clamped = Math.max(0, percentage);
-                        chatDrawer.style.transform = `translateX(${clamped}%)`;
+                    chatTouchCurrentX = e.touches[0].clientX;
+                    const diff = chatTouchCurrentX - chatTouchStartX; 
+                    const isOpen = chatDrawer.classList.contains('open');
+
+                    // Lógica unificada de movimento
+                    let percentage = 0;
+
+                    if (!isOpen) {
+                        // ABRINDO (Direita -> Esquerda)
+                        // Diff é negativo. Começa em 100% (fechado) e vai para 0%
+                        if (diff < 0) {
+                           percentage = 100 + (diff / window.innerWidth * 100);
+                        } else {
+                           percentage = 100; // Manteém fechado se arrastar p/ lado errado
+                        }
+                    } else {
+                        // FECHANDO (Esquerda -> Direita)
+                        // Diff é positivo. Começa em 0% (aberto) e vai para 100%
+                        if (diff > 0) {
+                            percentage = (diff / window.innerWidth * 100);
+                        } else {
+                            percentage = 0; // Mantém aberto se arrastar p/ lado errado
+                        }
                     }
+
+                    // Clamp e Aplica
+                    const clamped = Math.max(0, Math.min(100, percentage));
+                    chatDrawer.style.transform = `translateX(${clamped}%)`;
+                    
                 }, {passive: true});
 
                 document.addEventListener('touchend', e => {
                     if (isDraggingChat) {
                         isDraggingChat = false;
                         chatDrawer.classList.remove('dragging');
-                        chatDrawer.style.transform = ''; // Clear inline style to revert to class
+                        chatDrawer.style.transform = '';
 
-                        // Decision
-                        const diff = touchCurrentX - touchStartX;
-                        if (diff < -80) { // Dragged enough left
-                            openChatDrawer();
+                        const diff = (e.changedTouches[0].clientX) - chatTouchStartX;
+                        const isOpen = chatDrawer.classList.contains('open');
+
+                        if (!isOpen) {
+                            // Estava Fechado -> Tentando Abrir
+                            // Se arrastou mais de 80px p/ esquerda (negativo)
+                            if (diff < -80) {
+                                openChatDrawer();
+                            } else {
+                                closeChatDrawer(); // Volta a fechar
+                            }
                         } else {
-                            closeChatDrawer();
+                            // Estava Aberto -> Tentando Fechar
+                            // Se arrastou mais de 80px p/ direita (positivo)
+                            if (diff > 80) {
+                                closeChatDrawer();
+                            } else {
+                                openChatDrawer(); // Volta a abrir (snap back)
+                            }
                         }
                     }
                 });
