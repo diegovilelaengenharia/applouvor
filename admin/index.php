@@ -433,17 +433,6 @@ renderAppHeader('Visão Geral');
         }
         ?>
         
-        <!-- Card: Oração -->
-        <a href="oracao.php" class="access-card card-violet">
-            <div>
-                <div class="card-icon">
-                    <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
-                </div>
-                <h3 class="card-title">Oração</h3>
-                <p class="card-info">Pedidos e intercessão</p>
-            </div>
-        </a>
-
     </div>
 
 
