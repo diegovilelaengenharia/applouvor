@@ -875,72 +875,74 @@ renderAppHeader('Avisos');
         </div>
     </div>
     
-    <!-- Search Bar -->
-    <div class="search-container">
-        <form method="GET">
-            <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
-            <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
-            <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
-            <div class="search-wrapper">
-                <i data-lucide="search" class="search-icon"></i>
-                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" 
-                       placeholder="Buscar avisos..." class="search-input">
+    
+    <!-- Search and Filter Row -->
+    <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+        <!-- Search Bar -->
+        <div style="flex: 1;">
+            <form method="GET">
+                <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
+                <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
+                <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
+                <div class="search-wrapper">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" 
+                           placeholder="Buscar avisos..." class="search-input">
+                </div>
+            </form>
+        </div>
+        
+        <!-- Filter Dropdown -->
+        <div class="filter-container" style="width: 200px; margin-bottom: 0;">
+            <button type="button" class="filter-button" id="filterButton" onclick="toggleFilterDropdown()">
+                <span>
+                    <?php
+                        $filterLabels = [
+                            'all' => '✨ Todos',
+                            'espiritual' => '🙏 Espiritual',
+                            'eventos' => '🎉 Eventos',
+                            'geral' => '📢 Geral',
+                            'importante' => '⭐ Importante',
+                            'musica' => '🎵 Música',
+                            'urgente' => '🚨 Urgente'
+                        ];
+                        echo $filterLabels[$filterType] ?? '✨ Todos';
+                    ?>
+                </span>
+                <i data-lucide="chevron-down" style="width: 18px;"></i>
+            </button>
+            <div class="filter-dropdown" id="filterDropdown">
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'all'])) ?>" 
+                   class="filter-option <?= $filterType === 'all' ? 'active' : '' ?>">
+                    ✨ Todos
+                </a>
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'espiritual'])) ?>" 
+                   class="filter-option <?= $filterType === 'espiritual' ? 'active' : '' ?>">
+                    🙏 Espiritual
+                </a>
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'eventos'])) ?>" 
+                   class="filter-option <?= $filterType === 'eventos' ? 'active' : '' ?>">
+                    🎉 Eventos
+                </a>
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'geral'])) ?>" 
+                   class="filter-option <?= $filterType === 'geral' ? 'active' : '' ?>">
+                    📢 Geral
+                </a>
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'importante'])) ?>" 
+                   class="filter-option <?= $filterType === 'importante' ? 'active' : '' ?>">
+                    ⭐ Importante
+                </a>
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'musica'])) ?>" 
+                   class="filter-option <?= $filterType === 'musica' ? 'active' : '' ?>">
+                    🎵 Música
+                </a>
+                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'urgente'])) ?>" 
+                   class="filter-option <?= $filterType === 'urgente' ? 'active' : '' ?>">
+                    🚨 Urgente
+                </a>
             </div>
-        </form>
-    </div>
-    
-    
-    <!-- Filtro Dropdown -->
-    <div class="filter-container">
-        <button type="button" class="filter-button" id="filterButton" onclick="toggleFilterDropdown()">
-            <span>
-                <?php
-                    $filterLabels = [
-                        'all' => '✨ Todos',
-                        'espiritual' => '🙏 Espiritual',
-                        'eventos' => '🎉 Eventos',
-                        'geral' => '📢 Geral',
-                        'importante' => '⭐ Importante',
-                        'musica' => '🎵 Música',
-                        'urgente' => '🚨 Urgente'
-                    ];
-                    echo $filterLabels[$filterType] ?? '✨ Todos';
-                ?>
-            </span>
-            <i data-lucide="chevron-down" style="width: 18px;"></i>
-        </button>
-        <div class="filter-dropdown" id="filterDropdown">
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'all'])) ?>" 
-               class="filter-option <?= $filterType === 'all' ? 'active' : '' ?>">
-                ✨ Todos
-            </a>
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'espiritual'])) ?>" 
-               class="filter-option <?= $filterType === 'espiritual' ? 'active' : '' ?>">
-                🙏 Espiritual
-            </a>
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'eventos'])) ?>" 
-               class="filter-option <?= $filterType === 'eventos' ? 'active' : '' ?>">
-                🎉 Eventos
-            </a>
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'geral'])) ?>" 
-               class="filter-option <?= $filterType === 'geral' ? 'active' : '' ?>">
-                📢 Geral
-            </a>
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'importante'])) ?>" 
-               class="filter-option <?= $filterType === 'importante' ? 'active' : '' ?>">
-                ⭐ Importante
-            </a>
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'musica'])) ?>" 
-               class="filter-option <?= $filterType === 'musica' ? 'active' : '' ?>">
-                🎵 Música
-            </a>
-            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'urgente'])) ?>" 
-               class="filter-option <?= $filterType === 'urgente' ? 'active' : '' ?>">
-                🚨 Urgente
-            </a>
         </div>
     </div>
-
 
     <!-- Avisos List -->
     <?php if (empty($avisos)): ?>
