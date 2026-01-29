@@ -351,39 +351,12 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         </div>
     <?php endif; ?>
 
-    <!-- Painel de Gerenciamento (Toggleable) -->
-    <div class="config-card">
-        <div class="config-header" onclick="toggleConfig()">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="sliders-horizontal" style="color: var(--primary);"></i>
-                <span style="font-weight: 600; color: var(--text-main);">Gerenciar Preferências</span>
-            </div>
-            <i data-lucide="chevron-down" id="configChevron"></i>
-        </div>
-        
-        <div class="config-body" id="configBody">
-            <form method="POST">
-                <input type="hidden" name="action" value="save_preferences">
-                
-                <?php foreach ($notificationTypes as $category => $types): ?>
-                    <div class="config-section-title"><?= $category ?></div>
-                    <?php foreach ($types as $typeKey => $label): ?>
-                        <div class="notification-option">
-                            <label for="pref_<?= $typeKey ?>" style="cursor: pointer;"><?= $label ?></label>
-                            <label class="switch">
-                                <input type="checkbox" id="pref_<?= $typeKey ?>" name="prefs[<?= $typeKey ?>]" 
-                                    <?= (!isset($userPrefs[$typeKey]) || $userPrefs[$typeKey]) ? 'checked' : '' ?>>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endforeach; ?>
-                
-                <div style="margin-top: 20px; text-align: right;">
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                </div>
-            </form>
-        </div>
+    <!-- Botão de Ação -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 24px;">
+        <button onclick="openNotificationSettings()" class="btn btn-primary" style="background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-color);">
+            <i data-lucide="sliders-horizontal" style="width: 18px; margin-right: 8px;"></i>
+            Gerenciar Preferências
+        </button>
     </div>
 
     <!-- Stats -->
@@ -454,22 +427,75 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
 
 </div>
 
+<!-- Modal de Preferências -->
+<div id="notificationSettingsModal" style="display: none;">
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s;">
+        <div style="background: var(--bg-surface); width: 90%; max-width: 600px; max-height: 90vh; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column;">
+            
+            <div style="padding: 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main);">⚙️ Configurar Notificações</h2>
+                <button onclick="closeNotificationSettings()" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 8px;">
+                    <i data-lucide="x" style="width: 20px;"></i>
+                </button>
+            </div>
+            
+            <div style="padding: 20px; overflow-y: auto; flex: 1;">
+                <form id="notificationPrefsForm" method="POST">
+                    <input type="hidden" name="action" value="save_preferences">
+                    
+                    <?php foreach ($notificationTypes as $category => $types): ?>
+                        <div style="margin-bottom: 24px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 12px;"><?= $category ?></div>
+                            <div style="background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden;">
+                                <?php foreach ($types as $typeKey => $label): ?>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border-color);">
+                                        <label for="pref_<?= $typeKey ?>" style="cursor: pointer; font-weight: 500; font-size: 0.95rem; color: var(--text-main); flex: 1;"><?= $label ?></label>
+                                        <label class="switch">
+                                            <input type="checkbox" id="pref_<?= $typeKey ?>" name="prefs[<?= $typeKey ?>]" 
+                                                <?= (!isset($userPrefs[$typeKey]) || $userPrefs[$typeKey]) ? 'checked' : '' ?>>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </form>
+            </div>
+            
+            <div style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeNotificationSettings()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('notificationPrefsForm').submit()">Salvar Alterações</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
 <script>
     lucide.createIcons();
     
-    function toggleConfig() {
-        const body = document.getElementById('configBody');
-        const chevron = document.getElementById('configChevron');
-        
-        if (body.style.display === 'block') {
-            body.style.display = 'none';
-            chevron.setAttribute('data-lucide', 'chevron-down');
-        } else {
-            body.style.display = 'block';
-            chevron.setAttribute('data-lucide', 'chevron-up');
-        }
-        lucide.createIcons();
+    function openNotificationSettings() {
+        document.getElementById('notificationSettingsModal').style.display = 'block';
     }
+    
+    function closeNotificationSettings() {
+        const modal = document.getElementById('notificationSettingsModal');
+        modal.querySelector('div[style*="position: fixed"]').style.animation = 'fadeOut 0.2s';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.querySelector('div[style*="position: fixed"]').style.animation = 'fadeIn 0.2s';
+        }, 200);
+    }
+    
+    // Configurações de estilo para animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        .switch input:checked + .slider { background-color: var(--primary); }
+    `;
+    document.head.appendChild(style);
 </script>
 
 
