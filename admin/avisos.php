@@ -190,10 +190,12 @@ renderAppHeader('Avisos');
 
     .hero-content {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
         max-width: 800px;
         margin: 0 auto;
+        text-align: center;
     }
 
     .hero-icon {
@@ -204,7 +206,6 @@ renderAppHeader('Avisos');
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
     }
 
     .hero-icon i {
@@ -214,20 +215,20 @@ renderAppHeader('Avisos');
     }
 
     .hero-text {
-        flex: 1;
+        width: 100%;
     }
 
     .hero-title {
         font-size: 1.25rem;
         font-weight: 700;
-        color: #5b21b6; /* Roxo escuro */
+        color: #5b21b6;
         margin: 0 0 4px;
         letter-spacing: -0.01em;
     }
 
     .hero-subtitle {
         font-size: 0.875rem;
-        color: #7c3aed; /* Roxo médio */
+        color: #7c3aed;
         margin: 0;
         line-height: 1.4;
     }
@@ -274,45 +275,84 @@ renderAppHeader('Avisos');
         color: var(--text-muted);
     }
 
-    /* === FILTER TABS === */
-    .filter-tabs {
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        margin-bottom: 24px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+    /* === FILTER DROPDOWN === */
+    .filter-container {
+        margin-bottom: 20px;
+        position: relative;
     }
 
-    .filter-tabs::-webkit-scrollbar {
-        display: none;
-    }
-
-    .filter-tab {
-        padding: 10px 20px;
-        border-radius: 10px;
-        text-decoration: none;
+    .filter-button {
+        width: 100%;
+        padding: 12px 16px;
+        background: white;
+        border: 2px solid var(--purple-border);
+        border-radius: 12px;
         font-size: 0.9rem;
         font-weight: 600;
-        white-space: nowrap;
-        transition: all 0.2s;
-        background: white;
         color: var(--text-main);
-        border: 2px solid var(--border-color);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s;
     }
 
-    .filter-tab:hover {
-        border-color: var(--purple-light);
+    .filter-button:hover {
+        border-color: var(--purple-primary);
+        background: var(--purple-bg);
+    }
+
+    .filter-button.active {
+        border-color: var(--purple-primary);
+        background: var(--purple-bg);
+    }
+
+    .filter-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid var(--purple-border);
+        border-radius: 12px;
+        margin-top: 4px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        z-index: 100;
+        overflow: hidden;
+    }
+
+    .filter-dropdown.show {
+        display: block;
+        animation: fadeInDown 0.2s ease-out;
+    }
+
+    .filter-option {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .filter-option:last-child {
+        border-bottom: none;
+    }
+
+    .filter-option:hover {
+        background: var(--purple-bg);
         color: var(--purple-primary);
-        transform: translateY(-1px);
     }
 
-    .filter-tab.active {
-        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
-        color: white;
-        border-color: transparent;
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    .filter-option.active {
+        background: var(--purple-bg);
+        color: var(--purple-primary);
+        font-weight: 700;
     }
 
     /* === AVISO CARDS === */
@@ -804,16 +844,11 @@ renderAppHeader('Avisos');
     /* Responsive */
     @media (max-width: 768px) {
         .hero-title {
-            font-size: 1.5rem;
+            font-size: 1.15rem;
         }
 
-        .filter-tabs {
-            gap: 6px;
-        }
-
-        .filter-tab {
-            padding: 8px 16px;
-            font-size: 0.85rem;
+        .hero-subtitle {
+            font-size: 0.8rem;
         }
 
         .fab {
@@ -854,37 +889,58 @@ renderAppHeader('Avisos');
         </form>
     </div>
     
-    <!-- Filtros por Tipo -->
-    <div class="filter-tabs">
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'all'])) ?>" 
-           class="filter-tab <?= $filterType === 'all' ? 'active' : '' ?>">
-            ✨ Todos
-        </a>
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'espiritual'])) ?>" 
-           class="filter-tab <?= $filterType === 'espiritual' ? 'active' : '' ?>">
-            🙏 Espiritual
-        </a>
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'eventos'])) ?>" 
-           class="filter-tab <?= $filterType === 'eventos' ? 'active' : '' ?>">
-            🎉 Eventos
-        </a>
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'geral'])) ?>" 
-           class="filter-tab <?= $filterType === 'geral' ? 'active' : '' ?>">
-            📢 Geral
-        </a>
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'importante'])) ?>" 
-           class="filter-tab <?= $filterType === 'importante' ? 'active' : '' ?>">
-            ⭐ Importante
-        </a>
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'musica'])) ?>" 
-           class="filter-tab <?= $filterType === 'musica' ? 'active' : '' ?>">
-            🎵 Música
-        </a>
-        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'urgente'])) ?>" 
-           class="filter-tab <?= $filterType === 'urgente' ? 'active' : '' ?>">
-            🚨 Urgente
-        </a>
+    
+    <!-- Filtro Dropdown -->
+    <div class="filter-container">
+        <button type="button" class="filter-button" id="filterButton" onclick="toggleFilterDropdown()">
+            <span>
+                <?php
+                    $filterLabels = [
+                        'all' => '✨ Todos',
+                        'espiritual' => '🙏 Espiritual',
+                        'eventos' => '🎉 Eventos',
+                        'geral' => '📢 Geral',
+                        'importante' => '⭐ Importante',
+                        'musica' => '🎵 Música',
+                        'urgente' => '🚨 Urgente'
+                    ];
+                    echo $filterLabels[$filterType] ?? '✨ Todos';
+                ?>
+            </span>
+            <i data-lucide="chevron-down" style="width: 18px;"></i>
+        </button>
+        <div class="filter-dropdown" id="filterDropdown">
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'all'])) ?>" 
+               class="filter-option <?= $filterType === 'all' ? 'active' : '' ?>">
+                ✨ Todos
+            </a>
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'espiritual'])) ?>" 
+               class="filter-option <?= $filterType === 'espiritual' ? 'active' : '' ?>">
+                🙏 Espiritual
+            </a>
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'eventos'])) ?>" 
+               class="filter-option <?= $filterType === 'eventos' ? 'active' : '' ?>">
+                🎉 Eventos
+            </a>
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'geral'])) ?>" 
+               class="filter-option <?= $filterType === 'geral' ? 'active' : '' ?>">
+                📢 Geral
+            </a>
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'importante'])) ?>" 
+               class="filter-option <?= $filterType === 'importante' ? 'active' : '' ?>">
+                ⭐ Importante
+            </a>
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'musica'])) ?>" 
+               class="filter-option <?= $filterType === 'musica' ? 'active' : '' ?>">
+                🎵 Música
+            </a>
+            <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'urgente'])) ?>" 
+               class="filter-option <?= $filterType === 'urgente' ? 'active' : '' ?>">
+                🚨 Urgente
+            </a>
+        </div>
     </div>
+
 
     <!-- Avisos List -->
     <?php if (empty($avisos)): ?>
@@ -1045,7 +1101,15 @@ renderAppHeader('Avisos');
 </div>
 
 <script>
-    // Toggle Dropdown
+    // Toggle Filter Dropdown
+    function toggleFilterDropdown() {
+        const dropdown = document.getElementById('filterDropdown');
+        const button = document.getElementById('filterButton');
+        dropdown.classList.toggle('show');
+        button.classList.toggle('active');
+    }
+
+    // Toggle Aviso Dropdown
     function toggleDropdown(btn) {
         const dropdown = btn.nextElementSibling;
         const allDropdowns = document.querySelectorAll('.dropdown-menu');
@@ -1059,6 +1123,15 @@ renderAppHeader('Avisos');
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', (e) => {
+        // Close filter dropdown
+        if (!e.target.closest('.filter-container')) {
+            const filterDropdown = document.getElementById('filterDropdown');
+            const filterButton = document.getElementById('filterButton');
+            if (filterDropdown) filterDropdown.classList.remove('show');
+            if (filterButton) filterButton.classList.remove('active');
+        }
+        
+        // Close aviso dropdowns
         if (!e.target.closest('.aviso-dropdown')) {
             document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
         }
