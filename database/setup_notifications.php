@@ -43,11 +43,14 @@ try {
     
     echo "<div class='info'>📄 Arquivo SQL carregado com sucesso</div>";
     
+    // Remover comentários SQL (-- ...)
+    $sql = preg_replace('/^--.*$/m', '', $sql);
+    
     // Separar e executar cada statement
     $statements = array_filter(
         array_map('trim', explode(';', $sql)),
         function($stmt) {
-            return !empty($stmt) && !preg_match('/^--/', $stmt);
+            return !empty($stmt);
         }
     );
     

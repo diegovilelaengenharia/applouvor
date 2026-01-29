@@ -3,6 +3,7 @@
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
+require_once '../includes/notification_system.php';
 
 checkLogin();
 
@@ -76,6 +77,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($_POST['selected_tags'] as $tagId) {
             $stmtTag->execute([$newId, $tagId]);
         }
+    }
+
+    // Notificar todos os usuários sobre a nova música
+    try {
+        $notificationSystem = new NotificationSystem($pdo);
+        $songTitle = $_POST['title'];
+        $songArtist = $_POST['artist'];
+        
+        // Buscar todos os usuários ativos
+        $users = $pdo->query("SELECT id FROM users WHERE status = 'active'")->fetchAll(PDO::FETCH_COLUMN);
+        
+        foreach ($users as $uid) {
+            if ($uid == $_SESSION['user_id']) continue; // Não notificar o próprio criador
+            
+            $notificationSystem->createNotification(
+                $uid,
+                'new_music',
+                "Nova Música: $songTitle",
+                "$songTitle - $songArtist foi adicionada ao repertório.",
+                "musica_detalhe.php?id=$newId"
+            );
+        }
+    } catch (Exception $e) {
+        error_log("Erro ao enviar notificações de música: " . $e->getMessage());
     }
 
     header("Location: musica_detalhe.php?id=$newId");

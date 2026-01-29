@@ -3,6 +3,7 @@
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
+require_once '../includes/notification_system.php';
 
 checkLogin();
 
@@ -24,6 +25,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     !empty($_POST['expires_at']) ? $_POST['expires_at'] : NULL,
                     $userId
                 ]);
+
+                // Notificar usuários
+                $avisoId = $pdo->lastInsertId();
+                if ($avisoId) {
+                    try {
+                        $notificationSystem = new NotificationSystem($pdo);
+                        $targetAudience = $_POST['target_audience'];
+                        $priority = $_POST['priority'];
+                        $title = $_POST['title'];
+                        $notifType = $priority === 'urgent' ? 'aviso_urgent' : 'new_aviso';
+                        
+                        // Definir query de usuários baseado no público
+                        $usersQuery = "SELECT id FROM users WHERE status = 'active'";
+                        $usersParams = [];
+                        
+                        if ($targetAudience === 'admins') {
+                            $usersQuery .= " AND role = 'admin'";
+                        } elseif ($targetAudience === 'team') {
+                            $usersQuery .= " AND role IN ('admin', 'member')"; // Assumindo 'member' como equipe
+                        }
+                        
+                        $stmtUsers = $pdo->query($usersQuery);
+                        $users = $stmtUsers->fetchAll(PDO::FETCH_COLUMN);
+                        
+                        foreach ($users as $uid) {
+                            if ($uid == $userId) continue; // Não notificar o próprio criador
+                            
+                            $notificationSystem->createNotification(
+                                $uid,
+                                $notifType,
+                                "Novo Aviso: $title",
+                                strip_tags($_POST['message']), // Remover HTML da mensagem para notificação
+                                "avisos.php" 
+                            );
+                        }
+                    } catch (Exception $e) {
+                         // Ignorar erros de notificação para não bloquear o aviso
+                         error_log("Erro ao enviar notificações: " . $e->getMessage());
+                    }
+                }
+
                 header('Location: avisos.php?success=created');
                 exit;
 

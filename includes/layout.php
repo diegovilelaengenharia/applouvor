@@ -760,6 +760,31 @@ function renderAppHeader($title, $backUrl = null)
 
 
                     <!-- L├¡der Button (Admin only) -->
+                    <!-- Notification Button -->
+                    <div style="position: relative;">
+                        <button class="notification-btn ripple" onclick="toggleNotifications()" id="notificationBtn">
+                            <i data-lucide="bell"></i>
+                            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                        </button>
+                        
+                        <!-- Dropdown -->
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <span class="notification-title">Notificações</span>
+                                <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
+                            </div>
+                            <div class="notification-list" id="notificationList">
+                                <div class="empty-state">
+                                    <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
+                                    <p>Nenhuma notificação nova</p>
+                                </div>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="notificacoes.php">Ver todas as notificações</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
                             <i data-lucide="crown" style="color: white; width: 20px;"></i>
@@ -812,6 +837,13 @@ function renderAppHeader($title, $backUrl = null)
                                         <i data-lucide="user" style="width: 16px; height: 16px;"></i>
                                     </div>
                                     <span style="font-weight: 500;">Meu Perfil</span>
+                                </a>
+
+                                <a href="#" onclick="openDashboardCustomization(); return false;" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #eef2ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
+                                        <i data-lucide="layout" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                    <span style="font-weight: 500;">Acesso Rápido</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -1599,6 +1631,7 @@ function renderAppHeader($title, $backUrl = null)
             </script>
         </div>
     </header>
+    <script src="assets/js/notifications.js"></script>
 <?php
     }
 ?>

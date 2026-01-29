@@ -2,6 +2,7 @@
 // admin/escala_adicionar.php
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
+require_once '../includes/notification_system.php';
 
 // Buscar dados para os selects
 $allUsers = $pdo->query("SELECT id, name, instrument FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
@@ -22,6 +23,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtMember = $pdo->prepare("INSERT INTO schedule_users (schedule_id, user_id) VALUES (?, ?)");
         foreach ($_POST['members'] as $userId) {
             $stmtMember->execute([$scheduleId, $userId]);
+        }
+
+        // Notificar membros escalados
+        try {
+            $notificationSystem = new NotificationSystem($pdo);
+            $dateFormatted = date('d/m', strtotime($_POST['event_date']));
+            $typeFormatted = $eventType;
+            
+            foreach ($_POST['members'] as $uid) {
+                // Não notificar quem criou (opcional, mas geralmente útil para confirmar)
+                // Se quiser notificar todos escalados, remova a verificação abaixo se o criador estiver na lista
+                // if ($uid == $_SESSION['user_id']) continue; 
+                
+                $notificationSystem->createNotification(
+                    $uid,
+                    'new_escala',
+                    "Escalado: $dateFormatted - $typeFormatted",
+                    "Você foi escalado para $typeFormatted no dia $dateFormatted. Toque para ver detalhes.",
+                    "escala_detalhe.php?id=$scheduleId"
+                );
+            }
+        } catch (Exception $e) {
+            error_log("Erro ao enviar notificações de escala: " . $e->getMessage());
         }
     }
 
