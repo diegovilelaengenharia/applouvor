@@ -61,6 +61,7 @@ $stmtStats->execute([$userId]);
 $stats = $stmtStats->fetch(PDO::FETCH_ASSOC);
 
 renderAppHeader('Notificações');
+renderPageHeader('Minhas Notificações', 'Louvor PIB Oliveira');
 ?>
 
 <style>

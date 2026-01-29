@@ -958,9 +958,19 @@ renderAppHeader('Avisos');
         <?php foreach ($avisos as $aviso): ?>
             <div class="aviso-card <?= $aviso['priority'] ?>">
                 <!-- Header -->
+                <!-- Header -->
                 <div class="aviso-header">
-                    <?php if (!empty($aviso['author_avatar'])): ?>
-                        <img src="<?= $aviso['author_avatar'] ?>" alt="<?= htmlspecialchars($aviso['author_name']) ?>" class="aviso-avatar">
+                    <?php 
+                        $avatarPath = $aviso['author_avatar'];
+                        if ($avatarPath && !filter_var($avatarPath, FILTER_VALIDATE_URL) && strpos($avatarPath, 'data:') !== 0) {
+                            // Se não for URL completa nem base64, e não começar com /, adiciona ../ já que estamos em /admin
+                            if (strpos($avatarPath, '/') !== 0) {
+                                $avatarPath = '../' . $avatarPath;
+                            }
+                        }
+                    ?>
+                    <?php if (!empty($avatarPath)): ?>
+                        <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($aviso['author_name']) ?>" class="aviso-avatar">
                     <?php else: ?>
                         <div class="aviso-avatar-placeholder">
                             <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
