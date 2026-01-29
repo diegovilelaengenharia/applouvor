@@ -96,12 +96,53 @@ renderAppHeader('Gestão de Avisos');
         border-radius: 12px;
         border: 1px solid var(--border-color);
         text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.2s;
+    }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: currentColor;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .stat-card.ativos {
+        color: #10b981;
+    }
+    
+    .stat-card.arquivados {
+        color: #64748b;
+    }
+    
+    .stat-card.expirados {
+        color: #f59e0b;
+    }
+    
+    .stat-card.tags {
+        color: #8b5cf6;
+    }
+    
+    .stat-icon {
+        width: 24px;
+        height: 24px;
+        margin: 0 auto 6px;
+        opacity: 0.8;
     }
     
     .stat-value {
         font-size: var(--font-h2);
         font-weight: 800;
-        color: #8b5cf6;
+        color: currentColor;
     }
     
     .stat-label {
@@ -158,9 +199,71 @@ renderAppHeader('Gestão de Avisos');
     
     .filters-row {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 10px;
         margin-bottom: 12px;
+    }
+    
+    .tag-multiselect {
+        position: relative;
+    }
+    
+    .tag-multiselect-trigger {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: var(--font-body-sm);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .tag-multiselect-trigger:hover {
+        border-color: #c4b5fd;
+    }
+    
+    .tag-multiselect-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 4px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        z-index: 100;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .tag-multiselect-dropdown.active {
+        display: block;
+    }
+    
+    .tag-option-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: var(--font-body-sm);
+    }
+    
+    .tag-option-item:hover {
+        background: var(--bg-body);
+    }
+    
+    .tag-option-item input[type="checkbox"] {
+        cursor: pointer;
     }
     
     .filter-pill {
@@ -591,19 +694,31 @@ renderAppHeader('Gestão de Avisos');
     
     <!-- Estatísticas -->
     <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card ativos">
+            <div class="stat-icon">
+                <i data-lucide="check-circle" style="width: 100%; height: 100%;"></i>
+            </div>
             <div class="stat-value"><?= $totalActive ?></div>
             <div class="stat-label">Ativos</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card arquivados">
+            <div class="stat-icon">
+                <i data-lucide="archive" style="width: 100%; height: 100%;"></i>
+            </div>
             <div class="stat-value"><?= $totalArchived ?></div>
             <div class="stat-label">Arquivados</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card expirados">
+            <div class="stat-icon">
+                <i data-lucide="clock" style="width: 100%; height: 100%;"></i>
+            </div>
             <div class="stat-value"><?= $totalExpired ?></div>
             <div class="stat-label">Expirados</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card tags">
+            <div class="stat-icon">
+                <i data-lucide="tags" style="width: 100%; height: 100%;"></i>
+            </div>
             <div class="stat-value"><?= count($tags) ?></div>
             <div class="stat-label">Tags</div>
         </div>
@@ -633,6 +748,30 @@ renderAppHeader('Gestão de Avisos');
                     <option value="important" <?= $filterPriority === 'important' ? 'selected' : '' ?>>Importante</option>
                     <option value="info" <?= $filterPriority === 'info' ? 'selected' : '' ?>>Normal</option>
                 </select>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-section-label">Tags</div>
+                <div class="tag-multiselect">
+                    <div class="tag-multiselect-trigger" onclick="toggleTagDropdown()">
+                        <span id="tagFilterLabel">Todas as tags</span>
+                        <i data-lucide="chevron-down" style="width: 16px;"></i>
+                    </div>
+                    <div class="tag-multiselect-dropdown" id="tagDropdown">
+                        <div class="tag-option-item" onclick="selectAllTags()">
+                            <input type="checkbox" id="tag-all" checked>
+                            <label for="tag-all" style="cursor: pointer; flex: 1;">Todas</label>
+                        </div>
+                        <?php foreach ($tags as $tag): ?>
+                            <div class="tag-option-item" onclick="toggleTag(<?= $tag['id'] ?>)">
+                                <input type="checkbox" id="tag-<?= $tag['id'] ?>" class="tag-checkbox" checked>
+                                <label for="tag-<?= $tag['id'] ?>" style="cursor: pointer; flex: 1; color: <?= $tag['color'] ?>;">
+                                    <?= htmlspecialchars($tag['name']) ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
