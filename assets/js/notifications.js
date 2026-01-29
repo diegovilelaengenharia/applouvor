@@ -175,6 +175,145 @@ document.addEventListener('click', function (e) {
 document.addEventListener('DOMContentLoaded', function () {
     loadUnreadCount();
 
+    // Verificar se suporta SW e Push
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        checkNotificationPermission();
+    }
+
     // Atualizar a cada 30 segundos
     setInterval(loadUnreadCount, 30000);
 });
+
+// Som de notificação (Beep suave)
+const notificationSound = new Audio('data:audio/mp3;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAG1xUAALDkAAXGkAAIjR0oAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvwWAAfDOBsAAAAAt3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3'); // Placeholder curto
+
+// Checar e pedir permissão
+function checkNotificationPermission() {
+    const btn = document.getElementById('btnEnableNotifications');
+
+    // Se ainda não foi perguntado
+    if (Notification.permission === 'default') {
+        if (btn) btn.style.display = 'inline-flex';
+        // showPermissionRequestUI(); // Opcional, agora usamos o botão
+    } else if (Notification.permission === 'granted') {
+        if (btn) btn.style.display = 'none';
+        // Garantir que está inscrito
+        ensurePushSubscription();
+    } else {
+        if (btn) btn.style.display = 'none'; // Se negado, não mostra
+    }
+}
+
+
+// UI para pedir permissão (pode ser chamada pelo botão no menu)
+function requestNotificationPermission() {
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+            ensurePushSubscription();
+            new Audio(notificationSound.src).play().catch(e => console.log('Audio autoplay blocked'));
+            if (navigator.vibrate) navigator.vibrate([200]);
+            alert('Notificações ativadas com sucesso!');
+        }
+    });
+}
+
+function showPermissionRequestUI() {
+    // Implementar um toast ou modal suave se desejar, 
+    // ou apenas esperar o usuário clicar no botão "Ativar Notificações" no dropdown
+}
+
+// Garantir Inscrição no Push
+async function ensurePushSubscription() {
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        let subscription = await registration.pushManager.getSubscription();
+
+        if (!subscription) {
+            // Buscar chave pública
+            const response = await fetch('notifications_api.php?action=public_key');
+            const data = await response.json();
+
+            if (data.success && data.publicKey) {
+                const convertedKey = urlBase64ToUint8Array(data.publicKey);
+
+                subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: convertedKey
+                });
+
+                // Salvar no backend
+                await saveSubscription(subscription);
+            }
+        }
+    } catch (error) {
+        console.error('Erro no Push Subscription:', error);
+    }
+}
+
+async function saveSubscription(subscription) {
+    try {
+        await fetch('api/push_subscription.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(subscription)
+        });
+    } catch (e) {
+        console.error('Erro ao salvar subscription:', e);
+    }
+}
+
+// Utility para VAPID Key
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+// Modified loadNotifications to play sound if new ones arrived
+let lastNotificationId = 0;
+
+async function loadNotifications() {
+    try {
+        const response = await fetch('notifications_api.php?action=list&limit=10');
+        const data = await response.json();
+
+        if (data.success) {
+            notificationsData = data.notifications;
+
+            // Check for new notifications to play sound
+            if (notificationsData.length > 0) {
+                const newestId = notificationsData[0].id;
+                if (newestId > lastNotificationId && lastNotificationId !== 0) {
+                    playSoundAndVibrate();
+                }
+                lastNotificationId = newestId;
+            } else {
+                lastNotificationId = 0;
+            }
+
+            renderNotifications();
+        }
+    } catch (error) {
+        console.error('Erro ao carregar notificações:', error);
+    }
+}
+
+function playSoundAndVibrate() {
+    // Tocar som
+    notificationSound.play().catch(e => console.log('Audio play error', e));
+
+    // Vibrar
+    if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+    }
+}
+

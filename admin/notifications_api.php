@@ -46,6 +46,19 @@ try {
                 'count' => $count
             ]);
             break;
+
+        case 'public_key':
+             $configFile = __DIR__ . '/../includes/vapid_config.php';
+             if (file_exists($configFile)) {
+                 $config = require $configFile;
+                 echo json_encode([
+                     'success' => true,
+                     'publicKey' => $config['publicKey']
+                 ]);
+             } else {
+                 echo json_encode(['success' => false, 'error' => 'Configuração não encontrada']);
+             }
+             break;
             
         case 'mark_read':
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

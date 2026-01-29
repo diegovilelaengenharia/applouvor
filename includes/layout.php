@@ -770,7 +770,12 @@ function renderAppHeader($title, $backUrl = null)
                         <!-- Dropdown -->
                         <div class="notification-dropdown" id="notificationDropdown">
                             <div class="notification-header">
-                                <span class="notification-title">Notificações</span>
+                                <div class="notification-title">
+                                    Notificações
+                                    <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
+                                        <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
+                                    </button>
+                                </div>
                                 <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
                             </div>
                             <div class="notification-list" id="notificationList">
@@ -1703,7 +1708,10 @@ function renderAppHeader($title, $backUrl = null)
                 display: flex; justify-content: space-between; align-items: center;
                 background: #f8fafc;
             }
-            .notification-title { font-weight: 700; color: var(--text-main); font-size: 0.9rem; }
+            .notification-title { font-weight: 700; color: var(--text-main); font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+            .notification-enable-btn {
+                background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; display: none;
+            }
             .mark-all-read { 
                 background: none; border: none; color: var(--primary); 
                 font-size: 0.75rem; font-weight: 600; cursor: pointer; padding: 4px;
