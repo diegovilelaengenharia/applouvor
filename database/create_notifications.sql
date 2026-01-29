@@ -31,38 +31,18 @@ CREATE TABLE IF NOT EXISTS notification_preferences (
     UNIQUE KEY unique_user_type (user_id, type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Inserir preferências padrão para tipos de notificação
-INSERT INTO notification_preferences (user_id, type, enabled)
-SELECT id, 'weekly_report', TRUE FROM users
-WHERE NOT EXISTS (
-    SELECT 1 FROM notification_preferences 
-    WHERE user_id = users.id AND type = 'weekly_report'
-);
+-- Inserir preferências padrão para tipos de notificação (apenas se não existir)
+INSERT IGNORE INTO notification_preferences (user_id, type, enabled)
+SELECT id, 'weekly_report', TRUE FROM users;
 
-INSERT INTO notification_preferences (user_id, type, enabled)
-SELECT id, 'new_escala', TRUE FROM users
-WHERE NOT EXISTS (
-    SELECT 1 FROM notification_preferences 
-    WHERE user_id = users.id AND type = 'new_escala'
-);
+INSERT IGNORE INTO notification_preferences (user_id, type, enabled)
+SELECT id, 'new_escala', TRUE FROM users;
 
-INSERT INTO notification_preferences (user_id, type, enabled)
-SELECT id, 'new_music', TRUE FROM users
-WHERE NOT EXISTS (
-    SELECT 1 FROM notification_preferences 
-    WHERE user_id = users.id AND type = 'new_music'
-);
+INSERT IGNORE INTO notification_preferences (user_id, type, enabled)
+SELECT id, 'new_music', TRUE FROM users;
 
-INSERT INTO notification_preferences (user_id, type, enabled)
-SELECT id, 'new_aviso', TRUE FROM users
-WHERE NOT EXISTS (
-    SELECT 1 FROM notification_preferences 
-    WHERE user_id = users.id AND type = 'new_aviso'
-);
+INSERT IGNORE INTO notification_preferences (user_id, type, enabled)
+SELECT id, 'new_aviso', TRUE FROM users;
 
-INSERT INTO notification_preferences (user_id, type, enabled)
-SELECT id, 'aviso_urgent', TRUE FROM users
-WHERE NOT EXISTS (
-    SELECT 1 FROM notification_preferences 
-    WHERE user_id = users.id AND type = 'aviso_urgent'
-);
+INSERT IGNORE INTO notification_preferences (user_id, type, enabled)
+SELECT id, 'aviso_urgent', TRUE FROM users;
