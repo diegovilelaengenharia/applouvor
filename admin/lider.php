@@ -583,7 +583,7 @@ try {
         </a>
 
         <!-- Relatório Completo (Indicadores) -->
-        <a href="relatorios_gerais.php?print=true" target="_blank" class="create-btn" style="
+        <a href="relatorios_gerais.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);

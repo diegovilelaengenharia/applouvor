@@ -39,39 +39,7 @@ function getAllAvailableCards() {
             'url' => 'membros.php',
             'admin_only' => false
         ],
-        'stats_escalas' => [
-            'id' => 'stats_escalas',
-            'title' => 'Estatísticas Escalas',
-            'icon' => 'bar-chart-2',
-            'category' => 'gestao',
-            'category_name' => 'Gestão',
-            'color' => '#60a5fa', // Blue 400 (Lighter)
-            'bg' => '#eff6ff', // Blue 50
-            'url' => 'escalas_stats.php',
-            'admin_only' => false
-        ],
-        'stats_repertorio' => [
-            'id' => 'stats_repertorio',
-            'title' => 'Estatísticas Repertório',
-            'icon' => 'trending-up',
-            'category' => 'gestao',
-            'category_name' => 'Gestão',
-            'color' => '#60a5fa', // Blue 400 (Lighter)
-            'bg' => '#eff6ff', // Blue 50
-            'url' => 'repertorio_stats.php',
-            'admin_only' => false
-        ],
-        'relatorios' => [
-            'id' => 'relatorios',
-            'title' => 'Relatórios',
-            'icon' => 'file-text',
-            'category' => 'gestao',
-            'category_name' => 'Gestão',
-            'color' => '#60a5fa', // Blue 400 (Lighter)
-            'bg' => '#eff6ff', // Blue 50
-            'url' => 'relatorios_gerais.php',
-            'admin_only' => false
-        ],
+
         'agenda' => [
             'id' => 'agenda',
             'title' => 'Agenda',
@@ -83,9 +51,9 @@ function getAllAvailableCards() {
             'url' => 'agenda.php',
             'admin_only' => false
         ],
-        'indisponibilidades' => [
-            'id' => 'indisponibilidades',
-            'title' => 'Indisponibilidades',
+        'ausencias' => [
+            'id' => 'ausencias',
+            'title' => 'Ausências',
             'icon' => 'calendar-x',
             'category' => 'gestao',
             'category_name' => 'Gestão',
@@ -129,17 +97,7 @@ function getAllAvailableCards() {
             'url' => 'oracao.php',
             'admin_only' => false
         ],
-        'config_leitura' => [
-            'id' => 'config_leitura',
-            'title' => 'Config. Leitura',
-            'icon' => 'settings',
-            'category' => 'espirito',
-            'category_name' => 'Espírito',
-            'color' => '#34d399', // Emerald 400 (Lighter)
-            'bg' => '#ecfdf5', // Emerald 50
-            'url' => 'leitura.php#config',
-            'admin_only' => false
-        ],
+
         
         // COMUNICAÇÃO → ROXO
         'avisos' => [
@@ -153,9 +111,9 @@ function getAllAvailableCards() {
             'url' => 'avisos.php',
             'admin_only' => false
         ],
-        'aniversariantes' => [
-            'id' => 'aniversariantes',
-            'title' => 'Aniversariantes',
+        'aniversarios' => [
+            'id' => 'aniversarios',
+            'title' => 'Aniversários',
             'icon' => 'cake',
             'category' => 'comunica',
             'category_name' => 'Comunica',
@@ -164,17 +122,7 @@ function getAllAvailableCards() {
             'url' => 'aniversarios.php',
             'admin_only' => false
         ],
-        'chat' => [
-            'id' => 'chat',
-            'title' => 'Chat',
-            'icon' => 'message-circle',
-            'category' => 'comunica',
-            'category_name' => 'Comunica',
-            'color' => '#a78bfa', // Violet 400 (Lighter)
-            'bg' => '#f5f3ff', // Violet 50
-            'url' => 'chat.php',
-            'admin_only' => false
-        ],
+
         
         // ADMIN
         'lider' => [
@@ -199,17 +147,7 @@ function getAllAvailableCards() {
             'url' => 'perfil.php',
             'admin_only' => false
         ],
-        'configuracoes' => [
-            'id' => 'configuracoes',
-            'title' => 'Configurações',
-            'icon' => 'sliders',
-            'category' => 'admin',
-            'category_name' => 'Admin',
-            'color' => '#dc2626',
-            'bg' => '#fee2e2',
-            'url' => 'configuracoes.php',
-            'admin_only' => true
-        ],
+
         'monitoramento' => [
             'id' => 'monitoramento',
             'title' => 'Monitoramento',
