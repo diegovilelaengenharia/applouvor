@@ -780,7 +780,7 @@ function renderAppHeader($title, $backUrl = null)
                                 </div>
                             </div>
                             <div class="notification-footer">
-                                <a href="notificacoes.php">Ver todas as notificações</a>
+                                <a href="/admin/notificacoes.php">Ver todas as notificações</a>
                             </div>
                         </div>
                     </div>
@@ -1503,7 +1503,7 @@ function renderAppHeader($title, $backUrl = null)
             <?php endif; ?>
 
             <!-- Notification Button (Bell) -->
-            <button onclick="window.location.href='admin/notificacoes.php'" class="ripple" title="Notificações" style="
+            <button onclick="window.location.href='/admin/notificacoes.php'" class="ripple" title="Notificações" style="
                 width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
                 display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
             ">
