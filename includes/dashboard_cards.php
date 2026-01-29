@@ -123,30 +123,7 @@ function getAllAvailableCards() {
             'admin_only' => false
         ],
 
-        
-        // ADMIN
-        'lider' => [
-            'id' => 'lider',
-            'title' => 'Painel do Líder',
-            'icon' => 'crown',
-            'category' => 'admin',
-            'category_name' => 'Admin',
-            'color' => '#dc2626', // Red 600
-            'bg' => '#fee2e2', // Red 50
-            'url' => 'lider.php',
-            'admin_only' => true
-        ],
-        'perfil' => [
-            'id' => 'perfil',
-            'title' => 'Perfil',
-            'icon' => 'user',
-            'category' => 'admin',
-            'category_name' => 'Admin',
-            'color' => '#dc2626',
-            'bg' => '#fee2e2',
-            'url' => 'perfil.php',
-            'admin_only' => false
-        ],
+
 
 
 
