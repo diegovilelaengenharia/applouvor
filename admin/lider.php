@@ -639,20 +639,6 @@ try {
             </div>
         </a>
 
-        <!-- Novo Aviso -->
-         <a href="avisos_admin.php" class="create-btn" style="
-            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
-        ">
-            <div style="background: #fffbeb; color: #f59e0b; padding: 10px; border-radius: 10px;">
-                <i data-lucide="bell-plus" style="width: 20px;"></i>
-            </div>
-             <div style="text-align: center;">
-                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Aviso</div>
-                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Publicar</div>
-            </div>
-        </a>
     </div>
 
     <!-- 4. Atividade Recente -->
