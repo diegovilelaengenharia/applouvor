@@ -1628,7 +1628,95 @@ function renderAppHeader($title, $backUrl = null)
                         mobileDropdown.style.display = 'none';
                     }
                 });
+
             </script>
+            <style>
+            /* NOTIFICATION SYSTEM CSS */
+            .notification-btn {
+                width: 40px; height: 40px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer;
+                color: var(--text-muted);
+                position: relative;
+                transition: all 0.2s;
+            }
+            .notification-btn:hover, .notification-btn.active {
+                background: var(--bg-body);
+                color: var(--primary);
+                border-color: var(--primary-light);
+            }
+            .notification-badge {
+                position: absolute;
+                top: -4px; right: -4px;
+                background: #ef4444; color: white;
+                font-size: 10px; font-weight: 700;
+                min-width: 18px; height: 18px;
+                border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                border: 2px solid white;
+            }
+            .notification-dropdown {
+                display: none;
+                position: absolute;
+                top: 50px; right: -80px;
+                width: 320px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 16px;
+                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+                z-index: 1000;
+                overflow: hidden;
+                animation: fadeInUp 0.2s ease-out;
+            }
+            @media(max-width: 640px) {
+                .notification-dropdown {
+                    position: fixed;
+                    top: 60px; left: 16px; right: 16px;
+                    width: auto;
+                }
+            }
+            .notification-header {
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex; justify-content: space-between; align-items: center;
+                background: #f8fafc;
+            }
+            .notification-title { font-weight: 700; color: var(--text-main); font-size: 0.9rem; }
+            .mark-all-read { 
+                background: none; border: none; color: var(--primary); 
+                font-size: 0.75rem; font-weight: 600; cursor: pointer; padding: 4px;
+            }
+            .notification-list { max-height: 350px; overflow-y: auto; }
+            .notification-item {
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex; gap: 12px;
+                cursor: pointer; transition: background 0.1s;
+                text-decoration: none; color: inherit;
+            }
+            .notification-item:hover { background: #f1f5f9; }
+            .notification-item.unread { background: #f0fdf4; }
+            .notification-item:last-child { border-bottom: none; }
+            .notification-icon {
+                width: 32px; height: 32px; border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
+            }
+            .notification-content { flex: 1; }
+            .notification-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.4; margin-bottom: 4px; }
+            .notification-time { font-size: 0.75rem; color: var(--text-muted); }
+            .notification-footer {
+                padding: 10px; text-align: center; border-top: 1px solid var(--border-color);
+                background: #f8fafc;
+            }
+            .notification-footer a {
+                color: var(--primary); font-weight: 600; font-size: 0.85rem; text-decoration: none;
+            }
+            .empty-state { padding: 32px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+            </style>
         </div>
     </header>
     <script src="assets/js/notifications.js"></script>

@@ -108,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $showArchived = isset($_GET['archived']) && $_GET['archived'] === '1';
 $showHistory = isset($_GET['history']) && $_GET['history'] === '1';
 $filterTag = $_GET['tag'] ?? 'all';
+$filterType = $_GET['type'] ?? 'all';
 $search = $_GET['search'] ?? '';
 
 // Buscar todas as tags

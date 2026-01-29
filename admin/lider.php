@@ -525,6 +525,21 @@ try {
             </div>
         </a>
 
+        <!-- Notificações (NOVO) -->
+        <a href="notificacoes.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #f0f9ff; color: #0ea5e9; padding: 10px; border-radius: 10px;">
+                <i data-lucide="bell" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Notificações</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Visualizar</div>
+            </div>
+        </a>
+
         <!-- Indisponibilidades (NOVO) -->
         <a href="indisponibilidades_equipe.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;

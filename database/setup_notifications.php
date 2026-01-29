@@ -56,7 +56,7 @@ try {
     
     echo "<h2>Executando Statements SQL</h2>";
     
-    $pdo->beginTransaction();
+    // $pdo->beginTransaction(); // Removido
     
     $successCount = 0;
     $errorCount = 0;
@@ -85,7 +85,7 @@ try {
         }
     }
     
-    $pdo->commit();
+    // $pdo->commit();
     
     echo "<h2>Resumo</h2>";
     echo "<div class='success'>";
