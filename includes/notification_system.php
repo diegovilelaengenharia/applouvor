@@ -246,24 +246,27 @@ class NotificationSystem {
 
             // Instanciar Helper
             if (class_exists('WebPushHelper')) {
-                $webPush = new WebPushHelper(); 
+                // Carregar configurações VAPID
+                $vapid = require __DIR__ . '/vapid_config.php';
+                
+                $webPush = new WebPushHelper(
+                    $vapid['publicKey'],
+                    $vapid['privateKey'],
+                    $vapid['subject']
+                ); 
 
-                $payload = json_encode([
+                $payload = [
                     'title' => $title,
                     'body' => $message,
-                    'icon' => '../assets/icons/icon-192x192.png', // Tentar caminho relativo ao sw.js ou absoluto
+                    'icon' => '../assets/icons/icon-192x192.png',
                     'url' => $link ?? '/',
                     'data' => 
                         ['type' => $type]
-                ]);
+                ];
 
                 foreach ($subscriptions as $sub) {
-                    $webPush->sendNotification(
-                        $sub['endpoint'],
-                        $sub['p256dh'],
-                        $sub['auth'],
-                        $payload
-                    );
+                    // O método espera um array com endpoint, p256dh, auth
+                    $webPush->sendNotification($sub, $payload);
                 }
                 return true;
             }
