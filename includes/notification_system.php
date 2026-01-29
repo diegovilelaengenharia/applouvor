@@ -7,7 +7,35 @@
 require_once __DIR__ . '/web_push_helper.php';
 
 class NotificationSystem {
-    // ... (rest of class)
+    private $pdo;
+    
+    // Tipos de notificação
+    const TYPE_WEEKLY_REPORT = 'weekly_report';
+    const TYPE_NEW_ESCALA = 'new_escala';
+    const TYPE_ESCALA_UPDATE = 'escala_update';
+    const TYPE_NEW_MUSIC = 'new_music';
+    const TYPE_NEW_AVISO = 'new_aviso';
+    const TYPE_AVISO_URGENT = 'aviso_urgent';
+    const TYPE_MEMBER_ABSENCE = 'member_absence';
+    const TYPE_BIRTHDAY = 'birthday';
+    const TYPE_READING_REMINDER = 'reading_reminder';
+    
+    // Configuração de ícones e cores por tipo
+    public $typeConfig = [
+        'weekly_report' => ['icon' => 'file-text', 'color' => '#2563eb'],
+        'new_escala' => ['icon' => 'calendar-plus', 'color' => '#8b5cf6'],
+        'escala_update' => ['icon' => 'calendar-check', 'color' => '#7c3aed'],
+        'new_music' => ['icon' => 'music', 'color' => '#10b981'],
+        'new_aviso' => ['icon' => 'megaphone', 'color' => '#f59e0b'],
+        'aviso_urgent' => ['icon' => 'alert-circle', 'color' => '#ef4444'],
+        'member_absence' => ['icon' => 'user-x', 'color' => '#64748b'],
+        'birthday' => ['icon' => 'cake', 'color' => '#ec4899'],
+        'reading_reminder' => ['icon' => 'book-open', 'color' => '#06b6d4']
+    ];
+    
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
 
     /**
      * Criar notificação
