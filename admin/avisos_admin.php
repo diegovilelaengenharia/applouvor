@@ -81,25 +81,7 @@ renderAppHeader('Gestão de Avisos');
 ?>
 
 <style>
-    .admin-header {
-        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-        padding: 16px;
-        margin: -20px -20px 16px -20px;
-        color: white;
-        border-radius: 0 0 16px 16px;
-    }
-    
-    .admin-header h1 {
-        margin: 0 0 4px;
-        font-size: var(--font-h2);
-        font-weight: 800;
-    }
-    
-    .admin-header p {
-        margin: 0;
-        opacity: 0.9;
-        font-size: var(--font-body-sm);
-    }
+    /* Header removido - agora usamos avisos-header */
     
     .stats-grid {
         display: grid;
@@ -138,11 +120,8 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .filter-section {
-        margin-bottom: 12px;
-    }
-    
-    .filter-section:last-child {
-        margin-bottom: 0;
+        flex: 1;
+        min-width: 0;
     }
     
     .filter-section-label {
@@ -154,16 +133,34 @@ renderAppHeader('Gestão de Avisos');
         letter-spacing: 0.5px;
     }
     
-    .filter-pills {
-        display: flex;
-        gap: 6px;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        scrollbar-width: none;
+    .filter-select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: var(--font-body-sm);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
     }
     
-    .filter-pills::-webkit-scrollbar {
-        display: none;
+    .filter-select:hover {
+        border-color: #c4b5fd;
+    }
+    
+    .filter-select:focus {
+        outline: none;
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+    
+    .filters-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
     }
     
     .filter-pill {
@@ -326,6 +323,7 @@ renderAppHeader('Gestão de Avisos');
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
+        gap: 10px;
     }
     
     .avisos-title {
@@ -333,6 +331,32 @@ renderAppHeader('Gestão de Avisos');
         font-weight: 700;
         color: var(--text-main);
         margin: 0;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-tags {
+        background: var(--bg-surface);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: var(--font-body-sm);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+    
+    .btn-tags:hover {
+        background: #f3e8ff;
+        border-color: #c4b5fd;
+        color: #8b5cf6;
     }
     
     .modal {
@@ -509,20 +533,24 @@ renderAppHeader('Gestão de Avisos');
     }
     
     @media (max-width: 768px) {
-        .admin-header {
-            padding: 12px;
-            margin: -20px -20px 12px -20px;
-        }
-        
         .avisos-header {
             flex-direction: column;
             align-items: stretch;
             gap: 10px;
         }
         
-        .create-aviso-btn {
+        .header-actions {
+            flex-direction: column;
+        }
+        
+        .create-aviso-btn,
+        .btn-tags {
             width: 100%;
             justify-content: center;
+        }
+        
+        .filters-row {
+            grid-template-columns: 1fr;
         }
         
         .admin-header h1 {
@@ -561,20 +589,6 @@ renderAppHeader('Gestão de Avisos');
 
 <div class="container" style="padding-top: 16px; max-width: 900px; margin: 0 auto;">
     
-    <!-- Header -->
-    <div class="admin-header">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1>📢 Gestão de Avisos</h1>
-                <p>Central de gerenciamento</p>
-            </div>
-            <button onclick="openTagManager()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: var(--font-caption);">
-                <i data-lucide="tags" style="width: 14px; display: inline-block; vertical-align: middle;"></i>
-                Tags
-            </button>
-        </div>
-    </div>
-    
     <!-- Estatísticas -->
     <div class="stats-grid">
         <div class="stat-card">
@@ -597,26 +611,28 @@ renderAppHeader('Gestão de Avisos');
     
     <!-- Filtros -->
     <div class="filter-bar">
-        <div class="filter-section">
+        <div class="filter-section" style="margin-bottom: 12px;">
             <input type="text" id="searchInput" placeholder="Buscar avisos..." value="<?= htmlspecialchars($search) ?>" class="search-input">
         </div>
         
-        <div class="filter-section">
-            <div class="filter-section-label">Status</div>
-            <div class="filter-pills">
-                <a href="?status=active" class="filter-pill <?= $filterStatus === 'active' ? 'active' : '' ?>">Ativos</a>
-                <a href="?status=archived" class="filter-pill <?= $filterStatus === 'archived' ? 'active' : '' ?>">Arquivados</a>
-                <a href="?status=expired" class="filter-pill <?= $filterStatus === 'expired' ? 'active' : '' ?>">Expirados</a>
+        <div class="filters-row">
+            <div class="filter-section">
+                <div class="filter-section-label">Status</div>
+                <select class="filter-select" onchange="window.location.href='?status=' + this.value + '&priority=<?= $filterPriority ?>'">
+                    <option value="active" <?= $filterStatus === 'active' ? 'selected' : '' ?>>Ativos</option>
+                    <option value="archived" <?= $filterStatus === 'archived' ? 'selected' : '' ?>>Arquivados</option>
+                    <option value="expired" <?= $filterStatus === 'expired' ? 'selected' : '' ?>>Expirados</option>
+                </select>
             </div>
-        </div>
-        
-        <div class="filter-section">
-            <div class="filter-section-label">Prioridade</div>
-            <div class="filter-pills">
-                <a href="?priority=all&status=<?= $filterStatus ?>" class="filter-pill <?= $filterPriority === 'all' ? 'active' : '' ?>">Todas</a>
-                <a href="?priority=urgent&status=<?= $filterStatus ?>" class="filter-pill <?= $filterPriority === 'urgent' ? 'active' : '' ?>">Urgente</a>
-                <a href="?priority=important&status=<?= $filterStatus ?>" class="filter-pill <?= $filterPriority === 'important' ? 'active' : '' ?>">Importante</a>
-                <a href="?priority=info&status=<?= $filterStatus ?>" class="filter-pill <?= $filterPriority === 'info' ? 'active' : '' ?>">Normal</a>
+            
+            <div class="filter-section">
+                <div class="filter-section-label">Prioridade</div>
+                <select class="filter-select" onchange="window.location.href='?status=<?= $filterStatus ?>&priority=' + this.value">
+                    <option value="all" <?= $filterPriority === 'all' ? 'selected' : '' ?>>Todas</option>
+                    <option value="urgent" <?= $filterPriority === 'urgent' ? 'selected' : '' ?>>Urgente</option>
+                    <option value="important" <?= $filterPriority === 'important' ? 'selected' : '' ?>>Importante</option>
+                    <option value="info" <?= $filterPriority === 'info' ? 'selected' : '' ?>>Normal</option>
+                </select>
             </div>
         </div>
     </div>
@@ -624,10 +640,16 @@ renderAppHeader('Gestão de Avisos');
     <!-- Header da Lista de Avisos -->
     <div class="avisos-header">
         <h3 class="avisos-title">📋 Lista de Avisos</h3>
-        <button onclick="openCreateModal()" class="create-aviso-btn">
-            <i data-lucide="plus" style="width: 16px;"></i>
-            Criar Novo Aviso
-        </button>
+        <div class="header-actions">
+            <button onclick="openTagManager()" class="btn-tags">
+                <i data-lucide="tags" style="width: 16px;"></i>
+                Tags
+            </button>
+            <button onclick="openCreateModal()" class="create-aviso-btn">
+                <i data-lucide="plus" style="width: 16px;"></i>
+                Criar Novo Aviso
+            </button>
+        </div>
     </div>
     
     <!-- Lista de Avisos -->
