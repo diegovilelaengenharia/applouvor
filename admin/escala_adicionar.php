@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "escala_detalhe.php?id=$scheduleId"
                 );
             }
-        } catch (Exception $e) {
-            error_log("Erro ao enviar notificações de escala: " . $e->getMessage());
+        } catch (Throwable $e) {
+            error_log("Erro ao enviar notificações de escala: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
