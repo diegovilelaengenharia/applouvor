@@ -583,6 +583,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     updateNotificationStatus();
+
+    // Controle de Status com Listener Limpo
+    const btnActivate = document.getElementById('btnActivatePush');
+    if (btnActivate) {
+        btnActivate.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Botão Ativar Clicado'); // Debug
+            
+            if (typeof requestNotificationPermission === 'function') {
+                requestNotificationPermission();
+            } else {
+                alert('Erro: Função de ativação não encontrada. Recarregue a página.');
+                console.error('requestNotificationPermission is not defined');
+            }
+        });
+    }
     
     if (navigator.permissions && navigator.permissions.query) {
         navigator.permissions.query({name: 'notifications'}).then(function(permissionStatus) {
