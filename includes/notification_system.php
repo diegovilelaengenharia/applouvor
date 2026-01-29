@@ -4,37 +4,11 @@
  * Classe para gerenciar notificações do sistema
  */
 
+require_once 'web_push_helper.php';
+
 class NotificationSystem {
-    private $pdo;
-    
-    // Tipos de notificação
-    const TYPE_WEEKLY_REPORT = 'weekly_report';
-    const TYPE_NEW_ESCALA = 'new_escala';
-    const TYPE_ESCALA_UPDATE = 'escala_update';
-    const TYPE_NEW_MUSIC = 'new_music';
-    const TYPE_NEW_AVISO = 'new_aviso';
-    const TYPE_AVISO_URGENT = 'aviso_urgent';
-    const TYPE_MEMBER_ABSENCE = 'member_absence';
-    const TYPE_BIRTHDAY = 'birthday';
-    const TYPE_READING_REMINDER = 'reading_reminder';
-    
-    // Configuração de ícones e cores por tipo
-    private $typeConfig = [
-        'weekly_report' => ['icon' => 'file-text', 'color' => '#2563eb'],
-        'new_escala' => ['icon' => 'calendar-plus', 'color' => '#8b5cf6'],
-        'escala_update' => ['icon' => 'calendar-check', 'color' => '#7c3aed'],
-        'new_music' => ['icon' => 'music', 'color' => '#10b981'],
-        'new_aviso' => ['icon' => 'megaphone', 'color' => '#f59e0b'],
-        'aviso_urgent' => ['icon' => 'alert-circle', 'color' => '#ef4444'],
-        'member_absence' => ['icon' => 'user-x', 'color' => '#64748b'],
-        'birthday' => ['icon' => 'cake', 'color' => '#ec4899'],
-        'reading_reminder' => ['icon' => 'book-open', 'color' => '#06b6d4']
-    ];
-    
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
-    }
-    
+    // ... (rest of class)
+
     /**
      * Criar notificação
      */
@@ -52,7 +26,14 @@ class NotificationSystem {
             
             $jsonData = $data ? json_encode($data) : null;
             
-            return $stmt->execute([$userId, $type, $title, $message, $jsonData, $link]);
+            $result = $stmt->execute([$userId, $type, $title, $message, $jsonData, $link]);
+            
+            if ($result) {
+                // Enviar Push Notification em background (tentativa)
+                $this->sendPushNotification($userId, $title, $message, $link, $type);
+            }
+            
+            return $result;
         } catch (PDOException $e) {
             error_log("Erro ao criar notificação: " . $e->getMessage());
             return false;
@@ -244,6 +225,54 @@ class NotificationSystem {
         $users = $stmt->fetchAll(PDO::FETCH_COLUMN);
         
         return $this->createForMultiple($users, $type, $title, $message, $data, $link);
+    }
+    
+    /**
+     * Enviar Notification Push via WebPush
+     */
+    private function sendPushNotification($userId, $title, $message, $link = null, $type = 'info') {
+        try {
+            // Verificar subscriptions do usuário
+            // Verifica se a tabela existe primeiro para evitar erros em migrações parciais, ou assume que existe.
+            // Vamos assumir que existe pois já criamos.
+            
+            $stmt = $this->pdo->prepare("SELECT endpoint, p256dh, auth FROM push_subscriptions WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            $subscriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (empty($subscriptions)) {
+                return false;
+            }
+
+            // Instanciar Helper
+            if (class_exists('WebPushHelper')) {
+                $webPush = new WebPushHelper(); 
+
+                $payload = json_encode([
+                    'title' => $title,
+                    'body' => $message,
+                    'icon' => '../assets/icons/icon-192x192.png', // Tentar caminho relativo ao sw.js ou absoluto
+                    'url' => $link ?? '/',
+                    'data' => 
+                        ['type' => $type]
+                ]);
+
+                foreach ($subscriptions as $sub) {
+                    $webPush->sendNotification(
+                        $sub['endpoint'],
+                        $sub['p256dh'],
+                        $sub['auth'],
+                        $payload
+                    );
+                }
+                return true;
+            }
+            return false;
+
+        } catch (Exception $e) {
+            error_log("Erro no Push Notification: " . $e->getMessage());
+            return false;
+        }
     }
 }
 ?>
