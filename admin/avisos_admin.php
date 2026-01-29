@@ -80,63 +80,96 @@ $totalExpired = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
 renderAppHeader('Gestão de Avisos');
 ?>
 
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
 <style>
     .admin-header {
-        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-        padding: 24px 20px;
-        margin: -20px -20px 20px -20px;
+        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+        padding: 16px;
+        margin: -20px -20px 16px -20px;
         color: white;
-        border-radius: 0 0 20px 20px;
+        border-radius: 0 0 16px 16px;
+    }
+    
+    .admin-header h1 {
+        margin: 0 0 4px;
+        font-size: var(--font-h2);
+        font-weight: 800;
+    }
+    
+    .admin-header p {
+        margin: 0;
+        opacity: 0.9;
+        font-size: var(--font-body-sm);
     }
     
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 8px;
+        margin-bottom: 16px;
     }
     
     .stat-card {
         background: var(--bg-surface);
-        padding: 16px;
+        padding: 12px 8px;
         border-radius: 12px;
         border: 1px solid var(--border-color);
+        text-align: center;
     }
     
     .stat-value {
-        font-size: var(--font-h1);
+        font-size: var(--font-h2);
         font-weight: 800;
-        color: var(--text-main);
+        color: #8b5cf6;
     }
     
     .stat-label {
-        font-size: var(--font-body-sm);
+        font-size: var(--font-caption);
         color: var(--text-muted);
-        margin-top: 4px;
+        margin-top: 2px;
+        font-weight: 600;
     }
     
     .filter-bar {
         background: var(--bg-surface);
-        padding: 16px;
+        padding: 12px;
         border-radius: 12px;
         border: 1px solid var(--border-color);
-        margin-bottom: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .filter-section {
+        margin-bottom: 12px;
+    }
+    
+    .filter-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .filter-section-label {
+        font-size: var(--font-caption);
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .filter-pills {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         overflow-x: auto;
-        padding-bottom: 8px;
+        padding-bottom: 4px;
         scrollbar-width: none;
     }
     
+    .filter-pills::-webkit-scrollbar {
+        display: none;
+    }
+    
     .filter-pill {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: var(--font-body-sm);
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: var(--font-caption);
         font-weight: 600;
         text-decoration: none;
         white-space: nowrap;
@@ -147,116 +180,143 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .filter-pill.active {
-        background: linear-gradient(135deg, #f97316, #ea580c);
+        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
         color: white;
         border-color: transparent;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: var(--font-body-sm);
+        background: var(--bg-body);
+        color: var(--text-main);
     }
     
     .aviso-item {
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
         transition: all 0.2s;
     }
     
     .aviso-item:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+        border-color: #c4b5fd;
     }
     
     .aviso-header-row {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 12px;
+        gap: 8px;
     }
     
     .aviso-title-section {
         flex: 1;
+        min-width: 0;
     }
     
     .aviso-title {
-        font-size: var(--font-h3);
+        font-size: var(--font-body);
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 6px;
+        line-height: 1.3;
     }
     
     .aviso-meta {
         display: flex;
-        gap: 12px;
+        gap: 8px;
         flex-wrap: wrap;
-        font-size: var(--font-body-sm);
+        font-size: var(--font-caption);
         color: var(--text-muted);
+        align-items: center;
     }
     
     .tag-badge {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        padding: 4px 10px;
-        border-radius: 12px;
+        padding: 3px 8px;
+        border-radius: 10px;
         font-size: var(--font-caption);
         font-weight: 600;
     }
     
     .priority-badge {
-        padding: 4px 10px;
-        border-radius: 12px;
+        padding: 3px 8px;
+        border-radius: 10px;
         font-size: var(--font-caption);
         font-weight: 700;
         text-transform: uppercase;
     }
     
-    .priority-urgent { background: #fef2f2; color: #dc2626; }
-    .priority-important { background: #fef3c7; color: #d97706; }
+    .priority-urgent { 
+        background: #fef2f2; 
+        color: #dc2626; 
+    }
+    
+    .priority-important { 
+        background: #fef3c7; 
+        color: #d97706; 
+    }
     
     .pin-badge {
-        background: #eff6ff;
-        color: #2563eb;
-        padding: 4px 10px;
-        border-radius: 12px;
+        background: #f3e8ff;
+        color: #8b5cf6;
+        padding: 3px 8px;
+        border-radius: 10px;
         font-size: var(--font-caption);
         font-weight: 600;
     }
     
     .action-buttons {
         display: flex;
-        gap: 8px;
+        gap: 4px;
+        flex-shrink: 0;
     }
     
     .btn-icon {
         background: none;
         border: 1px solid var(--border-color);
-        padding: 8px;
+        padding: 6px;
         border-radius: 8px;
         cursor: pointer;
         color: var(--text-muted);
         transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .btn-icon:hover {
-        background: var(--bg-body);
-        color: var(--text-main);
+        background: #f3e8ff;
+        color: #8b5cf6;
+        border-color: #c4b5fd;
     }
     
     .fab {
         position: fixed;
         bottom: 90px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
+        right: 16px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #f97316, #ea580c);
+        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
         color: white;
         border: none;
-        box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 100;
+        transition: transform 0.2s;
     }
     
     .fab:hover {
@@ -281,16 +341,30 @@ renderAppHeader('Gestão de Avisos');
         left: 50%;
         transform: translate(-50%, -50%);
         width: 90%;
-        max-width: 600px;
+        max-width: 500px;
         background: var(--bg-surface);
-        border-radius: 24px;
-        padding: 24px;
+        border-radius: 20px;
+        padding: 20px;
         max-height: 90vh;
         overflow-y: auto;
     }
     
-    .form-group {
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 16px;
+    }
+    
+    .modal-title {
+        margin: 0;
+        font-size: var(--font-h2);
+        font-weight: 800;
+        color: var(--text-main);
+    }
+    
+    .form-group {
+        margin-bottom: 12px;
     }
     
     .form-label {
@@ -298,15 +372,15 @@ renderAppHeader('Gestão de Avisos');
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 6px;
-        font-size: var(--font-body);
+        font-size: var(--font-body-sm);
     }
     
     .form-input, .form-select, .form-textarea {
         width: 100%;
-        padding: 12px 14px;
+        padding: 10px 12px;
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        font-size: var(--font-body);
+        font-size: var(--font-body-sm);
         background: var(--bg-body);
         color: var(--text-main);
     }
@@ -314,23 +388,23 @@ renderAppHeader('Gestão de Avisos');
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
+        gap: 10px;
     }
     
     .tag-selector {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        padding: 12px;
+        gap: 6px;
+        padding: 10px;
         border: 1px solid var(--border-color);
         border-radius: 12px;
         background: var(--bg-body);
     }
     
     .tag-option {
-        padding: 6px 12px;
-        border-radius: 12px;
-        font-size: var(--font-body-sm);
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: var(--font-caption);
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s;
@@ -342,24 +416,96 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #f97316, #ea580c);
+        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
         color: white;
         border: none;
-        padding: 14px 24px;
+        padding: 12px 20px;
         border-radius: 12px;
         font-weight: 700;
         cursor: pointer;
         width: 100%;
+        font-size: var(--font-body-sm);
     }
     
     .btn-secondary {
         background: var(--bg-surface);
         color: var(--text-muted);
         border: 1px solid var(--border-color);
-        padding: 14px 24px;
+        padding: 12px 20px;
         border-radius: 12px;
         font-weight: 600;
         cursor: pointer;
+        font-size: var(--font-body-sm);
+    }
+    
+    .tag-manager-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: var(--bg-body);
+        border-radius: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .tag-color-preview {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+    
+    .tag-info {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .tag-name {
+        font-weight: 600;
+        font-size: var(--font-body-sm);
+        color: var(--text-main);
+    }
+    
+    .tag-type {
+        font-size: var(--font-caption);
+        color: var(--text-muted);
+    }
+    
+    @media (max-width: 768px) {
+        .admin-header {
+            padding: 12px;
+            margin: -20px -20px 12px -20px;
+        }
+        
+        .admin-header h1 {
+            font-size: var(--font-h3);
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        
+        .stat-card {
+            padding: 10px 6px;
+        }
+        
+        .stat-value {
+            font-size: var(--font-h3);
+        }
+        
+        .filter-bar {
+            padding: 10px;
+        }
+        
+        .aviso-item {
+            padding: 10px;
+        }
+        
+        .modal-content {
+            width: 95%;
+            padding: 16px;
+        }
     }
 </style>
 
@@ -371,11 +517,11 @@ renderAppHeader('Gestão de Avisos');
     <div class="admin-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h1 style="margin: 0 0 6px; font-size: var(--font-h1); font-weight: 800;">📢 Gestão de Avisos</h1>
-                <p style="margin: 0; opacity: 0.9; font-size: var(--font-body);">Central de gerenciamento e estatísticas</p>
+                <h1>📢 Gestão de Avisos</h1>
+                <p>Central de gerenciamento</p>
             </div>
-            <button onclick="openTagManager()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 16px; border-radius: 12px; font-weight: 600; cursor: pointer;">
-                <i data-lucide="tags" style="width: 16px; display: inline-block; vertical-align: middle;"></i>
+            <button onclick="openTagManager()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: var(--font-caption);">
+                <i data-lucide="tags" style="width: 14px; display: inline-block; vertical-align: middle;"></i>
                 Tags
             </button>
         </div>
@@ -403,12 +549,12 @@ renderAppHeader('Gestão de Avisos');
     
     <!-- Filtros -->
     <div class="filter-bar">
-        <div style="margin-bottom: 12px;">
-            <input type="text" id="searchInput" placeholder="Buscar avisos..." value="<?= htmlspecialchars($search) ?>" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body);">
+        <div class="filter-section">
+            <input type="text" id="searchInput" placeholder="Buscar avisos..." value="<?= htmlspecialchars($search) ?>" class="search-input">
         </div>
         
-        <div style="margin-bottom: 12px;">
-            <div style="font-size: var(--font-body-sm); font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">Status</div>
+        <div class="filter-section">
+            <div class="filter-section-label">Status</div>
             <div class="filter-pills">
                 <a href="?status=active" class="filter-pill <?= $filterStatus === 'active' ? 'active' : '' ?>">Ativos</a>
                 <a href="?status=archived" class="filter-pill <?= $filterStatus === 'archived' ? 'active' : '' ?>">Arquivados</a>
@@ -416,8 +562,8 @@ renderAppHeader('Gestão de Avisos');
             </div>
         </div>
         
-        <div>
-            <div style="font-size: var(--font-body-sm); font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">Prioridade</div>
+        <div class="filter-section">
+            <div class="filter-section-label">Prioridade</div>
             <div class="filter-pills">
                 <a href="?priority=all&status=<?= $filterStatus ?>" class="filter-pill <?= $filterPriority === 'all' ? 'active' : '' ?>">Todas</a>
                 <a href="?priority=urgent&status=<?= $filterStatus ?>" class="filter-pill <?= $filterPriority === 'urgent' ? 'active' : '' ?>">Urgente</a>
@@ -492,10 +638,10 @@ renderAppHeader('Gestão de Avisos');
 <!-- Modal Criar/Editar Aviso -->
 <div id="avisoModal" class="modal">
     <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 id="modalTitle" style="margin: 0; font-size: var(--font-h1); font-weight: 800;">Novo Aviso</h2>
-            <button onclick="closeModal('avisoModal')" style="background: none; border: none; cursor: pointer;">
-                <i data-lucide="x" style="width: 24px;"></i>
+        <div class="modal-header">
+            <h2 id="modalTitle" class="modal-title">Novo Aviso</h2>
+            <button onclick="closeModal('avisoModal')" style="background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                <i data-lucide="x" style="width: 20px;"></i>
             </button>
         </div>
         
@@ -559,10 +705,10 @@ renderAppHeader('Gestão de Avisos');
 <!-- Modal Gerenciar Tags -->
 <div id="tagModal" class="modal">
     <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0; font-size: var(--font-h1); font-weight: 800;">🏷️ Gerenciar Tags</h2>
-            <button onclick="closeModal('tagModal')" style="background: none; border: none; cursor: pointer;">
-                <i data-lucide="x" style="width: 24px;"></i>
+        <div class="modal-header">
+            <h2 class="modal-title">🏷️ Gerenciar Tags</h2>
+            <button onclick="closeModal('tagModal')" style="background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                <i data-lucide="x" style="width: 20px;"></i>
             </button>
         </div>
         
@@ -709,13 +855,13 @@ renderAppHeader('Gestão de Avisos');
             
             if (data.success) {
                 const html = data.tags.map(tag => `
-                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: 8px;">
-                        <div style="width: 32px; height: 32px; border-radius: 8px; background: ${tag.color};"></div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600;">${tag.name}</div>
-                            <div style="font-size: var(--font-caption); color: var(--text-muted);">${tag.is_default ? 'Tag padrão' : 'Tag customizada'}</div>
+                    <div class="tag-manager-item">
+                        <div class="tag-color-preview" style="background: ${tag.color};"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">${tag.name}</div>
+                            <div class="tag-type">${tag.is_default ? 'Tag padrão' : 'Tag customizada'}</div>
                         </div>
-                        ${!tag.is_default ? `<button onclick="deleteTag(${tag.id})" class="btn-icon"><i data-lucide="trash-2" style="width: 16px;"></i></button>` : ''}
+                        ${!tag.is_default ? `<button onclick="deleteTag(${tag.id})" class="btn-icon"><i data-lucide="trash-2" style="width: 14px;"></i></button>` : ''}
                     </div>
                 `).join('');
                 
