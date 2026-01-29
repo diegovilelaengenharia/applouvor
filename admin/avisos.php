@@ -117,10 +117,11 @@ try {
 } catch (Exception $e) {}
 
 // Query de avisos
-$query = "SELECT a.*, u.name as author_name, u.avatar as author_avatar 
+$query = "SELECT a.*, u.name as author_name, u.photo as author_avatar 
           FROM avisos a 
           LEFT JOIN users u ON a.created_by = u.id 
           WHERE 1=1";
+
 
 $params = [];
 
