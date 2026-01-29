@@ -359,62 +359,47 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         </button>
     </div>
 
-    <!-- Container de Status de Notificação (Dinâmico) -->
+    <!-- Container de Status de Notificação (Discreto) -->
     <div id="notificationStatusContainer" style="display: none; margin-bottom: 24px;">
-        <!-- Card Ativação (Default) -->
-        <div id="statusCardDefault" style="display: none; background: linear-gradient(135deg, #2563eb, #3b82f6); border-radius: 16px; padding: 24px; color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);">
-            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;">
-                <div>
-                    <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 700;">Ativar Notificações</h3>
-                    <p style="margin: 0 0 16px 0; opacity: 0.9; line-height: 1.5;">Receba alertas instantâneos sobre escalas, hinos e avisos mesmo quando o aplicativo estiver fechado.</p>
-                    <button onclick="requestNotificationPermission()" class="ripple" style="background: white; color: #2563eb; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                        <i data-lucide="bell-ring" style="width: 18px;"></i>
-                        Ativar Agora
-                    </button>
+        
+        <!-- Banner Ativação (Default) -->
+        <div id="statusCardDefault" style="display: none; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; color: #1e40af;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i data-lucide="bell" style="width: 20px; color: #3b82f6;"></i>
+                    <span style="font-size: 0.9rem; font-weight: 500;">Ative as notificações para não perder nada.</span>
                 </div>
-                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; backdrop-filter: blur(4px);">
-                    <i data-lucide="smartphone" style="width: 32px; height: 32px;"></i>
-                </div>
+                <button id="btnActivatePush" class="ripple" style="
+                    background: #3b82f6; color: white; border: none; padding: 6px 16px; border-radius: 6px; 
+                    font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+                    transition: background 0.2s;
+                ">
+                    Ativar Agora
+                </button>
             </div>
         </div>
 
-        <!-- Card Ativo (Granted) -->
-        <div id="statusCardGranted" style="display: none; background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 50%;">
-                    <i data-lucide="check-circle" style="width: 24px; height: 24px;"></i>
-                </div>
-                <div>
-                    <h3 style="margin: 0 0 4px 0; font-size: 1.1rem; font-weight: 700;">Notificações Ativadas</h3>
-                    <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Você receberá alertas neste dispositivo.</p>
-                </div>
+        <!-- Banner Ativo (Granted) -->
+        <div id="statusCardGranted" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; color: #166534;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="check" style="width: 18px; color: #10b981;"></i>
+                <span style="font-size: 0.9rem; font-weight: 500;">Notificações ativadas neste dispositivo.</span>
             </div>
         </div>
 
-        <!-- Card Bloqueado (Denied) -->
-        <div id="statusCardDenied" style="display: none; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);">
-            <div style="display: flex; align-items: flex-start; gap: 16px;">
-                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 50%;">
-                    <i data-lucide="bell-off" style="width: 24px; height: 24px;"></i>
-                </div>
-                <div>
-                    <h3 style="margin: 0 0 4px 0; font-size: 1.1rem; font-weight: 700;">Notificações Bloqueadas</h3>
-                    <p style="margin: 0 0 12px 0; opacity: 0.9; font-size: 0.9rem;">Você bloqueou as notificações. Para receber alertas, altere as configurações do navegador.</p>
-                    <div style="font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 6px; display: inline-block;">
-                        Clique no cadeado 🔒 na barra de endereço → Permissões → Ativar Notificações
-                    </div>
-                </div>
+        <!-- Banner Bloqueado (Denied) -->
+        <div id="statusCardDenied" style="display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: #991b1b;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="bell-off" style="width: 18px; color: #ef4444;"></i>
+                <span style="font-size: 0.9rem;">Notificações bloqueadas. <span style="font-weight: 600;">Clique no cadeado 🔒</span> na barra de endereço para liberar.</span>
             </div>
         </div>
 
-        <!-- Card Erro/Não Suportado -->
-        <div id="statusCardUnsupported" style="display: none; background: #f1f5f9; border-radius: 16px; padding: 20px; color: var(--text-muted); border: 1px solid var(--border-color);">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <i data-lucide="alert-triangle" style="width: 24px; height: 24px;"></i>
-                <div>
-                    <h3 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 700; color: var(--text-main);">Push Não Suportado</h3>
-                    <p style="margin: 0; font-size: 0.9rem;">Seu navegador ou conexão (HTTP) não suporta notificações Push.</p>
-                </div>
+        <!-- Banner Não Suportado -->
+        <div id="statusCardUnsupported" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; color: #64748b;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="info" style="width: 18px;"></i>
+                <span style="font-size: 0.9rem;">Push notifications indisponíveis neste navegador.</span>
             </div>
         </div>
     </div>
