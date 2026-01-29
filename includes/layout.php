@@ -1497,6 +1497,11 @@ function renderAppHeader($title, $backUrl = null)
                     display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
                     background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
                     cursor: pointer; color: var(--text-muted); margin-left: 8px;
+                ">
+                    <i data-lucide="settings" style="width: 20px;"></i>
+                </button>
+            <?php endif; ?>
+
             <!-- Notification Button (Bell) -->
             <button onclick="window.location.href='admin/notificacoes.php'" class="ripple" title="Notificações" style="
                 width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
