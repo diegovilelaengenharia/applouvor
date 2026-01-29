@@ -20,6 +20,13 @@ class NotificationSystem {
     const TYPE_BIRTHDAY = 'birthday';
     const TYPE_READING_REMINDER = 'reading_reminder';
     
+    // Novos tipos para eventos da agenda
+    const TYPE_NEW_EVENT = 'new_event';
+    const TYPE_EVENT_UPDATED = 'event_updated';
+    const TYPE_EVENT_CANCELLED = 'event_cancelled';
+    const TYPE_EVENT_REMINDER_24H = 'event_reminder_24h';
+    const TYPE_EVENT_REMINDER_1H = 'event_reminder_1h';
+    
     // Configuração de ícones e cores por tipo
     public $typeConfig = [
         'weekly_report' => ['icon' => 'file-text', 'color' => '#2563eb'],
@@ -30,7 +37,14 @@ class NotificationSystem {
         'aviso_urgent' => ['icon' => 'alert-circle', 'color' => '#ef4444'],
         'member_absence' => ['icon' => 'user-x', 'color' => '#64748b'],
         'birthday' => ['icon' => 'cake', 'color' => '#ec4899'],
-        'reading_reminder' => ['icon' => 'book-open', 'color' => '#06b6d4']
+        'reading_reminder' => ['icon' => 'book-open', 'color' => '#06b6d4'],
+        
+        // Eventos da agenda
+        'new_event' => ['icon' => 'calendar-plus', 'color' => '#3b82f6'],
+        'event_updated' => ['icon' => 'calendar-check', 'color' => '#6366f1'],
+        'event_cancelled' => ['icon' => 'calendar-x', 'color' => '#f87171'],
+        'event_reminder_24h' => ['icon' => 'clock', 'color' => '#f59e0b'],
+        'event_reminder_1h' => ['icon' => 'bell-ring', 'color' => '#ef4444']
     ];
     
     public function __construct($pdo) {
