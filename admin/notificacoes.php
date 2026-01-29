@@ -53,7 +53,7 @@ $stmtStats = $pdo->prepare("
     SELECT 
         COUNT(*) as total,
         SUM(CASE WHEN is_read = 0 THEN 1 ELSE 0 END) as unread,
-        SUM(CASE WHEN is_read = 1 THEN 1 ELSE 0 END) as read
+        SUM(CASE WHEN is_read = 1 THEN 1 ELSE 0 END) as `read`
     FROM notifications 
     WHERE user_id = ?
 ");
