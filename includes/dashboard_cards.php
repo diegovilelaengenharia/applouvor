@@ -148,63 +148,10 @@ function getAllAvailableCards() {
             'admin_only' => false
         ],
 
-        'monitoramento' => [
-            'id' => 'monitoramento',
-            'title' => 'Monitoramento',
-            'icon' => 'activity',
-            'category' => 'admin',
-            'category_name' => 'Admin',
-            'color' => '#dc2626',
-            'bg' => '#fee2e2',
-            'url' => 'monitoramento_usuarios.php',
-            'admin_only' => true
-        ],
-        'pastas' => [
-            'id' => 'pastas',
-            'title' => 'Pastas',
-            'icon' => 'folder',
-            'category' => 'admin',
-            'category_name' => 'Admin',
-            'color' => '#dc2626',
-            'bg' => '#fee2e2',
-            'url' => 'repertorio.php#pastas',
-            'admin_only' => false
-        ],
+
+
         
-        // EXTRAS (Cinza #64748b)
-        'playlists' => [
-            'id' => 'playlists',
-            'title' => 'Playlists',
-            'icon' => 'list-music',
-            'category' => 'extras',
-            'category_name' => 'Extras',
-            'color' => '#64748b',
-            'bg' => '#f1f5f9',
-            'url' => 'criar_playlist.php',
-            'admin_only' => false
-        ],
-        'artistas' => [
-            'id' => 'artistas',
-            'title' => 'Artistas',
-            'icon' => 'mic-2',
-            'category' => 'extras',
-            'category_name' => 'Extras',
-            'color' => '#64748b',
-            'bg' => '#f1f5f9',
-            'url' => 'repertorio.php#artistas',
-            'admin_only' => false
-        ],
-        'classificacoes' => [
-            'id' => 'classificacoes',
-            'title' => 'Classificações',
-            'icon' => 'tags',
-            'category' => 'extras',
-            'category_name' => 'Extras',
-            'color' => '#64748b',
-            'bg' => '#f1f5f9',
-            'url' => 'classificacoes.php',
-            'admin_only' => false
-        ],
+
     ];
 }
 
