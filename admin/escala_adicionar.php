@@ -36,11 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Se quiser notificar todos escalados, remova a verificação abaixo se o criador estiver na lista
                 // if ($uid == $_SESSION['user_id']) continue; 
                 
-                $notificationSystem->createNotification(
+                $notificationSystem->create(
                     $uid,
                     'new_escala',
                     "Escalado: $dateFormatted - $typeFormatted",
                     "Você foi escalado para $typeFormatted no dia $dateFormatted. Toque para ver detalhes.",
+                    null, // Data
                     "escala_detalhe.php?id=$scheduleId"
                 );
             }
