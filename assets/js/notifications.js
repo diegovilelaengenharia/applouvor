@@ -191,16 +191,24 @@ const notificationSound = new Audio('data:audio/mp3;base64,//uQRAAAAWMSLwUIYAAsY
 function checkNotificationPermission() {
     const btn = document.getElementById('btnEnableNotifications');
 
-    // Se ainda não foi perguntado
+    // Debug
+    console.log('Verificando permissão de notificação:', Notification.permission);
+
+    if (!btn) {
+        console.warn('Botão de ativar notificações não encontrado no DOM');
+        return;
+    }
+
+    // Se ainda não foi perguntado ('default'), mostra o botão
     if (Notification.permission === 'default') {
-        if (btn) btn.style.display = 'inline-flex';
-        // showPermissionRequestUI(); // Opcional, agora usamos o botão
-    } else if (Notification.permission === 'granted') {
-        if (btn) btn.style.display = 'none';
-        // Garantir que está inscrito
-        ensurePushSubscription();
+        btn.style.display = 'inline-flex';
     } else {
-        if (btn) btn.style.display = 'none'; // Se negado, não mostra
+        // Se já foi concedida ('granted') ou negada ('denied'), esconde
+        btn.style.display = 'none';
+
+        if (Notification.permission === 'granted') {
+            ensurePushSubscription();
+        }
     }
 }
 
