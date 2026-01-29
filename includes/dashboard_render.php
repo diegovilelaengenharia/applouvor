@@ -6,7 +6,7 @@
 // Renderizar card de Escalas (PRO)
 function renderCardEscalas($nextSchedule, $totalSchedules) {
     ?>
-    <a href="escalas.php" class="access-card card-blue">
+    <a href="escalas.php" class="access-card card-emerald">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -42,7 +42,7 @@ function renderCardEscalas($nextSchedule, $totalSchedules) {
 // Renderizar card de Repertório (PRO)
 function renderCardRepertorio($ultimaMusica, $totalMusicas) {
     ?>
-    <a href="repertorio.php" class="access-card card-purple">
+    <a href="repertorio.php" class="access-card card-violet">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -55,13 +55,13 @@ function renderCardRepertorio($ultimaMusica, $totalMusicas) {
             
             <div class="card-info" style="margin-top: 8px;">
                 <?php if ($ultimaMusica): ?>
-                    <div style="font-weight: 600; color: #065f46; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-weight: 600; color: #5b21b6; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         <?= htmlspecialchars($ultimaMusica['title']) ?>
                     </div>
-                    <div style="font-size: 0.75rem; color: #047857; opacity: 0.9; display: flex; align-items: center; gap: 4px;">
+                    <div style="font-size: 0.75rem; color: #7c3aed; opacity: 0.9; display: flex; align-items: center; gap: 4px;">
                         <span><?= htmlspecialchars($ultimaMusica['artist']) ?></span>
                         <?php if(!empty($ultimaMusica['tone'])): ?>
-                            <span style="background: rgba(255,255,255,0.5); padding: 1px 4px; border-radius: 4px; font-weight: 700; font-size: 0.65rem; border: 1px solid rgba(6, 95, 70, 0.2);">
+                            <span style="background: rgba(255,255,255,0.5); padding: 1px 4px; border-radius: 4px; font-weight: 700; font-size: 0.65rem; border: 1px solid rgba(124, 58, 237, 0.2);">
                                 <?= htmlspecialchars($ultimaMusica['tone']) ?>
                             </span>
                         <?php endif; ?>
@@ -79,7 +79,7 @@ function renderCardRepertorio($ultimaMusica, $totalMusicas) {
 function renderCardMembros($totalMembros, $stats) {
     $percent = $totalMembros > 0 ? round(($stats['vocals'] / $totalMembros) * 100) : 0;
     ?>
-    <a href="membros.php" class="access-card card-green">
+    <a href="membros.php" class="access-card card-blue">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -91,12 +91,12 @@ function renderCardMembros($totalMembros, $stats) {
             <h3 class="card-title">Membros</h3>
             
             <div class="card-info" style="margin-top: 8px;">
-                <div style="display: flex; gap: 8px; font-size: 0.75rem; color: #3730a3; font-weight: 500;">
+                <div style="display: flex; gap: 8px; font-size: 0.75rem; color: #1e40af; font-weight: 500;">
                     <span title="Vocais">🎤 <?= $stats['vocals'] ?></span>
                     <span title="Instrumentistas">🎸 <?= $stats['instrumentalists'] ?></span>
                 </div>
                 <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.5); border-radius: 2px; margin-top: 6px; overflow: hidden;">
-                    <div style="width: <?= $percent ?>%; height: 100%; background: #4f46e5;"></div>
+                    <div style="width: <?= $percent ?>%; height: 100%; background: #2563eb;"></div>
                 </div>
             </div>
         </div>
@@ -159,7 +159,7 @@ function renderCardLeitura($pdo, $userId) {
             </div>
             <h3 class="card-title">Leitura</h3>
             <p class="card-info" style="margin-top: 8px;">
-                <span style="display: block; font-weight: 600; color: #0e7490;">Dia <?= $displayDayGlobal ?></span>
+                <span style="display: block; font-weight: 600; color: #0891b2;">Dia <?= $displayDayGlobal ?></span>
                 <span style="font-size: 0.75rem;">Progresso atual</span>
             </p>
         </div>
@@ -170,7 +170,7 @@ function renderCardLeitura($pdo, $userId) {
 // Renderizar card de Avisos (PRO)
 function renderCardAvisos($ultimoAviso, $unreadCount) {
     ?>
-    <a href="avisos.php" class="access-card card-orange">
+    <a href="avisos.php" class="access-card card-amber">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -192,7 +192,7 @@ function renderCardAvisos($ultimoAviso, $unreadCount) {
 // Renderizar card de Aniversariantes (PRO)
 function renderCardAniversariantes($niverCount, $proximo = null) {
     ?>
-    <a href="aniversarios.php" class="access-card card-pink">
+    <a href="aniversarios.php" class="access-card card-fuchsia">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -203,10 +203,10 @@ function renderCardAniversariantes($niverCount, $proximo = null) {
             <h3 class="card-title">Nivers</h3>
             <div class="card-info" style="margin-top: 8px;">
                 <?php if ($proximo): ?>
-                    <div style="font-weight: 600; color: #c2410c; font-size: 0.9rem;">
+                    <div style="font-weight: 600; color: #a21caf; font-size: 0.9rem;">
                          <?= htmlspecialchars(explode(' ', $proximo['name'])[0]) ?>
                     </div>
-                    <div style="font-size: 0.75rem; color: #9a3412;">
+                    <div style="font-size: 0.75rem; color: #c026d3;">
                         Dia <?= $proximo['dia'] ?>
                     </div>
                 <?php else: ?>
@@ -221,7 +221,7 @@ function renderCardAniversariantes($niverCount, $proximo = null) {
 // Renderizar card de Devocional
 function renderCardDevocional() {
     ?>
-    <a href="devocionais.php" class="access-card card-violet">
+    <a href="devocionais.php" class="access-card card-indigo">
         <div>
             <div class="card-icon">
                 <i data-lucide="sunrise" style="width: 24px; height: 24px;"></i>
@@ -234,38 +234,86 @@ function renderCardDevocional() {
 }
 
 // Renderizar card de Oração
-function renderCardOracao() {
+function renderCardOracao($count = 0) {
     ?>
     <a href="oracao.php" class="access-card card-rose">
-        <div>
-            <div class="card-icon">
-                <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
+        <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="card-icon">
+                    <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
+                </div>
+                <?php if ($count > 0): ?>
+                    <span class="card-badge" style="background: #e11d48; color: white; border: none;"><?= $count ?></span>
+                <?php endif; ?>
             </div>
             <h3 class="card-title">Oração</h3>
-            <p class="card-info">Pedidos e intercessão</p>
+            <div class="card-info" style="margin-top: 8px;">
+                <?php if ($count > 0): ?>
+                    <span style="font-weight: 600; color: #be123c; font-size: 0.9rem;"><?= $count ?> pedidos</span>
+                    <span style="font-size: 0.75rem; color: #9f1239; opacity: 0.9;"> ativos na lista</span>
+                <?php else: ?>
+                    <span style="opacity: 0.8;">Nenhum pedido ativo</span>
+                <?php endif; ?>
+            </div>
         </div>
     </a>
     <?php
 }
 
-// Renderizar card genérico para cards ainda não implementados
+// Renderizar card genérico melhorado
 function renderCardGeneric($cardId, $cardDef) {
-    $colorClass = match($cardDef['category']) {
-        'Gestão' => 'card-blue',
-        'Espírito' => 'card-cyan',
-        'Comunica' => 'card-orange',
-        'Admin' => 'card-red',
-        'Extras' => 'card-gray',
-        default => 'card-blue'
+    // Mapeamento de cor definida para classe CSS
+    // Se não encontrar, usa a lógica de categoria como fallback
+    $colorMap = [
+        '#047857' => 'card-emerald',
+        '#7c3aed' => 'card-violet',
+        '#2563eb' => 'card-blue',
+        '#475569' => 'card-slate',
+        '#0891b2' => 'card-cyan',
+        '#4f46e5' => 'card-indigo',
+        '#e11d48' => 'card-rose',
+        '#d97706' => 'card-amber',
+        '#c026d3' => 'card-fuchsia',
+        '#dc2626' => 'card-red',
+    ];
+
+    $definedColor = $cardDef['color'] ?? '';
+    if (isset($colorMap[$definedColor])) {
+        $colorClass = $colorMap[$definedColor];
+    } else {
+        // Fallback por categoria
+        $colorClass = match($cardDef['category']) {
+            'Gestão' => 'card-emerald',
+            'Espírito' => 'card-indigo',
+            'Comunica' => 'card-amber',
+            'Admin' => 'card-red',
+            'Extras' => 'card-slate',
+            default => 'card-emerald'
+        };
+    }
+
+    // Personalizações por ID (apenas descrições)
+    $desc = match($cardId) {
+        'agenda' => 'Eventos e compromissos',
+        'indisponibilidade' => 'Gerenciar ausências',
+        'relatorios' => 'Métricas e histórico',
+        'stats_repertorio' => 'Análise de músicas',
+        'stats_escalas' => 'Análise de escalas',
+        default => '' // Não mostrar nada se não tiver descrição específica
     };
     ?>
     <a href="<?= $cardDef['url'] ?>" class="access-card <?= $colorClass ?>">
-        <div>
-            <div class="card-icon">
-                <i data-lucide="<?= $cardDef['icon'] ?>" style="width: 24px; height: 24px;"></i>
+        <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="card-icon">
+                    <i data-lucide="<?= $cardDef['icon'] ?>" style="width: 24px; height: 24px;"></i>
+                </div>
             </div>
             <h3 class="card-title"><?= htmlspecialchars($cardDef['title']) ?></h3>
-            <p class="card-info"><?= htmlspecialchars($cardDef['category']) ?></p>
+            
+            <?php if ($desc): ?>
+                <p class="card-info" style="margin-top: 8px;"><?= htmlspecialchars($desc) ?></p>
+            <?php endif; ?>
         </div>
     </a>
     <?php
@@ -300,7 +348,7 @@ function renderDashboardCard($cardId, $data) {
             renderCardDevocional();
             break;
         case 'oracao':
-            renderCardOracao();
+            renderCardOracao($data['oracaoCount'] ?? 0);
             break;
         default:
             // Para cards ainda não implementados, renderizar card genérico

@@ -133,6 +133,19 @@ try {
 } catch (Exception $e) {
 }
 
+// 6. Orações (Contagem Ativa)
+$oracaoCount = 0;
+try {
+    // Verificar se tabela existe primeiro (já que é novo)
+    $stmtCheck = $pdo->query("SHOW TABLES LIKE 'prayer_requests'");
+    if ($stmtCheck->rowCount() > 0) {
+        $stmt = $pdo->query("SELECT COUNT(*) FROM prayer_requests WHERE is_answered = 0");
+        $oracaoCount = $stmt->fetchColumn();
+    }
+} catch (Exception $e) {
+    $oracaoCount = 0;
+}
+
 // Saudação
 $hora = date('H');
 if ($hora >= 5 && $hora < 12) {
@@ -255,11 +268,18 @@ renderAppHeader('Visão Geral');
     }
 
     /* Quick Access Grid */
+    /* Quick Access Grid */
     .quick-access-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
         margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+        .quick-access-grid {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
     }
 
     .access-card {
@@ -292,73 +312,6 @@ renderAppHeader('Visão Geral');
         transform: scale(0.97);
     }
 
-    .access-card:hover::before {
-        left: 100%;
-    }
-
-    /* Cores seguindo padrão da barra de navegação */
-    /* GESTÃO (Verde) - Escalas, Repertório */
-    .card-blue { 
-        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-        border: 1px solid #6ee7b7;
-    }
-    .card-purple { 
-        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-        border: 1px solid #6ee7b7;
-    }
-    /* ESPÍRITO (Índigo) - Leitura, Devocional, Oração */
-    .card-green { 
-        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-        border: 1px solid #a5b4fc;
-    }
-    .card-cyan { 
-        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-        border: 1px solid #a5b4fc;
-    }
-    .card-violet { 
-        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-        border: 1px solid #a5b4fc;
-    }
-    /* COMUNICA (Laranja) - Avisos, Aniversariantes */
-    .card-orange { 
-        background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-        border: 1px solid #fdba74;
-    }
-    .card-pink { 
-        background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-        border: 1px solid #fdba74;
-    }
-
-    .card-icon {
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 10px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-    }
-
-    .card-icon i {
-        color: currentColor;
-    }
-
-    .card-blue .card-icon { color: #047857; }
-    .card-purple .card-icon { color: #047857; }
-    .card-green .card-icon { color: #4338ca; }
-    .card-orange .card-icon { color: #ea580c; }
-    .card-pink .card-icon { color: #ea580c; }
-    .card-cyan .card-icon { color: #4338ca; }
-    .card-violet .card-icon { color: #4338ca; }
-
-    .card-title {
-        font-size: var(--font-body);
-        font-weight: 700;
-        margin: 0 0 4px 0;
-        letter-spacing: -0.01em;
     }
 
     .card-info {
@@ -431,6 +384,65 @@ renderAppHeader('Visão Geral');
         .quick-access-grid { gap: 10px; }
         .access-card { min-height: 100px; padding: 14px; }
     }
+
+    /* CORES DOS CARDS - REFORMULADAS POR ÁREA */
+    
+    /* GESTÃO → AZUL */
+    .card-blue, .card-emerald { /* Gestão: Escalas, Repertório, Membros, Agenda, Ausências */
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #93c5fd;
+    }
+    .card-blue .card-icon, .card-emerald .card-icon { color: #2563eb; }
+
+    /* GESTÃO → AZUL CLARO (Stats/Relatórios) */
+    .card-slate { /* Estatísticas e Relatórios */
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #bfdbfe;
+    }
+    .card-slate .card-icon { color: #60a5fa; }
+
+    /* ESPIRITUAL → VERDE */
+    .card-green, .card-cyan, .card-indigo, .card-rose { /* Espiritual: Devocional, Oração, Leitura */
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 1px solid #6ee7b7;
+    }
+    .card-green .card-icon, .card-cyan .card-icon, .card-indigo .card-icon, .card-rose .card-icon { color: #059669; }
+
+    /* COMUNICAÇÃO → ROXO */
+    .card-violet, .card-purple, .card-amber, .card-fuchsia { /* Comunicação: Avisos, Aniversariantes */
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        border: 1px solid #c4b5fd;
+    }
+    .card-violet .card-icon, .card-purple .card-icon, .card-amber .card-icon, .card-fuchsia .card-icon { color: #7c3aed; }
+
+    /* ADMIN → VERMELHO */
+    .card-red { /* Líder */
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border: 1px solid #fca5a5;
+    }
+    .card-red .card-icon { color: #dc2626; }
+
+    /* Estilo Geral de Icone */
+    .card-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .card-icon i { color: currentColor; }
+
+    .card-title {
+        font-size: var(--font-body);
+        font-weight: 700;
+        margin: 0 0 4px 0;
+        letter-spacing: -0.01em;
+    }
 </style>
 
 <?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
@@ -439,13 +451,12 @@ renderAppHeader('Visão Geral');
 
 
     <!-- QUICK ACCESS GRID -->
-    <div class="quick-access-grid">
-        
+    <!-- DASHBOARD ORGANIZADO POR TÓPICOS -->
+    <div class="dashboard-container">
         <?php
-        // Renderizar cards dinamicamente conforme configurações do usuário
         require_once '../includes/dashboard_render.php';
         
-        // Preparar dados para renderização
+        // Dados para renderização
         $renderData = [
             'pdo' => $pdo,
             'userId' => $userId,
@@ -458,15 +469,54 @@ renderAppHeader('Visão Geral');
             'niverCount' => $aniversariantesCount,
             'proximoNiver' => $proximoAniversariante,
             'totalMembros' => $totalMembros,
-            'statsMembros' => $statsMembros
+            'statsMembros' => $statsMembros,
+            'oracaoCount' => $oracaoCount
         ];
+
+        // 1. Agrupar cards configurados pelo usuário
+        $groupedCards = [];
+        $cardsOrder = []; // Manter ordem relativa se necessário, ou usar a ordem da categoria
+
+        // Mapeamento de categorias e ordem de exibição
+        $categoryOrder = ['Gestão', 'Espírito', 'Comunica', 'Admin', 'Extras'];
         
-        // Loop pelos cards configurados pelo usuário
+        // Preparar grupos
+        foreach ($categoryOrder as $cat) {
+            $groupedCards[$cat] = [];
+        }
+
+        // Distribuir cards nos grupos
         foreach ($userDashboardSettings as $setting) {
-            renderDashboardCard($setting['card_id'], $renderData);
+            $cardId = $setting['card_id'];
+            if (isset($allCardsDefinitions[$cardId])) {
+                $cardDef = $allCardsDefinitions[$cardId];
+                $catName = $cardDef['category_name'];
+                
+                // Fallback para 'Extras' se categoria desconhecida
+                if (!isset($groupedCards[$catName])) {
+                    $catName = 'Extras';
+                    if (!isset($groupedCards['Extras'])) $groupedCards['Extras'] = [];
+                }
+                
+                $groupedCards[$catName][] = $cardId;
+            }
+        }
+
+        // 2. Renderizar Seções
+        foreach ($categoryOrder as $categoryName) {
+            if (empty($groupedCards[$categoryName])) continue;
+            
+            // Título da Seção (ex: Gestão)
+            echo "<h2 class='section-title' style='margin-top: 24px; margin-bottom: 12px; font-size: 1rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;'>{$categoryName}</h2>";
+            
+            // Grid da Seção
+            echo '<div class="quick-access-grid">';
+            foreach ($groupedCards[$categoryName] as $cardId) {
+                renderDashboardCard($cardId, $renderData);
+            }
+            echo '</div>';
         }
         ?>
-        
     </div>
 
 

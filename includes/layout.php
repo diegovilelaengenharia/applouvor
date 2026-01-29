@@ -170,6 +170,145 @@ function renderAppHeader($title, $backUrl = null)
                 --primary-subtle: #064e3b;
             }
 
+            /* ========================================
+               SISTEMA DE BOTÕES PADRONIZADOS
+               ======================================== */
+            
+            /* Base para todos os botões */
+            .btn, .btn-success, .btn-warning, .btn-danger, .btn-secondary, .btn-primary {
+                padding: 10px 20px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 0.9375rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                text-decoration: none;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn:disabled, .btn-success:disabled, .btn-warning:disabled, .btn-danger:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            /* CONFIRMAR/SALVAR → VERDE */
+            .btn-success {
+                background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                color: white;
+                border: 1px solid #047857;
+            }
+            .btn-success:hover:not(:disabled) {
+                background: #047857;
+                box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-success:active:not(:disabled) {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+            }
+
+            /* CANCELAR/VOLTAR → AMARELO/DOURADO */
+            .btn-warning {
+                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                color: white;
+                border: 1px solid #d97706;
+            }
+            .btn-warning:hover:not(:disabled) {
+                background: #d97706;
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-warning:active:not(:disabled) {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+            }
+
+            /* DELETAR/EXCLUIR/SAIR → VERMELHO */
+            .btn-danger {
+                background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+                color: white;
+                border: 1px solid #b91c1c;
+            }
+            .btn-danger:hover:not(:disabled) {
+                background: #b91c1c;
+                box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-danger:active:not(:disabled) {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+            }
+
+            /* NEUTRO/SECUNDÁRIO → CINZA */
+            .btn-secondary {
+                background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+                color: white;
+                border: 1px solid #475569;
+            }
+            .btn-secondary:hover:not(:disabled) {
+                background: #475569;
+                box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-secondary:active:not(:disabled) {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(100, 116, 139, 0.2);
+            }
+
+            /* PRIMARY → AZUL (para ações principais neutras) */
+            .btn-primary {
+                background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+                color: white;
+                border: 1px solid #1e40af;
+            }
+            .btn-primary:hover:not(:disabled) {
+                background: #1e40af;
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-primary:active:not(:disabled) {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+            }
+
+            /* Tamanhos de botões */
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 0.8125rem;
+            }
+            .btn-lg {
+                padding: 14px 28px;
+                font-size: 1rem;
+            }
+
+            /* Botão outline (variante) */
+            .btn-outline-success {
+                background: transparent;
+                color: #059669;
+                border: 2px solid #059669;
+            }
+            .btn-outline-success:hover {
+                background: #059669;
+                color: white;
+            }
+
+            .btn-outline-danger {
+                background: transparent;
+                color: #dc2626;
+                border: 2px solid #dc2626;
+            }
+            .btn-outline-danger:hover {
+                background: #dc2626;
+                color: white;
+            }
+
+            /* ======================================== */
+
             * {
                 box-sizing: border-box;
                 -webkit-tap-highlight-color: transparent;
@@ -827,38 +966,7 @@ function renderAppHeader($title, $backUrl = null)
             </div>
         </div>
 
-        <!-- 3. Sheet COMUNICA -->
-        <div id="sheet-comunica" class="bottom-sheet">
-            <div class="sheet-header">
-                <div style="background: #fff7ed; padding: 10px; border-radius: 12px; color: #c2410c;">
-                    <i data-lucide="megaphone"></i>
-                </div>
-                <div>
-                    <div class="sheet-title">Comunica</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mural e Interações</div>
-                </div>
-            </div>
-            <div class="sheet-grid">
-                <a href="avisos.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
-                        <i data-lucide="bell"></i>
-                    </div>
-                    Avisos
-                </a>
-                <a href="aniversarios.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
-                        <i data-lucide="cake"></i>
-                    </div>
-                    Aniversários
-                </a>
-                <a href="chat.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #fed7aa; color: #ea580c;">
-                        <i data-lucide="message-circle"></i>
-                    </div>
-                    Chat
-                </a>
-            </div>
-        </div>
+
 
 
         <!-- Barra de Navega├º├úo Fixa -->
@@ -896,29 +1004,29 @@ function renderAppHeader($title, $backUrl = null)
                     <span>Início</span>
                 </a>
 
-                <!-- Bot├úo GERAL (ex-Gest├úo) -->
-                <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #059669;">
-                    <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
+                <!-- Botão GERAL (Gestão → AZUL) -->
+                <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #2563eb;">
+                    <div class="b-nav-icon-wrapper" style="background: #eff6ff;">
                         <i data-lucide="layout-grid"></i>
                     </div>
                     <span>Geral</span>
                 </button>
 
-                <!-- Bot├úo ESP├ìRITO -->
-                <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #4f46e5;">
-                    <div class="b-nav-icon-wrapper" style="background: #eef2ff;">
+                <!-- Botão ESPÍRITO (Espiritual → VERDE) -->
+                <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #059669;">
+                    <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
                         <i data-lucide="flame"></i>
                     </div>
                     <span>Espírito</span>
                 </button>
 
-                <!-- Bot├úo COMUNICA -->
-                <button class="b-nav-item" onclick="toggleSheet('sheet-comunica', this)" style="color: #ea580c;">
-                    <div class="b-nav-icon-wrapper" style="background: #fff7ed;">
-                        <i data-lucide="megaphone"></i>
+                <!-- Botão AVISOS (Comunicação → ROXO) -->
+                <a href="avisos.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #7c3aed;">
+                    <div class="b-nav-icon-wrapper" style="background: #f5f3ff;">
+                        <i data-lucide="bell"></i>
                     </div>
-                    <span>Comunica</span>
-                </button>
+                    <span>Avisos</span>
+                </a>
 
 
 
