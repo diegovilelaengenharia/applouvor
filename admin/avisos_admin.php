@@ -300,27 +300,39 @@ renderAppHeader('Gestão de Avisos');
         border-color: #c4b5fd;
     }
     
-    .fab {
-        position: fixed;
-        bottom: 90px;
-        right: 16px;
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    .create-aviso-btn {
+        background: linear-gradient(135deg, #10b981, #059669);
         color: white;
         border: none;
-        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 700;
         cursor: pointer;
+        font-size: var(--font-body-sm);
         display: flex;
         align-items: center;
-        justify-content: center;
-        z-index: 100;
-        transition: transform 0.2s;
+        gap: 8px;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
     }
     
-    .fab:hover {
-        transform: scale(1.05);
+    .create-aviso-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    
+    .avisos-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    
+    .avisos-title {
+        font-size: var(--font-h3);
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
     }
     
     .modal {
@@ -471,10 +483,46 @@ renderAppHeader('Gestão de Avisos');
         color: var(--text-muted);
     }
     
+    /* Quill Editor Customization */
+    .ql-toolbar {
+        border-radius: 12px 12px 0 0 !important;
+        border-color: var(--border-color) !important;
+        background: var(--bg-body) !important;
+    }
+    
+    .ql-container {
+        border-radius: 0 0 12px 12px !important;
+        border-color: var(--border-color) !important;
+        background: white !important;
+        font-size: var(--font-body-sm) !important;
+    }
+    
+    .ql-editor {
+        min-height: 150px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .ql-editor.ql-blank::before {
+        color: var(--text-muted);
+        font-style: normal;
+    }
+    
     @media (max-width: 768px) {
         .admin-header {
             padding: 12px;
             margin: -20px -20px 12px -20px;
+        }
+        
+        .avisos-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+        
+        .create-aviso-btn {
+            width: 100%;
+            justify-content: center;
         }
         
         .admin-header h1 {
@@ -573,6 +621,15 @@ renderAppHeader('Gestão de Avisos');
         </div>
     </div>
     
+    <!-- Header da Lista de Avisos -->
+    <div class="avisos-header">
+        <h3 class="avisos-title">📋 Lista de Avisos</h3>
+        <button onclick="openCreateModal()" class="create-aviso-btn">
+            <i data-lucide="plus" style="width: 16px;"></i>
+            Criar Novo Aviso
+        </button>
+    </div>
+    
     <!-- Lista de Avisos -->
     <div id="avisosList">
         <?php if (count($avisos) > 0): ?>
@@ -629,11 +686,6 @@ renderAppHeader('Gestão de Avisos');
     
     <div style="height: 100px;"></div>
 </div>
-
-<!-- FAB -->
-<button onclick="openCreateModal()" class="fab">
-    <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
-</button>
 
 <!-- Modal Criar/Editar Aviso -->
 <div id="avisoModal" class="modal">
@@ -721,17 +773,23 @@ renderAppHeader('Gestão de Avisos');
     </div>
 </div>
 
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Quill Editor
+    // Quill Editor com formatação profissional
     const quill = new Quill('#editor', {
         theme: 'snow',
         placeholder: 'Escreva a mensagem do aviso...',
         modules: {
             toolbar: [
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                ['link']
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'align': [] }],
+                ['link'],
+                ['clean']
             ]
         }
     });
