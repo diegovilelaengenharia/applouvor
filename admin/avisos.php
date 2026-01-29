@@ -65,8 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // --- FILTROS E BUSCA ---
 $showArchived = isset($_GET['archived']) && $_GET['archived'] === '1';
 $showHistory = isset($_GET['history']) && $_GET['history'] === '1';
-$filterType = $_GET['type'] ?? 'all';
+$filterTag = $_GET['tag'] ?? 'all';
 $search = $_GET['search'] ?? '';
+
+// Buscar todas as tags
+$tags = $pdo->query("SELECT * FROM aviso_tags ORDER BY is_default DESC, name ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 // Construir Query
 $sql = "SELECT a.*, u.name as author_name, u.avatar as author_avatar FROM avisos a LEFT JOIN users u ON a.created_by = u.id WHERE 1=1";
@@ -80,9 +83,14 @@ if ($showArchived) {
     $sql .= " AND a.archived_at IS NULL AND (a.expires_at IS NULL OR a.expires_at >= CURDATE())";
 }
 
-if ($filterType !== 'all') {
-    $sql .= " AND a.type = ?";
-    $params[] = $filterType;
+// Filtro por tag
+if ($filterTag !== 'all') {
+    $sql .= " AND EXISTS (
+        SELECT 1 FROM aviso_tag_relations r 
+        JOIN aviso_tags t ON r.tag_id = t.id 
+        WHERE r.aviso_id = a.id AND t.id = ?
+    )";
+    $params[] = $filterTag;
 }
 
 if (!empty($search)) {
@@ -92,12 +100,24 @@ if (!empty($search)) {
 }
 
 $sql .= " ORDER BY 
+    a.is_pinned DESC,
     CASE WHEN a.priority = 'urgent' THEN 1 WHEN a.priority = 'important' THEN 2 ELSE 3 END ASC, 
     a.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Buscar tags de cada aviso
+foreach ($avisos as &$aviso) {
+    $stmt = $pdo->prepare("
+        SELECT t.* FROM aviso_tags t
+        JOIN aviso_tag_relations r ON t.id = r.tag_id
+        WHERE r.aviso_id = ?
+    ");
+    $stmt->execute([$aviso['id']]);
+    $aviso['tags'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 renderAppHeader('Avisos');
 ?>
@@ -353,14 +373,16 @@ renderAppHeader('Avisos');
         </form>
     </div>
     
-    <!-- Filtros por Tipo -->
+    <!-- Filtros por Tag -->
     <div class="filter-tabs">
-        <a href="?type=all<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'all' ? 'active' : '' ?>">✨ Todos</a>
-        <a href="?type=general<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'general' ? 'active' : '' ?>">📢 Geral</a>
-        <a href="?type=event<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'event' ? 'active' : '' ?>">🎉 Eventos</a>
-        <a href="?type=music<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'music' ? 'active' : '' ?>">🎵 Música</a>
-        <a href="?type=spiritual<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'spiritual' ? 'active' : '' ?>">🙏 Espiritual</a>
-        <a href="?type=urgent<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterType === 'urgent' ? 'active' : '' ?>">🚨 Urgente</a>
+        <a href="?tag=all<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterTag === 'all' ? 'active' : '' ?>">✨ Todos</a>
+        <?php foreach ($tags as $tag): ?>
+            <a href="?tag=<?= $tag['id'] ?><?= $showHistory ? '&history=1' : '' ?>" 
+               class="filter-tab <?= $filterTag == $tag['id'] ? 'active' : '' ?>" 
+               style="<?= $filterTag == $tag['id'] ? 'background: ' . $tag['color'] . '; color: white; border-color: transparent;' : '' ?>">
+                <?= htmlspecialchars($tag['name']) ?>
+            </a>
+        <?php endforeach; ?>
     </div>
     
     <!-- Toggle Histórico -->
@@ -381,16 +403,6 @@ renderAppHeader('Avisos');
     <div style="display: flex; flex-direction: column; gap: 20px;">
         <?php if (count($avisos) > 0): ?>
             <?php foreach ($avisos as $aviso): 
-                // Configuração de Cores e Ícones
-                $typeConfig = [
-                    'general' => ['color' => '#64748b', 'gradient' => 'linear-gradient(135deg, #64748b, #475569)', 'icon' => '📢', 'label' => 'Geral', 'class' => 'type-general'],
-                    'event' => ['color' => '#2563eb', 'gradient' => 'linear-gradient(135deg, #3b82f6, #2563eb)', 'icon' => '🎉', 'label' => 'Evento', 'class' => 'type-event'],
-                    'music' => ['color' => '#059669', 'gradient' => 'linear-gradient(135deg, #10b981, #059669)', 'icon' => '🎵', 'label' => 'Música', 'class' => 'type-music'],
-                    'spiritual' => ['color' => '#7c3aed', 'gradient' => 'linear-gradient(135deg, #8b5cf6, #7c3aed)', 'icon' => '🙏', 'label' => 'Espiritual', 'class' => 'type-spiritual'],
-                    'urgent' => ['color' => '#dc2626', 'gradient' => 'linear-gradient(135deg, #ef4444, #dc2626)', 'icon' => '🚨', 'label' => 'Urgente', 'class' => 'type-urgent']
-                ];
-                $tc = $typeConfig[$aviso['type']] ?? $typeConfig['general'];
-
                 // Prioridade
                 $isUrgent = $aviso['priority'] === 'urgent';
                 $isImportant = $aviso['priority'] === 'important';
@@ -431,8 +443,10 @@ renderAppHeader('Avisos');
                 <div class="aviso-header">
                     <?php if ($authorAvatar): ?>
                         <img src="<?= htmlspecialchars($authorAvatar) ?>" class="aviso-avatar" alt="Avatar">
-                    <?php else: ?>
-                        <div class="aviso-avatar-placeholder" style="background: <?= $tc['gradient'] ?>;">
+                    <?php else: 
+                        $avatarColor = !empty($aviso['tags']) ? $aviso['tags'][0]['color'] : '#f97316';
+                    ?>
+                        <div class="aviso-avatar-placeholder" style="background: <?= $avatarColor ?>;">
                             <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
                         </div>
                     <?php endif; ?>
@@ -440,7 +454,11 @@ renderAppHeader('Avisos');
                     <div class="aviso-author-info">
                         <div class="aviso-author-name"><?= htmlspecialchars($aviso['author_name'] ?? 'Admin') ?></div>
                         <div class="aviso-meta">
-                            <span class="aviso-type-badge <?= $tc['class'] ?>"><?= $tc['icon'] ?> <?= $tc['label'] ?></span>
+                            <?php foreach ($aviso['tags'] as $tag): ?>
+                                <span class="aviso-type-badge" style="background: <?= $tag['color'] ?>22; color: <?= $tag['color'] ?>;">
+                                    <?= htmlspecialchars($tag['name']) ?>
+                                </span>
+                            <?php endforeach; ?>
                             <span>• <?= $timeAgo ?></span>
                         </div>
                     </div>

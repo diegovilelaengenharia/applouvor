@@ -511,7 +511,7 @@ try {
         </a>
 
         <!-- Avisos -->
-        <a href="avisos.php" class="create-btn" style="
+        <a href="avisos_admin.php" class="create-btn" style="
             background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
@@ -521,7 +521,7 @@ try {
             </div>
              <div style="text-align: center;">
                 <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Avisos</div>
-                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Comunicados</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Gerenciar</div>
             </div>
         </a>
 
