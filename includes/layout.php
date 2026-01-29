@@ -544,43 +544,182 @@ function renderAppHeader($title, $backUrl = null)
                 transform: translateX(16px);
             }
             
-            /* Notification System Styles */
+            /* Notification System Styles - Professional Design */
             .notification-btn {
                 position: relative;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 40px;
-                height: 40px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+                border: 2px solid transparent;
+                background-clip: padding-box;
+                border-radius: 12px;
                 cursor: pointer;
-                color: var(--text-muted);
-                box-shadow: var(--shadow-sm);
-                transition: all 0.2s;
+                color: #64748b;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 
+                           0 0 0 1px rgba(148, 163, 184, 0.1);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                /* overflow: hidden; Removed to prevent badge clipping */
+                position: relative; /* Ensure badge is positioned relative to button */
+            }
+            
+            .notification-btn::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: 12px;
+                padding: 2px;
+                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                opacity: 0;
+                transition: opacity 0.3s;
             }
             
             .notification-btn:hover {
-                background: var(--bg-body);
-                border-color: var(--primary);
-                color: var(--primary);
+                background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+                color: #6366f1;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px rgba(99, 102, 241, 0.15),
+                           0 0 0 1px rgba(99, 102, 241, 0.1);
+            }
+            
+            .notification-btn:hover::before {
+                opacity: 1;
+            }
+            
+            .notification-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
             }
             
             .notification-badge {
                 position: absolute;
-                top: -4px;
-                right: -4px;
-                background: #ef4444;
+                top: -6px;
+                right: -6px;
+                background: linear-gradient(135deg, #ef4444, #dc2626);
                 color: white;
                 font-size: 10px;
                 font-weight: 700;
-                padding: 2px 5px;
-                border-radius: 10px;
-                min-width: 18px;
+                padding: 3px 6px;
+                border-radius: 12px;
+                min-width: 20px;
                 text-align: center;
-                box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4),
+                           0 0 0 2px white;
+                animation: pulse-badge 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
+            
+            @keyframes pulse-badge {
+                0%, 100% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+            
+            /* Header Buttons Base Styles */
+            .admin-crown-btn {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                border: 2px solid transparent;
+                border-radius: 12px;
+                text-decoration: none;
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25), 
+                           0 0 0 1px rgba(245, 158, 11, 0.1);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow: hidden;
+                color: #f59e0b; /* Icon Color */
+            }
+
+            .config-btn {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+                border: 2px solid transparent;
+                border-radius: 12px;
+                flex-shrink: 0;
+                cursor: pointer;
+                color: #64748b;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 
+                           0 0 0 1px rgba(148, 163, 184, 0.1);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow: hidden;
+            }
+
+            .profile-avatar-btn {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                border: 3px solid white;
+                box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), 
+                           0 4px 12px rgba(34, 197, 94, 0.2), 
+                           0 2px 8px rgba(0, 0, 0, 0.06);
+                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+                cursor: pointer;
+                border-radius: 50%;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                color: #166534;
+            }
+
+            /* Header Buttons Hover Effects */
+            .admin-crown-btn:hover {
+                background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+                box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35),
+                           0 0 0 1px rgba(245, 158, 11, 0.2);
+                transform: translateY(-2px) scale(1.05);
+            }
+            
+            .admin-crown-btn:active {
+                transform: translateY(0) scale(1);
+            }
+            
+            .config-btn:hover {
+                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+                color: #3b82f6;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2),
+                           0 0 0 1px rgba(59, 130, 246, 0.1);
+                transform: translateY(-2px);
+            }
+            
+            .config-btn:hover i {
+                animation: rotate-settings 0.6s ease-in-out;
+            }
+            
+            @keyframes rotate-settings {
+                0%, 100% { transform: rotate(0deg); }
+                50% { transform: rotate(90deg); }
+            }
+            
+            .profile-avatar-btn:hover {
+                box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.4),
+                           0 6px 16px rgba(34, 197, 94, 0.3),
+                           0 2px 8px rgba(0, 0, 0, 0.08);
+                transform: translateY(-2px) scale(1.05);
+            }
+            
+            .profile-avatar-btn:active {
+                transform: translateY(0) scale(1);
+            }
+            
             
             .notification-dropdown {
                 display: none;
@@ -791,8 +930,8 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
 
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
-                            <i data-lucide="crown" style="color: white; width: 20px;"></i>
+                        <a href="lider.php" class="admin-crown-btn" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid transparent; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25), 0 0 0 1px rgba(245, 158, 11, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
+                            <i data-lucide="crown" style="color: #f59e0b; width: 20px; position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));"></i>
                         </a>
                     <?php endif; ?>
 
@@ -800,18 +939,18 @@ function renderAppHeader($title, $backUrl = null)
 
                     <!-- Leitura Config Button (Leitura Only) -->
                     <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
-                        <button onclick="openConfig()" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; flex-shrink:0; cursor: pointer; color: var(--text-muted);">
-                            <i data-lucide="settings" style="width: 20px;"></i>
+                        <button onclick="openConfig()" class="config-btn" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); border: 2px solid transparent; border-radius: 12px; flex-shrink:0; cursor: pointer; color: #64748b; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(148, 163, 184, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
+                            <i data-lucide="settings" style="width: 20px; position: relative; z-index: 1;"></i>
                         </button>
                     <?php endif; ?>
 
                     <!-- Mobile Profile Avatar -->
                     <div style="position: relative;">
-                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" style="width: 40px; height: 40px; padding: 0; border: 2px solid white; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25), 0 2px 8px rgba(34, 197, 94, 0.2); background: var(--bg-surface); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;">
+                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" class="profile-avatar-btn" style="width: 44px; height: 44px; padding: 0; border: 3px solid white; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), 0 4px 12px rgba(34, 197, 94, 0.2), 0 2px 8px rgba(0, 0, 0, 0.06); background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative;">
                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                             <?php else: ?>
-                                <i data-lucide="user" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
+                                <i data-lucide="user" style="width: 20px; height: 20px; color: #22c55e;"></i>
                             <?php endif; ?>
                         </button>
 
@@ -1486,60 +1625,200 @@ function renderAppHeader($title, $backUrl = null)
             <?php endif; ?>
         </div>
 
-        <!-- Direita: A├º├Áes + L├¡der + Perfil -->
+        <!-- Direita: Ações + Líder + Perfil -->
         <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
 
-            <!-- L├¡der Button (Admin only) - Desktop -->
+            <!-- Líder Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                <a href="lider.php" class="ripple" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 10px; text-decoration: none; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);">
-                    <i data-lucide="crown" style="color: white; width: 20px;"></i>
+                <a href="lider.php" class="admin-crown-btn ripple" title="Painel do Líder">
+                    <i data-lucide="crown"></i>
                 </a>
             <?php endif; ?>
 
-            <!-- A├º├úo da P├ígina (se houver) -->
+            <!-- Ação da Página (se houver) -->
             <?php if (isset($rightAction) && $rightAction): ?>
                 <?= $rightAction ?>
             <?php endif; ?>
 
             <!-- Leitura Config Button (Leitura Only - Desktop) -->
             <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
-                <button onclick="openConfig()" class="ripple" style="
-                    display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
-                    background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
-                    cursor: pointer; color: var(--text-muted); margin-left: 8px;
-                ">
-                    <i data-lucide="settings" style="width: 20px;"></i>
+                <button onclick="openConfig()" class="config-btn ripple" title="Configurações">
+                    <i data-lucide="settings"></i>
                 </button>
             <?php endif; ?>
 
             <!-- Notification Button (Bell) -->
-            <button onclick="window.location.href='<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>'" class="ripple" title="Notificações" style="
-                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
-                display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
-            ">
-                <i data-lucide="bell" style="width: 20px;"></i>
-            </button>
+            <div style="position: relative;">
+                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                    <i data-lucide="bell"></i>
+                    <span class="notification-badge" id="notificationBadgeDesktop" style="display: none;">0</span>
+                </button>
+                
+                <!-- Desktop Dropdown -->
+                <div class="notification-dropdown" id="notificationDropdownDesktop">
+                    <div class="notification-header">
+                        <div class="notification-title">
+                            Notificações
+                            <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar Notificações Push" id="btnEnableNotifications">
+                                <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
+                            </button>
+                        </div>
+                        <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
+                    </div>
+                    <div class="notification-list">
+                        <!-- JS vai preencher aqui -->
+                        <div class="empty-state">
+                            <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
+                            <p>Carregando...</p>
+                        </div>
+                    </div>
+                    <div class="notification-footer">
+                        <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">
+                            Ver central completa
+                            <i data-lucide="arrow-right" style="width: 14px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+            /* NOTIFICATION SYSTEM CSS - PROFESSIONAL */
+            .notification-btn {
+                width: 44px; height: 44px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer;
+                color: var(--text-muted);
+                position: relative;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .notification-btn:hover, .notification-btn.active {
+                background: var(--bg-body);
+                color: var(--primary);
+                border-color: var(--primary-light);
+                transform: translateY(-1px);
+                box-shadow: var(--shadow-sm);
+            }
+            .notification-badge {
+                position: absolute;
+                top: -5px; right: -5px;
+                background: #ef4444; 
+                color: white;
+                font-size: 11px; 
+                font-weight: 700;
+                min-width: 20px; 
+                height: 20px;
+                padding: 0 5px;
+                border-radius: 10px;
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                border: 2px solid white;
+                box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+                transform-origin: center;
+                animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+            
+            .notification-dropdown {
+                display: none;
+                position: absolute;
+                right: 0;
+                top: 54px;
+                width: 380px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 16px;
+                box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
+                z-index: 1000;
+                overflow: hidden;
+                transform-origin: top right;
+                animation: dropdownIn 0.2s ease-out;
+            }
+            @keyframes dropdownIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+            @media(max-width: 640px) {
+                .notification-dropdown {
+                    position: fixed;
+                    top: 60px; left: 16px; right: 16px; width: auto;
+                }
+            }
+            .notification-header {
+                padding: 16px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex; justify-content: space-between; align-items: center;
+                background: #f8fafc;
+            }
+            .notification-title { 
+                font-weight: 700; color: var(--text-main); font-size: 0.95rem; 
+                display: flex; align-items: center; gap: 10px; 
+            }
+            .notification-enable-btn {
+                background: var(--primary); color: white; border: none; padding: 6px 12px; 
+                border-radius: 6px; font-size: 0.75rem; cursor: pointer; display: none; 
+                font-weight: 600; align-items: center; gap: 6px;
+                transition: background 0.2s;
+            }
+            .notification-enable-btn:hover { background: var(--primary-hover); }
+
+            .mark-all-read { 
+                background: none; border: none; color: var(--primary); 
+                font-size: 0.8rem; font-weight: 600; cursor: pointer; padding: 6px 10px;
+                border-radius: 6px; transition: background 0.1s;
+            }
+            .mark-all-read:hover { background: var(--primary-light); }
+
+            .notification-list { max-height: 400px; overflow-y: auto; }
+            .notification-item {
+                padding: 16px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex; gap: 16px;
+                cursor: pointer; transition: background 0.1s;
+                text-decoration: none; color: inherit;
+                position: relative;
+            }
+            .notification-item:hover { background: #f8fafc; }
+            .notification-item.unread { background: #f0fdf4; }
+            .notification-item.unread:before {
+                content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary);
+            }
+            .notification-item:last-child { border-bottom: none; }
+            
+            .notification-icon {
+                width: 40px; height: 40px; border-radius: 12px;
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
+            }
+            .notification-content { flex: 1; min-width: 0; }
+            .notification-title-text { 
+                font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 4px;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+            }
+            .notification-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 6px; }
+            .notification-time { font-size: 0.75rem; color: #94a3b8; display: flex; align-items: center; gap: 4px; }
+            
+            .notification-footer {
+                padding: 12px; text-align: center; border-top: 1px solid var(--border-color);
+                background: #f8fafc;
+            }
+            .notification-footer a {
+                color: var(--primary); font-weight: 600; font-size: 0.85rem; text-decoration: none;
+                display: inline-flex; align-items: center; gap: 6px;
+            }
+            .notification-footer a:hover { text-decoration: underline; }
+            
+            .empty-state { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 0.95rem; }
+            </style>
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')"
-                    class="ripple" style="
-                    width: 52px; height: 52px; padding: 0; 
-                    border: 2px solid white; 
-                    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25), 0 4px 12px rgba(34, 197, 94, 0.2);
-                    border-radius: 50%; overflow: hidden; cursor: pointer; background: var(--bg-surface);
-                    display: flex; align-items: center; justify-content: center;
-                    transition: transform 0.2s;
-                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                         <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                     <?php else: ?>
-                        <div style="width: 100%; height: 100%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                        </div>
+                        <i data-lucide="user"></i>
                     <?php endif; ?>
                 </button>
 
@@ -1659,96 +1938,7 @@ function renderAppHeader($title, $backUrl = null)
                 });
 
             </script>
-            <style>
-            /* NOTIFICATION SYSTEM CSS */
-            .notification-btn {
-                width: 40px; height: 40px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
-                display: flex; align-items: center; justify-content: center;
-                cursor: pointer;
-                color: var(--text-muted);
-                position: relative;
-                transition: all 0.2s;
-            }
-            .notification-btn:hover, .notification-btn.active {
-                background: var(--bg-body);
-                color: var(--primary);
-                border-color: var(--primary-light);
-            }
-            .notification-badge {
-                position: absolute;
-                top: -4px; right: -4px;
-                background: #ef4444; color: white;
-                font-size: 10px; font-weight: 700;
-                min-width: 18px; height: 18px;
-                border-radius: 50%;
-                display: flex; align-items: center; justify-content: center;
-                border: 2px solid white;
-            }
-            .notification-dropdown {
-                display: none;
-                position: absolute;
-                top: 50px; right: -80px;
-                width: 320px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 16px;
-                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-                z-index: 1000;
-                overflow: hidden;
-                animation: fadeInUp 0.2s ease-out;
-            }
-            @media(max-width: 640px) {
-                .notification-dropdown {
-                    position: fixed;
-                    top: 60px; left: 16px; right: 16px;
-                    width: auto;
-                }
-            }
-            .notification-header {
-                padding: 12px 16px;
-                border-bottom: 1px solid var(--border-color);
-                display: flex; justify-content: space-between; align-items: center;
-                background: #f8fafc;
-            }
-            .notification-title { font-weight: 700; color: var(--text-main); font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-            .notification-enable-btn {
-                background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; display: none;
-            }
-            .mark-all-read { 
-                background: none; border: none; color: var(--primary); 
-                font-size: 0.75rem; font-weight: 600; cursor: pointer; padding: 4px;
-            }
-            .notification-list { max-height: 350px; overflow-y: auto; }
-            .notification-item {
-                padding: 12px 16px;
-                border-bottom: 1px solid var(--border-color);
-                display: flex; gap: 12px;
-                cursor: pointer; transition: background 0.1s;
-                text-decoration: none; color: inherit;
-            }
-            .notification-item:hover { background: #f1f5f9; }
-            .notification-item.unread { background: #f0fdf4; }
-            .notification-item:last-child { border-bottom: none; }
-            .notification-icon {
-                width: 32px; height: 32px; border-radius: 50%;
-                display: flex; align-items: center; justify-content: center;
-                flex-shrink: 0;
-            }
-            .notification-content { flex: 1; }
-            .notification-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.4; margin-bottom: 4px; }
-            .notification-time { font-size: 0.75rem; color: var(--text-muted); }
-            .notification-footer {
-                padding: 10px; text-align: center; border-top: 1px solid var(--border-color);
-                background: #f8fafc;
-            }
-            .notification-footer a {
-                color: var(--primary); font-weight: 600; font-size: 0.85rem; text-decoration: none;
-            }
-            .empty-state { padding: 32px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
-            </style>
+
         </div>
     </header>
     <!-- Dashboard Customization Modal -->

@@ -1,10 +1,11 @@
 <?php
-// Configuração VAPID para Push Notifications
-// IMPORTANTE: Para produção, gere um novo par de chaves!
-// Você pode gerar chaves acessando: https://web-push-codelab.glitch.me/
-
 return [
     'subject' => 'mailto:admin@louvorpib.com',
-    'publicKey' => 'BDCae-2kP5aW_3aH7sZ8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2', // Placeholder - será substituído
-    'privateKey' => '4t5u6v7w8x9y0z1a2b3c4d5e6f7g8h9i0j1k2l3m' // Placeholder - será substituído
+    'publicKey' => 'BCPtPKB7JCiTBMC6Df3fvCdLkPzibvvofIsV3unLIYBhvPs-uOk01l6TFaN-06aUxake4Lp5ighPbzkXYLj6R6c',
+    'privateKey' => '-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTD0uShgjE+G4lCCz
+e9wG6kvUEvVwukGciRyvFTjnHI6hRANCAAQj7TygeyQokwTAug3937wnS5D84m77
+6HyLFd7pyyGAYbz7PrjpNNZekxWjftOmlMWpHuC6eYoIT285F2C4+ken
+-----END PRIVATE KEY-----
+'
 ];

@@ -6,7 +6,7 @@
 // Renderizar card de Escalas (PRO)
 function renderCardEscalas($nextSchedule, $totalSchedules) {
     ?>
-    <a href="escalas.php" class="access-card card-emerald">
+    <a href="escalas.php" class="access-card card-blue">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -24,10 +24,10 @@ function renderCardEscalas($nextSchedule, $totalSchedules) {
                     $date = new DateTime($nextSchedule['event_date']);
                     $roleFn = $nextSchedule['my_role'] ?? 'Membro da Equipe';
                 ?>
-                    <div style="font-weight: 600; color: #065f46; font-size: 0.9rem; margin-bottom: 2px;">
+                    <div style="font-weight: 600; color: #1e40af; font-size: 0.9rem; margin-bottom: 2px;">
                         <?= $date->format('d/m') ?> - <?= htmlspecialchars($nextSchedule['event_type']) ?>
                     </div>
-                    <div style="font-size: 0.75rem; color: #047857; opacity: 0.9;">
+                    <div style="font-size: 0.75rem; color: #1d4ed8; opacity: 0.9;">
                         <?= htmlspecialchars($roleFn) ?>
                     </div>
                 <?php else: ?>
@@ -42,7 +42,7 @@ function renderCardEscalas($nextSchedule, $totalSchedules) {
 // Renderizar card de Repertório (PRO)
 function renderCardRepertorio($ultimaMusica, $totalMusicas) {
     ?>
-    <a href="repertorio.php" class="access-card card-violet">
+    <a href="repertorio.php" class="access-card card-blue">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -55,13 +55,13 @@ function renderCardRepertorio($ultimaMusica, $totalMusicas) {
             
             <div class="card-info" style="margin-top: 8px;">
                 <?php if ($ultimaMusica): ?>
-                    <div style="font-weight: 600; color: #5b21b6; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-weight: 600; color: #1e40af; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         <?= htmlspecialchars($ultimaMusica['title']) ?>
                     </div>
-                    <div style="font-size: 0.75rem; color: #7c3aed; opacity: 0.9; display: flex; align-items: center; gap: 4px;">
+                    <div style="font-size: 0.75rem; color: #1d4ed8; opacity: 0.9; display: flex; align-items: center; gap: 4px;">
                         <span><?= htmlspecialchars($ultimaMusica['artist']) ?></span>
                         <?php if(!empty($ultimaMusica['tone'])): ?>
-                            <span style="background: rgba(255,255,255,0.5); padding: 1px 4px; border-radius: 4px; font-weight: 700; font-size: 0.65rem; border: 1px solid rgba(124, 58, 237, 0.2);">
+                            <span style="background: rgba(255,255,255,0.5); padding: 1px 4px; border-radius: 4px; font-weight: 700; font-size: 0.65rem; border: 1px solid rgba(29, 78, 216, 0.2);">
                                 <?= htmlspecialchars($ultimaMusica['tone']) ?>
                             </span>
                         <?php endif; ?>
@@ -149,7 +149,7 @@ function renderCardLeitura($pdo, $userId) {
     $todayTotal = count($todayVerses);
     $percentToday = $todayTotal > 0 ? round(($todayProgress / $todayTotal) * 100) : 0;
     ?>
-    <a href="leitura.php" class="access-card card-cyan">
+    <a href="leitura.php" class="access-card card-green">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -159,7 +159,7 @@ function renderCardLeitura($pdo, $userId) {
             </div>
             <h3 class="card-title">Leitura</h3>
             <p class="card-info" style="margin-top: 8px;">
-                <span style="display: block; font-weight: 600; color: #0891b2;">Dia <?= $displayDayGlobal ?></span>
+                <span style="display: block; font-weight: 600; color: #059669;">Dia <?= $displayDayGlobal ?></span>
                 <span style="font-size: 0.75rem;">Progresso atual</span>
             </p>
         </div>
@@ -170,7 +170,7 @@ function renderCardLeitura($pdo, $userId) {
 // Renderizar card de Avisos (PRO)
 function renderCardAvisos($ultimoAviso, $unreadCount) {
     ?>
-    <a href="avisos.php" class="access-card card-amber">
+    <a href="avisos.php" class="access-card card-violet">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -192,7 +192,7 @@ function renderCardAvisos($ultimoAviso, $unreadCount) {
 // Renderizar card de Aniversariantes (PRO)
 function renderCardAniversariantes($niverCount, $proximo = null) {
     ?>
-    <a href="aniversarios.php" class="access-card card-fuchsia">
+    <a href="aniversarios.php" class="access-card card-violet">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
@@ -221,7 +221,7 @@ function renderCardAniversariantes($niverCount, $proximo = null) {
 // Renderizar card de Devocional
 function renderCardDevocional() {
     ?>
-    <a href="devocionais.php" class="access-card card-indigo">
+    <a href="devocionais.php" class="access-card card-green">
         <div>
             <div class="card-icon">
                 <i data-lucide="sunrise" style="width: 24px; height: 24px;"></i>
@@ -236,21 +236,21 @@ function renderCardDevocional() {
 // Renderizar card de Oração
 function renderCardOracao($count = 0) {
     ?>
-    <a href="oracao.php" class="access-card card-rose">
+    <a href="oracao.php" class="access-card card-green">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div class="card-icon">
                     <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
                 </div>
                 <?php if ($count > 0): ?>
-                    <span class="card-badge" style="background: #e11d48; color: white; border: none;"><?= $count ?></span>
+                    <span class="card-badge" style="background: #059669; color: white; border: none;"><?= $count ?></span>
                 <?php endif; ?>
             </div>
             <h3 class="card-title">Oração</h3>
             <div class="card-info" style="margin-top: 8px;">
                 <?php if ($count > 0): ?>
-                    <span style="font-weight: 600; color: #be123c; font-size: 0.9rem;"><?= $count ?> pedidos</span>
-                    <span style="font-size: 0.75rem; color: #9f1239; opacity: 0.9;"> ativos na lista</span>
+                    <span style="font-weight: 600; color: #047857; font-size: 0.9rem;"><?= $count ?> pedidos</span>
+                    <span style="font-size: 0.75rem; color: #059669; opacity: 0.9;"> ativos na lista</span>
                 <?php else: ?>
                     <span style="opacity: 0.8;">Nenhum pedido ativo</span>
                 <?php endif; ?>

@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS google_calendar_sync_log (
 -- DADOS INICIAIS (SEED)
 -- ==========================================
 
--- Evento de exemplo para demonstração
-INSERT INTO events (title, description, start_datetime, end_datetime, location, event_type, color, created_by) VALUES
-('Reunião de Planejamento 2026', 'Planejamento estratégico do ministério para o primeiro semestre', '2026-02-15 14:00:00', '2026-02-15 16:00:00', 'Sala de Reuniões', 'reuniao', '#3b82f6', 1),
-('Confraternização do Louvor', 'Momento de comunhão e integração da equipe', '2026-02-22 19:00:00', '2026-02-22 22:00:00', 'Salão de Eventos', 'confraternizacao', '#f59e0b', 1);
+-- Dados de exemplo removidos para evitar erro de chave estrangeira
+-- INSERT INTO events (title, description, start_datetime, end_datetime, location, event_type, color, created_by) VALUES
+-- ('Reunião de Planejamento 2026', 'Planejamento estratégico do ministério para o primeiro semestre', '2026-02-15 14:00:00', '2026-02-15 16:00:00', 'Sala de Reuniões', 'reuniao', '#3b82f6', NULL),
+-- ('Confraternização do Louvor', 'Momento de comunhão e integração da equipe', '2026-02-22 19:00:00', '2026-02-22 22:00:00', 'Salão de Eventos', 'confraternizacao', '#f59e0b', NULL);

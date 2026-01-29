@@ -301,26 +301,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .fab {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        width: 56px;
-        height: 56px;
-        background: #166534;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.4);
-        border: none;
-        cursor: pointer;
-        z-index: 100;
-        transition: transform 0.2s;
-    }
-
-    .fab:hover {
-        transform: scale(1.1);
+        display: none; /* Botão removido */
     }
 
     /* Modal Styles */

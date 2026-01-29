@@ -6,13 +6,19 @@
 // Estado global
 let notificationsData = [];
 let unreadCount = 0;
-// Fallback se a variável não estiver definida (para evitar erros em páginas antigas)
+let lastNotificationId = 0;
+// Fallback se a variável não estiver definida
 const apiBase = (typeof NOTIFICATIONS_API_BASE !== 'undefined') ? NOTIFICATIONS_API_BASE : '';
+// Determine API Base Path dynamically if variable not set
+const IS_ADMIN = window.location.pathname.includes('/admin/');
+// If apiBase is empty, try to deduce. apiBase usually comes from layout.php
+// But we need a robust fallback.
+const API_ENDPOINT = apiBase + 'notifications_api.php';
 
 // Carregar contador de não lidas
 async function loadUnreadCount() {
     try {
-        const response = await fetch(`${apiBase}notifications_api.php?action=count_unread`);
+        const response = await fetch(`${API_ENDPOINT}?action=count_unread`);
         const data = await response.json();
 
         if (data.success) {
@@ -24,12 +30,10 @@ async function loadUnreadCount() {
     }
 }
 
-// ... (Rest of code)
-
-// Carregar notificações
+// Carregar notificações (Limit 3 per user request)
 async function loadNotifications() {
     try {
-        const response = await fetch(`${apiBase}notifications_api.php?action=list&limit=10`);
+        const response = await fetch(`${API_ENDPOINT}?action=list&limit=3`);
         const data = await response.json();
 
         if (data.success) {
@@ -38,151 +42,13 @@ async function loadNotifications() {
             // Check for new notifications to play sound
             if (notificationsData.length > 0) {
                 const newestId = notificationsData[0].id;
-                if (newestId > lastNotificationId && lastNotificationId !== 0) {
+                // Only play if we have a previous ID to compare against, and it's newer
+                if (lastNotificationId !== 0 && newestId > lastNotificationId) {
                     playSoundAndVibrate();
                 }
                 lastNotificationId = newestId;
-            } else {
-                lastNotificationId = 0;
             }
 
-            renderNotifications();
-        }
-    } catch (error) {
-        console.error('Erro ao carregar notificações:', error);
-    }
-}
-
-// ...
-
-// Marcar como lida ao clicar
-async function handleNotificationClick(id, link) {
-    try {
-        await fetch(`${apiBase}notifications_api.php?action=mark_read`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id })
-        });
-
-        // Atualizar contador
-        unreadCount = Math.max(0, unreadCount - 1);
-        updateBadge();
-
-        // Redirecionar se houver link
-        if (link) {
-            window.location.href = link;
-        }
-    } catch (error) {
-        console.error('Erro ao marcar como lida:', error);
-    }
-}
-
-// Marcar todas como lidas
-async function markAllAsRead() {
-    try {
-        const response = await fetch(`${apiBase}notifications_api.php?action=mark_all_read`, {
-            method: 'POST'
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            unreadCount = 0;
-            updateBadge();
-            loadNotifications();
-        }
-    } catch (error) {
-        console.error('Erro ao marcar todas como lidas:', error);
-    }
-}
-
-// ... 
-
-// Garantir Inscrição no Push
-async function ensurePushSubscription() {
-    try {
-        const registration = await navigator.serviceWorker.ready;
-        let subscription = await registration.pushManager.getSubscription();
-
-        if (!subscription) {
-            // Buscar chave pública
-            const response = await fetch(`${apiBase}notifications_api.php?action=public_key`);
-            const data = await response.json();
-
-            if (data.success && data.publicKey) {
-                const convertedKey = urlBase64ToUint8Array(data.publicKey);
-
-                subscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: convertedKey
-                });
-
-                // Salvar no backend
-                await saveSubscription(subscription);
-            }
-        }
-    } catch (error) {
-        console.error('Erro no Push Subscription:', error);
-    }
-}
-
-async function saveSubscription(subscription) {
-    try {
-        // Ajustar endpoint da API de push também, que está em admin/api/
-        // Se estamos em admin/, é api/push...
-        // Se estamos na raiz, é admin/api/push...
-        // apiBase já termina com 'admin/' se na raiz, ou vazio se em admin.
-        // O endpoint é manipulado um pouco diferente pois está em api/ subfolder.
-
-        let endpointUrl = 'api/push_subscription.php';
-        if (apiBase !== '') { // estamos na raiz
-            endpointUrl = apiBase + 'api/push_subscription.php';
-        }
-
-        await fetch(endpointUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(subscription)
-        });
-    } catch (e) {
-        console.error('Erro ao salvar subscription:', e);
-    }
-}
-
-// Atualizar badge
-function updateBadge() {
-    const badge = document.getElementById('notificationBadge');
-    if (badge) {
-        if (unreadCount > 0) {
-            badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
-            badge.style.display = 'block';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-}
-
-// Toggle dropdown
-function toggleNotifications() {
-    const dropdown = document.getElementById('notificationDropdown');
-    const isActive = dropdown.classList.contains('active');
-
-    if (!isActive) {
-        loadNotifications();
-        dropdown.classList.add('active');
-    } else {
-        dropdown.classList.remove('active');
-    }
-}
-
-// Carregar notificações
-async function loadNotifications() {
-    try {
-        const response = await fetch('notifications_api.php?action=list&limit=10');
-        const data = await response.json();
-
-        if (data.success) {
-            notificationsData = data.notifications;
             renderNotifications();
         }
     } catch (error) {
@@ -192,51 +58,58 @@ async function loadNotifications() {
 
 // Renderizar notificações
 function renderNotifications() {
-    const list = document.getElementById('notificationList');
+    // Select all lists (desktop and mobile if exists)
+    const lists = document.querySelectorAll('.notification-list');
 
-    if (!notificationsData || notificationsData.length === 0) {
-        list.innerHTML = `
-            <div class="notification-empty">
-                <i data-lucide="bell-off" style="width: 32px; height: 32px; margin: 0 auto 8px; opacity: 0.3;"></i>
-                <div>Nenhuma notificação</div>
-            </div>
-        `;
+    lists.forEach(list => {
+        if (!notificationsData || notificationsData.length === 0) {
+            list.innerHTML = `
+                <div class="notification-empty">
+                    <i data-lucide="bell-off" style="width: 32px; height: 32px; margin: 0 auto 8px; opacity: 0.3;"></i>
+                    <div>Nenhuma notificação</div>
+                </div>
+            `;
+        } else {
+            list.innerHTML = notificationsData.map(notification => {
+                const config = notification.config || { icon: 'bell', color: '#64748b' };
+                const unreadClass = !notification.is_read ? 'unread' : '';
+                const timeAgo = getTimeAgo(notification.created_at);
+
+                return `
+                    <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notification.id}, '${notification.link || ''}')">
+                        <div class="notification-icon" style="min-width: 40px; min-height: 40px; background: ${config.color}20; color: ${config.color}; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="${config.icon}" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title-text">${escapeHtml(notification.title)}</div>
+                            ${notification.message ? `<div class="notification-text">${escapeHtml(notification.message)}</div>` : ''}
+                            <div class="notification-time">
+                                <i data-lucide="clock" style="width: 10px; height: 10px;"></i>
+                                ${timeAgo}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    });
+
+    // Re-initialize icons
+    if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-        return;
     }
-
-    list.innerHTML = notificationsData.map(notification => {
-        const config = notification.config || { icon: 'bell', color: '#64748b' };
-        const unreadClass = !notification.is_read ? 'unread' : '';
-        const timeAgo = getTimeAgo(notification.created_at);
-
-        return `
-            <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notification.id}, '${notification.link || ''}')">
-                <div class="notification-icon" style="background: ${config.color}20; color: ${config.color};">
-                    <i data-lucide="${config.icon}" style="width: 18px; height: 18px;"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">${escapeHtml(notification.title)}</div>
-                    ${notification.message ? `<div class="notification-message">${escapeHtml(notification.message)}</div>` : ''}
-                    <div class="notification-time">${timeAgo}</div>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    lucide.createIcons();
 }
 
 // Marcar como lida ao clicar
 async function handleNotificationClick(id, link) {
     try {
-        await fetch('notifications_api.php?action=mark_read', {
+        await fetch(`${API_ENDPOINT}?action=mark_read`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
         });
 
-        // Atualizar contador
+        // Atualizar contador localmente
         unreadCount = Math.max(0, unreadCount - 1);
         updateBadge();
 
@@ -252,24 +125,63 @@ async function handleNotificationClick(id, link) {
 // Marcar todas como lidas
 async function markAllAsRead() {
     try {
-        const response = await fetch('notifications_api.php?action=mark_all_read', {
+        await fetch(`${API_ENDPOINT}?action=mark_all_read`, {
             method: 'POST'
         });
 
-        const data = await response.json();
+        // Refresh
+        unreadCount = 0;
+        updateBadge();
+        loadNotifications();
 
-        if (data.success) {
-            unreadCount = 0;
-            updateBadge();
-            loadNotifications();
-        }
     } catch (error) {
         console.error('Erro ao marcar todas como lidas:', error);
     }
 }
 
+// Atualizar badge
+function updateBadge() {
+    const badges = document.querySelectorAll('.notification-badge');
+    badges.forEach(badge => {
+        if (unreadCount > 0) {
+            badge.innerText = unreadCount > 99 ? '99+' : unreadCount;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+}
+
+// Toggle dropdown
+function toggleNotifications(dropdownId = 'notificationDropdown') {
+    let dropdown = document.getElementById(dropdownId);
+
+    // Fallback if specific ID not found
+    if (!dropdown) {
+        dropdown = document.querySelector('.notification-dropdown');
+    }
+
+    if (!dropdown) return;
+
+    const isActive = dropdown.style.display === 'block';
+
+    // Close all other dropdowns
+    document.querySelectorAll('.notification-dropdown').forEach(d => {
+        d.style.display = 'none';
+    });
+
+    if (!isActive) {
+        loadNotifications(); // Fetch new data
+        dropdown.style.display = 'block';
+    } else {
+        dropdown.style.display = 'none';
+    }
+}
+
+
 // Utilitários
 function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -288,167 +200,31 @@ function getTimeAgo(dateString) {
     return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
 }
 
+
+// Som de notificação (Beep suave)
+const notificationSound = new Audio('data:audio/mp3;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAG1xUAALDkAAXGkAAIjR0oAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvwWAAfDOBsAAAAAt3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3');
+
+function playSoundAndVibrate() {
+    new Audio(notificationSound.src).play().catch(() => { });
+    if (navigator.vibrate) navigator.vibrate([200]);
+}
+
 // Fechar dropdown ao clicar fora
 document.addEventListener('click', function (e) {
-    const dropdown = document.getElementById('notificationDropdown');
-    const btn = document.getElementById('notificationBtn');
+    if (!e.target.closest('.notification-container') &&
+        !e.target.closest('#notificationBtnDesktop')) {
 
-    if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
-        dropdown.classList.remove('active');
+        document.querySelectorAll('.notification-dropdown').forEach(d => {
+            d.style.display = 'none';
+        });
     }
 });
 
-// Carregar contador ao iniciar
+
+// Carregar contador ao iniciar e configurar polling
 document.addEventListener('DOMContentLoaded', function () {
     loadUnreadCount();
 
-    // Verificar se suporta SW e Push
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-        checkNotificationPermission();
-    }
-
-    // Atualizar a cada 30 segundos
-    setInterval(loadUnreadCount, 30000);
+    // Polling a cada 60 segundos (reduzido de 30s)
+    setInterval(loadUnreadCount, 60000);
 });
-
-// Som de notificação (Beep suave)
-const notificationSound = new Audio('data:audio/mp3;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAG1xUAALDkAAXGkAAIjR0oAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvwWAAfDOBsAAAAAt3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3'); // Placeholder curto
-
-// Checar e pedir permissão
-function checkNotificationPermission() {
-    const btn = document.getElementById('btnEnableNotifications');
-
-    // Debug
-    console.log('Verificando permissão de notificação:', Notification.permission);
-
-    if (!btn) {
-        console.warn('Botão de ativar notificações não encontrado no DOM');
-        return;
-    }
-
-    // Se ainda não foi perguntado ('default'), mostra o botão
-    if (Notification.permission === 'default') {
-        btn.style.display = 'inline-flex';
-    } else {
-        // Se já foi concedida ('granted') ou negada ('denied'), esconde
-        btn.style.display = 'none';
-
-        if (Notification.permission === 'granted') {
-            ensurePushSubscription();
-        }
-    }
-}
-
-
-// UI para pedir permissão (pode ser chamada pelo botão no menu)
-function requestNotificationPermission() {
-    Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-            ensurePushSubscription();
-            new Audio(notificationSound.src).play().catch(e => console.log('Audio autoplay blocked'));
-            if (navigator.vibrate) navigator.vibrate([200]);
-            alert('Notificações ativadas com sucesso!');
-        }
-    });
-}
-
-function showPermissionRequestUI() {
-    // Implementar um toast ou modal suave se desejar, 
-    // ou apenas esperar o usuário clicar no botão "Ativar Notificações" no dropdown
-}
-
-// Garantir Inscrição no Push
-async function ensurePushSubscription() {
-    try {
-        const registration = await navigator.serviceWorker.ready;
-        let subscription = await registration.pushManager.getSubscription();
-
-        if (!subscription) {
-            // Buscar chave pública
-            const response = await fetch('notifications_api.php?action=public_key');
-            const data = await response.json();
-
-            if (data.success && data.publicKey) {
-                const convertedKey = urlBase64ToUint8Array(data.publicKey);
-
-                subscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: convertedKey
-                });
-
-                // Salvar no backend
-                await saveSubscription(subscription);
-            }
-        }
-    } catch (error) {
-        console.error('Erro no Push Subscription:', error);
-    }
-}
-
-async function saveSubscription(subscription) {
-    try {
-        await fetch('api/push_subscription.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(subscription)
-        });
-    } catch (e) {
-        console.error('Erro ao salvar subscription:', e);
-    }
-}
-
-// Utility para VAPID Key
-function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-}
-
-// Modified loadNotifications to play sound if new ones arrived
-let lastNotificationId = 0;
-
-async function loadNotifications() {
-    try {
-        const response = await fetch('notifications_api.php?action=list&limit=10');
-        const data = await response.json();
-
-        if (data.success) {
-            notificationsData = data.notifications;
-
-            // Check for new notifications to play sound
-            if (notificationsData.length > 0) {
-                const newestId = notificationsData[0].id;
-                if (newestId > lastNotificationId && lastNotificationId !== 0) {
-                    playSoundAndVibrate();
-                }
-                lastNotificationId = newestId;
-            } else {
-                lastNotificationId = 0;
-            }
-
-            renderNotifications();
-        }
-    } catch (error) {
-        console.error('Erro ao carregar notificações:', error);
-    }
-}
-
-function playSoundAndVibrate() {
-    // Tocar som
-    notificationSound.play().catch(e => console.log('Audio play error', e));
-
-    // Vibrar
-    if (navigator.vibrate) {
-        navigator.vibrate([200, 100, 200]);
-    }
-}
-

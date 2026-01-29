@@ -618,38 +618,9 @@ renderAppHeader('Avisos');
         color: #dc2626;
     }
 
-    /* FAB (Floating Action Button) */
+    /* FAB (Floating Action Button) - Oculto por padrão */
     .fab {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        width: 56px;
-        height: 56px;
-        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
-        border-radius: 50%;
-        border: none;
-        color: white;
-        cursor: pointer;
-        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 50;
-    }
-
-    .fab:hover {
-        transform: scale(1.1) rotate(90deg);
-        box-shadow: 0 12px 32px rgba(124, 58, 237, 0.5);
-    }
-
-    .fab:active {
-        transform: scale(0.95);
-    }
-
-    .fab i {
-        width: 24px;
-        height: 24px;
+        display: none; /* Oculto - botão removido */
     }
 
     /* Empty State */

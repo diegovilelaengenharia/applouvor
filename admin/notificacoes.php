@@ -325,6 +325,14 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         font-size: 0.75rem;
         color: var(--text-muted);
         display: flex; align-items: center; gap: 4px;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .notification-time a {
+        position: relative;
+        z-index: 11;
+        cursor: pointer;
     }
     
     .empty-state {
@@ -607,5 +615,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<?php
+renderAppFooter();
+?>
 
 
