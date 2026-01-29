@@ -1,5 +1,5 @@
 <?php
-// admin/avisos.php - Redesign com visual premium
+// admin/avisos.php - Redesign com visual roxo moderno
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
@@ -36,32 +36,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $title = $_POST['title'];
                         $notifType = $priority === 'urgent' ? 'aviso_urgent' : 'new_aviso';
                         
-                        // Definir query de usuários baseado no público
                         $usersQuery = "SELECT id FROM users WHERE status = 'active'";
                         $usersParams = [];
                         
                         if ($targetAudience === 'admins') {
                             $usersQuery .= " AND role = 'admin'";
                         } elseif ($targetAudience === 'team') {
-                            $usersQuery .= " AND role IN ('admin', 'member')"; // Assumindo 'member' como equipe
+                            $usersQuery .= " AND role IN ('admin', 'member')";
                         }
                         
                         $stmtUsers = $pdo->query($usersQuery);
                         $users = $stmtUsers->fetchAll(PDO::FETCH_COLUMN);
                         
                         foreach ($users as $uid) {
-                            if ($uid == $userId) continue; // Não notificar o próprio criador
+                            if ($uid == $userId) continue;
                             
                             $notificationSystem->createNotification(
                                 $uid,
                                 $notifType,
                                 "Novo Aviso: $title",
-                                strip_tags($_POST['message']), // Remover HTML da mensagem para notificação
-                                "avisos.php" 
+                                strip_tags($_POST['message']),
+                                "avisos.php"
                             );
                         }
                     } catch (Exception $e) {
-                         // Ignorar erros de notificação para não bloquear o aviso
                          error_log("Erro ao enviar notificações: " . $e->getMessage());
                     }
                 }
@@ -112,51 +110,54 @@ $filterType = $_GET['type'] ?? 'all';
 $search = $_GET['search'] ?? '';
 
 // Buscar todas as tags
-$tags = $pdo->query("SELECT * FROM aviso_tags ORDER BY is_default DESC, name ASC")->fetchAll(PDO::FETCH_ASSOC);
+$allTags = [];
+try {
+    $stmt = $pdo->query("SELECT DISTINCT name FROM aviso_tags ORDER BY name");
+    $allTags = $stmt->fetchAll(PDO::FETCH_COLUMN);
+} catch (Exception $e) {}
 
-// Construir Query
-$sql = "SELECT a.*, u.name as author_name, u.avatar as author_avatar FROM avisos a LEFT JOIN users u ON a.created_by = u.id WHERE 1=1";
+// Query de avisos
+$query = "SELECT a.*, u.name as author_name, u.avatar as author_avatar 
+          FROM avisos a 
+          LEFT JOIN users u ON a.created_by = u.id 
+          WHERE 1=1";
+
 $params = [];
 
 if ($showArchived) {
-    $sql .= " AND a.archived_at IS NOT NULL";
-} elseif ($showHistory) {
-    $sql .= " AND (a.archived_at IS NOT NULL OR (a.expires_at IS NOT NULL AND a.expires_at < CURDATE()))";
+    $query .= " AND a.archived_at IS NOT NULL";
 } else {
-    $sql .= " AND a.archived_at IS NULL AND (a.expires_at IS NULL OR a.expires_at >= CURDATE())";
+    $query .= " AND a.archived_at IS NULL";
 }
 
-// Filtro por tag
-if ($filterTag !== 'all') {
-    $sql .= " AND EXISTS (
-        SELECT 1 FROM aviso_tag_relations r 
-        JOIN aviso_tags t ON r.tag_id = t.id 
-        WHERE r.aviso_id = a.id AND t.id = ?
-    )";
-    $params[] = $filterTag;
+if (!$showHistory) {
+    $query .= " AND (a.expires_at IS NULL OR a.expires_at >= CURDATE())";
+}
+
+if ($filterType !== 'all') {
+    $query .= " AND a.type = ?";
+    $params[] = $filterType;
 }
 
 if (!empty($search)) {
-    $sql .= " AND (a.title LIKE ? OR a.message LIKE ?)";
+    $query .= " AND (a.title LIKE ? OR a.message LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
 
-$sql .= " ORDER BY 
-    a.is_pinned DESC,
-    CASE WHEN a.priority = 'urgent' THEN 1 WHEN a.priority = 'important' THEN 2 ELSE 3 END ASC, 
-    a.created_at DESC";
+$query .= " ORDER BY a.priority='urgent' DESC, a.created_at DESC";
 
-$stmt = $pdo->prepare($sql);
+$stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Buscar tags de cada aviso
 foreach ($avisos as &$aviso) {
     $stmt = $pdo->prepare("
-        SELECT t.* FROM aviso_tags t
-        JOIN aviso_tag_relations r ON t.id = r.tag_id
-        WHERE r.aviso_id = ?
+        SELECT t.name 
+        FROM aviso_tags t
+        INNER JOIN aviso_tag_relations atr ON t.id = atr.tag_id
+        WHERE atr.aviso_id = ?
     ");
     $stmt->execute([$aviso['id']]);
     $aviso['tags'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -169,19 +170,192 @@ renderAppHeader('Avisos');
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <style>
-    /* Aviso Cards - Premium Design */
+    /* === PALETA ROXA MODERNA === */
+    :root {
+        --purple-primary: #7c3aed;
+        --purple-light: #8b5cf6;
+        --purple-bg: #f5f3ff;
+        --purple-border: #e9d5ff;
+    }
+
+    /* === HERO SECTION === */
+    .hero-avisos {
+        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        padding: 32px 20px;
+        margin: -20px -20px 24px -20px;
+        border-radius: 0 0 24px 24px;
+        box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-avisos::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .hero-icon {
+        width: 64px;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-icon i {
+        color: white;
+        width: 32px;
+        height: 32px;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: white;
+        margin: 0 0 8px;
+        text-align: center;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.9);
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* === SEARCH BAR === */
+    .search-container {
+        margin-bottom: 20px;
+    }
+
+    .search-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        color: var(--purple-primary);
+        opacity: 0.6;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        border: 2px solid var(--purple-border);
+        border-radius: 12px;
+        font-size: 0.95rem;
+        background: white;
+        outline: none;
+        color: var(--text-main);
+        transition: all 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--purple-primary);
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    }
+
+    .search-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    /* === FILTER TABS === */
+    .filter-tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        margin-bottom: 24px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-tab {
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.2s;
+        background: white;
+        color: var(--text-main);
+        border: 2px solid var(--border-color);
+    }
+
+    .filter-tab:hover {
+        border-color: var(--purple-light);
+        color: var(--purple-primary);
+        transform: translateY(-1px);
+    }
+
+    .filter-tab.active {
+        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    /* === AVISO CARDS === */
     .aviso-card {
-        background: var(--bg-surface);
+        background: white;
         border-radius: 16px;
         border: 1px solid var(--border-color);
         overflow: hidden;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        margin-bottom: 16px;
     }
+
+    .aviso-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--priority-color, var(--purple-primary));
+        transition: width 0.2s;
+    }
+
     .aviso-card:hover {
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
     }
-    
+
+    .aviso-card:hover::before {
+        width: 6px;
+    }
+
+    /* Priority Colors */
+    .aviso-card.urgent::before { background: #ef4444; }
+    .aviso-card.important::before { background: #f59e0b; }
+    .aviso-card.normal::before { background: var(--purple-primary); }
+
     /* Header do Card */
     .aviso-header {
         display: flex;
@@ -190,579 +364,739 @@ renderAppHeader('Avisos');
         padding: 16px;
         border-bottom: 1px solid var(--border-color);
     }
+
     .aviso-avatar {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border: 2px solid var(--purple-bg);
+        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
     }
+
     .aviso-avatar-placeholder {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
+        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-weight: 700;
-        color: white;
-        font-weight: 700;
-        font-size: var(--font-h3);
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
     }
+
     .aviso-author-info {
         flex: 1;
+        min-width: 0;
     }
+
     .aviso-author-name {
-        font-weight: 700;
-        font-weight: 700;
+        font-weight: 600;
         color: var(--text-main);
-        font-size: var(--font-body);
+        font-size: 0.9rem;
+        margin-bottom: 2px;
     }
+
     .aviso-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
         display: flex;
         align-items: center;
-        align-items: center;
         gap: 8px;
-        font-size: var(--font-body-sm);
-        color: var(--text-muted);
     }
-    .aviso-type-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 2px 8px;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: var(--font-caption);
-        font-weight: 600;
-    }
-    
-    /* Content */
-    .aviso-content {
+
+    /* Body do Card */
+    .aviso-body {
         padding: 16px;
     }
+
     .aviso-title {
-        font-size: var(--font-h2);
+        font-size: 1.1rem;
         font-weight: 700;
         color: var(--text-main);
         margin-bottom: 8px;
+        line-height: 1.4;
     }
-    .aviso-text {
-        color: var(--text-body);
-        font-size: var(--font-body);
+
+    .aviso-message {
+        font-size: 0.95rem;
+        color: var(--text-muted);
         line-height: 1.6;
+        margin-bottom: 12px;
     }
-    .aviso-text p { margin: 0 0 8px; }
-    
-    /* Footer */
-    .aviso-footer {
+
+    /* Tags */
+    .aviso-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .aviso-tag {
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: var(--purple-bg);
+        color: var(--purple-primary);
+        border: 1px solid var(--purple-border);
+    }
+
+    /* Priority Badge */
+    .priority-badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .priority-badge.urgent {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .priority-badge.important {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .priority-badge.normal {
+        background: var(--purple-bg);
+        color: var(--purple-primary);
+    }
+
+    /* Actions */
+    .aviso-actions {
         padding: 12px 16px;
-        background: #f8fafc;
         border-top: 1px solid var(--border-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background: var(--bg-body);
     }
-    
-    /* Type Badges */
-    .type-general { background: #f1f5f9; color: #64748b; }
-    .type-event { background: #eff6ff; color: #2563eb; }
-    .type-music { background: #ecfdf5; color: #059669; }
-    .type-spiritual { background: #f5f3ff; color: #7c3aed; }
-    .type-urgent { background: #fef2f2; color: #dc2626; }
-    
-    /* Priority Badges */
-    .priority-urgent {
-        background: #fef2f2;
-        color: #dc2626;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: var(--font-caption);
-        font-weight: 700;
-        text-transform: uppercase;
+
+    .action-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid var(--border-color);
+        background: white;
+        color: var(--text-main);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
     }
-    .priority-important {
-        background: #fef3c7;
-        color: #d97706;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: var(--font-caption);
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-    
-    /* FAB */
-    .fab-create {
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #f97316, #ea580c);
+
+    .action-btn:hover {
+        background: var(--purple-primary);
         color: white;
+        border-color: var(--purple-primary);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(124, 58, 237, 0.2);
+    }
+
+    .action-btn.danger:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+    }
+
+    /* Dropdown */
+    .aviso-dropdown {
+        position: relative;
+    }
+
+    .dropdown-toggle {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         border: none;
-        box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+        background: transparent;
+        color: var(--text-muted);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 100;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .fab-create:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 25px rgba(249, 115, 22, 0.5);
-    }
-    
-    /* Filter Tabs */
-    .filter-tabs {
-        display: flex;
-        gap: 4px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
-        scrollbar-width: none;
-    }
-    .filter-tab {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: var(--font-body-sm);
-        font-weight: 600;
-        color: var(--text-muted);
-        text-decoration: none;
-        white-space: nowrap;
         transition: all 0.2s;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
     }
-    .filter-tab:hover {
-        background: var(--border-color);
+
+    .dropdown-toggle:hover {
+        background: var(--purple-bg);
+        color: var(--purple-primary);
     }
-    .filter-tab.active {
-        background: linear-gradient(135deg, #f97316, #ea580c);
-        color: white;
-        border-color: transparent;
-    }
-    
-    /* Dropdown Menu */
-    .aviso-dropdown {
+
+    .dropdown-menu {
         display: none;
         position: absolute;
-        right: 0;
         top: 100%;
+        right: 0;
         background: white;
         border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         border: 1px solid var(--border-color);
-        min-width: 150px;
-        z-index: 50;
+        min-width: 180px;
+        z-index: 100;
         overflow: hidden;
+        margin-top: 4px;
     }
-    .aviso-dropdown a, .aviso-dropdown button {
+
+    .dropdown-menu.show {
+        display: block;
+        animation: fadeInDown 0.2s ease-out;
+    }
+
+    .dropdown-item {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 12px 16px;
-        color: var(--text-main);
-        text-decoration: none;
-        font-size: var(--font-body);
-        width: 100%;
-        background: none;
+        gap: 10px;
         border: none;
-        cursor: pointer;
+        background: none;
+        width: 100%;
         text-align: left;
     }
-    .aviso-dropdown a:hover, .aviso-dropdown button:hover {
-        background: #f8fafc;
+
+    .dropdown-item:hover {
+        background: var(--purple-bg);
+        color: var(--purple-primary);
     }
-    .aviso-dropdown .delete-btn {
+
+    .dropdown-item.danger:hover {
+        background: #fee2e2;
         color: #dc2626;
+    }
+
+    /* FAB (Floating Action Button) */
+    .fab {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        border-radius: 50%;
+        border: none;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 50;
+    }
+
+    .fab:hover {
+        transform: scale(1.1) rotate(90deg);
+        box-shadow: 0 12px 32px rgba(124, 58, 237, 0.5);
+    }
+
+    .fab:active {
+        transform: scale(0.95);
+    }
+
+    .fab i {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        opacity: 0.3;
+        color: var(--purple-primary);
+    }
+
+    .empty-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+
+    .empty-message {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .modal.show {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        color: white;
+        padding: 24px;
+        border-radius: 20px 20px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .modal-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+        background: rgba(255,255,255,0.3);
+    }
+
+    .modal-body {
+        padding: 24px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+        border-color: var(--purple-primary);
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    }
+
+    .form-textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .modal-footer {
+        padding: 20px 24px;
         border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-secondary {
+        background: var(--bg-body);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+        background: var(--bg-surface);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        color: white;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 1.5rem;
+        }
+
+        .filter-tabs {
+            gap: 6px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        .fab {
+            bottom: 80px;
+            right: 20px;
+        }
     }
 </style>
 
 <?php renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira'); ?>
 
-<div class="container" style="padding-top: 16px; max-width: 700px; margin: 0 auto;">
+<div class="container" style="padding-top: 0; max-width: 800px; margin: 0 auto;">
     
     <!-- Hero Section -->
-    <div style="text-align: center; padding: 20px 0 30px;">
-        <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);">
-            <i data-lucide="megaphone" style="color: white; width: 36px; height: 36px;"></i>
+    <div class="hero-avisos">
+        <div class="hero-icon">
+            <i data-lucide="megaphone"></i>
         </div>
-        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Central de Comunicação</h2>
-        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
-            Avisos importantes, eventos e novidades do ministério. Fique por dentro de tudo!
+        <h1 class="hero-title">Central de Comunicação</h1>
+        <p class="hero-subtitle">
+            Avisos importantes, eventos e novidades do ministério
         </p>
     </div>
     
     <!-- Search Bar -->
-    <div style="margin-bottom: 20px;">
-        <form style="display: flex; gap: 10px;">
+    <div class="search-container">
+        <form method="GET">
             <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
             <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
             <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
-            <div style="flex: 1; position: relative;">
-                <i data-lucide="search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; color: var(--text-muted);"></i>
-                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Buscar avisos..." style="
-                    width: 100%; padding: 12px 12px 12px 44px; border: 1px solid var(--border-color);
-                    border-radius: 12px; font-size: var(--font-body); background: var(--bg-surface);
-                    outline: none; color: var(--text-main);
-                ">
+            <div class="search-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" 
+                       placeholder="Buscar avisos..." class="search-input">
             </div>
         </form>
     </div>
     
-    <!-- Filtros por Tag -->
+    <!-- Filtros por Tipo -->
     <div class="filter-tabs">
-        <a href="?tag=all<?= $showHistory ? '&history=1' : '' ?>" class="filter-tab <?= $filterTag === 'all' ? 'active' : '' ?>">✨ Todos</a>
-        <?php foreach ($tags as $tag): ?>
-            <a href="?tag=<?= $tag['id'] ?><?= $showHistory ? '&history=1' : '' ?>" 
-               class="filter-tab <?= $filterTag == $tag['id'] ? 'active' : '' ?>" 
-               style="<?= $filterTag == $tag['id'] ? 'background: ' . $tag['color'] . '; color: white; border-color: transparent;' : '' ?>">
-                <?= htmlspecialchars($tag['name']) ?>
-            </a>
-        <?php endforeach; ?>
-    </div>
-    
-    <!-- Toggle Histórico -->
-    <div style="margin-bottom: 20px;">
-        <a href="?<?= $showHistory ? '' : 'history=1' ?><?= $filterType !== 'all' ? '&type=' . $filterType : '' ?>" style="
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
-            text-decoration: none; color: var(--text-muted);
-            background: <?= $showHistory ? 'var(--bg-surface)' : 'transparent' ?>;
-            border: 1px solid <?= $showHistory ? 'var(--border-color)' : 'transparent' ?>;
-        ">
-            <i data-lucide="<?= $showHistory ? 'eye' : 'clock' ?>" style="width: 14px;"></i>
-            <?= $showHistory ? 'Ver Ativos' : 'Ver Histórico' ?>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'all'])) ?>" 
+           class="filter-tab <?= $filterType === 'all' ? 'active' : '' ?>">
+            ✨ Todos
+        </a>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'espiritual'])) ?>" 
+           class="filter-tab <?= $filterType === 'espiritual' ? 'active' : '' ?>">
+            🙏 Espiritual
+        </a>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'eventos'])) ?>" 
+           class="filter-tab <?= $filterType === 'eventos' ? 'active' : '' ?>">
+            🎉 Eventos
+        </a>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'geral'])) ?>" 
+           class="filter-tab <?= $filterType === 'geral' ? 'active' : '' ?>">
+            📢 Geral
+        </a>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'importante'])) ?>" 
+           class="filter-tab <?= $filterType === 'importante' ? 'active' : '' ?>">
+            ⭐ Importante
+        </a>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'musica'])) ?>" 
+           class="filter-tab <?= $filterType === 'musica' ? 'active' : '' ?>">
+            🎵 Música
+        </a>
+        <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'urgente'])) ?>" 
+           class="filter-tab <?= $filterType === 'urgente' ? 'active' : '' ?>">
+            🚨 Urgente
         </a>
     </div>
-    
-    <!-- Feed de Avisos -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-        <?php if (count($avisos) > 0): ?>
-            <?php foreach ($avisos as $aviso): 
-                // Prioridade
-                $isUrgent = $aviso['priority'] === 'urgent';
-                $isImportant = $aviso['priority'] === 'important';
-                
-                // Data Relativa
-                $createdAt = new DateTime($aviso['created_at']);
-                $now = new DateTime();
-                $diff = $now->diff($createdAt);
-                
-                if ($diff->y > 0) $timeAgo = $diff->y . ' ano(s)';
-                elseif ($diff->m > 0) $timeAgo = $diff->m . ' mês(es)';
-                elseif ($diff->d > 0) $timeAgo = $diff->d . ' dia(s)';
-                elseif ($diff->h > 0) $timeAgo = $diff->h . 'h';
-                elseif ($diff->i > 0) $timeAgo = $diff->i . 'min';
-                else $timeAgo = 'agora';
 
-                // Expiração
-                $expiryText = "";
-                $expiryClass = "";
-                if ($aviso['expires_at']) {
-                    $expiresAt = new DateTime($aviso['expires_at']);
-                    $daysLeft = (int)$now->diff($expiresAt)->format('%r%a');
-                    
-                    if ($daysLeft < 0) { $expiryText = "Expirado"; $expiryClass = "color: var(--text-muted)"; }
-                    elseif ($daysLeft == 0) { $expiryText = "Expira hoje"; $expiryClass = "color: #dc2626"; }
-                    elseif ($daysLeft <= 3) { $expiryText = "Expira em $daysLeft dias"; $expiryClass = "color: #d97706"; }
-                    else { $expiryText = "Expira " . $expiresAt->format('d/m'); $expiryClass = "color: var(--text-muted)"; }
-                }
-                
-                // Avatar
-                $authorAvatar = !empty($aviso['author_avatar']) ? $aviso['author_avatar'] : null;
-                if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
-                    $authorAvatar = '../assets/uploads/' . $authorAvatar;
-                }
-            ?>
-            <div class="aviso-card animate-in">
+    <!-- Avisos List -->
+    <?php if (empty($avisos)): ?>
+        <div class="empty-state">
+            <i data-lucide="inbox" class="empty-icon"></i>
+            <div class="empty-title">Nenhum aviso encontrado</div>
+            <div class="empty-message">
+                <?= !empty($search) ? 'Tente ajustar sua busca' : 'Não há avisos no momento' ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <?php foreach ($avisos as $aviso): ?>
+            <div class="aviso-card <?= $aviso['priority'] ?>">
                 <!-- Header -->
                 <div class="aviso-header">
-                    <?php if ($authorAvatar): ?>
-                        <img src="<?= htmlspecialchars($authorAvatar) ?>" class="aviso-avatar" alt="Avatar">
-                    <?php else: 
-                        $avatarColor = !empty($aviso['tags']) ? $aviso['tags'][0]['color'] : '#f97316';
-                    ?>
-                        <div class="aviso-avatar-placeholder" style="background: <?= $avatarColor ?>;">
+                    <?php if (!empty($aviso['author_avatar'])): ?>
+                        <img src="<?= $aviso['author_avatar'] ?>" alt="<?= htmlspecialchars($aviso['author_name']) ?>" class="aviso-avatar">
+                    <?php else: ?>
+                        <div class="aviso-avatar-placeholder">
                             <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
                         </div>
                     <?php endif; ?>
                     
                     <div class="aviso-author-info">
-                        <div class="aviso-author-name"><?= htmlspecialchars($aviso['author_name'] ?? 'Admin') ?></div>
+                        <div class="aviso-author-name"><?= htmlspecialchars($aviso['author_name'] ?? 'Administrador') ?></div>
                         <div class="aviso-meta">
-                            <?php foreach ($aviso['tags'] as $tag): ?>
-                                <span class="aviso-type-badge" style="background: <?= $tag['color'] ?>22; color: <?= $tag['color'] ?>;">
-                                    <?= htmlspecialchars($tag['name']) ?>
-                                </span>
-                            <?php endforeach; ?>
-                            <span>• <?= $timeAgo ?></span>
+                            <span><?= date('d/m/Y', strtotime($aviso['created_at'])) ?></span>
+                            <span>•</span>
+                            <span class="priority-badge <?= $aviso['priority'] ?>">
+                                <?= $aviso['priority'] === 'urgent' ? '🚨 Urgente' : ($aviso['priority'] === 'important' ? '⭐ Importante' : '📌 Normal') ?>
+                            </span>
                         </div>
                     </div>
-                    
+
                     <?php if ($isAdmin): ?>
-                    <div style="position: relative;">
-                        <button onclick="toggleAvisoMenu('menu-<?= $aviso['id'] ?>')" style="background: none; border: none; padding: 8px; cursor: pointer; color: var(--text-muted); border-radius: 50%;">
-                            <i data-lucide="more-vertical" style="width: 18px;"></i>
-                        </button>
-                        <div id="menu-<?= $aviso['id'] ?>" class="aviso-dropdown">
-                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($aviso)) ?>); return false;">
-                                <i data-lucide="edit-2" style="width: 16px;"></i> Editar
-                            </a>
-                            <?php if (!$aviso['archived_at']): ?>
-                            <form method="POST" style="margin: 0;">
-                                <input type="hidden" name="action" value="archive">
-                                <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                <button type="submit">
-                                    <i data-lucide="archive" style="width: 16px;"></i> Arquivar
+                        <div class="aviso-dropdown">
+                            <button class="dropdown-toggle" onclick="toggleDropdown(this)">
+                                <i data-lucide="more-vertical" style="width: 18px;"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" onclick="editAviso(<?= $aviso['id'] ?>)">
+                                    <i data-lucide="edit" style="width: 16px;"></i>
+                                    Editar
                                 </button>
-                            </form>
-                            <?php else: ?>
-                            <form method="POST" style="margin: 0;">
-                                <input type="hidden" name="action" value="unarchive">
-                                <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                <button type="submit">
-                                    <i data-lucide="archive-restore" style="width: 16px;"></i> Restaurar
-                                </button>
-                            </form>
-                            <?php endif; ?>
-                            <form method="POST" style="margin: 0;" onsubmit="return confirm('Excluir este aviso permanentemente?')">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                <button type="submit" class="delete-btn">
-                                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
-                                </button>
-                            </form>
+                                <form method="POST" style="margin: 0;">
+                                    <input type="hidden" name="action" value="archive">
+                                    <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                    <button type="submit" class="dropdown-item">
+                                        <i data-lucide="archive" style="width: 16px;"></i>
+                                        Arquivar
+                                    </button>
+                                </form>
+                                <form method="POST" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja deletar este aviso?')">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
+                                    <button type="submit" class="dropdown-item danger">
+                                        <i data-lucide="trash-2" style="width: 16px;"></i>
+                                        Deletar
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
                     <?php endif; ?>
                 </div>
-                
-                <!-- Content -->
-                <div class="aviso-content">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <h3 class="aviso-title" style="margin: 0;"><?= htmlspecialchars($aviso['title']) ?></h3>
-                        <?php if($isUrgent): ?>
-                            <span class="priority-urgent">🔥 URGENTE</span>
-                        <?php elseif($isImportant): ?>
-                            <span class="priority-important">⭐ IMPORTANTE</span>
-                        <?php endif; ?>
-                    </div>
+
+                <!-- Body -->
+                <div class="aviso-body">
+                    <div class="aviso-title"><?= htmlspecialchars($aviso['title']) ?></div>
+                    <div class="aviso-message"><?= nl2br(htmlspecialchars($aviso['message'])) ?></div>
                     
-                    <div class="aviso-text"><?= $aviso['message'] ?></div>
-                </div>
-                
-                <!-- Footer -->
-                <div class="aviso-footer">
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: var(--font-body-sm); color: var(--text-muted);">
-                        <?php if($aviso['target_audience'] !== 'all'): ?>
-                            <span style="display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 4px 10px; border-radius: 12px;">
-                                <i data-lucide="users" style="width: 12px;"></i>
-                                <?= $aviso['target_audience'] == 'admins' ? 'Líderes' : 'Equipe' ?>
-                            </span>
-                        <?php endif; ?>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; gap: 10px; font-size: var(--font-body-sm); color: var(--text-muted);">
-                        <?php if($expiryText): ?>
-                            <span style="display: flex; align-items: center; gap: 4px; <?= $expiryClass ?>">
-                                <i data-lucide="clock" style="width: 12px;"></i>
-                                <?= $expiryText ?>
-                            </span>
-                        <?php endif; ?>
-                    </div>
+                    <?php if (!empty($aviso['tags'])): ?>
+                        <div class="aviso-tags">
+                            <?php foreach ($aviso['tags'] as $tag): ?>
+                                <span class="aviso-tag"><?= htmlspecialchars($tag['name']) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <!-- Empty State -->
-            <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i data-lucide="bell-off" style="color: #f97316; width: 40px; height: 40px;"></i>
-                </div>
-                <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum aviso encontrado</h3>
-                <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
-                    <?= $showHistory ? 'Nenhum aviso no histórico.' : 'Não há avisos ativos no momento.' ?>
-                </p>
-                <?php if ($isAdmin): ?>
-                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
-                    <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
-                    Criar Aviso
-                </button>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-    
-    <div style="height: 100px;"></div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
 
-<!-- FAB Button -->
+<!-- FAB (Floating Action Button) -->
 <?php if ($isAdmin): ?>
-<button onclick="openCreateModal()" class="fab-create">
-    <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
-</button>
+    <button class="fab" onclick="openCreateModal()">
+        <i data-lucide="plus"></i>
+    </button>
 <?php endif; ?>
 
-<!-- Modal Create/Edit -->
-<div id="avisoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
-    <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);"></div>
-    
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 550px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
-        
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 id="modalTitle" style="margin: 0; font-size: var(--font-h1); font-weight: 800; color: var(--text-main);">📢 Novo Aviso</h2>
-            <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
-                <i data-lucide="x" style="width: 20px;"></i>
+<!-- Modal de Criação/Edição -->
+<div id="avisoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">Novo Aviso</h3>
+            <button class="modal-close" onclick="closeModal()">
+                <i data-lucide="x" style="width: 18px;"></i>
             </button>
         </div>
-        
-        <form method="POST" id="avisoForm" onsubmit="return prepareSubmit()">
-            <input type="hidden" name="action" id="formAction" value="create">
-            <input type="hidden" name="id" id="avisoId">
-            <input type="hidden" name="message" id="hiddenMessage">
-            
-            <!-- Título -->
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título</label>
-                <input type="text" name="title" id="avisoTitle" required placeholder="Ex: Ensaio especial neste sábado" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
-            </div>
-            
-            <!-- Tipo e Prioridade -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                <!-- Tipo -->
-                <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Tipo</label>
-                    <select name="type" id="avisoType" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
-                        <option value="general">📢 Geral</option>
-                        <option value="event">🎉 Evento</option>
-                        <option value="music">🎵 Música</option>
-                        <option value="spiritual">🙏 Espiritual</option>
-                        <option value="urgent">🚨 Urgente</option>
+        <form method="POST" id="avisoForm">
+            <div class="modal-body">
+                <input type="hidden" name="action" value="create" id="formAction">
+                <input type="hidden" name="id" id="avisoId">
+                
+                <div class="form-group">
+                    <label class="form-label">Título</label>
+                    <input type="text" name="title" class="form-input" required id="avisoTitle">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Mensagem</label>
+                    <textarea name="message" class="form-textarea" required id="avisoMessage"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Prioridade</label>
+                    <select name="priority" class="form-select" id="avisoPriority">
+                        <option value="normal">Normal</option>
+                        <option value="important">Importante</option>
+                        <option value="urgent">Urgente</option>
                     </select>
                 </div>
                 
-                <!-- Prioridade -->
-                <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Prioridade</label>
-                    <select name="priority" id="avisoPriority" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
-                        <option value="info">ℹ️ Normal</option>
-                        <option value="important">⭐ Importante</option>
-                        <option value="urgent">🔥 Urgente</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- Público e Validade -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                <!-- Público -->
-                <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Público</label>
-                    <select name="target_audience" id="avisoTarget" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
-                        <option value="all">👥 Todos</option>
-                        <option value="team">🎸 Equipe</option>
-                        <option value="admins">👑 Líderes</option>
+                <div class="form-group">
+                    <label class="form-label">Tipo</label>
+                    <select name="type" class="form-select" id="avisoType">
+                        <option value="geral">Geral</option>
+                        <option value="espiritual">Espiritual</option>
+                        <option value="eventos">Eventos</option>
+                        <option value="musica">Música</option>
+                        <option value="importante">Importante</option>
+                        <option value="urgente">Urgente</option>
                     </select>
                 </div>
                 
-                <!-- Validade -->
-                <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Expira em</label>
-                    <input type="date" name="expires_at" id="avisoExpires" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); background: var(--bg-body); color: var(--text-main);">
+                <div class="form-group">
+                    <label class="form-label">Público-Alvo</label>
+                    <select name="target_audience" class="form-select" id="avisoAudience">
+                        <option value="all">Todos</option>
+                        <option value="team">Equipe</option>
+                        <option value="admins">Administradores</option>
+                        <option value="leaders">Líderes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Data de Expiração (Opcional)</label>
+                    <input type="date" name="expires_at" class="form-input" id="avisoExpires">
                 </div>
             </div>
             
-            <!-- Editor de Texto -->
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Mensagem</label>
-                <div id="editor" style="height: 150px; background: white; border-radius: 12px;"></div>
-            </div>
-            
-            <!-- Buttons -->
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
-                    Cancelar
-                </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #f97316, #ea580c); color: white; font-weight: 700; cursor: pointer;">
-                    Publicar
-                </button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar Aviso</button>
             </div>
         </form>
     </div>
 </div>
 
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Quill Editor
-    var quill = new Quill('#editor', {
-        theme: 'snow',
-        placeholder: 'Escreva a mensagem do aviso...',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                ['link']
-            ]
+    // Toggle Dropdown
+    function toggleDropdown(btn) {
+        const dropdown = btn.nextElementSibling;
+        const allDropdowns = document.querySelectorAll('.dropdown-menu');
+        
+        allDropdowns.forEach(d => {
+            if (d !== dropdown) d.classList.remove('show');
+        });
+        
+        dropdown.classList.toggle('show');
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.aviso-dropdown')) {
+            document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
         }
     });
-    
-    function prepareSubmit() {
-        document.getElementById('hiddenMessage').value = quill.root.innerHTML;
-        return true;
-    }
-    
+
+    // Modal Functions
     function openCreateModal() {
-        document.getElementById('modalTitle').innerText = '📢 Novo Aviso';
+        document.getElementById('modalTitle').textContent = 'Novo Aviso';
         document.getElementById('formAction').value = 'create';
         document.getElementById('avisoForm').reset();
-        document.getElementById('avisoId').value = '';
-        quill.setContents([]);
-        
-        document.getElementById('avisoModal').style.display = 'block';
+        document.getElementById('avisoModal').classList.add('show');
+        lucide.createIcons();
     }
-    
-    function openEditModal(aviso) {
-        document.getElementById('modalTitle').innerText = '✏️ Editar Aviso';
+
+    function editAviso(id) {
+        // Aqui você implementaria a lógica para carregar os dados do aviso
+        document.getElementById('modalTitle').textContent = 'Editar Aviso';
         document.getElementById('formAction').value = 'update';
-        document.getElementById('avisoId').value = aviso.id;
-        document.getElementById('avisoTitle').value = aviso.title;
-        document.getElementById('avisoType').value = aviso.type;
-        document.getElementById('avisoPriority').value = aviso.priority;
-        document.getElementById('avisoTarget').value = aviso.target_audience || 'all';
-        document.getElementById('avisoExpires').value = aviso.expires_at || '';
-        
-        quill.root.innerHTML = aviso.message || '';
-        
-        closeAllMenus();
-        document.getElementById('avisoModal').style.display = 'block';
+        document.getElementById('avisoId').value = id;
+        document.getElementById('avisoModal').classList.add('show');
+        lucide.createIcons();
     }
-    
+
     function closeModal() {
-        document.getElementById('avisoModal').style.display = 'none';
+        document.getElementById('avisoModal').classList.remove('show');
     }
-    
-    // Dropdown menus
-    function toggleAvisoMenu(id) {
-        closeAllMenus();
-        const menu = document.getElementById(id);
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    function closeAllMenus() {
-        document.querySelectorAll('.aviso-dropdown').forEach(m => m.style.display = 'none');
-    }
-    
-    window.onclick = function(e) {
-        if (!e.target.closest('.aviso-dropdown') && !e.target.closest('[onclick*="toggleAvisoMenu"]')) {
-            closeAllMenus();
-        }
-    }
+
+    // Close modal on outside click
+    document.getElementById('avisoModal').addEventListener('click', (e) => {
+        if (e.target.id === 'avisoModal') closeModal();
+    });
+
+    // Initialize Lucide icons
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+    });
 </script>
 
 <?php renderAppFooter(); ?>
