@@ -1890,4 +1890,6 @@ function renderAppHeader($title, $backUrl = null)
 
     <script src="assets/js/notifications.js"></script>
 
+<?php
+    }
 ?>
