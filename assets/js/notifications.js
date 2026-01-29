@@ -6,11 +6,13 @@
 // Estado global
 let notificationsData = [];
 let unreadCount = 0;
+// Fallback se a variável não estiver definida (para evitar erros em páginas antigas)
+const apiBase = (typeof NOTIFICATIONS_API_BASE !== 'undefined') ? NOTIFICATIONS_API_BASE : '';
 
 // Carregar contador de não lidas
 async function loadUnreadCount() {
     try {
-        const response = await fetch('notifications_api.php?action=count_unread');
+        const response = await fetch(`${apiBase}notifications_api.php?action=count_unread`);
         const data = await response.json();
 
         if (data.success) {
@@ -19,6 +21,131 @@ async function loadUnreadCount() {
         }
     } catch (error) {
         console.error('Erro ao carregar contador:', error);
+    }
+}
+
+// ... (Rest of code)
+
+// Carregar notificações
+async function loadNotifications() {
+    try {
+        const response = await fetch(`${apiBase}notifications_api.php?action=list&limit=10`);
+        const data = await response.json();
+
+        if (data.success) {
+            notificationsData = data.notifications;
+
+            // Check for new notifications to play sound
+            if (notificationsData.length > 0) {
+                const newestId = notificationsData[0].id;
+                if (newestId > lastNotificationId && lastNotificationId !== 0) {
+                    playSoundAndVibrate();
+                }
+                lastNotificationId = newestId;
+            } else {
+                lastNotificationId = 0;
+            }
+
+            renderNotifications();
+        }
+    } catch (error) {
+        console.error('Erro ao carregar notificações:', error);
+    }
+}
+
+// ...
+
+// Marcar como lida ao clicar
+async function handleNotificationClick(id, link) {
+    try {
+        await fetch(`${apiBase}notifications_api.php?action=mark_read`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+        });
+
+        // Atualizar contador
+        unreadCount = Math.max(0, unreadCount - 1);
+        updateBadge();
+
+        // Redirecionar se houver link
+        if (link) {
+            window.location.href = link;
+        }
+    } catch (error) {
+        console.error('Erro ao marcar como lida:', error);
+    }
+}
+
+// Marcar todas como lidas
+async function markAllAsRead() {
+    try {
+        const response = await fetch(`${apiBase}notifications_api.php?action=mark_all_read`, {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            unreadCount = 0;
+            updateBadge();
+            loadNotifications();
+        }
+    } catch (error) {
+        console.error('Erro ao marcar todas como lidas:', error);
+    }
+}
+
+// ... 
+
+// Garantir Inscrição no Push
+async function ensurePushSubscription() {
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        let subscription = await registration.pushManager.getSubscription();
+
+        if (!subscription) {
+            // Buscar chave pública
+            const response = await fetch(`${apiBase}notifications_api.php?action=public_key`);
+            const data = await response.json();
+
+            if (data.success && data.publicKey) {
+                const convertedKey = urlBase64ToUint8Array(data.publicKey);
+
+                subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: convertedKey
+                });
+
+                // Salvar no backend
+                await saveSubscription(subscription);
+            }
+        }
+    } catch (error) {
+        console.error('Erro no Push Subscription:', error);
+    }
+}
+
+async function saveSubscription(subscription) {
+    try {
+        // Ajustar endpoint da API de push também, que está em admin/api/
+        // Se estamos em admin/, é api/push...
+        // Se estamos na raiz, é admin/api/push...
+        // apiBase já termina com 'admin/' se na raiz, ou vazio se em admin.
+        // O endpoint é manipulado um pouco diferente pois está em api/ subfolder.
+
+        let endpointUrl = 'api/push_subscription.php';
+        if (apiBase !== '') { // estamos na raiz
+            endpointUrl = apiBase + 'api/push_subscription.php';
+        }
+
+        await fetch(endpointUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(subscription)
+        });
+    } catch (e) {
+        console.error('Erro ao salvar subscription:', e);
     }
 }
 

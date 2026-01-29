@@ -785,7 +785,7 @@ function renderAppHeader($title, $backUrl = null)
                                 </div>
                             </div>
                             <div class="notification-footer">
-                                <a href="/admin/notificacoes.php">Ver todas as notificações</a>
+                                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificações</a>
                             </div>
                         </div>
                     </div>
@@ -1426,6 +1426,11 @@ function renderAppHeader($title, $backUrl = null)
             }
         };
     </script>
+    <script>
+        // Configuração Global de Caminhos
+        const NOTIFICATIONS_API_BASE = '<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? '' : 'admin/') ?>';
+    </script>
+    <script src="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? '../assets/js/notifications.js' : 'assets/js/notifications.js') ?>"></script>
 </body>
 </html>
 <?php
@@ -1508,7 +1513,7 @@ function renderAppHeader($title, $backUrl = null)
             <?php endif; ?>
 
             <!-- Notification Button (Bell) -->
-            <button onclick="window.location.href='/admin/notificacoes.php'" class="ripple" title="Notificações" style="
+            <button onclick="window.location.href='<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>'" class="ripple" title="Notificações" style="
                 width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
                 display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
             ">
