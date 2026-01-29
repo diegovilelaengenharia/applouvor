@@ -178,64 +178,60 @@ renderAppHeader('Avisos');
         --purple-border: #e9d5ff;
     }
 
-    /* === HERO SECTION === */
+
+    /* === HERO SECTION SIMPLIFICADO === */
     .hero-avisos {
-        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
-        padding: 32px 20px;
-        margin: -20px -20px 24px -20px;
-        border-radius: 0 0 24px 24px;
-        box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
-        position: relative;
-        overflow: hidden;
+        background: #f5f3ff; /* Roxo muito claro */
+        padding: 20px;
+        margin: -20px -20px 20px -20px;
+        border-radius: 0 0 16px 16px;
+        border-bottom: 2px solid #e9d5ff;
     }
 
-    .hero-avisos::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        border-radius: 50%;
+    .hero-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        max-width: 800px;
+        margin: 0 auto;
     }
 
     .hero-icon {
-        width: 64px;
-        height: 64px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 16px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
     }
 
     .hero-icon i {
         color: white;
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .hero-text {
+        flex: 1;
     }
 
     .hero-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: white;
-        margin: 0 0 8px;
-        text-align: center;
-        letter-spacing: -0.02em;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #5b21b6; /* Roxo escuro */
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
     }
 
     .hero-subtitle {
-        font-size: 0.95rem;
-        color: rgba(255, 255, 255, 0.9);
-        text-align: center;
-        max-width: 400px;
-        margin: 0 auto;
-        line-height: 1.5;
+        font-size: 0.875rem;
+        color: #7c3aed; /* Roxo médio */
+        margin: 0;
+        line-height: 1.4;
     }
+
 
     /* === SEARCH BAR === */
     .search-container {
@@ -833,13 +829,15 @@ renderAppHeader('Avisos');
     
     <!-- Hero Section -->
     <div class="hero-avisos">
-        <div class="hero-icon">
-            <i data-lucide="megaphone"></i>
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i data-lucide="megaphone"></i>
+            </div>
+            <div class="hero-text">
+                <h1 class="hero-title">Central de Comunicação</h1>
+                <p class="hero-subtitle">Avisos importantes, eventos e novidades do ministério</p>
+            </div>
         </div>
-        <h1 class="hero-title">Central de Comunicação</h1>
-        <p class="hero-subtitle">
-            Avisos importantes, eventos e novidades do ministério
-        </p>
     </div>
     
     <!-- Search Bar -->
