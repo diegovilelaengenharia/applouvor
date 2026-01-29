@@ -4,7 +4,7 @@
  * Classe para gerenciar notificações do sistema
  */
 
-require_once 'web_push_helper.php';
+require_once __DIR__ . '/web_push_helper.php';
 
 class NotificationSystem {
     // ... (rest of class)
