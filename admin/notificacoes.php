@@ -472,4 +472,4 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
     }
 </script>
 
-<?php require_once '../includes/bottom_navigation.php'; ?>
+
