@@ -235,6 +235,70 @@ class NotificationSystem {
     }
     
     /**
+     * Limpar TODAS as notificações do banco (ADMIN ONLY)
+     */
+    public function clearAllDatabase() {
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM notifications");
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Erro ao limpar banco de notificações: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Obter estatísticas de visualização de uma notificação (ADMIN)
+     */
+    public function getNotificationStats($notificationId) {
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    n.title,
+                    n.type,
+                    n.created_at,
+                    COUNT(DISTINCT n2.user_id) as total_recipients,
+                    SUM(CASE WHEN n2.is_read = 1 THEN 1 ELSE 0 END) as read_count,
+                    SUM(CASE WHEN n2.is_read = 0 THEN 1 ELSE 0 END) as unread_count
+                FROM notifications n
+                LEFT JOIN notifications n2 ON n.title = n2.title AND n.created_at = n2.created_at
+                WHERE n.id = ?
+                GROUP BY n.id
+            ");
+            $stmt->execute([$notificationId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar stats: " . $e->getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * Obter lista de quem leu/não leu uma notificação (ADMIN)
+     */
+    public function getNotificationReaders($notificationTitle, $createdAt) {
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    u.name,
+                    u.email,
+                    n.is_read,
+                    n.read_at
+                FROM notifications n
+                INNER JOIN users u ON n.user_id = u.id
+                WHERE n.title = ? AND DATE(n.created_at) = DATE(?)
+                ORDER BY n.is_read DESC, u.name ASC
+            ");
+            $stmt->execute([$notificationTitle, $createdAt]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar leitores: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
      * Verificar se tipo de notificação está ativo para usuário
      */
     private function isTypeEnabled($userId, $type) {

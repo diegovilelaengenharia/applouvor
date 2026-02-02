@@ -359,10 +359,20 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         </div>
     <?php endif; ?>
 
-    <!-- Botão de Ação -->
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 24px;">
-        <button onclick="openNotificationSettings()" class="btn btn-primary" style="background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-color);">
-            <i data-lucide="sliders-horizontal" style="width: 18px; margin-right: 8px;"></i>
+    <!-- Botões de Ação -->
+    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+        <?php if ($_SESSION['role'] === 'admin'): ?>
+        <button onclick="clearDatabaseAdmin()" class="btn" style="background: #dc2626; color: white; border: none; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="database" style="width: 16px;"></i>
+            Limpar Banco
+        </button>
+        <button onclick="openViewsModal()" class="btn" style="background: #7c3aed; color: white; border: none; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="users" style="width: 16px;"></i>
+            Visualizações
+        </button>
+        <?php endif; ?>
+        <button onclick="openNotificationSettings()" class="btn btn-primary" style="background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="sliders-horizontal" style="width: 18px;"></i>
             Gerenciar Preferências
         </button>
     </div>
@@ -651,6 +661,143 @@ async function deleteAllNotifications() {
         alert('Erro ao apagar notificações');
     }
 }
+
+// Função ADMIN para limpar TODO o banco de dados
+async function clearDatabaseAdmin() {
+    if (!confirm('⚠️ ATENÇÃO: Você está prestes a APAGAR TODAS AS NOTIFICAÇÕES DE TODOS OS USUÁRIOS do banco de dados!\n\nEsta ação é IRREVERSÍVEL e afetará TODOS os membros.\n\nTem certeza absoluta?')) {
+        return;
+    }
+    
+    if (!confirm('Última confirmação: APAGAR TUDO?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('notifications_api.php?action=clear_database_admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(`✅ Banco de dados limpo com sucesso!\n${data.count} notificação(ões) removida(s).`);
+            location.reload();
+        } else {
+            alert('❌ Erro: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao limpar banco de dados');
+    }
+}
+
+// Função para abrir modal de visualizações
+function openViewsModal() {
+    // Criar modal dinamicamente
+    const modal = document.createElement('div');
+    modal.id = 'viewsModal';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5); display: flex; align-items: center;
+        justify-content: center; z-index: 9999; padding: 20px;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 80vh; overflow: auto; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700;">Visualizações de Notificações</h3>
+                <button onclick="closeViewsModal()" style="background: none; border: none; cursor: pointer; font-size: 24px; color: #64748b;">&times;</button>
+            </div>
+            <div id="viewsContent" style="color: #64748b;">
+                <p>Selecione uma notificação da lista abaixo para ver quem visualizou:</p>
+                <div id="notificationsList"></div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    loadNotificationsForViews();
+}
+
+function closeViewsModal() {
+    const modal = document.getElementById('viewsModal');
+    if (modal) modal.remove();
+}
+
+async function loadNotificationsForViews() {
+    try {
+        const response = await fetch('notifications_api.php?action=list&limit=50');
+        const data = await response.json();
+        
+        if (data.success && data.notifications.length > 0) {
+            const list = document.getElementById('notificationsList');
+            list.innerHTML = data.notifications.map(notif => `
+                <div onclick="loadViewsForNotification('${notif.title.replace(/'/g, "\\'")}', '${notif.created_at}')" 
+                     style="padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s;"
+                     onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                    <div style="font-weight: 600; color: #1e293b;">${notif.title}</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">${new Date(notif.created_at).toLocaleString('pt-BR')}</div>
+                </div>
+            `).join('');
+        } else {
+            document.getElementById('notificationsList').innerHTML = '<p style="color: #94a3b8;">Nenhuma notificação encontrada.</p>';
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('notificationsList').innerHTML = '<p style="color: #ef4444;">Erro ao carregar notificações</p>';
+    }
+}
+
+async function loadViewsForNotification(title, createdAt) {
+    const content = document.getElementById('viewsContent');
+    content.innerHTML = '<p style="text-align: center; color: #64748b;">Carregando...</p>';
+    
+    try {
+        const response = await fetch(`notifications_api.php?action=get_notification_views&title=${encodeURIComponent(title)}&created_at=${encodeURIComponent(createdAt)}`);
+        const data = await response.json();
+        
+        if (data.success && data.readers.length > 0) {
+            const readCount = data.readers.filter(r => r.is_read == 1).length;
+            const unreadCount = data.readers.filter(r => r.is_read == 0).length;
+            
+            content.innerHTML = `
+                <div style="margin-bottom: 16px;">
+                    <h4 style="margin: 0 0 8px 0; font-size: 1rem; font-weight: 600; color: #1e293b;">${title}</h4>
+                    <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                        <span style="color: #10b981; font-weight: 600;">✓ ${readCount} leram</span>
+                        <span style="color: #ef4444; font-weight: 600;">✗ ${unreadCount} não leram</span>
+                    </div>
+                </div>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${data.readers.map(reader => `
+                        <div style="padding: 10px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; color: #1e293b;">${reader.name}</div>
+                                <div style="font-size: 0.85rem; color: #64748b;">${reader.email}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                ${reader.is_read == 1 
+                                    ? `<span style="color: #10b981; font-weight: 600;">✓ Lida</span><br><span style="font-size: 0.75rem; color: #64748b;">${reader.read_at ? new Date(reader.read_at).toLocaleString('pt-BR') : ''}</span>`
+                                    : `<span style="color: #ef4444; font-weight: 600;">✗ Não lida</span>`
+                                }
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button onclick="loadNotificationsForViews()" style="margin-top: 16px; padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    ← Voltar para lista
+                </button>
+            `;
+        } else {
+            content.innerHTML = '<p style="color: #94a3b8;">Nenhum dado de visualização encontrado.</p>';
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        content.innerHTML = '<p style="color: #ef4444;">Erro ao carregar visualizações</p>';
+    }
+}
+
 
 </script>
 

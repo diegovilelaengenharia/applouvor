@@ -152,6 +152,46 @@ try {
             ]);
             break;
             
+        case 'clear_database_admin':
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception('Método não permitido');
+            }
+            
+            // Verificar se é admin
+            if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+                throw new Exception('Acesso negado - apenas administradores');
+            }
+            
+            $count = $notificationSystem->clearAllDatabase();
+            
+            echo json_encode([
+                'success' => $count !== false,
+                'count' => $count,
+                'message' => $count !== false ? "Banco de dados limpo: $count notificação(ões) removida(s)" : 'Erro ao limpar banco'
+            ]);
+            break;
+            
+        case 'get_notification_views':
+            // Verificar se é admin
+            if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+                throw new Exception('Acesso negado - apenas administradores');
+            }
+            
+            $title = $_GET['title'] ?? '';
+            $createdAt = $_GET['created_at'] ?? '';
+            
+            if (!$title || !$createdAt) {
+                throw new Exception('Título e data são obrigatórios');
+            }
+            
+            $readers = $notificationSystem->getNotificationReaders($title, $createdAt);
+            
+            echo json_encode([
+                'success' => true,
+                'readers' => $readers
+            ]);
+            break;
+            
         default:
             throw new Exception('Ação inválida');
     }
