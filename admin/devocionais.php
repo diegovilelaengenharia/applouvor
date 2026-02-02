@@ -108,16 +108,19 @@ $filterDateFrom = $_GET['date_from'] ?? '';
 $filterDateTo = $_GET['date_to'] ?? '';
 $filterVerse = $_GET['verse'] ?? '';
 $filterSeries = $_GET['series'] ?? '';
+$filterRead = $_GET['read_status'] ?? 'all'; // 'all', 'read', 'unread'
 
 // Buscar devocionais
 $sql = "SELECT d.*, u.name as author_name, u.avatar as author_avatar,
         s.title as series_title, s.cover_color as series_color,
-        (SELECT COUNT(*) FROM devotional_comments WHERE devotional_id = d.id) as comment_count
+        (SELECT COUNT(*) FROM devotional_comments WHERE devotional_id = d.id) as comment_count,
+        IF(dr.id IS NOT NULL, 1, 0) as is_read
         FROM devotionals d 
         LEFT JOIN users u ON d.user_id = u.id 
         LEFT JOIN devotional_series s ON d.series_id = s.id
+        LEFT JOIN devotional_reads dr ON d.id = dr.devotional_id AND dr.user_id = ?
         WHERE 1=1";
-$params = [];
+$params = [$userId];
 
 if (!empty($filterTag)) {
     $sql .= " AND d.id IN (SELECT devotional_id FROM devotional_tags WHERE tag_id = ?)";
@@ -166,8 +169,15 @@ if (!empty($filterSeries)) {
     $params[] = $filterSeries;
 }
 
+// Filtro: Status de leitura
+if ($filterRead === 'read') {
+    $sql .= " AND dr.id IS NOT NULL";
+} elseif ($filterRead === 'unread') {
+    $sql .= " AND dr.id IS NULL";
+}
 
-$sql .= " ORDER BY d.created_at DESC";
+// Ordenação: Não lidas primeiro, depois por data
+$sql .= " ORDER BY is_read ASC, d.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
@@ -581,6 +591,21 @@ renderAppHeader('Devocionais');
     .devotional-card.collapsed .expand-indicator {
         display: flex;
     }
+    
+    /* Cards Lidos vs Não Lidos */
+    .devotional-card.read {
+        opacity: 0.7;
+        border: 1px dashed var(--border-color);
+    }
+    
+    .devotional-card.read .dev-title {
+        color: var(--text-muted);
+    }
+    
+    .devotional-card.unread {
+        background: linear-gradient(to right, #ffffff, #f8f7ff);
+        border-left: 3px solid var(--primary);
+    }
 </style>
 
 <?php renderPageHeader('Devocionais', 'Louvor PIB Oliveira'); ?>
@@ -626,6 +651,35 @@ renderAppHeader('Devocionais');
             <option value="video" <?= $filterType === 'video' ? 'selected' : '' ?>>🎬 Vídeos</option>
             <option value="audio" <?= $filterType === 'audio' ? 'selected' : '' ?>>🎵 Áudios</option>
             <option value="link" <?= $filterType === 'link' ? 'selected' : '' ?>>🔗 Links</option>
+        </select>
+    </div>
+    
+    <!-- Filtro de Leitura -->
+    <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">
+            📚 Status de Leitura
+        </label>
+        <select onchange="window.location.href='?read_status='+this.value+'&type=<?= $filterType ?>'" style="
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            font-size: var(--font-body);
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23667eea%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        ">
+            <option value="all" <?= $filterRead === 'all' ? 'selected' : '' ?>>📋 Todas</option>
+            <option value="unread" <?= $filterRead === 'unread' ? 'selected' : '' ?>>🆕 Não Lidas</option>
+            <option value="read" <?= $filterRead === 'read' ? 'selected' : '' ?>>✅ Lidas</option>
         </select>
     </div>
     
@@ -766,8 +820,9 @@ renderAppHeader('Devocionais');
                     'link' => ['icon' => '🔗', 'label' => 'Link', 'class' => 'type-link']
                 ];
                 $tc = $typeConfig[$dev['media_type']] ?? $typeConfig['text'];
+                $readClass = $dev['is_read'] ? 'read' : 'unread';
             ?>
-            <div class="devotional-card animate-in collapsed" id="dev-<?= $dev['id'] ?>" onclick="toggleDevotionalCard(<?= $dev['id'] ?>, event)">
+            <div class="devotional-card animate-in collapsed <?= $readClass ?>" id="dev-<?= $dev['id'] ?>" onclick="toggleDevotionalCard(<?= $dev['id'] ?>, event)" data-is-read="<?= $dev['is_read'] ?>">
                 <!-- Header -->
                 <div class="dev-header">
                     <?php if ($authorAvatar): ?>
@@ -1256,7 +1311,13 @@ renderAppHeader('Devocionais');
         }
         
         const card = document.getElementById('dev-' + id);
+        const wasCollapsed = card.classList.contains('collapsed');
         card.classList.toggle('collapsed');
+        
+        // Se expandiu e não foi lido, marcar como lido
+        if (wasCollapsed && card.dataset.isRead === '0') {
+            markAsRead(id, card);
+        }
         
         // Se expandiu, scroll suave até o card
         if (!card.classList.contains('collapsed')) {
@@ -1264,6 +1325,27 @@ renderAppHeader('Devocionais');
                 card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 100);
         }
+    }
+    
+    // Marcar devocional como lido
+    function markAsRead(id, card) {
+        fetch('../api/mark_devotional_read.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'devotional_id=' + id
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Atualizar visual do card
+                card.classList.remove('unread');
+                card.classList.add('read');
+                card.dataset.isRead = '1';
+            }
+        })
+        .catch(error => console.error('Erro ao marcar como lido:', error));
     }
     
     // Comments toggle
