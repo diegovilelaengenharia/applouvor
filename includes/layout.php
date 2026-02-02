@@ -726,11 +726,11 @@ function renderAppHeader($title, $backUrl = null)
                 position: absolute;
                 top: 50px;
                 right: 0;
-                width: 360px;
-                max-width: calc(100vw - 32px);
+                width: 320px;
+                max-width: calc(100vw - 24px);
                 background: var(--bg-surface);
                 border: 1px solid var(--border-color);
-                border-radius: 16px;
+                border-radius: 14px;
                 box-shadow: 0 8px 24px rgba(0,0,0,0.12);
                 z-index: 1000;
                 overflow: hidden;
@@ -753,7 +753,7 @@ function renderAppHeader($title, $backUrl = null)
             }
             
             .notification-header {
-                padding: 16px;
+                padding: 12px 14px;
                 border-bottom: 1px solid var(--border-color);
                 display: flex;
                 justify-content: space-between;
@@ -779,17 +779,17 @@ function renderAppHeader($title, $backUrl = null)
             }
             
             .notification-list {
-                max-height: 400px;
+                max-height: 320px;
                 overflow-y: auto;
             }
             
             .notification-item {
-                padding: 12px 16px;
+                padding: 10px 12px;
                 border-bottom: 1px solid var(--border-color);
                 cursor: pointer;
                 transition: background 0.2s;
                 display: flex;
-                gap: 12px;
+                gap: 10px;
             }
             
             .notification-item:hover {
@@ -801,8 +801,8 @@ function renderAppHeader($title, $backUrl = null)
             }
             
             .notification-icon {
-                width: 36px;
-                height: 36px;
+                width: 32px;
+                height: 32px;
                 border-radius: 8px;
                 display: flex;
                 align-items: center;
@@ -835,7 +835,7 @@ function renderAppHeader($title, $backUrl = null)
             }
             
             .notification-footer {
-                padding: 12px 16px;
+                padding: 10px 14px;
                 border-top: 1px solid var(--border-color);
                 text-align: center;
             }
