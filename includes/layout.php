@@ -1065,6 +1065,13 @@ function renderAppHeader($title, $backUrl = null)
         ?>
         </div> <!-- Fim #app-content -->
 
+        <style>
+            /* OCULTAR BARRA DE NAVEGAÇÃO INFERIOR */
+            .bottom-nav-container {
+                display: none !important;
+            }
+        </style>
+
         <!-- Bottom Navigation & Submenus (Mobile Only) -->
         <style>
             .bottom-nav-container {
