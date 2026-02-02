@@ -872,6 +872,15 @@ function renderAppHeader($title, $backUrl = null)
                     z-index: 9999 !important;
                 }
                 
+                /* Quando visível, force flex display */
+                .notification-dropdown[style*="display: block"],
+                .notification-dropdown[style*="display:block"] {
+                    display: flex !important;
+                    flex-direction: column !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                }
+                
                 .notification-list {
                     max-height: calc(80vh - 140px) !important;
                 }
