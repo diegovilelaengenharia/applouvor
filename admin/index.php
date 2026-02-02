@@ -443,6 +443,27 @@ renderAppHeader('Visão Geral');
         margin: 0 0 4px 0;
         letter-spacing: -0.01em;
     }
+    
+    /* Animations */
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+    }
+    
+    .access-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    }
+    
+    .access-card:hover::before {
+        left: 100%;
+    }
 </style>
 
 <?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
