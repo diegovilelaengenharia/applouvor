@@ -499,6 +499,22 @@ renderAppHeader('Devocionais');
         color: white;
         border-color: var(--primary);
     }
+    
+    /* Reações */
+    .reaction-btn:hover {
+        border-color: var(--primary);
+        background: var(--primary)10;
+        transform: translateY(-1px);
+    }
+    
+    .reaction-btn.reacted {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+    
+    .reaction-btn.reacted span {
+        color: white !important;
+    }
 </style>
 
 <?php renderPageHeader('Devocionais', 'Louvor PIB Oliveira'); ?>
@@ -523,6 +539,110 @@ renderAppHeader('Devocionais');
         <a href="?type=video" class="filter-tab <?= $filterType === 'video' ? 'active' : '' ?>">🎬 Vídeos</a>
         <a href="?type=audio" class="filter-tab <?= $filterType === 'audio' ? 'active' : '' ?>">🎵 Áudios</a>
         <a href="?type=link" class="filter-tab <?= $filterType === 'link' ? 'active' : '' ?>">🔗 Links</a>
+    </div>
+    
+    <!-- Botão para Filtros Avançados -->
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+        <button onclick="toggleAdvancedFilters()" style="
+            padding: 10px 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: var(--font-body-sm);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-main);
+        ">
+            <i data-lucide="sliders-horizontal" style="width: 16px;"></i>
+            Filtros Avançados
+            <span id="active-filters-indicator" style="display: none; background: var(--primary); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">●</span>
+        </button>
+        
+        <?php if (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)): ?>
+        <button onclick="window.location.href='devocionais.php'" style="
+            padding: 10px 16px;
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            border-radius: 12px;
+            font-size: var(--font-body-sm);
+            font-weight: 600;
+            cursor: pointer;
+            color: #dc2626;
+        ">
+            Limpar Filtros
+        </button>
+        <?php endif; ?>
+    </div>
+
+    <!-- Painel de Filtros Avançados -->
+    <div id="advanced-filters-panel" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+        <form method="GET" action="devocionais.php">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                
+                <!-- Buscar por Autor -->
+                <div>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                        👤 Autor
+                    </label>
+                    <select name="author" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
+                        <option value="">Todos</option>
+                        <?php foreach ($allAuthors as $author): ?>
+                            <option value="<?= $author['id'] ?>" <?= $filterAuthor == $author['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($author['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                
+                <!-- Data Inicial -->
+                <div>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                        📅 De
+                    </label>
+                    <input type="date" name="date_from" value="<?= htmlspecialchars($filterDateFrom) ?>" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
+                </div>
+                
+                <!-- Data Final -->
+                <div>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                        📅 Até
+                    </label>
+                    <input type="date" name="date_to" value="<?= htmlspecialchars($filterDateTo) ?>" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
+                </div>
+                
+                <!-- Buscar por Versículo -->
+                <div>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                        📖 Versículo
+                    </label>
+                    <input type="text" name="verse" value="<?= htmlspecialchars($filterVerse) ?>" placeholder="Ex: João 3:16" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
+                </div>
+                
+                <!-- Série -->
+                <?php if (!empty($allSeries)): ?>
+                <div>
+                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                        📚 Série
+                    </label>
+                    <select name="series" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
+                        <option value="">Todas</option>
+                        <?php foreach ($allSeries as $series): ?>
+                            <option value="<?= $series['id'] ?>" <?= $filterSeries == $series['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($series['title']) ?> (<?= $series['devotional_count'] ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+            </div>
+            
+            <button type="submit" style="margin-top: 12px; width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                Aplicar Filtros
+            </button>
+        </form>
     </div>
     
     <!-- Feed de Devocionais -->
@@ -574,6 +694,23 @@ renderAppHeader('Devocionais');
                             <span class="dev-type-badge <?= $tc['class'] ?>"><?= $tc['icon'] ?> <?= $tc['label'] ?></span>
                             <span>• <?= $timeAgo ?></span>
                         </div>
+                        <?php if (!empty($dev['series_title'])): ?>
+                        <a href="?series=<?= $dev['series_id'] ?>" style="
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 4px;
+                            padding: 4px 10px;
+                            background: <?= $dev['series_color'] ?? '#667eea' ?>20;
+                            color: <?= $dev['series_color'] ?? '#667eea' ?>;
+                            border-radius: 12px;
+                            font-size: var(--font-caption);
+                            font-weight: 600;
+                            text-decoration: none;
+                            margin-top: 4px;
+                        ">
+                            📚 <?= htmlspecialchars($dev['series_title']) ?>
+                        </a>
+                        <?php endif; ?>
                     </div>
                     
                     <?php if ($dev['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
@@ -661,11 +798,73 @@ renderAppHeader('Devocionais');
                 <?php endif; ?>
                 
                 <!-- Footer Actions -->
-                <div class="dev-footer">
-                    <div class="dev-actions">
+                <div class="dev-footer" style="padding: 14px 16px;" data-devotional-id="<?= $dev['id'] ?>">
+                    <!-- Reações -->
+                    <div id="reactions-<?= $dev['id'] ?>" style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <button class="reaction-btn btn-amen" onclick="toggleReaction(<?= $dev['id'] ?>, 'amen')" style="
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            padding: 8px 12px;
+                            background: var(--bg-surface);
+                            border: 1.5px solid var(--border-color);
+                            border-radius: 20px;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                            font-size: var(--font-body-sm);
+                        ">
+                            <span style="font-size: 1.1rem;">🙏</span>
+                           <span class="count-amen" style="font-weight: 600; color: var(--text-muted);"></span>
+                        </button>
+                        
+                        <button class="reaction-btn btn-prayer" onclick="toggleReaction(<?= $dev['id'] ?>, 'prayer')" style="
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            padding: 8px 12px;
+                            background: var(--bg-surface);
+                            border: 1.5px solid var(--border-color);
+                            border-radius: 20px;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                            font-size: var(--font-body-sm);
+                        ">
+                            <span style="font-size: 1.1rem;">❤️</span>
+                            <span class="count-prayer" style="font-weight: 600; color: var(--text-muted);"></span>
+                        </button>
+                        
+                        <button class="reaction-btn btn-inspired" onclick="toggleReaction(<?= $dev['id'] ?>, 'inspired')" style="
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            padding: 8px 12px;
+                            background: var(--bg-surface);
+                            border: 1.5px solid var(--border-color);
+                            border-radius: 20px;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                            font-size: var(--font-body-sm);
+                        ">
+                            <span style="font-size: 1.1rem;">💡</span>
+                            <span class="count-inspired" style="font-weight: 600; color: var(--text-muted);"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- Ações -->
+                    <div class="dev-actions" style="display: flex; flex-wrap: wrap; gap: 8px;">
                         <button class="dev-action-btn" onclick="toggleComments('comments-<?= $dev['id'] ?>')">
                             <i data-lucide="message-circle" style="width: 18px;"></i>
                             <span><?= count($comments) ?> comentário(s)</span>
+                        </button>
+                        
+                        <button class="dev-action-btn" onclick="shareWhatsApp(<?= $dev['id'] ?>, '<?= addslashes($dev['title']) ?>')">
+                            <i data-lucide="share-2" style="width: 18px;"></i>
+                            <span>Compartilhar</span>
+                        </button>
+                        
+                        <button class="dev-action-btn" onclick="openReadingMode(<?= $dev['id'] ?>)">
+                            <i data-lucide="maximize-2" style="width: 18px;"></i>
+                            <span>Modo Leitura</span>
                         </button>
                     </div>
                 </div>
@@ -970,5 +1169,7 @@ renderAppHeader('Devocionais');
         }
     }
 </script>
+
+<script src="../assets/js/devotional-enhancements.js"></script>
 
 <?php renderAppFooter(); ?>
