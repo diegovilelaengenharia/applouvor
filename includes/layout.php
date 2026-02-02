@@ -910,7 +910,7 @@ function renderAppHeader($title, $backUrl = null)
                     <!-- L├¡der Button (Admin only) -->
                     <!-- Notification Button -->
                     <div style="position: relative;">
-                        <button class="notification-btn ripple" onclick="toggleNotifications()" id="notificationBtn">
+                        <button class="notification-btn ripple" onclick="toggleNotifications('notificationDropdown')" id="notificationBtn">
                             <i data-lucide="bell"></i>
                             <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
                         </button>
