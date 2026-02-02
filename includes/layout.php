@@ -976,11 +976,23 @@ function renderAppHeader($title, $backUrl = null)
                             <!-- Compacted Header Mobile -->
 
                             <div style="padding: 8px;">
-                                <a href="quem_somos.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                <?php
+                                $qsLink = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '../app/quem_somos.php' : 'quem_somos.php';
+                                if (strpos($_SERVER['PHP_SELF'], '/app/') !== false) {
+                                     // Already in app, so just quem_somos.php works. 
+                                     // The previous check covers admin. If in root, 'app/quem_somos.php'?
+                                     // If we are in root index.php, we are likely redirected or included.
+                                     // simpler: 
+                                     if(file_exists('app/quem_somos.php')) $qsLink = 'app/quem_somos.php';
+                                     elseif(file_exists('../app/quem_somos.php')) $qsLink = '../app/quem_somos.php';
+                                     else $qsLink = 'quem_somos.php'; // fallback for app dir
+                                }
+                                ?>
+                                <a href="<?= $qsLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                                     <div style="background: #e0e7ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
-                                        <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+                                        <i data-lucide="circle-help" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span style="font-weight: 500;">Quem nós somos</span>
+                                    <span style="font-weight: 500;">Quem somos nós?</span>
                                 </a>
 
                                 <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
@@ -1851,15 +1863,24 @@ function renderAppHeader($title, $backUrl = null)
                     <!-- Compacted Header Desktop -->
 
                             <div style="padding: 8px;">
-                                <a href="quem_somos.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                <?php
+                                $qsLink = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '../app/quem_somos.php' : 'quem_somos.php';
+                                if (strpos($_SERVER['PHP_SELF'], '/app/') !== false) {
+                                     // Default works
+                                } else if (strpos($_SERVER['PHP_SELF'], '/admin/') === false) {
+                                     // Probably root
+                                     if(file_exists('app/quem_somos.php')) $qsLink = 'app/quem_somos.php';
+                                }
+                                ?>
+                                <a href="<?= $qsLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                                     <div style="background: #e0e7ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <circle cx="12" cy="12" r="10"></circle>
-                                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                            <path d="M12 17h.01"></path>
                                         </svg>
                                     </div>
-                                    <span style="font-weight: 500;">Quem nós somos</span>
+                                    <span style="font-weight: 500;">Quem somos nós?</span>
                                 </a>
 
                                 <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
