@@ -361,7 +361,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
 
     <!-- Botões de Ação -->
     <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
-        <?php if ($_SESSION['role'] === 'admin'): ?>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
         <button onclick="clearDatabaseAdmin()" class="btn" style="background: #dc2626; color: white; border: none; display: flex; align-items: center; gap: 8px;">
             <i data-lucide="database" style="width: 16px;"></i>
             Limpar Banco
