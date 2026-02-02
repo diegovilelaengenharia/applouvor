@@ -1658,7 +1658,7 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Líder Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                <a href="lider.php" class="admin-crown-btn ripple" title="Painel do Líder">
+                <a href="lider.php" class="header-action-btn ripple" title="Painel do Líder" style="background: #fef3c7; color: #d97706; border-color: #fcd34d;">
                     <i data-lucide="crown"></i>
                 </a>
             <?php endif; ?>
@@ -1670,17 +1670,19 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Leitura Config Button (Leitura Only - Desktop) -->
             <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
-                <button onclick="openConfig()" class="config-btn ripple" title="Configurações">
+                <button onclick="openConfig()" class="header-action-btn ripple" title="Configurações">
                     <i data-lucide="settings"></i>
                 </button>
             <?php endif; ?>
 
             <!-- Notification Button (Bell) -->
             <div style="position: relative;">
-                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn ripple" id="notificationBtnDesktop" title="Notificações">
                     <i data-lucide="bell"></i>
                     <span class="notification-badge" id="notificationBadgeDesktop" style="display: none;">0</span>
                 </button>
+                
+                <!-- Desktop Dropdown -->
                 
                 <!-- Desktop Dropdown -->
                 <div class="notification-dropdown" id="notificationDropdownDesktop">
@@ -1711,7 +1713,8 @@ function renderAppHeader($title, $backUrl = null)
 
             <style>
             /* NOTIFICATION SYSTEM CSS - PROFESSIONAL */
-            .notification-btn {
+            /* UNIFIED HEADER ACTION BUTTONS */
+            .header-action-btn {
                 width: 44px; height: 44px;
                 background: var(--bg-surface);
                 border: 1px solid var(--border-color);
@@ -1721,32 +1724,36 @@ function renderAppHeader($title, $backUrl = null)
                 color: var(--text-muted);
                 position: relative;
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                /* Remove overflow hidden to allow badge */
             }
-            .notification-btn:hover, .notification-btn.active {
+            .header-action-btn:hover {
                 background: var(--bg-body);
                 color: var(--primary);
                 border-color: var(--primary-light);
                 transform: translateY(-1px);
                 box-shadow: var(--shadow-sm);
             }
+
             .notification-badge {
                 position: absolute;
-                top: -5px; right: -5px;
+                top: -6px; right: -6px;
                 background: #ef4444; 
                 color: white;
                 font-size: 11px; 
                 font-weight: 700;
                 min-width: 20px; 
                 height: 20px;
-                padding: 0 5px;
+                padding: 0 4px;
                 border-radius: 10px;
                 display: flex; 
                 align-items: center; 
                 justify-content: center;
-                border: 2px solid white;
-                box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+                border: 2px solid var(--bg-surface); /* Match bg instead of white */
+                box-shadow: 0 2px 5px rgba(239, 68, 68, 0.3);
                 transform-origin: center;
                 animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                z-index: 10;
+                pointer-events: none;
             }
             @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
             
@@ -1842,20 +1849,29 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="ripple" style="
+                    width: 44px; height: 44px; 
+                    border-radius: 50%; /* Circular */
+                    padding: 0; border: 2px solid white; 
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    overflow: hidden; cursor: pointer;
+                    transition: transform 0.2s;
+                    display: flex; align-items: center; justify-content: center;
+                    background: var(--bg-surface);
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                         <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                     <?php else: ?>
-                        <i data-lucide="user"></i>
+                        <i data-lucide="user" style="color: var(--text-muted);"></i>
                     <?php endif; ?>
                 </button>
 
                 <!-- Dropdown Card -->
                 <div id="headerProfileDropdown" style="
-                    display: none; position: absolute; top: 54px; right: 0; 
+                    display: none; position: absolute; top: 60px; right: 0; 
                     background: var(--bg-surface); border-radius: 16px; 
                     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-                    min-width: 200px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
+                    min-width: 220px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
                     animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
                     transform-origin: top right;
                 ">
