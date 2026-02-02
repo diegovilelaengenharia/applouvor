@@ -679,17 +679,11 @@ renderAppHeader('Devocionais');
         transform: translateY(-1px);
     }
 </style>
-    
-    <!-- Hero Section -->
-    <div style="text-align: center; padding: 20px 0 30px;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
-            <i data-lucide="book-heart" style="color: white; width: 36px; height: 36px;"></i>
-        </div>
-        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Devocionais da Comunidade</h2>
-        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
-            Compartilhe reflexões, versículos e momentos com Deus. Edifique e seja edificado!
-        </p>
-    </div>
+
+<?php renderPageHeader('Devocionais', 'Louvor PIB Oliveira'); ?>
+
+<div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
+
     
     <!-- Toolbar de Filtros Compacta -->
     <div class="filter-toolbar">
