@@ -3,6 +3,7 @@
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
+require_once '../includes/devotional_helpers.php';
 
 checkLogin();
 
@@ -13,13 +14,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'create':
-                $stmt = $pdo->prepare("INSERT INTO devotionals (user_id, title, content, media_type, media_url, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+                // Extrair referências de versículos do conteúdo
+                $verseRefs = extractVerseReferences($_POST['content']);
+                $verseRefsJson = !empty($verseRefs) ? json_encode($verseRefs) : NULL;
+                
+                // Criar devocional
+                $stmt = $pdo->prepare("
+                    INSERT INTO devotionals (user_id, title, content, media_type, media_url, series_id, verse_references, order_in_series, created_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                ");
                 $stmt->execute([
                     $userId,
                     $_POST['title'],
                     $_POST['content'],
                     $_POST['media_type'],
-                    !empty($_POST['media_url']) ? $_POST['media_url'] : NULL
+                    !empty($_POST['media_url']) ? $_POST['media_url'] : NULL,
+                    !empty($_POST['series_id']) ? $_POST['series_id'] : NULL,
+                    $verseRefsJson,
+                    !empty($_POST['order_in_series']) ? $_POST['order_in_series'] : 0
                 ]);
                 $devotionalId = $pdo->lastInsertId();
                 
@@ -30,6 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $tagStmt->execute([$devotionalId, $tagId]);
                     }
                 }
+                
+                // Enviar notificações
+                $authorName = $_SESSION['user_name'] ?? 'Alguém';
+                notifyNewDevotional($pdo, $devotionalId, $_POST['title'], $authorName);
                 
                 header('Location: devocionais.php?success=created');
                 exit;
@@ -87,12 +103,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $filterTag = $_GET['tag'] ?? '';
 $filterType = $_GET['type'] ?? 'all';
 $search = $_GET['search'] ?? '';
+$filterAuthor = $_GET['author'] ?? '';
+$filterDateFrom = $_GET['date_from'] ?? '';
+$filterDateTo = $_GET['date_to'] ?? '';
+$filterVerse = $_GET['verse'] ?? '';
+$filterSeries = $_GET['series'] ?? '';
 
 // Buscar devocionais
 $sql = "SELECT d.*, u.name as author_name, u.avatar as author_avatar,
+        s.title as series_title, s.cover_color as series_color,
         (SELECT COUNT(*) FROM devotional_comments WHERE devotional_id = d.id) as comment_count
         FROM devotionals d 
         LEFT JOIN users u ON d.user_id = u.id 
+        LEFT JOIN devotional_series s ON d.series_id = s.id
         WHERE 1=1";
 $params = [];
 
@@ -112,6 +135,38 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
+// Filtro avançado: Autor
+if (!empty($filterAuthor)) {
+    $sql .= " AND d.user_id = ?";
+    $params[] = $filterAuthor;
+}
+
+// Filtro avançado: Data inicial
+if (!empty($filterDateFrom)) {
+    $sql .= " AND DATE(d.created_at) >= ?";
+    $params[] = $filterDateFrom;
+}
+
+// Filtro avançado: Data final
+if (!empty($filterDateTo)) {
+    $sql .= " AND DATE(d.created_at) <= ?";
+    $params[] = $filterDateTo;
+}
+
+// Filtro avançado: Versículos
+if (!empty($filterVerse)) {
+    $sql .= " AND (d.verse_references LIKE ? OR d.content LIKE ?)";
+    $params[] = "%$filterVerse%";
+    $params[] = "%[verso%$filterVerse%]%";
+}
+
+// Filtro: Série
+if (!empty($filterSeries)) {
+    $sql .= " AND d.series_id = ?";
+    $params[] = $filterSeries;
+}
+
+
 $sql .= " ORDER BY d.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
@@ -121,6 +176,23 @@ $devotionals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Buscar tags existentes
 $tagsStmt = $pdo->query("SELECT * FROM tags ORDER BY name");
 $allTags = $tagsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Buscar séries disponíveis
+try {
+    $seriesStmt = $pdo->query("SELECT * FROM series_with_stats ORDER BY created_at DESC");
+    $allSeries = $seriesStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $allSeries = [];
+}
+
+// Buscar autores que já publicaram devocionais
+$authorsStmt = $pdo->query("
+    SELECT DISTINCT u.id, u.name 
+    FROM users u
+    INNER JOIN devotionals d ON u.id = d.user_id
+    ORDER BY u.name ASC
+");
+$allAuthors = $authorsStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Buscar tags de cada devocional
 function getDevotionalTags($pdo, $devotionalId) {
@@ -573,7 +645,7 @@ renderAppHeader('Devocionais');
                     <?php endif; ?>
                     
                     <?php if (!empty($dev['content'])): ?>
-                        <div class="dev-text"><?= $dev['content'] ?></div>
+                        <div class="dev-text"><?= parseVerseShortcodes($dev['content']) ?></div>
                     <?php endif; ?>
                 </div>
                 
