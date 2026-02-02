@@ -902,7 +902,30 @@ function renderAppHeader($title, $backUrl = null)
             .notification-overlay.active {
                 display: block;
             }
-        
+            
+            /* HTML5 Dialog Native Styles */
+            .notification-dialog {
+                padding: 0;
+                border: none;
+                border-radius: 16px;
+                width: 90vw;
+                max-width: 400px;
+                max-height: 80vh;
+                background: var(--bg-surface);
+                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                overflow: hidden;
+            }
+            
+            .notification-dialog::backdrop {
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+            }
+            
+            @media (min-width: 769px) {
+                .notification-dialog {
+                    width: 360px;
+                }
+            }
         </style>
     </head>
 

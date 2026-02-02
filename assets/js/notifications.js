@@ -188,45 +188,59 @@ function updateBadge() {
     }
 }
 
-// Toggle dropdown/modal
+// Toggle modal using HTML5 dialog
 function toggleNotifications(dropdownId = 'notificationDropdown') {
-    let dropdown = document.getElementById(dropdownId);
+    // Tentar encontrar o dialog
+    let dialog = document.getElementById('notificationDialog');
 
-    // Fallback if specific ID not found
-    if (!dropdown) {
-        dropdown = document.querySelector('.notification-dropdown');
+    // Se não existir, criar
+    if (!dialog) {
+        dialog = document.createElement('dialog');
+        dialog.id = 'notificationDialog';
+        dialog.className = 'notification-dialog';
+        dialog.innerHTML = `
+            <div class="notification-header">
+                <div class="notification-title">
+                    Notificações
+                    <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
+                        <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
+                    </button>
+                </div>
+                <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
+            </div>
+            <div class="notification-list" id="notificationList">
+                <div class="empty-state">
+                    <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
+                    <p>Nenhuma notificação nova</p>
+                </div>
+            </div>
+            <div class="notification-footer">
+                <a href="${window.location.pathname.includes('/admin/') ? 'notificacoes.php' : 'admin/notificacoes.php'}">Ver todas as notificações</a>
+            </div>
+        `;
+
+        // Fechar ao clicar no backdrop
+        dialog.addEventListener('click', (e) => {
+            const rect = dialog.getBoundingClientRect();
+            if (e.clientX < rect.left || e.clientX > rect.right ||
+                e.clientY < rect.top || e.clientY > rect.bottom) {
+                dialog.close();
+            }
+        });
+
+        document.body.appendChild(dialog);
+
+        // Re-initialize lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
-    if (!dropdown) return;
-
-    const isActive = dropdown.style.display === 'block';
-
-    // Close all other dropdowns
-    document.querySelectorAll('.notification-dropdown').forEach(d => {
-        d.style.display = 'none';
-    });
-
-    // Get or create overlay
-    let overlay = document.getElementById('notificationOverlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'notificationOverlay';
-        overlay.className = 'notification-overlay';
-        overlay.onclick = () => toggleNotifications(dropdownId);
-        document.body.appendChild(overlay);
-    }
-
-    if (!isActive) {
-        loadNotifications(); // Fetch new data
-        dropdown.style.display = 'block';
-        overlay.classList.add('active');
-        // Prevent body scroll on mobile
-        document.body.style.overflow = 'hidden';
+    if (dialog.open) {
+        dialog.close();
     } else {
-        dropdown.style.display = 'none';
-        overlay.classList.remove('active');
-        // Restore body scroll
-        document.body.style.overflow = '';
+        loadNotifications();
+        dialog.showModal();
     }
 }
 
