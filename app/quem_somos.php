@@ -12,32 +12,33 @@ renderAppHeader('Quem Somos');
     .hero-section {
         background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%);
         color: white;
-        padding: 48px 24px;
+        padding: 32px 20px 28px 20px;
         text-align: center;
-        margin: -24px -24px 32px -24px;
-        border-radius: 0 0 24px 24px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        margin: -24px -24px 24px -24px;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
     
     .hero-title {
-        font-size: 1.75rem;
+        font-size: 1.4rem;
         font-weight: 800;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         letter-spacing: -0.5px;
         text-transform: uppercase;
+        line-height: 1.2;
     }
     
     .hero-subtitle {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         opacity: 0.95;
     }
     
     .hero-tagline {
         font-style: italic;
-        font-size: 1rem;
-        margin-bottom: 16px;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
         opacity: 0.9;
     }
     
@@ -46,9 +47,9 @@ renderAppHeader('Quem Somos');
         align-items: center;
         gap: 6px;
         background: rgba(255,255,255,0.15);
-        padding: 8px 16px;
+        padding: 6px 14px;
         border-radius: 20px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         backdrop-filter: blur(10px);
     }
     
