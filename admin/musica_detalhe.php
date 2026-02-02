@@ -10,6 +10,24 @@ if (!$id) {
     exit;
 }
 
+// Processar exclusão
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_song') {
+    try {
+        // Deletar tags associadas primeiro
+        $stmtDelTags = $pdo->prepare("DELETE FROM song_tags WHERE song_id = ?");
+        $stmtDelTags->execute([$id]);
+        
+        // Deletar a música
+        $stmtDel = $pdo->prepare("DELETE FROM songs WHERE id = ?");
+        $stmtDel->execute([$id]);
+        
+        header('Location: repertorio.php');
+        exit;
+    } catch (Exception $e) {
+        die("Erro ao excluir música: " . $e->getMessage());
+    }
+}
+
 // Buscar Música
 $stmt = $pdo->prepare("SELECT * FROM songs WHERE id = ?");
 $stmt->execute([$id]);
