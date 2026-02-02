@@ -103,15 +103,14 @@ try {
 $totalMembros = 0;
 $statsMembros = ['vocals' => 0, 'instrumentalists' => 0];
 try {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active'");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM users");
     $totalMembros = $stmt->fetchColumn();
 
     // Contar vocais: incluir tanto user_roles quanto coluna instrument (sistema legado)
     $stmtV = $pdo->query("
         SELECT COUNT(DISTINCT u.id) 
         FROM users u
-        WHERE u.status = 'active' 
-        AND (
+        WHERE (
             -- Vocais da tabela user_roles
             EXISTS (
                 SELECT 1 FROM user_roles ur
@@ -133,8 +132,7 @@ try {
     $stmtI = $pdo->query("
         SELECT COUNT(DISTINCT u.id) 
         FROM users u
-        WHERE u.status = 'active' 
-        AND (
+        WHERE (
             -- Tem role de instrumentista
             EXISTS (
                 SELECT 1 FROM user_roles ur
@@ -158,11 +156,11 @@ try {
 } catch (Exception $e) {
     // Fallback se não houver tabela de roles
     try {
-        $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active'");
+        $stmt = $pdo->query("SELECT COUNT(*) FROM users");
         $totalMembros = $stmt->fetchColumn();
-        $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active' AND (instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%')");
+        $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE (instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%')");
         $statsMembros['vocals'] = $stmtV->fetchColumn();
-        $stmtI = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active' AND instrument IS NOT NULL AND instrument != '' AND instrument NOT LIKE '%Voz%' AND instrument NOT LIKE '%Vocal%' AND instrument NOT LIKE '%Ministro%'");
+        $stmtI = $pdo->query("SELECT COUNT(*) FROM users WHERE instrument IS NOT NULL AND instrument != '' AND instrument NOT LIKE '%Voz%' AND instrument NOT LIKE '%Vocal%' AND instrument NOT LIKE '%Ministro%'");
         $statsMembros['instrumentalists'] = $stmtI->fetchColumn();
     } catch (Exception $e2) {
     }
