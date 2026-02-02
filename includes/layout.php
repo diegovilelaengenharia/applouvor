@@ -952,28 +952,6 @@ function renderAppHeader($title, $backUrl = null)
                             <i data-lucide="bell"></i>
                             <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
                         </button>
-                        
-                        <!-- Dropdown -->
-                        <div class="notification-dropdown" id="notificationDropdown">
-                            <div class="notification-header">
-                                <div class="notification-title">
-                                    Notificações
-                                    <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
-                                        <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
-                                    </button>
-                                </div>
-                                <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
-                            </div>
-                            <div class="notification-list" id="notificationList">
-                                <div class="empty-state">
-                                    <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                                    <p>Nenhuma notificação nova</p>
-                                </div>
-                            </div>
-                            <div class="notification-footer">
-                                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificações</a>
-                            </div>
-                        </div>
                     </div>
 
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -1092,6 +1070,29 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
                 </div>
             </header>
+            
+            <!-- Notification Dropdown (Outside header for proper z-index) -->
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <div class="notification-title">
+                        Notificações
+                        <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
+                            <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
+                        </button>
+                    </div>
+                    <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
+                </div>
+                <div class="notification-list" id="notificationList">
+                    <div class="empty-state">
+                        <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
+                        <p>Nenhuma notificação nova</p>
+                    </div>
+                </div>
+                <div class="notification-footer">
+                    <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificações</a>
+                </div>
+            </div>
+
 
         <?php
     }
