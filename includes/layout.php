@@ -856,6 +856,44 @@ function renderAppHeader($title, $backUrl = null)
                 text-align: center;
                 color: var(--text-muted);
             }
+            
+            /* Mobile: Convert dropdown to fullscreen modal */
+            @media (max-width: 768px) {
+                .notification-dropdown {
+                    position: fixed !important;
+                    top: 50% !important;
+                    left: 50% !important;
+                    transform: translate(-50%, -50%) !important;
+                    right: auto !important;
+                    width: 90vw !important;
+                    max-width: 400px !important;
+                    max-height: 80vh !important;
+                    border-radius: 16px !important;
+                    z-index: 9999 !important;
+                }
+                
+                .notification-list {
+                    max-height: calc(80vh - 140px) !important;
+                }
+            }
+            
+            /* Overlay para mobile */
+            .notification-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 9998;
+                backdrop-filter: blur(4px);
+            }
+            
+            .notification-overlay.active {
+                display: block;
+            }
+        
         </style>
     </head>
 

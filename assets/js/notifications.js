@@ -188,7 +188,7 @@ function updateBadge() {
     }
 }
 
-// Toggle dropdown
+// Toggle dropdown/modal
 function toggleNotifications(dropdownId = 'notificationDropdown') {
     let dropdown = document.getElementById(dropdownId);
 
@@ -206,13 +206,30 @@ function toggleNotifications(dropdownId = 'notificationDropdown') {
         d.style.display = 'none';
     });
 
+    // Get or create overlay
+    let overlay = document.getElementById('notificationOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'notificationOverlay';
+        overlay.className = 'notification-overlay';
+        overlay.onclick = () => toggleNotifications(dropdownId);
+        document.body.appendChild(overlay);
+    }
+
     if (!isActive) {
         loadNotifications(); // Fetch new data
         dropdown.style.display = 'block';
+        overlay.classList.add('active');
+        // Prevent body scroll on mobile
+        document.body.style.overflow = 'hidden';
     } else {
         dropdown.style.display = 'none';
+        overlay.classList.remove('active');
+        // Restore body scroll
+        document.body.style.overflow = '';
     }
 }
+
 
 
 // Utilitários
