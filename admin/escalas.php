@@ -191,101 +191,90 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $hasAbsences = count($absences) > 0;
                 ?>
 
-                    <!-- Card de Evento REDESENHADO COM CORES -->
+                    <!-- Card de Evento REFINADO (Mais Sutil) -->
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
                             display: block;
-                            background: linear-gradient(135deg, <?= $themeLight ?> 0%, <?= $themeLight ?> 100%);
-                            border-radius: 16px; 
-                            border: 2px solid <?= $themeColor ?>20;
-                            padding: 16px; 
+                            background: white;
+                            border-radius: 12px; 
+                            border-left: 4px solid <?= $themeColor ?>;
+                            border-top: 1px solid #e2e8f0;
+                            border-right: 1px solid #e2e8f0;
+                            border-bottom: 1px solid #e2e8f0;
+                            padding: 14px; 
                             text-decoration: none; 
                             color: inherit;
-                            box-shadow: 0 4px 12px <?= $themeColor ?>15, 0 2px 4px rgba(0,0,0,0.05);
-                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+                            transition: all 0.2s ease;
                             position: relative;
-                            overflow: hidden;
                         ">
 
-                        <!-- Decorative gradient overlay -->
-                        <div style="
-                            position: absolute;
-                            top: 0;
-                            right: 0;
-                            width: 200px;
-                            height: 200px;
-                            background: radial-gradient(circle, <?= $themeColor ?>10 0%, transparent 70%);
-                            pointer-events: none;
-                        "></div>
+                        <div style="display: flex; gap: 14px; align-items: flex-start;">
 
-                        <div style="display: flex; gap: 16px; align-items: flex-start; position: relative; z-index: 1;">
-
-                            <!-- Data Box COLORIDO (Lateral Esquerda) -->
+                            <!-- Data Box SUTIL (Lateral Esquerda) -->
                             <div style="
-                                background: linear-gradient(135deg, <?= $themeColor ?> 0%, <?= $themeColor ?>dd 100%);
-                                color: white;
-                                min-width: 64px;
-                                height: 64px;
-                                padding: 8px;
-                                border-radius: 14px; 
+                                background: <?= $themeLight ?>;
+                                color: <?= $themeColor ?>;
+                                min-width: 56px;
+                                height: 56px;
+                                padding: 6px;
+                                border-radius: 10px; 
                                 text-align: center;
-                                box-shadow: 0 4px 12px <?= $themeColor ?>40;
+                                border: 1px solid <?= $themeColor ?>20;
                                 display: flex;
                                 flex-direction: column;
                                 justify-content: center;
                                 align-items: center;
                             ">
-                                <div style="font-weight: 800; font-size: 1.5rem; line-height: 1;"><?= $date->format('d') ?></div>
-                                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-top: 2px; opacity: 0.95;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                                <div style="font-weight: 700; font-size: 1.3rem; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; margin-top: 2px; opacity: 0.8;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                             </div>
 
                             <!-- Infos do Evento -->
                             <div style="flex: 1; min-width: 0;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-                                    <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: <?= $themeColor ?>; line-height: 1.3;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                                    <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b; line-height: 1.3;">
                                         <?= htmlspecialchars($schedule['event_type']) ?>
                                     </h3>
                                     <?php if ($isToday): ?>
                                         <span style="
-                                            font-size: 0.7rem;
+                                            font-size: 0.65rem;
                                             color: white;
-                                            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                                            padding: 4px 10px;
-                                            border-radius: 8px;
-                                            font-weight: 800;
-                                            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+                                            background: #10b981;
+                                            padding: 3px 8px;
+                                            border-radius: 6px;
+                                            font-weight: 700;
                                             text-transform: uppercase;
-                                            letter-spacing: 0.5px;
                                         ">HOJE</span>
                                     <?php endif; ?>
                                 </div>
 
-                                <div style="display: flex; align-items: center; gap: 14px; font-size: 0.85rem; color: <?= $themeColor ?>cc; margin-bottom: 10px; font-weight: 600;">
-                                    <div style="display: flex; align-items: center; gap: 5px;">
-                                        <i data-lucide="clock" style="width: 15px;"></i> <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
+                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: #64748b; margin-bottom: 8px; font-weight: 500;">
+                                    <div style="display: flex; align-items: center; gap: 4px;">
+                                        <i data-lucide="clock" style="width: 14px;"></i> <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                     </div>
                                     <?php if ($totalParticipants > 0): ?>
-                                        <div style="display: flex; align-items: center; gap: 5px;">
-                                            <i data-lucide="users" style="width: 15px;"></i> <?= $totalParticipants ?>
+                                        <div style="display: flex; align-items: center; gap: 4px;">
+                                            <i data-lucide="users" style="width: 14px;"></i> <?= $totalParticipants ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
 
-                                <!-- Avatares (Coloridos e Maiores) -->
+                                <!-- Avatares (Compactos) -->
                                 <?php if (!empty($participants)): ?>
-                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                    <div style="display: flex; align-items: center;">
                                         <?php foreach ($participants as $i => $p):
                                             $zIndex = 10 - $i;
                                             $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
                                         ?>
                                             <div style="
-                                                width: 32px; height: 32px; border-radius: 50%; 
-                                                border: 3px solid white;
+                                                width: 28px; height: 28px; border-radius: 50%; 
+                                                border: 2px solid white;
                                                 background: <?= $p['avatar_color'] ?: $themeColor ?>;
-                                                margin-left: <?= $i > 0 ? '-10px' : '0' ?>;
+                                                margin-left: <?= $i > 0 ? '-8px' : '0' ?>;
                                                 z-index: <?= $zIndex ?>;
                                                 display: flex; align-items: center; justify-content: center;
-                                                color: white; font-size: 0.75rem; font-weight: 800; overflow: hidden;
-                                                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                                                color: white; font-size: 0.7rem; font-weight: 700; overflow: hidden;
+                                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                                             ">
                                                 <?php if ($photoUrl): ?>
                                                     <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover;">
@@ -296,52 +285,42 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         <?php endforeach; ?>
                                         <?php if ($extraCount > 0): ?>
                                             <div style="
-                                                font-size: 0.8rem;
-                                                color: <?= $themeColor ?>;
-                                                font-weight: 700;
-                                                margin-left: 8px;
-                                                background: white;
-                                                padding: 4px 8px;
-                                                border-radius: 8px;
-                                                border: 2px solid <?= $themeColor ?>30;
+                                                font-size: 0.75rem;
+                                                color: #64748b;
+                                                font-weight: 600;
+                                                margin-left: 6px;
                                             ">+<?= $extraCount ?></div>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
-                                    <span style="font-size: 0.85rem; color: <?= $themeColor ?>99; font-style: italic; font-weight: 500;">Equipe não definida</span>
+                                    <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Equipe não definida</span>
                                 <?php endif; ?>
 
-                                <!-- Badge de Ausências REDESENHADO -->
+                                <!-- Badge de Ausências -->
                                 <?php if ($hasAbsences): ?>
                                 <div style="
                                     display: inline-flex;
                                     align-items: center;
-                                    gap: 6px;
-                                    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+                                    gap: 4px;
+                                    background: #fef2f2;
                                     color: #dc2626;
-                                    padding: 6px 12px;
-                                    border-radius: 10px;
-                                    font-size: 0.75rem;
-                                    font-weight: 700;
-                                    border: 2px solid #fecaca;
-                                    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.15);
+                                    padding: 4px 8px;
+                                    border-radius: 6px;
+                                    font-size: 0.7rem;
+                                    font-weight: 600;
+                                    margin-top: 6px;
+                                    border: 1px solid #fecaca;
                                 ">
-                                    <i data-lucide="alert-circle" style="width: 14px;"></i>
+                                    <i data-lucide="alert-circle" style="width: 12px;"></i>
                                     <?= count($absences) ?> ausência<?= count($absences) > 1 ? 's' : '' ?>
-                                    <?php 
-                                    $withReplacement = array_filter($absences, fn($a) => !empty($a['replacement_name']));
-                                    if (count($withReplacement) > 0): 
-                                    ?>
-                                        • <?= count($withReplacement) ?> com substituto<?= count($withReplacement) > 1 ? 's' : '' ?>
-                                    <?php endif; ?>
                                 </div>
                                 <?php endif; ?>
 
                             </div>
 
-                            <!-- Icon Setta COLORIDO -->
-                            <div style="align-self: center; color: <?= $themeColor ?>;">
-                                <i data-lucide="chevron-right" style="width: 22px;"></i>
+                            <!-- Icon Setta -->
+                            <div style="align-self: center; color: #cbd5e1;">
+                                <i data-lucide="chevron-right" style="width: 20px;"></i>
                             </div>
 
                         </div>
