@@ -103,6 +103,7 @@ try {
     $totalMembros = $stmt->fetchColumn();
 
     // Contar vocais baseado em roles que contenham "Vocal", "Ministro" ou "Voz"
+    // Count Vocals
     $stmtV = $pdo->query("
         SELECT COUNT(DISTINCT u.id) 
         FROM users u
@@ -112,7 +113,19 @@ try {
         AND (r.name LIKE '%Vocal%' OR r.name LIKE '%Ministro%' OR r.name LIKE '%Voz%')
     ");
     $statsMembros['vocals'] = $stmtV->fetchColumn();
-    $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals'];
+
+    // Count Instrumentalists (Any role that is NOT Vocal-related)
+    $stmtI = $pdo->query("
+        SELECT COUNT(DISTINCT u.id) 
+        FROM users u
+        INNER JOIN user_roles ur ON u.id = ur.user_id
+        INNER JOIN roles r ON ur.role_id = r.id
+        WHERE u.status = 'active' 
+        AND r.name NOT LIKE '%Vocal%' 
+        AND r.name NOT LIKE '%Ministro%' 
+        AND r.name NOT LIKE '%Voz%'
+    ");
+    $statsMembros['instrumentalists'] = $stmtI->fetchColumn();
 } catch (Exception $e) {
     // Fallback se não houver tabela de roles
     try {

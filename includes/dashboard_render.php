@@ -113,7 +113,8 @@ function renderCardRepertorio($ultimaMusica, $totalMusicas) {
 
 // Renderizar card de Membros (PRO - ENHANCED)
 function renderCardMembros($totalMembros, $stats) {
-    $percent = $totalMembros > 0 ? round(($stats['vocals'] / $totalMembros) * 100) : 0;
+    // Calculate percentages relative to total members (can exceed 100% combined due to multi-role)
+    $percentVocals = $totalMembros > 0 ? min(100, round(($stats['vocals'] / $totalMembros) * 100)) : 0;
     ?>
     <a href="membros.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
@@ -138,9 +139,6 @@ function renderCardMembros($totalMembros, $stats) {
                             <div style="font-size: 1.2rem; font-weight: 700; color: #2563eb;"><?= $stats['instrumentalists'] ?></div>
                             <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;">Instrumentos</div>
                         </div>
-                    </div>
-                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.5); border-radius: 3px; overflow: hidden;">
-                        <div style="width: <?= $percent ?>%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); transition: width 0.3s ease;"></div>
                     </div>
                 </div>
                 <span style="font-size: 0.7rem; color: #3b82f6; font-weight: 600; text-transform: uppercase; float: right;">Ver Equipe →</span>
