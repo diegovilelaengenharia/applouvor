@@ -74,18 +74,6 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <a href="sugerir_musica.php" class="dropdown-item">
                 <i data-lucide="send" width="16"></i> Sugerir Música
             </a>
-            
-            <?php if (($_SESSION['user_role'] ?? 'user') === 'admin'): ?>
-                <div style="height: 1px; background: #e2e8f0; margin: 4px 0;"></div>
-                
-                <a href="sugestoes_musicas.php" class="dropdown-item">
-                    <i data-lucide="inbox" width="16"></i> Sugestões Pendentes
-                </a>
-                
-                <a href="musica_adicionar.php" class="dropdown-item">
-                    <i data-lucide="plus" width="16"></i> Adicionar Música
-                </a>
-            <?php endif; ?>
 
             <style>
                 .dropdown-item {

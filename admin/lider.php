@@ -569,6 +569,21 @@ try {
                 <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Equipe</div>
             </div>
         </a>
+
+        <!-- Sugestões de Músicas (NOVO) -->
+        <a href="sugestoes_musicas.php" class="create-btn" style="
+            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
+        ">
+            <div style="background: #f0fdf4; color: #059669; padding: 10px; border-radius: 10px;">
+                <i data-lucide="inbox" style="width: 20px;"></i>
+            </div>
+             <div style="text-align: center;">
+                <div style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main);">Sugestões</div>
+                <div style="font-size: var(--font-caption); color: var(--text-muted); margin-top: 2px;">Pendentes</div>
+            </div>
+        </a>
     </div>
 
     <!-- 2. Estatísticas (Separado) -->
