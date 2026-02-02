@@ -2,6 +2,7 @@
 // admin/repertorio.php
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
+require_once 'init_db_suggestions.php';
 
 // Filtros e Busca
 $search = $_GET['q'] ?? '';
