@@ -156,23 +156,35 @@ async function markAllAsRead() {
 }
 
 // Atualizar estilo do botão ao invés de badge
+// Atualizar estilo do botão ao invés de badge
 function updateBadge() {
-    const btn = document.getElementById('notificationBtnDesktop');
-    if (!btn) return;
+    // 1. Desktop Button (Estilo Amarelo/Icone)
+    const btnDesktop = document.getElementById('notificationBtnDesktop');
+    if (btnDesktop) {
+        if (unreadCount > 0) {
+            btnDesktop.style.background = '#fef3c7';
+            btnDesktop.style.color = '#d97706';
+            btnDesktop.style.borderColor = '#fcd34d';
+        } else {
+            btnDesktop.style.background = '';
+            btnDesktop.style.color = '';
+            btnDesktop.style.borderColor = '';
+        }
+    }
 
-    if (unreadCount > 0) {
-        // Estilo Yellow/Amber quando tem notificações
-        btn.style.background = '#fef3c7';
-        btn.style.color = '#d97706';
-        btn.style.borderColor = '#fcd34d';
+    // 2. Mobile Button (Badge Vermelho)
+    const btnMobile = document.getElementById('notificationBtn');
+    const badgeMobile = document.getElementById('notificationBadge');
 
-        // Se quiser animar ou mudar o icone, pode fazer aqui
-        // btn.classList.add('has-notifications');
-    } else {
-        // Estilo padrão (reset)
-        btn.style.background = ''; // Volta ao CSS original (.header-action-btn background)
-        btn.style.color = '';      // Volta ao CSS original
-        btn.style.borderColor = ''; // Volta ao CSS original
+    if (btnMobile && badgeMobile) {
+        if (unreadCount > 0) {
+            badgeMobile.style.display = 'flex';
+            badgeMobile.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            // Opcional: Efeito visual no botão mobile também?
+            // btnMobile.style.color = '#d97706'; 
+        } else {
+            badgeMobile.style.display = 'none';
+        }
     }
 }
 
