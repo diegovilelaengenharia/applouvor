@@ -113,11 +113,17 @@ function renderNotifications() {
 // Marcar como lida ao clicar
 async function handleNotificationClick(id, link) {
     try {
-        await fetch(`${API_ENDPOINT}?action=mark_read`, {
+        const response = await fetch(`${API_ENDPOINT}?action=mark_read`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
         });
+
+        const data = await response.json();
+        if (!data.success) {
+            console.error('Falha ao marcar como lida:', data);
+            return; // Don't update UI if failed
+        }
 
         // Atualizar contador localmente
         unreadCount = Math.max(0, unreadCount - 1);

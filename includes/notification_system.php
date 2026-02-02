@@ -172,10 +172,11 @@ class NotificationSystem {
         try {
             $stmt = $this->pdo->prepare("
                 UPDATE notifications
-                SET is_read = TRUE, read_at = NOW()
+                SET is_read = 1, read_at = NOW()
                 WHERE id = ? AND user_id = ?
             ");
-            return $stmt->execute([$notificationId, $userId]);
+            $stmt->execute([$notificationId, $userId]);
+            return $stmt->rowCount() > 0;
         } catch (PDOException $e) {
             error_log("Erro ao marcar como lida: " . $e->getMessage());
             return false;
@@ -189,10 +190,11 @@ class NotificationSystem {
         try {
             $stmt = $this->pdo->prepare("
                 UPDATE notifications
-                SET is_read = TRUE, read_at = NOW()
-                WHERE user_id = ? AND is_read = FALSE
+                SET is_read = 1, read_at = NOW()
+                WHERE user_id = ? AND is_read = 0
             ");
-            return $stmt->execute([$userId]);
+            $stmt->execute([$userId]);
+            return $stmt->rowCount() > 0;
         } catch (PDOException $e) {
             error_log("Erro ao marcar todas como lidas: " . $e->getMessage());
             return false;
