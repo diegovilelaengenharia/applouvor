@@ -61,9 +61,13 @@ try {
     // Buscar próxima escala (TODAS, não só as do usuário)
     $stmt = $pdo->prepare("
         SELECT s.*,
-               (SELECT r.name FROM schedule_users su 
-                LEFT JOIN roles r ON su.role_id = r.id 
-                WHERE su.schedule_id = s.id AND su.user_id = ? LIMIT 1) as my_role
+               (SELECT r.name 
+                FROM schedule_users su 
+                JOIN user_roles ur ON su.user_id = ur.user_id
+                JOIN roles r ON ur.role_id = r.id 
+                WHERE su.schedule_id = s.id AND su.user_id = ? 
+                ORDER BY ur.is_primary DESC 
+                LIMIT 1) as my_role
         FROM schedules s
         WHERE s.event_date >= CURDATE()
         ORDER BY s.event_date ASC, s.event_time ASC
@@ -102,38 +106,64 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active'");
     $totalMembros = $stmt->fetchColumn();
 
-    // Contar vocais baseado em roles que contenham "Vocal", "Ministro" ou "Voz"
-    // Count Vocals
+    // Contar vocais: incluir tanto user_roles quanto coluna instrument (sistema legado)
     $stmtV = $pdo->query("
         SELECT COUNT(DISTINCT u.id) 
         FROM users u
-        INNER JOIN user_roles ur ON u.id = ur.user_id
-        INNER JOIN roles r ON ur.role_id = r.id
         WHERE u.status = 'active' 
-        AND (r.name LIKE '%Vocal%' OR r.name LIKE '%Ministro%' OR r.name LIKE '%Voz%')
+        AND (
+            -- Vocais da tabela user_roles
+            EXISTS (
+                SELECT 1 FROM user_roles ur
+                INNER JOIN roles r ON ur.role_id = r.id
+                WHERE ur.user_id = u.id
+                AND (r.name LIKE '%Vocal%' OR r.name LIKE '%Ministro%' OR r.name LIKE '%Voz%')
+            )
+            -- OU vocais da coluna instrument (legado)
+            OR (
+                u.instrument IS NOT NULL 
+                AND u.instrument != ''
+                AND (u.instrument LIKE '%Voz%' OR u.instrument LIKE '%Vocal%' OR u.instrument LIKE '%Ministro%')
+            )
+        )
     ");
     $statsMembros['vocals'] = $stmtV->fetchColumn();
 
-    // Count Instrumentalists (Any role that is NOT Vocal-related)
+    // Contar instrumentistas: qualquer um que NÃO seja vocal (roles ou instrument)
     $stmtI = $pdo->query("
         SELECT COUNT(DISTINCT u.id) 
         FROM users u
-        INNER JOIN user_roles ur ON u.id = ur.user_id
-        INNER JOIN roles r ON ur.role_id = r.id
         WHERE u.status = 'active' 
-        AND r.name NOT LIKE '%Vocal%' 
-        AND r.name NOT LIKE '%Ministro%' 
-        AND r.name NOT LIKE '%Voz%'
+        AND (
+            -- Tem role de instrumentista
+            EXISTS (
+                SELECT 1 FROM user_roles ur
+                INNER JOIN roles r ON ur.role_id = r.id
+                WHERE ur.user_id = u.id
+                AND r.name NOT LIKE '%Vocal%' 
+                AND r.name NOT LIKE '%Ministro%' 
+                AND r.name NOT LIKE '%Voz%'
+            )
+            -- OU tem instrumento legado que não seja vocal
+            OR (
+                u.instrument IS NOT NULL 
+                AND u.instrument != ''
+                AND u.instrument NOT LIKE '%Voz%' 
+                AND u.instrument NOT LIKE '%Vocal%' 
+                AND u.instrument NOT LIKE '%Ministro%'
+            )
+        )
     ");
     $statsMembros['instrumentalists'] = $stmtI->fetchColumn();
 } catch (Exception $e) {
     // Fallback se não houver tabela de roles
     try {
-        $stmt = $pdo->query("SELECT COUNT(*) FROM users");
+        $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active'");
         $totalMembros = $stmt->fetchColumn();
-        $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%'");
+        $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active' AND (instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%')");
         $statsMembros['vocals'] = $stmtV->fetchColumn();
-        $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals'];
+        $stmtI = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active' AND instrument IS NOT NULL AND instrument != '' AND instrument NOT LIKE '%Voz%' AND instrument NOT LIKE '%Vocal%' AND instrument NOT LIKE '%Ministro%'");
+        $statsMembros['instrumentalists'] = $stmtI->fetchColumn();
     } catch (Exception $e2) {
     }
 }

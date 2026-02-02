@@ -10,54 +10,77 @@ if (!$id) {
 }
 
 // --- Processamento do Salvamento em Lote ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    try {
-        $pdo->beginTransaction();
-        
-        // 0. Atualizar Dados da Escala (Nome, Data, Hora)
-        // 0. Atualizar Dados da Escala (Nome, Data, Hora, Notas)
-        if (isset($_POST['event_type']) && isset($_POST['event_date']) && isset($_POST['event_time'])) {
-            $notes = $_POST['notes'] ?? ''; // Pegar notas se existir
-            $stmtUpdateSchedule = $pdo->prepare("UPDATE schedules SET event_type = ?, event_date = ?, event_time = ?, notes = ? WHERE id = ?");
-            $stmtUpdateSchedule->execute([$_POST['event_type'], $_POST['event_date'], $_POST['event_time'], $notes, $id]);
+    // EXCLUSÃO
+    if (isset($_POST['delete_schedule']) && $_SESSION['user_role'] === 'admin') {
+        try {
+            $pdo->beginTransaction();
+            
+            // Remover dependências (se não houver CASCADE)
+            $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?")->execute([$id]);
+            $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ?")->execute([$id]);
+            
+            // Remover a escala
+            $pdo->prepare("DELETE FROM schedules WHERE id = ?")->execute([$id]);
+            
+            $pdo->commit();
+            header("Location: escalas.php?msg=deleted");
+            exit;
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            die("Erro ao excluir: " . $e->getMessage());
         }
-        
-        // 1. Atualizar Membros
-        // Remover todos os atuais
-        $stmtDelMembers = $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?");
-        $stmtDelMembers->execute([$id]);
-        
-        // Inserir os novos
-        if (isset($_POST['members']) && is_array($_POST['members'])) {
-            $stmtAddMember = $pdo->prepare("INSERT INTO schedule_users (schedule_id, user_id) VALUES (?, ?)");
-            foreach ($_POST['members'] as $userId) {
-                $stmtAddMember->execute([$id, $userId]);
+    }
+
+    if (isset($_POST['save_changes'])) {
+    
+        try {
+            $pdo->beginTransaction();
+            
+            // 0. Atualizar Dados da Escala (Nome, Data, Hora, Notas)
+            if (isset($_POST['event_type']) && isset($_POST['event_date']) && isset($_POST['event_time'])) {
+                $notes = $_POST['notes'] ?? ''; // Pegar notas se existir
+                $stmtUpdateSchedule = $pdo->prepare("UPDATE schedules SET event_type = ?, event_date = ?, event_time = ?, notes = ? WHERE id = ?");
+                $stmtUpdateSchedule->execute([$_POST['event_type'], $_POST['event_date'], $_POST['event_time'], $notes, $id]);
             }
-        }
-        
-        // 2. Atualizar Músicas
-        // Remover todas as atuais
-        $stmtDelSongs = $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ?");
-        $stmtDelSongs->execute([$id]);
-        
-        // Inserir as novas com posição
-        if (isset($_POST['songs']) && is_array($_POST['songs'])) {
-            $stmtAddSong = $pdo->prepare("INSERT INTO schedule_songs (schedule_id, song_id, position) VALUES (?, ?, ?)");
-            foreach ($_POST['songs'] as $pos => $songId) {
-                $stmtAddSong->execute([$id, $songId, $pos + 1]);
+            
+            // 1. Atualizar Membros
+            // Remover todos os atuais
+            $stmtDelMembers = $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?");
+            $stmtDelMembers->execute([$id]);
+            
+            // Inserir os novos
+            if (isset($_POST['members']) && is_array($_POST['members'])) {
+                $stmtAddMember = $pdo->prepare("INSERT INTO schedule_users (schedule_id, user_id) VALUES (?, ?)");
+                foreach ($_POST['members'] as $userId) {
+                    $stmtAddMember->execute([$id, $userId]);
+                }
             }
+            
+            // 2. Atualizar Músicas
+            // Remover todas as atuais
+            $stmtDelSongs = $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ?");
+            $stmtDelSongs->execute([$id]);
+            
+            // Inserir as novas com posição
+            if (isset($_POST['songs']) && is_array($_POST['songs'])) {
+                $stmtAddSong = $pdo->prepare("INSERT INTO schedule_songs (schedule_id, song_id, position) VALUES (?, ?, ?)");
+                foreach ($_POST['songs'] as $pos => $songId) {
+                    $stmtAddSong->execute([$id, $songId, $pos + 1]);
+                }
+            }
+            
+            $pdo->commit();
+            
+            // Redirecionar para limpar o POST e mostrar sucesso
+            header("Location: escala_detalhe.php?id=$id&success=1");
+            exit;
+            
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            die("Erro ao salvar mudanças: " . $e->getMessage());
         }
-        
-        $pdo->commit();
-        
-        // Redirecionar para limpar o POST e mostrar sucesso
-        header("Location: escala_detalhe.php?id=$id&success=1");
-        exit;
-        
-    } catch (Exception $e) {
-        $pdo->rollBack();
-        die("Erro ao salvar mudanças: " . $e->getMessage());
     }
 }
 
@@ -160,6 +183,25 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
             
             <!-- Botões de Ação -->
             <div style="display: flex; gap: 8px;">
+                <!-- Botão Excluir (Admin) -->
+                <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.');" style="margin: 0;">
+                    <input type="hidden" name="delete_schedule" value="1">
+                    <button type="submit" id="deleteBtn" style="
+                        padding: 10px 14px; border-radius: 12px;
+                        background: linear-gradient(135deg, #ef4444, #dc2626);
+                        border: none; color: white; cursor: pointer;
+                        display: flex; align-items: center; gap: 6px;
+                        font-weight: 700; font-size: var(--font-body-sm);
+                        transition: all 0.2s;
+                        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)'"
+                       onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(239, 68, 68, 0.3)'">
+                        <i data-lucide="trash-2" style="width: 16px;"></i>
+                    </button>
+                </form>
+                <?php endif; ?>
+
                 <!-- Botão Salvar (visível apenas no modo edição) -->
                 <button id="saveBtn" onclick="saveAllChanges()" style="
                     padding: 10px 18px; border-radius: 12px;

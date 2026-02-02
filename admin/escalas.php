@@ -88,8 +88,23 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
     <!-- Right Controls: Add Button, View Toggle & Filter -->
     <div style="display: flex; gap: 12px; align-items: center;">
-    
-        <!-- Botão Adicionar Escala (Simplificado) -->
+
+        <!-- Botão Adicionar Escala (Admin Only) -->
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+        <a href="escala_adicionar.php" class="ripple" style="
+            width: 48px; height: 48px; 
+            background: #166534; 
+            color: white; 
+            border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2);
+            transition: all 0.2s;
+        ">
+            <i data-lucide="plus" style="width: 24px;"></i>
+        </a>
+        <?php endif; ?>
+
 
 
         <!-- Filter Button (Simplificado) -->

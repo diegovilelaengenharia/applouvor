@@ -473,11 +473,28 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
             <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
                 <!-- Avatar -->
                 <div class="member-avatar" style="background: <?= generateAvatarColor($user['name']) ?>">
-                    <?php if (!empty($user['avatar'])): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" alt="<?= htmlspecialchars($user['name']) ?>">
-                    <?php else: ?>
-                        <?= strtoupper(substr($user['name'], 0, 1)) ?>
-                    <?php endif; ?>
+                    <?php 
+                    $initial = strtoupper(substr($user['name'], 0, 1));
+                    if (!empty($user['avatar'])) {
+                        $avatarPath = $user['avatar'];
+                        // Fix path if it doesn't already have path info or http
+                        if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
+                            $avatarPath = '../assets/uploads/' . $avatarPath;
+                        } elseif (strpos($avatarPath, 'assets/uploads') !== false && strpos($avatarPath, '../') === false) {
+                             // If it has assets/uploads but not ../ (assuming relative from root), prepend ../
+                             // But be careful if it already has it.
+                             // Simplest way: if it starts with 'assets/', prepend '../'
+                             if (strpos($avatarPath, 'assets/') === 0) {
+                                 $avatarPath = '../' . $avatarPath;
+                             }
+                        }
+                        
+                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" onerror=\"this.style.display='none'; this.nextElementSibling.style.display='block';\">";
+                        echo "<span style='display:none;' class='fallback-initial'>" . $initial . "</span>";
+                    } else {
+                        echo $initial;
+                    }
+                    ?>
                 </div>
 
                 <!-- Info -->
