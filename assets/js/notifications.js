@@ -8,12 +8,22 @@ let notificationsData = [];
 let unreadCount = 0;
 let lastNotificationId = 0;
 // Fallback se a variável não estiver definida
-const apiBase = (typeof NOTIFICATIONS_API_BASE !== 'undefined') ? NOTIFICATIONS_API_BASE : '';
-// Determine API Base Path dynamically if variable not set
-const IS_ADMIN = window.location.pathname.includes('/admin/');
-// If apiBase is empty, try to deduce. apiBase usually comes from layout.php
-// But we need a robust fallback.
-const API_ENDPOINT = apiBase + 'notifications_api.php';
+// Determinar API Endpoint corretamente
+const currentPath = window.location.pathname;
+let apiPrefix = '';
+
+if (currentPath.includes('/admin/')) {
+    apiPrefix = ''; // Já estamos em admin/
+} else if (currentPath.includes('/app/')) {
+    apiPrefix = '../admin/'; // Estamos em app/, voltar e entrar em admin
+} else {
+    // Root ou outra pasta
+    apiPrefix = 'admin/';
+}
+
+const API_ENDPOINT = (typeof NOTIFICATIONS_API_BASE !== 'undefined')
+    ? NOTIFICATIONS_API_BASE + 'notifications_api.php'
+    : apiPrefix + 'notifications_api.php';
 
 // Carregar contador de não lidas
 async function loadUnreadCount() {
@@ -139,17 +149,25 @@ async function markAllAsRead() {
     }
 }
 
-// Atualizar badge
+// Atualizar estilo do botão ao invés de badge
 function updateBadge() {
-    const badges = document.querySelectorAll('.notification-badge');
-    badges.forEach(badge => {
-        if (unreadCount > 0) {
-            badge.innerText = unreadCount > 99 ? '99+' : unreadCount;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    });
+    const btn = document.getElementById('notificationBtnDesktop');
+    if (!btn) return;
+
+    if (unreadCount > 0) {
+        // Estilo Yellow/Amber quando tem notificações
+        btn.style.background = '#fef3c7';
+        btn.style.color = '#d97706';
+        btn.style.borderColor = '#fcd34d';
+
+        // Se quiser animar ou mudar o icone, pode fazer aqui
+        // btn.classList.add('has-notifications');
+    } else {
+        // Estilo padrão (reset)
+        btn.style.background = ''; // Volta ao CSS original (.header-action-btn background)
+        btn.style.color = '';      // Volta ao CSS original
+        btn.style.borderColor = ''; // Volta ao CSS original
+    }
 }
 
 // Toggle dropdown
