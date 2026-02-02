@@ -89,9 +89,42 @@ document.addEventListener('DOMContentLoaded', async function () {
 // ==========================================
 
 function shareWhatsApp(devotionalId, title) {
+    // Pegar o conteúdo do devocional
+    const devotionalCard = document.querySelector(`#dev-${devotionalId}`);
+    if (!devotionalCard) return;
+
+    const contentEl = devotionalCard.querySelector('.dev-text');
+    const authorEl = devotionalCard.querySelector('.dev-author-name');
+
+    // Extrair preview do conteúdo (primeiros 150 caracteres)
+    let preview = '';
+    if (contentEl) {
+        const textContent = contentEl.textContent || contentEl.innerText;
+        preview = textContent.substring(0, 150).trim();
+        if (textContent.length > 150) {
+            preview += '...';
+        }
+    }
+
+    const author = authorEl ? authorEl.textContent : 'Louvor PIB Oliveira';
     const url = window.location.origin + window.location.pathname + '?id=' + devotionalId;
-    const text = `📖 *${title}*\n\nConfira este devocional: ${url}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+    // Mensagem formatada e bonita
+    const message = `✨ *Devocional da Comunidade* ✨
+
+📖 *${title}*
+👤 _Por ${author}_
+
+${preview}
+
+━━━━━━━━━━━━━━━━━━
+🔗 Leia completo aqui:
+${url}
+
+🙏 _Compartilhe a Palavra!_
+_Louvor PIB Oliveira_ 💙`;
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, '_blank');
 }

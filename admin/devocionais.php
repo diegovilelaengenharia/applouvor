@@ -533,12 +533,34 @@ renderAppHeader('Devocionais');
     </div>
     
     <!-- Filtros por Tipo -->
-    <div class="filter-tabs">
-        <a href="?type=all" class="filter-tab <?= $filterType === 'all' ? 'active' : '' ?>">✨ Todos</a>
-        <a href="?type=text" class="filter-tab <?= $filterType === 'text' ? 'active' : '' ?>">📝 Textos</a>
-        <a href="?type=video" class="filter-tab <?= $filterType === 'video' ? 'active' : '' ?>">🎬 Vídeos</a>
-        <a href="?type=audio" class="filter-tab <?= $filterType === 'audio' ? 'active' : '' ?>">🎵 Áudios</a>
-        <a href="?type=link" class="filter-tab <?= $filterType === 'link' ? 'active' : '' ?>">🔗 Links</a>
+    <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">
+            🎯 Tipo de Conteúdo
+        </label>
+        <select onchange="window.location.href='?type='+this.value" style="
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            font-size: var(--font-body);
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23667eea%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        ">
+            <option value="all" <?= $filterType === 'all' ? 'selected' : '' ?>>✨ Todos</option>
+            <option value="text" <?= $filterType === 'text' ? 'selected' : '' ?>>📝 Textos</option>
+            <option value="video" <?= $filterType === 'video' ? 'selected' : '' ?>>🎬 Vídeos</option>
+            <option value="audio" <?= $filterType === 'audio' ? 'selected' : '' ?>>🎵 Áudios</option>
+            <option value="link" <?= $filterType === 'link' ? 'selected' : '' ?>>🔗 Links</option>
+        </select>
     </div>
     
     <!-- Botão para Filtros Avançados -->
