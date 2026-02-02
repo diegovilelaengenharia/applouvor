@@ -357,35 +357,6 @@ renderAppHeader('Início');
         </a>
     </div>
 
-    <!-- Card: Quem Somos -->
-    <div class="dashboard-card">
-        <a href="quem_somos.php" class="ripple" style="
-            display: flex; 
-            align-items: center; 
-            gap: 16px; 
-            padding: 16px; 
-            text-decoration: none; 
-            color: var(--text-primary);
-        ">
-            <div style="
-                width: 48px; 
-                height: 48px; 
-                border-radius: 12px; 
-                background: linear-gradient(135deg, #6610f2 0%, #520dc2 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-            ">
-                <i data-lucide="info" style="width: 24px; color: white;"></i>
-            </div>
-            <div>
-                <h4 style="margin: 0; font-size: 1rem; font-weight: 700;">Quem somos?</h4>
-                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">Propósito e Visão</p>
-            </div>
-            <i data-lucide="chevron-right" style="margin-left: auto; width: 20px; color: var(--text-muted);"></i>
-        </a>
-    </div>
 
 </div>
 

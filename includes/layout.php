@@ -976,6 +976,13 @@ function renderAppHeader($title, $backUrl = null)
                             <!-- Compacted Header Mobile -->
 
                             <div style="padding: 8px;">
+                                <a href="quem_somos.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #e0e7ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
+                                        <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                    <span style="font-weight: 500;">Quem nós somos</span>
+                                </a>
+
                                 <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                                     <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
                                         <i data-lucide="user" style="width: 16px; height: 16px;"></i>
@@ -1844,6 +1851,17 @@ function renderAppHeader($title, $backUrl = null)
                     <!-- Compacted Header Desktop -->
 
                             <div style="padding: 8px;">
+                                <a href="quem_somos.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <div style="background: #e0e7ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                        </svg>
+                                    </div>
+                                    <span style="font-weight: 500;">Quem nós somos</span>
+                                </a>
+
                                 <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                                     <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
