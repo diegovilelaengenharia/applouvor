@@ -72,6 +72,7 @@ if ($tableExists && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // --- FILTROS ---
 $filterCategory = $_GET['category'] ?? 'all';
+$filterIntercession = $_GET['intercession'] ?? 'all'; // all, interceded, not_interceded
 $showAnswered = isset($_GET['answered']) && $_GET['answered'] === '1';
 
 // Buscar pedidos
@@ -80,11 +81,15 @@ if ($tableExists) {
     try {
         $sql = "SELECT p.*, u.name as author_name, u.avatar as author_avatar,
                 (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'pray') as pray_count,
-                (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'comment') as comment_count
+                (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'comment') as comment_count,
+                IF(pi_user.id IS NOT NULL, 1, 0) as is_interceded
                 FROM prayer_requests p 
-                LEFT JOIN users u ON p.user_id = u.id 
+                LEFT JOIN users u ON p.user_id = u.id
+                LEFT JOIN prayer_interactions pi_user ON p.id = pi_user.prayer_id 
+                                                       AND pi_user.user_id = ?
+                                                       AND pi_user.type = 'pray'
                 WHERE 1=1";
-        $params = [];
+        $params = [$userId];
 
         if ($showAnswered) {
             $sql .= " AND p.is_answered = 1";
@@ -96,8 +101,16 @@ if ($tableExists) {
             $sql .= " AND p.category = ?";
             $params[] = $filterCategory;
         }
+        
+        // Filtro de Intercessão
+        if ($filterIntercession === 'interceded') {
+            $sql .= " AND pi_user.id IS NOT NULL";
+        } elseif ($filterIntercession === 'not_interceded') {
+            $sql .= " AND pi_user.id IS NULL";
+        }
 
-        $sql .= " ORDER BY p.is_urgent DESC, p.created_at DESC";
+        // Ordenação: Não intercedidos primeiro, depois urgentes, depois mais recentes
+        $sql .= " ORDER BY is_interceded ASC, p.is_urgent DESC, p.created_at DESC";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -318,22 +331,105 @@ renderAppHeader('Pedidos de Oração');
     .comment-item:last-child {
         border-bottom: none;
     }
+    
+    /* Collapsible Cards */
+    .prayer-card.collapsed {
+        cursor: pointer;
+    }
+    .prayer-card.collapsed .prayer-description {
+        display: none;
+    }
+    .prayer-card.collapsed .comments-section {
+        display: none !important;
+    }
+    .prayer-card.collapsed .prayer-footer {
+        display: none;
+    }
+    
+    /* Intercession States */
+    .prayer-card.not-interceded {
+        background: linear-gradient(to right, #ffffff, #fffbeb);
+        border-left: 3px solid #f59e0b;
+    }
+    .prayer-card.interceded {
+        opacity: 0.7;
+        border: 1px dashed var(--border-color);
+    }
+    .prayer-card.interceded .prayer-title {
+        color: var(--text-muted);
+    }
+    
+    /* Filter Toolbar */
+    .filter-toolbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+    .filter-group {
+        flex: 1;
+        position: relative;
+    }
+    .filter-select {
+        width: 100%;
+        padding: 10px 12px 10px 36px;
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #4a5568;
+        appearance: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
+    .filter-select:focus {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        outline: none;
+    }
+    .filter-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #718096;
+    }
+    .btn-advanced-filter {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #718096;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        flex-shrink: 0;
+        position: relative;
+    }
+    .btn-advanced-filter.active {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border-color: #f59e0b;
+    }
+    .btn-advanced-filter:hover {
+        background: #f7fafc;
+        transform: translateY(-1px);
+    }
 </style>
 
 <?php renderPageHeader('Mural de Oração', 'Louvor PIB Oliveira'); ?>
 
-<div class="container" style="padding-top: 16px; max-width: 700px; margin: 0 auto;">
-    
-    <!-- Hero Section -->
-    <div style="text-align: center; padding: 20px 0 30px;">
-        <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);">
-            <i data-lucide="heart-handshake" style="color: white; width: 36px; height: 36px;"></i>
-        </div>
-        <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Mural de Oração</h2>
-        <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 400px; margin: 0 auto;">
-            Compartilhe seus pedidos e interceda pelos irmãos. Unidos em oração!
-        </p>
-    </div>
+<div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
     
     <?php if (!$tableExists): ?>
     <!-- Setup Required Message -->
@@ -351,27 +447,59 @@ renderAppHeader('Pedidos de Oração');
         </a>
     </div>
     <?php else: ?>
-    <div class="filter-tabs">
-        <a href="?category=all" class="filter-tab <?= $filterCategory === 'all' ? 'active' : '' ?>">🙏 Todos</a>
-        <a href="?category=health" class="filter-tab <?= $filterCategory === 'health' ? 'active' : '' ?>">❤️ Saúde</a>
-        <a href="?category=family" class="filter-tab <?= $filterCategory === 'family' ? 'active' : '' ?>">👨‍👩‍👧 Família</a>
-        <a href="?category=work" class="filter-tab <?= $filterCategory === 'work' ? 'active' : '' ?>">💼 Trabalho</a>
-        <a href="?category=spiritual" class="filter-tab <?= $filterCategory === 'spiritual' ? 'active' : '' ?>">✨ Espiritual</a>
-        <a href="?category=gratitude" class="filter-tab <?= $filterCategory === 'gratitude' ? 'active' : '' ?>">🙌 Gratidão</a>
+    
+    <!-- Toolbar de Filtros Compacta -->
+    <div class="filter-toolbar">
+        <!-- Filtro Intercessão -->
+        <div class="filter-group">
+            <i class="filter-icon" data-lucide="heart" style="width: 16px; height: 16px;"></i>
+            <select onchange="window.location.href='?intercession='+this.value+'&category=<?= $filterCategory ?><?= $showAnswered ? '&answered=1' : '' ?>'" class="filter-select">
+                <option value="all" <?= $filterIntercession === 'all' ? 'selected' : '' ?>>Todos</option>
+                <option value="not_interceded" <?= $filterIntercession === 'not_interceded' ? 'selected' : '' ?>>Não Intercedidos</option>
+                <option value="interceded" <?= $filterIntercession === 'interceded' ? 'selected' : '' ?>>Intercedidos</option>
+            </select>
+        </div>
+        
+        <!-- Botão Filtros Avançados -->
+        <button onclick="toggleAdvancedFilters()" class="btn-advanced-filter <?= ($filterCategory !== 'all' || $showAnswered) ? 'active' : '' ?>" title="Filtros Avançados">
+            <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
+            <?php if ($filterCategory !== 'all' || $showAnswered): ?>
+                <span style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span>
+            <?php endif; ?>
+        </button>
+        
+        <!-- Botão Limpar Filtros -->
+        <?php if ($filterCategory !== 'all' || $showAnswered): ?>
+        <button onclick="window.location.href='oracao.php'" class="btn-advanced-filter" style="color: #ef4444; border-color: #fecaca; background: #fef2f2;" title="Limpar Filtros">
+            <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+        <?php endif; ?>
     </div>
     
-    <!-- Toggle Respondidas -->
-    <div style="margin-bottom: 20px;">
-        <a href="?<?= $showAnswered ? '' : 'answered=1' ?><?= $filterCategory !== 'all' ? '&category=' . $filterCategory : '' ?>" style="
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
-            text-decoration: none; color: <?= $showAnswered ? '#10b981' : 'var(--text-muted)' ?>;
-            background: <?= $showAnswered ? '#dcfce7' : 'transparent' ?>;
-            border: 1px solid <?= $showAnswered ? '#10b981' : 'transparent' ?>;
-        ">
-            <i data-lucide="<?= $showAnswered ? 'check-circle' : 'sparkles' ?>" style="width: 14px;"></i>
-            <?= $showAnswered ? 'Ver Pendentes' : 'Ver Respondidas 🎉' ?>
-        </a>
+    <!-- Painel de Filtros Avançados -->
+    
+    <!-- Painel de Filtros Avançados -->
+    <div id="advanced-filters-panel" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px;">
+            <a href="?intercession=<?= $filterIntercession ?>&category=all<?= $showAnswered ? '&answered=1' : '' ?>" class="filter-tab <?= $filterCategory === 'all' ? 'active' : '' ?>">🙏 Todos</a>
+            <a href="?intercession=<?= $filterIntercession ?>&category=health<?= $showAnswered ? '&answered=1' : '' ?>" class="filter-tab <?= $filterCategory === 'health' ? 'active' : '' ?>">❤️ Saúde</a>
+            <a href="?intercession=<?= $filterIntercession ?>&category=family<?= $showAnswered ? '&answered=1' : '' ?>" class="filter-tab <?= $filterCategory === 'family' ? 'active' : '' ?>">👨‍👩‍👧 Família</a>
+            <a href="?intercession=<?= $filterIntercession ?>&category=work<?= $showAnswered ? '&answered=1' : '' ?>" class="filter-tab <?= $filterCategory === 'work' ? 'active' : '' ?>">💼 Trabalho</a>
+            <a href="?intercession=<?= $filterIntercession ?>&category=spiritual<?= $showAnswered ? '&answered=1' : '' ?>" class="filter-tab <?= $filterCategory === 'spiritual' ? 'active' : '' ?>">✨ Espiritual</a>
+            <a href="?intercession=<?= $filterIntercession ?>&category=gratitude<?= $filterCategory === 'gratitude' ? 'active' : '' ?>" class="filter-tab <?= $filterCategory === 'gratitude' ? 'active' : '' ?>">🙌 Gratidão</a>
+        </div>
+        <div style="border-top: 1px solid var(--border-color); padding-top: 12px;">
+            <a href="?intercession=<?= $filterIntercession ?>&category=<?= $filterCategory ?><?= $showAnswered ? '' : '&answered=1' ?>" style="
+                display: inline-flex; align-items: center; gap: 6px;
+                padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
+                text-decoration: none; color: <?= $showAnswered ? '#10b981' : 'var(--text-muted)' ?>;
+                background: <?= $showAnswered ? '#dcfce7' : 'transparent' ?>;
+                border: 1px solid <?= $showAnswered ? '#10b981' : 'var(--border-color)' ?>;
+            ">
+                <i data-lucide="<?= $showAnswered ? 'check-circle' : 'sparkles' ?>" style="width: 14px;"></i>
+                <?= $showAnswered ? 'Ver Pendentes' : 'Ver Respondidas 🎉' ?>
+            </a>
+        </div>
     </div>
     
     <!-- Feed de Pedidos -->
@@ -413,8 +541,12 @@ renderAppHeader('Pedidos de Oração');
                     'other' => ['icon' => '🙏', 'label' => 'Outros', 'class' => 'cat-other']
                 ];
                 $cat = $catConfig[$prayer['category']] ?? $catConfig['other'];
+                $intercessionClass = $prayer['is_interceded'] ? 'interceded' : 'not-interceded';
             ?>
-            <div class="prayer-card <?= $prayer['is_urgent'] ? 'urgent' : '' ?> <?= $prayer['is_answered'] ? 'answered' : '' ?>" id="prayer-<?= $prayer['id'] ?>">
+            <div class="prayer-card collapsed <?= $intercessionClass ?> <?= $prayer['is_urgent'] ? 'urgent' : '' ?> <?= $prayer['is_answered'] ? 'answered' : '' ?>" 
+                 id="prayer-<?= $prayer['id'] ?>" 
+                 onclick="togglePrayerCard(<?= $prayer['id'] ?>, event)"
+                 data-is-interceded="<?= $prayer['is_interceded'] ?>">
                 <!-- Header -->
                 <div class="prayer-header">
                     <?php if ($authorAvatar): ?>
@@ -455,14 +587,10 @@ renderAppHeader('Pedidos de Oração');
                 <!-- Footer -->
                 <div class="prayer-footer">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <form method="POST" style="margin: 0;">
-                            <input type="hidden" name="action" value="pray">
-                            <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                            <button type="submit" class="pray-btn <?= $hasPrayed ? 'prayed' : 'not-prayed' ?>">
-                                <i data-lucide="heart" style="width: 16px;"></i>
-                                <?= $hasPrayed ? 'Orei' : 'Orar' ?> (<?= $prayer['pray_count'] ?>)
-                            </button>
-                        </form>
+                        <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this)" class="pray-btn <?= $prayer['is_interceded'] ? 'prayed' : 'not-prayed' ?>" id="intercession-btn-<?= $prayer['id'] ?>">
+                            <i data-lucide="heart" style="width: 16px;"></i>
+                            <span><?= $prayer['is_interceded'] ? 'Intercedi' : 'Interceder' ?></span> (<?= $prayer['pray_count'] ?>)
+                        </button>
                         
                         <button onclick="toggleComments('comments-<?= $prayer['id'] ?>')" style="background: none; border: none; color: var(--text-muted); font-size: var(--font-body-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                             <i data-lucide="message-circle" style="width: 16px;"></i>
@@ -663,6 +791,90 @@ renderAppHeader('Pedidos de Oração');
     function toggleComments(id) {
         const section = document.getElementById(id);
         section.classList.toggle('open');
+    }
+    
+    // Toggle prayer card expansion/collapse
+    function togglePrayerCard(id, event) {
+        // Evitar toggle se clicar em botões, links ou inputs
+        if (event.target.closest('button, a, input, textarea, select')) {
+            return;
+        }
+        
+        const card = document.getElementById('prayer-' + id);
+        card.classList.toggle('collapsed');
+        
+        // Se expandiu, scroll suave até o card
+        if (!card.classList.contains('collapsed')) {
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }
+    
+    // Toggle intercession status (AJAX)
+    function toggleIntercessionStatus(prayerId, btn) {
+        const card = document.getElementById('prayer-' + prayerId);
+        const btnSpan = btn.querySelector('span');
+        const counter = btn.textContent.match(/\((\d+)\)/)[1];
+        
+        // Feedback visual imediato
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        
+        fetch('../api/toggle_intercession.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'prayer_id=' + prayerId
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            
+            if (data.success) {
+                const currentCount = parseInt(counter);
+                const newCount = data.is_interceded ? currentCount + 1 : currentCount - 1;
+                
+                if (data.is_interceded) {
+                    // Marcou como intercedido
+                    card.classList.remove('not-interceded');
+                    card.classList.add('interceded');
+                    card.dataset.isInterceded = '1';
+                    btn.classList.remove('not-prayed');
+                    btn.classList.add('prayed');
+                    btnSpan.textContent = 'Intercedi';
+                } else {
+                    // Desmarcou
+                    card.classList.remove('interceded');
+                    card.classList.add('not-interceded');
+                    card.dataset.isInterceded = '0';
+                    btn.classList.remove('prayed');
+                    btn.classList.add('not-prayed');
+                    btnSpan.textContent = 'Interceder';
+                }
+                
+                // Atualizar contador
+                btn.innerHTML = btn.innerHTML.replace(/\(\d+\)/, `(${newCount})`);
+                
+                // Recriar ícones Lucide
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            console.error('Erro ao atualizar intercessão:', error);
+        });
+    }
+    
+    // Toggle advanced filters panel
+    function toggleAdvancedFilters() {
+        const panel = document.getElementById('advanced-filters-panel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }
 </script>
 
