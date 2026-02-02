@@ -129,12 +129,11 @@ try {
 $nextEvent = null;
 $totalEvents = 0;
 try {
-    // Buscar próximo evento da agenda (não escala individual)
+    // Buscar próximo evento da agenda (tabela events)
     $stmt = $pdo->prepare("
-        SELECT * FROM calendar_events
-        WHERE event_date >= CURDATE()
-        AND event_type != 'personal'
-        ORDER BY event_date ASC, event_time ASC
+        SELECT * FROM events
+        WHERE start_datetime >= NOW()
+        ORDER BY start_datetime ASC
         LIMIT 1
     ");
     $stmt->execute();
@@ -142,13 +141,12 @@ try {
     
     // Contar total de eventos futuros
     $stmtCount = $pdo->query("
-        SELECT COUNT(*) FROM calendar_events
-        WHERE event_date >= CURDATE()
-        AND event_type != 'personal'
+        SELECT COUNT(*) FROM events
+        WHERE start_datetime >= NOW()
     ");
     $totalEvents = $stmtCount->fetchColumn();
 } catch (Exception $e) {
-    // Tabela calendar_events pode não existir ainda
+    // Tabela events pode não existir ainda
 }
 
 

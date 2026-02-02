@@ -380,7 +380,7 @@ function renderCardAgenda($nextEvent, $totalEvents) {
     $eventName = 'Nenhum evento próximo';
     
     if ($nextEvent) {
-        $date = new DateTime($nextEvent['event_date']);
+        $date = new DateTime($nextEvent['start_datetime']);
         $now = new DateTime();
         $diff = $now->diff($date);
         
@@ -392,13 +392,8 @@ function renderCardAgenda($nextEvent, $totalEvents) {
             $countdown = 'em ' . $diff->days . ' dias';
         }
         
-        $dateDisplay = $date->format('d/m');
-        $eventName = htmlspecialchars($nextEvent['title'] ?? $nextEvent['event_name'] ?? 'Evento');
-        
-        // Adicionar hora se disponível
-        if (!empty($nextEvent['event_time'])) {
-            $dateDisplay .= ' às ' . substr($nextEvent['event_time'], 0, 5);
-        }
+        $dateDisplay = $date->format('d/m \à\s H:i');
+        $eventName = htmlspecialchars($nextEvent['title'] ?? 'Evento');
     }
     ?>
     <a href="agenda.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
