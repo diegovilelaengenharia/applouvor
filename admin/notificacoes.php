@@ -361,17 +361,25 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
 
     <!-- Botões de Ação -->
     <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+        <!-- Botão para TODOS os usuários -->
+        <button onclick="deleteAllNotifications()" class="btn" style="background: #f59e0b; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+            <i data-lucide="trash-2" style="width: 16px;"></i>
+            Apagar Todas
+        </button>
+        
+        <!-- Botões apenas para ADMIN -->
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-        <button onclick="clearDatabaseAdmin()" class="btn" style="background: #dc2626; color: white; border: none; display: flex; align-items: center; gap: 8px;">
+        <button onclick="clearDatabaseAdmin()" class="btn" style="background: #dc2626; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
             <i data-lucide="database" style="width: 16px;"></i>
             Limpar Banco
         </button>
-        <button onclick="openViewsModal()" class="btn" style="background: #7c3aed; color: white; border: none; display: flex; align-items: center; gap: 8px;">
+        <button onclick="openViewsModal()" class="btn" style="background: #7c3aed; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
             <i data-lucide="users" style="width: 16px;"></i>
             Visualizações
         </button>
         <?php endif; ?>
-        <button onclick="openNotificationSettings()" class="btn btn-primary" style="background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px;">
+        
+        <button onclick="openNotificationSettings()" class="btn btn-primary" style="background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
             <i data-lucide="sliders-horizontal" style="width: 18px;"></i>
             Gerenciar Preferências
         </button>
