@@ -13,7 +13,8 @@ try {
     // Migrations a executar
     $migrations = [
         'devotional_improvements.sql',
-        'devotional_reads.sql'
+        'devotional_reads.sql',
+        'prayer_improvements.sql'  // Nova: garante unicidade de intercessões
     ];
     
     $totalSuccess = 0;
