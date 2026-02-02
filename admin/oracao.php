@@ -144,7 +144,7 @@ renderAppHeader('Pedidos de Oração');
     /* Prayer Cards - Premium Design */
     .prayer-card {
         background: var(--bg-surface);
-        border-radius: 16px;
+        border-radius: 14px;
         border: 1px solid var(--border-color);
         overflow: hidden;
         box-shadow: var(--shadow-sm);
@@ -165,33 +165,33 @@ renderAppHeader('Pedidos de Oração');
     .prayer-header {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 16px;
+        gap: 10px;
+        padding: 14px;
         border-bottom: 1px solid var(--border-color);
     }
     .prayer-avatar {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid white;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .prayer-avatar-placeholder {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-weight: 700;
-        font-size: var(--font-h3);
+        font-size: var(--font-body);
     }
     
     /* Content */
     .prayer-content {
-        padding: 16px;
+        padding: 14px;
     }
     .prayer-title {
         font-size: var(--font-h3);
