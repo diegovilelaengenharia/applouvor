@@ -150,7 +150,7 @@ function renderCardMembros($totalMembros, $stats) {
     <?php
 }
 
-// Renderizar card de Leitura
+// Renderizar card de Leitura (ENHANCED)
 function renderCardLeitura($pdo, $userId) {
     require_once '../includes/reading_plan.php';
     
@@ -194,20 +194,41 @@ function renderCardLeitura($pdo, $userId) {
     $todayProgress = count($todayRead);
     $todayTotal = count($todayVerses);
     $percentToday = $todayTotal > 0 ? round(($todayProgress / $todayTotal) * 100) : 0;
+    $percentYear = round(($displayDayGlobal / 365) * 100);
     ?>
-    <a href="leitura.php" class="access-card card-green">
+    <a href="leitura.php" class="access-card card-green" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon">
-                    <i data-lucide="book-open" style="width: 24px; height: 24px;"></i>
+                <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
+                    <i data-lucide="book-open" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
-                <span class="card-badge"><?= $percentToday ?>%</span>
+                <span class="card-badge" style="background: #059669; color: white; border: none; font-weight: 700;"><?= $percentToday ?>%</span>
             </div>
-            <h3 class="card-title">Leitura</h3>
-            <p class="card-info" style="margin-top: 8px;">
-                <span style="display: block; font-weight: 600; color: #059669;">Dia <?= $displayDayGlobal ?></span>
-                <span style="font-size: 0.75rem;">Progresso atual</span>
-            </p>
+            <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: 8px;">Leitura Bíblica</h3>
+            <div class="card-info" style="margin-top: 8px;">
+                <div style="background: rgba(5, 150, 105, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #047857;">Dia <?= $displayDayGlobal ?></div>
+                            <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;">de 365 dias</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #047857;"><?= $percentYear ?>%</div>
+                            <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;">completo</div>
+                        </div>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.5); border-radius: 3px; overflow: hidden;">
+                        <div style="width: <?= $percentYear ?>%; height: 100%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
+                        <i data-lucide="check-circle" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i>
+                        Hoje: <?= $todayProgress ?>/<?= $todayTotal ?>
+                    </span>
+                    <span style="font-size: 0.7rem; color: #059669; font-weight: 600; text-transform: uppercase;">Ler Agora →</span>
+                </div>
+            </div>
         </div>
     </a>
     <?php
@@ -287,41 +308,64 @@ function renderCardAniversariantes($niverCount, $proximo = null) {
     <?php
 }
 
-// Renderizar card de Devocional
+// Renderizar card de Devocional (ENHANCED)
 function renderCardDevocional() {
+    $hoje = date('d/m');
     ?>
-    <a href="devocionais.php" class="access-card card-green">
-        <div>
-            <div class="card-icon">
-                <i data-lucide="sunrise" style="width: 24px; height: 24px;"></i>
+    <a href="devocionais.php" class="access-card card-green" style="position: relative; overflow: hidden;">
+        <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
+                    <i data-lucide="sunrise" style="width: 24px; height: 24px; color: white;"></i>
+                </div>
             </div>
-            <h3 class="card-title">Devocional</h3>
-            <p class="card-info">Reflexão diária</p>
+            <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: 8px;">Devocional</h3>
+            <div class="card-info" style="margin-top: 8px;">
+                <div style="background: rgba(5, 150, 105, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
+                    <div style="font-weight: 700; color: #047857; font-size: 0.95rem; margin-bottom: 3px;">
+                        ☀️ Reflexão Diária
+                    </div>
+                    <div style="font-size: 0.75rem; color: #059669; font-weight: 600;">
+                        Hoje, <?= $hoje ?>
+                    </div>
+                </div>
+                <span style="font-size: 0.7rem; color: #059669; font-weight: 600; text-transform: uppercase; float: right;">Ler Devocional →</span>
+            </div>
         </div>
     </a>
     <?php
 }
 
-// Renderizar card de Oração
+// Renderizar card de Oração (ENHANCED)
 function renderCardOracao($count = 0) {
     ?>
-    <a href="oracao.php" class="access-card card-green">
+    <a href="oracao.php" class="access-card card-green" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon">
-                    <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
+                <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
+                    <i data-lucide="heart" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($count > 0): ?>
-                    <span class="card-badge" style="background: #059669; color: white; border: none;"><?= $count ?></span>
+                    <span class="card-badge" style="background: #059669; color: white; border: none; font-weight: 700;"><?= $count ?></span>
                 <?php endif; ?>
             </div>
-            <h3 class="card-title">Oração</h3>
+            <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: 8px;">Oração</h3>
             <div class="card-info" style="margin-top: 8px;">
                 <?php if ($count > 0): ?>
-                    <span style="font-weight: 600; color: #047857; font-size: 0.9rem;"><?= $count ?> pedidos</span>
-                    <span style="font-size: 0.75rem; color: #059669; opacity: 0.9;"> ativos na lista</span>
+                    <div style="background: rgba(5, 150, 105, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
+                        <div style="font-weight: 700; color: #047857; font-size: 1.2rem; margin-bottom: 3px;">
+                            <?= $count ?> <?= $count == 1 ? 'pedido' : 'pedidos' ?>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #059669; font-weight: 600;">
+                            🙏 Ativos na lista
+                        </div>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #059669; font-weight: 600; text-transform: uppercase; float: right;">Ver Lista →</span>
                 <?php else: ?>
-                    <span style="opacity: 0.8;">Nenhum pedido ativo</span>
+                    <div style="background: rgba(5, 150, 105, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
+                        <span style="font-size: 0.85rem; color: #047857; font-weight: 600;">Nenhum pedido ativo</span>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #059669; font-weight: 600; text-transform: uppercase; float: right;">Fazer Pedido →</span>
                 <?php endif; ?>
             </div>
         </div>
