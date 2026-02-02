@@ -340,15 +340,47 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     
     @media (max-width: 768px) {
         .calendar-day {
-            min-height: <?= $viewMode === 'week' ? '150px' : '80px' ?>;
+            min-height: <?= $viewMode === 'week' ? '150px' : '60px' ?>;
             font-size: 0.8rem;
+            padding: 4px;
         }
         .week-header-day { font-size: 0.7rem; padding: 8px 2px; }
-        .event-chip { padding: 2px 4px; font-size: 0.65rem; }
+        
+        /* Transform chips into dots on mobile month view */
+        @media (max-width: 640px) {
+            .calendar-day .event-chip { 
+                width: 8px; 
+                height: 8px; 
+                padding: 0; 
+                font-size: 0;
+                border: none !important;
+                border-radius: 50%;
+                margin: 2px 1px;
+                display: inline-block;
+                /* Use css var or important to override inline styles if needed, 
+                   but inline style sets background-color with opacity. 
+                   We need solid color. 
+                   We can use 'color' property which is set inline, to set background. */
+                background-color: currentColor !important;
+                opacity: 0.8;
+            }
+        }
+        
         .nav-group { min-width: auto; }
         .current-display { font-size: 0.95rem; }
     }
 </style>
+
+<?php
+// Parâmetros de visualização
+// Detectar Mobile
+$isMobile = preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i', $_SERVER['HTTP_USER_AGENT'] ?? '');
+
+$defaultView = $isMobile ? 'list' : 'month';
+$viewMode = $_GET['view'] ?? $defaultView;
+// Normaliza view antiga 'calendar' para 'month'
+if ($viewMode === 'calendar') $viewMode = 'month';
+?>
 
 <div class="agenda-container">
     <div class="agenda-controls">
