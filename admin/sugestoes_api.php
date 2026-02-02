@@ -97,20 +97,17 @@ try {
             $stmt->execute([$userId, $id]);
 
             // 2. Inserir na tabela de músicas (songs)
-            // Verificar se já existe (opcional, mas bom)
-            // Aqui vamos apenas inserir
+            // Nota: youtube_link e spotify_link não existem na tabela songs
             $stmtInsert = $pdo->prepare("
-                INSERT INTO songs (title, artist, tone, bpm, youtube_link, spotify_link, status)
-                VALUES (?, ?, ?, ?, ?, ?, 'active')
+                INSERT INTO songs (title, artist, tone, bpm, status)
+                VALUES (?, ?, ?, ?, 'active')
             ");
             // Nota: BPM não vem da sugestão, default null ou 0
             $stmtInsert->execute([
                 $suggestion['title'],
                 $suggestion['artist'],
                 $suggestion['tone'],
-                0, // BPM default
-                $suggestion['youtube_link'],
-                $suggestion['spotify_link']
+                0 // BPM default
             ]);
 
             $pdo->commit();

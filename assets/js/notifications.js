@@ -172,18 +172,18 @@ function updateBadge() {
         }
     }
 
-    // 2. Mobile Button (Badge Vermelho)
+    // 2. Mobile Button (Mesmo estilo do Desktop - Amarelo)
     const btnMobile = document.getElementById('notificationBtn');
-    const badgeMobile = document.getElementById('notificationBadge');
 
-    if (btnMobile && badgeMobile) {
+    if (btnMobile) {
         if (unreadCount > 0) {
-            badgeMobile.style.display = 'flex';
-            badgeMobile.textContent = unreadCount > 9 ? '9+' : unreadCount;
-            // Opcional: Efeito visual no botão mobile também?
-            // btnMobile.style.color = '#d97706'; 
+            btnMobile.style.background = '#fef3c7';
+            btnMobile.style.color = '#d97706';
+            btnMobile.style.borderColor = '#fcd34d';
         } else {
-            badgeMobile.style.display = 'none';
+            btnMobile.style.background = '';
+            btnMobile.style.color = '';
+            btnMobile.style.borderColor = '';
         }
     }
 }
