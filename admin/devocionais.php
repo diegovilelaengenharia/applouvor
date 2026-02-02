@@ -606,11 +606,79 @@ renderAppHeader('Devocionais');
         background: linear-gradient(to right, #ffffff, #f8f7ff);
         border-left: 3px solid var(--primary);
     }
+    /* Barra de Filtros Inteligente */
+    .filter-toolbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+    
+    .filter-group {
+        flex: 1;
+        position: relative;
+    }
+    
+    .filter-select {
+        width: 100%;
+        padding: 10px 12px 10px 36px; /* Espaço para ícone */
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #4a5568;
+        appearance: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
+    
+    .filter-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary)15;
+        outline: none;
+    }
+    
+    .filter-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #718096;
+    }
+    
+    .btn-advanced-filter {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #718096;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        flex-shrink: 0;
+    }
+    
+    .btn-advanced-filter.active {
+        background: var(--primary)10;
+        color: var(--primary);
+        border-color: var(--primary);
+    }
+    
+    .btn-advanced-filter:hover {
+        background: #f7fafc;
+        transform: translateY(-1px);
+    }
 </style>
-
-<?php renderPageHeader('Devocionais', 'Louvor PIB Oliveira'); ?>
-
-<div class="container" style="padding-top: 16px; max-width: 700px; margin: 0 auto;">
     
     <!-- Hero Section -->
     <div style="text-align: center; padding: 20px 0 30px;">
@@ -623,98 +691,30 @@ renderAppHeader('Devocionais');
         </p>
     </div>
     
-    <!-- Filtros por Tipo -->
-    <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">
-            🎯 Tipo de Conteúdo
-        </label>
-        <select onchange="window.location.href='?type='+this.value" style="
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-surface);
-            border: 1.5px solid var(--border-color);
-            border-radius: 12px;
-            font-size: var(--font-body);
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
-            appearance: none;
-            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23667eea%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        ">
-            <option value="all" <?= $filterType === 'all' ? 'selected' : '' ?>>✨ Todos</option>
-            <option value="text" <?= $filterType === 'text' ? 'selected' : '' ?>>📝 Textos</option>
-            <option value="video" <?= $filterType === 'video' ? 'selected' : '' ?>>🎬 Vídeos</option>
-            <option value="audio" <?= $filterType === 'audio' ? 'selected' : '' ?>>🎵 Áudios</option>
-            <option value="link" <?= $filterType === 'link' ? 'selected' : '' ?>>🔗 Links</option>
-        </select>
-    </div>
-    
-    <!-- Filtro de Leitura -->
-    <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">
-            📚 Status de Leitura
-        </label>
-        <select onchange="window.location.href='?read_status='+this.value+'&type=<?= $filterType ?>'" style="
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-surface);
-            border: 1.5px solid var(--border-color);
-            border-radius: 12px;
-            font-size: var(--font-body);
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
-            appearance: none;
-            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23667eea%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        ">
-            <option value="all" <?= $filterRead === 'all' ? 'selected' : '' ?>>📋 Todas</option>
-            <option value="unread" <?= $filterRead === 'unread' ? 'selected' : '' ?>>🆕 Não Lidas</option>
-            <option value="read" <?= $filterRead === 'read' ? 'selected' : '' ?>>✅ Lidas</option>
-        </select>
-    </div>
-    
-    <!-- Botão para Filtros Avançados -->
-    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-        <button onclick="toggleAdvancedFilters()" style="
-            padding: 10px 16px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-size: var(--font-body-sm);
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-main);
-        ">
-            <i data-lucide="sliders-horizontal" style="width: 16px;"></i>
-            Filtros Avançados
-            <span id="active-filters-indicator" style="display: none; background: var(--primary); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">●</span>
+    <!-- Toolbar de Filtros Compacta -->
+    <div class="filter-toolbar">
+        <!-- Filtro Leitura -->
+        <div class="filter-group">
+            <i class="filter-icon" data-lucide="book-open" style="width: 16px; height: 16px;"></i>
+            <select onchange="window.location.href='?read_status='+this.value+'&type=<?= $filterType ?>'" class="filter-select">
+                <option value="all" <?= $filterRead === 'all' ? 'selected' : '' ?>>Todas</option>
+                <option value="unread" <?= $filterRead === 'unread' ? 'selected' : '' ?>>Não Lidas</option>
+                <option value="read" <?= $filterRead === 'read' ? 'selected' : '' ?>>Lidas</option>
+            </select>
+        </div>
+        
+        <!-- Botão Filtros Avançados -->
+        <button onclick="toggleAdvancedFilters()" class="btn-advanced-filter <?= (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)) ? 'active' : '' ?>" title="Filtros Avançados">
+            <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
+            <?php if (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)): ?>
+                <span style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: var(--primary); border-radius: 50%;"></span>
+            <?php endif; ?>
         </button>
         
+        <!-- Botão Limpar (aparece somente se houver filtros ativos) -->
         <?php if (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)): ?>
-        <button onclick="window.location.href='devocionais.php'" style="
-            padding: 10px 16px;
-            background: #fee2e2;
-            border: 1px solid #fca5a5;
-            border-radius: 12px;
-            font-size: var(--font-body-sm);
-            font-weight: 600;
-            cursor: pointer;
-            color: #dc2626;
-        ">
-            Limpar Filtros
+        <button onclick="window.location.href='devocionais.php'" class="btn-advanced-filter" style="color: #ef4444; border-color: #fecaca; background: #fef2f2;" title="Limpar Filtros">
+            <i data-lucide="x" style="width: 20px; height: 20px;"></i>
         </button>
         <?php endif; ?>
     </div>
