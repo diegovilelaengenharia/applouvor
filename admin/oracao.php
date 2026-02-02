@@ -427,6 +427,7 @@ renderAppHeader('Pedidos de Oração');
     }
 </style>
 
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <?php renderPageHeader('Mural de Oração', 'Louvor PIB Oliveira'); ?>
 
 <div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
@@ -686,19 +687,20 @@ renderAppHeader('Pedidos de Oração');
             </button>
         </div>
         
-        <form method="POST">
+        <form method="POST" id="prayerForm" onsubmit="return preparePrayerSubmit()">
             <input type="hidden" name="action" value="create">
+            <input type="hidden" name="description" id="hiddenDescription">
             
             <!-- Título -->
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título do Pedido</label>
-                <input type="text" name="title" required placeholder="Ex: Oração pela saúde do meu pai" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
+                <input type="text" name="title" id="prayerTitle" required placeholder="Ex: Oração pela saúde do meu pai" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
             </div>
             
-            <!-- Descrição -->
+            <!-- Editor de Descrição -->
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Descrição (opcional)</label>
-                <textarea name="description" rows="3" placeholder="Compartilhe mais detalhes se desejar..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body); resize: vertical;"></textarea>
+               <div id="prayerEditor" style="min-height: 120px; background: white; border-radius: 12px;"></div>
             </div>
             
             <!-- Categoria -->
@@ -876,6 +878,36 @@ renderAppHeader('Pedidos de Oração');
         const panel = document.getElementById('advanced-filters-panel');
         panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }
+</script>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    // Inicializar Quill Editor para Oração
+    var prayerQuill = new Quill('#prayerEditor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link']
+            ]
+        },
+        placeholder: 'Compartilhe mais detalhes se desejar...'
+    });
+    
+    // Preparar submit do formulário de oração
+    function preparePrayerSubmit() {
+        document.getElementById('hiddenDescription').value = prayerQuill.root.innerHTML;
+        return true;
+    }
+    
+    // Limpar editor ao abrir/fechar modal
+    const originalOpenModal = openCreateModal;
+    openCreateModal = function() {
+        originalOpenModal();
+        prayerQuill.setContents([]);
+        document.getElementById('prayerTitle').value = '';
+    };
 </script>
 
 <?php renderAppFooter(); ?>
