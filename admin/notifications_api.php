@@ -47,6 +47,31 @@ try {
             ]);
             break;
 
+        case 'stats':
+            $stmtStats = $notificationSystem->pdo->prepare("
+                SELECT 
+                    COUNT(*) as total,
+                    SUM(CASE WHEN is_read = 0 THEN 1 ELSE 0 END) as unread,
+                    SUM(CASE WHEN is_read = 1 THEN 1 ELSE 0 END) as `read`
+                FROM notifications 
+                WHERE user_id = ?
+            ");
+            $stmtStats->execute([$userId]);
+            $stats = $stmtStats->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
+
+            // Ensure values are integers (checked for nulls)
+            $response = [
+                'total' => (int)($stats['total'] ?? 0),
+                'unread' => (int)($stats['unread'] ?? 0),
+                'read' => (int)($stats['read'] ?? 0)
+            ];
+
+            echo json_encode([
+                'success' => true,
+                'stats' => $response
+            ]);
+            break;
+
         case 'public_key':
              $configFile = __DIR__ . '/../includes/vapid_config.php';
              if (file_exists($configFile)) {

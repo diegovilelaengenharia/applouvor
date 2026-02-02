@@ -282,6 +282,9 @@ function openNotificationModal(notification) {
         // Update UI in Full Page (if exists)
         const row = document.querySelector(`.notification-item[data-id="${notification.id}"]`);
         if (row) row.classList.remove('unread');
+
+        // Update Stats
+        loadDashboardStats();
     }
 }
 
@@ -297,10 +300,31 @@ function closeNotificationDetail() {
     if (modal) modal.style.display = 'none';
 }
 
+// Carregar estatísticas do dashboard
+async function loadDashboardStats() {
+    // Só executa se os elementos existirem (estamos na página de notificações)
+    const elTotal = document.getElementById('stat-total');
+    if (!elTotal) return;
+
+    try {
+        const response = await fetch(`${API_ENDPOINT}?action=stats`);
+        const data = await response.json();
+
+        if (data.success && data.stats) {
+            elTotal.innerText = data.stats.total;
+            document.getElementById('stat-unread').innerText = data.stats.unread;
+            document.getElementById('stat-read').innerText = data.stats.read;
+        }
+    } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+    }
+}
+
 
 // Carregar contador ao iniciar e configurar polling
 document.addEventListener('DOMContentLoaded', function () {
     loadUnreadCount();
+    loadDashboardStats();
 
     // Polling a cada 60 segundos (reduzido de 30s)
     setInterval(loadUnreadCount, 60000);

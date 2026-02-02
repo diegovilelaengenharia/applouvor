@@ -88,7 +88,7 @@ $offset = ($page - 1) * $perPage;
 $stmt = $pdo->prepare("
     SELECT * FROM notifications 
     WHERE $whereClause 
-    ORDER BY created_at DESC 
+    ORDER BY is_read ASC, created_at DESC 
     LIMIT $perPage OFFSET $offset
 ");
 $stmt->execute($params);
@@ -415,15 +415,15 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
     <!-- Stats -->
     <div class="stats-grid">
         <div class="stat-card total">
-            <div class="stat-value"><?= $stats['total'] ?></div>
+            <div class="stat-value" id="stat-total"><?= (int)$stats['total'] ?></div>
             <div class="stat-label">Total</div>
         </div>
         <div class="stat-card unread">
-            <div class="stat-value"><?= $stats['unread'] ?></div>
+            <div class="stat-value" id="stat-unread"><?= (int)$stats['unread'] ?></div>
             <div class="stat-label">Não Lidas</div>
         </div>
         <div class="stat-card read">
-            <div class="stat-value"><?= $stats['read'] ?></div>
+            <div class="stat-value" id="stat-read"><?= (int)$stats['read'] ?></div>
             <div class="stat-label">Lidas</div>
         </div>
     </div>
