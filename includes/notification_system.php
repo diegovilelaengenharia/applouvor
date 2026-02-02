@@ -218,6 +218,23 @@ class NotificationSystem {
     }
     
     /**
+     * Deletar todas as notificações do usuário
+     */
+    public function deleteAll($userId) {
+        try {
+            $stmt = $this->pdo->prepare("
+                DELETE FROM notifications
+                WHERE user_id = ?
+            ");
+            $stmt->execute([$userId]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Erro ao deletar todas as notificações: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
      * Verificar se tipo de notificação está ativo para usuário
      */
     private function isTypeEnabled($userId, $type) {

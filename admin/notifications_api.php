@@ -138,6 +138,20 @@ try {
             ]);
             break;
             
+        case 'delete_all':
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception('Método não permitido');
+            }
+            
+            $count = $notificationSystem->deleteAll($userId);
+            
+            echo json_encode([
+                'success' => $count !== false,
+                'count' => $count,
+                'message' => $count !== false ? "Todas as notificações foram apagadas ($count)" : 'Erro ao apagar notificações'
+            ]);
+            break;
+            
         default:
             throw new Exception('Ação inválida');
     }

@@ -625,6 +625,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Função para apagar todas as notificações
+async function deleteAllNotifications() {
+    if (!confirm('Tem certeza que deseja apagar TODAS as notificações? Esta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('notifications_api.php?action=delete_all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(`${data.count} notificação(ões) apagada(s) com sucesso!`);
+            location.reload();
+        } else {
+            alert('Erro ao apagar notificações: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao apagar notificações');
+    }
+}
+
 </script>
 
 <?php
