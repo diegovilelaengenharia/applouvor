@@ -58,29 +58,26 @@ try {
 $nextSchedule = null;
 $totalSchedules = 0;
 try {
-    // Buscar próxima escala com Event Type
+    // Buscar próxima escala (TODAS, não só as do usuário)
     $stmt = $pdo->prepare("
         SELECT s.*,
                (SELECT r.name FROM schedule_users su 
                 LEFT JOIN roles r ON su.role_id = r.id 
                 WHERE su.schedule_id = s.id AND su.user_id = ? LIMIT 1) as my_role
         FROM schedules s
-        JOIN schedule_users su ON s.id = su.schedule_id
-        WHERE su.user_id = ? AND s.event_date >= CURDATE()
-        ORDER BY s.event_date ASC
+        WHERE s.event_date >= CURDATE()
+        ORDER BY s.event_date ASC, s.event_time ASC
         LIMIT 1
     ");
-    $stmt->execute([$userId, $userId]);
+    $stmt->execute([$userId]);
     $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // Contagem total
-    $stmtCount = $pdo->prepare("
+    // Contagem total de escalas futuras
+    $stmtCount = $pdo->query("
         SELECT COUNT(*) 
-        FROM schedules s
-        JOIN schedule_users su ON s.id = su.schedule_id
-        WHERE su.user_id = ? AND s.event_date >= CURDATE()
+        FROM schedules
+        WHERE event_date >= CURDATE()
     ");
-    $stmtCount->execute([$userId]);
     $totalSchedules = $stmtCount->fetchColumn();
 } catch (Exception $e) {
 }
@@ -102,16 +99,58 @@ try {
 $totalMembros = 0;
 $statsMembros = ['vocals' => 0, 'instrumentalists' => 0];
 try {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE status = 'active'");
     $totalMembros = $stmt->fetchColumn();
 
-    // Tentar inferir stats simples (Isso pode variar dependendo de como as roles est├úo no DB)
-    // Assumindo que role 'Vocal' ou instrumento 'Voz' identifica vocal
-    $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%'");
+    // Contar vocais baseado em roles que contenham "Vocal", "Ministro" ou "Voz"
+    $stmtV = $pdo->query("
+        SELECT COUNT(DISTINCT u.id) 
+        FROM users u
+        INNER JOIN user_roles ur ON u.id = ur.user_id
+        INNER JOIN roles r ON ur.role_id = r.id
+        WHERE u.status = 'active' 
+        AND (r.name LIKE '%Vocal%' OR r.name LIKE '%Ministro%' OR r.name LIKE '%Voz%')
+    ");
     $statsMembros['vocals'] = $stmtV->fetchColumn();
-    $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals']; // Simplificado
+    $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals'];
 } catch (Exception $e) {
+    // Fallback se não houver tabela de roles
+    try {
+        $stmt = $pdo->query("SELECT COUNT(*) FROM users");
+        $totalMembros = $stmt->fetchColumn();
+        $stmtV = $pdo->query("SELECT COUNT(*) FROM users WHERE instrument LIKE '%Voz%' OR instrument LIKE '%Vocal%' OR instrument LIKE '%Ministro%'");
+        $statsMembros['vocals'] = $stmtV->fetchColumn();
+        $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals'];
+    } catch (Exception $e2) {
+    }
 }
+
+// 5. Agenda (Próximo Evento Coletivo)
+$nextEvent = null;
+$totalEvents = 0;
+try {
+    // Buscar próximo evento da agenda (não escala individual)
+    $stmt = $pdo->prepare("
+        SELECT * FROM calendar_events
+        WHERE event_date >= CURDATE()
+        AND event_type != 'personal'
+        ORDER BY event_date ASC, event_time ASC
+        LIMIT 1
+    ");
+    $stmt->execute();
+    $nextEvent = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Contar total de eventos futuros
+    $stmtCount = $pdo->query("
+        SELECT COUNT(*) FROM calendar_events
+        WHERE event_date >= CURDATE()
+        AND event_type != 'personal'
+    ");
+    $totalEvents = $stmtCount->fetchColumn();
+} catch (Exception $e) {
+    // Tabela calendar_events pode não existir ainda
+}
+
 
 // 5. Aniversariantes (Próximo)
 $aniversariantesCount = 0;
@@ -491,7 +530,9 @@ renderAppHeader('Visão Geral');
             'proximoNiver' => $proximoAniversariante,
             'totalMembros' => $totalMembros,
             'statsMembros' => $statsMembros,
-            'oracaoCount' => $oracaoCount
+            'oracaoCount' => $oracaoCount,
+            'nextEvent' => $nextEvent,
+            'totalEvents' => $totalEvents
         ];
 
         // 1. Agrupar cards configurados pelo usuário

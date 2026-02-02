@@ -373,6 +373,74 @@ function renderCardOracao($count = 0) {
     <?php
 }
 
+// Renderizar card de Agenda (ENHANCED)
+function renderCardAgenda($nextEvent, $totalEvents) {
+    $countdown = '';
+    $dateDisplay = '';
+    $eventName = 'Nenhum evento próximo';
+    
+    if ($nextEvent) {
+        $date = new DateTime($nextEvent['event_date']);
+        $now = new DateTime();
+        $diff = $now->diff($date);
+        
+        if ($diff->days == 0) {
+            $countdown = 'HOJE!';
+        } elseif ($diff->days == 1) {
+            $countdown = 'Amanhã';
+        } else {
+            $countdown = 'em ' . $diff->days . ' dias';
+        }
+        
+        $dateDisplay = $date->format('d/m');
+        $eventName = htmlspecialchars($nextEvent['title'] ?? $nextEvent['event_name'] ?? 'Evento');
+        
+        // Adicionar hora se disponível
+        if (!empty($nextEvent['event_time'])) {
+            $dateDisplay .= ' às ' . substr($nextEvent['event_time'], 0, 5);
+        }
+    }
+    ?>
+    <a href="agenda.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
+        <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                    <i data-lucide="calendar-days" style="width: 24px; height: 24px; color: white;"></i>
+                </div>
+                <?php if ($totalEvents > 0): ?>
+                    <span class="card-badge" style="background: #2563eb; color: white; border: none; font-weight: 700;"><?= $totalEvents ?></span>
+                <?php endif; ?>
+            </div>
+            
+            <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: 8px;">Agenda</h3>
+            
+            <div class="card-info" style="margin-top: 8px;">
+                <?php if ($nextEvent): ?>
+                    <div style="background: rgba(37, 99, 235, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
+                        <div style="font-weight: 700; color: #1e40af; font-size: 0.95rem; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <?= $eventName ?>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #3b82f6; display: flex; align-items: center; gap: 4px;">
+                            <i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
+                            <?= $dateDisplay ?>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">
+                            <i data-lucide="clock" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i>
+                            <?= $countdown ?>
+                        </span>
+                        <span style="font-size: 0.7rem; color: #3b82f6; font-weight: 600; text-transform: uppercase;">Ver Agenda →</span>
+                    </div>
+                <?php else: ?>
+                    <span style="opacity: 0.7; font-size: 0.85rem;">Nenhum evento agendado</span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </a>
+    <?php
+}
+
 // Renderizar card genérico melhorado
 function renderCardGeneric($cardId, $cardDef) {
     // Mapeamento de cor definida para classe CSS
@@ -447,6 +515,9 @@ function renderDashboardCard($cardId, $data) {
         // NOVO CASO PARA MEMBROS (Membros agora é um card especial)
         case 'membros':
             renderCardMembros($data['totalMembros'], $data['statsMembros']);
+            break;
+        case 'agenda':
+            renderCardAgenda($data['nextEvent'] ?? null, $data['totalEvents'] ?? 0);
             break;
         case 'leitura':
             renderCardLeitura($data['pdo'], $data['userId']);
