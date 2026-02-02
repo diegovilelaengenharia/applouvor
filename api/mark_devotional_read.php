@@ -32,7 +32,11 @@ try {
         
         echo json_encode(['success' => true, 'message' => 'Marcado como lido', 'is_read' => true]);
     } else {
-        echo json_encode(['success' => true, 'message' => 'Já estava marcado como lido', 'is_read' => true]);
+        // Desmarcar (remover leitura)
+        $stmt = $pdo->prepare("DELETE FROM devotional_reads WHERE user_id = ? AND devotional_id = ?");
+        $stmt->execute([$userId, $devotionalId]);
+        
+        echo json_encode(['success' => true, 'message' => 'Marcado como não lido', 'is_read' => false]);
     }
 } catch (PDOException $e) {
     http_response_code(500);

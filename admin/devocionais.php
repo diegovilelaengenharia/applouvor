@@ -1023,6 +1023,11 @@ renderAppHeader('Devocionais');
                             <i data-lucide="maximize-2" style="width: 18px;"></i>
                             <span>Modo Leitura</span>
                         </button>
+                        
+                        <button class="dev-action-btn btn-mark-read" data-id="<?= $dev['id'] ?>" onclick="toggleReadStatus(<?= $dev['id'] ?>, this)" style="<?= $dev['is_read'] ? 'color: var(--primary); background: var(--primary)10;' : '' ?>">
+                            <i data-lucide="<?= $dev['is_read'] ? 'check-circle' : 'circle' ?>" style="width: 18px;"></i>
+                            <span><?= $dev['is_read'] ? 'Lido' : 'Marcar como lido' ?></span>
+                        </button>
                     </div>
                 </div>
                 
@@ -1311,13 +1316,7 @@ renderAppHeader('Devocionais');
         }
         
         const card = document.getElementById('dev-' + id);
-        const wasCollapsed = card.classList.contains('collapsed');
         card.classList.toggle('collapsed');
-        
-        // Se expandiu e não foi lido, marcar como lido
-        if (wasCollapsed && card.dataset.isRead === '0') {
-            markAsRead(id, card);
-        }
         
         // Se expandiu, scroll suave até o card
         if (!card.classList.contains('collapsed')) {
@@ -1327,8 +1326,16 @@ renderAppHeader('Devocionais');
         }
     }
     
-    // Marcar devocional como lido
-    function markAsRead(id, card) {
+    // Marcar/Desmarcar devocional como lido (MANUAL)
+    function toggleReadStatus(id, btn) {
+        const card = document.getElementById('dev-' + id);
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+        
+        // Feedback visual imediato (optimistic UI)
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        
         fetch('../api/mark_devotional_read.php', {
             method: 'POST',
             headers: {
@@ -1338,14 +1345,54 @@ renderAppHeader('Devocionais');
         })
         .then(response => response.json())
         .then(data => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            
             if (data.success) {
-                // Atualizar visual do card
-                card.classList.remove('unread');
-                card.classList.add('read');
-                card.dataset.isRead = '1';
+                if (data.is_read) {
+                    // Marcou como lido
+                    card.classList.remove('unread');
+                    card.classList.add('read');
+                    card.dataset.isRead = '1';
+                    
+                    // Atualizar botão
+                    btn.style.color = 'var(--primary)';
+                    btn.style.background = 'var(--primary)10';
+                    text.textContent = 'Lido';
+                    
+                    // Atualizar ícone (usando Lucide se disponível ou trocando HTML)
+                    if (window.lucide) {
+                        icon.setAttribute('data-lucide', 'check-circle');
+                        lucide.createIcons();
+                    } else {
+                        // Fallback de ícone simples se lucide não atualizar dinâmico
+                        icon.innerHTML = '<polyline points="22 11.08 22 2 15 22 2 22 2 11.08"></polyline>'; 
+                    }
+                } else {
+                    // Desmarcou (não lido)
+                    card.classList.remove('read');
+                    card.classList.add('unread');
+                    card.dataset.isRead = '0';
+                    
+                    // Atualizar botão
+                    btn.style.color = '';
+                    btn.style.background = '';
+                    text.textContent = 'Marcar como lido';
+                    
+                    if (window.lucide) {
+                        icon.setAttribute('data-lucide', 'circle');
+                        lucide.createIcons();
+                    }
+                }
+                
+                // Forçar recriação de ícones para o botão específico
+                setTimeout(() => lucide.createIcons(), 50);
             }
         })
-        .catch(error => console.error('Erro ao marcar como lido:', error));
+        .catch(error => {
+            console.error('Erro ao alternar leitura:', error);
+            btn.disabled = false;
+        });
     }
     
     // Comments toggle
