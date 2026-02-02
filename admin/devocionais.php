@@ -515,6 +515,72 @@ renderAppHeader('Devocionais');
     .reaction-btn.reacted span {
         color: white !important;
     }
+    
+    /* Cards Colapsáveis */
+    .devotional-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    /* Esconder apenas conteúdo detalhado quando collapsed */
+    .devotional-card.collapsed .dev-media,
+    .devotional-card.collapsed .dev-text,
+    .devotional-card.collapsed .dev-link-preview,
+    .devotional-card.collapsed .dev-footer,
+    .devotional-card.collapsed .comments-section {
+        display: none !important;
+    }
+    
+    .devotional-card.collapsed {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .devotional-card.collapsed:hover {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .devotional-card.collapsed .dev-title {
+        margin-bottom: 8px;
+        font-size: var(--font-h3);
+    }
+    
+    .dev-preview {
+        font-size: var(--font-body-sm);
+        color: var(--text-muted);
+        line-height: 1.5;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-top: 8px;
+    }
+    
+    /* Esconder preview quando expandido */
+    .devotional-card:not(.collapsed) .dev-preview {
+        display: none;
+    }
+    
+    .expand-indicator {
+        position: absolute;
+        bottom: 12px;
+        right: 16px;
+        background: var(--primary);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: var(--font-caption);
+        font-weight: 600;
+        display: none;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .devotional-card.collapsed .expand-indicator {
+        display: flex;
+    }
 </style>
 
 <?php renderPageHeader('Devocionais', 'Louvor PIB Oliveira'); ?>
@@ -701,7 +767,7 @@ renderAppHeader('Devocionais');
                 ];
                 $tc = $typeConfig[$dev['media_type']] ?? $typeConfig['text'];
             ?>
-            <div class="devotional-card animate-in" id="dev-<?= $dev['id'] ?>">
+            <div class="devotional-card animate-in collapsed" id="dev-<?= $dev['id'] ?>" onclick="toggleDevotionalCard(<?= $dev['id'] ?>, event)">
                 <!-- Header -->
                 <div class="dev-header">
                     <?php if ($authorAvatar): ?>
@@ -759,6 +825,20 @@ renderAppHeader('Devocionais');
                 <!-- Content -->
                 <div class="dev-content">
                     <h3 class="dev-title"><?= htmlspecialchars($dev['title']) ?></h3>
+                    
+                    <!-- Preview (visível quando collapsed) -->
+                    <div class="dev-preview">
+                        <?php 
+                        $previewText = strip_tags($dev['content']);
+                        echo htmlspecialchars(mb_substr($previewText, 0, 120)) . (mb_strlen($previewText) > 120 ? '...' : '');
+                        ?>
+                    </div>
+                    
+                    <!-- Indicador de expansão -->
+                    <div class="expand-indicator">
+                        <i data-lucide="chevron-down" style="width: 14px;"></i>
+                        Ver mais
+                    </div>
                     
                     <?php if ($dev['media_type'] === 'video' && !empty($dev['media_url'])): ?>
                         <div class="dev-media">
@@ -1166,6 +1246,24 @@ renderAppHeader('Devocionais');
     
     function closeModal() {
         document.getElementById('devotionalModal').style.display = 'none';
+    }
+    
+    // Toggle card expansion/collapse
+    function toggleDevotionalCard(id, event) {
+        // Evitar toggle se clicar em botões, links ou inputs
+        if (event.target.closest('button, a, input, textarea, select, .dev-dropdown')) {
+            return;
+        }
+        
+        const card = document.getElementById('dev-' + id);
+        card.classList.toggle('collapsed');
+        
+        // Se expandiu, scroll suave até o card
+        if (!card.classList.contains('collapsed')) {
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
     }
     
     // Comments toggle
