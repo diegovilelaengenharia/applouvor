@@ -43,7 +43,7 @@ async function loadUnreadCount() {
 // Carregar notificações (Limit 3 per user request)
 async function loadNotifications() {
     try {
-        const response = await fetch(`${API_ENDPOINT}?action=list&limit=3`);
+        const response = await fetch(`${API_ENDPOINT}?action=list&limit=3&unread_only=true`);
         const data = await response.json();
 
         if (data.success) {
