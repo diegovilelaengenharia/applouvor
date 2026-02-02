@@ -862,7 +862,16 @@ function renderAppHeader($title, $backUrl = null)
     <body>
 
         <!-- Incluir Sidebar -->
-        <?php include_once 'sidebar.php'; ?>
+        <!-- Incluir Sidebar -->
+        <?php 
+        if (file_exists('sidebar.php')) {
+            include_once 'sidebar.php';
+        } elseif (file_exists('../admin/sidebar.php')) {
+            include_once '../admin/sidebar.php';
+        } elseif (file_exists('admin/sidebar.php')) {
+            include_once 'admin/sidebar.php';
+        }
+        ?>
 
         <div id="app-content">
             <!-- Header Mobile (S├│ vis├¡vel em telas menores) -->
