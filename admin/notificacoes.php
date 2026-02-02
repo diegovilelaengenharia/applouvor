@@ -458,7 +458,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
             $config = $notificationSystem->typeConfig[$notif['type']] ?? ['icon' => 'bell', 'color' => '#64748b'];
             $data = is_string($notif['data']) ? json_decode($notif['data'], true) : $notif['data'];
         ?>
-            <div class="notification-item <?= !$notif['is_read'] ? 'unread' : '' ?>">
+            <div class="notification-item <?= !$notif['is_read'] ? 'unread' : '' ?>" data-id="<?= $notif['id'] ?>">
                 <div class="notification-icon" style="background: <?= $config['color'] ?>;">
                     <i data-lucide="<?= $config['icon'] ?>" style="width: 20px;"></i>
                 </div>
@@ -472,7 +472,18 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
                         <?= date('d/m/Y H:i', strtotime($notif['created_at'])) ?>
                         
                         <?php if ($notif['link']): ?>
-                            <a href="<?= $notif['link'] ?>" class="btn-link" style="margin-left: auto; color: var(--primary); font-weight: 500; text-decoration: none;">Ver detalhes</a>
+                            <?php 
+                                $jsNotif = [
+                                    'id' => $notif['id'],
+                                    'title' => $notif['title'],
+                                    'message' => $notif['message'],
+                                    'created_at' => $notif['created_at'],
+                                    'link' => $notif['link'],
+                                    'is_read' => $notif['is_read'],
+                                    'config' => $config
+                                ];
+                            ?>
+                            <a href="javascript:void(0)" onclick='openNotificationModal(<?= json_encode($jsNotif) ?>)' class="btn-link" style="margin-left: auto; color: var(--primary); font-weight: 500; text-decoration: none;">Ver detalhes</a>
                         <?php endif; ?>
                     </div>
                 </div>

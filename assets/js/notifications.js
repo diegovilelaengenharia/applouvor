@@ -86,7 +86,7 @@ function renderNotifications() {
                 const timeAgo = getTimeAgo(notification.created_at);
 
                 return `
-                    <div class="notification-item ${unreadClass}" onclick="handleNotificationClick(${notification.id}, '${notification.link || ''}')">
+                    <div class="notification-item ${unreadClass}" onclick="openNotificationDetail(${notification.id})">
                         <div class="notification-icon" style="min-width: 40px; min-height: 40px; background: ${config.color}20; color: ${config.color}; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                             <i data-lucide="${config.icon}" style="width: 20px; height: 20px;"></i>
                         </div>
@@ -237,6 +237,65 @@ document.addEventListener('click', function (e) {
         });
     }
 });
+
+
+// Modal Detalhes
+function openNotificationModal(notification) {
+    if (!notification) return;
+
+    // Populate Modal
+    document.getElementById('notifDetailTitle').textContent = notification.title;
+    document.getElementById('notifDetailMessage').textContent = notification.message || '';
+    document.getElementById('notifDetailDate').textContent = getTimeAgo(notification.created_at);
+
+    // Icon Logic
+    const config = notification.config || { icon: 'bell', color: '#64748b' };
+    const iconContainer = document.getElementById('notifDetailIcon');
+    iconContainer.style.backgroundColor = config.color + '20';
+    iconContainer.style.color = config.color;
+    iconContainer.innerHTML = `<i data-lucide="${config.icon}" style="width: 24px; height: 24px;"></i>`;
+    if (window.lucide) window.lucide.createIcons({ root: iconContainer });
+
+    // Link Logic
+    const linkBtn = document.getElementById('notifDetailLink');
+    if (notification.link) {
+        linkBtn.style.display = 'flex';
+        linkBtn.href = notification.link;
+    } else {
+        linkBtn.style.display = 'none';
+    }
+
+    // Show Modal
+    const modal = document.getElementById('notificationDetailModal');
+    if (modal) modal.style.display = 'flex';
+
+    // Mark as read without redirecting
+    if (!notification.is_read) {
+        handleNotificationClick(notification.id, null);
+
+        // Update local state if in dropdown data
+        notification.is_read = 1;
+
+        // Update UI in Dropdown
+        renderNotifications();
+
+        // Update UI in Full Page (if exists)
+        const row = document.querySelector(`.notification-item[data-id="${notification.id}"]`);
+        if (row) row.classList.remove('unread');
+    }
+}
+
+function openNotificationDetail(id) {
+    const notification = notificationsData.find(n => n.id == id);
+    if (notification) {
+        openNotificationModal(notification);
+    }
+}
+
+function closeNotificationDetail() {
+    const modal = document.getElementById('notificationDetailModal');
+    if (modal) modal.style.display = 'none';
+}
 
 
 // Carregar contador ao iniciar e configurar polling

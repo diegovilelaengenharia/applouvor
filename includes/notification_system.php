@@ -126,7 +126,10 @@ class NotificationSystem {
             $sql .= " ORDER BY created_at DESC LIMIT ? OFFSET ?";
             
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$userId, $limit, $offset]);
+            $stmt->bindValue(1, $userId);
+            $stmt->bindValue(2, $limit, PDO::PARAM_INT);
+            $stmt->bindValue(3, $offset, PDO::PARAM_INT);
+            $stmt->execute();
             
             $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
