@@ -25,6 +25,6 @@ define('CHURCH_INSTAGRAM', 'https://www.instagram.com/piboliveiramg/');
 define('CHURCH_FACEBOOK', 'https://www.facebook.com/piboliveiramg');
 
 // System Info
-define('APP_VERSION', '1.0.0');
+define('APP_VERSION', '4.0');
 define('APP_COPYRIGHT', '© ' . date('Y') . ' Louvor PIB Oliveira');
 
