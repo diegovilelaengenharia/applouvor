@@ -177,7 +177,7 @@ renderAppHeader('Detalhes da Música');
     $usersList = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
     
     // 3. Histórico de Execuções e Status
-    $stmtHistory = $pdo->prepare("SELECT s.event_date FROM scale_songs ss JOIN scales s ON ss.scale_id = s.id WHERE ss.song_id = ? ORDER BY s.event_date DESC");
+    $stmtHistory = $pdo->prepare("SELECT s.event_date FROM schedule_songs ss JOIN schedules s ON ss.schedule_id = s.id WHERE ss.song_id = ? ORDER BY s.event_date DESC");
     $stmtHistory->execute([$id]);
     $history = $stmtHistory->fetchAll(PDO::FETCH_ASSOC);
 
