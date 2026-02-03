@@ -96,6 +96,15 @@ if (!empty($currentUser['avatar'])) {
             <span class="sidebar-text">Repertório</span>
         </a>
 
+        <a href="<?= $baseAdmin ?>historico.php" class="nav-item nav-violet <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'active' : '' ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v5h5"/>
+                <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/>
+                <path d="M12 7v5l4 2"/>
+            </svg>
+            <span class="sidebar-text">Histórico</span>
+        </a>
+
         <a href="<?= $baseAdmin ?>membros.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
