@@ -73,7 +73,10 @@ $stmt = $pdo->prepare("
     JOIN schedules s ON su1.schedule_id = s.id
     JOIN users u1 ON su1.user_id = u1.id
     JOIN users u2 ON su2.user_id = u2.id
-    WHERE $dateCondition AND su1.status != 'declined' AND su2.status != 'declined'
+    WHERE $dateCondition 
+    AND su1.status != 'declined' AND su2.status != 'declined'
+    AND (u1.instrument LIKE '%Vocal%' OR u1.instrument LIKE '%Voz%' OR u1.instrument LIKE '%Ministro%' OR u1.instrument LIKE '%Cantor%' OR u1.instrument LIKE '%Backing%')
+    AND (u2.instrument LIKE '%Vocal%' OR u2.instrument LIKE '%Voz%' OR u2.instrument LIKE '%Ministro%' OR u2.instrument LIKE '%Cantor%' OR u2.instrument LIKE '%Backing%')
     GROUP BY p1, p2
     ORDER BY qtd DESC
     LIMIT 5
