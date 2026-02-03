@@ -41,7 +41,7 @@ async function loadUnreadCount() {
 }
 
 // Carregar notificações (Limit 3 per user request)
-async function loadNotifications() {
+async function loadNotifications(containerId = 'notificationList') {
     try {
         const response = await fetch(`${API_ENDPOINT}?action=list&limit=3&unread_only=true`);
         const data = await response.json();
@@ -59,7 +59,7 @@ async function loadNotifications() {
                 lastNotificationId = newestId;
             }
 
-            renderNotifications();
+            renderNotifications(containerId);
         }
     } catch (error) {
         console.error('Erro ao carregar notificações:', error);
@@ -67,9 +67,15 @@ async function loadNotifications() {
 }
 
 // Renderizar notificações
-function renderNotifications() {
-    // Select all lists (desktop and mobile if exists)
-    const lists = document.querySelectorAll('.notification-list');
+function renderNotifications(containerId = null) {
+    // Select specific container or all lists
+    let lists;
+    if (containerId) {
+        const container = document.getElementById(containerId);
+        lists = container ? [container] : document.querySelectorAll('.notification-list');
+    } else {
+        lists = document.querySelectorAll('.notification-list');
+    }
 
     lists.forEach(list => {
         if (!notificationsData || notificationsData.length === 0) {
@@ -205,7 +211,7 @@ function toggleNotifications(dropdownId = 'notificationDropdown') {
                     <h3>Notificações</h3>
                     <button onclick="document.getElementById('notificationDialog').close()" class="modal-close">✕</button>
                 </div>
-                <div class="notification-list" id="notificationList"></div>
+                <div class="notification-list" id="notificationListMobile"></div>
                 <div class="modal-footer">
                     <a href="${window.location.pathname.includes('/admin/') ? 'notificacoes.php' : 'admin/notificacoes.php'}">Ver todas</a>
                 </div>
@@ -225,20 +231,35 @@ function toggleNotifications(dropdownId = 'notificationDropdown') {
         if (dialog.open) {
             dialog.close();
         } else {
-            loadNotifications();
+            loadNotifications('notificationListMobile');
             dialog.showModal();
         }
 
     } else {
-        // DESKTOP: Use dropdown
-        const dropdown = document.getElementById('notificationDropdown');
-        if (!dropdown) return;
+        // DESKTOP: Use dropdown - use passed dropdownId
+        let dropdown = document.getElementById(dropdownId);
+
+        // Fallback to default if not found
+        if (!dropdown) {
+            dropdown = document.getElementById('notificationDropdown');
+        }
+        if (!dropdown) {
+            dropdown = document.getElementById('notificationDropdownDesktop');
+        }
+
+        if (!dropdown) {
+            console.error('Notification dropdown not found');
+            return;
+        }
 
         const isVisible = dropdown.style.display === 'block';
 
-        if (isVisible) {
-            dropdown.style.display = 'none';
-        } else {
+        // Close all dropdowns first
+        document.querySelectorAll('.notification-dropdown').forEach(d => {
+            d.style.display = 'none';
+        });
+
+        if (!isVisible) {
             loadNotifications();
             dropdown.style.display = 'block';
         }
@@ -248,9 +269,12 @@ function toggleNotifications(dropdownId = 'notificationDropdown') {
 // Close dropdown when clicking outside (desktop only)
 document.addEventListener('click', function (e) {
     if (window.innerWidth > 768) {
-        if (!e.target.closest('.notification-btn') && !e.target.closest('#notificationDropdown')) {
-            const dropdown = document.getElementById('notificationDropdown');
-            if (dropdown) dropdown.style.display = 'none';
+        if (!e.target.closest('.notification-btn') &&
+            !e.target.closest('.header-action-btn') &&
+            !e.target.closest('.notification-dropdown')) {
+            document.querySelectorAll('.notification-dropdown').forEach(d => {
+                d.style.display = 'none';
+            });
         }
     }
 });

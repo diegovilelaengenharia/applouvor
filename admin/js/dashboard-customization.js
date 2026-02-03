@@ -9,7 +9,7 @@ let allCards = {};
 // Inicializar modal
 function initDashboardCustomization() {
     loadAllCardsDefinitions();
-    
+
     // Adicionar botão de configuração ao cabeçalho se não existir
     const pageHeader = document.querySelector('.desktop-only-header');
     if (pageHeader && !document.getElementById('btnCustomizeDashboard')) {
@@ -30,41 +30,24 @@ function initDashboardCustomization() {
     }
 }
 
-// Definições de todos os cards disponíveis
+// Definições de todos os cards disponíveis (sincronizado com dashboard_cards.php)
 function loadAllCardsDefinitions() {
     allCards = {
-        // GESTÃO
-        escalas: { title: 'Escalas', icon: 'calendar', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        repertorio: { title: 'Repertório', icon: 'music', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        membros: { title: 'Membros', icon: 'users', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        stats_escalas: { title: 'Stats Escalas', icon: 'bar-chart-2', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        stats_repertorio: { title: 'Stats Repertório', icon: 'trending-up', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        relatorios: { title: 'Relatórios', icon: 'file-text', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        agenda: { title: 'Agenda', icon: 'calendar-days', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        indisponibilidades: { title: 'Indisponibilidades', icon: 'calendar-x', category: 'Gestão', color: '#047857', bg: '#ecfdf5' },
-        
-        // ESPÍRITO
-        leitura: { title: 'Leitura Bíblica', icon: 'book-open', category: 'Espírito', color: '#4338ca', bg: '#eef2ff' },
-        devocional: { title: 'Devocional', icon: 'sunrise', category: 'Espírito', color: '#4338ca', bg: '#eef2ff' },
-        oracao: { title: 'Oração', icon: 'heart', category: 'Espírito', color: '#4338ca', bg: '#eef2ff' },
-        config_leitura: { title: 'Config. Leitura', icon: 'settings', category: 'Espírito', color: '#4338ca', bg: '#eef2ff' },
-        
-        // COMUNICA
-        avisos: { title: 'Avisos', icon: 'bell', category: 'Comunica', color: '#ea580c', bg: '#fff7ed' },
-        aniversariantes: { title: 'Aniversariantes', icon: 'cake', category: 'Comunica', color: '#ea580c', bg: '#fff7ed' },
-        chat: { title: 'Chat', icon: 'message-circle', category: 'Comunica', color: '#ea580c', bg: '#fff7ed' },
-        
-        // ADMIN
-        lider: { title: 'Painel do Líder', icon: 'crown', category: 'Admin', color: '#dc2626', bg: '#fee2e2' },
-        perfil: { title: 'Perfil', icon: 'user', category: 'Admin', color: '#dc2626', bg: '#fee2e2' },
-        configuracoes: { title: 'Configurações', icon: 'sliders', category: 'Admin', color: '#dc2626', bg: '#fee2e2' },
-        monitoramento: { title: 'Monitoramento', icon: 'activity', category: 'Admin', color: '#dc2626', bg: '#fee2e2' },
-        pastas: { title: 'Pastas', icon: 'folder', category: 'Admin', color: '#dc2626', bg: '#fee2e2' },
-        
-        // EXTRAS
-        playlists: { title: 'Playlists', icon: 'list-music', category: 'Extras', color: '#64748b', bg: '#f1f5f9' },
-        artistas: { title: 'Artistas', icon: 'mic-2', category: 'Extras', color: '#64748b', bg: '#f1f5f9' },
-        classificacoes: { title: 'Classificações', icon: 'tags', category: 'Extras', color: '#64748b', bg: '#f1f5f9' }
+        // GESTÃO → AZUL
+        escalas: { title: 'Escalas', icon: 'calendar', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
+        repertorio: { title: 'Repertório', icon: 'music', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
+        membros: { title: 'Membros', icon: 'users', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
+        agenda: { title: 'Agenda', icon: 'calendar-days', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
+        ausencias: { title: 'Ausências', icon: 'calendar-x', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
+
+        // ESPÍRITO → VERDE
+        leitura: { title: 'Leitura Bíblica', icon: 'book-open', category: 'Espírito', color: '#059669', bg: '#ecfdf5' },
+        devocional: { title: 'Devocional', icon: 'sunrise', category: 'Espírito', color: '#059669', bg: '#ecfdf5' },
+        oracao: { title: 'Oração', icon: 'heart', category: 'Espírito', color: '#059669', bg: '#ecfdf5' },
+
+        // COMUNICAÇÃO → ROXO
+        avisos: { title: 'Avisos', icon: 'bell', category: 'Comunica', color: '#7c3aed', bg: '#f5f3ff' },
+        aniversarios: { title: 'Aniversários', icon: 'cake', category: 'Comunica', color: '#7c3aed', bg: '#f5f3ff' }
     };
 }
 
@@ -74,7 +57,7 @@ async function openDashboardCustomization() {
     try {
         const response = await fetch('api/get_dashboard_settings.php');
         const data = await response.json();
-        
+
         if (data.success) {
             dashboardSettings = data.settings;
             renderCustomizationModal();
@@ -92,7 +75,7 @@ function renderCustomizationModal() {
     // Remover modal existente se houver
     const existingModal = document.getElementById('dashboardCustomizationModal');
     if (existingModal) existingModal.remove();
-    
+
     // Criar modal
     const modal = document.createElement('div');
     modal.id = 'dashboardCustomizationModal';
@@ -100,110 +83,70 @@ function renderCustomizationModal() {
         <style>
             #dashboardCustomizationModal {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+                background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
                 z-index: 9999; display: flex; align-items: center; justify-content: center;
                 animation: fadeIn 0.2s;
             }
             
             .customize-modal-content {
-                background: var(--bg-surface); width: 90%; max-width: 600px;
-                max-height: 90vh; border-radius: 20px; overflow: hidden;
+                background: var(--bg-surface); width: 90%; max-width: 500px;
+                max-height: 80vh; border-radius: 16px; overflow: hidden;
                 box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
                 display: flex; flex-direction: column;
             }
             
             .customize-modal-header {
-                padding: 24px; border-bottom: 1px solid var(--border-color);
+                padding: 20px 24px; border-bottom: 1px solid var(--border-color);
                 display: flex; align-items: center; justify-content: space-between;
             }
             
-            .customize-modal-header h2 {
+            .customize-modal-header h3 {
                 margin: 0; font-size: 1.25rem; font-weight: 700;
                 color: var(--text-main);
             }
             
             .customize-modal-body {
-                padding: 20px; overflow-y: auto; flex: 1;
+                padding: 20px 24px; overflow-y: auto; flex: 1;
             }
             
-            .customize-category {
-                margin-bottom: 24px;
+            .customize-description {
+                color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;
             }
             
-            .customize-category-title {
-                font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-                letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 12px;
-                display: flex; align-items: center; gap: 8px;
+            .customize-grid {
+                display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
             }
             
-            .customize-card-item {
-                background: var(--bg-body); border: 2px solid var(--border-color);
-                border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;
-                display: flex; align-items: center; gap: 12px;
-                cursor: move; transition: all 0.2s;
+            .customize-card-label {
+                display: flex; align-items: center; gap: 10px; padding: 12px;
+                border: 1px solid var(--border-color); border-radius: 12px;
+                cursor: pointer; transition: all 0.2s; background: var(--bg-body);
             }
             
-            .customize-card-item:hover {
-                border-color: var(--primary); transform: translateX(4px);
+            .customize-card-label:hover {
+                border-color: var(--primary); background: var(--bg-surface);
             }
             
-            .customize-card-item.dragging {
-                opacity: 0.5;
-            }
-            
-            .customize-card-drag {
-                color: var(--text-muted); cursor: grab;
-            }
-            
-            .customize-card-drag:active {
-                cursor: grabbing;
+            .customize-card-label input {
+                width: 18px; height: 18px; accent-color: var(--primary);
             }
             
             .customize-card-icon {
-                width: 36px; height: 36px; border-radius: 10px;
+                width: 28px; height: 28px; border-radius: 8px;
                 display: flex; align-items: center; justify-content: center;
             }
             
-            .customize-card-info {
-                flex: 1;
-            }
-            
             .customize-card-title {
-                font-weight: 600; font-size: 0.9rem; color: var(--text-main);
-            }
-            
-            .customize-card-category {
-                font-size: 0.75rem; color: var(--text-muted);
-            }
-            
-            .customize-toggle {
-                position: relative; width: 44px; height: 24px;
-                background: #e2e8f0; border-radius: 12px;
-                cursor: pointer; transition: background 0.2s;
-            }
-            
-            .customize-toggle.active {
-                background: var(--primary);
-            }
-            
-            .customize-toggle-slider {
-                position: absolute; top: 2px; left: 2px;
-                width: 20px; height: 20px; background: white;
-                border-radius: 50%; transition: transform 0.2s;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            }
-            
-            .customize-toggle.active .customize-toggle-slider {
-                transform: translateX(20px);
+                font-weight: 500; font-size: 0.85rem; color: var(--text-main);
             }
             
             .customize-modal-footer {
-                padding: 20px; border-top: 1px solid var(--border-color);
+                padding: 16px 24px; border-top: 1px solid var(--border-color);
                 display: flex; gap: 12px; justify-content: flex-end;
             }
             
             .customize-btn {
-                padding: 10px 20px; border-radius: 10px; font-weight: 600;
+                padding: 10px 20px; border-radius: 8px; font-weight: 600;
                 cursor: pointer; transition: all 0.2s; border: none;
                 font-size: 0.9rem;
             }
@@ -213,16 +156,16 @@ function renderCustomizationModal() {
             }
             
             .customize-btn-primary:hover {
-                opacity: 0.9; transform: translateY(-1px);
+                opacity: 0.9;
             }
             
             .customize-btn-secondary {
-                background: var(--bg-body); color: var(--text-main);
+                background: transparent; color: var(--text-main);
                 border: 1px solid var(--border-color);
             }
             
             .customize-btn-secondary:hover {
-                background: var(--border-color);
+                background: var(--bg-body);
             }
             
             @keyframes fadeIn {
@@ -233,92 +176,58 @@ function renderCustomizationModal() {
         
         <div class="customize-modal-content">
             <div class="customize-modal-header">
-                <h2>⚙️ Personalizar Visão Geral</h2>
+                <h3>Personalizar Acesso Rápido</h3>
                 <button onclick="closeDashboardCustomization()" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 8px;">
                     <i data-lucide="x" style="width: 20px;"></i>
                 </button>
             </div>
             
-            <div class="customize-modal-body" id="customizeCardsList">
-                <!-- Cards serão inseridos aqui -->
+            <div class="customize-modal-body">
+                <p class="customize-description">Selecione os atalhos que deseja exibir no seu painel.</p>
+                <div class="customize-grid" id="customizeCardsList">
+                    <!-- Cards serão inseridos aqui -->
+                </div>
             </div>
             
             <div class="customize-modal-footer">
-                <button class="customize-btn customize-btn-secondary" onclick="resetDashboardToDefault()">
-                    Restaurar Padrão
-                </button>
                 <button class="customize-btn customize-btn-secondary" onclick="closeDashboardCustomization()">
                     Cancelar
                 </button>
                 <button class="customize-btn customize-btn-primary" onclick="saveDashboardCustomization()">
-                    Salvar
+                    Salvar Alterações
                 </button>
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
     renderCardsList();
-    initDragAndDrop();
     lucide.createIcons();
 }
 
-// Renderizar lista de cards
+// Renderizar lista de cards como checkboxes em grid 2 colunas
 function renderCardsList() {
     const container = document.getElementById('customizeCardsList');
-    const categories = {
-        'Gestão': [],
-        'Espírito': [],
-        'Comunica': [],
-        'Admin': [],
-        'Extras': []
-    };
-    
-    // Agrupar por categoria
+
+    // Renderizar todos os cards como checkboxes
+    let html = '';
     dashboardSettings.forEach(setting => {
         const card = allCards[setting.card_id];
-        if (card) {
-            categories[card.category].push({...setting, ...card});
-        }
-    });
-    
-    // Renderizar por categoria
-    let html = '';
-    Object.keys(categories).forEach(category => {
-        if (categories[category].length === 0) return;
-        
+        if (!card) return;
+
         html += `
-            <div class="customize-category">
-                <div class="customize-category-title">${category}</div>
-                <div class="customize-category-cards">
-        `;
-        
-        categories[category].forEach((card, index) => {
-            html += `
-                <div class="customize-card-item" draggable="true" data-card-id="${card.card_id}" data-order="${card.display_order}">
-                    <div class="customize-card-drag">
-                        <i data-lucide="grip-vertical" style="width: 18px;"></i>
-                    </div>
-                    <div class="customize-card-icon" style="background: ${card.bg}; color: ${card.color};">
-                        <i data-lucide="${card.icon}" style="width: 18px;"></i>
-                    </div>
-                    <div class="customize-card-info">
-                        <div class="customize-card-title">${card.title}</div>
-                        <div class="customize-card-category">${card.category}</div>
-                    </div>
-                    <div class="customize-toggle ${card.is_visible ? 'active' : ''}" onclick="toggleCardVisibility('${card.card_id}')">
-                        <div class="customize-toggle-slider"></div>
-                    </div>
+            <label class="customize-card-label" data-card-id="${setting.card_id}">
+                <input type="checkbox" 
+                       ${setting.is_visible ? 'checked' : ''} 
+                       onchange="toggleCardVisibility('${setting.card_id}')">
+                <div class="customize-card-icon" style="background: ${card.bg}; color: ${card.color};">
+                    <i data-lucide="${card.icon}" style="width: 16px;"></i>
                 </div>
-            `;
-        });
-        
-        html += `
-                </div>
-            </div>
+                <span class="customize-card-title">${card.title}</span>
+            </label>
         `;
     });
-    
+
     container.innerHTML = html;
 }
 
@@ -327,12 +236,6 @@ function toggleCardVisibility(cardId) {
     const setting = dashboardSettings.find(s => s.card_id === cardId);
     if (setting) {
         setting.is_visible = !setting.is_visible;
-        
-        // Atualizar UI
-        const toggle = document.querySelector(`[data-card-id="${cardId}"] .customize-toggle`);
-        if (toggle) {
-            toggle.classList.toggle('active');
-        }
     }
 }
 
@@ -340,18 +243,18 @@ function toggleCardVisibility(cardId) {
 function initDragAndDrop() {
     const items = document.querySelectorAll('.customize-card-item');
     let draggedItem = null;
-    
+
     items.forEach(item => {
-        item.addEventListener('dragstart', function() {
+        item.addEventListener('dragstart', function () {
             draggedItem = this;
             this.classList.add('dragging');
         });
-        
-        item.addEventListener('dragend', function() {
+
+        item.addEventListener('dragend', function () {
             this.classList.remove('dragging');
         });
-        
-        item.addEventListener('dragover', function(e) {
+
+        item.addEventListener('dragover', function (e) {
             e.preventDefault();
             const afterElement = getDragAfterElement(this.parentElement, e.clientY);
             if (afterElement == null) {
@@ -365,11 +268,11 @@ function initDragAndDrop() {
 
 function getDragAfterElement(container, y) {
     const draggableElements = [...container.querySelectorAll('.customize-card-item:not(.dragging)')];
-    
+
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
-        
+
         if (offset < 0 && offset > closest.offset) {
             return { offset: offset, element: child };
         } else {
@@ -389,23 +292,23 @@ async function saveDashboardCustomization() {
             setting.display_order = index + 1;
         }
     });
-    
+
     // Validar que pelo menos 1 card está visível
     const visibleCount = dashboardSettings.filter(s => s.is_visible).length;
     if (visibleCount === 0) {
         alert('Pelo menos um card deve estar visível!');
         return;
     }
-    
+
     try {
         const response = await fetch('api/save_dashboard_settings.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cards: dashboardSettings })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             closeDashboardCustomization();
             location.reload(); // Recarregar página para mostrar mudanças
@@ -423,13 +326,13 @@ function resetDashboardToDefault() {
     if (!confirm('Deseja restaurar as configurações padrão? Isso irá resetar todos os cards.')) {
         return;
     }
-    
+
     // Resetar para configuração padrão
     dashboardSettings.forEach(setting => {
         const defaultVisible = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversariantes', 'devocional', 'oracao'];
         setting.is_visible = defaultVisible.includes(setting.card_id);
     });
-    
+
     renderCardsList();
     lucide.createIcons();
 }
