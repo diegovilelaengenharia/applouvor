@@ -1491,7 +1491,7 @@ $missingData = [];
 $types = ['cifra' => 'link_cifra', 'letra' => 'link_letra', 'áudio' => 'link_audio', 'vídeo' => 'link_video'];
 
 foreach ($types as $label => $col) {
-    $stmt = $pdo->prepare("SELECT title, artist FROM songs WHERE ($col IS NULL OR $col = '') ORDER BY title ASC");
+    $stmt = $pdo->prepare("SELECT id, title, artist FROM songs WHERE ($col IS NULL OR $col = '') ORDER BY title ASC");
     $stmt->execute();
     $missingData[$label] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -1521,8 +1521,22 @@ foreach ($types as $label => $col) {
                 item.style.padding = '8px';
                 item.style.borderBottom = '1px solid #f1f5f9';
                 item.innerHTML = `
-                    <div style="font-weight: 600; font-size: 13px; color: #334155;">${song.title}</div>
-                    <div style="font-size: 11px; color: #94a3b8;">${song.artist}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px; color: #334155;">${song.title}</div>
+                            <div style="font-size: 11px; color: #94a3b8;">${song.artist}</div>
+                        </div>
+                        <a href="musica_editar.php?id=${song.id}" class="ripple" style="
+                            padding: 6px 12px; 
+                            background: #eff6ff; 
+                            color: #3b82f6; 
+                            font-size: 11px; 
+                            font-weight: 600; 
+                            border-radius: 6px; 
+                            text-decoration: none;
+                            display: inline-block;
+                        ">Resolver →</a>
+                    </div>
                 `;
                 list.appendChild(item);
             });
