@@ -325,7 +325,26 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
                     <label class="form-label">Cor</label>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <?php
-                        $colors = ['#047857', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#6366F1'];
+                        $colors = [
+                            '#047857', // Emerald Dark
+                            '#10B981', // Emerald
+                            '#84CC16', // Lime
+                            '#F59E0B', // Amber
+                            '#F97316', // Orange
+                            '#EF4444', // Red
+                            '#F43F5E', // Rose
+                            '#EC4899', // Pink
+                            '#D946EF', // Fuchsia
+                            '#8B5CF6', // Violet
+                            '#6366F1', // Indigo
+                            '#3B82F6', // Blue
+                            '#0EA5E9', // Sky
+                            '#06B6D4', // Cyan
+                            '#14B8A6', // Teal
+                            '#64748B', // Slate
+                            '#71717A', // Zinc
+                            '#1F2937'  // Gray Dark
+                        ];
                         foreach ($colors as $c): ?>
                             <label style="cursor: pointer;">
                                 <input type="radio" name="color" value="<?= $c ?>" style="display: none;" onchange="selectColor(this)">
