@@ -434,17 +434,17 @@ function renderCardAgenda($nextEvent, $totalEvents) {
     <?php
 }
 
-// Renderizar card de Histórico (NEW)
+// Renderizar card de Histórico (NEW - Styled as Blue/Management)
 function renderCardHistorico($data) {
     $lastCulto = $data['last_culto'];
     $sugestoesCount = $data['sugestoes_count'];
     $dateDisplay = $lastCulto ? date('d/m', strtotime($lastCulto['event_date'])) : '--/--';
     $typeDisplay = $lastCulto ? htmlspecialchars($lastCulto['event_type']) : 'Nenhum registro';
     ?>
-    <a href="historico.php" class="access-card card-violet" style="position: relative; overflow: hidden;">
+    <a href="historico.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
+                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <i data-lucide="history" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($sugestoesCount > 0): ?>
@@ -458,11 +458,11 @@ function renderCardHistorico($data) {
             <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: 8px;">Histórico</h3>
             
             <div class="card-info" style="margin-top: 8px;">
-                <div style="background: rgba(124, 58, 237, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
-                    <div style="font-weight: 700; color: #6d28d9; font-size: 0.95rem; margin-bottom: 3px;">
+                <div style="background: rgba(37, 99, 235, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
+                    <div style="font-weight: 700; color: #1e40af; font-size: 0.95rem; margin-bottom: 3px;">
                         Último: <?= $dateDisplay ?>
                     </div>
-                    <div style="font-size: 0.75rem; color: #7c3aed; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-size: 0.75rem; color: #3b82f6; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         <?= $typeDisplay ?>
                     </div>
                 </div>
@@ -470,7 +470,7 @@ function renderCardHistorico($data) {
                     <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
                         Análise Completa
                     </span>
-                    <span style="font-size: 0.7rem; color: #7c3aed; font-weight: 600; text-transform: uppercase;">Ver →</span>
+                    <span style="font-size: 0.7rem; color: #3b82f6; font-weight: 600; text-transform: uppercase;">Ver →</span>
                 </div>
             </div>
         </div>
