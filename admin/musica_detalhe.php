@@ -239,7 +239,18 @@ if (!$song) {
     }
     
     // Lista de Tons Musicais
-    $musicTones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'A#m', 'Bm'];    
+    $musicTones = [
+        'C' => 'C (Dó)', 'C#' => 'C# (Dó Sustenido)', 'D' => 'D (Ré)',
+        'D#' => 'D# (Ré Sustenido)', 'E' => 'E (Mi)', 'F' => 'F (Fá)',
+        'F#' => 'F# (Fá Sustenido)', 'G' => 'G (Sol)', 'G#' => 'G# (Sol Sustenido)',
+        'A' => 'A (Lá)', 'A#' => 'A# (Lá Sustenido)', 'B' => 'B (Si)',
+        'Cm' => 'Cm (Dó Menor)', 'C#m' => 'C#m (Dó Sustenido Menor)',
+        'Dm' => 'Dm (Ré Menor)', 'D#m' => 'D#m (Ré Sustenido Menor)',
+        'Em' => 'Em (Mi Menor)', 'Fm' => 'Fm (Fá Menor)',
+        'F#m' => 'F#m (Fá Sustenido Menor)', 'Gm' => 'Gm (Sol Menor)',
+        'G#m' => 'G#m (Sol Sustenido Menor)', 'Am' => 'Am (Lá Menor)',
+        'A#m' => 'A#m (Lá Sustenido Menor)', 'Bm' => 'Bm (Si Menor)'
+    ];
 
     // Menu de Ações (Dropdown)
     $menuActions = '
@@ -644,8 +655,8 @@ document.addEventListener(\'click\', function(e) {
             <div style="margin-bottom: 16px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Tom</label>
                 <select name="tone" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main);">
-                    <?php foreach ($musicTones as $t): ?>
-                        <option value="<?= $t ?>" <?= $t == ($song['tone'] ?? 'C') ? 'selected' : '' ?>><?= $t ?></option>
+                    <?php foreach ($musicTones as $val => $label): ?>
+                        <option value="<?= $val ?>" <?= $val == ($song['tone'] ?? 'C') ? 'selected' : '' ?>><?= $label ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
