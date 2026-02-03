@@ -482,7 +482,41 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 
                     <div class="form-group">
                         <label class="form-label">Tom</label>
-                        <input type="text" name="tone" class="form-input" value="<?= htmlspecialchars($song['tone']) ?>" placeholder="Ex: G">
+                        <select name="tone" class="form-input" style="appearance: none;">
+                            <option value="">Selecione...</option>
+                            <?php
+                            $tones = [
+                                'C' => 'C (Dó)',
+                                'C#' => 'C# (Dó Sustenido)',
+                                'D' => 'D (Ré)',
+                                'D#' => 'D# (Ré Sustenido)',
+                                'E' => 'E (Mi)',
+                                'F' => 'F (Fá)',
+                                'F#' => 'F# (Fá Sustenido)',
+                                'G' => 'G (Sol)',
+                                'G#' => 'G# (Sol Sustenido)',
+                                'A' => 'A (Lá)',
+                                'A#' => 'A# (Lá Sustenido)',
+                                'B' => 'B (Si)',
+                                'Cm' => 'Cm (Dó Menor)',
+                                'C#m' => 'C#m (Dó Sustenido Menor)',
+                                'Dm' => 'Dm (Ré Menor)',
+                                'D#m' => 'D#m (Ré Sustenido Menor)',
+                                'Em' => 'Em (Mi Menor)',
+                                'Fm' => 'Fm (Fá Menor)',
+                                'F#m' => 'F#m (Fá Sustenido Menor)',
+                                'Gm' => 'Gm (Sol Menor)',
+                                'G#m' => 'G#m (Sol Sustenido Menor)',
+                                'Am' => 'Am (Lá Menor)',
+                                'A#m' => 'A#m (Lá Sustenido Menor)',
+                                'Bm' => 'Bm (Si Menor)'
+                            ];
+                            foreach ($tones as $val => $label) {
+                                $selected = (isset($song['tone']) && $song['tone'] === $val) ? 'selected' : '';
+                                echo "<option value='$val' $selected>$label</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
 

@@ -1168,9 +1168,28 @@ renderAppHeader('Indicadores Avançados');
 
                         <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: #64748b;">Tons Preferidos</h5>
                         <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                            <?php foreach($topTones as $t): ?>
+                            <?php 
+                            $toneMap = [
+                                'C' => 'C (Dó)', 'C#' => 'C# (Dó Sust.)', 'Db' => 'Db (Ré Bemol)',
+                                'D' => 'D (Ré)', 'D#' => 'D# (Ré Sust.)', 'Eb' => 'Eb (Mi Bemol)',
+                                'E' => 'E (Mi)',
+                                'F' => 'F (Fá)', 'F#' => 'F# (Fá Sust.)', 'Gb' => 'Gb (Sol Bemol)',
+                                'G' => 'G (Sol)', 'G#' => 'G# (Sol Sust.)', 'Ab' => 'Ab (Lá Bemol)',
+                                'A' => 'A (Lá)', 'A#' => 'A# (Lá Sust.)', 'Bb' => 'Bb (Si Bemol)',
+                                'B' => 'B (Si)',
+                                'Cm' => 'Cm (Dó m)', 'C#m' => 'C#m (Dó# m)',
+                                'Dm' => 'Dm (Ré m)', 'D#m' => 'D#m (Ré# m)',
+                                'Em' => 'Em (Mi m)',
+                                'Fm' => 'Fm (Fá m)', 'F#m' => 'F#m (Fá# m)',
+                                'Gm' => 'Gm (Sol m)', 'G#m' => 'G#m (Sol# m)',
+                                'Am' => 'Am (Lá m)', 'A#m' => 'A#m (Lá# m)',
+                                'Bm' => 'Bm (Si m)'
+                            ];
+                            foreach($topTones as $t): 
+                                $displayTone = $toneMap[$t['tone']] ?? $t['tone'];
+                            ?>
                             <div style="background: #f1f5f9; border-radius: 6px; padding: 8px 12px; text-align: center;">
-                                <div style="font-weight: 800; color: #334155;"><?= $t['tone'] ?></div>
+                                <div style="font-weight: 800; color: #334155; font-size: 11px; white-space: nowrap;"><?= $displayTone ?></div>
                                 <div style="font-size: 10px; color: #94a3b8;"><?= $t['qtd'] ?>x</div>
                             </div>
                             <?php endforeach; ?>
