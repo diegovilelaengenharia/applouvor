@@ -436,16 +436,23 @@ try {
 <?php elseif ($currentTab == 'laboratorio'): ?>
     
     <div style="max-width: 800px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border-radius: 20px; padding: 32px; color: white; margin-bottom: 32px; box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);">
+        <div style="
+            background: #f8fafc; border: 1px solid var(--border-color); border-radius: 20px; 
+            padding: 32px; color: var(--text-main); margin-bottom: 32px; 
+        ">
             <div style="text-align: center; margin-bottom: 24px;">
-                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                <div style="
+                    width: 60px; height: 60px; background: white; border: 1px solid var(--border-color);
+                    border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                    margin: 0 auto 16px auto; color: #7c3aed;
+                ">
                     <i data-lucide="flask-conical" width="32" height="32"></i>
                 </div>
-                <h2 style="font-size: 1.8rem; font-weight: 800; margin: 0 0 8px 0;">Laboratório de Escolha</h2>
-                <p style="opacity: 0.9; margin: 0;">Encontre a música perfeita para completar sua escala.</p>
+                <h2 style="font-size: 1.8rem; font-weight: 800; margin: 0 0 8px 0; color: var(--text-main);">Laboratório de Escolha</h2>
+                <p style="color: var(--text-muted); margin: 0;">Encontre a música perfeita para completar sua escala.</p>
             </div>
 
-            <form action="" method="GET" style="background: white; padding: 24px; border-radius: 16px; color: var(--text-main);">
+            <form action="" method="GET" style="background: white; padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); color: var(--text-main);">
                 <input type="hidden" name="tab" value="laboratorio">
                 <input type="hidden" name="search" value="1">
                 
