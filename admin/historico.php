@@ -400,23 +400,30 @@ try {
         <h3 class="section-title" style="margin-bottom: 20px;">🎵 Distribuição de Tons (Nas Execuções)</h3>
         
         <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 40px;">
-            <div style="display: flex; align-items: flex-end; gap: 8px; height: 200px; padding-bottom: 20px; overflow-x: auto;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
                 <?php 
                 $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
                 foreach ($usoTons as $ton):
-                    $height = max(10, ($ton['uses_period'] / $maxTonUses) * 100);
+                    $width = max(5, ($ton['uses_period'] / $maxTonUses) * 100);
                     $barColor = '#3b82f6';
                     // Cores para tons especificos
                     if (strpos($ton['tone'], '#') !== false) $barColor = '#8b5cf6'; // Sustenidos Roxo
                 ?>
-                <div style="flex: 1; min-width: 30px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                    <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted);"><?= $ton['uses_period'] ?></div>
-                    <div style="width: 100%; height: <?= $height ?>%; background: <?= $barColor ?>; border-radius: 4px 4px 0 0; opacity: 0.8; transition: all 0.3s;" title="<?= $ton['tone'] ?>: <?= $ton['uses_period'] ?> vezes"></div>
-                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);"><?= $ton['tone'] ?></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 12px;">
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem; text-align: right;"><?= $ton['tone'] ?></div>
+                    <div style="width: 100%; bg-body; height: 24px; background: var(--bg-body); border-radius: 6px; overflow: hidden;">
+                        <div style="width: <?= $width ?>%; height: 100%; background: <?= $barColor ?>; border-radius: 6px; display: flex; align-items: center; padding-left: 8px; transition: width 0.5s ease;">
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);"><?= $ton['uses_period'] ?>x</div>
                 </div>
                 <?php endforeach; ?>
+                
+                <?php if (empty($usoTons)): ?>
+                    <div style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum tom registrado neste período.</div>
+                <?php endif; ?>
             </div>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 12px;">
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 12px;">
                 Frequência de tons utilizados nos últimos <?= $period ?> dias.
             </p>
         </div>
