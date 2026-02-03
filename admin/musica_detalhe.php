@@ -314,7 +314,7 @@ document.addEventListener(\'click\', function(e) {
 
     // Ícone Principal Compacto
     ?>
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 24px;">
         <div style="
         width: 48px; 
         height: 48px; 
@@ -327,15 +327,50 @@ document.addEventListener(\'click\', function(e) {
     ">
             <i data-lucide="music" style="width: 24px; height: 24px; color: white;"></i>
         </div>
-        <h1 style="color: #1e293b; margin: 12px 0 2px 0; font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
-        <p style="color: #64748b; margin: 0; font-weight: 500; font-size: var(--font-body);"><?= htmlspecialchars($song['artist']) ?></p>
+        <h1 style="color: #1e293b; margin: 12px 0 4px 0; font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;"><?= htmlspecialchars($song['title']) ?></h1>
         
-        <!-- Status Badge -->
-        <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: <?= $statusColor ?>15; color: <?= $statusColor ?>; border-radius: 20px; font-weight: 700; font-size: 0.85rem; border: 1px solid <?= $statusColor ?>30;">
-            <i data-lucide="<?= $statusIcon ?>" style="width: 14px;"></i>
-            <?= $statusLabel ?>
+        <!-- Meta Info Row (Artista, Status, Stats) -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+            
+            <!-- Artista Link -->
+            <a href="repertorio.php?q=<?= urlencode($song['artist']) ?>" style="
+                color: #64748b; font-weight: 600; font-size: 0.95rem; text-decoration: none; 
+                display: flex; align-items: center; gap: 4px; border-bottom: 1px dotted transparent; transition: all 0.2s;
+            " onmouseover="this.style.color='var(--primary)'; this.style.borderColor='var(--primary)'" onmouseout="this.style.color='#64748b'; this.style.borderColor='transparent'">
+                <?= htmlspecialchars($song['artist']) ?>
+                <i data-lucide="external-link" style="width: 12px; opacity: 0.5;"></i>
+            </a>
+
+            <span style="color: #cbd5e1;">•</span>
+
+            <!-- Status Badge (Discreto) -->
+            <div title="<?= $statusDesc ?>" style="
+                display: inline-flex; align-items: center; gap: 4px; 
+                padding: 2px 8px; 
+                background: <?= $statusColor ?>10; 
+                color: <?= $statusColor ?>; 
+                border-radius: 12px; 
+                font-weight: 700; 
+                font-size: 0.75rem; 
+                border: 1px solid <?= $statusColor ?>20;
+                cursor: help;
+            ">
+                <i data-lucide="<?= $statusIcon ?>" style="width: 12px;"></i>
+                <?= $statusLabel ?>
+            </div>
+
+            <span style="color: #cbd5e1;">•</span>
+
+            <!-- Execuções -->
+            <div style="font-size: 0.85rem; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                <i data-lucide="play-circle" style="width: 14px; color: #94a3b8;"></i>
+                <?= $totalExecs ?> execuç<?= $totalExecs == 1 ? 'ão' : 'ões' ?>
+                <?php if ($lastPlayed): ?>
+                    <span style="color: #94a3b8; font-size: 0.75rem;">(Última: <?= (new DateTime($lastPlayed))->format('d/m/y') ?>)</span>
+                <?php endif; ?>
+            </div>
+
         </div>
-        <div style="color: <?= $statusColor ?>; font-size: 0.75rem; margin-top: 4px; font-weight: 500; opacity: 0.8;"><?= $statusDesc ?></div>
     </div>
 
 
@@ -357,37 +392,6 @@ document.addEventListener(\'click\', function(e) {
                 <div class="info-value"><?= $song['bpm'] ?: '-' ?></div>
             </div>
         </div>
-    </div>
-
-    <!-- Estatísticas de Execução (NOVO) -->
-    <div class="info-section">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <div class="info-section-title" style="margin-bottom: 0;">Histórico de Execuções</div>
-            <div style="font-size: 0.8rem; font-weight: 700; color: #1e293b;"><?= $totalExecs ?> vezes total</div>
-        </div>
-        
-        <?php if (!empty($yearsStats)): ?>
-            <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;">
-                <?php foreach ($yearsStats as $year => $count): 
-                    // Calcular altura relativa da barra (max 100px)
-                    $maxCount = max($yearsStats);
-                    $height = $maxCount > 0 ? round(($count / $maxCount) * 80) : 0;
-                    $height = max($height, 4); // Mínimo visível
-                ?>
-                    <div style="display: flex; flex-direction: column; align-items: center; min-width: 40px;">
-                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); margin-bottom: 4px;"><?= $count ?></span>
-                        <div style="width: 100%; height: 80px; display: flex; align-items: flex-end; justify-content: center; background: #f1f5f9; border-radius: 8px; position: relative; overflow: hidden;">
-                            <div style="width: 100%; height: <?= $height ?>%; background: var(--primary); border-radius: 8px 8px 0 0; opacity: 0.8;"></div>
-                        </div>
-                        <span style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-weight: 600;"><?= $year ?></span>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php else: ?>
-            <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem;">
-                Nenhuma execução registrada.
-            </div>
-        <?php endif; ?>
     </div>
 
     <!-- Classificações -->
