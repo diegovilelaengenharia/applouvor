@@ -122,12 +122,17 @@ function getAllAvailableCards() {
             'url' => 'aniversarios.php',
             'admin_only' => false
         ],
-
-
-
-
-
-        
+        'historico' => [
+            'id' => 'historico',
+            'title' => 'Histórico',
+            'icon' => 'history',
+            'category' => 'gestao',
+            'category_name' => 'Gestão',
+            'color' => '#7c3aed', // Violet 600
+            'bg' => '#f5f3ff', // Violet 50
+            'url' => 'historico.php',
+            'admin_only' => false
+        ],
 
     ];
 }
