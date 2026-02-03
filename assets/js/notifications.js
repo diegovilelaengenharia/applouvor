@@ -41,7 +41,7 @@ async function loadUnreadCount() {
 }
 
 // Carregar notificações (Limit 3 per user request)
-async function loadNotifications(containerId = 'notificationList') {
+async function loadNotifications(containerId = null) {
     try {
         const response = await fetch(`${API_ENDPOINT}?action=list&limit=3&unread_only=true`);
         const data = await response.json();
@@ -260,7 +260,7 @@ function toggleNotifications(dropdownId = 'notificationDropdown') {
         });
 
         if (!isVisible) {
-            loadNotifications();
+            loadNotifications(null); // null = render to all .notification-list elements
             dropdown.style.display = 'block';
         }
     }
