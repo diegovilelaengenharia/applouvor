@@ -144,6 +144,100 @@ renderAppHeader('Detalhes da Música');
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
 
     <?php
+    // --- LÓGICA DE POST: PERSONAL TONES ---
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        if ($_POST['action'] === 'add_tone') {
+            $stmtInsert = $pdo->prepare("INSERT INTO song_personal_tones (song_id, user_id, tone, observation) VALUES (?, ?, ?, ?)");
+            $stmtInsert->execute([$id, $_POST['user_id'], $_POST['tone'], $_POST['observation']]);
+            header("Location: musica_detalhe.php?id=$id");
+            exit;
+        } elseif ($_POST['action'] === 'delete_tone') {
+            $stmtDelete = $pdo->prepare("DELETE FROM song_personal_tones WHERE id = ?");
+            $stmtDelete->execute([$_POST['tone_id']]);
+            header("Location: musica_detalhe.php?id=$id");
+            exit;
+        }
+    }
+
+    // --- QUERIES ADICIONAIS ---
+
+    // 1. Tons Pessoais
+    $stmtTones = $pdo->prepare("
+        SELECT spt.*, u.name, u.avatar 
+        FROM song_personal_tones spt 
+        JOIN users u ON spt.user_id = u.id 
+        WHERE spt.song_id = ?
+        ORDER BY u.name
+    ");
+    $stmtTones->execute([$id]);
+    $personalTones = $stmtTones->fetchAll(PDO::FETCH_ASSOC);
+
+    // 2. Todos os Usuários (para o modal)
+    $stmtUsers = $pdo->query("SELECT id, name FROM users ORDER BY name");
+    $usersList = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
+    
+    // 3. Histórico de Execuções e Status
+    $stmtHistory = $pdo->prepare("SELECT s.event_date FROM scale_songs ss JOIN scales s ON ss.scale_id = s.id WHERE ss.song_id = ? ORDER BY s.event_date DESC");
+    $stmtHistory->execute([$id]);
+    $history = $stmtHistory->fetchAll(PDO::FETCH_ASSOC);
+
+    // Cálculo de Status
+    $totalExecs = count($history);
+    $lastPlayed = $history[0]['event_date'] ?? null;
+    $count90Days = 0;
+    $today = new DateTime();
+    $threeMonthsAgo = (clone $today)->modify('-3 months');
+
+    // Estatísticas Anuais
+    $yearsStats = [];
+    foreach ($history as $h) {
+        $dateObj = new DateTime($h['event_date']);
+        if ($dateObj >= $threeMonthsAgo) {
+            $count90Days++;
+        }
+        $year = $dateObj->format('Y');
+        if (!isset($yearsStats[$year])) {
+            $yearsStats[$year] = 0;
+        }
+        $yearsStats[$year]++;
+    }
+
+    // Definição do Status Visual
+    $statusLabel = 'Normal';
+    $statusColor = '#10b981'; // Emerald
+    $statusDesc = 'Frequência equilbrada';
+    $statusIcon = 'check-circle';
+
+    if ($totalExecs == 0) {
+        $statusLabel = 'Nunca Tocada';
+        $statusColor = '#f59e0b'; // Amber
+        $statusDesc = 'Oportunidade de novidade!';
+        $statusIcon = 'sparkles';
+    } else {
+        $lastDate = new DateTime($lastPlayed);
+        $diff = $today->diff($lastDate);
+        $monthsDiff = ($diff->y * 12) + $diff->m;
+
+        if ($count90Days >= 3) {
+            $statusLabel = 'Alta Rotatividade';
+            $statusColor = '#ef4444'; // Red
+            $statusDesc = 'Cuidado para não "cansar" a igreja.';
+            $statusIcon = 'flame';
+        } elseif ($monthsDiff >= 3 && $monthsDiff <= 6) {
+            $statusLabel = 'Geladeira';
+            $statusColor = '#3b82f6'; // Blue
+            $statusDesc = 'Ótima hora para reintroduzir!';
+            $statusIcon = 'snowflake';
+        } elseif ($monthsDiff > 6) {
+            $statusLabel = 'Esquecida';
+            $statusColor = '#64748b'; // Slate
+            $statusDesc = 'Mais de 6 meses sem tocar.';
+            $statusIcon = 'archive';
+        }
+    }
+    
+    // Lista de Tons Musicais
+    $musicTones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'A#m', 'Bm'];    
 
     // Menu de Ações (Dropdown)
     $menuActions = '
@@ -195,7 +289,7 @@ renderAppHeader('Detalhes da Música');
                 font-weight: 500;
                 cursor: pointer;
                 text-align: left;
-            " onmouseover="this.style.backgroundColor=\'#fef2f2\'" onmouseout="this.style.backgroundColor=\'transparent\'">
+                " onmouseover="this.style.backgroundColor=\'#fef2f2\'" onmouseout="this.style.backgroundColor=\'transparent\'">
                 <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
             </button>
         </form>
@@ -206,7 +300,6 @@ function toggleMenu() {
     const menu = document.getElementById(\'dropdown-menu\');
     menu.style.display = menu.style.display === \'block\' ? \'none\' : \'block\';
 }
-// Fechar ao clicar fora
 document.addEventListener(\'click\', function(e) {
     const menu = document.getElementById(\'dropdown-menu\');
     const btn = document.querySelector(\'[onclick="toggleMenu()"]\');
@@ -236,6 +329,13 @@ document.addEventListener(\'click\', function(e) {
         </div>
         <h1 style="color: #1e293b; margin: 12px 0 2px 0; font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.5px;"><?= htmlspecialchars($song['title']) ?></h1>
         <p style="color: #64748b; margin: 0; font-weight: 500; font-size: var(--font-body);"><?= htmlspecialchars($song['artist']) ?></p>
+        
+        <!-- Status Badge -->
+        <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: <?= $statusColor ?>15; color: <?= $statusColor ?>; border-radius: 20px; font-weight: 700; font-size: 0.85rem; border: 1px solid <?= $statusColor ?>30;">
+            <i data-lucide="<?= $statusIcon ?>" style="width: 14px;"></i>
+            <?= $statusLabel ?>
+        </div>
+        <div style="color: <?= $statusColor ?>; font-size: 0.75rem; margin-top: 4px; font-weight: 500; opacity: 0.8;"><?= $statusDesc ?></div>
     </div>
 
 
@@ -259,6 +359,37 @@ document.addEventListener(\'click\', function(e) {
         </div>
     </div>
 
+    <!-- Estatísticas de Execução (NOVO) -->
+    <div class="info-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="info-section-title" style="margin-bottom: 0;">Histórico de Execuções</div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: #1e293b;"><?= $totalExecs ?> vezes total</div>
+        </div>
+        
+        <?php if (!empty($yearsStats)): ?>
+            <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;">
+                <?php foreach ($yearsStats as $year => $count): 
+                    // Calcular altura relativa da barra (max 100px)
+                    $maxCount = max($yearsStats);
+                    $height = $maxCount > 0 ? round(($count / $maxCount) * 80) : 0;
+                    $height = max($height, 4); // Mínimo visível
+                ?>
+                    <div style="display: flex; flex-direction: column; align-items: center; min-width: 40px;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); margin-bottom: 4px;"><?= $count ?></span>
+                        <div style="width: 100%; height: 80px; display: flex; align-items: flex-end; justify-content: center; background: #f1f5f9; border-radius: 8px; position: relative; overflow: hidden;">
+                            <div style="width: 100%; height: <?= $height ?>%; background: var(--primary); border-radius: 8px 8px 0 0; opacity: 0.8;"></div>
+                        </div>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-weight: 600;"><?= $year ?></span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem;">
+                Nenhuma execução registrada.
+            </div>
+        <?php endif; ?>
+    </div>
+
     <!-- Classificações -->
     <?php if (!empty($tags)): ?>
         <div class="info-section">
@@ -280,6 +411,73 @@ document.addEventListener(\'click\', function(e) {
             </div>
         </div>
     <?php endif; ?>
+
+    <!-- TONS POR VOZ (NOVO) -->
+    <div class="info-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div class="info-section-title" style="margin-bottom: 0;">Tons por Voz</div>
+            <button onclick="openToneModal()" style="
+                background: var(--bg-body); 
+                border: 1px solid var(--border-color); 
+                padding: 6px 12px; 
+                border-radius: 20px; 
+                font-size: 0.75rem; 
+                font-weight: 700; 
+                color: var(--primary); 
+                cursor: pointer; 
+                display: flex; 
+                align-items: center; 
+                gap: 4px;    
+                transition: all 0.2s;
+            " class="ripple">
+                <i data-lucide="plus" style="width: 14px;"></i> Adicionar
+            </button>
+        </div>
+
+        <?php if (!empty($personalTones)): ?>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <?php foreach ($personalTones as $pt): ?>
+                    <div style="background: var(--bg-body); border-radius: 10px; padding: 12px; display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--border-color);">
+                        <!-- Avatar -->
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #64748b; flex-shrink: 0; font-size: 0.9rem; overflow: hidden;">
+                             <?php if ($pt['avatar']): ?>
+                                 <img src="<?= htmlspecialchars($pt['avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                             <?php else: ?>
+                                 <?= strtoupper(substr($pt['name'], 0, 1)) ?>
+                             <?php endif; ?>
+                        </div>
+                        
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;"><?= htmlspecialchars($pt['name']) ?></div>
+                                <span style="background: #eff6ff; color: #3b82f6; font-weight: 800; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem;">
+                                    <?= htmlspecialchars($pt['tone']) ?>
+                                </span>
+                            </div>
+                            <?php if ($pt['observation']): ?>
+                                <div style="font-size: 0.8rem; color: #64748b; margin-top: 4px; line-height: 1.4; background: rgba(0,0,0,0.02); padding: 6px; border-radius: 6px;">
+                                    <?= nl2br(htmlspecialchars($pt['observation'])) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Delete Btn -->
+                        <form method="POST" onsubmit="return confirm('Remover este tom?')" style="margin: 0;">
+                            <input type="hidden" name="action" value="delete_tone">
+                            <input type="hidden" name="tone_id" value="<?= $pt['id'] ?>">
+                            <button type="submit" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; padding: 4px;" title="Remover">
+                                <i data-lucide="x" style="width: 16px;"></i>
+                            </button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div style="text-align: center; padding: 20px 0; color: var(--text-muted); font-size: 0.9rem;">
+                Nenhum tom pessoal cadastrado.
+            </div>
+        <?php endif; ?>
+    </div>
 
     <!-- Referências -->
     <div class="info-section">
@@ -353,5 +551,71 @@ document.addEventListener(\'click\', function(e) {
         </div>
     <?php endif; ?>
 
+</div>
 
-    <?php renderAppFooter(); ?>
+<!-- Modal Add Tone -->
+<div id="toneModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+" onclick="if(event.target === this) closeToneModal()">
+    <div style="
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%; max-width: 400px;
+        background: var(--bg-surface);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    ">
+        <h3 style="margin: 0 0 16px 0; font-size: 1.25rem; color: var(--text-main);">Adicionar Tom por Voz</h3>
+        
+        <form method="POST">
+            <input type="hidden" name="action" value="add_tone">
+            
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Membro</label>
+                <select name="user_id" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main);">
+                    <?php foreach ($usersList as $u): ?>
+                        <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Tom</label>
+                <select name="tone" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main);">
+                    <?php foreach ($musicTones as $t): ?>
+                        <option value="<?= $t ?>" <?= $t == ($song['tone'] ?? 'C') ? 'selected' : '' ?>><?= $t ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Observação</label>
+                <textarea name="observation" rows="3" placeholder="Ex: Usa capo na 2ª casa..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-family: inherit; resize: vertical;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button type="button" onclick="closeToneModal()" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" style="flex: 2; padding: 12px; border-radius: 8px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openToneModal() {
+        document.getElementById('toneModal').style.display = 'block';
+    }
+    function closeToneModal() {
+        document.getElementById('toneModal').style.display = 'none';
+    }
+</script>
+
+<?php renderAppFooter(); ?>
