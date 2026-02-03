@@ -73,7 +73,7 @@ $stmt = $pdo->prepare("
     JOIN schedules s ON su1.schedule_id = s.id
     JOIN users u1 ON su1.user_id = u1.id
     JOIN users u2 ON su2.user_id = u2.id
-    WHERE $dateCondition AND su1.status = 'confirmed' AND su2.status = 'confirmed'
+    WHERE $dateCondition AND su1.status != 'declined' AND su2.status != 'declined'
     GROUP BY p1, p2
     ORDER BY qtd DESC
     LIMIT 5
@@ -1077,26 +1077,7 @@ renderAppHeader('Indicadores Avançados');
             <div id="section-scales">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
                     
-                    <!-- Taxa de Confirmação -->
-                    <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Taxa de Confirmação por Membro</h5>
-                        <?php foreach(array_slice($memberConfirmRate, 0, 5) as $m): ?>
-                        <div class="list-item">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $m['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px;">
-                                    <?= strtoupper(substr($m['name'], 0, 2)) ?>
-                                </div>
-                                <span style="font-weight: 600; font-size: 13px;"><?= $m['name'] ?></span>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-weight: 800; color: <?= $m['rate'] >= 80 ? '#10b981' : ($m['rate'] >= 60 ? '#f59e0b' : '#ef4444') ?>;">
-                                    <?= $m['rate'] ?>%
-                                </div>
-                                <div style="font-size: 10px; color: #94a3b8;"><?= $m['confirmed'] ?>/<?= $m['total_invites'] ?></div>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
+
 
                     <!-- Membros Mais Escalados -->
                     <div>
@@ -1126,13 +1107,7 @@ renderAppHeader('Indicadores Avançados');
                     </div>
                 </div>
 
-                <!-- Tendência Temporal -->
-                <?php if(!empty($scaleTrend)): ?>
-                <div style="margin-top: 30px;">
-                    <h5 style="font-size: 13px; margin: 0 0 15px 0; color: #64748b;">Tendência Temporal (Escalas por Mês)</h5>
-                    <canvas id="chartScaleTrend" style="max-height: 150px;"></canvas>
-                </div>
-                <?php endif; ?>
+
             </div>
         </div>
 
@@ -1224,10 +1199,11 @@ renderAppHeader('Indicadores Avançados');
                         foreach($links as $link):
                             $pct = round(($link['count'] / $repertoireCompleteness['total']) * 100);
                         ?>
-                        <div style="padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div onclick="showMissingSongs('<?= $link['label'] ?>', '<?= strtolower($link['label']) ?>')" style="padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
                             <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;"><?= $link['label'] ?></div>
                             <div style="font-size: 24px; font-weight: 800; color: <?= $link['color'] ?>;"><?= $pct ?>%</div>
                             <div style="font-size: 10px; color: #94a3b8;"><?= $link['count'] ?>/<?= $repertoireCompleteness['total'] ?></div>
+                            <div style="font-size: 9px; color: <?= $link['color'] ?>; margin-top: 4px; font-weight: 600;">Ver pendências →</div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -1290,8 +1266,7 @@ renderAppHeader('Indicadores Avançados');
                             <div style="font-size: 13px; opacity: 0.9;"><?= $adherenceData['leitores_ativos'] ?> de <?= $adherenceData['total_usuarios'] ?> membros</div>
                         </div>
 
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: #64748b;">Comparação entre Planos</h5>
-                        <canvas id="chartPlanComparison" style="max-height: 180px;"></canvas>
+
                     </div>
 
                     <!-- Horários de Leitura -->
@@ -1488,6 +1463,75 @@ renderAppHeader('Indicadores Avançados');
 
     </div>
 </div>
+
+<!-- Modal Músicas Pendentes -->
+<div id="modalMissingSongs" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; width: 90%; max-width: 500px; border-radius: 12px; padding: 20px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+            <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: #0f172a;">Músicas Pendentes</h3>
+            <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="background: none; border: none; cursor: pointer; color: #64748b;">
+                <i data-lucide="x" style="width: 20px;"></i>
+            </button>
+        </div>
+        <div id="modalContent" style="overflow-y: auto; flex: 1;">
+            <!-- Lista será injetada aqui -->
+        </div>
+        <div style="margin-top: 15px; text-align: right;">
+            <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="padding: 8px 16px; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #475569;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<?php
+// Pre-fetch missing songs data for the modal
+$missingData = [];
+$types = ['cifra' => 'link_cifra', 'letra' => 'link_letra', 'áudio' => 'link_audio', 'vídeo' => 'link_video'];
+
+foreach ($types as $label => $col) {
+    $stmt = $pdo->prepare("SELECT title, artist FROM songs WHERE ($col IS NULL OR $col = '') ORDER BY title ASC");
+    $stmt->execute();
+    $missingData[$label] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
+
+<script>
+    const missingSongsData = <?= json_encode($missingData) ?>;
+
+    function showMissingSongs(label, type) {
+        const modal = document.getElementById('modalMissingSongs');
+        const title = document.getElementById('modalTitle');
+        const content = document.getElementById('modalContent');
+        
+        // Normalize type key
+        const key = label.toLowerCase();
+        
+        title.innerText = `Músicas sem ${label}`;
+        content.innerHTML = '';
+
+        if (missingSongsData[key] && missingSongsData[key].length > 0) {
+            const list = document.createElement('div');
+            list.style.display = 'grid';
+            list.style.gap = '8px';
+            
+            missingSongsData[key].forEach(song => {
+                const item = document.createElement('div');
+                item.style.padding = '8px';
+                item.style.borderBottom = '1px solid #f1f5f9';
+                item.innerHTML = `
+                    <div style="font-weight: 600; font-size: 13px; color: #334155;">${song.title}</div>
+                    <div style="font-size: 11px; color: #94a3b8;">${song.artist}</div>
+                `;
+                list.appendChild(item);
+            });
+            content.appendChild(list);
+        } else {
+            content.innerHTML = '<div style="text-align: center; color: #64748b; padding: 20px;">Nenhuma pendência encontrada! 🎉</div>';
+        }
+
+        modal.style.display = 'flex';
+        lucide.createIcons();
+    }
+</script>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
