@@ -188,62 +188,72 @@ function updateBadge() {
     }
 }
 
-// Toggle modal using HTML5 dialog
+// Toggle notifications - Hybrid: Dropdown (desktop) / Modal (mobile)
 function toggleNotifications(dropdownId = 'notificationDropdown') {
-    // Tentar encontrar o dialog
-    let dialog = document.getElementById('notificationDialog');
+    const isMobile = window.innerWidth <= 768;
 
-    // Se não existir, criar
-    if (!dialog) {
-        dialog = document.createElement('dialog');
-        dialog.id = 'notificationDialog';
-        dialog.className = 'notification-dialog';
-        dialog.innerHTML = `
-            <div class="notification-header">
-                <div class="notification-title">
-                    Notificações
-                    <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
-                        <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
-                    </button>
+    if (isMobile) {
+        // MOBILE: Use dialog modal
+        let dialog = document.getElementById('notificationDialog');
+
+        if (!dialog) {
+            dialog = document.createElement('dialog');
+            dialog.id = 'notificationDialog';
+            dialog.className = 'notification-modal';
+            dialog.innerHTML = `
+                <div class="modal-header">
+                    <h3>Notificações</h3>
+                    <button onclick="document.getElementById('notificationDialog').close()" class="modal-close">✕</button>
                 </div>
-                <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
-            </div>
-            <div class="notification-list" id="notificationList">
-                <div class="empty-state">
-                    <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                    <p>Nenhuma notificação nova</p>
+                <div class="notification-list" id="notificationList"></div>
+                <div class="modal-footer">
+                    <a href="${window.location.pathname.includes('/admin/') ? 'notificacoes.php' : 'admin/notificacoes.php'}">Ver todas</a>
                 </div>
-            </div>
-            <div class="notification-footer">
-                <a href="${window.location.pathname.includes('/admin/') ? 'notificacoes.php' : 'admin/notificacoes.php'}">Ver todas as notificações</a>
-            </div>
-        `;
+            `;
 
-        // Fechar ao clicar no backdrop
-        dialog.addEventListener('click', (e) => {
-            const rect = dialog.getBoundingClientRect();
-            if (e.clientX < rect.left || e.clientX > rect.right ||
-                e.clientY < rect.top || e.clientY > rect.bottom) {
-                dialog.close();
-            }
-        });
+            dialog.addEventListener('click', (e) => {
+                const rect = dialog.getBoundingClientRect();
+                if (e.clientX < rect.left || e.clientX > rect.right ||
+                    e.clientY < rect.top || e.clientY > rect.bottom) {
+                    dialog.close();
+                }
+            });
 
-        document.body.appendChild(dialog);
-
-        // Re-initialize lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
+            document.body.appendChild(dialog);
         }
-    }
 
-    if (dialog.open) {
-        dialog.close();
+        if (dialog.open) {
+            dialog.close();
+        } else {
+            loadNotifications();
+            dialog.showModal();
+        }
+
     } else {
-        loadNotifications();
-        dialog.showModal();
+        // DESKTOP: Use dropdown
+        const dropdown = document.getElementById('notificationDropdown');
+        if (!dropdown) return;
+
+        const isVisible = dropdown.style.display === 'block';
+
+        if (isVisible) {
+            dropdown.style.display = 'none';
+        } else {
+            loadNotifications();
+            dropdown.style.display = 'block';
+        }
     }
 }
 
+// Close dropdown when clicking outside (desktop only)
+document.addEventListener('click', function (e) {
+    if (window.innerWidth > 768) {
+        if (!e.target.closest('.notification-btn') && !e.target.closest('#notificationDropdown')) {
+            const dropdown = document.getElementById('notificationDropdown');
+            if (dropdown) dropdown.style.display = 'none';
+        }
+    }
+});
 
 
 // Utilitários

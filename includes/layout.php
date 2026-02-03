@@ -903,29 +903,87 @@ function renderAppHeader($title, $backUrl = null)
                 display: block;
             }
             
-            /* HTML5 Dialog Native Styles */
-            .notification-dialog {
-                padding: 0;
-                border: none;
-                border-radius: 16px;
-                width: 90vw;
-                max-width: 400px;
-                max-height: 80vh;
+            /* DESKTOP: Dropdown positioned near button */
+            .notification-dropdown {
+                display: none;
+                position: absolute;
+                top: 50px;
+                right: 0;
+                width: 360px;
+                max-width: calc(100vw - 32px);
                 background: var(--bg-surface);
-                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                z-index: 1000;
                 overflow: hidden;
             }
             
-            .notification-dialog::backdrop {
-                background: rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(4px);
+            /* MOBILE: Modal centered */
+            .notification-modal {
+                padding: 0;
+                border: none;
+                border-radius: 20px;
+                width: 92vw;
+                max-width: 420px;
+                max-height: 85vh;
+                background: var(--bg-surface);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             }
             
-            @media (min-width: 769px) {
-                .notification-dialog {
-                    width: 360px;
-                }
+            .notification-modal::backdrop {
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(8px);
             }
+            
+            .modal-header {
+                padding: 20px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .modal-header h3 {
+                font-size: 18px;
+                font-weight: 700;
+                margin: 0;
+                color: var(--text-main);
+            }
+            
+            .modal-close {
+                background: var(--bg-body);
+                border: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--text-muted);
+                transition: all 0.2s;
+            }
+            
+            .modal-close:hover {
+                background: var(--border-color);
+                color: var(--text-main);
+            }
+            
+            .modal-footer {
+                padding: 16px 20px;
+                border-top: 1px solid var(--border-color);
+                text-align: center;
+            }
+            
+            .modal-footer a {
+                color: var(--primary);
+                font-weight: 600;
+                text-decoration: none;
+                font-size: 14px;
+            }
+        
         </style>
     </head>
 
