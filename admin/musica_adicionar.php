@@ -108,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 renderAppHeader('Adicionar Música');
+renderPageHeader('Nova Música', 'Cadastrar no repertório');
 ?>
 
 <style>
@@ -119,44 +120,6 @@ renderAppHeader('Adicionar Música');
         padding: 16px 12px 60px 12px;
     }
 
-    .header-bar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-    }
-
-    .btn-back {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-surface);
-        color: var(--text-muted);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        box-shadow: var(--shadow-sm);
-        text-decoration: none;
-    }
-
-    .btn-back:hover {
-        background: var(--bg-body);
-        color: var(--primary);
-        border-color: var(--primary-light);
-    }
-
-    .page-title {
-        font-size: var(--font-display);
-        font-weight: 800;
-        background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin: 0;
-    }
 
     /* Compact Form Card */
     .form-card {
@@ -291,12 +254,7 @@ renderAppHeader('Adicionar Música');
 </style>
 
 <div class="compact-container">
-    <div class="header-bar">
-        <a href="repertorio.php" class="btn-back">
-            <i data-lucide="arrow-left" style="width: 20px;"></i>
-        </a>
-        <h1 class="page-title">Nova Música</h1>
-    </div>
+
 
     <form method="POST">
         <!-- Card 1: Informações Principais -->
