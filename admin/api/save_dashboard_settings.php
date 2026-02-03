@@ -28,16 +28,11 @@ if (!isset($data['cards']) || !is_array($data['cards'])) {
 $cards = $data['cards'];
 $validCardIds = [
     // GESTÃO
-    'escalas', 'repertorio', 'membros', 'stats_escalas', 'stats_repertorio', 
-    'relatorios', 'agenda', 'indisponibilidades',
+    'escalas', 'repertorio', 'membros', 'agenda', 'ausencias', 'historico',
     // ESPÍRITO
-    'leitura', 'devocional', 'oracao', 'config_leitura',
-    // COMUNICA
-    'avisos', 'aniversariantes', 'chat',
-    // ADMIN
-    'lider', 'perfil', 'configuracoes', 'monitoramento', 'pastas',
-    // EXTRAS
-    'playlists', 'artistas', 'classificacoes'
+    'leitura', 'devocional', 'oracao',
+    // COMUNICAÇÃO
+    'avisos', 'aniversarios'
 ];
 
 // Validar que pelo menos 1 card está visível
