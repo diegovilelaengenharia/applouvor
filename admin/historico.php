@@ -139,6 +139,15 @@ try {
 
 ?>
 
+<div style="display: flex; justify-content: flex-end; padding: 0 16px; margin-bottom: -10px; position: relative; z-index: 10;">
+    <button onclick="openHelpModal()" class="ripple" style="
+        background: transparent; border: none; color: var(--primary); font-weight: 600; font-size: 0.85rem;
+        display: flex; align-items: center; gap: 6px; cursor: pointer;
+    ">
+        <i data-lucide="help-circle" width="16"></i> Entenda as Métricas
+    </button>
+</div>
+
 <!-- NAVEGAÇÃO SUPERIOR (TABS) -->
 <div style="
     display: flex; gap: 8px; overflow-x: auto; padding: 4px 16px 16px 16px; 
@@ -586,5 +595,79 @@ try {
     </div>
 
 <?php endif; ?>
+
+<!-- MODAL DE AJUDA -->
+<div id="helpModal" style="
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+">
+    <div style="
+        background: white; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+        border-radius: 20px; padding: 24px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    ">
+        <button onclick="closeHelpModal()" style="
+            position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; color: var(--text-muted);
+        "><i data-lucide="x" width="24"></i></button>
+
+        <h2 style="margin-top: 0; color: var(--primary);">Entenda as Métricas</h2>
+        
+        <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">📊 Classificação de Status</h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+                <li style="display: flex; gap: 12px; align-items: flex-start;">
+                    <span style="background: #fee2e2; color: #ef4444; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Alta Rotatividade</span>
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Músicas tocadas <strong>3 ou mais vezes</strong> nos últimos 90 dias. Cuidado para não "cansar" a igreja.</span>
+                </li>
+                <li style="display: flex; gap: 12px; align-items: flex-start;">
+                    <span style="background: #dbeafe; color: #3b82f6; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Geladeira</span>
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Músicas não tocadas entre <strong>3 e 6 meses</strong>. Ótima hora para reintroduzir!</span>
+                </li>
+                <li style="display: flex; gap: 12px; align-items: flex-start;">
+                    <span style="background: #e0e7ff; color: #6366f1; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Esquecida</span>
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Mais de <strong>6 meses</strong> sem tocar. Talvez já tenhamos esquecido a letra ou arranjo.</span>
+                </li>
+                <li style="display: flex; gap: 12px; align-items: flex-start;">
+                    <span style="background: #fef3c7; color: #d97706; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Nunca Tocada</span>
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Cadastradas no sistema mas nunca escaladas. Oportunidade de novidade!</span>
+                </li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">📈 KPIs de Saúde</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
+                <strong>Taxa de Uso:</strong> Porcentagem do nosso repertório total que foi usado nos últimos 90 dias. Uma taxa muito baixa (< 20%) indica que temos muitas músicas "mortas". Uma taxa muito alta (> 80%) indica que rodamos bem o repertório.
+            </p>
+        </div>
+
+        <div>
+            <h3 style="font-size: 1rem; color: #7c3aed; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">🧪 Laboratório de Escolha</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
+                Use esta ferramenta para montar escalas equilibradas.
+                <br>Exemplo: <em>"Preciso de uma música rápida (Tag: Celebração) em Tom D para completar a escala, mas não quero repetir o que já tocamos mês passado."</em>
+            </p>
+        </div>
+
+        <div style="margin-top: 24px; text-align: center;">
+            <button onclick="closeHelpModal()" style="
+                background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer;
+            ">Entendi!</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openHelpModal() {
+    document.getElementById('helpModal').style.display = 'flex';
+}
+function closeHelpModal() {
+    document.getElementById('helpModal').style.display = 'none';
+}
+// Fechar ao clicar fora
+document.getElementById('helpModal').addEventListener('click', function(e) {
+    if (e.target === this) closeHelpModal();
+});
+</script>
 
 <?php renderAppFooter(); ?> 
