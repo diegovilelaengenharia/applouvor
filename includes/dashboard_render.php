@@ -434,6 +434,50 @@ function renderCardAgenda($nextEvent, $totalEvents) {
     <?php
 }
 
+// Renderizar card de Histórico (NEW)
+function renderCardHistorico($data) {
+    $lastCulto = $data['last_culto'];
+    $sugestoesCount = $data['sugestoes_count'];
+    $dateDisplay = $lastCulto ? date('d/m', strtotime($lastCulto['event_date'])) : '--/--';
+    $typeDisplay = $lastCulto ? htmlspecialchars($lastCulto['event_type']) : 'Nenhum registro';
+    ?>
+    <a href="historico.php" class="access-card card-violet" style="position: relative; overflow: hidden;">
+        <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
+                    <i data-lucide="history" style="width: 24px; height: 24px; color: white;"></i>
+                </div>
+                <?php if ($sugestoesCount > 0): ?>
+                    <span class="card-badge" style="background: #ef4444; color: white; border: none; font-weight: 700;" title="Sugestões de músicas">
+                        <i data-lucide="lightbulb" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle;"></i>
+                        <?= $sugestoesCount ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            
+            <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: 8px;">Histórico</h3>
+            
+            <div class="card-info" style="margin-top: 8px;">
+                <div style="background: rgba(124, 58, 237, 0.1); padding: 8px; border-radius: 8px; margin-bottom: 6px;">
+                    <div style="font-weight: 700; color: #6d28d9; font-size: 0.95rem; margin-bottom: 3px;">
+                        Último: <?= $dateDisplay ?>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #7c3aed; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <?= $typeDisplay ?>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
+                        Análise Completa
+                    </span>
+                    <span style="font-size: 0.7rem; color: #7c3aed; font-weight: 600; text-transform: uppercase;">Ver →</span>
+                </div>
+            </div>
+        </div>
+    </a>
+    <?php
+}
+
 // Renderizar card genérico melhorado
 function renderCardGeneric($cardId, $cardDef) {
     // Mapeamento de cor definida para classe CSS
@@ -526,6 +570,9 @@ function renderDashboardCard($cardId, $data) {
             break;
         case 'oracao':
             renderCardOracao($data['oracaoCount'] ?? 0);
+            break;
+        case 'historico':
+            renderCardHistorico($data['historicoData'] ?? ['last_culto' => null, 'sugestoes_count' => 0]);
             break;
         default:
             // Para cards ainda não implementados, renderizar card genérico

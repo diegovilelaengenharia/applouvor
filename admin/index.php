@@ -224,6 +224,34 @@ try {
     $oracaoCount = 0;
 }
 
+// 7. Histórico (Dados Rápidos)
+$historicoData = ['last_culto' => null, 'sugestoes_count' => 0];
+try {
+    // Último culto realizado
+    $stmtLastCulto = $pdo->query("
+        SELECT event_date, event_type 
+        FROM schedules 
+        WHERE event_date < CURDATE() 
+        ORDER BY event_date DESC 
+        LIMIT 1
+    ");
+    $historicoData['last_culto'] = $stmtLastCulto->fetch(PDO::FETCH_ASSOC);
+
+    // Contagem de Sugestões (nunca tocadas ou > 60 dias)
+    $stmtSugCount = $pdo->query("
+        SELECT COUNT(*) FROM (
+            SELECT s.id
+            FROM songs s
+            LEFT JOIN schedule_songs ss ON s.id = ss.song_id
+            LEFT JOIN schedules sc ON ss.schedule_id = sc.id AND sc.event_date < CURDATE()
+            GROUP BY s.id
+            HAVING MAX(sc.event_date) IS NULL OR MAX(sc.event_date) < DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+        ) as sub
+    ");
+    $historicoData['sugestoes_count'] = $stmtSugCount->fetchColumn();
+} catch (Exception $e) {
+}
+
 // Saudação
 $hora = date('H');
 if ($hora >= 5 && $hora < 12) {
@@ -571,7 +599,8 @@ renderAppHeader('Visão Geral');
             'statsMembros' => $statsMembros,
             'oracaoCount' => $oracaoCount,
             'nextEvent' => $nextEvent,
-            'totalEvents' => $totalEvents
+            'totalEvents' => $totalEvents,
+            'historicoData' => $historicoData
         ];
 
         // 1. Agrupar cards configurados pelo usuário
