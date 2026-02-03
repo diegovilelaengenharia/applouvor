@@ -37,18 +37,33 @@ if (!$song) {
     die("Música não encontrada.");
 }
 
-// Buscar Tags
-$stmtTags = $pdo->prepare("
-    SELECT t.* 
-    FROM tags t 
-    JOIN song_tags st ON st.tag_id = t.id 
-    WHERE st.song_id = ?
-");
-$stmtTags->execute([$id]);
-$tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+    // --- LÓGICA DE POST: PERSONAL TONES ---
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        if ($_POST['action'] === 'add_tone') {
+            $stmtInsert = $pdo->prepare("INSERT INTO song_personal_tones (song_id, user_id, tone, observation) VALUES (?, ?, ?, ?)");
+            $stmtInsert->execute([$id, $_POST['user_id'], $_POST['tone'], $_POST['observation']]);
+            header("Location: musica_detalhe.php?id=$id");
+            exit;
+        } elseif ($_POST['action'] === 'delete_tone') {
+            $stmtDelete = $pdo->prepare("DELETE FROM song_personal_tones WHERE id = ?");
+            $stmtDelete->execute([$_POST['tone_id']]);
+            header("Location: musica_detalhe.php?id=$id");
+            exit;
+        }
+    }
 
-renderAppHeader('Detalhes da Música');
-?>
+    // Buscar Tags
+    $stmtTags = $pdo->prepare("
+        SELECT t.* 
+        FROM tags t 
+        JOIN song_tags st ON st.tag_id = t.id 
+        WHERE st.song_id = ?
+    ");
+    $stmtTags->execute([$id]);
+    $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+
+    renderAppHeader('Detalhes da Música');
+    ?>
 <style>
     /* Estilos para Detalhes da Música */
     .info-section {
@@ -144,20 +159,7 @@ renderAppHeader('Detalhes da Música');
 <div style="max-width: 800px; margin: 0 auto; padding: 0 16px;">
 
     <?php
-    // --- LÓGICA DE POST: PERSONAL TONES ---
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-        if ($_POST['action'] === 'add_tone') {
-            $stmtInsert = $pdo->prepare("INSERT INTO song_personal_tones (song_id, user_id, tone, observation) VALUES (?, ?, ?, ?)");
-            $stmtInsert->execute([$id, $_POST['user_id'], $_POST['tone'], $_POST['observation']]);
-            header("Location: musica_detalhe.php?id=$id");
-            exit;
-        } elseif ($_POST['action'] === 'delete_tone') {
-            $stmtDelete = $pdo->prepare("DELETE FROM song_personal_tones WHERE id = ?");
-            $stmtDelete->execute([$_POST['tone_id']]);
-            header("Location: musica_detalhe.php?id=$id");
-            exit;
-        }
-    }
+
 
     // --- QUERIES ADICIONAIS ---
 
@@ -309,9 +311,6 @@ document.addEventListener(\'click\', function(e) {
 });
 </script>
 ';
-
-    renderPageHeader('Detalhes da Música', '', $menuActions);
-    ?>
 
     renderPageHeader('Detalhes da Música', '', $menuActions);
     ?>
@@ -495,11 +494,13 @@ document.addEventListener(\'click\', function(e) {
             <!-- Classificações -->
             <div style="text-align: center;">
                 <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px;">Classificações</div>
-                <?php if ($song['tags']): ?>
+                <?php if (!empty($tags)): ?>
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
-                        <?php foreach (explode(',', $song['tags']) as $tag): ?>
-                            <span style="padding: 6px 14px; background: rgba(139, 92, 246, 0.1); color: #8B5CF6; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
-                                <?= htmlspecialchars(trim($tag)) ?>
+                        <?php foreach ($tags as $tag): 
+                            $tagColor = $tag['color'] ?? '#047857';
+                        ?>
+                            <span style="padding: 6px 14px; background: <?= $tagColor ?>15; color: <?= $tagColor ?>; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                <?= htmlspecialchars($tag['name']) ?>
                             </span>
                         <?php endforeach; ?>
                     </div>
