@@ -1049,9 +1049,6 @@ function renderAppHeader($title, $backUrl = null)
                             <i data-lucide="crown" style="color: #f59e0b; width: 20px; position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));"></i>
                         </a>
                     <?php endif; ?>
-
-
-
                     <!-- Leitura Config Button (Leitura Only) -->
                     <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
                         <button onclick="openConfig()" class="config-btn" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); border: 2px solid transparent; border-radius: 12px; flex-shrink:0; cursor: pointer; color: #64748b; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(148, 163, 184, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
