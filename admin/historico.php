@@ -187,7 +187,7 @@ function getExternalLinks($title, $artist) {
         LEFT JOIN schedule_songs ss ON s.id = ss.song_id
         LEFT JOIN schedules sc ON ss.schedule_id = sc.id AND sc.event_date < CURDATE()
         GROUP BY s.id
-        HAVING last_played IS NULL OR last_played < DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+        HAVING MAX(sc.event_date) IS NULL OR MAX(sc.event_date) < DATE_SUB(CURDATE(), INTERVAL 60 DAY)
         ORDER BY last_played IS NULL DESC, last_played ASC
         LIMIT 10
     ");
