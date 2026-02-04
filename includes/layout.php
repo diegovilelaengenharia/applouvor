@@ -2321,8 +2321,6 @@ function renderAppHeader($title, $backUrl = null)
         });
     </script>
 
-    <script src="assets/js/notifications.js"></script>
-
-<?php
+    <?php
     }
 ?>
