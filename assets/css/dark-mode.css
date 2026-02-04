@@ -6,16 +6,22 @@
 /* === VARIÁVEIS GLOBAIS DARK MODE === */
 body.dark-mode {
     /* Backgrounds - Ergonomic Dark (Neutral Grays) */
-    --bg-primary: #121212;   /* Deep Grey - Not pure black */
-    --bg-secondary: #1E1E1E; /* Lighter Grey for cards/surfaces */
-    --bg-tertiary: #27272a;  /* Slightly lighter for inputs/hover */
+    --bg-primary: #121212;
+    /* Deep Grey - Not pure black */
+    --bg-secondary: #1E1E1E;
+    /* Lighter Grey for cards/surfaces */
+    --bg-tertiary: #27272a;
+    /* Slightly lighter for inputs/hover */
     --bg-body: #121212;
     --bg-surface: #1E1E1E;
 
     /* Textos - Reduced Contrast for comfort */
-    --text-primary: rgba(255, 255, 255, 0.87);   /* High Emphasis */
-    --text-secondary: rgba(255, 255, 255, 0.60); /* Medium Emphasis */
-    --text-muted: rgba(255, 255, 255, 0.38);     /* Disabled/Muted */
+    --text-primary: rgba(255, 255, 255, 0.87);
+    /* High Emphasis */
+    --text-secondary: rgba(255, 255, 255, 0.60);
+    /* Medium Emphasis */
+    --text-muted: rgba(255, 255, 255, 0.38);
+    /* Disabled/Muted */
     --text-main: rgba(255, 255, 255, 0.87);
 
     /* Bordas */
@@ -23,11 +29,15 @@ body.dark-mode {
     --border-subtle: #2d2d2d;
 
     /* Primary Colors - Dessaturadas para Dark Mode */
-    --primary: #34d399;           /* Emerald 400 - Softer than 500 */
-    --primary-hover: #10b981;     /* Emerald 500 */
-    --primary-light: #064e3b;     /* Emerald 900 background */
-    --primary-subtle: #0f392b;    /* Very dark green background */
-    
+    --primary: #34d399;
+    /* Emerald 400 - Softer than 500 */
+    --primary-hover: #10b981;
+    /* Emerald 500 */
+    --primary-light: #064e3b;
+    /* Emerald 900 background */
+    --primary-subtle: #0f392b;
+    /* Very dark green background */
+
     --primary-green: #34d399;
     --primary-green-light: #6ee7b7;
     --primary-green-dark: #10b981;
@@ -35,8 +45,10 @@ body.dark-mode {
     /* Accent Colors - Pastels */
     --accent-primary: #34d399;
     --accent-interactive: #6ee7b7;
-    --primary-blue: #60a5fa;      /* Blue 400 - Softer */
-    --primary-blue-light: #93c5fd; /* Blue 300 - Even softer */
+    --primary-blue: #60a5fa;
+    /* Blue 400 - Softer */
+    --primary-blue-light: #93c5fd;
+    /* Blue 300 - Even softer */
 
     /* Glassmorphism Dark */
     --glass-bg: rgba(255, 255, 255, 0.05);
@@ -47,17 +59,19 @@ body.dark-mode {
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
-    
+
     /* Reduced Glows for better eye comfort */
-    --shadow-glow: 0 0 15px rgba(52, 211, 153, 0.1); 
+    --shadow-glow: 0 0 15px rgba(52, 211, 153, 0.1);
     --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.5);
 
     /* Gradientes mais sutis */
-    --gradient-primary: linear-gradient(135deg, #059669 0%, #047857 100%); /* Mantendo um pouco de cor nos gradientes mas controlada */
+    --gradient-primary: linear-gradient(135deg, #059669 0%, #047857 100%);
+    /* Mantendo um pouco de cor nos gradientes mas controlada */
     --gradient-elegant: linear-gradient(135deg, #27272a 0%, #18181b 100%);
     --gradient-soft: linear-gradient(135deg, #27272a 0%, #1e1e1e 100%);
     --gradient-vibrant: linear-gradient(135deg, #34d399 0%, #3b82f6 100%);
-    --gradient-hero: linear-gradient(135deg, #1e1e1e 0%, #121212 100%); /* Hero mais neutro */
+    --gradient-hero: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+    /* Hero mais neutro */
 }
 
 /* === TRANSIÇÕES SUAVES === */
@@ -93,6 +107,76 @@ body.dark-mode a {
 
 body.dark-mode a:hover {
     color: var(--primary-green-light);
+}
+
+/* === CARDS E SUPERFÍCIES === */
+
+/* Cards Globais - Força fundo escuro em todos os cards */
+body.dark-mode .card,
+body.dark-mode .dashboard-card,
+body.dark-mode .quick-access-card,
+body.dark-mode .stat-card,
+body.dark-mode .scale-card,
+body.dark-mode .leader-card,
+body.dark-mode .info-card,
+body.dark-mode .event-card,
+body.dark-mode .member-card,
+body.dark-mode .song-card,
+body.dark-mode [class*="card-"],
+body.dark-mode [class*="-card"] {
+    background: var(--bg-secondary) !important;
+    /* #1E1E1E */
+    border-color: var(--border-color) !important;
+    /* #333333 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Títulos e textos principais dentro dos cards */
+body.dark-mode .card h1,
+body.dark-mode .card h2,
+body.dark-mode .card h3,
+body.dark-mode .card h4,
+body.dark-mode .card h5,
+body.dark-mode .card h6,
+body.dark-mode .card p,
+body.dark-mode .dashboard-card h1,
+body.dark-mode .dashboard-card h2,
+body.dark-mode .dashboard-card h3,
+body.dark-mode .dashboard-card h4,
+body.dark-mode .dashboard-card p,
+body.dark-mode .quick-access-card h3,
+body.dark-mode .quick-access-card p,
+body.dark-mode [class*="card-"] h1,
+body.dark-mode [class*="card-"] h2,
+body.dark-mode [class*="card-"] h3,
+body.dark-mode [class*="card-"] h4,
+body.dark-mode [class*="card-"] p {
+    color: var(--text-primary) !important;
+}
+
+/* Textos secundários e muted */
+body.dark-mode .card .text-muted,
+body.dark-mode .card small,
+body.dark-mode .card .subtitle,
+body.dark-mode .dashboard-card small,
+body.dark-mode .dashboard-card .text-muted,
+body.dark-mode [class*="card-"] small,
+body.dark-mode [class*="card-"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Card headers e footers */
+body.dark-mode .card-header,
+body.dark-mode .card-footer {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Card bodies */
+body.dark-mode .card-body {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
 }
 
 /* === NAVEGAÇÃO === */
