@@ -455,11 +455,50 @@ body.dark-mode .calendar-controls {
     color: var(--text-primary) !important;
 }
 
+
 /* Botões de ação com fundo branco */
 body.dark-mode .btn-white,
 body.dark-mode [class*="btn-"][class*="light"] {
     background: var(--bg-tertiary) !important;
     color: var(--text-primary) !important;
+}
+
+/* === CORREÇÕES DE CORES INLINE (DASHBOARD) === */
+
+/* Texto Azul Escuro -> Azul Claro */
+body.dark-mode [style*="color: #1e40af"],
+body.dark-mode [style*="color:#1e40af"] {
+    color: #60a5fa !important;
+}
+
+/* Texto Azul Médio -> Azul Claro */
+body.dark-mode [style*="color: #3b82f6"],
+body.dark-mode [style*="color:#3b82f6"] {
+    color: #93c5fd !important;
+}
+
+/* Texto Verde Escuro -> Verde Claro */
+body.dark-mode [style*="color: #047857"],
+body.dark-mode [style*="color:#047857"] {
+    color: #34d399 !important;
+}
+
+/* Texto Verde Médio -> Verde Claro */
+body.dark-mode [style*="color: #059669"],
+body.dark-mode [style*="color:#059669"] {
+    color: #6ee7b7 !important;
+}
+
+/* Texto Roxo Escuro -> Roxo Claro */
+body.dark-mode [style*="color: #6d28d9"],
+body.dark-mode [style*="color:#6d28d9"] {
+    color: #a78bfa !important;
+}
+
+/* Texto Roxo Médio -> Roxo Claro */
+body.dark-mode [style*="color: #7c3aed"],
+body.dark-mode [style*="color:#7c3aed"] {
+    color: #c4b5fd !important;
 }
 
 /* Sidebar */
