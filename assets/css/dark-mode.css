@@ -367,7 +367,100 @@ body.dark-mode [style*="background:#fff"] {
     color: var(--text-primary) !important;
 }
 
-/* === NAVEGAÇÃO === */
+/* === PÁGINAS ESPECÍFICAS === */
+
+/* Página de Leitura Bíblica */
+body.dark-mode .selection-container,
+body.dark-mode .plan-grid,
+body.dark-mode .plan-card {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .plan-card:hover {
+    background: var(--bg-tertiary) !important;
+}
+
+body.dark-mode .plan-title,
+body.dark-mode .plan-desc {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .action-bar,
+body.dark-mode .date-group {
+    background: var(--bg-secondary) !important;
+}
+
+body.dark-mode .date-input {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .btn-start {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+body.dark-mode .cal-strip {
+    background: var(--bg-secondary) !important;
+}
+
+body.dark-mode .bottom-bar {
+    background: var(--bg-secondary) !important;
+    border-top-color: var(--border-color) !important;
+}
+
+body.dark-mode .action-btn {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .modal-overlay {
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+
+body.dark-mode .editor-btn,
+body.dark-mode .emoji-btn {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Mural de Avisos - Card branco grande */
+body.dark-mode .notice-card,
+body.dark-mode .notice-container,
+body.dark-mode .empty-state {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Formulários e páginas de adicionar/editar */
+body.dark-mode .form-container,
+body.dark-mode .form-card,
+body.dark-mode .form-group {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .form-label {
+    color: var(--text-primary) !important;
+}
+
+/* Calendário da Agenda - Header branco */
+body.dark-mode .calendar-header,
+body.dark-mode .calendar-controls {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Botões de ação com fundo branco */
+body.dark-mode .btn-white,
+body.dark-mode [class*="btn-"][class*="light"] {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
 
 /* Sidebar */
 body.dark-mode .sidebar {
