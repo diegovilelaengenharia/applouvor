@@ -1648,6 +1648,22 @@ function renderAppHeader($title, $backUrl = null)
             });
         }
 
+        // Global Dark Mode Toggle Function (Fixing ReferenceError)
+        window.toggleThemeMode = function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            
+            // Dispatch event for components that need to react
+            window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
+
+            // Update toggles UI if present
+            document.querySelectorAll('#darkModeToggle, #darkModeToggleMobile').forEach(el => {
+                el.checked = isDark;
+            });
+        };
+
+
         // Install Button Logic
         let deferredPrompt;
         const btnInstall = document.getElementById('btnInstallSidebar');
