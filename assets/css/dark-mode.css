@@ -179,6 +179,136 @@ body.dark-mode .card-body {
     color: var(--text-primary) !important;
 }
 
+/* === MODAIS E OVERLAYS === */
+
+/* Modais */
+body.dark-mode .modal,
+body.dark-mode .modal-content,
+body.dark-mode .modal-dialog,
+body.dark-mode .modal-body,
+body.dark-mode [class*="modal-"],
+body.dark-mode .overlay,
+body.dark-mode .popup {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .modal-header {
+    background: var(--bg-tertiary) !important;
+    border-bottom-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .modal-footer {
+    background: var(--bg-tertiary) !important;
+    border-top-color: var(--border-color) !important;
+}
+
+/* === CALENDÁRIO === */
+
+/* Calendário e suas células */
+body.dark-mode .calendar,
+body.dark-mode .calendar-grid,
+body.dark-mode .calendar-day,
+body.dark-mode .calendar-cell,
+body.dark-mode .calendar-header,
+body.dark-mode [class*="calendar-"] {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .calendar-day:hover {
+    background: var(--bg-tertiary) !important;
+}
+
+/* === CONTAINERS E WRAPPERS === */
+
+/* Containers principais */
+body.dark-mode .container,
+body.dark-mode .content-wrapper,
+body.dark-mode .main-content,
+body.dark-mode .page-content,
+body.dark-mode .content-area,
+body.dark-mode .wrapper {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* === INPUTS E FORMULÁRIOS === */
+
+/* Inputs de texto */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="search"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="tel"],
+body.dark-mode input[type="url"],
+body.dark-mode textarea {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Selects e dropdowns */
+body.dark-mode select {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode select option {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* === DROPDOWNS E MENUS === */
+
+/* Profile dropdown e outros dropdowns */
+body.dark-mode .dropdown,
+body.dark-mode .dropdown-menu,
+body.dark-mode .dropdown-content,
+body.dark-mode [id*="Dropdown"],
+body.dark-mode [class*="dropdown-"] {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .dropdown-item,
+body.dark-mode .dropdown a {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .dropdown-item:hover,
+body.dark-mode .dropdown a:hover {
+    background: var(--bg-tertiary) !important;
+}
+
+/* === BOTÕES ESPECÍFICOS === */
+
+/* Botão do Líder */
+body.dark-mode .leader-btn,
+body.dark-mode [href*="lider.php"],
+body.dark-mode .header-action-btn[title*="Líder"] {
+    background: #fef3c7 !important;
+    color: #d97706 !important;
+    border-color: #fcd34d !important;
+}
+
+/* Botão coroa (líder) */
+body.dark-mode .header-action-btn[style*="fef3c7"] {
+    background: #fef3c7 !important;
+    color: #d97706 !important;
+}
+
 /* === NAVEGAÇÃO === */
 
 /* Sidebar */
