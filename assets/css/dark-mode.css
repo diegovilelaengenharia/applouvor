@@ -1630,3 +1630,112 @@ body.dark-mode .profile-avatar-btn:hover {
     border-color: #10b981 !important;
     box-shadow: 0 3px 8px rgba(16, 185, 129, 0.15) !important;
 }
+
+/* ========================================
+   ESCALAS PAGE - DARK MODE FIXES
+   ======================================== */
+
+/* Toggle Buttons (Próximas/Anteriores) */
+body.dark-mode [style*="background: #e2e8f0"] {
+    background: #27272a !important;
+}
+
+body.dark-mode #btn-future,
+body.dark-mode #btn-past {
+    background: transparent !important;
+    color: #a1a1aa !important;
+}
+
+body.dark-mode #btn-future[style*="background: white"],
+body.dark-mode #btn-past[style*="background: white"] {
+    background: #3f3f46 !important;
+    color: #e4e4e7 !important;
+}
+
+/* Filter Button */
+body.dark-mode button[style*="background: white"][style*="border: 1px solid #e2e8f0"] {
+    background: var(--bg-secondary) !important;
+    border-color: #3f3f46 !important;
+    color: #a1a1aa !important;
+}
+
+/* Timeline Cards */
+body.dark-mode .timeline-card,
+body.dark-mode a[style*="background: white"][style*="border-radius: 12px"] {
+    background: var(--bg-secondary) !important;
+    border-color: #3f3f46 !important;
+}
+
+/* Card Titles - Better contrast */
+body.dark-mode h3[style*="color: #1e293b"],
+body.dark-mode [style*="color: #1e293b"] {
+    color: #e4e4e7 !important;
+}
+
+body.dark-mode [style*="color: #334155"] {
+    color: #d4d4d8 !important;
+}
+
+body.dark-mode [style*="color: #64748b"] {
+    color: #a1a1aa !important;
+}
+
+body.dark-mode [style*="color: #94a3b8"] {
+    color: #71717a !important;
+}
+
+/* Date Box in Cards - Dark Mode */
+body.dark-mode [style*="background: #ecfdf5"],
+body.dark-mode [style*="background: #fffbeb"],
+body.dark-mode [style*="background: #eef2ff"],
+body.dark-mode [style*="background: #fff1f2"],
+body.dark-mode [style*="background: #eff6ff"],
+body.dark-mode [style*="background: #f0fdf4"] {
+    background: #262626 !important;
+    border-color: #3f3f46 !important;
+}
+
+/* Empty State */
+body.dark-mode [style*="background: #f1f5f9"] {
+    background: #27272a !important;
+}
+
+/* Filter Sheet - Dark Mode */
+body.dark-mode #filterSheet>div:last-child {
+    background: var(--bg-secondary) !important;
+}
+
+body.dark-mode #filterSheet h3 {
+    color: #e4e4e7 !important;
+}
+
+body.dark-mode #filterSheet label[style*="background: #f8fafc"] {
+    background: #27272a !important;
+    border-color: #3f3f46 !important;
+}
+
+body.dark-mode #filterSheet span[style*="color: #334155"] {
+    color: #e4e4e7 !important;
+}
+
+body.dark-mode #filterSheet div[style*="background: white"] {
+    background: var(--bg-secondary) !important;
+    border-color: #3f3f46 !important;
+}
+
+body.dark-mode #filterSheet a[style*="background: #f1f5f9"] {
+    background: #27272a !important;
+    color: #a1a1aa !important;
+}
+
+/* Absence Badge - Dark Mode */
+body.dark-mode [style*="background: #fef2f2"][style*="color: #dc2626"] {
+    background: #450a0a !important;
+    color: #fca5a5 !important;
+    border-color: #7f1d1d !important;
+}
+
+/* Chevron Arrow */
+body.dark-mode [style*="color: #cbd5e1"] {
+    color: #52525b !important;
+}
