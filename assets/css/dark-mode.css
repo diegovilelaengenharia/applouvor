@@ -316,20 +316,9 @@ body.dark-mode .dropdown a:hover {
 
 /* === BOTÕES ESPECÍFICOS === */
 
-/* Botão do Líder */
-body.dark-mode .leader-btn,
-body.dark-mode [href*="lider.php"],
-body.dark-mode .header-action-btn[title*="Líder"] {
-    background: #fef3c7 !important;
-    color: #d97706 !important;
-    border-color: #fcd34d !important;
-}
+/* Botão do Líder - Premium Emerald Style */
+/* MOVIDO PARA layout.php - .admin-crown-btn e .lider-menu-item */
 
-/* Botão coroa (líder) */
-body.dark-mode .header-action-btn[style*="fef3c7"] {
-    background: #fef3c7 !important;
-    color: #d97706 !important;
-}
 
 /* === OVERRIDES PARA ESTILOS INLINE === */
 
