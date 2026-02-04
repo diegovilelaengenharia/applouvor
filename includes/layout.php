@@ -2326,6 +2326,35 @@ function renderAppHeader($title, $backUrl = null)
         });
     </script>
 
-    <?php
-    }
+
+        <!-- Notifications Script -->
+        <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
+
+        <style>
+            /* Fix Notification Button Consistency */
+            #notificationBtn, #notificationBtnDesktop {
+                transition: all 0.2s;
+            }
+            
+            /* Remove default bad styles on mobile if any */
+            #notificationBtn {
+                background: transparent;
+                border: 1px solid transparent;
+                color: var(--text-secondary);
+            }
+
+            /* Ensure dark mode compatibility */
+            body.dark-mode #notificationBtn {
+                color: var(--text-secondary);
+            }
+            
+            body.dark-mode #notificationBtn:hover {
+                background: var(--bg-tertiary);
+                color: var(--text-primary);
+            }
+        </style>
+    </body>
+    </html>
+<?php
+}
 ?>
