@@ -541,7 +541,7 @@ function renderAppHeader($title, $backUrl = null)
                 transform: translateX(16px);
             }
             
-            /* Notification System Styles - Professional Design */
+            /* Notification System Styles - Premium Design */
             .notification-btn {
                 position: relative;
                 display: flex;
@@ -549,73 +549,113 @@ function renderAppHeader($title, $backUrl = null)
                 justify-content: center;
                 width: 44px;
                 height: 44px;
-                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-                border: 2px solid transparent;
-                background-clip: padding-box;
-                border-radius: 12px;
+                background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+                border: none;
+                border-radius: 14px;
                 cursor: pointer;
-                color: #64748b;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 
-                           0 0 0 1px rgba(148, 163, 184, 0.1);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                /* overflow: hidden; Removed to prevent badge clipping */
-                position: relative; /* Ensure badge is positioned relative to button */
+                color: #6366f1;
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.12), 
+                           0 2px 4px rgba(0, 0, 0, 0.04),
+                           inset 0 1px 0 rgba(255, 255, 255, 0.9);
+                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                overflow: visible;
             }
             
+            /* Borda gradiente animada */
             .notification-btn::before {
                 content: '';
                 position: absolute;
-                inset: 0;
-                border-radius: 12px;
-                padding: 2px;
-                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                opacity: 0;
-                transition: opacity 0.3s;
+                inset: -2px;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+                background-size: 200% 200%;
+                animation: gradient-shift 3s ease infinite;
+                z-index: -1;
+                opacity: 0.5;
+                filter: blur(3px);
+                transition: all 0.4s ease;
+            }
+            
+            @keyframes gradient-shift {
+                0%, 100% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+            }
+            
+            /* Ícone do sino com animação */
+            .notification-btn i,
+            .notification-btn svg {
+                transition: all 0.3s ease;
+                color: #6366f1;
             }
             
             .notification-btn:hover {
-                background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
-                color: #6366f1;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 16px rgba(99, 102, 241, 0.15),
-                           0 0 0 1px rgba(99, 102, 241, 0.1);
+                background: linear-gradient(145deg, #eef2ff 0%, #e0e7ff 100%);
+                color: #4f46e5;
+                transform: translateY(-3px) scale(1.05);
+                box-shadow: 0 12px 25px rgba(99, 102, 241, 0.25), 
+                           0 4px 8px rgba(99, 102, 241, 0.15),
+                           inset 0 1px 0 rgba(255, 255, 255, 1);
             }
             
             .notification-btn:hover::before {
-                opacity: 1;
+                opacity: 0.8;
+                filter: blur(6px);
+            }
+            
+            /* Animação do sino ao hover */
+            .notification-btn:hover i,
+            .notification-btn:hover svg {
+                animation: ring-bell 0.6s ease-in-out;
+                color: #4f46e5;
+            }
+            
+            @keyframes ring-bell {
+                0% { transform: rotate(0deg); }
+                15% { transform: rotate(15deg); }
+                30% { transform: rotate(-12deg); }
+                45% { transform: rotate(8deg); }
+                60% { transform: rotate(-5deg); }
+                75% { transform: rotate(3deg); }
+                100% { transform: rotate(0deg); }
             }
             
             .notification-btn:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+                transform: translateY(-1px) scale(1.02);
+                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
             }
             
+            /* Badge de notificação premium */
             .notification-badge {
                 position: absolute;
-                top: -6px;
-                right: -6px;
-                background: linear-gradient(135deg, #ef4444, #dc2626);
+                top: -8px;
+                right: -8px;
+                background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
                 color: white;
                 font-size: 10px;
-                font-weight: 700;
-                padding: 3px 6px;
-                border-radius: 12px;
-                min-width: 20px;
+                font-weight: 800;
+                padding: 4px 7px;
+                border-radius: 20px;
+                min-width: 22px;
                 text-align: center;
-                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4),
-                           0 0 0 2px white;
-                animation: pulse-badge 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                box-shadow: 0 4px 12px rgba(244, 63, 94, 0.5),
+                           0 0 0 3px white,
+                           0 0 20px rgba(244, 63, 94, 0.3);
+                animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                z-index: 10;
             }
             
-            @keyframes pulse-badge {
+            @keyframes pulse-glow {
                 0%, 100% {
                     transform: scale(1);
+                    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.5),
+                               0 0 0 3px white,
+                               0 0 20px rgba(244, 63, 94, 0.3);
                 }
                 50% {
-                    transform: scale(1.1);
+                    transform: scale(1.15);
+                    box-shadow: 0 6px 16px rgba(244, 63, 94, 0.6),
+                               0 0 0 3px white,
+                               0 0 30px rgba(244, 63, 94, 0.5);
                 }
             }
             

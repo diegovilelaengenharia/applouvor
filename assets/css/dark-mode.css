@@ -1568,3 +1568,49 @@ body.dark-mode [style*="color: #1f2937"],
 body.dark-mode [style*="color: #374151"] {
     color: var(--text-main) !important;
 }
+
+/* ========================================
+   BOTÃO DE NOTIFICAÇÃO - DARK MODE PREMIUM
+   ======================================== */
+
+body.dark-mode .notification-btn {
+    background: linear-gradient(145deg, #2a2a2a 0%, #1e1e1e 100%) !important;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    color: #a78bfa !important;
+}
+
+body.dark-mode .notification-btn::before {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #22d3ee 100%) !important;
+    opacity: 0.4 !important;
+}
+
+body.dark-mode .notification-btn i,
+body.dark-mode .notification-btn svg {
+    color: #a78bfa !important;
+}
+
+body.dark-mode .notification-btn:hover {
+    background: linear-gradient(145deg, #353535 0%, #252525 100%) !important;
+    color: #c4b5fd !important;
+    box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25),
+        0 4px 10px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode .notification-btn:hover::before {
+    opacity: 0.7 !important;
+}
+
+body.dark-mode .notification-btn:hover i,
+body.dark-mode .notification-btn:hover svg {
+    color: #c4b5fd !important;
+}
+
+/* Badge no dark mode - com borda escura */
+body.dark-mode .notification-badge {
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.5),
+        0 0 0 3px #1e1e1e,
+        0 0 25px rgba(244, 63, 94, 0.35) !important;
+}
