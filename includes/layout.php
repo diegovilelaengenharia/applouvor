@@ -1064,22 +1064,15 @@ function renderAppHeader($title, $backUrl = null)
                         </button>
 
                         <!-- Mobile Dropdown -->
-                        <div id="mobileProfileDropdown" style="
-                            display: none; position: absolute; top: 54px; right: 0; 
-                            background: var(--bg-surface); border-radius: 16px; 
-                            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-                            min-width: 200px; z-index: 2000; border: 1px solid var(--border-color); overflow: hidden;
-                            animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-                            transform-origin: top right;
-                        ">
+                        <div id="mobileProfileDropdown" class="profile-dropdown">
                             <!-- Header do Card -->
-                            <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
-                                <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0;">
-                                    <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div class="profile-header">
+                                <div class="profile-avatar-container">
+                                    <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar">
                                 </div>
-                                <div style="flex: 1; min-width: 0;">
-                                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                                    <div style="font-size: 0.75rem; color: #047857; font-weight: 500;">Membro da Equipe</div>
+                                <div class="profile-info">
+                                    <div class="profile-name"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                                    <div class="profile-role">Membro da Equipe</div>
                                 </div>
                             </div>
                             <!-- Compacted Header Mobile -->
@@ -1097,25 +1090,25 @@ function renderAppHeader($title, $backUrl = null)
                                      else $qsLink = 'quem_somos.php'; // fallback for app dir
                                 }
                                 ?>
-                                <a href="<?= $qsLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #e0e7ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
+                                <a href="<?= $qsLink ?>" class="profile-menu-item">
+                                    <div class="icon-wrapper">
                                         <i data-lucide="circle-help" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span style="font-weight: 500;">Quem somos nós?</span>
+                                    <span>Quem somos nós?</span>
                                 </a>
 
-                                <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
+                                <a href="perfil.php" class="profile-menu-item">
+                                    <div class="icon-wrapper">
                                         <i data-lucide="user" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span style="font-weight: 500;">Meu Perfil</span>
+                                    <span>Meu Perfil</span>
                                 </a>
 
-                                <a href="#" onclick="openDashboardCustomization(); return false;" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #eef2ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
+                                <a href="#" onclick="openDashboardCustomization(); return false;" class="profile-menu-item">
+                                    <div class="icon-wrapper">
                                         <i data-lucide="layout" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span style="font-weight: 500;">Acesso Rápido</span>
+                                    <span>Acesso Rápido</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -1128,11 +1121,11 @@ function renderAppHeader($title, $backUrl = null)
                                 <?php endif; ?>
 
                                 <!-- Dark Mode Toggle -->
-                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
+                                <div onclick="toggleThemeMode()" class="profile-menu-item" style="cursor: pointer;">
+                                    <div class="icon-wrapper">
                                         <i data-lucide="moon" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span style="font-weight: 500;">Modo Escuro</span>
+                                    <span>Modo Escuro</span>
                                     <div style="margin-left: auto;">
                                         <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
                                             <input type="checkbox" id="darkModeToggleMobile" onchange="toggleThemeMode()">
@@ -1143,11 +1136,11 @@ function renderAppHeader($title, $backUrl = null)
 
                                 <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
 
-                                <a href="../logout.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: #ef4444; font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #fee2e2; padding: 6px; border-radius: 6px; display: flex; color: #ef4444;">
+                                <a href="../logout.php" class="profile-menu-item logout-item">
+                                    <div class="icon-wrapper">
                                         <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span style="font-weight: 600;">Sair da Conta</span>
+                                    <span>Sair da Conta</span>
                                 </a>
                             </div>
                         </div>
@@ -2461,54 +2454,167 @@ function renderAppHeader($title, $backUrl = null)
             body.dark-mode .notification-empty { color: #94a3b8 !important; }
             body.dark-mode .notification-empty i { opacity: 0.5 !important; color: #64748b !important; }
 
-            /* Profile Dropdown - Dark Mode Premium */
-            body.dark-mode #mobileProfileDropdown,
-            body.dark-mode #desktopProfileDropdown {
+            /* Profile Dropdown Container */
+            .profile-dropdown {
+                display: none;
+                position: absolute;
+                top: 54px;
+                right: 0;
+                background: var(--bg-surface);
+                border-radius: 16px;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+                min-width: 200px;
+                z-index: 2000;
+                border: 1px solid var(--border-color);
+                overflow: hidden;
+                animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                transform-origin: top right;
+            }
+
+            /* Profile Header */
+            .profile-header {
+                padding: 12px 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: linear-gradient(to bottom, #f8fafc, #ffffff);
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .profile-avatar-container {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid white;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                flex-shrink: 0;
+            }
+
+            .profile-avatar-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .profile-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .profile-name {
+                font-weight: 700;
+                color: var(--text-main);
+                font-size: 0.95rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .profile-role {
+                font-size: 0.75rem;
+                color: #047857;
+                font-weight: 500;
+            }
+
+            /* Profile Menu Item - Base Styles */
+            .profile-menu-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+                text-decoration: none;
+                color: var(--text-main);
+                font-size: 0.85rem;
+                border-radius: 8px;
+                transition: all 0.2s;
+            }
+
+            .profile-menu-item .icon-wrapper {
+                padding: 6px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 28px;
+                height: 28px;
+                transition: all 0.2s;
+            }
+
+            .profile-menu-item span {
+                font-weight: 500;
+            }
+
+            .profile-menu-item:hover {
+                background: var(--bg-body);
+            }
+
+            /* Light Mode Icon Colors */
+            .profile-menu-item:nth-child(1) .icon-wrapper { background: #e0e7ff; color: #4338ca; }
+            .profile-menu-item:nth-child(2) .icon-wrapper { background: #f1f5f9; color: #64748b; }
+            .profile-menu-item:nth-child(3) .icon-wrapper { background: #eef2ff; color: #4338ca; }
+            .profile-menu-item:nth-child(5) .icon-wrapper { background: #f1f5f9; color: #64748b; }
+
+            .logout-item {
+                color: #ef4444 !important;
+            }
+            .logout-item .icon-wrapper {
+                background: #fee2e2;
+                color: #ef4444;
+            }
+            .logout-item:hover {
+                background: #fef2f2 !important;
+            }
+
+            /* ===== DARK MODE ===== */
+
+            /* Profile Dropdown - Dark Mode */
+            body.dark-mode .profile-dropdown {
                 background: #1e293b !important;
                 border: 1px solid #334155 !important;
                 box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6) !important;
             }
 
-            /* Profile Header Card - Premium Gradient */
-            body.dark-mode #mobileProfileDropdown > div:first-child,
-            body.dark-mode #desktopProfileDropdown > div:first-child {
+            /* Profile Header - Premium Gradient */
+            body.dark-mode .profile-header {
                 background: linear-gradient(135deg, #0f766e 0%, #047857 100%) !important;
                 border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
             }
 
-            /* User Name in Header */
-            body.dark-mode #mobileProfileDropdown > div:first-child > div > div:first-child,
-            body.dark-mode #desktopProfileDropdown > div:first-child > div > div:first-child {
+            body.dark-mode .profile-avatar-container {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+
+            body.dark-mode .profile-name {
                 color: #ffffff !important;
             }
 
-            /* "Membro da Equipe" subtitle */
-            body.dark-mode #mobileProfileDropdown > div:first-child > div > div:last-child,
-            body.dark-mode #desktopProfileDropdown > div:first-child > div > div:last-child {
+            body.dark-mode .profile-role {
                 color: #d1fae5 !important;
             }
 
-            /* Profile Menu Items - Base Style */
-            body.dark-mode #mobileProfileDropdown a,
-            body.dark-mode #desktopProfileDropdown a,
-            body.dark-mode #mobileProfileDropdown > div:last-child > div {
+            /* Profile Menu Items - Dark Mode */
+            body.dark-mode .profile-menu-item {
                 color: #f1f5f9 !important;
             }
 
-            /* Icon Wrappers - Professional Look */
-            body.dark-mode #mobileProfileDropdown a > div:first-child,
-            body.dark-mode #desktopProfileDropdown a > div:first-child,
-            body.dark-mode #mobileProfileDropdown > div:last-child > div > div:first-child {
+            body.dark-mode .profile-menu-item:hover {
+                background: rgba(51, 65, 85, 0.5) !important;
+            }
+
+            /* Icon Wrappers - Professional Dark Look */
+            body.dark-mode .profile-menu-item .icon-wrapper {
                 background: rgba(148, 163, 184, 0.15) !important;
-                border: 1px solid rgba(148, 163, 184, 0.2) !important;
+                border: 1px solid rgba(148, 163, 184, 0.25) !important;
+                color: #94a3b8 !important;
             }
 
             /* Líder Item - Premium Gold Style */
             body.dark-mode .lider-menu-item .icon-wrapper {
-                background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15)) !important;
-                border: 1px solid rgba(251, 191, 36, 0.3) !important;
+                background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)) !important;
+                border: 1px solid rgba(251, 191, 36, 0.4) !important;
                 color: #fbbf24 !important;
-                box-shadow: 0 0 12px rgba(251, 191, 36, 0.15) !important;
+                box-shadow: 0 0 15px rgba(251, 191, 36, 0.2) !important;
             }
 
             body.dark-mode .lider-menu-item span {
@@ -2517,30 +2623,22 @@ function renderAppHeader($title, $backUrl = null)
             }
 
             body.dark-mode .lider-menu-item:hover .icon-wrapper {
-                background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.25)) !important;
-                box-shadow: 0 0 16px rgba(251, 191, 36, 0.25) !important;
+                background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.3)) !important;
+                box-shadow: 0 0 20px rgba(251, 191, 36, 0.3) !important;
             }
 
-            /* Hover States for Menu Items */
-            body.dark-mode #mobileProfileDropdown a:hover,
-            body.dark-mode #desktopProfileDropdown a:hover {
-                background: rgba(51, 65, 85, 0.5) !important;
-            }
-
-            /* Logout Button - Red Accent */
-            body.dark-mode #mobileProfileDropdown a[href*="logout"],
-            body.dark-mode #desktopProfileDropdown a[href*="logout"] {
+            /* Logout Button - Red Accent Dark Mode */
+            body.dark-mode .logout-item {
                 color: #fca5a5 !important;
             }
 
-            body.dark-mode #mobileProfileDropdown a[href*="logout"] > div:first-child,
-            body.dark-mode #desktopProfileDropdown a[href*="logout"] > div:first-child {
-                background: rgba(239, 68, 68, 0.15) !important;
-                border: 1px solid rgba(239, 68, 68, 0.2) !important;
+            body.dark-mode .logout-item .icon-wrapper {
+                background: rgba(239, 68, 68, 0.2) !important;
+                border: 1px solid rgba(239, 68, 68, 0.3) !important;
+                color: #f87171 !important;
             }
 
-            body.dark-mode #mobileProfileDropdown a[href*="logout"]:hover,
-            body.dark-mode #desktopProfileDropdown a[href*="logout"]:hover {
+            body.dark-mode .logout-item:hover {
                 background: rgba(127, 29, 29, 0.3) !important;
             }
         </style>
