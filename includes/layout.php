@@ -96,6 +96,9 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Dark Mode CSS -->
         <link rel="stylesheet" href="../assets/css/dark-mode.css">
 
+        <!-- Theme Toggle Script (Critical: Must load immediately) -->
+        <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
+
         <style>
             /* --- DESIGN SYSTEM 2.5 (Compact & Mobile First) --- */
             :root {
