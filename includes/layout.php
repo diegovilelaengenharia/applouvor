@@ -1844,11 +1844,12 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Notification Button (Bell) -->
             <div style="position: relative;">
-                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="Notificações">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
                         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
                     </svg>
+                    <span class="notification-badge" id="notificationBadgeDesktop" style="display: none;">0</span>
                 </button>
                 
                 <!-- Desktop Dropdown -->
