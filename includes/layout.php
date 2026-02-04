@@ -2367,15 +2367,16 @@ function renderAppHeader($title, $backUrl = null)
             
             /* Dark Mode (GREEN OUTLINE - STANDARD) */
             body.dark-mode .admin-crown-btn {
-                background: transparent !important;
-                border: 1px solid #10b981 !important; /* Verde Padrão */
-                color: #10b981 !important;
-                box-shadow: none !important;
+                background: linear-gradient(135deg, rgba(6, 78, 59, 0.4), rgba(4, 120, 87, 0.4)) !important;
+                border: 2px solid #059669 !important;
+                color: #34d399 !important;
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(52, 211, 153, 0.2) !important;
             }
             body.dark-mode .admin-crown-btn:hover {
-                background: rgba(16, 185, 129, 0.1) !important;
-                box-shadow: 0 0 15px rgba(16, 185, 129, 0.25) !important;
+                background: linear-gradient(135deg, rgba(6, 78, 59, 0.6), rgba(4, 120, 87, 0.6)) !important;
+                box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(52, 211, 153, 0.3) !important;
                 transform: translateY(-2px);
+                border-color: #34d399 !important;
             }
 
             /* --- Leader Menu Item (Dropdown) --- */
@@ -2609,22 +2610,24 @@ function renderAppHeader($title, $backUrl = null)
                 color: #94a3b8 !important;
             }
 
-            /* Líder Item - Premium Gold Style */
+            /* Líder Item - Premium Emerald Style */
             body.dark-mode .lider-menu-item .icon-wrapper {
-                background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)) !important;
-                border: 1px solid rgba(251, 191, 36, 0.4) !important;
-                color: #fbbf24 !important;
-                box-shadow: 0 0 15px rgba(251, 191, 36, 0.2) !important;
+                background: linear-gradient(135deg, rgba(6, 78, 59, 0.5), rgba(4, 120, 87, 0.5)) !important;
+                border: 2px solid #059669 !important;
+                color: #34d399 !important;
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(52, 211, 153, 0.2) !important;
             }
 
             body.dark-mode .lider-menu-item span {
-                color: #fbbf24 !important;
-                font-weight: 600;
+                color: #34d399 !important;
+                font-weight: 700;
+                text-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
             }
 
             body.dark-mode .lider-menu-item:hover .icon-wrapper {
-                background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.3)) !important;
-                box-shadow: 0 0 20px rgba(251, 191, 36, 0.3) !important;
+                background: linear-gradient(135deg, rgba(6, 78, 59, 0.7), rgba(4, 120, 87, 0.7)) !important;
+                box-shadow: 0 0 25px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(52, 211, 153, 0.3) !important;
+                border-color: #34d399 !important;
             }
 
             /* Logout Button - Red Accent Dark Mode */
