@@ -1741,6 +1741,25 @@ function renderAppHeader($title, $backUrl = null)
             <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificações</a>
         </div>
     </div>
+    <!-- EMERGENCY INLINE SCRIPT FALLBACK -->
+    <script>
+        console.log('Emergency Toggle Script Loaded');
+        window.toggleThemeMode = function() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+            var isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            
+            // Dispatch event
+            window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark: isDark } }));
+
+            // Update UI
+            var toggles = document.querySelectorAll('#darkModeToggle, #darkModeToggleMobile, input[onchange="toggleThemeMode()"]');
+            for(var i=0; i<toggles.length; i++) {
+                if(toggles[i].type === 'checkbox') toggles[i].checked = isDark;
+            }
+        };
+    </script>
 </body>
 </html>
 <?php
