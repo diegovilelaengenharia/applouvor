@@ -1701,7 +1701,6 @@ function renderAppHeader($title, $backUrl = null)
         // Configuração Global de Caminhos
         const NOTIFICATIONS_API_BASE = '<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? '' : 'admin/') ?>';
     </script>
-    <script src="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? '../assets/js/notifications.js' : 'assets/js/notifications.js') ?>"></script>
     
     <!-- Notification Modal (At body level for proper z-index) -->
     <div class="notification-dropdown" id="notificationDropdown">
