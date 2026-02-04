@@ -8,6 +8,15 @@
 
     console.log('[THEME] Script loaded at:', new Date().toISOString());
 
+    // Restore dark mode from localStorage IMMEDIATELY
+    var savedMode = localStorage.getItem('darkMode');
+    console.log('[THEME] Saved mode:', savedMode);
+
+    if (savedMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+        console.log('[THEME] Dark mode restored from localStorage');
+    }
+
     // Define function globally
     window.toggleThemeMode = function () {
         console.log('[THEME] Toggle called');
