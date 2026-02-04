@@ -1637,6 +1637,8 @@ function renderAppHeader($title, $backUrl = null)
         <script src="../assets/js/main.js"></script>
         <script src="../assets/js/gestures.js"></script>
         <script src="../assets/js/notifications.js"></script>
+        <!-- Force load theme toggle with timestamp -->
+        <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
     <!-- PWA Install Script (Global) -->
     <script>
         // Check for Service Worker Support
