@@ -1650,20 +1650,8 @@ function renderAppHeader($title, $backUrl = null)
             });
         }
 
-        // Global Dark Mode Toggle Function (Fixing ReferenceError)
-        window.toggleThemeMode = function() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-            
-            // Dispatch event for components that need to react
-            window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
-
-            // Update toggles UI if present
-            document.querySelectorAll('#darkModeToggle, #darkModeToggleMobile').forEach(el => {
-                el.checked = isDark;
-            });
-        };
+        // toggleThemeMode is defined in theme-toggle.js (loaded in HEAD)
+        // DO NOT define it here as it will overwrite the correct function
 
 
         // Install Button Logic
