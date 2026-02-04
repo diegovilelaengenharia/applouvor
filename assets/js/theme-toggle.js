@@ -18,8 +18,20 @@
         document.body.classList.remove('dark-mode');
     }
 
+    // Prevent double-toggle flag
+    var isToggling = false;
+
     // Global toggle function
-    window.toggleThemeMode = function () {
+    window.toggleThemeMode = function (event) {
+        // Prevent double-toggle
+        if (isToggling) {
+            console.log('[THEME] Prevented double toggle');
+            return;
+        }
+
+        isToggling = true;
+        setTimeout(function () { isToggling = false; }, 100);
+
         console.log('[THEME] TOGGLE CLICKED!');
 
         // Toggle the class
