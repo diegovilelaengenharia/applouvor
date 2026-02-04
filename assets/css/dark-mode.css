@@ -1477,4 +1477,37 @@ body.dark-mode button[onclick*="openSheet"][style*="background: white"] {
     background: var(--bg-surface) !important;
     border-color: var(--border-color) !important;
     color: var(--text-secondary) !important;
+}/* ==========================================================================
+   ULTRA-AGGRESSIVE OVERRIDES FOR INLINE STYLES (LEITURA.PHP + OTHERS)
+   ========================================================================== */
+
+/* All elements with 'background: white' or '#fff' inline style */
+body.dark-mode [style*="background: white"],
+body.dark-mode [style*="background:#fff"],
+body.dark-mode [style*="background: #fff"],
+body.dark-mode [style*="background: #ffffff"] {
+    background: var(--bg-surface) !important;
+}
+
+/* Calendar navigation buttons with white gradients */
+body.dark-mode button[style*="background: linear-gradient(90deg, white"] {
+    background: linear-gradient(90deg, var(--bg-surface), transparent) !important;
+}
+
+body.dark-mode button[style*="background: linear-gradient(-90deg, white"] {
+    background: linear-gradient(-90deg, var(--bg-surface), transparent) !important;
+}
+
+/* Light gradient backgrounds */
+body.dark-mode [style*="background: linear-gradient(135deg, #f8fafc"] {
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-surface)) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Dark text colors that won't be readable on dark backgrounds */
+body.dark-mode [style*="color: #111827"],
+body.dark-mode [style*="color:#111827"],
+body.dark-mode [style*="color: #1f2937"],
+body.dark-mode [style*="color: #374151"] {
+    color: var(--text-main) !important;
 }
