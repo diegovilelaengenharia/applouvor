@@ -541,220 +541,198 @@ function renderAppHeader($title, $backUrl = null)
                 transform: translateX(16px);
             }
             
-            /* Notification System Styles - Premium Design */
-            .notification-btn {
+            /* ========================================
+               HEADER BUTTONS - ELEGANT UNIFIED DESIGN
+               ======================================== */
+            
+            /* Base style for all header action buttons */
+            .header-btn-base {
                 position: relative;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 44px;
-                height: 44px;
-                background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
-                border: none;
-                border-radius: 14px;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
                 cursor: pointer;
-                color: #6366f1;
-                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.12), 
-                           0 2px 4px rgba(0, 0, 0, 0.04),
-                           inset 0 1px 0 rgba(255, 255, 255, 0.9);
-                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-                overflow: visible;
+                transition: all 0.2s ease;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
             }
             
-            /* Borda gradiente animada */
-            .notification-btn::before {
-                content: '';
-                position: absolute;
-                inset: -2px;
-                border-radius: 16px;
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-                background-size: 200% 200%;
-                animation: gradient-shift 3s ease infinite;
-                z-index: -1;
-                opacity: 0.5;
-                filter: blur(3px);
-                transition: all 0.4s ease;
+            .header-btn-base:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
             }
             
-            @keyframes gradient-shift {
-                0%, 100% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
+            .header-btn-base:active {
+                transform: translateY(0);
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
             }
             
-            /* Ícone do sino com animação */
-            .notification-btn i,
-            .notification-btn svg {
-                transition: all 0.3s ease;
-                color: #6366f1;
-            }
-            
-            .notification-btn:hover {
-                background: linear-gradient(145deg, #eef2ff 0%, #e0e7ff 100%);
-                color: #4f46e5;
-                transform: translateY(-3px) scale(1.05);
-                box-shadow: 0 12px 25px rgba(99, 102, 241, 0.25), 
-                           0 4px 8px rgba(99, 102, 241, 0.15),
-                           inset 0 1px 0 rgba(255, 255, 255, 1);
-            }
-            
-            .notification-btn:hover::before {
-                opacity: 0.8;
-                filter: blur(6px);
-            }
-            
-            /* Animação do sino ao hover */
-            .notification-btn:hover i,
-            .notification-btn:hover svg {
-                animation: ring-bell 0.6s ease-in-out;
-                color: #4f46e5;
-            }
-            
-            @keyframes ring-bell {
-                0% { transform: rotate(0deg); }
-                15% { transform: rotate(15deg); }
-                30% { transform: rotate(-12deg); }
-                45% { transform: rotate(8deg); }
-                60% { transform: rotate(-5deg); }
-                75% { transform: rotate(3deg); }
-                100% { transform: rotate(0deg); }
-            }
-            
-            .notification-btn:active {
-                transform: translateY(-1px) scale(1.02);
-                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-            }
-            
-            /* Badge de notificação premium */
-            .notification-badge {
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-                color: white;
-                font-size: 10px;
-                font-weight: 800;
-                padding: 4px 7px;
-                border-radius: 20px;
-                min-width: 22px;
-                text-align: center;
-                box-shadow: 0 4px 12px rgba(244, 63, 94, 0.5),
-                           0 0 0 3px white,
-                           0 0 20px rgba(244, 63, 94, 0.3);
-                animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                z-index: 10;
-            }
-            
-            @keyframes pulse-glow {
-                0%, 100% {
-                    transform: scale(1);
-                    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.5),
-                               0 0 0 3px white,
-                               0 0 20px rgba(244, 63, 94, 0.3);
-                }
-                50% {
-                    transform: scale(1.15);
-                    box-shadow: 0 6px 16px rgba(244, 63, 94, 0.6),
-                               0 0 0 3px white,
-                               0 0 30px rgba(244, 63, 94, 0.5);
-                }
-            }
-            
-            /* Header Buttons Base Styles */
+            /* Líder Button - Subtle amber accent */
             .admin-crown-btn {
                 position: relative;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 44px;
-                height: 44px;
-                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-                border: 2px solid transparent;
-                border-radius: 12px;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-surface);
+                border: 1px solid #fcd34d;
+                border-radius: 10px;
                 text-decoration: none;
-                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25), 
-                           0 0 0 1px rgba(245, 158, 11, 0.1);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                overflow: hidden;
-                color: #f59e0b; /* Icon Color */
+                cursor: pointer;
+                color: #d97706;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+                transition: all 0.2s ease;
+            }
+            
+            .admin-crown-btn:hover {
+                background: #fffbeb;
+                border-color: #fbbf24;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(251, 191, 36, 0.15);
+            }
+            
+            .admin-crown-btn:hover i,
+            .admin-crown-btn:hover svg {
+                animation: crown-bounce 0.4s ease;
+            }
+            
+            @keyframes crown-bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+            
+            .admin-crown-btn:active {
+                transform: translateY(0);
+            }
+            
+            /* Notification Button - Neutral with subtle accent */
+            .notification-btn {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                cursor: pointer;
+                color: #64748b;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+                transition: all 0.2s ease;
+                overflow: visible;
+            }
+            
+            .notification-btn:hover {
+                background: #f8fafc;
+                color: #475569;
+                border-color: #cbd5e1;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+            }
+            
+            .notification-btn:hover svg,
+            .notification-btn:hover i {
+                animation: bell-swing 0.5s ease;
+            }
+            
+            @keyframes bell-swing {
+                0%, 100% { transform: rotate(0deg); }
+                25% { transform: rotate(8deg); }
+                50% { transform: rotate(-6deg); }
+                75% { transform: rotate(4deg); }
+            }
+            
+            .notification-btn:active {
+                transform: translateY(0);
+            }
+            
+            /* Notification Badge - Elegant red dot */
+            .notification-badge {
+                position: absolute;
+                top: -4px;
+                right: -4px;
+                background: #ef4444;
+                color: white;
+                font-size: 10px;
+                font-weight: 700;
+                padding: 2px 5px;
+                border-radius: 8px;
+                min-width: 16px;
+                text-align: center;
+                box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3),
+                           0 0 0 2px var(--bg-surface);
+                z-index: 10;
             }
 
+            /* Config Button - Neutral style */
             .config-btn {
                 position: relative;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 44px;
-                height: 44px;
-                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-                border: 2px solid transparent;
-                border-radius: 12px;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
                 flex-shrink: 0;
                 cursor: pointer;
                 color: #64748b;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 
-                           0 0 0 1px rgba(148, 163, 184, 0.1);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                overflow: hidden;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+                transition: all 0.2s ease;
+            }
+            
+            .config-btn:hover {
+                background: #f8fafc;
+                color: #475569;
+                border-color: #cbd5e1;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+            }
+            
+            .config-btn:hover i,
+            .config-btn:hover svg {
+                animation: gear-spin 0.5s ease;
+            }
+            
+            @keyframes gear-spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(45deg); }
             }
 
+            /* Profile Avatar Button - Clean circular style */
             .profile-avatar-btn {
-                width: 44px;
-                height: 44px;
+                width: 40px;
+                height: 40px;
                 padding: 0;
-                border: 3px solid white;
-                box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), 
-                           0 4px 12px rgba(34, 197, 94, 0.2), 
-                           0 2px 8px rgba(0, 0, 0, 0.06);
-                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+                background: var(--bg-surface);
+                border: 2px solid var(--border-color);
                 cursor: pointer;
                 border-radius: 50%;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: all 0.2s ease;
                 position: relative;
-                color: #166534;
-            }
-
-            /* Header Buttons Hover Effects */
-            .admin-crown-btn:hover {
-                background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
-                box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35),
-                           0 0 0 1px rgba(245, 158, 11, 0.2);
-                transform: translateY(-2px) scale(1.05);
-            }
-            
-            .admin-crown-btn:active {
-                transform: translateY(0) scale(1);
-            }
-            
-            .config-btn:hover {
-                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-                color: #3b82f6;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2),
-                           0 0 0 1px rgba(59, 130, 246, 0.1);
-                transform: translateY(-2px);
-            }
-            
-            .config-btn:hover i {
-                animation: rotate-settings 0.6s ease-in-out;
-            }
-            
-            @keyframes rotate-settings {
-                0%, 100% { transform: rotate(0deg); }
-                50% { transform: rotate(90deg); }
+                color: #64748b;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
             }
             
             .profile-avatar-btn:hover {
-                box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.4),
-                           0 6px 16px rgba(34, 197, 94, 0.3),
-                           0 2px 8px rgba(0, 0, 0, 0.08);
-                transform: translateY(-2px) scale(1.05);
+                border-color: #10b981;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(16, 185, 129, 0.12);
             }
             
             .profile-avatar-btn:active {
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
             
             
