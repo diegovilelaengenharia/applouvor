@@ -93,6 +93,9 @@ function renderAppHeader($title, $backUrl = null)
         <!-- ├ìcones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
+        <!-- Dark Mode CSS -->
+        <link rel="stylesheet" href="../assets/css/dark-mode.css">
+
         <style>
             /* --- DESIGN SYSTEM 2.5 (Compact & Mobile First) --- */
             :root {
@@ -159,16 +162,7 @@ function renderAppHeader($title, $backUrl = null)
                 animation-duration: 0.3s;
             }
 
-            /* Global Dark Mode */
-            body.dark-mode {
-                --bg-body: #0f172a;
-                --bg-surface: #1e293b;
-                --text-main: #f1f5f9;
-                --text-muted: #94a3b8;
-                --border-color: #334155;
-                --primary-light: #064e3b;
-                --primary-subtle: #064e3b;
-            }
+            /* Global Dark Mode - Now handled by dark-mode.css */
 
             /* ========================================
                SISTEMA DE BOTÕES PADRONIZADOS

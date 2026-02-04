@@ -25,6 +25,20 @@ function syncAllToggles(isDark) {
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
 
+    // Se não há preferência salva, detectar preferência do sistema
+    if (!savedTheme) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            document.body.classList.add('dark-mode');
+            syncAllToggles(true);
+        } else {
+            document.body.classList.remove('dark-mode');
+            syncAllToggles(false);
+        }
+        return;
+    }
+
+    // Aplicar preferência salva
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
         syncAllToggles(true);

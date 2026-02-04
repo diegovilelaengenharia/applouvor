@@ -5,56 +5,59 @@
 
 /* === VARIÁVEIS GLOBAIS DARK MODE === */
 body.dark-mode {
-    /* Backgrounds - Tons de cinza azulado */
-    --bg-primary: #1a1f2e;
-    --bg-secondary: #242938;
-    --bg-tertiary: #2d3348;
-    --bg-body: #1a1f2e;
-    --bg-surface: #242938;
+    /* Backgrounds - Ergonomic Dark (Neutral Grays) */
+    --bg-primary: #121212;   /* Deep Grey - Not pure black */
+    --bg-secondary: #1E1E1E; /* Lighter Grey for cards/surfaces */
+    --bg-tertiary: #27272a;  /* Slightly lighter for inputs/hover */
+    --bg-body: #121212;
+    --bg-surface: #1E1E1E;
 
-    /* Textos */
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --text-main: #e2e8f0;
+    /* Textos - Reduced Contrast for comfort */
+    --text-primary: rgba(255, 255, 255, 0.87);   /* High Emphasis */
+    --text-secondary: rgba(255, 255, 255, 0.60); /* Medium Emphasis */
+    --text-muted: rgba(255, 255, 255, 0.38);     /* Disabled/Muted */
+    --text-main: rgba(255, 255, 255, 0.87);
 
     /* Bordas */
-    --border-color: #334155;
-    --border-subtle: #334155;
+    --border-color: #333333;
+    --border-subtle: #2d2d2d;
 
-    /* Primary Colors - Mais vibrantes para contraste */
-    --primary: #10b981;
-    --primary-hover: #059669;
-    --primary-light: #064e3b;
-    --primary-subtle: #022c22;
-    --primary-green: #10b981;
-    --primary-green-light: #34d399;
-    --primary-green-dark: #059669;
+    /* Primary Colors - Dessaturadas para Dark Mode */
+    --primary: #34d399;           /* Emerald 400 - Softer than 500 */
+    --primary-hover: #10b981;     /* Emerald 500 */
+    --primary-light: #064e3b;     /* Emerald 900 background */
+    --primary-subtle: #0f392b;    /* Very dark green background */
+    
+    --primary-green: #34d399;
+    --primary-green-light: #6ee7b7;
+    --primary-green-dark: #10b981;
 
-    /* Accent Colors */
-    --accent-primary: #10b981;
-    --accent-interactive: #34d399;
-    --primary-blue: #3b82f6;
-    --primary-blue-light: #60a5fa;
+    /* Accent Colors - Pastels */
+    --accent-primary: #34d399;
+    --accent-interactive: #6ee7b7;
+    --primary-blue: #60a5fa;      /* Blue 400 - Softer */
+    --primary-blue-light: #93c5fd; /* Blue 300 - Even softer */
 
     /* Glassmorphism Dark */
     --glass-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.1);
 
-    /* Shadows Dark - Mais sutis */
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 4px 20px rgba(16, 185, 129, 0.3);
-    --shadow-elevated: 0 12px 48px rgba(16, 185, 129, 0.2);
+    /* Shadows Dark */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+    
+    /* Reduced Glows for better eye comfort */
+    --shadow-glow: 0 0 15px rgba(52, 211, 153, 0.1); 
+    --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-    /* Gradientes ajustados */
-    --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    --gradient-elegant: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-    --gradient-soft: linear-gradient(135deg, #2d3348 0%, #242938 100%);
-    --gradient-vibrant: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-    --gradient-hero: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    /* Gradientes mais sutis */
+    --gradient-primary: linear-gradient(135deg, #059669 0%, #047857 100%); /* Mantendo um pouco de cor nos gradientes mas controlada */
+    --gradient-elegant: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+    --gradient-soft: linear-gradient(135deg, #27272a 0%, #1e1e1e 100%);
+    --gradient-vibrant: linear-gradient(135deg, #34d399 0%, #3b82f6 100%);
+    --gradient-hero: linear-gradient(135deg, #1e1e1e 0%, #121212 100%); /* Hero mais neutro */
 }
 
 /* === TRANSIÇÕES SUAVES === */
