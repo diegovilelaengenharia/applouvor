@@ -2330,6 +2330,7 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Notifications Script -->
         <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
 
+        <style>
             /* Notification Button - Green Outline (Dark Mode) */
             body.dark-mode #notificationBtn,
             body.dark-mode #notificationBtnDesktop {
