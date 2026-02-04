@@ -2365,18 +2365,22 @@ function renderAppHeader($title, $backUrl = null)
                 z-index: 1;
             }
             
-            /* Dark Mode (GREEN OUTLINE - STANDARD) */
+            /* Dark Mode - Líder: Teal Premium (Autoridade + Harmonia) */
             body.dark-mode .admin-crown-btn {
-                background: linear-gradient(135deg, rgba(6, 78, 59, 0.4), rgba(4, 120, 87, 0.4)) !important;
-                border: 2px solid #059669 !important;
-                color: #34d399 !important;
-                box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(52, 211, 153, 0.2) !important;
+                background: linear-gradient(145deg, rgba(13, 148, 136, 0.2), rgba(20, 184, 166, 0.15)) !important;
+                border: 1.5px solid rgba(45, 212, 191, 0.5) !important;
+                color: #5eead4 !important;
+                box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.1), 
+                            0 4px 12px rgba(13, 148, 136, 0.2),
+                            inset 0 1px 0 rgba(94, 234, 212, 0.1) !important;
             }
             body.dark-mode .admin-crown-btn:hover {
-                background: linear-gradient(135deg, rgba(6, 78, 59, 0.6), rgba(4, 120, 87, 0.6)) !important;
-                box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(52, 211, 153, 0.3) !important;
+                background: linear-gradient(145deg, rgba(13, 148, 136, 0.35), rgba(20, 184, 166, 0.25)) !important;
+                border-color: #5eead4 !important;
+                box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.15),
+                            0 8px 20px rgba(13, 148, 136, 0.35),
+                            inset 0 1px 0 rgba(94, 234, 212, 0.15) !important;
                 transform: translateY(-2px);
-                border-color: #34d399 !important;
             }
 
             /* --- Leader Menu Item (Dropdown) --- */
@@ -2610,24 +2614,29 @@ function renderAppHeader($title, $backUrl = null)
                 color: #94a3b8 !important;
             }
 
-            /* Líder Item - Premium Emerald Style */
+            /* Líder Item (Dropdown) - Teal Premium */
             body.dark-mode .lider-menu-item .icon-wrapper {
-                background: linear-gradient(135deg, rgba(6, 78, 59, 0.5), rgba(4, 120, 87, 0.5)) !important;
-                border: 2px solid #059669 !important;
-                color: #34d399 !important;
-                box-shadow: 0 0 20px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(52, 211, 153, 0.2) !important;
+                background: linear-gradient(145deg, rgba(13, 148, 136, 0.25), rgba(20, 184, 166, 0.2)) !important;
+                border: 1.5px solid rgba(45, 212, 191, 0.4) !important;
+                color: #5eead4 !important;
+                box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2),
+                            inset 0 1px 0 rgba(94, 234, 212, 0.1) !important;
             }
 
             body.dark-mode .lider-menu-item span {
-                color: #34d399 !important;
-                font-weight: 700;
-                text-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+                color: #5eead4 !important;
+                font-weight: 600;
+            }
+
+            body.dark-mode .lider-menu-item:hover {
+                background: rgba(13, 148, 136, 0.1) !important;
             }
 
             body.dark-mode .lider-menu-item:hover .icon-wrapper {
-                background: linear-gradient(135deg, rgba(6, 78, 59, 0.7), rgba(4, 120, 87, 0.7)) !important;
-                box-shadow: 0 0 25px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(52, 211, 153, 0.3) !important;
-                border-color: #34d399 !important;
+                background: linear-gradient(145deg, rgba(13, 148, 136, 0.4), rgba(20, 184, 166, 0.3)) !important;
+                border-color: #5eead4 !important;
+                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3),
+                            inset 0 1px 0 rgba(94, 234, 212, 0.15) !important;
             }
 
             /* Logout Button - Red Accent Dark Mode */
