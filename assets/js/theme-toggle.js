@@ -22,8 +22,20 @@
     }
     // If savedTheme is null, do nothing (let main.js handle system preference)
 
+    // Helper function to sync all toggles
+    function syncAllToggles(isDark) {
+        var toggles = document.querySelectorAll('#darkModeToggle, #darkModeToggleMobile, #darkModeToggleDropdown');
+        for (var i = 0; i < toggles.length; i++) {
+            if (toggles[i] && toggles[i].type === 'checkbox') {
+                toggles[i].checked = isDark;
+            }
+        }
+    }
+
     // Define function globally
-    window.toggleThemeMode = function () {
+    window.toggleThemeMode = function (e) {
+        if (e) e.preventDefault();
+
         console.log('[THEME] Toggle called');
         document.body.classList.toggle('dark-mode');
         var isDark = document.body.classList.contains('dark-mode');
@@ -36,8 +48,22 @@
             console.error('[THEME] LocalStorage error:', e);
         }
 
+        // Sync all toggles
+        syncAllToggles(isDark);
+
         console.log('[THEME] Theme is now:', isDark ? 'dark' : 'light');
     };
 
     console.log('[THEME] toggleThemeMode function defined:', typeof window.toggleThemeMode);
+
+    // Initialize toggles on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            var isDark = document.body.classList.contains('dark-mode');
+            syncAllToggles(isDark);
+        });
+    } else {
+        var isDark = document.body.classList.contains('dark-mode');
+        syncAllToggles(isDark);
+    }
 })();
