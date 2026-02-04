@@ -571,7 +571,7 @@ function renderAppHeader($title, $backUrl = null)
                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
             }
             
-            /* Líder Button - Subtle amber accent */
+            /* Líder Button - Subtle red accent */
             .admin-crown-btn {
                 position: relative;
                 display: flex;
@@ -580,20 +580,20 @@ function renderAppHeader($title, $backUrl = null)
                 width: 40px;
                 height: 40px;
                 background: var(--bg-surface);
-                border: 1px solid #fcd34d;
+                border: 1px solid #fca5a5;
                 border-radius: 10px;
                 text-decoration: none;
                 cursor: pointer;
-                color: #d97706;
+                color: #dc2626;
                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
                 transition: all 0.2s ease;
             }
             
             .admin-crown-btn:hover {
-                background: #fffbeb;
-                border-color: #fbbf24;
+                background: #fef2f2;
+                border-color: #f87171;
                 transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(251, 191, 36, 0.15);
+                box-shadow: 0 3px 8px rgba(239, 68, 68, 0.15);
             }
             
             .admin-crown-btn:hover i,
