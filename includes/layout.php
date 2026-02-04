@@ -1042,8 +1042,8 @@ function renderAppHeader($title, $backUrl = null)
                     </div>
 
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <a href="lider.php" class="admin-crown-btn" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid transparent; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25), 0 0 0 1px rgba(245, 158, 11, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
-                            <i data-lucide="crown" style="color: #f59e0b; width: 20px; position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));"></i>
+                        <a href="lider.php" class="admin-crown-btn">
+                            <i data-lucide="crown"></i>
                         </a>
                     <?php endif; ?>
                     <!-- Leitura Config Button (Leitura Only) -->
@@ -1119,11 +1119,11 @@ function renderAppHeader($title, $backUrl = null)
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                                    <a href="lider.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                        <div style="background: #fff7ed; padding: 6px; border-radius: 6px; display: flex; color: #d97706;">
+                                    <a href="lider.php" class="lider-menu-item">
+                                        <div class="icon-wrapper">
                                             <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
                                         </div>
-                                        <span style="font-weight: 500;">Painel do Líder</span>
+                                        <span>Painel do Líder</span>
                                     </a>
                                 <?php endif; ?>
 
@@ -2348,59 +2348,118 @@ function renderAppHeader($title, $backUrl = null)
                 transform: translateY(-2px);
             }
 
-            /* Fix Leader Button (Crown) in Dark Mode - Golden Outline */
-            body.dark-mode .admin-crown-btn {
-                background: transparent !important;
-                border: 1px solid #f59e0b !important; /* Amber 500 */
-                color: #f59e0b !important;
-                box-shadow: none !important;
+            /* --- Leader Button Styles (Header) --- */
+            /* Light Mode (Original) */
+            .admin-crown-btn {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                border: 2px solid transparent;
+                border-radius: 12px;
+                text-decoration: none;
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25), 0 0 0 1px rgba(245, 158, 11, 0.1);
+                transition: all 0.3s;
+                color: #f59e0b;
+                cursor: pointer;
             }
-
-            body.dark-mode .admin-crown-btn:hover {
-                background: rgba(245, 158, 11, 0.1) !important;
-                box-shadow: 0 0 12px rgba(245, 158, 11, 0.2) !important;
-                transform: translateY(-2px);
+            .admin-crown-btn i {
+                width: 20px;
+                position: relative;
+                z-index: 1;
             }
             
-            /* Dropdown Notificações - Dark Mode Premium */
+            /* Dark Mode (GREEN OUTLINE - STANDARD) */
+            body.dark-mode .admin-crown-btn {
+                background: transparent !important;
+                border: 1px solid #10b981 !important; /* Verde Padrão */
+                color: #10b981 !important;
+                box-shadow: none !important;
+            }
+            body.dark-mode .admin-crown-btn:hover {
+                background: rgba(16, 185, 129, 0.1) !important;
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.25) !important;
+                transform: translateY(-2px);
+            }
+
+            /* --- Leader Menu Item (Dropdown) --- */
+            .lider-menu-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+                text-decoration: none;
+                font-size: 0.85rem;
+                border-radius: 8px;
+                transition: background 0.2s;
+                color: var(--text-main);
+            }
+            .lider-menu-item .icon-wrapper {
+                background: #fff7ed;
+                padding: 6px;
+                border-radius: 6px;
+                display: flex;
+                color: #d97706;
+                transition: all 0.2s;
+                width: 28px; height: 28px; justify-content: center; align-items: center;
+            }
+            .lider-menu-item:hover {
+                background: var(--bg-body);
+            }
+            
+            /* Dark Mode Lider Item (GREEN OUTLINE) */
+            body.dark-mode .lider-menu-item .icon-wrapper {
+                background: transparent !important;
+                border: 1px solid #10b981;
+                color: #10b981;
+            }
+            body.dark-mode .lider-menu-item span {
+                color: #10b981 !important;
+                font-weight: 600;
+            }
+            body.dark-mode .lider-menu-item:hover .icon-wrapper {
+                background: rgba(16, 185, 129, 0.1) !important;
+            }
+
+            /* Dropdown Notificações & Footer FIX */
             body.dark-mode .notification-dropdown {
-                background: #0f172a !important; /* Slate 950 */
+                background: #0f172a !important;
                 border: 1px solid #1e293b !important;
                 box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
             }
-
             body.dark-mode .notification-header {
                 border-bottom: 1px solid #1e293b !important;
                 background: #0f172a !important;
             }
+            body.dark-mode .notification-header h3 { color: #f1f5f9 !important; }
+            body.dark-mode .mark-all-read { color: #34d399 !important; font-weight: 600; }
             
-            body.dark-mode .notification-header h3 {
-                color: #f1f5f9 !important; /* Slate 100 */
-            }
-
-            body.dark-mode .mark-all-read {
-                color: #34d399 !important; /* Emerald 400 - Verde vibrante */
-                font-weight: 600;
-            }
-
-            body.dark-mode .view-all-btn {
-                color: #34d399 !important;
-                border-top: 1px solid #1e293b !important;
+            /* Footer Fix - Remover Fundo Branco */
+            body.dark-mode .notification-footer,
+            body.dark-mode .modal-footer {
                 background: #0f172a !important;
+                border-top: 1px solid #1e293b !important;
             }
             
-            body.dark-mode .view-all-btn:hover {
-                background: #1e293b !important;
+            body.dark-mode .notification-view-all,
+            body.dark-mode .view-all-btn, 
+            body.dark-mode .modal-footer a { 
+                color: #34d399 !important; 
+                background: transparent !important;
+                border-top: none !important;
+            }
+            
+            body.dark-mode .notification-view-all:hover,
+            body.dark-mode .view-all-btn:hover { 
+                background: rgba(52, 211, 153, 0.1) !important; 
+                text-decoration: none !important;
             }
 
-            body.dark-mode .notification-empty {
-                color: #94a3b8 !important; /* Slate 400 */
-            }
-            
-            body.dark-mode .notification-empty i {
-                opacity: 0.5 !important;
-                color: #64748b !important;
-            }
+            body.dark-mode .notification-empty { color: #94a3b8 !important; }
+            body.dark-mode .notification-empty i { opacity: 0.5 !important; color: #64748b !important; }
         </style>
     </body>
     </html>
