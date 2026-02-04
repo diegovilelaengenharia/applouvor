@@ -309,6 +309,64 @@ body.dark-mode .header-action-btn[style*="fef3c7"] {
     color: #d97706 !important;
 }
 
+/* === OVERRIDES PARA ESTILOS INLINE === */
+
+/* Bottom Sheets e Modais com gradientes brancos */
+body.dark-mode .bottom-sheet,
+body.dark-mode .bottom-sheet-header,
+body.dark-mode [id*="Sheet"],
+body.dark-mode [id*="sheet"] {
+    background: var(--bg-secondary) !important;
+}
+
+/* Config Button com gradiente branco inline */
+body.dark-mode .config-btn,
+body.dark-mode button[onclick*="openConfig"] {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Profile Dropdown Headers com gradiente branco */
+body.dark-mode [style*="linear-gradient"][style*="#ffffff"],
+body.dark-mode [style*="linear-gradient"][style*="#f8fafc"] {
+    background: var(--bg-tertiary) !important;
+}
+
+/* Badges e ícones com fundo amarelo claro (#fff7ed, #fffbeb) */
+body.dark-mode [style*="#fff7ed"],
+body.dark-mode [style*="#fffbeb"] {
+    background: #78350f !important;
+    /* Amber 900 - dark version */
+    color: #fbbf24 !important;
+    /* Amber 400 */
+    border-color: #92400e !important;
+}
+
+/* Bottom Navigation */
+body.dark-mode .bottom-nav,
+body.dark-mode [class*="bottom-nav"],
+body.dark-mode [id*="bottomNav"] {
+    background: var(--bg-secondary) !important;
+    border-top-color: var(--border-color) !important;
+}
+
+/* Elementos com background-color: white inline */
+body.dark-mode [style*="background-color: white"],
+body.dark-mode [style*="background-color:white"],
+body.dark-mode [style*="background: white"],
+body.dark-mode [style*="background:white"] {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Elementos com background #fff inline */
+body.dark-mode [style*="background: #fff"],
+body.dark-mode [style*="background:#fff"] {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
 /* === NAVEGAÇÃO === */
 
 /* Sidebar */
