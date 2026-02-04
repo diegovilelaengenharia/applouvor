@@ -2460,6 +2460,34 @@ function renderAppHeader($title, $backUrl = null)
 
             body.dark-mode .notification-empty { color: #94a3b8 !important; }
             body.dark-mode .notification-empty i { opacity: 0.5 !important; color: #64748b !important; }
+
+            /* Profile Dropdown - Dark Mode */
+            body.dark-mode #mobileProfileDropdown,
+            body.dark-mode #desktopProfileDropdown {
+                background: #0f172a !important;
+                border: 1px solid #1e293b !important;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            /* Profile Header Card */
+            body.dark-mode #mobileProfileDropdown > div:first-child,
+            body.dark-mode #desktopProfileDropdown > div:first-child {
+                background: linear-gradient(to bottom, #1e293b, #0f172a) !important;
+                border-bottom: 1px solid #1e293b !important;
+            }
+
+            /* Profile Menu Items */
+            body.dark-mode .lider-menu-item,
+            body.dark-mode #mobileProfileDropdown a:not(.lider-menu-item),
+            body.dark-mode #desktopProfileDropdown a:not(.lider-menu-item) {
+                color: #f1f5f9 !important;
+            }
+
+            /* Icon Wrappers in Profile Menu */
+            body.dark-mode #mobileProfileDropdown .icon-wrapper:not(.lider-menu-item .icon-wrapper),
+            body.dark-mode #desktopProfileDropdown .icon-wrapper:not(.lider-menu-item .icon-wrapper) {
+                opacity: 0.9;
+            }
         </style>
     </body>
     </html>
