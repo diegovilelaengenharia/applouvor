@@ -1,17 +1,5 @@
 // Main JS - Global Scripts
-// Definição global para garantir acesso via onclick
-window.toggleThemeMode = function (e) {
-    if (e) e.preventDefault(); // Evitar comportamentos padrão se passado evento
-
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-
-    // Salvar preferência
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-
-    // Atualizar UI
-    syncAllToggles(isDark);
-};
+// toggleThemeMode is now defined in theme-toggle.js (loaded in HEAD)
 
 function syncAllToggles(isDark) {
     const dropdownToggle = document.getElementById('darkModeToggleDropdown');
