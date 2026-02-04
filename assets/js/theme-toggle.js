@@ -1,31 +1,27 @@
 /**
- * Dark Mode Toggle Script
- * Dedicated file to ensure this logic is loaded regardless of layout.php caching
+ * Dark Mode Toggle - Ultra Simple Version
+ * No dependencies, no fancy features, just works
  */
 
-console.log('Theme Toggle Script Loaded');
+(function () {
+    'use strict';
 
-window.toggleThemeMode = function () {
-    console.log('Toggling theme mode...');
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
+    console.log('[THEME] Script loaded at:', new Date().toISOString());
 
-    // Save to local storage
-    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    // Define function globally
+    window.toggleThemeMode = function () {
+        console.log('[THEME] Toggle called');
+        document.body.classList.toggle('dark-mode');
+        var isDark = document.body.classList.contains('dark-mode');
 
-    // Dispatch global event
-    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
+        try {
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        } catch (e) {
+            console.error('[THEME] LocalStorage error:', e);
+        }
 
-    // Update all toggles in DOM
-    document.querySelectorAll('#darkModeToggle, #darkModeToggleMobile').forEach(el => {
-        if (el.type === 'checkbox') el.checked = isDark;
-    });
-};
+        console.log('[THEME] Dark mode is now:', isDark);
+    };
 
-// Initialize toggles on load
-document.addEventListener('DOMContentLoaded', () => {
-    const isDark = document.body.classList.contains('dark-mode');
-    document.querySelectorAll('#darkModeToggle, #darkModeToggleMobile').forEach(el => {
-        if (el.type === 'checkbox') el.checked = isDark;
-    });
-});
+    console.log('[THEME] toggleThemeMode function defined:', typeof window.toggleThemeMode);
+})();
