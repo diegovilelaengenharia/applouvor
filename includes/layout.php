@@ -2330,27 +2330,75 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Notifications Script -->
         <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
 
-        <style>
-            /* Fix Notification Button Consistency */
-            #notificationBtn, #notificationBtnDesktop {
+            /* Notification Button - Green Outline (Dark Mode) */
+            body.dark-mode #notificationBtn,
+            body.dark-mode #notificationBtnDesktop {
+                border: 1px solid #10b981 !important; /* Emerald 500 */
+                color: #10b981 !important;
+                background: transparent !important;
+                box-shadow: none !important;
                 transition: all 0.2s;
             }
-            
-            /* Remove default bad styles on mobile if any */
-            #notificationBtn {
-                background: transparent;
-                border: 1px solid transparent;
-                color: var(--text-secondary);
+
+            body.dark-mode #notificationBtn:hover,
+            body.dark-mode #notificationBtnDesktop:hover {
+                background: rgba(16, 185, 129, 0.1) !important;
+                box-shadow: 0 0 12px rgba(16, 185, 129, 0.2) !important;
+                transform: translateY(-2px);
             }
 
-            /* Ensure dark mode compatibility */
-            body.dark-mode #notificationBtn {
-                color: var(--text-secondary);
+            /* Fix Leader Button (Crown) in Dark Mode - Golden Outline */
+            body.dark-mode .admin-crown-btn {
+                background: transparent !important;
+                border: 1px solid #f59e0b !important; /* Amber 500 */
+                color: #f59e0b !important;
+                box-shadow: none !important;
+            }
+
+            body.dark-mode .admin-crown-btn:hover {
+                background: rgba(245, 158, 11, 0.1) !important;
+                box-shadow: 0 0 12px rgba(245, 158, 11, 0.2) !important;
+                transform: translateY(-2px);
             }
             
-            body.dark-mode #notificationBtn:hover {
-                background: var(--bg-tertiary);
-                color: var(--text-primary);
+            /* Dropdown Notificações - Dark Mode Premium */
+            body.dark-mode .notification-dropdown {
+                background: #0f172a !important; /* Slate 950 */
+                border: 1px solid #1e293b !important;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            body.dark-mode .notification-header {
+                border-bottom: 1px solid #1e293b !important;
+                background: #0f172a !important;
+            }
+            
+            body.dark-mode .notification-header h3 {
+                color: #f1f5f9 !important; /* Slate 100 */
+            }
+
+            body.dark-mode .mark-all-read {
+                color: #34d399 !important; /* Emerald 400 - Verde vibrante */
+                font-weight: 600;
+            }
+
+            body.dark-mode .view-all-btn {
+                color: #34d399 !important;
+                border-top: 1px solid #1e293b !important;
+                background: #0f172a !important;
+            }
+            
+            body.dark-mode .view-all-btn:hover {
+                background: #1e293b !important;
+            }
+
+            body.dark-mode .notification-empty {
+                color: #94a3b8 !important; /* Slate 400 */
+            }
+            
+            body.dark-mode .notification-empty i {
+                opacity: 0.5 !important;
+                color: #64748b !important;
             }
         </style>
     </body>
