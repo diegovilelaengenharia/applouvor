@@ -1066,18 +1066,18 @@ function renderAppHeader($title, $backUrl = null)
                     <?php endif; ?>
                     <!-- Leitura Config Button (Leitura Only) -->
                     <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
-                        <button onclick="openConfig()" class="config-btn" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); border: 2px solid transparent; border-radius: 12px; flex-shrink:0; cursor: pointer; color: #64748b; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(148, 163, 184, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
-                            <i data-lucide="settings" style="width: 20px; position: relative; z-index: 1;"></i>
+                        <button onclick="openConfig()" class="config-btn">
+                            <i data-lucide="settings" style="width: 20px;"></i>
                         </button>
                     <?php endif; ?>
 
                     <!-- Mobile Profile Avatar -->
                     <div style="position: relative;">
-                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" class="profile-avatar-btn" style="width: 44px; height: 44px; padding: 0; border: 3px solid white; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), 0 4px 12px rgba(34, 197, 94, 0.2), 0 2px 8px rgba(0, 0, 0, 0.06); background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); cursor: pointer; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative;">
+                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" class="profile-avatar-btn">
                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                             <?php else: ?>
-                                <i data-lucide="user" style="width: 20px; height: 20px; color: #22c55e;"></i>
+                                <i data-lucide="user" style="width: 20px; height: 20px;"></i>
                             <?php endif; ?>
                         </button>
 
@@ -1800,8 +1800,8 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Líder Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                <a href="lider.php" class="header-action-btn ripple" title="Painel do Líder" style="background: #fef3c7; color: #d97706; border-color: #fcd34d;">
-                    <i data-lucide="crown"></i>
+                <a href="lider.php" class="admin-crown-btn ripple" title="Painel do Líder">
+                    <i data-lucide="crown" style="width: 20px;"></i>
                 </a>
             <?php endif; ?>
 
@@ -1997,20 +1997,11 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="ripple" style="
-                    width: 44px; height: 44px; 
-                    border-radius: 50%; /* Circular */
-                    padding: 0; border: 2px solid white; 
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                    overflow: hidden; cursor: pointer;
-                    transition: transform 0.2s;
-                    display: flex; align-items: center; justify-content: center;
-                    background: var(--bg-surface);
-                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                         <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                     <?php else: ?>
-                        <i data-lucide="user" style="color: var(--text-muted);"></i>
+                        <i data-lucide="user" style="width: 20px; height: 20px;"></i>
                     <?php endif; ?>
                 </button>
 
