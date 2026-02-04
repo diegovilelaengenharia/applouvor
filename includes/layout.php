@@ -1634,9 +1634,9 @@ function renderAppHeader($title, $backUrl = null)
 
         
         <!-- Main Script & Gestures (Legacy includes kept) -->
-        <script src="/assets/js/main.js"></script>
-        <script src="/assets/js/gestures.js"></script>
-        <script src="/assets/js/notifications.js"></script>
+        <script src="../assets/js/main.js"></script>
+        <script src="../assets/js/gestures.js"></script>
+        <script src="../assets/js/notifications.js"></script>
     <!-- PWA Install Script (Global) -->
     <script>
         // Check for Service Worker Support
