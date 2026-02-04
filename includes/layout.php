@@ -2461,32 +2461,87 @@ function renderAppHeader($title, $backUrl = null)
             body.dark-mode .notification-empty { color: #94a3b8 !important; }
             body.dark-mode .notification-empty i { opacity: 0.5 !important; color: #64748b !important; }
 
-            /* Profile Dropdown - Dark Mode */
+            /* Profile Dropdown - Dark Mode Premium */
             body.dark-mode #mobileProfileDropdown,
             body.dark-mode #desktopProfileDropdown {
-                background: #0f172a !important;
-                border: 1px solid #1e293b !important;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+                background: #1e293b !important;
+                border: 1px solid #334155 !important;
+                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6) !important;
             }
 
-            /* Profile Header Card */
+            /* Profile Header Card - Premium Gradient */
             body.dark-mode #mobileProfileDropdown > div:first-child,
             body.dark-mode #desktopProfileDropdown > div:first-child {
-                background: linear-gradient(to bottom, #1e293b, #0f172a) !important;
-                border-bottom: 1px solid #1e293b !important;
+                background: linear-gradient(135deg, #0f766e 0%, #047857 100%) !important;
+                border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
             }
 
-            /* Profile Menu Items */
-            body.dark-mode .lider-menu-item,
-            body.dark-mode #mobileProfileDropdown a:not(.lider-menu-item),
-            body.dark-mode #desktopProfileDropdown a:not(.lider-menu-item) {
+            /* User Name in Header */
+            body.dark-mode #mobileProfileDropdown > div:first-child > div > div:first-child,
+            body.dark-mode #desktopProfileDropdown > div:first-child > div > div:first-child {
+                color: #ffffff !important;
+            }
+
+            /* "Membro da Equipe" subtitle */
+            body.dark-mode #mobileProfileDropdown > div:first-child > div > div:last-child,
+            body.dark-mode #desktopProfileDropdown > div:first-child > div > div:last-child {
+                color: #d1fae5 !important;
+            }
+
+            /* Profile Menu Items - Base Style */
+            body.dark-mode #mobileProfileDropdown a,
+            body.dark-mode #desktopProfileDropdown a,
+            body.dark-mode #mobileProfileDropdown > div:last-child > div {
                 color: #f1f5f9 !important;
             }
 
-            /* Icon Wrappers in Profile Menu */
-            body.dark-mode #mobileProfileDropdown .icon-wrapper:not(.lider-menu-item .icon-wrapper),
-            body.dark-mode #desktopProfileDropdown .icon-wrapper:not(.lider-menu-item .icon-wrapper) {
-                opacity: 0.9;
+            /* Icon Wrappers - Professional Look */
+            body.dark-mode #mobileProfileDropdown a > div:first-child,
+            body.dark-mode #desktopProfileDropdown a > div:first-child,
+            body.dark-mode #mobileProfileDropdown > div:last-child > div > div:first-child {
+                background: rgba(148, 163, 184, 0.15) !important;
+                border: 1px solid rgba(148, 163, 184, 0.2) !important;
+            }
+
+            /* Líder Item - Premium Gold Style */
+            body.dark-mode .lider-menu-item .icon-wrapper {
+                background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15)) !important;
+                border: 1px solid rgba(251, 191, 36, 0.3) !important;
+                color: #fbbf24 !important;
+                box-shadow: 0 0 12px rgba(251, 191, 36, 0.15) !important;
+            }
+
+            body.dark-mode .lider-menu-item span {
+                color: #fbbf24 !important;
+                font-weight: 600;
+            }
+
+            body.dark-mode .lider-menu-item:hover .icon-wrapper {
+                background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.25)) !important;
+                box-shadow: 0 0 16px rgba(251, 191, 36, 0.25) !important;
+            }
+
+            /* Hover States for Menu Items */
+            body.dark-mode #mobileProfileDropdown a:hover,
+            body.dark-mode #desktopProfileDropdown a:hover {
+                background: rgba(51, 65, 85, 0.5) !important;
+            }
+
+            /* Logout Button - Red Accent */
+            body.dark-mode #mobileProfileDropdown a[href*="logout"],
+            body.dark-mode #desktopProfileDropdown a[href*="logout"] {
+                color: #fca5a5 !important;
+            }
+
+            body.dark-mode #mobileProfileDropdown a[href*="logout"] > div:first-child,
+            body.dark-mode #desktopProfileDropdown a[href*="logout"] > div:first-child {
+                background: rgba(239, 68, 68, 0.15) !important;
+                border: 1px solid rgba(239, 68, 68, 0.2) !important;
+            }
+
+            body.dark-mode #mobileProfileDropdown a[href*="logout"]:hover,
+            body.dark-mode #desktopProfileDropdown a[href*="logout"]:hover {
+                background: rgba(127, 29, 29, 0.3) !important;
             }
         </style>
     </body>
