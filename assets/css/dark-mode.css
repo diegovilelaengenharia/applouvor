@@ -15,14 +15,14 @@ body.dark-mode {
     --bg-body: #121212;
     --bg-surface: #252525;
 
-    /* Textos - Reduced Contrast for comfort */
-    --text-primary: rgba(255, 255, 255, 0.87);
-    /* High Emphasis */
-    --text-secondary: rgba(255, 255, 255, 0.60);
-    /* Medium Emphasis */
-    --text-muted: rgba(255, 255, 255, 0.38);
+    /* Textos - Melhor legibilidade */
+    --text-primary: rgba(255, 255, 255, 0.95);
+    /* High Emphasis - Mais claro */
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    /* Medium Emphasis - Mais claro */
+    --text-muted: rgba(255, 255, 255, 0.50);
     /* Disabled/Muted */
-    --text-main: rgba(255, 255, 255, 0.87);
+    --text-main: rgba(255, 255, 255, 0.95);
 
     /* Bordas */
     --border-color: #333333;
@@ -528,29 +528,33 @@ body.dark-mode .sidebar-nav {
 }
 
 body.dark-mode .nav-item {
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.85) !important; /* Texto mais claro */
 }
 
 body.dark-mode .nav-item:hover {
     background: var(--bg-tertiary);
-    color: var(--text-primary);
+    color: rgba(255, 255, 255, 0.95) !important; /* Texto ainda mais claro no hover */
 }
 
 body.dark-mode .nav-item.active {
     background: var(--primary-light);
-    color: var(--primary-green-light);
+    color: rgba(255, 255, 255, 1) !important; /* Branco puro quando ativo */
 }
 
+/* ÍCONES COLORIDOS - Mantém cores vibrantes */
 body.dark-mode .nav-item svg {
-    color: var(--text-muted);
+    /* Remove o filtro de cor - mantém a cor original do ícone */
+    opacity: 1 !important;
 }
 
 body.dark-mode .nav-item:hover svg {
-    color: var(--text-primary);
+    /* Mantém cor original no hover, apenas aumenta brilho */
+    filter: brightness(1.2);
 }
 
 body.dark-mode .nav-item.active svg {
-    color: var(--primary-green-light) !important;
+    /* Mantém cor original quando ativo, com brilho máximo */
+    filter: brightness(1.3) !important;
 }
 
 /* Sidebar specific nav items */
@@ -592,39 +596,45 @@ body.dark-mode .sidebar-text {
     color: var(--text-muted);
 }
 
-/* Sidebar Footer */
+/* Sidebar Footer - BARRA DE PERFIL PREMIUM */
 body.dark-mode .sidebar-footer {
-    background: var(--bg-tertiary);
-    border-top-color: var(--border-color);
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%) !important;
+    border-top: 2px solid rgba(52, 211, 153, 0.2) !important; /* Borda verde sutil */
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+    padding: 12px !important;
 }
 
 body.dark-mode .user-profile-integrated {
-    color: var(--text-primary);
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
 body.dark-mode .profile-link:hover {
-    background: var(--bg-primary);
+    background: rgba(52, 211, 153, 0.1) !important; /* Hover com toque verde */
+    border-radius: 8px;
 }
 
 body.dark-mode .user-avatar-compact {
-    border-color: var(--border-color);
+    border: 3px solid #34d399 !important; /* Borda verde vibrante */
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
 }
 
 body.dark-mode .u-name {
-    color: var(--text-primary);
+    color: rgba(255, 255, 255, 1) !important; /* Branco puro para o nome */
+    font-weight: 600 !important;
 }
 
 body.dark-mode .u-role {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.70) !important; /* Mais claro que antes */
 }
 
 body.dark-mode .action-icon-subtle {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.70) !important;
 }
 
 body.dark-mode .action-icon-subtle:hover {
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: rgba(52, 211, 153, 0.15) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 6px;
 }
 
 /* Sidebar Overlay */
