@@ -5,15 +5,17 @@
 
 /* === VARIÁVEIS GLOBAIS DARK MODE === */
 body.dark-mode {
-    /* Backgrounds - Ergonomic Dark (Neutral Grays) */
-    --bg-primary: #121212;
-    /* Deep Grey - Not pure black */
-    --bg-secondary: #252525;
-    /* Lighter Grey for cards/surfaces - CLARIFIED */
-    --bg-tertiary: #2d2d2d;
-    /* Slightly lighter for inputs/hover */
-    --bg-body: #121212;
-    --bg-surface: #252525;
+    /* Backgrounds - Premium Dark Palette */
+    --bg-primary: #0a0a0a;
+    /* Quase preto, mais profundo */
+    --bg-secondary: #171717;
+    /* Neutral 900 - Base para cards */
+    --bg-tertiary: #262626;
+    /* Neutral 800 - Base para inputs/hovers */
+
+    /* Surface aliases */
+    --bg-body: #0a0a0a;
+    --bg-surface: #171717;
 
     /* Textos - Melhor legibilidade */
     --text-primary: rgba(255, 255, 255, 0.95);
@@ -124,11 +126,20 @@ body.dark-mode .member-card,
 body.dark-mode .song-card,
 body.dark-mode [class*="card-"],
 body.dark-mode [class*="-card"] {
-    background: var(--bg-secondary) !important;
-    /* #1E1E1E */
-    border-color: var(--border-color) !important;
-    /* #333333 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+    background: linear-gradient(145deg, #1e1e1e 0%, #252525 100%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Efeito Premium Hover em Cards Interativos */
+body.dark-mode .dashboard-card:hover,
+body.dark-mode .quick-access-card:hover,
+body.dark-mode .event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important;
+    border-top-color: var(--primary-green) !important;
+    /* Toque de cor ao passar o mouse */
 }
 
 /* Títulos e textos principais dentro dos cards */
@@ -189,20 +200,21 @@ body.dark-mode .modal-body,
 body.dark-mode [class*="modal-"],
 body.dark-mode .overlay,
 body.dark-mode .popup {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
+    background: #1e1e1e !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
 body.dark-mode .modal-header {
-    background: var(--bg-tertiary) !important;
-    border-bottom-color: var(--border-color) !important;
-    color: var(--text-primary) !important;
+    background: linear-gradient(to right, #1e1e1e, #252525) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: white !important;
 }
 
 body.dark-mode .modal-footer {
-    background: var(--bg-tertiary) !important;
-    border-top-color: var(--border-color) !important;
+    background: #1e1e1e !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
 /* === CALENDÁRIO === */
@@ -247,9 +259,19 @@ body.dark-mode input[type="number"],
 body.dark-mode input[type="tel"],
 body.dark-mode input[type="url"],
 body.dark-mode textarea {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
+    background: #2a2a2a !important;
+    color: white !important;
+    border: 1px solid #404040 !important;
+    transition: all 0.2s ease;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+    background: #333 !important;
+    border-color: var(--primary-green) !important;
+    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.2) !important;
+    color: white !important;
 }
 
 body.dark-mode input::placeholder,
@@ -528,17 +550,20 @@ body.dark-mode .sidebar-nav {
 }
 
 body.dark-mode .nav-item {
-    color: rgba(255, 255, 255, 0.85) !important; /* Texto mais claro */
+    color: rgba(255, 255, 255, 0.85) !important;
+    /* Texto mais claro */
 }
 
 body.dark-mode .nav-item:hover {
     background: var(--bg-tertiary);
-    color: rgba(255, 255, 255, 0.95) !important; /* Texto ainda mais claro no hover */
+    color: rgba(255, 255, 255, 0.95) !important;
+    /* Texto ainda mais claro no hover */
 }
 
 body.dark-mode .nav-item.active {
     background: var(--primary-light);
-    color: rgba(255, 255, 255, 1) !important; /* Branco puro quando ativo */
+    color: rgba(255, 255, 255, 1) !important;
+    /* Branco puro quando ativo */
 }
 
 /* ÍCONES COLORIDOS - Mantém cores vibrantes */
@@ -599,7 +624,8 @@ body.dark-mode .sidebar-text {
 /* Sidebar Footer - BARRA DE PERFIL PREMIUM */
 body.dark-mode .sidebar-footer {
     background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%) !important;
-    border-top: 2px solid rgba(52, 211, 153, 0.2) !important; /* Borda verde sutil */
+    border-top: 2px solid rgba(52, 211, 153, 0.2) !important;
+    /* Borda verde sutil */
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
     padding: 12px !important;
 }
@@ -609,22 +635,26 @@ body.dark-mode .user-profile-integrated {
 }
 
 body.dark-mode .profile-link:hover {
-    background: rgba(52, 211, 153, 0.1) !important; /* Hover com toque verde */
+    background: rgba(52, 211, 153, 0.1) !important;
+    /* Hover com toque verde */
     border-radius: 8px;
 }
 
 body.dark-mode .user-avatar-compact {
-    border: 3px solid #34d399 !important; /* Borda verde vibrante */
+    border: 3px solid #34d399 !important;
+    /* Borda verde vibrante */
     box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
 }
 
 body.dark-mode .u-name {
-    color: rgba(255, 255, 255, 1) !important; /* Branco puro para o nome */
+    color: rgba(255, 255, 255, 1) !important;
+    /* Branco puro para o nome */
     font-weight: 600 !important;
 }
 
 body.dark-mode .u-role {
-    color: rgba(255, 255, 255, 0.70) !important; /* Mais claro que antes */
+    color: rgba(255, 255, 255, 0.70) !important;
+    /* Mais claro que antes */
 }
 
 body.dark-mode .action-icon-subtle {
@@ -697,6 +727,19 @@ body.dark-mode .sheet-btn {
 
 body.dark-mode .sheet-btn:active {
     background: var(--bg-primary);
+}
+
+/* Aviso Item Premium */
+body.dark-mode .aviso-item {
+    background: linear-gradient(145deg, #1e1e1e 0%, #252525 100%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-left-width: 4px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .aviso-item:hover {
+    transform: translateX(2px);
+    background: #2a2a2a !important;
 }
 
 /* Mobile Header */
@@ -961,19 +1004,28 @@ body.dark-mode .btn-action-delete {
 /* === TABELAS === */
 
 body.dark-mode .clean-table-container {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
+    background: #1e1e1e !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
 }
 
 body.dark-mode .clean-table th {
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-    border-bottom-color: var(--border-color);
+    background: rgba(255, 255, 255, 0.03) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 body.dark-mode .clean-table td {
-    border-bottom-color: var(--border-color);
-    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.dark-mode .clean-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02) !important;
 }
 
 body.dark-mode .table-avatar {
@@ -1364,14 +1416,18 @@ body.dark-mode .aviso-actions {
 }
 
 body.dark-mode .action-btn {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-secondary) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.2s ease;
 }
 
 body.dark-mode .action-btn:hover {
     background: var(--primary) !important;
     color: white !important;
+    border-color: var(--primary) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3) !important;
 }
 
 /* === LEITURA BÍBLICA (leitura.php) === */
@@ -1487,7 +1543,9 @@ body.dark-mode button[onclick*="openSheet"][style*="background: white"] {
     background: var(--bg-surface) !important;
     border-color: var(--border-color) !important;
     color: var(--text-secondary) !important;
-}/* ==========================================================================
+}
+
+/* ==========================================================================
    ULTRA-AGGRESSIVE OVERRIDES FOR INLINE STYLES (LEITURA.PHP + OTHERS)
    ========================================================================== */
 
