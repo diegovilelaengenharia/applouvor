@@ -1278,3 +1278,203 @@ body.dark-mode .fab {
 body.dark-mode {
     animation: dark-mode-fade-in 0.3s ease-in-out;
 }
+
+/* ==========================================================================
+   FIXES FINAIS DE AUDITORIA (LOUVOR APP)
+   ========================================================================== */
+
+/* === AVISOS (avisos.php) === */
+/* Hero Header Roxo -> Escuro */
+body.dark-mode .hero-avisos {
+    background: #1e1b4b !important;
+    /* Indigo 950 */
+    border-bottom: 1px solid #4338ca !important;
+}
+
+body.dark-mode .hero-title {
+    color: #e0e7ff !important;
+    /* Indigo 100 */
+}
+
+body.dark-mode .hero-subtitle {
+    color: #c7d2fe !important;
+    /* Indigo 200 */
+}
+
+/* Inputs e Filtros (Avisos) */
+body.dark-mode .search-input,
+body.dark-mode .filter-button {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+body.dark-mode .search-input:focus,
+body.dark-mode .filter-button:hover,
+body.dark-mode .filter-button.active {
+    border-color: var(--primary) !important;
+    background: var(--bg-tertiary) !important;
+}
+
+/* Dropdown de Filtros */
+body.dark-mode .filter-dropdown {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .filter-option {
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+body.dark-mode .filter-option:hover,
+body.dark-mode .filter-option.active {
+    background: var(--bg-tertiary) !important;
+    color: var(--primary) !important;
+}
+
+/* Aviso Cards */
+body.dark-mode .aviso-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .aviso-header {
+    border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-mode .aviso-author-name,
+body.dark-mode .aviso-title {
+    color: var(--text-main) !important;
+}
+
+body.dark-mode .aviso-actions {
+    background: var(--bg-tertiary) !important;
+    border-top-color: var(--border-color) !important;
+}
+
+body.dark-mode .action-btn {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+body.dark-mode .action-btn:hover {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+/* === LEITURA BÍBLICA (leitura.php) === */
+/* Régua de Calendário */
+body.dark-mode #calendar-strip,
+body.dark-mode .cal-strip {
+    background: var(--bg-surface) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-mode .cal-item {
+    background: var(--bg-body) !important;
+    color: var(--text-muted) !important;
+}
+
+body.dark-mode .cal-item .cal-num {
+    color: var(--text-main) !important;
+}
+
+body.dark-mode .cal-item.active {
+    background: var(--primary-subtle) !important;
+    /* Tinted background */
+    border-color: var(--primary) !important;
+}
+
+body.dark-mode .cal-item.active .cal-num {
+    color: var(--primary) !important;
+}
+
+/* Cards e Texto */
+body.dark-mode .verse-card,
+body.dark-mode .plan-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode #day-title {
+    color: var(--text-main) !important;
+}
+
+/* Barra Inferior e Editor de Notas */
+body.dark-mode .bottom-bar {
+    background: #1e1e1e !important;
+    border-top-color: #333 !important;
+}
+
+body.dark-mode .editor-btn {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+body.dark-mode #note-desc-input {
+    color: var(--text-main) !important;
+    background: transparent !important;
+}
+
+/* Modais de Leitura (corrigindo textos escuros) */
+body.dark-mode .modal-content,
+body.dark-mode [style*="background: white"] {
+    background: var(--bg-surface) !important;
+    color: var(--text-main) !important;
+}
+
+/* === AGENDA (agenda.php) === */
+/* Controles de Topo */
+body.dark-mode .agenda-controls {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .view-toggle {
+    background: var(--bg-body) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .view-btn {
+    color: var(--text-muted) !important;
+}
+
+body.dark-mode .view-btn.active {
+    background: var(--bg-surface) !important;
+    color: var(--primary) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .nav-btn {
+    background: var(--bg-body) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+body.dark-mode .current-display {
+    color: var(--text-main) !important;
+}
+
+/* === ESCALAS (escalas.php) === */
+/* Botões de Toggle (Próximas/Past) com style inline */
+body.dark-mode #btn-future[style*="background: white"],
+body.dark-mode #btn-past[style*="background: white"] {
+    background: var(--bg-surface) !important;
+    color: var(--text-main) !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode [style*="background: #e2e8f0"] {
+    /* O container cinza do toggle */
+    background: var(--bg-tertiary) !important;
+}
+
+/* Filtro Button */
+body.dark-mode button[onclick*="openSheet"][style*="background: white"] {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
