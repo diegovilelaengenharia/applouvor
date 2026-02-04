@@ -8,12 +8,12 @@ body.dark-mode {
     /* Backgrounds - Ergonomic Dark (Neutral Grays) */
     --bg-primary: #121212;
     /* Deep Grey - Not pure black */
-    --bg-secondary: #1E1E1E;
-    /* Lighter Grey for cards/surfaces */
-    --bg-tertiary: #27272a;
+    --bg-secondary: #252525;
+    /* Lighter Grey for cards/surfaces - CLARIFIED */
+    --bg-tertiary: #2d2d2d;
     /* Slightly lighter for inputs/hover */
     --bg-body: #121212;
-    --bg-surface: #1E1E1E;
+    --bg-surface: #252525;
 
     /* Textos - Reduced Contrast for comfort */
     --text-primary: rgba(255, 255, 255, 0.87);
@@ -45,10 +45,10 @@ body.dark-mode {
     /* Accent Colors - Pastels */
     --accent-primary: #34d399;
     --accent-interactive: #6ee7b7;
-    --primary-blue: #60a5fa;
-    /* Blue 400 - Softer */
-    --primary-blue-light: #93c5fd;
-    /* Blue 300 - Even softer */
+    --primary-blue: #7dd3fc;
+    /* Sky 300 - Brighter and more vibrant */
+    --primary-blue-light: #bae6fd;
+    /* Sky 200 - Even lighter */
 
     /* Glassmorphism Dark */
     --glass-bg: rgba(255, 255, 255, 0.05);
