@@ -30,19 +30,19 @@ body.dark-mode {
     --border-color: #333333;
     --border-subtle: #2d2d2d;
 
-    /* Primary Colors - Dessaturadas para Dark Mode */
-    --primary: #34d399;
-    /* Emerald 400 - Softer than 500 */
-    --primary-hover: #10b981;
-    /* Emerald 500 */
+    /* Primary Colors - Mais intensas para Dark Mode */
+    --primary: #10b981;
+    /* Emerald 500 - Mais intenso */
+    --primary-hover: #059669;
+    /* Emerald 600 - Hover mais escuro */
     --primary-light: #064e3b;
     /* Emerald 900 background */
     --primary-subtle: #0f392b;
     /* Very dark green background */
 
-    --primary-green: #34d399;
-    --primary-green-light: #6ee7b7;
-    --primary-green-dark: #10b981;
+    --primary-green: #10b981;
+    --primary-green-light: #34d399;
+    --primary-green-dark: #059669;
 
     /* Accent Colors - Pastels */
     --accent-primary: #34d399;
