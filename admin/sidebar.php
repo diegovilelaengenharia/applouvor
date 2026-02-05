@@ -45,13 +45,13 @@ if (!empty($currentUser['avatar'])) {
 <div id="app-sidebar" class="sidebar">
     <!-- Cabeçalho Sidebar com Logo (Clicável para Recolher) -->
     <div onclick="toggleSidebarDesktop()" style="padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" title="Expandir/Recolher Menu">
-        <div class="logo-area" style="font-weight: 800; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
+        <div class="logo-area" style="font-weight: 800; color: var(--slate-900); font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
             <!-- Logo Imagem -->
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color:#376ac8; font-size: 0.95rem;">PIB Oliveira</span>
-                <span class="sidebar-text" style="font-size: 0.7rem; color: #64748b; font-weight: 600;">App Louvor</span>
+                <span class="sidebar-text" style="color: var(--slate-600); font-size: 0.95rem;">PIB Oliveira</span>
+                <span class="sidebar-text" style="font-size: 0.7rem; color: var(--slate-500); font-weight: 600;">App Louvor</span>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <div class="nav-divider"></div>
-        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
+        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
 
         <a href="<?= $baseAdmin ?>escalas.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -138,7 +138,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <div class="nav-divider"></div>
-        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
+        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
 
         <a href="<?= $baseAdmin ?>devocionais.php" class="nav-item nav-indigo <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -163,7 +163,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <div class="nav-divider"></div>
-        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
+        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
 
         <a href="<?= $baseAdmin ?>avisos.php" class="nav-item nav-amber <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -195,10 +195,10 @@ if (!empty($currentUser['avatar'])) {
         --sidebar-width: 190px;
         --sidebar-collapsed-width: 88px;
         --sidebar-bg: #ffffff;
-        --sidebar-text: #475569;
-        --brand-primary: #376ac8; /* Smart Blue 500 */
-        --brand-light: #ebf0fa;   /* Smart Blue 50 */
-        --brand-hover: #f1f5f9;
+        --sidebar-text: var(--slate-600);
+        --brand-primary: var(--slate-600);
+        --brand-light: var(--slate-100);
+        --brand-hover: var(--slate-100);
     }
 
     /* Sidebar Layout */
@@ -209,7 +209,7 @@ if (!empty($currentUser['avatar'])) {
         bottom: 0;
         width: var(--sidebar-width);
         background: var(--sidebar-bg);
-        border-right: 1px solid #e2e8f0;
+        border-right: 1px solid var(--slate-200);
         display: flex;
         flex-direction: column;
         z-index: 1000;
@@ -266,56 +266,56 @@ if (!empty($currentUser['avatar'])) {
     /* Colors Classes restored */
     .nav-item.nav-primary:hover,
     .nav-item.nav-primary.active {
-        background-color: var(--bg-surface-hover, #f1f5f9);
-        color: var(--text-main, #334155);
+        background-color: var(--slate-100);
+        color: var(--slate-700);
     }
 
     .nav-item.nav-primary.active svg {
-        color: var(--primary, #376ac8);
+        color: var(--slate-600);
     }
 
     /* GESTÃO → NEUTRO COM ACENTO AZUL */
-    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: #94a3b8; }
+    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: var(--slate-400); }
     .nav-item.nav-emerald:hover, .nav-item.nav-emerald.active,
     .nav-item.nav-blue:hover, .nav-item.nav-blue.active,
-    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: var(--bg-surface-hover, #f1f5f9); color: var(--text-main, #334155); }
+    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: var(--slate-100); color: var(--slate-700); }
     
     .nav-item.nav-emerald.active svg,
     .nav-item.nav-blue.active svg,
-    .nav-item.nav-violet.active svg { color: #376ac8; }
+    .nav-item.nav-violet.active svg { color: var(--slate-600); }
 
     /* ESPIRITUAL → NEUTRO COM ACENTO VERDE */
-    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: #94a3b8; }
+    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: var(--slate-400); }
     .nav-item.nav-indigo:hover, .nav-item.nav-indigo.active,
     .nav-item.nav-rose:hover, .nav-item.nav-rose.active,
-    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: var(--bg-surface-hover, #f1f5f9); color: var(--text-main, #334155); }
+    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: var(--sage-100); color: var(--sage-700); }
     
     .nav-item.nav-indigo.active svg,
     .nav-item.nav-rose.active svg,
-    .nav-item.nav-cyan.active svg { color: #376ac8; }
+    .nav-item.nav-cyan.active svg { color: var(--sage-600); }
 
     /* COMUNICAÇÃO → NEUTRO COM ACENTO ROXO */
-    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: #94a3b8; }
+    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: var(--slate-400); }
     .nav-item.nav-amber:hover, .nav-item.nav-amber.active,
-    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: var(--bg-surface-hover, #f1f5f9); color: var(--text-main, #334155); }
+    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: var(--lavender-100); color: var(--lavender-700); }
     
     .nav-item.nav-amber.active svg,
-    .nav-item.nav-pink.active svg { color: #a855f7; }
+    .nav-item.nav-pink.active svg { color: var(--lavender-600); }
 
     /* Indicadores (Blue) */
     .nav-item.nav-indicators svg {
-        color: #3b82f6;
+        color: var(--slate-500);
     }
 
     .nav-item.nav-indicators:hover,
     .nav-item.nav-indicators.active {
-        background-color: #eff6ff;
-        color: #1e40af;
+        background-color: var(--slate-50);
+        color: var(--slate-700);
     }
 
     .nav-item.nav-indicators:hover svg,
     .nav-item.nav-indicators.active svg {
-        color: #1e40af;
+        color: var(--slate-700);
     }
 
 
