@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Louvor - Paleta de Cores v2.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #3b82f6 0%, #24CE6B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 40px 0 20px 0;
+            color: #1f2937;
+        }
+        
+        .color-row {
+            margin-bottom: 30px;
+        }
+        
+        .row-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+        }
+        
+        .swatch {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .swatch:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        
+        .swatch.main {
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .swatch-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 0.65rem;
+            padding: 4px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .swatch:hover .swatch-label {
+            opacity: 1;
+        }
+        
+        .secondary-colors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .secondary-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 20px;
+        }
+        
+        .secondary-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .secondary-swatches {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+        
+        .secondary-swatch {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .secondary-swatch:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        
+        .secondary-swatch.main {
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .swatches {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>App Louvor - Design System v2.0</h1>
+        <p class="subtitle">Paleta de Cores Profissional</p>
+        
+        <h2 class="section-title">Cores Principais</h2>
+        
+        <!-- AZUL - Gestão -->
+        <div class="color-row">
+            <div class="row-label">🔵 Azul - Gestão</div>
+            <div class="swatches">
+                <div class="swatch" style="background: #eff6ff;"><span class="swatch-label">#eff6ff<br>50</span></div>
+                <div class="swatch" style="background: #dbeafe;"><span class="swatch-label">#dbeafe<br>100</span></div>
+                <div class="swatch" style="background: #bfdbfe;"><span class="swatch-label">#bfdbfe<br>200</span></div>
+                <div class="swatch" style="background: #93c5fd;"><span class="swatch-label">#93c5fd<br>300</span></div>
+                <div class="swatch" style="background: #60a5fa;"><span class="swatch-label">#60a5fa<br>400</span></div>
+                <div class="swatch main" style="background: #3b82f6;"><span class="swatch-label">#3b82f6<br>⭐ 500</span></div>
+                <div class="swatch" style="background: #2563eb;"><span class="swatch-label">#2563eb<br>600</span></div>
+                <div class="swatch" style="background: #1d4ed8;"><span class="swatch-label">#1d4ed8<br>700</span></div>
+                <div class="swatch" style="background: #1e40af;"><span class="swatch-label">#1e40af<br>800</span></div>
+                <div class="swatch" style="background: #1e3a8a;"><span class="swatch-label">#1e3a8a<br>900</span></div>
+            </div>
+        </div>
+        
+        <!-- VERDE - Espiritual -->
+        <div class="color-row">
+            <div class="row-label">🟢 Verde - Espiritual</div>
+            <div class="swatches">
+                <div class="swatch" style="background: #ecfdf5;"><span class="swatch-label">#ecfdf5<br>50</span></div>
+                <div class="swatch" style="background: #d1fae5;"><span class="swatch-label">#d1fae5<br>100</span></div>
+                <div class="swatch" style="background: #a7f3d0;"><span class="swatch-label">#a7f3d0<br>200</span></div>
+                <div class="swatch" style="background: #6ee7b7;"><span class="swatch-label">#6ee7b7<br>300</span></div>
+                <div class="swatch" style="background: #34d399;"><span class="swatch-label">#34d399<br>400</span></div>
+                <div class="swatch main" style="background: #24CE6B;"><span class="swatch-label">#24CE6B<br>⭐ 500</span></div>
+                <div class="swatch" style="background: #1fb85e;"><span class="swatch-label">#1fb85e<br>600</span></div>
+                <div class="swatch" style="background: #1a9d50;"><span class="swatch-label">#1a9d50<br>700</span></div>
+                <div class="swatch" style="background: #158242;"><span class="swatch-label">#158242<br>800</span></div>
+                <div class="swatch" style="background: #106734;"><span class="swatch-label">#106734<br>900</span></div>
+            </div>
+        </div>
+        
+        <!-- AMARELO - Comunicação -->
+        <div class="color-row">
+            <div class="row-label">🟡 Amarelo - Comunicação</div>
+            <div class="swatches">
+                <div class="swatch" style="background: #fffbeb;"><span class="swatch-label">#fffbeb<br>50</span></div>
+                <div class="swatch" style="background: #fef3c7;"><span class="swatch-label">#fef3c7<br>100</span></div>
+                <div class="swatch" style="background: #fde68a;"><span class="swatch-label">#fde68a<br>200</span></div>
+                <div class="swatch" style="background: #fcd34d;"><span class="swatch-label">#fcd34d<br>300</span></div>
+                <div class="swatch" style="background: #fbbf24;"><span class="swatch-label">#fbbf24<br>400</span></div>
+                <div class="swatch main" style="background: #FFC501;"><span class="swatch-label">#FFC501<br>⭐ 500</span></div>
+                <div class="swatch" style="background: #e6b001;"><span class="swatch-label">#e6b001<br>600</span></div>
+                <div class="swatch" style="background: #cc9c01;"><span class="swatch-label">#cc9c01<br>700</span></div>
+                <div class="swatch" style="background: #a67c01;"><span class="swatch-label">#a67c01<br>800</span></div>
+                <div class="swatch" style="background: #8b6501;"><span class="swatch-label">#8b6501<br>900</span></div>
+            </div>
+        </div>
+        
+        <!-- VERMELHO - Crítico -->
+        <div class="color-row">
+            <div class="row-label">🔴 Vermelho - Crítico</div>
+            <div class="swatches">
+                <div class="swatch" style="background: #fef2f2;"><span class="swatch-label">#fef2f2<br>50</span></div>
+                <div class="swatch" style="background: #fee2e2;"><span class="swatch-label">#fee2e2<br>100</span></div>
+                <div class="swatch" style="background: #fecaca;"><span class="swatch-label">#fecaca<br>200</span></div>
+                <div class="swatch" style="background: #fca5a5;"><span class="swatch-label">#fca5a5<br>300</span></div>
+                <div class="swatch" style="background: #f87171;"><span class="swatch-label">#f87171<br>400</span></div>
+                <div class="swatch main" style="background: #ef4444;"><span class="swatch-label">#ef4444<br>⭐ 500</span></div>
+                <div class="swatch" style="background: #dc2626;"><span class="swatch-label">#dc2626<br>600</span></div>
+                <div class="swatch" style="background: #b91c1c;"><span class="swatch-label">#b91c1c<br>700</span></div>
+                <div class="swatch" style="background: #991b1b;"><span class="swatch-label">#991b1b<br>800</span></div>
+                <div class="swatch" style="background: #7f1d1d;"><span class="swatch-label">#7f1d1d<br>900</span></div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Cores Secundárias</h2>
+        
+        <div class="secondary-colors">
+            <!-- ROXO - Liderança -->
+            <div class="secondary-card">
+                <h3>🟣 Roxo - Liderança</h3>
+                <div class="secondary-swatches">
+                    <div class="secondary-swatch" style="background: #faf5ff;" title="#faf5ff - 50"></div>
+                    <div class="secondary-swatch" style="background: #e9d5ff;" title="#e9d5ff - 200"></div>
+                    <div class="secondary-swatch main" style="background: #c084fc;" title="#c084fc - ⭐ 500"></div>
+                    <div class="secondary-swatch" style="background: #7e22ce;" title="#7e22ce - 700"></div>
+                    <div class="secondary-swatch" style="background: #581c87;" title="#581c87 - 900"></div>
+                </div>
+            </div>
+            
+            <!-- LARANJA - Atenção -->
+            <div class="secondary-card">
+                <h3>🔶 Laranja - Atenção</h3>
+                <div class="secondary-swatches">
+                    <div class="secondary-swatch" style="background: #fff7ed;" title="#fff7ed - 50"></div>
+                    <div class="secondary-swatch" style="background: #fed7aa;" title="#fed7aa - 200"></div>
+                    <div class="secondary-swatch main" style="background: #fb923c;" title="#fb923c - ⭐ 400"></div>
+                    <div class="secondary-swatch" style="background: #c2410c;" title="#c2410c - 700"></div>
+                    <div class="secondary-swatch" style="background: #7c2d12;" title="#7c2d12 - 900"></div>
+                </div>
+            </div>
+            
+            <!-- CIANO - Informação -->
+            <div class="secondary-card">
+                <h3>🩵 Ciano - Informação</h3>
+                <div class="secondary-swatches">
+                    <div class="secondary-swatch" style="background: #ecfeff;" title="#ecfeff - 50"></div>
+                    <div class="secondary-swatch" style="background: #a5f3fc;" title="#a5f3fc - 200"></div>
+                    <div class="secondary-swatch main" style="background: #22d3ee;" title="#22d3ee - ⭐ 400"></div>
+                    <div class="secondary-swatch" style="background: #0e7490;" title="#0e7490 - 700"></div>
+                    <div class="secondary-swatch" style="background: #164e63;" title="#164e63 - 900"></div>
+                </div>
+            </div>
+            
+            <!-- ROSA - Especial -->
+            <div class="secondary-card">
+                <h3>🩷 Rosa - Especial</h3>
+                <div class="secondary-swatches">
+                    <div class="secondary-swatch" style="background: #fdf2f8;" title="#fdf2f8 - 50"></div>
+                    <div class="secondary-swatch" style="background: #fbcfe8;" title="#fbcfe8 - 200"></div>
+                    <div class="secondary-swatch main" style="background: #f472b6;" title="#f472b6 - ⭐ 400"></div>
+                    <div class="secondary-swatch" style="background: #be185d;" title="#be185d - 700"></div>
+                    <div class="secondary-swatch" style="background: #831843;" title="#831843 - 900"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Copiar cor ao clicar
+        document.querySelectorAll('.swatch, .secondary-swatch').forEach(swatch => {
+            swatch.addEventListener('click', () => {
+                const color = swatch.style.background;
+                navigator.clipboard.writeText(color);
+                
+                // Feedback visual
+                const originalBg = swatch.style.background;
+                swatch.style.background = '#000';
+                setTimeout(() => {
+                    swatch.style.background = originalBg;
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
