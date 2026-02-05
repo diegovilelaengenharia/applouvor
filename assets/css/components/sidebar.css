@@ -17,6 +17,12 @@
     transition: all 0.2s;
 }
 
+/* 🎨 VISÃO GERAL → MULTICOLOR (Ícone especial) */
+.nav-item.nav-multicolor:hover,
+.nav-item.nav-multicolor.active {
+    background-color: var(--blue-50);
+}
+
 /* Cores semânticas para navegação - GESTÃO (Azul Vibrante) */
 .nav-blue {
     color: #3b82f6;
