@@ -53,7 +53,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
 
 <!-- Header Card -->
 <div style="max-width: 800px; margin: 0 auto 20px; padding: 0 16px;">
-    <div style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+    <div style="background: linear-gradient(135deg, var(--lavender-600), #7c3aed); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
                 <div style="
@@ -125,7 +125,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
                     <div style="display: flex; gap: 12px; align-items: flex-start;">
                         <div style="
                             width: 48px; height: 48px; border-radius: 10px;
-                            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                            background: linear-gradient(135deg, var(--lavender-600), #7c3aed);
                             color: white; display: flex; align-items: center; justify-content: center;
                             font-weight: 700; font-size: var(--font-h2); flex-shrink: 0;
                         ">
@@ -135,7 +135,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
                             <h4 style="margin: 0 0 4px 0; font-size: var(--font-h3); font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></h4>
                             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
                                 <?php if ($song['category']): ?>
-                                    <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #dbeafe;">
+                                    <span style="background: var(--slate-50); color: var(--slate-600); padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--slate-100);">
                                         <?= htmlspecialchars($song['category']) ?>
                                     </span>
                                 <?php endif; ?>
@@ -145,7 +145,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($song['bpm']): ?>
-                                    <span style="background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fee2e2;">
+                                    <span style="background: var(--rose-50); color: var(--rose-600); padding: 4px 10px; border-radius: 6px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-100);">
                                         <?= $song['bpm'] ?> BPM
                                     </span>
                                 <?php endif; ?>
@@ -163,8 +163,8 @@ renderPageHeader($artistName, 'Perfil do Artista');
 <div id="editModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
     <div style="background: white; width: 90%; max-width: 500px; border-radius: 20px; padding: 24px; animation: slideUp 0.3s ease;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="margin: 0; font-size: var(--font-h2); color: #1e293b;">Editar Artista</h3>
-            <button onclick="closeEditModal()" style="background: none; border: none; font-size: var(--font-display); color: #94a3b8; cursor: pointer;">&times;</button>
+            <h3 style="margin: 0; font-size: var(--font-h2); color: var(--slate-800);">Editar Artista</h3>
+            <button onclick="closeEditModal()" style="background: none; border: none; font-size: var(--font-display); color: var(--slate-400); cursor: pointer;">&times;</button>
         </div>
         
         <form method="POST">
@@ -178,10 +178,10 @@ renderPageHeader($artistName, 'Perfil do Artista');
                 " onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#d1d5db'">
             </div>
             
-            <div style="background: #fffbeb; padding: 12px; border-radius: 8px; border: 1px solid #fef3c7; margin-bottom: 20px;">
+            <div style="background: var(--yellow-50); padding: 12px; border-radius: 8px; border: 1px solid var(--yellow-100); margin-bottom: 20px;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                    <i data-lucide="alert-triangle" style="width: 16px; color: #f59e0b;"></i>
-                    <span style="font-size: var(--font-body-sm); font-weight: 700; color: #f59e0b;">ATENÇÃO</span>
+                    <i data-lucide="alert-triangle" style="width: 16px; color: var(--yellow-500);"></i>
+                    <span style="font-size: var(--font-body-sm); font-weight: 700; color: var(--yellow-500);">ATENÇÃO</span>
                 </div>
                 <p style="margin: 0; font-size: var(--font-body-sm); color: #78350f;">
                     Alterar o nome do artista irá atualizar <strong>todas as <?= $totalSongs ?> música<?= $totalSongs != 1 ? 's' : '' ?></strong> deste artista.
@@ -190,7 +190,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
             
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeEditModal()" style="flex: 1; padding: 12px; background: white; border: 1px solid #d1d5db; color: #374151; border-radius: 12px; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" style="flex: 1; padding: 12px; background: #8b5cf6; border: none; color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">Salvar</button>
+                <button type="submit" style="flex: 1; padding: 12px; background: var(--lavender-600); border: none; color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">Salvar</button>
             </div>
         </form>
     </div>

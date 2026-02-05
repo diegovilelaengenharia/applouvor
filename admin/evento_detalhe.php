@@ -201,7 +201,7 @@ renderPageHeader($event['title'], '');
     }
     
     .participant-item.declined {
-        background: #fef2f220;
+        background: var(--rose-50)20;
         border-color: #f87171;
         opacity: 0.7;
     }
@@ -236,7 +236,7 @@ renderPageHeader($event['title'], '');
     }
     
     .status-pending {
-        background: #fef3c7;
+        background: var(--yellow-100);
         color: #92400e;
     }
     
@@ -246,8 +246,8 @@ renderPageHeader($event['title'], '');
     }
     
     .status-declined {
-        background: #fee2e2;
-        color: #991b1b;
+        background: var(--rose-100);
+        color: var(--rose-700);
     }
     
     /* Action Buttons */

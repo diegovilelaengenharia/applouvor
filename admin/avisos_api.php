@@ -37,7 +37,7 @@ try {
             }
             
             $name = $_POST['name'] ?? '';
-            $color = $_POST['color'] ?? '#64748b';
+            $color = $_POST['color'] ?? 'var(--slate-500)';
             $icon = $_POST['icon'] ?? 'tag';
             
             if (empty($name)) {

@@ -121,9 +121,9 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         margin-right: 6px;
     }
 
-    .status-online { background-color: #22c55e; }
-    .status-recent { background-color: #f59e0b; }
-    .status-offline { background-color: #ef4444; }
+    .status-online { background-color: var(--sage-500); }
+    .status-recent { background-color: var(--yellow-500); }
+    .status-offline { background-color: var(--rose-500); }
 
     .badge {
         padding: 4px 10px;
@@ -132,9 +132,9 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         font-weight: 600;
     }
 
-    .badge-high { background: #dcfce7; color: #15803d; }
-    .badge-med { background: #fef9c3; color: #854d0e; }
-    .badge-low { background: #fee2e2; color: #991b1b; }
+    .badge-high { background: var(--sage-100); color: var(--sage-700); }
+    .badge-med { background: var(--yellow-100); color: var(--yellow-800); }
+    .badge-low { background: var(--rose-100); color: var(--rose-700); }
     
     @media (max-width: 768px) {
         .user-table thead { display: none; }
@@ -176,7 +176,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <!-- KPIs -->
     <div class="dashboard-grid">
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: #eff6ff; color: #3b82f6;">
+            <div class="kpi-icon" style="background: var(--slate-50); color: var(--slate-500);">
                 <i data-lucide="users"></i>
             </div>
             <div>
@@ -186,7 +186,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: #f0fdf4; color: #22c55e;">
+            <div class="kpi-icon" style="background: var(--sage-50); color: var(--sage-500);">
                 <i data-lucide="activity"></i>
             </div>
             <div>
@@ -196,7 +196,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: #fffbeb; color: #f59e0b;">
+            <div class="kpi-icon" style="background: var(--yellow-50); color: var(--yellow-500);">
                 <i data-lucide="target"></i>
             </div>
             <div>

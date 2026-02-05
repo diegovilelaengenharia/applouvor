@@ -243,7 +243,7 @@ try {
     }
 
     .rank-number.gold {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: linear-gradient(135deg, #fbbf24, var(--yellow-500));
     }
 
     .rank-number.silver {
@@ -297,8 +297,8 @@ try {
 
     <!-- KPIs Grid -->
     <div class="kpi-grid">
-        <div class="kpi-card" style="border-left: 4px solid #8b5cf6;">
-            <div class="kpi-value" style="color: #8b5cf6;"><?= $totalEscalas ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--lavender-600);">
+            <div class="kpi-value" style="color: var(--lavender-600);"><?= $totalEscalas ?></div>
             <div class="kpi-label">Total de Escalas</div>
         </div>
 
@@ -307,13 +307,13 @@ try {
             <div class="kpi-label">Taxa Confirmação</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid #f59e0b;">
-            <div class="kpi-value" style="color: #f59e0b;"><?= $escalasPendentes ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--yellow-500);">
+            <div class="kpi-value" style="color: var(--yellow-500);"><?= $escalasPendentes ?></div>
             <div class="kpi-label">Pendentes</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid #3b82f6;">
-            <div class="kpi-value" style="color: #3b82f6;"><?= count($escalasPorTipo) ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--slate-500);">
+            <div class="kpi-value" style="color: var(--slate-500);"><?= count($escalasPorTipo) ?></div>
             <div class="kpi-label">Tipos de Culto</div>
         </div>
     </div>
@@ -385,7 +385,7 @@ try {
                 <?php foreach ($escalasPorTipo as $tipo): ?>
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                         <span style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($tipo['event_type']) ?></span>
-                        <span style="background: #eff6ff; color: #2563eb; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
+                        <span style="background: var(--slate-50); color: var(--slate-600); padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
                             <?= $tipo['total'] ?>
                         </span>
                     </div>

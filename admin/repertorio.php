@@ -41,8 +41,8 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="ripple" style="
             width: 48px; height: 48px; 
             background: white; 
-            border: 1px solid #e2e8f0; 
-            color: #64748b; 
+            border: 1px solid var(--slate-200); 
+            color: var(--slate-500); 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
@@ -63,7 +63,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             top: 56px;
             right: 0;
             background: white;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--slate-200);
             border-radius: 12px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             min-width: 200px;
@@ -86,7 +86,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     transition: background 0.2s;
                 }
                 .dropdown-item:hover {
-                    background: #f8fafc;
+                    background: var(--slate-50);
                     color: var(--primary);
                 }
             </style>
@@ -100,7 +100,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         const btn = document.getElementById('options-menu-btn');
         if (menu.style.display === 'none' || menu.style.display === '') {
             menu.style.display = 'block';
-            btn.style.background = '#f1f5f9';
+            btn.style.background = 'var(--slate-100)';
         } else {
             menu.style.display = 'none';
             btn.style.background = 'white';
@@ -189,14 +189,14 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         <?php if ($tone):
             // Cores dos tons
             $toneColors = [
-                'C' => '#ef4444', 'C#' => '#f97316', 'Db' => '#f97316',
-                'D' => '#f59e0b', 'D#' => '#84cc16', 'Eb' => '#84cc16',
-                'E' => '#22c55e', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
-                'G' => '#3b82f6', 'G#' => '#6366f1', 'Ab' => '#6366f1',
-                'A' => '#8b5cf6', 'A#' => '#a855f7', 'Bb' => '#a855f7',
+                'C' => 'var(--rose-500)', 'C#' => '#f97316', 'Db' => '#f97316',
+                'D' => 'var(--yellow-500)', 'D#' => '#84cc16', 'Eb' => '#84cc16',
+                'E' => 'var(--sage-500)', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
+                'G' => 'var(--slate-500)', 'G#' => '#6366f1', 'Ab' => '#6366f1',
+                'A' => 'var(--lavender-600)', 'A#' => 'var(--lavender-500)', 'Bb' => 'var(--lavender-500)',
                 'B' => '#ec4899'
             ];
-            $toneColor = $toneColors[$tone] ?? '#22c55e';
+            $toneColor = $toneColors[$tone] ?? 'var(--sage-500)';
         ?>
             <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; background: <?= $toneColor ?>15; padding: 12px 16px; border-radius: 12px; border: 1px solid <?= $toneColor ?>30;">
                 <div style="display: flex; align-items: center; gap: 8px; color: <?= $toneColor ?>; font-weight: 700;">
@@ -284,7 +284,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($tags as $tag):
-                $bgHex = $tag['color'] ?? '#22c55e';
+                $bgHex = $tag['color'] ?? 'var(--sage-500)';
             ?>
                 <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="ripple" style="
                 display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
@@ -349,7 +349,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             </a>
 
             <?php if (empty($tags)): ?>
-                <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                <div style="text-align: center; padding: 40px; color: var(--slate-400);">
                     <p>Nenhuma TAG encontrada.</p>
                 </div>
             <?php endif; ?>
@@ -389,7 +389,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 </a>
             <?php endforeach; ?>
             <?php if (empty($artists)): ?>
-                <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                <div style="text-align: center; padding: 40px; color: var(--slate-400);">
                     <p>Nenhum artista encontrado.</p>
                 </div>
             <?php endif; ?>
@@ -400,11 +400,11 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     <?php if ($tab === 'tons'):
         // Cores dos tons
         $toneColors = [
-            'C' => '#ef4444', 'C#' => '#f97316', 'Db' => '#f97316',
-            'D' => '#f59e0b', 'D#' => '#84cc16', 'Eb' => '#84cc16',
-            'E' => '#22c55e', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
-            'G' => '#3b82f6', 'G#' => '#6366f1', 'Ab' => '#6366f1',
-            'A' => '#8b5cf6', 'A#' => '#a855f7', 'Bb' => '#a855f7',
+            'C' => 'var(--rose-500)', 'C#' => '#f97316', 'Db' => '#f97316',
+            'D' => 'var(--yellow-500)', 'D#' => '#84cc16', 'Eb' => '#84cc16',
+            'E' => 'var(--sage-500)', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
+            'G' => 'var(--slate-500)', 'G#' => '#6366f1', 'Ab' => '#6366f1',
+            'A' => 'var(--lavender-600)', 'A#' => 'var(--lavender-500)', 'Bb' => 'var(--lavender-500)',
             'B' => '#ec4899'
         ];
         
@@ -419,7 +419,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($tones as $toneItem):
                 $toneName = $toneItem['name'];
-                $bgHex = $toneColors[$toneName] ?? '#22c55e';
+                $bgHex = $toneColors[$toneName] ?? 'var(--sage-500)';
             ?>
                 <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneName) ?>" class="ripple" style="
                 display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
@@ -460,7 +460,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <?php endforeach; ?>
 
             <?php if (empty($tones)): ?>
-                <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                <div style="text-align: center; padding: 40px; color: var(--slate-400);">
                     <p>Nenhum tom encontrado no repertório.</p>
                 </div>
             <?php endif; ?>

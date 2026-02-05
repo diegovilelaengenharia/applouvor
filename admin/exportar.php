@@ -34,7 +34,7 @@ renderAppHeader('Admin');
 
         <!-- Exportar Membros -->
         <a href="exportar_completo.php?tipo=membros" class="dash-card ripple" style="text-decoration: none;">
-            <div class="dash-icon-bg" style="background: rgba(37, 99, 235, 0.1); color: #2563eb;">
+            <div class="dash-icon-bg" style="background: rgba(37, 99, 235, 0.1); color: var(--slate-600);">
                 <i data-lucide="users" style="width: 24px;"></i>
             </div>
             <div class="dash-title">Apenas Membros</div>
@@ -43,7 +43,7 @@ renderAppHeader('Admin');
 
         <!-- Exportar Repertório -->
         <a href="exportar_completo.php?tipo=repertorio" class="dash-card ripple" style="text-decoration: none;">
-            <div class="dash-icon-bg" style="background: rgba(147, 51, 234, 0.1); color: #9333ea;">
+            <div class="dash-icon-bg" style="background: rgba(147, 51, 234, 0.1); color: var(--lavender-600);">
                 <i data-lucide="music" style="width: 24px;"></i>
             </div>
             <div class="dash-title">Apenas Repertório</div>

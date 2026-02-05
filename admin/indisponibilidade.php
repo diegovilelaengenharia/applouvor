@@ -135,7 +135,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
         </div>
     <?php endif; ?>
     <?php if ($error): ?>
-        <div style="background:#FEF2F2; color:#DC2626; padding:12px; border-radius:12px; margin-bottom:20px; font-weight:700; display:flex; align-items:center; gap:10px; border:1px solid #FECACA;">
+        <div style="background:var(--rose-50); color:var(--rose-600); padding:12px; border-radius:12px; margin-bottom:20px; font-weight:700; display:flex; align-items:center; gap:10px; border:1px solid var(--rose-200);">
             <i data-lucide="alert-circle" width="18"></i> <?= $error ?>
         </div>
     <?php endif; ?>
@@ -162,7 +162,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                         <li>Você pode gravar um áudio explicando melhor a situação para a liderança.</li>
                     </ul>
 
-                    <p style="margin-bottom: 0; margin-top: 12px; font-style: italic; color: #d97706;">
+                    <p style="margin-bottom: 0; margin-top: 12px; font-style: italic; color: var(--yellow-600);">
                         "Servi uns aos outros, cada um conforme o dom que recebeu, como bons despenseiros da multiforme graça de Deus." (1 Pedro 4:10)
                     </p>
                 </div>
@@ -172,7 +172,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
         <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
             <button onclick="openModal()" class="ripple" style="
                 width: 100%;
-                background: #376ac8; 
+                background: var(--slate-600); 
                 border: none; 
                 padding: 14px 20px; 
                 border-radius: 12px; 
@@ -198,11 +198,11 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
         <h3 style="margin: 0 0 16px 0; font-size: 1.1rem; color: var(--text-main); font-weight: 700;">Suas Ausências</h3>
 
         <?php if (empty($my_items)): ?>
-            <div style="text-align: center; padding: 40px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
-                <div style="background: #f1f5f9; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-                    <i data-lucide="calendar" style="color: #94a3b8;" width="28"></i>
+            <div style="text-align: center; padding: 40px; background: white; border-radius: 16px; border: 1px dashed var(--slate-300);">
+                <div style="background: var(--slate-100); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                    <i data-lucide="calendar" style="color: var(--slate-400);" width="28"></i>
                 </div>
-                <p style="color: #64748b; margin: 0; font-weight: 500;">Nenhuma ausência futura.</p>
+                <p style="color: var(--slate-500); margin: 0; font-weight: 500;">Nenhuma ausência futura.</p>
             </div>
         <?php else: ?>
             <div style="display: flex; flex-direction: column; gap: 16px;">
@@ -232,12 +232,12 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                     <div style="background: white; border-radius: 16px; padding: 0; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; overflow: hidden; position: relative;">
                         
                         <!-- Barra Lateral Colorida (Opcional, decorativa) -->
-                        <div style="width: 6px; background: #376ac8;"></div>
+                        <div style="width: 6px; background: var(--slate-600);"></div>
 
                         <div style="flex: 1; padding: 16px; display: flex; gap: 16px; align-items: flex-start;">
                             
                             <!-- Bloco de Data -->
-                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: #f0fdf4; border-radius: 12px; color: #15803d; border: 1px solid #dcfce7;">
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: var(--sage-50); border-radius: 12px; color: var(--sage-700); border: 1px solid var(--sage-100);">
                                 <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;"><?= $monthStr ?></span>
                                 <span style="font-size: 1.4rem; font-weight: 800; line-height: 1; margin-top: 2px;"><?= $dayStr ?></span>
                             </div>
@@ -250,7 +250,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                                             <?= htmlspecialchars($item['reason'] ?: 'Ausência') ?>
                                         </h4>
                                         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                            <span style="font-size: 0.8rem; color: #64748b; background: #f8fafc; padding: 2px 8px; border-radius: 6px; border: 1px solid #e2e8f0; font-weight: 500;">
+                                            <span style="font-size: 0.8rem; color: var(--slate-500); background: var(--slate-50); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--slate-200); font-weight: 500;">
                                                 <?= $dateRange ?>
                                             </span>
                                             
@@ -259,7 +259,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                                                     <i data-lucide="user-check" width="12"></i> <?= htmlspecialchars($item['replacement_name']) ?>
                                                 </span>
                                             <?php else: ?>
-                                                <span style="font-size: 0.8rem; color: #dc2626; background: #fef2f2; padding: 2px 8px; border-radius: 6px; border: 1px solid #fee2e2; font-weight: 600;">
+                                                <span style="font-size: 0.8rem; color: var(--rose-600); background: var(--rose-50); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--rose-100); font-weight: 600;">
                                                     Sem substituto!
                                                 </span>
                                             <?php endif; ?>
@@ -268,13 +268,13 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
                                     <!-- Ações (Desktop) -->
                                     <div style="display: flex; gap: 8px;">
-                                        <button onclick="editItem(<?= $itemJson ?>)" title="Editar" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
+                                        <button onclick="editItem(<?= $itemJson ?>)" title="Editar" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #bfdbfe; background: var(--slate-50); color: var(--slate-600); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
                                             <i data-lucide="edit-2" width="14"></i>
                                         </button>
                                         <form method="POST" onsubmit="return confirm('Cancelar esta ausência?');" style="margin:0;">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                                            <button type="submit" title="Excluir" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
+                                            <button type="submit" title="Excluir" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--rose-200); background: var(--rose-50); color: var(--rose-600); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
                                                 <i data-lucide="trash-2" width="14"></i>
                                             </button>
                                         </form>
@@ -284,7 +284,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                                 <!-- Detalhes Extras (Obs/Audio) -->
                                 <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
                                     <?php if (!empty($item['observation'])): ?>
-                                        <div style="font-size: 0.85rem; color: #475569; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border-left: 3px solid #cbd5e1; line-height: 1.4;">
+                                        <div style="font-size: 0.85rem; color: var(--slate-600); background: var(--slate-50); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--slate-300); line-height: 1.4;">
                                             <?= nl2br(htmlspecialchars($item['observation'])) ?>
                                         </div>
                                     <?php endif; ?>
@@ -318,7 +318,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 <div id="absenceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
     <div id="formCard" class="fade-in-up" style="background: var(--bg-surface); width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); position: relative;">
         
-        <button type="button" onclick="closeModal()" style="position: absolute; right: 16px; top: 16px; background: none; border: none; color: #94a3b8; cursor: pointer;">
+        <button type="button" onclick="closeModal()" style="position: absolute; right: 16px; top: 16px; background: none; border: none; color: var(--slate-400); cursor: pointer;">
             <i data-lucide="x" width="24"></i>
         </button>
 
@@ -353,23 +353,23 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                 
                 <input type="file" name="audio_file" id="audioInput" accept="audio/*" style="display: none;">
 
-                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 12px; text-align: center;">
+                <div style="background: var(--slate-50); border: 1px dashed var(--slate-300); border-radius: 12px; padding: 12px; text-align: center;">
                     <div id="recordingControls">
-                        <button type="button" id="btnStartRecord" onclick="startRecording()" style="background: #376ac8; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <button type="button" id="btnStartRecord" onclick="startRecording()" style="background: var(--slate-600); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                             <i data-lucide="mic" width="16"></i> Gravar Explicação
                         </button>
-                        <button type="button" id="btnStopRecord" onclick="stopRecording()" style="display: none; background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; align-items: center; gap: 6px;">
+                        <button type="button" id="btnStopRecord" onclick="stopRecording()" style="display: none; background: var(--rose-500); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; align-items: center; gap: 6px;">
                             <div style="width: 10px; height: 10px; background: white; border-radius: 2px;"></div> Parar
                         </button>
                     </div>
 
                     <div id="audioPreviewContainer" style="display: none; margin-top: 10px;">
                         <audio id="audioPlayer" controls style="width: 100%; height: 36px;"></audio>
-                        <button type="button" onclick="clearAudio()" style="margin-top: 6px; background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; text-decoration: underline;">Remover Áudio</button>
+                        <button type="button" onclick="clearAudio()" style="margin-top: 6px; background: none; border: none; color: var(--rose-500); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">Remover Áudio</button>
                     </div>
 
-                    <div id="existingAudioContainer" style="display: none; margin-top: 10px; border-top: 1px solid #e2e8f0; paddingTop: 10px;">
-                        <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 4px;">Áudio Salvo</p>
+                    <div id="existingAudioContainer" style="display: none; margin-top: 10px; border-top: 1px solid var(--slate-200); paddingTop: 10px;">
+                        <p style="font-size: 0.75rem; color: var(--slate-500); margin-bottom: 4px;">Áudio Salvo</p>
                         <audio id="existingAudioPlayer" controls style="width: 100%; height: 36px;"></audio>
                     </div>
                 </div>
@@ -377,7 +377,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
-                    Substituto <span style="color: #ef4444;">*</span>
+                    Substituto <span style="color: var(--rose-500);">*</span>
                 </label>
                 <div style="position: relative;">
                     <input type="text" list="users_datalist" id="replacementSearch" placeholder="Busque o nome..." required
@@ -389,13 +389,13 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                             <option data-id="<?= $u['id'] ?>" value="<?= htmlspecialchars($u['name']) ?>"></option>
                         <?php endforeach; ?>
                     </datalist>
-                    <i data-lucide="search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 16px;"></i>
+                    <i data-lucide="search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--slate-400); width: 16px;"></i>
                 </div>
             </div>
 
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: #376ac8; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                <button type="button" onclick="closeModal()" style="flex: 1; background: var(--slate-200); color: var(--slate-600); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: var(--slate-600); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
                     <span id="submitText">Registrar</span>
                 </button>
             </div>

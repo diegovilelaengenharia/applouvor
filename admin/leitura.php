@@ -143,7 +143,7 @@ if (!$planStarted) {
 
         .plan-card {
             background: var(--bg-surface, white);
-            border: 1px solid var(--border-color, #e2e8f0);
+            border: 1px solid var(--border-color, var(--slate-200));
             border-radius: 12px;
             padding: 16px;
             cursor: pointer;
@@ -157,13 +157,13 @@ if (!$planStarted) {
 
         .plan-card:hover {
             transform: translateY(-2px);
-            border-color: #376ac8;
+            border-color: var(--slate-600);
             box-shadow: 0 4px 12px rgba(55, 106, 200, 0.15);
         }
 
         .plan-card.selected {
-            border: 2px solid #376ac8;
-            background: #eff6ff;
+            border: 2px solid var(--slate-600);
+            background: var(--slate-50);
         }
         
         .plan-icon {
@@ -182,13 +182,13 @@ if (!$planStarted) {
         .plan-title {
             font-size: 1rem;
             font-weight: 700;
-            color: var(--text-main, #1e293b);
+            color: var(--text-main, var(--slate-800));
             margin-bottom: 4px;
         }
 
         .plan-desc {
             font-size: 0.8rem;
-            color: var(--text-muted, #64748b);
+            color: var(--text-muted, var(--slate-500));
             line-height: 1.4;
         }
 
@@ -198,8 +198,8 @@ if (!$planStarted) {
             text-transform: uppercase;
             padding: 4px 8px;
             border-radius: 6px;
-            background: #f1f5f9;
-            color: #475569;
+            background: var(--slate-100);
+            color: var(--slate-600);
             align-self: flex-start;
             margin-top: auto; /* Push to bottom if needed */
         }
@@ -207,7 +207,7 @@ if (!$planStarted) {
         /* Action Bar (Sticky Bottom style on mobile, inline on desktop) */
         .action-bar {
             background: var(--bg-surface, white);
-            border: 1px solid var(--border-color, #e2e8f0);
+            border: 1px solid var(--border-color, var(--slate-200));
             border-radius: 16px;
             padding: 12px 16px;
             display: flex;
@@ -228,7 +228,7 @@ if (!$planStarted) {
         }
 
         .date-input {
-            border: 1px solid var(--border-color, #e2e8f0);
+            border: 1px solid var(--border-color, var(--slate-200));
             border-radius: 8px;
             padding: 10px;
             font-family: inherit;
@@ -241,7 +241,7 @@ if (!$planStarted) {
         @media(min-width: 640px) { .date-input { width: auto; } }
 
         .btn-start {
-            background: #376ac8;
+            background: var(--slate-600);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -287,7 +287,7 @@ if (!$planStarted) {
             
             <!-- Cronológico -->
             <div class="plan-card" onclick="selectPlan('chronological', this)">
-                <div class="plan-icon" style="background: #dcfce7; color: #15803d;">
+                <div class="plan-icon" style="background: var(--sage-100); color: var(--sage-700);">
                     <i data-lucide="clock"></i>
                 </div>
                 <div class="plan-content">
@@ -299,7 +299,7 @@ if (!$planStarted) {
             
             <!-- M'Cheyne -->
             <div class="plan-card" onclick="selectPlan('mcheyne', this)">
-                <div class="plan-icon" style="background: #fef3c7; color: #b45309;">
+                <div class="plan-icon" style="background: var(--yellow-100); color: #b45309;">
                     <i data-lucide="book-open"></i>
                 </div>
                 <div class="plan-content">
@@ -595,29 +595,29 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <style>
     /* ... (CSS preserved from original, added adjustments for 31 days columns if needed) ... */
-    :root { --primary: #3b82f6; --primary-soft: #eff6ff; --success: #22c55e; }
-    /* body { background-color: #f8fafc; color: #1e293b; padding-bottom: 70px; font-family: -apple-system, sans-serif; } */
+    :root { --primary: var(--slate-500); --primary-soft: var(--slate-50); --success: var(--sage-500); }
+    /* body { background-color: var(--slate-50); color: var(--slate-800); padding-bottom: 70px; font-family: -apple-system, sans-serif; } */
     
     /* Calendar Strip & Items */
-    .cal-strip { display: flex !important; gap: 8px; overflow-x: auto; padding: 10px 12px; background: white; border-bottom: 1px solid #e2e8f0; scrollbar-width: none; }
+    .cal-strip { display: flex !important; gap: 8px; overflow-x: auto; padding: 10px 12px; background: white; border-bottom: 1px solid var(--slate-200); scrollbar-width: none; }
     .cal-strip::-webkit-scrollbar { display: none; }
     .cal-item { min-width: 56px; height: 68px; border-radius: 12px; background: #f3f4f6; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s; }
     .cal-month { font-size: var(--font-caption); font-weight: 700; text-transform: uppercase; color: #6b7280; }
     .cal-num { font-size: var(--font-h1); font-weight: 800; color: #1f2937; }
-    .cal-item.active { background: white; border-color: #16a34a; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15); }
-    .cal-item.active .cal-num, .cal-item.active .cal-month { color: #15803d; }
-    .cal-item.done { background: #dcfce7; }
-    .cal-item.done .cal-num { color: #16a34a; }
-    .cal-item.partial { background: #fef3c7; }
-    .cal-progress { font-size: var(--font-caption); color: #64748b; font-weight: 600; margin-top: 4px; line-height: 1; }
-    .cal-item.done .cal-progress { color: #16a34a; }
+    .cal-item.active { background: white; border-color: var(--sage-600); box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15); }
+    .cal-item.active .cal-num, .cal-item.active .cal-month { color: var(--sage-700); }
+    .cal-item.done { background: var(--sage-100); }
+    .cal-item.done .cal-num { color: var(--sage-600); }
+    .cal-item.partial { background: var(--yellow-100); }
+    .cal-progress { font-size: var(--font-caption); color: var(--slate-500); font-weight: 600; margin-top: 4px; line-height: 1; }
+    .cal-item.done .cal-progress { color: var(--sage-600); }
     
     /* Verse Cards */
-    .verse-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-    .verse-card.read { background: #dcfce7; border-color: #dcfce7; }
+    .verse-card { background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .verse-card.read { background: var(--sage-100); border-color: var(--sage-100); }
     .check-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
-    .verse-card.read .check-icon { background: #22c55e; border-color: #22c55e; color: white; }
-    .btn-read-link { background: #16a34a; color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px; }
+    .verse-card.read .check-icon { background: var(--sage-500); border-color: var(--sage-500); color: white; }
+    .btn-read-link { background: var(--sage-600); color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px; }
 
     /* Modals & Utils */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -626,7 +626,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     .config-fullscreen { 
         position: fixed; 
         top: 0; bottom: 0; right: 0; left: 0; 
-        background: #f8fafc; 
+        background: var(--slate-50); 
         z-index: 100; /* Lower than sidebar (usually > 100) check if needed, but sidebar takes space */
         display: none; 
         flex-direction: column; 
@@ -651,10 +651,10 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     .btn-orange-light:hover { background: #ffedd5; border-color: #fdba74; }
 
     .btn-blue-light {
-        background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;
+        background: var(--slate-50); color: var(--slate-600); border: 1px solid #bfdbfe;
         box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
     }
-    .btn-blue-light:hover { background: #dbeafe; border-color: #93c5fd; }
+    .btn-blue-light:hover { background: var(--slate-100); border-color: #93c5fd; }
 </style>
 
 
@@ -693,7 +693,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <i data-lucide="book" width="18"></i> Meu Diário
     </button>
 </div>
-<div id="save-toast" style="position:fixed; top:90px; left:50%; transform:translateX(-50%); background:#1e293b; color:white; padding:8px 16px; border-radius:20px; opacity:0; pointer-events:none; z-index:2000; transition:opacity 0.3s; display:flex; align-items:center; gap:8px;"><i data-lucide="check" width="14"></i> Salvo auto</div>
+<div id="save-toast" style="position:fixed; top:90px; left:50%; transform:translateX(-50%); background:var(--slate-800); color:white; padding:8px 16px; border-radius:20px; opacity:0; pointer-events:none; z-index:2000; transition:opacity 0.3s; display:flex; align-items:center; gap:8px;"><i data-lucide="check" width="14"></i> Salvo auto</div>
 
 <!-- INCLUDES: Modals -->
 <!-- Note Modal, Stats Modal etc are defined in previous versions. I'll include minified versions for brevity as they are unchanged logic mostly. -->
@@ -710,12 +710,12 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
         <div style="padding: 20px 24px; overflow-y: auto; flex: 1;">
             <!-- Title Input -->
-            <input type="text" id="note-title-input" placeholder="Título da anotação..." style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
+            <input type="text" id="note-title-input" placeholder="Título da anotação..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
             
             <!-- Rich Text Editor -->
-            <div style="border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: white;">
+            <div style="border: 1px solid var(--slate-300); border-radius: 10px; overflow: hidden; background: white;">
                 <!-- Toolbar -->
-                <div style="display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: var(--slate-50); border-bottom: 1px solid var(--slate-200); flex-wrap: wrap;">
                     <!-- Text Formatting -->
                     <button type="button" onclick="formatText('bold')" class="editor-btn" title="Negrito">
                         <i data-lucide="bold" width="16"></i>
@@ -730,7 +730,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                         <i data-lucide="strikethrough" width="16"></i>
                     </button>
                     
-                    <div style="width:1px; height:20px; background:#e2e8f0; margin:0 4px;"></div>
+                    <div style="width:1px; height:20px; background:var(--slate-200); margin:0 4px;"></div>
                     
                     <!-- Lists -->
                     <button type="button" onclick="formatText('insertUnorderedList')" class="editor-btn" title="Lista">
@@ -740,7 +740,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                         <i data-lucide="list-ordered" width="16"></i>
                     </button>
                     
-                    <div style="width:1px; height:20px; background:#e2e8f0; margin:0 4px;"></div>
+                    <div style="width:1px; height:20px; background:var(--slate-200); margin:0 4px;"></div>
                     
                     <!-- Link -->
                     <button type="button" onclick="insertLink()" class="editor-btn" title="Inserir link">
@@ -752,7 +752,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                         <button type="button" id="emoji-btn" onclick="toggleEmojiPicker()" class="editor-btn" title="Emoji">
                             <i data-lucide="smile" width="16"></i>
                         </button>
-                        <div id="emoji-picker" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-width: 280px;">
+                        <div id="emoji-picker" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border: 1px solid var(--slate-200); border-radius: 8px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-width: 280px;">
                             <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;">
                                 <!-- Spiritual -->
                                 <button type="button" onclick="insertEmoji('🙏')" class="emoji-btn">🙏</button>
@@ -794,7 +794,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                         </div>
                     </div>
                     
-                    <div style="width:1px; height:20px; background:#e2e8f0; margin:0 4px;"></div>
+                    <div style="width:1px; height:20px; background:var(--slate-200); margin:0 4px;"></div>
                     
                     <!-- Clear Formatting -->
                     <button type="button" onclick="formatText('removeFormat')" class="editor-btn" title="Limpar formatação">
@@ -806,7 +806,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <div 
                     id="note-desc-input" 
                     contenteditable="true" 
-                    style="width: 100%; min-height: 120px; max-height: 60vh; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:var(--font-body); line-height:1.6; color:#334155;"
+                    style="width: 100%; min-height: 120px; max-height: 60vh; padding: 16px; border: none; outline: none; overflow-y: auto; font-size:var(--font-body); line-height:1.6; color:var(--slate-700);"
                     data-placeholder="Digite aqui... Use a barra de ferramentas para formatar o texto."
                 ></div>
             </div>
@@ -814,7 +814,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <style>
                 .editor-btn {
                     background: white;
-                    border: 1px solid #e2e8f0;
+                    border: 1px solid var(--slate-200);
                     border-radius: 6px;
                     padding: 6px 8px;
                     cursor: pointer;
@@ -822,16 +822,16 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     align-items: center;
                     justify-content: center;
                     transition: all 0.2s;
-                    color: #64748b;
+                    color: var(--slate-500);
                 }
                 .editor-btn:hover {
-                    background: #f8fafc;
-                    border-color: #cbd5e1;
-                    color: #334155;
+                    background: var(--slate-50);
+                    border-color: var(--slate-300);
+                    color: var(--slate-700);
                 }
                 .editor-btn:active {
                     transform: scale(0.95);
-                    background: #f1f5f9;
+                    background: var(--slate-100);
                 }
                 
                 .emoji-btn {
@@ -847,15 +847,15 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     justify-content: center;
                 }
                 .emoji-btn:hover {
-                    background: #f8fafc;
-                    border-color: #e2e8f0;
+                    background: var(--slate-50);
+                    border-color: var(--slate-200);
                     transform: scale(1.1);
                 }
                 
                 /* Placeholder for contenteditable */
                 #note-desc-input:empty:before {
                     content: attr(data-placeholder);
-                    color: #94a3b8;
+                    color: var(--slate-400);
                     font-style: italic;
                 }
                 
@@ -870,8 +870,8 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 #note-desc-input a:hover { color: #065f46; }
             </style>
         </div>
-        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 12px;">
-            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
+        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid var(--slate-100); display: flex; justify-content: flex-end; gap: 12px;">
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid var(--slate-200); background: white; color: var(--slate-500); border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
             <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: #f97316; color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anotação</button>
         </div>
     </div>
@@ -918,27 +918,27 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     <!-- TAB: GERAL -->
     <div id="content-geral" class="config-content" style="padding: 20px; max-width: 600px; margin: 0 auto; width: 100%;">
         <!-- Change Plan Section -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+        <div style="background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
             <h3 style="margin-top: 0;">Plano Atual</h3>
-            <div style="margin-bottom: 16px; padding: 12px; background: #f1f5f9; border-radius: 8px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px;">
+            <div style="margin-bottom: 16px; padding: 12px; background: var(--slate-100); border-radius: 8px; font-weight: 600; color: var(--slate-700); display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="book" width="18"></i>
                 <span style="text-transform: capitalize;"><?= $selectedPlanType == 'chronological' ? 'Cronológico' : ($selectedPlanType == 'mcheyne' ? 'M\'Cheyne' : 'Navigators') ?></span>
             </div>
             
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Trocar Plano (CUIDADO!)</label>
-            <select id="change-plan-select" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 12px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Trocar Plano (CUIDADO!)</label>
+            <select id="change-plan-select" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--slate-300); margin-bottom: 12px;">
                 <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
                 <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronológico (365 dias)</option>
                 <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
             </select>
             
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Data de Início</label>
-            <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Data de Início</label>
+            <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="width: 100%; padding: 12px; border: 1px solid var(--slate-300); border-radius: 8px; margin-bottom: 16px;">
             
             <button onclick="saveSettings()" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar Alterações</button>
         </div>
 
-        <button onclick="resetPlan()" style="width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
+        <button onclick="resetPlan()" style="width: 100%; padding: 12px; background: var(--rose-500); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
             <i data-lucide="trash-2" width="16" style="display: inline; vertical-align: middle; margin-right: 6px;"></i> Resetar Todo Progresso
         </button>
     </div>
@@ -1005,8 +1005,8 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100px; gap: 6px;">
                     <?php foreach($jsWeekDist as $wd): 
                         $h = max(10, $wd['pct']); 
-                        $bg = $wd['pct'] > 0 ? '#8b5cf6' : '#f1f5f9';
-                        $txt = $wd['pct'] > 0 ? '#4c1d95' : '#94a3b8';
+                        $bg = $wd['pct'] > 0 ? 'var(--lavender-600)' : 'var(--slate-100)';
+                        $txt = $wd['pct'] > 0 ? '#4c1d95' : 'var(--slate-400)';
                     ?>
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;">
                         <input type="hidden" value="<?= $wd['count'] ?> leituras">
@@ -1030,15 +1030,15 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                          $w = max(5, $td['pct']);
                     ?>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="width: 70px; font-size: 0.75rem; font-weight: 600; color: #64748b;"><?= $td['label'] ?></span>
-                        <div style="flex: 1; height: 24px; background: #f1f5f9; border-radius: 6px; overflow: hidden; position: relative;">
+                        <span style="width: 70px; font-size: 0.75rem; font-weight: 600; color: var(--slate-500);"><?= $td['label'] ?></span>
+                        <div style="flex: 1; height: 24px; background: var(--slate-100); border-radius: 6px; overflow: hidden; position: relative;">
                             <div style="width: <?= $w ?>%; height: 100%; background: #10b981; border-radius: 6px;"></div>
                         </div>
                         <span style="width: 30px; font-size: 0.75rem; font-weight: 700; color: #111827; text-align: right;"><?= $td['count'] ?></span>
                     </div>
                     <?php endforeach; ?>
                     <?php if($totalTimeReads == 0): ?>
-                        <div style="text-align: center; color: #94a3b8; font-size: 0.8rem; padding: 10px;">Sem dados ainda</div>
+                        <div style="text-align: center; color: var(--slate-400); font-size: 0.8rem; padding: 10px;">Sem dados ainda</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -1055,10 +1055,10 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 $maxVal = max($maxVal, 5); // Minimum scale
                 foreach($activityChart as $day): 
                     $h = ($day['count'] / $maxVal) * 100;
-                    $color = $day['count'] > 0 ? '#6366f1' : '#f1f5f9';
+                    $color = $day['count'] > 0 ? '#6366f1' : 'var(--slate-100)';
                 ?>
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <div style="width: 100%; background: #f1f5f9; border-radius: 6px; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden;">
+                    <div style="width: 100%; background: var(--slate-100); border-radius: 6px; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden;">
                         <div style="width: 100%; height: <?= $h ?>%; background: <?= $color ?>; border-radius: 6px; transition: height 0.5s;"></div>
                     </div>
                     <span style="font-size: 0.7rem; font-weight: 600; color: #6b7280;"><?= $day['label'] ?></span>
@@ -1101,11 +1101,11 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <!-- Dropdown Menu -->
                 <div id="export-menu" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 4px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; min-width: 180px; overflow: hidden;">
                     <button onclick="exportDiary('word')" style="width: 100%; padding: 10px 16px; border: none; background: white; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #374151; transition: all 0.2s; border-bottom: 1px solid #f3f4f6;">
-                        <i data-lucide="file-text" width="16" style="color: #2563eb;"></i>
+                        <i data-lucide="file-text" width="16" style="color: var(--slate-600);"></i>
                         <span style="font-weight: 600;">Exportar como Word</span>
                     </button>
                     <button onclick="exportDiary('pdf')" style="width: 100%; padding: 10px 16px; border: none; background: white; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #374151; transition: all 0.2s;">
-                        <i data-lucide="file" width="16" style="color: #dc2626;"></i>
+                        <i data-lucide="file" width="16" style="color: var(--rose-600);"></i>
                         <span style="font-weight: 600;">Exportar como PDF</span>
                     </button>
                 </div>
@@ -1117,7 +1117,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <?php if(!empty($reportData)): ?>
         <div style="margin-bottom: 20px; position: relative;">
             <i data-lucide="search" width="18" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
-            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anotações (título, conteúdo, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anotações (título, conteúdo, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
         </div>
         <?php endif; ?>
         
@@ -1129,11 +1129,11 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             /* Modern Timeline & Cards */
             .timeline-container { position: relative; padding-left: 20px; }
             .timeline-container::before {
-                content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; border-radius: 2px;
+                content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--slate-200); border-radius: 2px;
             }
             
             .group-header { 
-                position: relative; padding: 20px 0 10px 0; background: #f8fafc; z-index: 1; cursor: pointer; user-select: none;
+                position: relative; padding: 20px 0 10px 0; background: var(--slate-50); z-index: 1; cursor: pointer; user-select: none;
                 transition: opacity 0.2s;
             }
             .group-header:hover { opacity: 0.8; }
@@ -1141,11 +1141,11 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             .group-header.collapsed .toggle-icon { transform: rotate(-90deg); }
             
             .month-label { 
-                font-size: 1.2rem; font-weight: 800; color: #1e293b; text-transform: capitalize; 
+                font-size: 1.2rem; font-weight: 800; color: var(--slate-800); text-transform: capitalize; 
                 display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;
             }
             .week-label {
-                font-size: 0.85rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px;
+                font-size: 0.85rem; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: 1px;
                 padding-left: 4px; margin-bottom: 12px;
             }
             
@@ -1160,13 +1160,13 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             
             .diary-card::before {
                 content: ''; position: absolute; left: -26px; top: 24px; width: 14px; height: 14px;
-                background: #6366f1; border: 3px solid #f8fafc; border-radius: 50%; box-shadow: 0 2px 4px rgba(99,102,241,0.3);
+                background: #6366f1; border: 3px solid var(--slate-50); border-radius: 50%; box-shadow: 0 2px 4px rgba(99,102,241,0.3);
             }
             
-            .diary-date { font-size: 0.8rem; color: #64748b; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+            .diary-date { font-size: 0.8rem; color: var(--slate-500); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
             
-            .diary-title { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 10px 0; line-height: 1.4; }
-            .diary-content { color: #334155; line-height: 1.6; font-size: 0.95rem; }
+            .diary-title { font-size: 1.15rem; font-weight: 700; color: var(--slate-800); margin: 0 0 10px 0; line-height: 1.4; }
+            .diary-content { color: var(--slate-700); line-height: 1.6; font-size: 0.95rem; }
             
             .diary-content b, .diary-content strong { font-weight: 700; }
             .diary-content i, .diary-content em { font-style: italic; }
@@ -1184,8 +1184,8 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             }
             .read-more-btn {
                 width: 100%;
-                background: #f8fafc;
-                border: 1px solid #e2e8f0;
+                background: var(--slate-50);
+                border: 1px solid var(--slate-200);
                 border-top: none;
                 padding: 8px;
                 color: #6366f1;
@@ -1200,7 +1200,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 margin-top: 0;
                 transition: background 0.2s;
             }
-            .read-more-btn:hover { background: #f1f5f9; }
+            .read-more-btn:hover { background: var(--slate-100); }
         </style>
         
         <?php if(empty($reportData)): ?>
@@ -1227,12 +1227,12 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 
                 // MONTH HEADER
                 if($mLabel !== $currentMonthLabel): ?>
-                    <div class="group-header month-header" onclick="toggleGroup(this, 'month')" style="padding-top:24px; padding-bottom:12px; border-bottom:1px solid #e2e8f0; margin-bottom:12px;">
+                    <div class="group-header month-header" onclick="toggleGroup(this, 'month')" style="padding-top:24px; padding-bottom:12px; border-bottom:1px solid var(--slate-200); margin-bottom:12px;">
                         <div class="month-label" style="display:flex; align-items:center; justify-content:space-between; width:100%;">
-                            <div style="display:flex; align-items:center; gap:8px; font-size:1.1rem; font-weight:800; color:#1e293b;">
+                            <div style="display:flex; align-items:center; gap:8px; font-size:1.1rem; font-weight:800; color:var(--slate-800);">
                                 <i data-lucide="calendar" width="20" style="color:#6366f1;"></i> <?= $mLabel ?>
                             </div>
-                            <i data-lucide="chevron-down" class="toggle-icon" width="20" style="color:#94a3b8;"></i>
+                            <i data-lucide="chevron-down" class="toggle-icon" width="20" style="color:var(--slate-400);"></i>
                         </div>
                     </div>
                 <?php 
@@ -1243,8 +1243,8 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 // WEEK HEADER
                 if($wLabel !== $currentWeekLabel): ?>
                     <div class="group-header week-header" onclick="toggleGroup(this, 'week')" style="margin-left:8px; padding:10px 0; cursor:pointer; display:flex; align-items:center; gap:8px;">
-                        <div class="week-label" style="margin:0; font-size:0.85rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;"><?= $wLabel ?></div>
-                         <i data-lucide="chevron-down" class="toggle-icon" width="14" style="color:#cbd5e1;"></i>
+                        <div class="week-label" style="margin:0; font-size:0.85rem; color:var(--slate-500); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;"><?= $wLabel ?></div>
+                         <i data-lucide="chevron-down" class="toggle-icon" width="14" style="color:var(--slate-300);"></i>
                     </div>
                 <?php 
                     $currentWeekLabel = $wLabel;
@@ -1255,7 +1255,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <div style="display:flex; justify-content:space-between; align-items:start;">
                     <div class="diary-date">
                         <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \à\s H:i') ?>
-                         <span style="width: 4px; height: 4px; background: #cbd5e1; border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
+                         <span style="width: 4px; height: 4px; background: var(--slate-300); border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
                          Dia <?= $rep['d'] ?>
                     </div>
                     
@@ -1455,11 +1455,11 @@ function loadDay(m, d) {
     const isComplete = verses.length > 0 && savedVerses.length >= verses.length;
     
     badge.innerHTML = isComplete 
-        ? '<span class="status-badge success" style="background:#dcfce7; color:#059669; padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Concluído</span>'
-        : '<span class="status-badge pending" style="background:#fef3c7; color:#d97706; padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="clock" width="14"></i> Pendente</span>';
+        ? '<span class="status-badge success" style="background:var(--sage-100); color:#059669; padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Concluído</span>'
+        : '<span class="status-badge pending" style="background:var(--yellow-100); color:var(--yellow-600); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="clock" width="14"></i> Pendente</span>';
     
     if (verses.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8;">Nenhuma leitura programada.</div>';
+        list.innerHTML = '<div style="text-align:center; padding:30px; color:var(--slate-400);">Nenhuma leitura programada.</div>';
     } else {
         verses.forEach((vText, idx) => {
             const isRead = savedVerses.includes(idx);
@@ -1821,7 +1821,7 @@ function exportAsWord(entries, dateStr) {
     html += '<style>';
     html += 'body{font-family:Arial,sans-serif;line-height:1.6;padding:20px;}';
     html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
-    html += '.stats-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;}';
+    html += '.stats-box{background:var(--slate-50);border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;}';
     html += '.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px;}';
     html += '.stat-item{text-align:center;padding:10px;background:white;border-radius:6px;}';
     html += '.stat-value{font-size:24px;font-weight:bold;color:#111827;}';
@@ -1897,7 +1897,7 @@ function exportAsPDF(entries, dateStr) {
     html += '@media print{@page{margin:20mm;}}';
     html += 'body{font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:800px;margin:0 auto;padding:20px;}';
     html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
-    html += '.stats-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;page-break-inside:avoid;}';
+    html += '.stats-box{background:var(--slate-50);border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;page-break-inside:avoid;}';
     html += '.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px;}';
     html += '.stat-item{text-align:center;padding:10px;background:white;border-radius:6px;border:1px solid #e5e7eb;}';
     html += '.stat-value{font-size:20px;font-weight:bold;color:#111827;}';

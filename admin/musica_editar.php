@@ -430,7 +430,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         width: 100%;
         padding: 14px 20px;
         border-radius: 12px;
-        background: linear-gradient(135deg, var(--primary) 0%, #15803d 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--sage-700) 100%);
         border: none;
         color: white;
         font-weight: 700;
@@ -453,7 +453,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 <div class="compact-container">
     <form method="POST">
         <!-- Card 1: Informações Principais -->
-        <div class="form-card" style="--card-color: #3b82f6; --focus-shadow: rgba(59, 130, 246, 0.1);">
+        <div class="form-card" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="music" style="width: 14px;"></i>
@@ -535,7 +535,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         </div>
 
         <!-- Card 2: Referências e Mídia -->
-        <div class="form-card" style="--card-color: #22c55e; --focus-shadow: rgba(34, 197, 94, 0.1);">
+        <div class="form-card" style="--card-color: var(--sage-500); --focus-shadow: rgba(34, 197, 94, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="link" style="width: 14px;"></i>
@@ -593,7 +593,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         </div>
 
         <!-- Card 3: Classificações -->
-        <div class="form-card" style="--card-color: #f59e0b; --focus-shadow: rgba(245, 158, 11, 0.1);">
+        <div class="form-card" style="--card-color: var(--yellow-500); --focus-shadow: rgba(245, 158, 11, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="folder" style="width: 14px;"></i>
@@ -611,7 +611,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 ?>
                     <label class="tag-pill-compact" style="<?= $isChecked ? 'background: var(--primary-subtle); border-color: var(--primary); color: var(--primary);' : '' ?>">
                         <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?> onchange="updateTagStyle(this)">
-                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#22c55e' ?>;"></span>
+                        <span class="tag-dot" style="background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;"></span>
                         <?= htmlspecialchars($tag['name']) ?>
                     </label>
                 <?php endforeach; ?>
@@ -658,7 +658,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 flex: 2; 
                 padding: 14px 20px; 
                 border-radius: 12px; 
-                background: linear-gradient(135deg, var(--primary) 0%, #15803d 100%); 
+                background: linear-gradient(135deg, var(--primary) 0%, var(--sage-700) 100%); 
                 border: none; 
                 color: white; 
                 font-weight: 700; 
@@ -700,7 +700,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         <div id="tagsList" style="flex: 1; overflow-y: auto; margin-bottom: 24px; min-height: 150px;">
             <?php foreach ($allTags as $tag): ?>
                 <div class="tag-card-item" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border: 1px solid var(--border-color);">
-                    <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: '#22c55e' ?>;">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;">
                         <i data-lucide="folder" style="width: 20px;"></i>
                     </div>
                     <div style="flex: 1; min-width: 0;">
@@ -711,7 +711,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                         <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="btn-close" style="width: 32px; height: 32px;">
                             <i data-lucide="edit-2" style="width: 16px;"></i>
                         </button>
-                        <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="btn-close" style="width: 32px; height: 32px; color: #ef4444;">
+                        <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="btn-close" style="width: 32px; height: 32px; color: var(--rose-500);">
                             <i data-lucide="trash-2" style="width: 16px;"></i>
                         </button>
                     </div>
@@ -737,7 +737,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 <label class="form-label">Cor</label>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <?php
-                    $colors = ['#22c55e', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#6366F1'];
+                    $colors = ['var(--sage-500)', 'var(--yellow-500)', 'var(--rose-500)', 'var(--slate-500)', 'var(--lavender-600)', '#EC4899', '#6366F1'];
                     foreach ($colors as $c): ?>
                         <label style="cursor: pointer;">
                             <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">
@@ -773,7 +773,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 <div>
                     <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input" placeholder="Link (https://...)">
                 </div>
-                <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="width: 32px; height: 32px; color: #ef4444;" title="Remover">
+                <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="width: 32px; height: 32px; color: var(--rose-500);" title="Remover">
                     <i data-lucide="trash-2" style="width: 16px;"></i>
                 </button>
             `;

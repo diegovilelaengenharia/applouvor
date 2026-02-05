@@ -167,7 +167,7 @@ try {
     }
 
     .stat-hero {
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        background: linear-gradient(135deg, var(--slate-500) 0%, var(--slate-700) 100%);
         color: white;
         padding: 24px 20px;
         border-radius: 16px;
@@ -253,7 +253,7 @@ try {
     }
 
     .rank-number.gold {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: linear-gradient(135deg, #fbbf24, var(--yellow-500));
     }
 
     .rank-number.silver {
@@ -313,28 +313,28 @@ try {
 
     <!-- KPIs Grid -->
     <div class="kpi-grid">
-        <div class="kpi-card" style="border-left: 4px solid #22c55e;">
-            <div class="kpi-value" style="color: #22c55e;"><?= $totalSongs - $neverPlayed ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--sage-500);">
+            <div class="kpi-value" style="color: var(--sage-500);"><?= $totalSongs - $neverPlayed ?></div>
             <div class="kpi-label">Músicas Tocadas</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid #f59e0b;">
-            <div class="kpi-value" style="color: #f59e0b;"><?= $neverPlayed ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--yellow-500);">
+            <div class="kpi-value" style="color: var(--yellow-500);"><?= $neverPlayed ?></div>
             <div class="kpi-label">Nunca Tocadas</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid #ef4444;">
-            <div class="kpi-value" style="color: #ef4444;"><?= $incompleteSongs ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--rose-500);">
+            <div class="kpi-value" style="color: var(--rose-500);"><?= $incompleteSongs ?></div>
             <div class="kpi-label">Sem Material</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid #3b82f6;">
-            <div class="kpi-value" style="color: #3b82f6;"><?= $recentSongs ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--slate-500);">
+            <div class="kpi-value" style="color: var(--slate-500);"><?= $recentSongs ?></div>
             <div class="kpi-label">Adicionadas (30d)</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid #8b5cf6;">
-            <div class="kpi-value" style="color: #8b5cf6;"><?= $avgBpm ?: '--' ?></div>
+        <div class="kpi-card" style="border-left: 4px solid var(--lavender-600);">
+            <div class="kpi-value" style="color: var(--lavender-600);"><?= $avgBpm ?: '--' ?></div>
             <div class="kpi-label">BPM Médio</div>
         </div>
     </div>
@@ -362,7 +362,7 @@ try {
                             <?= htmlspecialchars($song['artist']) ?>
                         </div>
                     </div>
-                    <div style="background: #f0fdf4; color: #22c55e; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
+                    <div style="background: var(--sage-50); color: var(--sage-500); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
                         <?= $song['play_count'] ?>x
                     </div>
                 </div>
@@ -382,7 +382,7 @@ try {
                 <?php foreach ($topArtists as $artist): ?>
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                         <span style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($artist['artist']) ?></span>
-                        <span style="background: #f0fdf4; color: #22c55e; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
+                        <span style="background: var(--sage-50); color: var(--sage-500); padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
                             <?= $artist['play_count'] ?>
                         </span>
                     </div>
@@ -399,7 +399,7 @@ try {
                 <?php foreach ($byTone as $tone): ?>
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                         <span style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($tone['tone']) ?></span>
-                        <span style="background: #eff6ff; color: #2563eb; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
+                        <span style="background: var(--slate-50); color: var(--slate-600); padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
                             <?= $tone['count'] ?>
                         </span>
                     </div>

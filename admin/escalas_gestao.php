@@ -221,7 +221,7 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
             
             <!-- Botão PDF/Imprimir (NOVO RELATÓRIO) -->
             <a href="escalas_relatorio_print.php?period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>&semester=<?= $semester ?? '' ?>" target="_blank" style="text-decoration: none;">
-                <button style="padding: 8px 14px; background: #dc2626; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 0.9rem;">
+                <button style="padding: 8px 14px; background: var(--rose-600); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 0.9rem;">
                     <i data-lucide="printer" style="width: 16px;"></i> PDF
                 </button>
             </a>
@@ -295,7 +295,7 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
                             <div>
                                 <h3 style="margin: 0 0 4px 0; font-size: 1rem; color: var(--text-main); font-weight: 600;">
                                     <?= htmlspecialchars($s['event_type']) ?>
-                                    <?php if($isPassed): ?> <span style="font-size: 0.7rem; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #64748b;">Concluída</span><?php endif; ?>
+                                    <?php if($isPassed): ?> <span style="font-size: 0.7rem; background: var(--slate-100); padding: 2px 6px; border-radius: 4px; color: var(--slate-500);">Concluída</span><?php endif; ?>
                                 </h3>
                                 <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; gap: 12px;">
                                     <span><i data-lucide="clock" style="width: 12px; vertical-align: middle;"></i> <?= substr($s['event_time'],0,5) ?></span>
@@ -306,14 +306,14 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <a href="escala_detalhe.php?id=<?= $s['id'] ?>" style="
-                                background: #eff6ff; color: #2563eb; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; border: 1px solid #dbeafe; display: flex; align-items: center; gap: 4px;
+                                background: var(--slate-50); color: var(--slate-600); padding: 8px 12px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; border: 1px solid var(--slate-100); display: flex; align-items: center; gap: 4px;
                             ">
                                 <i data-lucide="edit-2" style="width: 14px;"></i> Editar
                             </a>
                             <form method="POST" onsubmit="return confirm('Tem certeza que deseja EXCLUIR esta escala?');" style="margin: 0;">
                                 <input type="hidden" name="delete_id" value="<?= $s['id'] ?>">
                                 <button type="submit" style="
-                                    background: #fef2f2; color: #dc2626; padding: 8px 12px; border-radius: 8px; border: 1px solid #fee2e2; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;
+                                    background: var(--rose-50); color: var(--rose-600); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--rose-100); cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;
                                 ">
                                     <i data-lucide="trash-2" style="width: 14px;"></i>
                                 </button>
@@ -330,17 +330,17 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
         
         <!-- KPIs Globais -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-            <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid #8b5cf6;">
+            <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid var(--lavender-600);">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total de Escalas</div>
-                <div style="font-size: 1.8rem; font-weight: 800; color: #8b5cf6;"><?= $totalEscalas ?></div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: var(--lavender-600);"><?= $totalEscalas ?></div>
             </div>
             <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid #10b981;">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Taxa de Confirmação</div>
                 <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;"><?= $taxaConfirmacao ?>%</div>
             </div>
-            <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid #f59e0b;">
+            <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid var(--yellow-500);">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Escalas Pendentes</div>
-                <div style="font-size: 1.8rem; font-weight: 800; color: #f59e0b;"><?= $escalasPendentes ?></div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: var(--yellow-500);"><?= $escalasPendentes ?></div>
             </div>
         </div>
 
@@ -356,7 +356,7 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
                         <?php foreach ($escalasPorTipo as $tipo): ?>
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body);">
                                 <span style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;"><?= htmlspecialchars($tipo['event_type']) ?></span>
-                                <span style="background: #eff6ff; color: #2563eb; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.8rem;">
+                                <span style="background: var(--slate-50); color: var(--slate-600); padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.8rem;">
                                     <?= $tipo['total'] ?>
                                 </span>
                             </div>
@@ -373,14 +373,14 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
                 <?php else: ?>
                     <div style="display: flex; flex-direction: column; gap: 8px; max-height: 500px; overflow-y: auto;">
                         <?php foreach ($rankingParticipacao as $idx => $membro): 
-                             $colorClass = $idx === 0 ? '#fbbf24' : ($idx === 1 ? '#9ca3af' : ($idx === 2 ? '#d97706' : '#e2e8f0'));
-                             $textColor = $idx < 3 ? 'white' : '#64748b';
+                             $colorClass = $idx === 0 ? '#fbbf24' : ($idx === 1 ? '#9ca3af' : ($idx === 2 ? 'var(--yellow-600)' : 'var(--slate-200)'));
+                             $textColor = $idx < 3 ? 'white' : 'var(--slate-500)';
                         ?>
                             <div style="display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-body); border-radius: 10px;">
                                 <div style="width: 24px; height: 24px; background: <?= $colorClass ?>; color: <?= $textColor ?>; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;">
                                     <?= $idx + 1 ?>
                                 </div>
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $membro['avatar_color'] ?: '#cbd5e1' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $membro['avatar_color'] ?: 'var(--slate-300)' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">
                                     <?= strtoupper(substr($membro['name'], 0, 1)) ?>
                                 </div>
                                 <div style="flex: 1;">
@@ -431,7 +431,7 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
             <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
                 <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Registros de Ausência</div>
-                <div style="font-size: 2rem; font-weight: 800; color: #ef4444;"><?= $totalRegistrosAusencia ?></div>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--rose-500);"><?= $totalRegistrosAusencia ?></div>
             </div>
         </div>
 
@@ -445,7 +445,7 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <?php foreach($topAusentes as $userId => $data): ?>
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $data['avatar_color'] ?: '#cbd5e1' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $data['avatar_color'] ?: 'var(--slate-300)' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
                                     <?= strtoupper(substr($data['name'], 0, 1)) ?>
                                 </div>
                                 <div style="flex: 1;">
@@ -473,8 +473,8 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
                             $end = date('d/m', strtotime($ab['end_date']));
                             $periodStr = ($start == $end) ? $start : "$start a $end";
                         ?>
-                            <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444;"></div>
+                            <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--slate-100);">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--rose-500);"></div>
                                 <div style="flex: 1;">
                                     <div style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;"><?= htmlspecialchars($ab['name']) ?></div>
                                     <div style="font-size: 0.8rem; color: var(--text-muted);"><?= $periodStr ?></div>

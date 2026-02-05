@@ -189,7 +189,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <input type="hidden" name="delete_schedule" value="1">
                     <button type="submit" id="deleteBtn" style="
                         padding: 10px 14px; border-radius: 12px;
-                        background: linear-gradient(135deg, #ef4444, #dc2626);
+                        background: linear-gradient(135deg, var(--rose-500), var(--rose-600));
                         border: none; color: white; cursor: pointer;
                         display: flex; align-items: center; gap: 6px;
                         font-weight: 700; font-size: var(--font-body-sm);
@@ -205,7 +205,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <!-- Botão Salvar (visível apenas no modo edição) -->
                 <button id="saveBtn" onclick="saveAllChanges()" style="
                     padding: 10px 18px; border-radius: 12px;
-                    background: linear-gradient(135deg, #22c55e, #16a34a);
+                    background: linear-gradient(135deg, var(--sage-500), var(--sage-600));
                     border: none; color: white; cursor: pointer;
                     display: none; align-items: center; gap: 6px;
                     font-weight: 700; font-size: var(--font-body-sm);
@@ -220,7 +220,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <!-- Botão Editar/Cancelar -->
                 <button id="editBtn" onclick="toggleEditMode()" style="
                     padding: 10px 18px; border-radius: 12px;
-                    background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+                    background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); 
                     border: none; color: white; cursor: pointer;
                     display: flex; align-items: center; gap: 6px;
                     font-weight: 700; font-size: var(--font-body-sm);
@@ -237,7 +237,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <!-- Info Row Compacta (Ícones reduzidos) -->
         <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: <?= $schedule['notes'] ? '12px' : '0' ?>;">
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--lavender-600), #7c3aed); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="clock" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
@@ -248,7 +248,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--sage-500), var(--sage-600)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="users" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
@@ -257,7 +257,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--yellow-500), var(--yellow-600)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="music" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
@@ -271,18 +271,18 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         
         <!-- Observações (Apenas para Administradores) -->
         <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
-            <div id="display-notes-container" style="padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
+            <div id="display-notes-container" style="padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100);">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                    <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações do Líder</span>
+                    <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
                 </div>
                 <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
             </div>
         <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
-            <div id="display-notes-container" style="display: none; padding: 12px; background: #fffbeb; border-radius: 12px; border: 1px solid #fef3c7;">
+            <div id="display-notes-container" style="display: none; padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100);">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                    <i data-lucide="info" style="width: 14px; color: #f59e0b;"></i>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Observações do Líder</span>
+                    <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
                 </div>
                 <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"></div>
             </div>
@@ -308,14 +308,14 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     <div id="view-mode" class="view-mode">
         <!-- AUSÊNCIAS CADASTRADAS -->
         <?php if (!empty($absences)): ?>
-        <div style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #fecaca; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);">
+        <div style="background: linear-gradient(135deg, var(--rose-50) 0%, var(--rose-100) 100%); border: 1px solid var(--rose-200); border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--rose-600), var(--rose-700)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="alert-circle" style="width: 18px; color: white;"></i>
                 </div>
                 <div>
-                    <h3 style="margin: 0; color: #dc2626; font-size: 1.125rem; font-weight: 700;">Ausências Cadastradas</h3>
-                    <p style="margin: 0; font-size: 0.875rem; color: #991b1b; font-weight: 500;"><?= count($absences) ?> membro<?= count($absences) > 1 ? 's' : '' ?> não poderá<?= count($absences) > 1 ? 'ão' : '' ?> participar</p>
+                    <h3 style="margin: 0; color: var(--rose-600); font-size: 1.125rem; font-weight: 700;">Ausências Cadastradas</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: var(--rose-700); font-weight: 500;"><?= count($absences) ?> membro<?= count($absences) > 1 ? 's' : '' ?> não poderá<?= count($absences) > 1 ? 'ão' : '' ?> participar</p>
                 </div>
             </div>
 
@@ -323,15 +323,15 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <?php foreach ($absences as $absence): ?>
                 <div style="background: white; border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <!-- Avatar do Ausente -->
-                    <div style="width: 48px; height: 48px; border-radius: 50%; background: <?= $absence['avatar_color'] ?: '#cbd5e1' ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.125rem; flex-shrink: 0;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: <?= $absence['avatar_color'] ?: 'var(--slate-300)' ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.125rem; flex-shrink: 0;">
                         <?= strtoupper(substr($absence['name'], 0, 2)) ?>
                     </div>
 
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;"><?= htmlspecialchars($absence['name']) ?></div>
-                        <div style="font-size: 0.8125rem; color: #64748b; margin-top: 2px;"><?= htmlspecialchars($absence['instrument'] ?: 'Membro') ?></div>
+                        <div style="font-weight: 700; color: var(--slate-900); font-size: 0.9375rem;"><?= htmlspecialchars($absence['name']) ?></div>
+                        <div style="font-size: 0.8125rem; color: var(--slate-500); margin-top: 2px;"><?= htmlspecialchars($absence['instrument'] ?: 'Membro') ?></div>
                         <?php if ($absence['reason']): ?>
-                        <div style="font-size: 0.8125rem; color: #94a3b8; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+                        <div style="font-size: 0.8125rem; color: var(--slate-400); margin-top: 4px; display: flex; align-items: center; gap: 4px;">
                             <i data-lucide="info" style="width: 12px;"></i>
                             <?= htmlspecialchars($absence['reason']) ?>
                         </div>
@@ -340,18 +340,18 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 
                     <!-- Substituto (se houver) -->
                     <?php if ($absence['replacement_id']): ?>
-                    <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f0fdf4; border-radius: 10px; border: 1px solid #bbf7d0;">
-                        <i data-lucide="arrow-right" style="width: 18px; color: #16a34a;"></i>
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: <?= $absence['replacement_color'] ?: '#cbd5e1' ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; border: 2px solid #16a34a;">
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--sage-50); border-radius: 10px; border: 1px solid var(--sage-200);">
+                        <i data-lucide="arrow-right" style="width: 18px; color: var(--sage-600);"></i>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: <?= $absence['replacement_color'] ?: 'var(--slate-300)' ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; border: 2px solid var(--sage-600);">
                             <?= strtoupper(substr($absence['replacement_name'], 0, 2)) ?>
                         </div>
                         <div style="min-width: 0;">
-                            <div style="font-weight: 700; color: #16a34a; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($absence['replacement_name']) ?></div>
-                            <div style="font-size: 0.75rem; color: #15803d;"><?= htmlspecialchars($absence['replacement_instrument'] ?: 'Substituto') ?></div>
+                            <div style="font-weight: 700; color: var(--sage-600); font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($absence['replacement_name']) ?></div>
+                            <div style="font-size: 0.75rem; color: var(--sage-700);"><?= htmlspecialchars($absence['replacement_instrument'] ?: 'Substituto') ?></div>
                         </div>
                     </div>
                     <?php else: ?>
-                    <div style="background: #fef3c7; color: #92400e; padding: 8px 14px; border-radius: 8px; font-size: 0.8125rem; font-weight: 600; white-space: nowrap;">
+                    <div style="background: var(--yellow-100); color: #92400e; padding: 8px 14px; border-radius: 8px; font-size: 0.8125rem; font-weight: 600; white-space: nowrap;">
                         Sem substituto
                     </div>
                     <?php endif; ?>
@@ -388,7 +388,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04)'">
                             <div style="
                                 width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px;
-                                background: <?= $member['avatar_color'] ?: '#e2e8f0' ?>;
+                                background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>;
                                 color: white; display: flex; align-items: center; justify-content: center;
                                 font-weight: 700; font-size: var(--font-h2);
                                 box-shadow: 0 2px 6px rgba(0,0,0,0.08);
@@ -444,7 +444,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                             <div style="display: flex; gap: 12px; align-items: flex-start;">
                                 <div style="
                                     min-width: 28px; height: 28px; 
-                                    background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+                                    background: linear-gradient(135deg, var(--lavender-600), #7c3aed); 
                                     border-radius: 8px; 
                                     display: flex; align-items: center; justify-content: center;
                                     font-size: var(--font-body-sm); font-weight: 800; color: white;
@@ -457,7 +457,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                     <p style="margin: 0 0 10px 0; font-size: var(--font-body-sm); color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
                                     <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
                                         <?php if ($song['category']): ?>
-                                            <span style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">
+                                            <span style="background: linear-gradient(135deg, var(--slate-50), var(--slate-100)); color: var(--slate-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">
                                                 <?= htmlspecialchars($song['category']) ?>
                                             </span>
                                         <?php endif; ?>
@@ -467,13 +467,13 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['bpm']): ?>
-                                            <span style="background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fecaca;">
+                                            <span style="background: linear-gradient(135deg, var(--rose-50), var(--rose-100)); color: var(--rose-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);">
                                                 <?= htmlspecialchars($song['bpm']) ?> BPM
                                             </span>
                                         <?php endif; ?>
                                         <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
-                                            background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #ef4444; text-decoration: none;
-                                            padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fecaca;
+                                            background: linear-gradient(135deg, var(--rose-50), var(--rose-100)); color: var(--rose-500); text-decoration: none;
+                                            padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);
                                             display: inline-flex; align-items: center; gap: 3px;
                                             transition: all 0.2s;
                                         " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 2px 6px rgba(239, 68, 68, 0.2)'" 
@@ -507,7 +507,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                          </div>
                          <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($member['name']) ?></span>
-                         <button onclick="toggleMember(<?= $member['user_id'] ?>, null)" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 0 0 0 4px; display: flex;"><i data-lucide="x" style="width: 14px;"></i></button>
+                         <button onclick="toggleMember(<?= $member['user_id'] ?>, null)" style="border: none; background: none; color: var(--rose-500); cursor: pointer; padding: 0 0 0 4px; display: flex;"><i data-lucide="x" style="width: 14px;"></i></button>
                     </div>
                 <?php endforeach; ?>
                 <?php if(empty($team)): ?><span style="color: var(--text-muted); font-style: italic;">Nenhum participante.</span><?php endif; ?>
@@ -533,7 +533,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                             <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($song['title']) ?></div>
                             <div style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?></div>
                          </div>
-                         <button onclick="toggleSong(<?= $song['song_id'] ?>, null)" style="border: none; background: none; color: #ef4444; cursor: pointer; padding: 4px; display: flex;"><i data-lucide="trash-2" style="width: 16px;"></i></button>
+                         <button onclick="toggleSong(<?= $song['song_id'] ?>, null)" style="border: none; background: none; color: var(--rose-500); cursor: pointer; padding: 4px; display: flex;"><i data-lucide="trash-2" style="width: 16px;"></i></button>
                     </div>
                 <?php endforeach; ?>
                  <?php if(empty($songs)): ?><span style="color: var(--text-muted); font-style: italic;">Nenhuma música.</span><?php endif; ?>
@@ -565,7 +565,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
              ?>
                 <label class="member-filter-item" data-name="<?= strtolower($user['name']) ?>" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s;">
                     <input type="checkbox" <?= $isSelected ? 'checked' : '' ?> onchange="toggleMember(<?= $user['id'] ?>, this)" style="width: 20px; height: 20px; accent-color: var(--primary);">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: <?= $user['avatar_color'] ?: '#e2e8f0' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: <?= $user['avatar_color'] ?: 'var(--slate-200)' ?>; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
                         <?= strtoupper(substr($user['name'], 0, 1)) ?>
                     </div>
                     <div>

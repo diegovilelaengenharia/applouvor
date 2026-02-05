@@ -76,20 +76,20 @@ renderPageHeader('Integração Google Calendar', 'Sincronize eventos automaticam
     }
     
     .status-disconnected {
-        background: #fee2e2;
-        color: #991b1b;
+        background: var(--rose-100);
+        color: var(--rose-700);
     }
     
     .info-box {
-        background: #eff6ff;
-        border: 1px solid #dbeafe;
+        background: var(--slate-50);
+        border: 1px solid var(--slate-100);
         border-radius: 10px;
         padding: 16px;
         margin: 16px 0;
     }
     
     .info-box h4 {
-        color: #1e40af;
+        color: var(--slate-700);
         margin: 0 0 8px;
         font-size: 0.9375rem;
     }
@@ -109,7 +109,7 @@ renderPageHeader('Integração Google Calendar', 'Sincronize eventos automaticam
     }
     
     .warning-box {
-        background: #fef3c7;
+        background: var(--yellow-100);
         border: 1px solid #fde68a;
         border-radius: 10px;
         padding: 16px;
@@ -137,7 +137,7 @@ renderPageHeader('Integração Google Calendar', 'Sincronize eventos automaticam
     <?php endif; ?>
     
     <?php if (isset($error)): ?>
-        <div style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+        <div style="background: var(--rose-100); border: 1px solid var(--rose-500); color: var(--rose-700); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
             <?= htmlspecialchars($error) ?>
         </div>
     <?php endif; ?>
@@ -201,7 +201,7 @@ renderPageHeader('Integração Google Calendar', 'Sincronize eventos automaticam
                 </a>
             <?php 
                 } catch (Exception $e) {
-                    echo "<p style='color: #991b1b; text-align: center;'>Erro: " . htmlspecialchars($e->getMessage()) . "</p>";
+                    echo "<p style='color: var(--rose-700); text-align: center;'>Erro: " . htmlspecialchars($e->getMessage()) . "</p>";
                 }
             else: 
             ?>

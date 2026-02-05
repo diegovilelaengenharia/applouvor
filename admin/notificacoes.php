@@ -167,9 +167,9 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         background: currentColor;
     }
     
-    .stat-card.total { color: #376ac8; }
+    .stat-card.total { color: var(--slate-600); }
     .stat-card.unread { color: #f43f5e; }
-    .stat-card.read { color: #22c55e; }
+    .stat-card.read { color: var(--sage-500); }
     
     .stat-value {
         font-size: 1.5rem;
@@ -198,7 +198,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: #f8fafc;
+        background: var(--slate-50);
         cursor: pointer;
     }
 
@@ -255,7 +255,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         position: absolute;
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
-        background-color: #cbd5e1;
+        background-color: var(--slate-300);
         transition: .4s;
         border-radius: 24px;
     }
@@ -348,13 +348,13 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
 <div class="notifications-container">
     
     <?php if (isset($success)): ?>
-        <div class="alert alert-success" style="padding: 12px; border-radius: 8px; background: #dcfce7; color: #166534; margin-bottom: 20px; border: 1px solid #bbf7d0;">
+        <div class="alert alert-success" style="padding: 12px; border-radius: 8px; background: var(--sage-100); color: var(--sage-800); margin-bottom: 20px; border: 1px solid var(--sage-200);">
             <?= $success ?>
         </div>
     <?php endif; ?>
     
     <?php if (isset($error)): ?>
-        <div class="alert alert-danger" style="padding: 12px; border-radius: 8px; background: #fee2e2; color: #991b1b; margin-bottom: 20px; border: 1px solid #fecaca;">
+        <div class="alert alert-danger" style="padding: 12px; border-radius: 8px; background: var(--rose-100); color: var(--rose-700); margin-bottom: 20px; border: 1px solid var(--rose-200);">
             <?= $error ?>
         </div>
     <?php endif; ?>
@@ -362,14 +362,14 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
     <!-- Botões de Ação -->
     <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
         <!-- Botão para TODOS os usuários -->
-        <button onclick="deleteAllNotifications()" class="btn" style="background: #f59e0b; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+        <button onclick="deleteAllNotifications()" class="btn" style="background: var(--yellow-500); color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
             <i data-lucide="trash-2" style="width: 16px;"></i>
             Apagar Todas
         </button>
         
         <!-- Botões apenas para ADMIN -->
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-        <button onclick="clearDatabaseAdmin()" class="btn" style="background: #dc2626; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+        <button onclick="clearDatabaseAdmin()" class="btn" style="background: var(--rose-600); color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
             <i data-lucide="database" style="width: 16px;"></i>
             Limpar Banco
         </button>
@@ -389,14 +389,14 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
     <div id="notificationStatusContainer" style="display: none; margin-bottom: 24px;">
         
         <!-- Banner Ativação (Default) -->
-        <div id="statusCardDefault" style="display: none; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; color: #1e40af;">
+        <div id="statusCardDefault" style="display: none; background: var(--slate-50); border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; color: var(--slate-700);">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <i data-lucide="bell" style="width: 20px; color: #3b82f6;"></i>
+                    <i data-lucide="bell" style="width: 20px; color: var(--slate-500);"></i>
                     <span style="font-size: 0.9rem; font-weight: 500;">Ative as notificações para não perder nada.</span>
                 </div>
                 <button id="btnActivatePush" class="ripple" style="
-                    background: #3b82f6; color: white; border: none; padding: 6px 16px; border-radius: 6px; 
+                    background: var(--slate-500); color: white; border: none; padding: 6px 16px; border-radius: 6px; 
                     font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;
                     transition: background 0.2s;
                 ">
@@ -406,23 +406,23 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         </div>
 
         <!-- Banner Ativo (Granted) -->
-        <div id="statusCardGranted" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; color: #166534;">
+        <div id="statusCardGranted" style="display: none; background: var(--sage-50); border: 1px solid var(--sage-200); border-radius: 8px; padding: 12px 16px; color: var(--sage-800);">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="check" style="width: 18px; color: #22c55e;"></i>
+                <i data-lucide="check" style="width: 18px; color: var(--sage-500);"></i>
                 <span style="font-size: 0.9rem; font-weight: 500;">Notificações ativadas neste dispositivo.</span>
             </div>
         </div>
 
         <!-- Banner Bloqueado (Denied) -->
-        <div id="statusCardDenied" style="display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: #991b1b;">
+        <div id="statusCardDenied" style="display: none; background: var(--rose-50); border: 1px solid var(--rose-200); border-radius: 8px; padding: 12px 16px; color: var(--rose-700);">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="bell-off" style="width: 18px; color: #ef4444;"></i>
+                <i data-lucide="bell-off" style="width: 18px; color: var(--rose-500);"></i>
                 <span style="font-size: 0.9rem;">Notificações bloqueadas. <span style="font-weight: 600;">Clique no cadeado 🔒</span> na barra de endereço para liberar.</span>
             </div>
         </div>
 
         <!-- Banner Não Suportado -->
-        <div id="statusCardUnsupported" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; color: #64748b;">
+        <div id="statusCardUnsupported" style="display: none; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 8px; padding: 12px 16px; color: var(--slate-500);">
             <div style="display: flex; align-items: center; gap: 12px;">
                 <i data-lucide="info" style="width: 18px;"></i>
                 <span style="font-size: 0.9rem;">Push notifications indisponíveis neste navegador.</span>
@@ -473,7 +473,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         </div>
     <?php else: ?>
         <?php foreach ($notifications as $notif): 
-            $config = $notificationSystem->typeConfig[$notif['type']] ?? ['icon' => 'bell', 'color' => '#64748b'];
+            $config = $notificationSystem->typeConfig[$notif['type']] ?? ['icon' => 'bell', 'color' => 'var(--slate-500)'];
             $data = is_string($notif['data']) ? json_decode($notif['data'], true) : $notif['data'];
         ?>
             <div class="notification-item <?= !$notif['is_read'] ? 'unread' : '' ?>" data-id="<?= $notif['id'] ?>">
@@ -715,9 +715,9 @@ function openViewsModal() {
         <div style="background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 80vh; overflow: auto; padding: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700;">Visualizações de Notificações</h3>
-                <button onclick="closeViewsModal()" style="background: none; border: none; cursor: pointer; font-size: 24px; color: #64748b;">&times;</button>
+                <button onclick="closeViewsModal()" style="background: none; border: none; cursor: pointer; font-size: 24px; color: var(--slate-500);">&times;</button>
             </div>
-            <div id="viewsContent" style="color: #64748b;">
+            <div id="viewsContent" style="color: var(--slate-500);">
                 <p>Selecione uma notificação da lista abaixo para ver quem visualizou:</p>
                 <div id="notificationsList"></div>
             </div>
@@ -742,24 +742,24 @@ async function loadNotificationsForViews() {
             const list = document.getElementById('notificationsList');
             list.innerHTML = data.notifications.map(notif => `
                 <div onclick="loadViewsForNotification('${notif.title.replace(/'/g, "\\'")}', '${notif.created_at}')" 
-                     style="padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s;"
-                     onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                    <div style="font-weight: 600; color: #1e293b;">${notif.title}</div>
-                    <div style="font-size: 0.85rem; color: #64748b;">${new Date(notif.created_at).toLocaleString('pt-BR')}</div>
+                     style="padding: 12px; border: 1px solid var(--slate-200); border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s;"
+                     onmouseover="this.style.background='var(--slate-50)'" onmouseout="this.style.background='white'">
+                    <div style="font-weight: 600; color: var(--slate-800);">${notif.title}</div>
+                    <div style="font-size: 0.85rem; color: var(--slate-500);">${new Date(notif.created_at).toLocaleString('pt-BR')}</div>
                 </div>
             `).join('');
         } else {
-            document.getElementById('notificationsList').innerHTML = '<p style="color: #94a3b8;">Nenhuma notificação encontrada.</p>';
+            document.getElementById('notificationsList').innerHTML = '<p style="color: var(--slate-400);">Nenhuma notificação encontrada.</p>';
         }
     } catch (error) {
         console.error('Erro:', error);
-        document.getElementById('notificationsList').innerHTML = '<p style="color: #ef4444;">Erro ao carregar notificações</p>';
+        document.getElementById('notificationsList').innerHTML = '<p style="color: var(--rose-500);">Erro ao carregar notificações</p>';
     }
 }
 
 async function loadViewsForNotification(title, createdAt) {
     const content = document.getElementById('viewsContent');
-    content.innerHTML = '<p style="text-align: center; color: #64748b;">Carregando...</p>';
+    content.innerHTML = '<p style="text-align: center; color: var(--slate-500);">Carregando...</p>';
     
     try {
         const response = await fetch(`notifications_api.php?action=get_notification_views&title=${encodeURIComponent(title)}&created_at=${encodeURIComponent(createdAt)}`);
@@ -771,38 +771,38 @@ async function loadViewsForNotification(title, createdAt) {
             
             content.innerHTML = `
                 <div style="margin-bottom: 16px;">
-                    <h4 style="margin: 0 0 8px 0; font-size: 1rem; font-weight: 600; color: #1e293b;">${title}</h4>
+                    <h4 style="margin: 0 0 8px 0; font-size: 1rem; font-weight: 600; color: var(--slate-800);">${title}</h4>
                     <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-                        <span style="color: #22c55e; font-weight: 600;">✓ ${readCount} leram</span>
-                        <span style="color: #ef4444; font-weight: 600;">✗ ${unreadCount} não leram</span>
+                        <span style="color: var(--sage-500); font-weight: 600;">✓ ${readCount} leram</span>
+                        <span style="color: var(--rose-500); font-weight: 600;">✗ ${unreadCount} não leram</span>
                     </div>
                 </div>
                 <div style="max-height: 400px; overflow-y: auto;">
                     ${data.readers.map(reader => `
-                        <div style="padding: 10px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="padding: 10px; border-bottom: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <div style="font-weight: 600; color: #1e293b;">${reader.name}</div>
-                                <div style="font-size: 0.85rem; color: #64748b;">${reader.email}</div>
+                                <div style="font-weight: 600; color: var(--slate-800);">${reader.name}</div>
+                                <div style="font-size: 0.85rem; color: var(--slate-500);">${reader.email}</div>
                             </div>
                             <div style="text-align: right;">
                                 ${reader.is_read == 1 
-                                    ? `<span style="color: #22c55e; font-weight: 600;">✓ Lida</span><br><span style="font-size: 0.75rem; color: #64748b;">${reader.read_at ? new Date(reader.read_at).toLocaleString('pt-BR') : ''}</span>`
-                                    : `<span style="color: #ef4444; font-weight: 600;">✗ Não lida</span>`
+                                    ? `<span style="color: var(--sage-500); font-weight: 600;">✓ Lida</span><br><span style="font-size: 0.75rem; color: var(--slate-500);">${reader.read_at ? new Date(reader.read_at).toLocaleString('pt-BR') : ''}</span>`
+                                    : `<span style="color: var(--rose-500); font-weight: 600;">✗ Não lida</span>`
                                 }
                             </div>
                         </div>
                     `).join('')}
                 </div>
-                <button onclick="loadNotificationsForViews()" style="margin-top: 16px; padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                <button onclick="loadNotificationsForViews()" style="margin-top: 16px; padding: 8px 16px; background: var(--slate-500); color: white; border: none; border-radius: 6px; cursor: pointer;">
                     ← Voltar para lista
                 </button>
             `;
         } else {
-            content.innerHTML = '<p style="color: #94a3b8;">Nenhum dado de visualização encontrado.</p>';
+            content.innerHTML = '<p style="color: var(--slate-400);">Nenhum dado de visualização encontrado.</p>';
         }
     } catch (error) {
         console.error('Erro:', error);
-        content.innerHTML = '<p style="color: #ef4444;">Erro ao carregar visualizações</p>';
+        content.innerHTML = '<p style="color: var(--rose-500);">Erro ao carregar visualizações</p>';
     }
 }
 

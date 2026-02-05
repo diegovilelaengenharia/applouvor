@@ -188,7 +188,7 @@ renderAppHeader('Detalhes do Membro');
 
 <!-- Hero Header Compacto -->
 <div style="
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); 
+    background: linear-gradient(135deg, var(--sage-600) 0%, var(--sage-700) 100%); 
     margin: -16px -16px 20px -16px; 
     padding: 16px 16px 40px 16px; 
     border-radius: 0 0 20px 20px; 
@@ -339,7 +339,7 @@ renderAppHeader('Detalhes do Membro');
     <!-- Tab: Dados -->
     <div style="display: <?= $activeTab === 'dados' ? 'block' : 'none' ?>;">
         <?php if (isset($_GET['updated'])): ?>
-            <div style="background: #DCFCE7; color: #166534; padding: 10px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: var(--font-body-sm); font-weight: 600; border: 1px solid #bbf7d0;">
+            <div style="background: var(--sage-100); color: var(--sage-800); padding: 10px; border-radius: 8px; margin-bottom: 16px; text-align: center; font-size: var(--font-body-sm); font-weight: 600; border: 1px solid var(--sage-200);">
                 ✓ Dados atualizados!
             </div>
         <?php endif; ?>

@@ -75,7 +75,7 @@ renderPageHeader('Gestão de Sugestões', 'Aprove ou rejeite músicas sugeridas'
     .sug-artist { font-size: 0.9rem; color: var(--text-muted); }
     
     .sug-meta {
-        background: #f8fafc;
+        background: var(--slate-50);
         padding: 8px 12px;
         border-radius: 8px;
         font-size: 0.8rem;
@@ -170,8 +170,8 @@ function renderSuggestions(list) {
             `;
         } else {
             const statusLabel = item.status === 'approved' 
-                ? '<span style="color:#16a34a; font-weight:700;">Aprovada</span>' 
-                : '<span style="color:#dc2626; font-weight:700;">Rejeitada</span>';
+                ? '<span style="color:var(--sage-600); font-weight:700;">Aprovada</span>' 
+                : '<span style="color:var(--rose-600); font-weight:700;">Rejeitada</span>';
             actionsHtml = `<div style="flex:1; text-align:right; font-size:0.9rem;">${statusLabel}</div>`;
         }
         

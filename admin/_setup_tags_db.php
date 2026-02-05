@@ -9,7 +9,7 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(50) NOT NULL,
             description TEXT,
-            color VARCHAR(20) DEFAULT '#16a34a',
+            color VARCHAR(20) DEFAULT 'var(--sage-600)',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     ");
@@ -27,10 +27,10 @@ try {
 
     // Popular com alguns dados iniciais baseados na imagem
     $initialTags = [
-        ['Louvor', 'São cânticos cujas letras expressam elogio e agradecimento por aquilo que Deus fez.', '#F59E0B'], // Amarelo (mantido)
-        ['Adoração', 'São cânticos cujas letras expressam reconhecimento a Deus por aquilo que Ele é.', '#a855f7'], // Purple 500 - Vibrante
-        ['Contemplação', 'São cânticos que se concentram em meditar na Pessoa de Deus.', '#3b82f6'], // Blue 500 (mantido)
-        ['Consagração', 'Tratam da dedicação de nossas vidas a Deus.', '#22c55e'], // Green 500 - Vibrante
+        ['Louvor', 'São cânticos cujas letras expressam elogio e agradecimento por aquilo que Deus fez.', 'var(--yellow-500)'], // Amarelo (mantido)
+        ['Adoração', 'São cânticos cujas letras expressam reconhecimento a Deus por aquilo que Ele é.', 'var(--lavender-500)'], // Purple 500 - Vibrante
+        ['Contemplação', 'São cânticos que se concentram em meditar na Pessoa de Deus.', 'var(--slate-500)'], // Blue 500 (mantido)
+        ['Consagração', 'Tratam da dedicação de nossas vidas a Deus.', 'var(--sage-500)'], // Green 500 - Vibrante
         ['Alegria', 'Expressam alegria pelo Senhor e seus feitos.', '#EC4899'], // Pink (mantido)
         ['Especiais', 'Temas como casamento, batizados, etc.', '#6366F1'] // Indigo (mantido)
     ];

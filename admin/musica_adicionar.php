@@ -258,7 +258,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
 
     <form method="POST">
         <!-- Card 1: Informações Principais -->
-        <div class="form-card" style="--card-color: #3b82f6; --focus-shadow: rgba(59, 130, 246, 0.1);">
+        <div class="form-card" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="music" style="width: 14px;"></i>
@@ -335,7 +335,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         </div>
 
         <!-- Card 2: Referências -->
-        <div class="form-card" style="--card-color: #22c55e; --focus-shadow: rgba(34, 197, 94, 0.1);">
+        <div class="form-card" style="--card-color: var(--sage-500); --focus-shadow: rgba(34, 197, 94, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="link" style="width: 14px;"></i>
@@ -385,7 +385,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         </div>
 
         <!-- Card 3: Tags -->
-        <div class="form-card" style="--card-color: #f59e0b; --focus-shadow: rgba(245, 158, 11, 0.1);">
+        <div class="form-card" style="--card-color: var(--yellow-500); --focus-shadow: rgba(245, 158, 11, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="folder" style="width: 14px;"></i>
@@ -400,7 +400,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
                 <?php foreach ($allTags as $tag): ?>
                     <label class="tag-pill-compact" onclick="this.classList.toggle('active')">
                         <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>">
-                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#22c55e' ?>;"></span>
+                        <span class="tag-dot" style="background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;"></span>
                         <span><?= htmlspecialchars($tag['name']) ?></span>
                     </label>
                 <?php endforeach; ?>
@@ -444,7 +444,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
             item.innerHTML = `
                 <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input" placeholder="Descrição">
                 <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input" placeholder="Link">
-                 <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="color: #ef4444;">
+                 <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="color: var(--rose-500);">
                     <i data-lucide="trash-2" style="width: 14px;"></i>
                 </button>
             `;

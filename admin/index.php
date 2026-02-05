@@ -316,9 +316,9 @@ renderAppHeader('Visão Geral');
         background: #fff; width: 90%; max-width: 400px; border-radius: 20px; 
         padding: 24px; position: relative; text-align: center;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        border-top: 6px solid #ef4444;
+        border-top: 6px solid var(--rose-500);
     ">
-        <div style="background: #fee2e2; color: #dc2626; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+        <div style="background: var(--rose-100); color: var(--rose-600); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
             <i data-lucide="alert-triangle" width="24"></i>
         </div>
         <h3 style="margin: 0 0 8px 0; font-size: var(--font-h1); font-weight: 800; color: #1f2937;">Aviso Urgente</h3>
@@ -329,7 +329,7 @@ renderAppHeader('Visão Geral');
             <?= $popupAviso['message'] ?>
         </div>
         <button onclick="closeUrgentModal()" style="
-            width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 12px;
+            width: 100%; padding: 12px; background: var(--rose-500); color: white; border: none; border-radius: 12px;
             font-weight: 700; font-size: var(--font-h3); cursor: pointer;
         ">
             Entendido
@@ -495,14 +495,14 @@ renderAppHeader('Visão Geral');
     
     /* GESTÃO → AZUL */
     .card-blue, .card-emerald { /* Gestão: Escalas, Repertório, Membros, Agenda, Ausências */
-        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
         border: 1px solid #93c5fd;
     }
-    .card-blue .card-icon, .card-emerald .card-icon { color: #2563eb; }
+    .card-blue .card-icon, .card-emerald .card-icon { color: var(--slate-600); }
 
     /* GESTÃO → AZUL CLARO (Stats/Relatórios) */
     .card-slate { /* Estatísticas e Relatórios */
-        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
         border: 1px solid #bfdbfe;
     }
     .card-slate .card-icon { color: #60a5fa; }
@@ -516,17 +516,17 @@ renderAppHeader('Visão Geral');
 
     /* COMUNICAÇÃO → ROXO */
     .card-violet, .card-purple, .card-amber, .card-fuchsia { /* Comunicação: Avisos, Aniversariantes */
-        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        background: linear-gradient(135deg, var(--lavender-50) 0%, #ede9fe 100%);
         border: 1px solid #c4b5fd;
     }
     .card-violet .card-icon, .card-purple .card-icon, .card-amber .card-icon, .card-fuchsia .card-icon { color: #7c3aed; }
 
     /* ADMIN → VERMELHO */
     .card-red { /* Líder */
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        background: linear-gradient(135deg, var(--rose-100) 0%, var(--rose-200) 100%);
         border: 1px solid #fca5a5;
     }
-    .card-red .card-icon { color: #dc2626; }
+    .card-red .card-icon { color: var(--rose-600); }
 
     /* Estilo Geral de Icone */
     .card-icon {

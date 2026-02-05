@@ -87,7 +87,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
 <div class="container fade-in-up">
 
     <?php if ($success): ?>
-        <div style="background:#dcfce7; color:#166534; padding:12px; border-radius:12px; margin-bottom:20px; border:1px solid #bbf7d0; display:flex; gap:10px; align-items:center; font-weight:700;">
+        <div style="background:var(--sage-100); color:var(--sage-800); padding:12px; border-radius:12px; margin-bottom:20px; border:1px solid var(--sage-200); display:flex; gap:10px; align-items:center; font-weight:700;">
             <i data-lucide="check-circle" width="18"></i> <?= $success ?>
         </div>
     <?php endif; ?>
@@ -96,14 +96,14 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
     <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; box-shadow: var(--shadow-sm);">
         <form method="GET" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: end;">
             <div style="flex: 1; min-width: 180px;">
-                <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 6px; font-weight: 600;">Mês de Referência</label>
+                <label style="display: block; font-size: 0.8rem; color: var(--slate-500); margin-bottom: 6px; font-weight: 600;">Mês de Referência</label>
                 <input type="month" name="month" value="<?= $monthFilter ?>" onchange="this.form.submit()" 
-                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
             </div>
             
             <div style="flex: 1; min-width: 180px;">
-                <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 6px; font-weight: 600;">Filtrar Membro</label>
-                <select name="user_id" onchange="this.form.submit()" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                <label style="display: block; font-size: 0.8rem; color: var(--slate-500); margin-bottom: 6px; font-weight: 600;">Filtrar Membro</label>
+                <select name="user_id" onchange="this.form.submit()" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
                     <option value="">Mostrar Todos</option>
                     <?php foreach ($users as $u): ?>
                         <option value="<?= $u['id'] ?>" <?= $userFilter == $u['id'] ? 'selected' : '' ?>><?= htmlspecialchars($u['name']) ?></option>
@@ -120,11 +120,11 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
 
     <!-- Lista -->
     <?php if (empty($absences)): ?>
-        <div style="text-align: center; padding: 48px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
-            <div style="background: #f1f5f9; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-                <i data-lucide="calendar-check" style="color:#94a3b8" width="32"></i>
+        <div style="text-align: center; padding: 48px; background: white; border-radius: 16px; border: 1px dashed var(--slate-300);">
+            <div style="background: var(--slate-100); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                <i data-lucide="calendar-check" style="color:var(--slate-400)" width="32"></i>
             </div>
-            <p style="color: #64748b; margin: 0; font-weight: 500;">Nenhuma ausência encontrada para este filtro.</p>
+            <p style="color: var(--slate-500); margin: 0; font-weight: 500;">Nenhuma ausência encontrada para este filtro.</p>
         </div>
     <?php else: ?>
         <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
@@ -150,12 +150,12 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
                 <div style="background: white; border-radius: 16px; border: 1px solid var(--border-color); display: flex; overflow: hidden; box-shadow: var(--shadow-sm); position: relative;">
                     
                     <!-- ID Color Bar (based on avatar color or default) -->
-                    <div style="width: 6px; background: <?= $item['avatar_color'] ?: '#64748b' ?>;"></div>
+                    <div style="width: 6px; background: <?= $item['avatar_color'] ?: 'var(--slate-500)' ?>;"></div>
 
                     <div style="flex: 1; padding: 16px; display: flex; gap: 16px; align-items: flex-start;">
                         
                         <!-- Date Block -->
-                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: #f8fafc; border-radius: 12px; color: #64748b; border: 1px solid #e2e8f0;">
+                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: var(--slate-50); border-radius: 12px; color: var(--slate-500); border: 1px solid var(--slate-200);">
                             <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;"><?= $monthStr ?></span>
                             <span style="font-size: 1.4rem; font-weight: 800; line-height: 1; margin-top: 2px;"><?= $dayStr ?></span>
                         </div>
@@ -165,19 +165,19 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
                             
                             <!-- Header: Name & Role -->
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-                                <div style="width: 24px; height: 24px; border-radius: 50%; background: <?= $item['avatar_color'] ?: '#cbd5e1' ?>; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">
+                                <div style="width: 24px; height: 24px; border-radius: 50%; background: <?= $item['avatar_color'] ?: 'var(--slate-300)' ?>; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">
                                     <?= strtoupper(substr($item['user_name'], 0, 1)) ?>
                                 </div>
-                                <span style="font-weight: 700; color: #1e293b; font-size: 0.95rem;"><?= htmlspecialchars($item['user_name']) ?></span>
+                                <span style="font-weight: 700; color: var(--slate-800); font-size: 0.95rem;"><?= htmlspecialchars($item['user_name']) ?></span>
                             </div>
 
                             <!-- Reason & Sub -->
-                            <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 600; color: #475569;">
+                            <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 600; color: var(--slate-600);">
                                 <?= htmlspecialchars($item['reason']) ?>
                             </h4>
 
                             <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-                                <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                <span style="font-size: 0.8rem; background: var(--slate-100); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--slate-200);">
                                     <?= $periodo ?>
                                 </span>
                                 <?php if ($item['replacement_name']): ?>
@@ -185,7 +185,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
                                         <i data-lucide="user-check" width="12"></i> <?= htmlspecialchars($item['replacement_name']) ?>
                                     </span>
                                 <?php else: ?>
-                                    <span style="font-size: 0.8rem; color: #dc2626; background: #fef2f2; padding: 2px 8px; border-radius: 4px; border: 1px solid #fee2e2;">
+                                    <span style="font-size: 0.8rem; color: var(--rose-600); background: var(--rose-50); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--rose-100);">
                                         Sem substituto
                                     </span>
                                 <?php endif; ?>
@@ -193,7 +193,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
 
                             <!-- Obs/Audio -->
                             <?php if (!empty($item['observation'])): ?>
-                                <div style="font-size: 0.85rem; color: #64748b; background: #f8fafc; padding: 8px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #f1f5f9;">
+                                <div style="font-size: 0.85rem; color: var(--slate-500); background: var(--slate-50); padding: 8px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--slate-100);">
                                     <?= nl2br(htmlspecialchars($item['observation'])) ?>
                                 </div>
                             <?php endif; ?>
@@ -217,7 +217,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
                             <form method="POST" onsubmit="return confirm('Remover esta ausência?');">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                                <button type="submit" title="Excluir" style="background: #fff1f2; color: #e11d48; border: 1px solid #fecaca; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
+                                <button type="submit" title="Excluir" style="background: #fff1f2; color: #e11d48; border: 1px solid var(--rose-200); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
                                     <i data-lucide="trash-2" width="14"></i>
                                 </button>
                             </form>
@@ -235,7 +235,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
 <div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
     <div class="fade-in-up" style="background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
         
-        <button onclick="closeModal()" style="position: absolute; right: 16px; top: 16px; border: none; background: none; color: #94a3b8; cursor: pointer;">
+        <button onclick="closeModal()" style="position: absolute; right: 16px; top: 16px; border: none; background: none; color: var(--slate-400); cursor: pointer;">
             <i data-lucide="x" width="24"></i>
         </button>
 
@@ -246,7 +246,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
             
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Membro</label>
-                <select name="user_id" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                <select name="user_id" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
                     <option value="">Selecione...</option>
                     <?php foreach ($users as $u): ?>
                         <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
@@ -257,27 +257,27 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">De</label>
-                    <input type="date" name="start_date" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                    <input type="date" name="start_date" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Até</label>
-                    <input type="date" name="end_date" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                    <input type="date" name="end_date" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
                 </div>
             </div>
 
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Motivo</label>
-                <input type="text" name="reason" placeholder="Ex: Viagem" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                <input type="text" name="reason" placeholder="Ex: Viagem" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
             </div>
 
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Observação</label>
-                <textarea name="observation" rows="2" placeholder="Detalhes..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; resize: vertical; outline:none;"></textarea>
+                <textarea name="observation" rows="2" placeholder="Detalhes..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); resize: vertical; outline:none;"></textarea>
             </div>
 
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Substituto (Opcional)</label>
-                <select name="replacement_id" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; outline:none;">
+                <select name="replacement_id" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
                     <option value="">Sem substituto definido</option>
                     <?php foreach ($users as $u): ?>
                         <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
@@ -286,7 +286,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
             </div>
 
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 12px; background: #e2e8f0; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="button" onclick="closeModal()" style="flex: 1; padding: 12px; background: var(--slate-200); border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
                 <button type="submit" style="flex: 2; padding: 12px; background: #e11d48; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar</button>
             </div>
         </form>

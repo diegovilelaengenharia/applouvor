@@ -276,13 +276,13 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
                     <div class="tag-desc"><?= htmlspecialchars($tag['description']) ?></div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <button onclick='editTag(<?= json_encode($tag) ?>)' class="btn-icon ripple" style="color: #64748b;">
+                    <button onclick='editTag(<?= json_encode($tag) ?>)' class="btn-icon ripple" style="color: var(--slate-500);">
                         <i data-lucide="edit-2" style="width: 18px;"></i>
                     </button>
                     <form method="POST" onsubmit="return confirm('Excluir esta tag?');" style="margin: 0;">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="id" value="<?= $tag['id'] ?>">
-                        <button type="submit" class="btn-icon ripple" style="color: #ef4444;">
+                        <button type="submit" class="btn-icon ripple" style="color: var(--rose-500);">
                             <i data-lucide="trash-2" style="width: 18px;"></i>
                         </button>
                     </form>
@@ -329,19 +329,19 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
                             '#047857', // Emerald Dark
                             '#10B981', // Emerald
                             '#84CC16', // Lime
-                            '#F59E0B', // Amber
+                            'var(--yellow-500)', // Amber
                             '#F97316', // Orange
-                            '#EF4444', // Red
+                            'var(--rose-500)', // Red
                             '#F43F5E', // Rose
                             '#EC4899', // Pink
                             '#D946EF', // Fuchsia
-                            '#8B5CF6', // Violet
+                            'var(--lavender-600)', // Violet
                             '#6366F1', // Indigo
-                            '#3B82F6', // Blue
+                            'var(--slate-500)', // Blue
                             '#0EA5E9', // Sky
                             '#06B6D4', // Cyan
                             '#14B8A6', // Teal
-                            '#64748B', // Slate
+                            'var(--slate-500)', // Slate
                             '#71717A', // Zinc
                             '#1F2937'  // Gray Dark
                         ];

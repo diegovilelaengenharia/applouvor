@@ -73,14 +73,14 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 <div style="max-width: 900px; margin: 0 auto 32px auto; padding: 0 16px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center;">
 
     <!-- Toggle Central -->
-    <div style="background: #e2e8f0; padding: 4px; border-radius: 14px; display: flex; gap: 2px;">
+    <div style="background: var(--slate-200); padding: 4px; border-radius: 14px; display: flex; gap: 2px;">
         <button onclick="switchTab('future')" id="btn-future" class="ripple" style="
-                border: none; background: white; color: #0f172a; 
+                border: none; background: white; color: var(--slate-900); 
                 padding: 10px 24px; border-radius: 10px; font-weight: 700; font-size: var(--font-body);
                 box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;
             ">Próximas</button>
         <button onclick="switchTab('past')" id="btn-past" class="ripple" style="
-                border: none; background: transparent; color: #64748b; 
+                border: none; background: transparent; color: var(--slate-500); 
                 padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: var(--font-body);
                 cursor: pointer; transition: all 0.2s;
             ">Anteriores</button>
@@ -93,7 +93,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
         <a href="escala_adicionar.php" class="ripple" style="
             width: 48px; height: 48px; 
-            background: #376ac8; 
+            background: var(--slate-600); 
             color: white; 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
@@ -110,9 +110,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         <!-- Filter Button (Simplificado) -->
         <button onclick="openSheet('filterSheet')" class="ripple" style="
             width: 48px; height: 48px; 
-            background: #f1f5f9; 
-            border: 1px solid #cbd5e1; 
-            color: #475569; 
+            background: var(--slate-100); 
+            border: 1px solid var(--slate-300); 
+            color: var(--slate-600); 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
@@ -134,11 +134,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     <div id="tab-future">
         <?php if (empty($futureSchedules)): ?>
             <div style="text-align: center; padding: 80px 20px;">
-                <div style="background: #f1f5f9; width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 24px auto; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="calendar" style="width: 32px; color: #94a3b8;"></i>
+                <div style="background: var(--slate-100); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 24px auto; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="calendar" style="width: 32px; color: var(--slate-400);"></i>
                 </div>
-                <h3 style="color: #334155; margin-bottom: 8px;">Tudo tranquilo por aqui</h3>
-                <p style="color: #94a3b8;">Nenhuma escala agendada para os próximos dias.</p>
+                <h3 style="color: var(--slate-700); margin-bottom: 8px;">Tudo tranquilo por aqui</h3>
+                <p style="color: var(--slate-400);">Nenhuma escala agendada para os próximos dias.</p>
 
             </div>
         <?php else: ?>
@@ -152,26 +152,26 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     // Definir Tema de Cor (Moderate Palette)
                     $type = mb_strtolower($schedule['event_type']);
                     if (strpos($type, 'domingo') !== false) {
-                        $themeColor = '#376ac8'; // Smart Blue 500
-                        $themeLight = '#ebf0fa'; // Smart Blue 50
+                        $themeColor = 'var(--slate-600)'; // Smart Blue 500
+                        $themeLight = 'var(--slate-100)'; // Smart Blue 50
                     } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = '#f59e0b'; // Amber 500
-                        $themeLight = '#fffbeb'; // Amber 50
+                        $themeColor = 'var(--yellow-500)'; // Amber 500
+                        $themeLight = 'var(--yellow-50)'; // Amber 50
                     } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#a855f7'; // Purple 500
-                        $themeLight = '#faf5ff'; // Purple 50
+                        $themeColor = 'var(--lavender-500)'; // Purple 500
+                        $themeLight = 'var(--lavender-50)'; // Purple 50
                     } elseif (strpos($type, 'especial') !== false) {
                         $themeColor = '#ec4899'; // Pink 500
                         $themeLight = '#fdf2f8'; // Pink 50
                     } else {
-                        $themeColor = '#376ac8'; // Blue 500
-                        $themeLight = '#ebf0fa'; // Blue 50
+                        $themeColor = 'var(--slate-600)'; // Blue 500
+                        $themeLight = 'var(--slate-100)'; // Blue 50
                     }
 
                     // Sobrescrever se for HOJE (Destaque sutil)
                     if ($isToday) {
-                        $themeColor = '#376ac8'; // Smart Blue 500
-                        $themeLight = '#ebf0fa'; // Smart Blue 50
+                        $themeColor = 'var(--slate-600)'; // Smart Blue 500
+                        $themeLight = 'var(--slate-100)'; // Smart Blue 50
                     }
 
                     // Buscar participantes (Top 5)
@@ -211,7 +211,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     
                     // Cores de fundo do card baseado na data
                     if ($isToday) {
-                        $cardBg = '#ebf0fa'; // Blue muito claro
+                        $cardBg = 'var(--slate-100)'; // Blue muito claro
                         $cardBorderColor = '#93c5fd'; // Blue claro
                     } else {
                         $cardBg = '#fefce8'; // Amarelo muito claro
@@ -260,14 +260,14 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             <!-- Infos do Evento -->
                             <div style="flex: 1; min-width: 0;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-                                    <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b; line-height: 1.3;">
+                                    <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--slate-800); line-height: 1.3;">
                                         <?= htmlspecialchars($schedule['event_type']) ?>
                                     </h3>
                                     <?php if ($isToday): ?>
                                         <span style="
                                             font-size: 0.65rem;
                                             color: white;
-                                            background: #376ac8;
+                                            background: var(--slate-600);
                                             padding: 3px 8px;
                                             border-radius: 6px;
                                             font-weight: 700;
@@ -277,7 +277,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         <span style="
                                             font-size: 0.65rem;
                                             color: #92400e;
-                                            background: #fef3c7;
+                                            background: var(--yellow-100);
                                             padding: 3px 8px;
                                             border-radius: 6px;
                                             font-weight: 600;
@@ -285,7 +285,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     <?php endif; ?>
                                 </div>
 
-                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: #64748b; margin-bottom: 8px; font-weight: 500;">
+                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: var(--slate-500); margin-bottom: 8px; font-weight: 500;">
                                     <div style="display: flex; align-items: center; gap: 4px;">
                                         <i data-lucide="clock" style="width: 14px;"></i> <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                     </div>
@@ -323,14 +323,14 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         <?php if ($extraCount > 0): ?>
                                             <div style="
                                                 font-size: 0.75rem;
-                                                color: #64748b;
+                                                color: var(--slate-500);
                                                 font-weight: 600;
                                                 margin-left: 6px;
                                             ">+<?= $extraCount ?></div>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
-                                    <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Equipe não definida</span>
+                                    <span style="font-size: 0.8rem; color: var(--slate-400); font-style: italic;">Equipe não definida</span>
                                 <?php endif; ?>
 
                                 <!-- Badge de Ausências -->
@@ -339,14 +339,14 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     display: inline-flex;
                                     align-items: center;
                                     gap: 4px;
-                                    background: #fef2f2;
-                                    color: #dc2626;
+                                    background: var(--rose-50);
+                                    color: var(--rose-600);
                                     padding: 4px 8px;
                                     border-radius: 6px;
                                     font-size: 0.7rem;
                                     font-weight: 600;
                                     margin-top: 6px;
-                                    border: 1px solid #fecaca;
+                                    border: 1px solid var(--rose-200);
                                 ">
                                     <i data-lucide="alert-circle" style="width: 12px;"></i>
                                     <?= count($absences) ?> ausência<?= count($absences) > 1 ? 's' : '' ?>
@@ -356,7 +356,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             </div>
 
                             <!-- Icon Setta -->
-                            <div style="align-self: center; color: #cbd5e1;">
+                            <div style="align-self: center; color: var(--slate-300);">
                                 <i data-lucide="chevron-right" style="width: 20px;"></i>
                             </div>
 
@@ -425,10 +425,10 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $daysAgo = $date->diff($today)->days;
                     
                     // Cor cinza para escalas passadas
-                    $themeColor = '#64748b'; // Slate 500
-                    $themeLight = '#f1f5f9'; // Slate 100
-                    $cardBg = '#f8fafc'; // Slate 50
-                    $cardBorderColor = '#e2e8f0'; // Slate 200
+                    $themeColor = 'var(--slate-500)'; // Slate 500
+                    $themeLight = 'var(--slate-100)'; // Slate 100
+                    $cardBg = 'var(--slate-50)'; // Slate 50
+                    $cardBorderColor = 'var(--slate-200)'; // Slate 200
                     
                     // Buscar participantes (Top 5)
                     $stmtUsersPast = $pdo->prepare("
@@ -488,20 +488,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             <!-- Infos do Evento -->
                             <div style="flex: 1; min-width: 0;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-                                    <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #64748b; line-height: 1.3;">
+                                    <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--slate-500); line-height: 1.3;">
                                         <?= htmlspecialchars($schedule['event_type']) ?>
                                     </h3>
                                     <span style="
                                         font-size: 0.65rem;
-                                        color: #64748b;
-                                        background: #e2e8f0;
+                                        color: var(--slate-500);
+                                        background: var(--slate-200);
                                         padding: 3px 8px;
                                         border-radius: 6px;
                                         font-weight: 600;
                                     "><?= $daysAgo == 1 ? 'Ontem' : 'há ' . $daysAgo . ' dias' ?></span>
                                 </div>
 
-                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; font-weight: 500;">
+                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: var(--slate-400); margin-bottom: 8px; font-weight: 500;">
                                     <div style="display: flex; align-items: center; gap: 4px;">
                                         <i data-lucide="clock" style="width: 14px;"></i> <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                     </div>
@@ -522,7 +522,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                             <div style="
                                                 width: 28px; height: 28px; border-radius: 50%; 
                                                 border: 2px solid white;
-                                                background: <?= $p['avatar_color'] ?: '#94a3b8' ?>;
+                                                background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;
                                                 margin-left: <?= $i > 0 ? '-8px' : '0' ?>;
                                                 z-index: <?= $zIndex ?>;
                                                 display: flex; align-items: center; justify-content: center;
@@ -540,20 +540,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         <?php if ($extraCountPast > 0): ?>
                                             <div style="
                                                 font-size: 0.75rem;
-                                                color: #94a3b8;
+                                                color: var(--slate-400);
                                                 font-weight: 600;
                                                 margin-left: 6px;
                                             ">+<?= $extraCountPast ?></div>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
-                                    <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Equipe não definida</span>
+                                    <span style="font-size: 0.8rem; color: var(--slate-400); font-style: italic;">Equipe não definida</span>
                                 <?php endif; ?>
 
                             </div>
 
                             <!-- Icon Seta -->
-                            <div style="align-self: center; color: #cbd5e1;">
+                            <div style="align-self: center; color: var(--slate-300);">
                                 <i data-lucide="chevron-right" style="width: 20px;"></i>
                             </div>
 
@@ -587,8 +587,8 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         animation: slideUp 0.3s ease-out;
     ">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h3 style="margin: 0; font-size: var(--font-h1); font-weight: 700; color: #1e293b;">Filtrar Escalas</h3>
-            <button onclick="closeSheet('filterSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: #64748b;">
+            <h3 style="margin: 0; font-size: var(--font-h1); font-weight: 700; color: var(--slate-800);">Filtrar Escalas</h3>
+            <button onclick="closeSheet('filterSheet')" style="background: none; border: none; padding: 4px; cursor: pointer; color: var(--slate-500);">
                 <i data-lucide="x" style="width: 24px;"></i>
             </button>
         </div>
@@ -597,16 +597,16 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             <!-- Toggle Minhas Escalas -->
             <label style="
                 display: flex; align-items: center; justify-content: space-between;
-                padding: 16px; background: #f8fafc; border-radius: 12px;
-                cursor: pointer; margin-bottom: 20px; border: 1px solid #e2e8f0;
+                padding: 16px; background: var(--slate-50); border-radius: 12px;
+                cursor: pointer; margin-bottom: 20px; border: 1px solid var(--slate-200);
             ">
-                <span style="font-weight: 600; color: #334155;">Apenas em que participo</span>
+                <span style="font-weight: 600; color: var(--slate-700);">Apenas em que participo</span>
                 <input type="checkbox" name="mine" value="1" <?= $filterMine ? 'checked' : '' ?> style="transform: scale(1.5);">
             </label>
 
             <!-- Tipo de Evento -->
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: var(--font-body); font-weight: 600; color: #64748b; margin-bottom: 8px;">Tipo de Evento</label>
+                <label style="display: block; font-size: var(--font-body); font-weight: 600; color: var(--slate-500); margin-bottom: 8px;">Tipo de Evento</label>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <?php
                     $types = ['Culto Domingo a Noite', 'Ensaio', 'Culto Jovem', 'Especial'];
@@ -617,9 +617,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             <input type="radio" name="type" value="<?= $t ?>" <?= $active ? 'checked' : '' ?> style="display: none;">
                             <div style="
                                 padding: 8px 16px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
-                                background: <?= $active ? '#dcfce7' : 'white' ?>;
-                                color: <?= $active ? '#166534' : '#64748b' ?>;
-                                border: 1px solid <?= $active ? '#166534' : '#e2e8f0' ?>;
+                                background: <?= $active ? 'var(--sage-100)' : 'white' ?>;
+                                color: <?= $active ? 'var(--sage-800)' : 'var(--slate-500)' ?>;
+                                border: 1px solid <?= $active ? 'var(--sage-800)' : 'var(--slate-200)' ?>;
                                 transition: all 0.2s;
                             ">
                                 <?= $t ?>
@@ -633,10 +633,10 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             <div style="display: flex; gap: 12px;">
                 <a href="escalas.php" style="
                     flex: 1; padding: 14px; text-align: center; text-decoration: none;
-                    color: #64748b; font-weight: 600; background: #f1f5f9; border-radius: 12px;
+                    color: var(--slate-500); font-weight: 600; background: var(--slate-100); border-radius: 12px;
                 ">Limpar</a>
                 <button type="submit" style="
-                    flex: 2; padding: 14px; border: none; background: #166534; 
+                    flex: 2; padding: 14px; border: none; background: var(--sage-800); 
                     color: white; font-weight: 700; border-radius: 12px; font-size: var(--font-h3);
                     box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2); cursor: pointer;
                 ">Aplicar Filtros</button>
@@ -660,22 +660,22 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             tabPast.style.display = 'none';
 
             btnFuture.style.background = 'white';
-            btnFuture.style.color = '#0f172a';
+            btnFuture.style.color = 'var(--slate-900)';
             btnFuture.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
 
             btnPast.style.background = 'transparent';
-            btnPast.style.color = '#64748b';
+            btnPast.style.color = 'var(--slate-500)';
             btnPast.style.boxShadow = 'none';
         } else {
             tabFuture.style.display = 'none';
             tabPast.style.display = 'block';
 
             btnFuture.style.background = 'transparent';
-            btnFuture.style.color = '#64748b';
+            btnFuture.style.color = 'var(--slate-500)';
             btnFuture.style.boxShadow = 'none';
 
             btnPast.style.background = 'white';
-            btnPast.style.color = '#0f172a';
+            btnPast.style.color = 'var(--slate-900)';
             btnPast.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
         }
     }
@@ -706,12 +706,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
             if (btnTimeline) {
                 btnTimeline.style.background = 'white';
-                btnTimeline.style.color = '#0f172a';
+                btnTimeline.style.color = 'var(--slate-900)';
                 btnTimeline.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
             }
             if (btnList) {
                 btnList.style.background = 'transparent';
-                btnList.style.color = '#64748b';
+                btnList.style.color = 'var(--slate-500)';
                 btnList.style.boxShadow = 'none';
             }
         } else {
@@ -725,12 +725,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
             if (btnTimeline) {
                 btnTimeline.style.background = 'transparent';
-                btnTimeline.style.color = '#64748b';
+                btnTimeline.style.color = 'var(--slate-500)';
                 btnTimeline.style.boxShadow = 'none';
             }
             if (btnList) {
                 btnList.style.background = 'white';
-                btnList.style.color = '#0f172a';
+                btnList.style.color = 'var(--slate-900)';
                 btnList.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
             }
         }

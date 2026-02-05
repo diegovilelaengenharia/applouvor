@@ -243,7 +243,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .badge-admin {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: linear-gradient(135deg, var(--yellow-500), var(--yellow-600));
         color: white;
         padding: 1px 5px;
         border-radius: 6px;
@@ -273,7 +273,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .btn-whatsapp {
-        background: #22c55e;
+        background: var(--sage-500);
         color: white;
         box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
     }
@@ -291,7 +291,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .btn-delete {
-        background: #ef4444;
+        background: var(--rose-500);
         color: white;
         box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
     }
@@ -682,7 +682,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 <?php
 function generateAvatarColor($name) {
-    $colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#06b6d4', '#3b82f6', '#6366f1', '#a855f7', '#d946ef', '#f43f5e'];
+    $colors = ['var(--rose-500)', '#f97316', 'var(--yellow-500)', '#84cc16', 'var(--sage-500)', '#06b6d4', 'var(--slate-500)', '#6366f1', 'var(--lavender-500)', '#d946ef', '#f43f5e'];
     $index = crc32($name) % count($colors);
     return $colors[$index];
 }

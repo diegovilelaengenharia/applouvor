@@ -141,7 +141,7 @@ try {
 
 <div style="display: flex; justify-content: flex-end; padding: 0 16px; margin-bottom: -10px; position: relative; z-index: 10;">
     <button onclick="openHelpModal()" class="ripple" style="
-        background: transparent; border: none; color: #376ac8; font-weight: 600; font-size: 0.85rem;
+        background: transparent; border: none; color: var(--slate-600); font-weight: 600; font-size: 0.85rem;
         display: flex; align-items: center; gap: 6px; cursor: pointer;
     ">
         <i data-lucide="help-circle" width="16"></i> Entenda as Métricas
@@ -171,7 +171,7 @@ try {
     
     <a href="?tab=laboratorio" class="ripple" style="
         padding: 10px 16px; border-radius: 20px; white-space: nowrap; font-weight: 600; font-size: 0.9rem; text-decoration: none;
-        <?= $currentTab == 'laboratorio' ? 'background: #376ac8; color: white;' : 'background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color);' ?>
+        <?= $currentTab == 'laboratorio' ? 'background: var(--slate-600); color: white;' : 'background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color);' ?>
     ">🧪 Laboratório</a>
 </div>
 
@@ -192,7 +192,7 @@ try {
             
             <!-- Taxa de Renovação -->
             <div style="background: var(--bg-surface); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;">
-                <div style="font-size: 2rem; font-weight: 800; color: <?= $renovacaoTaxa > 30 ? '#10b981' : '#f59e0b' ?>;">
+                <div style="font-size: 2rem; font-weight: 800; color: <?= $renovacaoTaxa > 30 ? '#10b981' : 'var(--yellow-500)' ?>;">
                     <?= $renovacaoTaxa ?>%
                 </div>
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Taxa de Uso</div>
@@ -201,7 +201,7 @@ try {
 
             <!-- Músicas em Alta -->
             <div style="background: var(--bg-surface); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;">
-                <div style="font-size: 2rem; font-weight: 800; color: #ef4444;">
+                <div style="font-size: 2rem; font-weight: 800; color: var(--rose-500);">
                     <?= $statusDist['em_alta'] ?>
                 </div>
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Super Expostas</div>
@@ -219,7 +219,7 @@ try {
 
             <!-- Nunca Tocadas -->
             <div style="background: var(--bg-surface); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;">
-                <div style="font-size: 2rem; font-weight: 800; color: #d97706;">
+                <div style="font-size: 2rem; font-weight: 800; color: var(--yellow-600);">
                     <?= $statusDist['virgem'] ?>
                 </div>
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-main);">Nunca Tocadas</div>
@@ -254,7 +254,7 @@ try {
         <div style="margin-top: 32px; text-align: center;">
             <a href="historico.php?tab=laboratorio" class="ripple" style="
                 display: inline-flex; align-items: center; gap: 8px;
-                background: #376ac8; color: white; padding: 12px 24px;
+                background: var(--slate-600); color: white; padding: 12px 24px;
                 border-radius: 12px; text-decoration: none; font-weight: 700;
                 box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);
             ">
@@ -297,17 +297,17 @@ try {
                         <?php foreach ($musicasXRay as $m): 
                             // Determine status badge
                             $days = $m['days_since_last'];
-                            $badgeColor = '#94a3b8';
+                            $badgeColor = 'var(--slate-400)';
                             $badgeText = 'Normal';
                             
                             if ($m['freq_total'] == 0) {
-                                $badgeColor = '#d97706'; $badgeText = 'Nunca Tocada';
+                                $badgeColor = 'var(--yellow-600)'; $badgeText = 'Nunca Tocada';
                             } elseif ($m['freq_period'] >= 3) {
-                                $badgeColor = '#ef4444'; $badgeText = 'Alta Rotatividade';
+                                $badgeColor = 'var(--rose-500)'; $badgeText = 'Alta Rotatividade';
                             } elseif ($days > 180) {
                                 $badgeColor = '#6366f1'; $badgeText = 'Esquecida';
                             } elseif ($days > 90) {
-                                $badgeColor = '#3b82f6'; $badgeText = 'Geladeira';
+                                $badgeColor = 'var(--slate-500)'; $badgeText = 'Geladeira';
                             } else {
                                 $badgeColor = '#10b981'; $badgeText = 'Saudável';
                             }
@@ -405,9 +405,9 @@ try {
                 $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
                 foreach ($usoTons as $ton):
                     $width = max(5, ($ton['uses_period'] / $maxTonUses) * 100);
-                    $barColor = '#3b82f6';
+                    $barColor = 'var(--slate-500)';
                     // Cores para tons especificos
-                    if (strpos($ton['tone'], '#') !== false) $barColor = '#8b5cf6'; // Sustenidos Roxo
+                    if (strpos($ton['tone'], '#') !== false) $barColor = 'var(--lavender-600)'; // Sustenidos Roxo
                 ?>
                 <div style="display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 12px;">
                     <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem; text-align: right;"><?= $ton['tone'] ?></div>
@@ -437,14 +437,14 @@ try {
     
     <div style="max-width: 800px; margin: 0 auto;">
         <div style="
-            background: #f8fafc; border: 1px solid var(--border-color); border-radius: 20px; 
+            background: var(--slate-50); border: 1px solid var(--border-color); border-radius: 20px; 
             padding: 32px; color: var(--text-main); margin-bottom: 32px; 
         ">
             <div style="text-align: center; margin-bottom: 24px;">
                 <div style="
                     width: 60px; height: 60px; background: white; border: 1px solid var(--border-color);
                     border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-                    margin: 0 auto 16px auto; color: #376ac8;
+                    margin: 0 auto 16px auto; color: var(--slate-600);
                 ">
                     <i data-lucide="flask-conical" width="32" height="32"></i>
                 </div>
@@ -464,7 +464,7 @@ try {
                     
                     <!-- Filtro Temporal -->
                     <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                        <input type="checkbox" name="not_played" value="1" <?= isset($_GET['not_played']) ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: #376ac8;">
+                        <input type="checkbox" name="not_played" value="1" <?= isset($_GET['not_played']) ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: var(--slate-600);">
                         <div>
                             <div style="font-weight: 600;">Que não tocamos há muito tempo</div>
                             <div style="font-size: 0.8rem; color: var(--text-muted);">Pelo menos 3 meses (90 dias)</div>
@@ -506,7 +506,7 @@ try {
 
                 <button type="submit" class="ripple" style="
                     width: 100%; padding: 14px; border: none; border-radius: 12px;
-                    background: #376ac8; color: white; font-weight: 700; font-size: 1rem;
+                    background: var(--slate-600); color: white; font-weight: 700; font-size: 1rem;
                     cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
                 ">
                     <i data-lucide="search" width="20"></i> Analisar e Buscar
@@ -576,7 +576,7 @@ try {
                                     </span>
                                 <?php endif; ?>
                                 
-                                <span style="background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">
+                                <span style="background: var(--slate-100); color: var(--slate-500); padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">
                                     <?php 
                                         if (!$res['last_played']) echo "Nunca tocada";
                                         else echo $res['days_since'] . " dias sem tocar";
@@ -590,8 +590,8 @@ try {
                     <!-- Botões de Ação Rápida -->
                     <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-color); padding-top: 12px;">
                         <a href="<?= $links['cifraclub'] ?>" target="_blank" style="flex: 1; text-align: center; background: #fff7ed; color: #c2410c; padding: 8px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.8rem;">Cifra</a>
-                        <a href="<?= $links['youtube'] ?>" target="_blank" style="flex: 1; text-align: center; background: #fef2f2; color: #b91c1c; padding: 8px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.8rem;">YouTube</a>
-                        <a href="<?= $links['spotify'] ?>" target="_blank" style="flex: 1; text-align: center; background: #f0fdf4; color: #15803d; padding: 8px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.8rem;">Spotify</a>
+                        <a href="<?= $links['youtube'] ?>" target="_blank" style="flex: 1; text-align: center; background: var(--rose-50); color: var(--rose-700); padding: 8px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.8rem;">YouTube</a>
+                        <a href="<?= $links['spotify'] ?>" target="_blank" style="flex: 1; text-align: center; background: var(--sage-50); color: var(--sage-700); padding: 8px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.8rem;">Spotify</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -630,11 +630,11 @@ try {
             <h3 style="font-size: 1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">📊 Classificação de Status</h3>
             <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
                 <li style="display: flex; gap: 12px; align-items: flex-start;">
-                    <span style="background: #fee2e2; color: #ef4444; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Alta Rotatividade</span>
+                    <span style="background: var(--rose-100); color: var(--rose-500); padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Alta Rotatividade</span>
                     <span style="font-size: 0.9rem; color: var(--text-muted);">Músicas tocadas <strong>3 ou mais vezes</strong> nos últimos 90 dias. Cuidado para não "cansar" a igreja.</span>
                 </li>
                 <li style="display: flex; gap: 12px; align-items: flex-start;">
-                    <span style="background: #dbeafe; color: #3b82f6; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Geladeira</span>
+                    <span style="background: var(--slate-100); color: var(--slate-500); padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Geladeira</span>
                     <span style="font-size: 0.9rem; color: var(--text-muted);">Músicas não tocadas entre <strong>3 e 6 meses</strong>. Ótima hora para reintroduzir!</span>
                 </li>
                 <li style="display: flex; gap: 12px; align-items: flex-start;">
@@ -642,7 +642,7 @@ try {
                     <span style="font-size: 0.9rem; color: var(--text-muted);">Mais de <strong>6 meses</strong> sem tocar. Talvez já tenhamos esquecido a letra ou arranjo.</span>
                 </li>
                 <li style="display: flex; gap: 12px; align-items: flex-start;">
-                    <span style="background: #fef3c7; color: #d97706; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Nunca Tocada</span>
+                    <span style="background: var(--yellow-100); color: var(--yellow-600); padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; white-space: nowrap;">Nunca Tocada</span>
                     <span style="font-size: 0.9rem; color: var(--text-muted);">Cadastradas no sistema mas nunca escaladas. Oportunidade de novidade!</span>
                 </li>
             </ul>
@@ -656,7 +656,7 @@ try {
         </div>
 
         <div>
-            <h3 style="font-size: 1rem; color: #376ac8; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">🧪 Laboratório de Escolha</h3>
+            <h3 style="font-size: 1rem; color: var(--slate-600); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">🧪 Laboratório de Escolha</h3>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
                 Use esta ferramenta para montar escalas equilibradas.
                 <br>Exemplo: <em>"Preciso de uma música rápida (Tag: Celebração) em Tom D para completar a escala, mas não quero repetir o que já tocamos mês passado."</em>

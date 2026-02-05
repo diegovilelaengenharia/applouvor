@@ -60,7 +60,7 @@ renderAppHeader('Artista');
 
 <!-- Hero Header Compacto -->
 <div style="
-    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); 
+    background: linear-gradient(135deg, var(--lavender-600) 0%, #6D28D9 100%); 
     margin: -16px -16px 20px -16px; 
     padding: 16px 16px 40px 16px; 
     border-radius: 0 0 20px 20px; 

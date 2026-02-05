@@ -88,7 +88,7 @@ foreach ($events as $event) {
 foreach ($schedules as $schedule) {
     $dayKey = $schedule['event_date'];
     if (!isset($eventsByDay[$dayKey])) $eventsByDay[$dayKey] = [];
-    $color = '#376ac8'; // Smart Blue padrão para escalas
+    $color = 'var(--slate-600)'; // Smart Blue padrão para escalas
     $eventsByDay[$dayKey][] = array_merge($schedule, [
         'source' => 'schedule',
         'title' => $schedule['event_type'],
@@ -203,7 +203,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     .week-header {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        background: #f8fafc;
+        background: var(--slate-50);
         border-bottom: 1px solid var(--border-color);
     }
     
@@ -241,7 +241,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     }
     
     .calendar-day.today {
-        background: #f0fdf4;
+        background: var(--sage-50);
     }
     
     .day-num {
@@ -268,9 +268,9 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
         border-radius: 6px;
         margin-bottom: 4px;
         cursor: pointer;
-        background: #ebf0fa;
+        background: var(--slate-100);
         color: #213f78;
-        border-left: 3px solid #376ac8;
+        border-left: 3px solid var(--slate-600);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -312,7 +312,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     }
     
     .date-box {
-        background: #f1f5f9;
+        background: var(--slate-100);
         border-radius: 10px;
         padding: 10px;
         text-align: center;
@@ -479,7 +479,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="day-num">'.$d.'</div>';
                         
                         foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? '#376ac8';
+                            $color = $evt['color'] ?? 'var(--slate-600)';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             echo "<div onclick=\"window.location='$url'\" class='event-chip' style='border-left-color: $color; color: $color; background: {$color}15;'>";
                             echo htmlspecialchars($evt['title']);
@@ -524,7 +524,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="calendar-day week-view-day '.($isToday?'today':'').'">';
                         echo '<div class="day-num">'.$dayNum.'</div>';
                          foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? '#376ac8';
+                            $color = $evt['color'] ?? 'var(--slate-600)';
                             $startTime = date('H:i', strtotime($evt['start_datetime']));
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             

@@ -89,7 +89,7 @@ header("Content-Disposition: attachment;Filename=Relatorio_Escalas_{$period}_{$y
     <table style="border: none;">
         <tr style="border: none;">
             <td style="border: none; text-align: center;">
-                <div style="font-size: 24pt; font-weight: bold; color: #3b82f6;"><?= $totalEscalas ?></div>
+                <div style="font-size: 24pt; font-weight: bold; color: var(--slate-500);"><?= $totalEscalas ?></div>
                 <div>Total de Escalas</div>
             </td>
             <td style="border: none; text-align: center;">

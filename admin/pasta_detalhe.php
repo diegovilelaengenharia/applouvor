@@ -76,7 +76,7 @@ renderAppHeader($tag['name']);
 
 <!-- Hero da Pasta Compacto -->
 <div style="
-    background: <?= $tag['color'] ?: '#16a34a' ?>; 
+    background: <?= $tag['color'] ?: 'var(--sage-600)' ?>; 
     margin: -16px -16px 20px -16px; 
     padding: 16px 16px 40px 16px; 
     border-radius: 0 0 20px 20px; 
@@ -126,7 +126,7 @@ renderAppHeader($tag['name']);
             </div>
             <h3 style="color: var(--text-primary); font-size: var(--font-h3); margin-bottom: 6px;">Pasta Vazia</h3>
             <p style="color: var(--text-secondary); font-size: var(--font-body-sm);">Nenhuma música vinculada.</p>
-            <a href="repertorio.php" style="display: inline-block; margin-top: 12px; color: <?= $tag['color'] ?: '#16a34a' ?>; font-weight: 700; font-size: var(--font-body);">Ir para Repertório</a>
+            <a href="repertorio.php" style="display: inline-block; margin-top: 12px; color: <?= $tag['color'] ?: 'var(--sage-600)' ?>; font-weight: 700; font-size: var(--font-body);">Ir para Repertório</a>
         </div>
     <?php else: ?>
         <h3 style="margin-bottom: 12px; font-size: var(--font-body-sm); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Músicas (<?= count($songs) ?>)</h3>
@@ -159,7 +159,7 @@ renderAppHeader($tag['name']);
     width: 48px; 
     height: 48px; 
     border-radius: 50%; 
-    background: <?= $tag['color'] ?: '#16a34a' ?>; 
+    background: <?= $tag['color'] ?: 'var(--sage-600)' ?>; 
     color: white; 
     display: flex; 
     align-items: center; 

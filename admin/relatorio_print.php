@@ -145,7 +145,7 @@ if (!empty($scheduleIds)) {
         }
 
         .btn-print {
-            background: #2563eb;
+            background: var(--slate-600);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -161,7 +161,7 @@ if (!empty($scheduleIds)) {
         }
 
         .btn-print:hover {
-            background: #1d4ed8;
+            background: var(--slate-700);
             transform: translateY(-2px);
         }
     </style>
@@ -169,8 +169,8 @@ if (!empty($scheduleIds)) {
 
 <body onload="window.print()">
 
-    <div class="no-print" style="margin-bottom: 30px; text-align: right; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1; display:flex; align-items:center; justify-content:space-between;">
-        <div style="text-align: left; color: #64748b; font-size: 14px;">
+    <div class="no-print" style="margin-bottom: 30px; text-align: right; background: var(--slate-50); padding: 15px; border-radius: 8px; border: 1px dashed var(--slate-300); display:flex; align-items:center; justify-content:space-between;">
+        <div style="text-align: left; color: var(--slate-500); font-size: 14px;">
             <strong>Dica:</strong> Ajuste as margens na visualização de impressão se necessário.
         </div>
         <button onclick="window.print()" class="btn-print">

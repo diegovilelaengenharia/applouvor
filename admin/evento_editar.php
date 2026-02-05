@@ -285,7 +285,7 @@ renderPageHeader('Editar Evento', $event['title']);
 
 <div class="event-container">
     <?php if (isset($error)): ?>
-        <div style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+        <div style="background: var(--rose-100); border: 1px solid var(--rose-500); color: var(--rose-700); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
             <?= htmlspecialchars($error) ?>
         </div>
     <?php endif; ?>
@@ -375,7 +375,7 @@ renderPageHeader('Editar Evento', $event['title']);
                 <label class="form-label">Cor do Evento</label>
                 <div class="color-options">
                     <?php
-                    $colors = ['#3b82f6', '#047857', '#f59e0b', '#ec4899', '#8b5cf6', '#ef4444'];
+                    $colors = ['var(--slate-500)', '#047857', 'var(--yellow-500)', '#ec4899', 'var(--lavender-600)', 'var(--rose-500)'];
                     foreach ($colors as $color):
                     ?>
                         <label class="color-option">

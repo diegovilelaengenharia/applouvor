@@ -240,7 +240,7 @@ renderAppHeader('Escalas');
         <div style="display: flex; gap: 8px;">
             <!-- Add Button -->
             <a href="escala_adicionar.php" class="ripple" style="
-                background: #D97706; 
+                background: var(--yellow-600); 
                 border: none; 
                 width: 44px; 
                 height: 44px; 
@@ -475,7 +475,7 @@ renderAppHeader('Escalas');
                 <!-- Toggle: Apenas que eu participo -->
                 <?php
                 $isMyFilterActive = isset($_GET['filter_my']) && $_GET['filter_my'] == '1';
-                $rowStyle = $isMyFilterActive ? 'background: #FEF3C7; border: 1px solid #F59E0B; color: #92400E;' : 'background: var(--bg-tertiary); border: 1px solid transparent;';
+                $rowStyle = $isMyFilterActive ? 'background: var(--yellow-100); border: 1px solid var(--yellow-500); color: #92400E;' : 'background: var(--bg-tertiary); border: 1px solid transparent;';
                 ?>
                 <div id="filterMyRow" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 12px; transition: all 0.2s; <?= $rowStyle ?>">
                     <span style="font-weight: 600;">Apenas que eu participo</span>
@@ -544,8 +544,8 @@ renderAppHeader('Escalas');
     function toggleMyRowStyle(checkbox) {
         const row = document.getElementById('filterMyRow');
         if (checkbox.checked) {
-            row.style.background = '#FEF3C7';
-            row.style.border = '1px solid #F59E0B';
+            row.style.background = 'var(--yellow-100)';
+            row.style.border = '1px solid var(--yellow-500)';
             row.style.color = '#92400E';
         } else {
             row.style.background = 'var(--bg-tertiary)';

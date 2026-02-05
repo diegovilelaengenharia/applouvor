@@ -68,7 +68,7 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
         @page { size: A4; margin: 1.5cm; }
         body {
             font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: #334155; /* Slate 700 */
+            color: var(--slate-700); /* Slate 700 */
             line-height: 1.4;
             font-size: 10pt;
             background: white;
@@ -80,9 +80,9 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
         
         /* Layout */
         .header {
-            background: #f8fafc; /* Slate 50 */
-            border-bottom: 2px solid #e2e8f0; /* Slate 200 */
-            color: #0f172a; /* Slate 900 */
+            background: var(--slate-50); /* Slate 50 */
+            border-bottom: 2px solid var(--slate-200); /* Slate 200 */
+            color: var(--slate-900); /* Slate 900 */
             padding: 25px 30px;
             margin-bottom: 30px;
             display: flex;
@@ -96,26 +96,26 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
             text-transform: uppercase;
             letter-spacing: -0.5px;
             font-weight: 800;
-            color: #2563eb; /* Primary Blue */
+            color: var(--slate-600); /* Primary Blue */
         }
         .header .subtitle {
             font-size: 11pt;
-            color: #64748b; /* Slate 500 */
+            color: var(--slate-500); /* Slate 500 */
             font-weight: 500;
             margin-top: 4px;
         }
         .header .meta {
             text-align: right;
             font-size: 9pt;
-            color: #64748b;
+            color: var(--slate-500);
         }
 
         .section { margin-bottom: 35px; }
         .section-title {
             font-size: 11pt;
             font-weight: 700;
-            color: #334155;
-            border-bottom: 2px solid #e2e8f0;
+            color: var(--slate-700);
+            border-bottom: 2px solid var(--slate-200);
             padding-bottom: 10px;
             margin-bottom: 15px;
             text-transform: uppercase;
@@ -129,7 +129,7 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
             display: block;
             width: 8px;
             height: 8px;
-            background: #2563eb;
+            background: var(--slate-600);
             border-radius: 50%;
         }
 
@@ -144,45 +144,45 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
             flex: 1;
             text-align: center; 
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--slate-200);
             border-radius: 12px;
             padding: 20px 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         
-        .kpi-value { font-size: 24pt; font-weight: 800; color: #0f172a; line-height: 1; margin-bottom: 6px; }
-        .kpi-label { font-size: 8pt; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.5px; }
+        .kpi-value { font-size: 24pt; font-weight: 800; color: var(--slate-900); line-height: 1; margin-bottom: 6px; }
+        .kpi-label { font-size: 8pt; text-transform: uppercase; color: var(--slate-500); font-weight: 700; letter-spacing: 0.5px; }
         
         /* Cores Específicas para KPIs */
-        .kpi-item.blue .kpi-value { color: #2563eb; }
+        .kpi-item.blue .kpi-value { color: var(--slate-600); }
         .kpi-item.green .kpi-value { color: #10b981; }
-        .kpi-item.amber .kpi-value { color: #f59e0b; }
+        .kpi-item.amber .kpi-value { color: var(--yellow-500); }
 
-        .kpi-item.blue { background: #eff6ff; border-color: #dbeafe; } /* Blue 50 */
-        .kpi-item.green { background: #f0fdf4; border-color: #dcfce7; } /* Emerald 50 */
-        .kpi-item.amber { background: #fffbeb; border-color: #fef3c7; } /* Amber 50 */
+        .kpi-item.blue { background: var(--slate-50); border-color: var(--slate-100); } /* Blue 50 */
+        .kpi-item.green { background: var(--sage-50); border-color: var(--sage-100); } /* Emerald 50 */
+        .kpi-item.amber { background: var(--yellow-50); border-color: var(--yellow-100); } /* Amber 50 */
 
         /* Tabelas */
         table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 9.5pt; }
         th { 
             text-align: left; 
-            background: #f8fafc; 
-            color: #64748b; 
+            background: var(--slate-50); 
+            color: var(--slate-500); 
             padding: 12px 10px; 
             font-weight: 700; 
             text-transform: uppercase; 
             font-size: 8pt; 
-            border-bottom: 2px solid #e2e8f0;
-            border-top: 1px solid #e2e8f0;
+            border-bottom: 2px solid var(--slate-200);
+            border-top: 1px solid var(--slate-200);
         }
-        th:first-child { border-left: 1px solid #e2e8f0; border-top-left-radius: 8px; }
-        th:last-child { border-right: 1px solid #e2e8f0; border-top-right-radius: 8px; }
+        th:first-child { border-left: 1px solid var(--slate-200); border-top-left-radius: 8px; }
+        th:last-child { border-right: 1px solid var(--slate-200); border-top-right-radius: 8px; }
 
         td { 
-            border-bottom: 1px solid #f1f5f9; 
+            border-bottom: 1px solid var(--slate-100); 
             padding: 10px 10px; 
             vertical-align: middle; 
-            color: #334155;
+            color: var(--slate-700);
         }
         tr:last-child td { border-bottom: none; }
         
@@ -197,23 +197,23 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
             font-weight: 700;
             text-transform: uppercase;
         }
-        .status-future { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
-        .status-past { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+        .status-future { background: var(--slate-50); color: var(--slate-600); border: 1px solid var(--slate-100); }
+        .status-past { background: var(--slate-50); color: var(--slate-500); border: 1px solid var(--slate-200); }
 
         /* Footer */
         .footer {
             margin-top: 50px;
             padding: 20px;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid var(--slate-200);
             text-align: center;
             font-size: 8pt;
-            color: #94a3b8;
+            color: var(--slate-400);
         }
 
         /* Para Tela (Botão Imprimir) */
         .no-print {
             position: fixed; top: 20px; right: 20px;
-            background: #2563eb; color: white;
+            background: var(--slate-600); color: white;
             padding: 12px 24px; border-radius: 8px;
             text-decoration: none; font-weight: bold;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
@@ -221,13 +221,13 @@ $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
             z-index: 1000;
             transition: all 0.2s;
         }
-        .no-print:hover { background: #1d4ed8; }
+        .no-print:hover { background: var(--slate-700); }
 
         @media print { 
             @page { margin: 1cm; }
             body { margin: 0; padding: 0; }
             .no-print { display: none; } 
-            .header { background: #f8fafc !important; -webkit-print-color-adjust: exact; }
+            .header { background: var(--slate-50) !important; -webkit-print-color-adjust: exact; }
             .kpi-item { -webkit-print-color-adjust: exact; }
         }
     </style>

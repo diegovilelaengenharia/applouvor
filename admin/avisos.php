@@ -173,16 +173,16 @@ renderAppHeader('Avisos');
 <style>
     /* === PALETA SMART BLUE === */
     :root {
-        --purple-primary: #376ac8;
+        --purple-primary: var(--slate-600);
         --purple-light: #60a5fa;
-        --purple-bg: #eff6ff;
+        --purple-bg: var(--slate-50);
         --purple-border: #bfdbfe;
     }
 
 
     /* === HERO SECTION SIMPLIFICADO === */
     .hero-avisos {
-        background: #eff6ff; /* Blue muito claro */
+        background: var(--slate-50); /* Blue muito claro */
         padding: 20px;
         margin: -20px -20px 20px -20px;
         border-radius: 0 0 16px 16px;
@@ -202,7 +202,7 @@ renderAppHeader('Avisos');
     .hero-icon {
         width: 48px;
         height: 48px;
-        background: linear-gradient(135deg, #376ac8 0%, #2c55a0 100%);
+        background: linear-gradient(135deg, var(--slate-600) 0%, #2c55a0 100%);
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -229,7 +229,7 @@ renderAppHeader('Avisos');
 
     .hero-subtitle {
         font-size: 0.875rem;
-        color: #376ac8;
+        color: var(--slate-600);
         margin: 0;
         line-height: 1.4;
     }
@@ -389,8 +389,8 @@ renderAppHeader('Avisos');
     }
 
     /* Priority Colors */
-    .aviso-card.urgent::before { background: #ef4444; }
-    .aviso-card.important::before { background: #f59e0b; }
+    .aviso-card.urgent::before { background: var(--rose-500); }
+    .aviso-card.important::before { background: var(--yellow-500); }
     .aviso-card.normal::before { background: var(--purple-primary); }
 
     /* Header do Card */
@@ -497,13 +497,13 @@ renderAppHeader('Avisos');
     }
 
     .priority-badge.urgent {
-        background: #fee2e2;
-        color: #dc2626;
+        background: var(--rose-100);
+        color: var(--rose-600);
     }
 
     .priority-badge.important {
-        background: #fef3c7;
-        color: #d97706;
+        background: var(--yellow-100);
+        color: var(--yellow-600);
     }
 
     .priority-badge.normal {
@@ -545,8 +545,8 @@ renderAppHeader('Avisos');
     }
 
     .action-btn.danger:hover {
-        background: #ef4444;
-        border-color: #ef4444;
+        background: var(--rose-500);
+        border-color: var(--rose-500);
     }
 
     /* Dropdown */
@@ -614,8 +614,8 @@ renderAppHeader('Avisos');
     }
 
     .dropdown-item.danger:hover {
-        background: #fee2e2;
-        color: #dc2626;
+        background: var(--rose-100);
+        color: var(--rose-600);
     }
 
     /* FAB (Floating Action Button) - Oculto por padrão */

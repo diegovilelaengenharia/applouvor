@@ -121,15 +121,15 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .stat-card.arquivados {
-        color: #64748b;
+        color: var(--slate-500);
     }
     
     .stat-card.expirados {
-        color: #f59e0b;
+        color: var(--yellow-500);
     }
     
     .stat-card.tags {
-        color: #8b5cf6;
+        color: var(--lavender-600);
     }
     
     .stat-icon {
@@ -193,7 +193,7 @@ renderAppHeader('Gestão de Avisos');
     
     .filter-select:focus {
         outline: none;
-        border-color: #8b5cf6;
+        border-color: var(--lavender-600);
         box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
     }
     
@@ -280,7 +280,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .filter-pill.active {
-        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+        background: linear-gradient(135deg, #a78bfa, var(--lavender-600));
         color: white;
         border-color: transparent;
     }
@@ -357,18 +357,18 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .priority-urgent { 
-        background: #fef2f2; 
-        color: #dc2626; 
+        background: var(--rose-50); 
+        color: var(--rose-600); 
     }
     
     .priority-important { 
-        background: #fef3c7; 
-        color: #d97706; 
+        background: var(--yellow-100); 
+        color: var(--yellow-600); 
     }
     
     .pin-badge {
-        background: #f3e8ff;
-        color: #8b5cf6;
+        background: var(--lavender-100);
+        color: var(--lavender-600);
         padding: 3px 8px;
         border-radius: 10px;
         font-size: var(--font-caption);
@@ -395,8 +395,8 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .btn-icon:hover {
-        background: #f3e8ff;
-        color: #8b5cf6;
+        background: var(--lavender-100);
+        color: var(--lavender-600);
         border-color: #c4b5fd;
     }
     
@@ -457,9 +457,9 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .btn-tags:hover {
-        background: #f3e8ff;
+        background: var(--lavender-100);
         border-color: #c4b5fd;
-        color: #8b5cf6;
+        color: var(--lavender-600);
     }
     
     .modal {
@@ -555,7 +555,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+        background: linear-gradient(135deg, #a78bfa, var(--lavender-600));
         color: white;
         border: none;
         padding: 12px 20px;
@@ -1096,7 +1096,7 @@ renderAppHeader('Gestão de Avisos');
         const name = prompt('Nome da tag:');
         if (!name) return;
         
-        const color = prompt('Cor (hex):', '#3b82f6');
+        const color = prompt('Cor (hex):', 'var(--slate-500)');
         
         const formData = new FormData();
         formData.append('action', 'create_tag');

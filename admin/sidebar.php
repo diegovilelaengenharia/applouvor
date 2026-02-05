@@ -183,9 +183,9 @@ if (!empty($currentUser['avatar'])) {
 
 
     <!-- Créditos do Desenvolvedor -->
-    <div class="sidebar-credits" style="margin-top: auto; padding: 20px; text-align: center; font-size: 0.65rem; color: #94a3b8; border-top: 1px solid #f1f5f9;">
+    <div class="sidebar-credits" style="margin-top: auto; padding: 20px; text-align: center; font-size: 0.65rem; color: var(--slate-400); border-top: 1px solid var(--slate-100);">
         <span class="sidebar-text" style="display: block; margin-bottom: 2px;">Desenvolvido por</span>
-        <span class="sidebar-text" style="font-weight: 600; color: #64748b; font-size: 0.7rem;">Diego T. N. Vilela</span>
+        <span class="sidebar-text" style="font-weight: 600; color: var(--slate-500); font-size: 0.7rem;">Diego T. N. Vilela</span>
     </div>
 </div>
 
@@ -329,21 +329,21 @@ if (!empty($currentUser['avatar'])) {
         height: 22px;
         transition: all 0.2s;
         /* Default fallback */
-        color: #94a3b8;
+        color: var(--slate-400);
     }
 
 
     .nav-divider {
         height: 1px;
-        background: #e2e8f0;
+        background: var(--slate-200);
         margin: 8px 16px;
     }
 
     /* CSS Extra para o Footer Integrado */
     .sidebar-footer {
         padding: 16px;
-        border-top: 1px solid #e2e8f0;
-        background: #f8fafc;
+        border-top: 1px solid var(--slate-200);
+        background: var(--slate-50);
         /* Slate 50 */
     }
 
@@ -367,7 +367,7 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .profile-link:hover {
-        background: #e2e8f0;
+        background: var(--slate-200);
     }
 
     .user-avatar-compact {
@@ -385,7 +385,7 @@ if (!empty($currentUser['avatar'])) {
         right: -2px;
         width: 12px;
         height: 12px;
-        background: #22c55e;
+        background: var(--sage-500);
         border: 2px solid #fff;
         border-radius: 50%;
     }
@@ -402,7 +402,7 @@ if (!empty($currentUser['avatar'])) {
         font-size: 0.9375rem;
         /* 15px */
         font-weight: 600;
-        color: #334155;
+        color: var(--slate-700);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -410,7 +410,7 @@ if (!empty($currentUser['avatar'])) {
 
     .u-role {
         font-size: 0.75rem;
-        color: #64748b;
+        color: var(--slate-500);
     }
 
     .actions-row {
@@ -425,18 +425,18 @@ if (!empty($currentUser['avatar'])) {
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        color: #94a3b8;
+        color: var(--slate-400);
         transition: all 0.2s;
     }
 
     .action-icon-subtle:hover {
         background: #fff;
-        color: #0f172a;
+        color: var(--slate-900);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     .action-icon-subtle.danger:hover {
-        color: #ef4444;
+        color: var(--rose-500);
         background: #fff;
     }
 

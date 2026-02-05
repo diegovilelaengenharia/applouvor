@@ -264,7 +264,7 @@ renderAppHeader('Devocionais');
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #376ac8, #2c55a0);
+        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -357,7 +357,7 @@ renderAppHeader('Devocionais');
     /* Footer/Comments */
     .dev-footer {
         padding: 12px 16px;
-        background: #f8fafc;
+        background: var(--slate-50);
         border-top: 1px solid var(--border-color);
     }
     .dev-actions {
@@ -388,7 +388,7 @@ renderAppHeader('Devocionais');
     .comments-section {
         display: none;
         padding: 16px;
-        background: #f8fafc;
+        background: var(--slate-50);
         border-top: 1px solid var(--border-color);
     }
     .comments-section.open {
@@ -452,9 +452,9 @@ renderAppHeader('Devocionais');
     
     /* Type Badges */
     .type-text { background: #ecfdf5; color: #047857; }
-    .type-video { background: #fef2f2; color: #dc2626; }
-    .type-audio { background: #ebf0fa; color: #376ac8; }
-    .type-link { background: #eff6ff; color: #2563eb; }
+    .type-video { background: var(--rose-50); color: var(--rose-600); }
+    .type-audio { background: var(--slate-100); color: var(--slate-600); }
+    .type-link { background: var(--slate-50); color: var(--slate-600); }
     
     /* FAB */
     .fab-create {
@@ -464,7 +464,7 @@ renderAppHeader('Devocionais');
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #376ac8, #2c55a0);
+        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
         color: white;
         border: none;
         box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
@@ -505,9 +505,9 @@ renderAppHeader('Devocionais');
         background: var(--border-color);
     }
     .filter-tab.active {
-        background: #376ac8;
+        background: var(--slate-600);
         color: white;
-        border-color: #376ac8;
+        border-color: var(--slate-600);
     }
     
     /* Reações */
@@ -518,8 +518,8 @@ renderAppHeader('Devocionais');
     }
     
     .reaction-btn.reacted {
-        background: #376ac8;
-        border-color: #376ac8;
+        background: var(--slate-600);
+        border-color: var(--slate-600);
     }
     
     .reaction-btn.reacted span {
@@ -577,7 +577,7 @@ renderAppHeader('Devocionais');
         position: absolute;
         bottom: 12px;
         right: 16px;
-        background: #376ac8;
+        background: var(--slate-600);
         color: white;
         padding: 4px 10px;
         border-radius: 12px;
@@ -603,8 +603,8 @@ renderAppHeader('Devocionais');
     }
     
     .devotional-card.unread {
-        background: linear-gradient(to right, #ffffff, #ebf0fa);
-        border-left: 3px solid #376ac8;
+        background: linear-gradient(to right, #ffffff, var(--slate-100));
+        border-left: 3px solid var(--slate-600);
     }
     /* Barra de Filtros Inteligente */
     .filter-toolbar {
@@ -623,7 +623,7 @@ renderAppHeader('Devocionais');
         width: 100%;
         padding: 10px 12px 10px 36px; /* Espaço para ícone */
         background-color: white;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--slate-200);
         border-radius: 12px;
         font-size: 0.9rem;
         font-weight: 500;
@@ -659,7 +659,7 @@ renderAppHeader('Devocionais');
         align-items: center;
         justify-content: center;
         background: white;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--slate-200);
         border-radius: 12px;
         color: #718096;
         cursor: pointer;
@@ -707,7 +707,7 @@ renderAppHeader('Devocionais');
         
         <!-- Botão Limpar (aparece somente se houver filtros ativos) -->
         <?php if (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)): ?>
-        <button onclick="window.location.href='devocionais.php'" class="btn-advanced-filter" style="color: #ef4444; border-color: #fecaca; background: #fef2f2;" title="Limpar Filtros">
+        <button onclick="window.location.href='devocionais.php'" class="btn-advanced-filter" style="color: var(--rose-500); border-color: var(--rose-200); background: var(--rose-50);" title="Limpar Filtros">
             <i data-lucide="x" style="width: 20px; height: 20px;"></i>
         </button>
         <?php endif; ?>
@@ -862,7 +862,7 @@ renderAppHeader('Devocionais');
                             <form method="POST" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja excluir?')">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $dev['id'] ?>">
-                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: #dc2626; background: none; border: none; border-top: 1px solid var(--border-color); font-size: var(--font-body-sm); cursor: pointer; text-align: left;">
+                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: var(--rose-600); background: none; border: none; border-top: 1px solid var(--border-color); font-size: var(--font-body-sm); cursor: pointer; text-align: left;">
                                     <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
                                 </button>
                             </form>
@@ -899,7 +899,7 @@ renderAppHeader('Devocionais');
                                 echo '<iframe src="https://www.youtube.com/embed/' . $videoId . '" allowfullscreen></iframe>';
                             } else {
                                 echo '<a href="' . htmlspecialchars($videoUrl) . '" target="_blank" class="dev-link-preview">
-                                    <i data-lucide="play-circle" style="width: 24px; color: #dc2626;"></i>
+                                    <i data-lucide="play-circle" style="width: 24px; color: var(--rose-600);"></i>
                                     <span>Assistir vídeo</span>
                                 </a>';
                             }
@@ -926,7 +926,7 @@ renderAppHeader('Devocionais');
                     
                     <?php if ($dev['media_type'] === 'link' && !empty($dev['media_url'])): ?>
                         <a href="<?= htmlspecialchars($dev['media_url']) ?>" target="_blank" class="dev-link-preview">
-                            <i data-lucide="external-link" style="width: 20px; color: #2563eb;"></i>
+                            <i data-lucide="external-link" style="width: 20px; color: var(--slate-600);"></i>
                             <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($dev['media_url']) ?></span>
                             <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted);"></i>
                         </a>

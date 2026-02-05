@@ -373,7 +373,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
 
 <div class="event-container">
     <?php if (isset($error)): ?>
-        <div style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+        <div style="background: var(--rose-100); border: 1px solid var(--rose-500); color: var(--rose-700); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
             <?= htmlspecialchars($error) ?>
         </div>
     <?php endif; ?>
@@ -396,7 +396,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
     
     <form method="POST" id="eventForm">
         <!-- Step 1: Informações Básicas -->
-        <div class="form-card active" id="step-1" style="--card-color: #3b82f6; --focus-shadow: rgba(59, 130, 246, 0.1);">
+        <div class="form-card active" id="step-1" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
             <div class="card-title">
                 <i data-lucide="info" style="width: 16px;"></i>
                 Informações Básicas
@@ -452,7 +452,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
             
             <div class="type-grid">
                 <label class="type-option">
-                    <input type="radio" name="event_type" value="reuniao" checked onchange="updateColor('#3b82f6')">
+                    <input type="radio" name="event_type" value="reuniao" checked onchange="updateColor('var(--slate-500)')">
                     <div class="type-box">📋 Reunião</div>
                 </label>
                 <label class="type-option">
@@ -460,7 +460,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                     <div class="type-box">🎵 Ensaio Extra</div>
                 </label>
                 <label class="type-option">
-                    <input type="radio" name="event_type" value="confraternizacao" onchange="updateColor('#f59e0b')">
+                    <input type="radio" name="event_type" value="confraternizacao" onchange="updateColor('var(--yellow-500)')">
                     <div class="type-box">🎉 Confraternização</div>
                 </label>
                 <label class="type-option">
@@ -468,11 +468,11 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                     <div class="type-box">🎂 Aniversário</div>
                 </label>
                 <label class="type-option">
-                    <input type="radio" name="event_type" value="treinamento" onchange="updateColor('#8b5cf6')">
+                    <input type="radio" name="event_type" value="treinamento" onchange="updateColor('var(--lavender-600)')">
                     <div class="type-box">📚 Treinamento</div>
                 </label>
                 <label class="type-option">
-                    <input type="radio" name="event_type" value="outro" onchange="updateColor('#64748b')">
+                    <input type="radio" name="event_type" value="outro" onchange="updateColor('var(--slate-500)')">
                     <div class="type-box">📌 Outro</div>
                 </label>
             </div>
@@ -481,35 +481,35 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                 <label class="form-label">Cor do Evento</label>
                 <div class="color-options">
                     <label class="color-option">
-                        <input type="radio" name="color" value="#3b82f6" checked>
-                        <div class="color-swatch" style="background: #3b82f6;"></div>
+                        <input type="radio" name="color" value="var(--slate-500)" checked>
+                        <div class="color-swatch" style="background: var(--slate-500);"></div>
                     </label>
                     <label class="color-option">
                         <input type="radio" name="color" value="#047857">
                         <div class="color-swatch" style="background: #047857;"></div>
                     </label>
                     <label class="color-option">
-                        <input type="radio" name="color" value="#f59e0b">
-                        <div class="color-swatch" style="background: #f59e0b;"></div>
+                        <input type="radio" name="color" value="var(--yellow-500)">
+                        <div class="color-swatch" style="background: var(--yellow-500);"></div>
                     </label>
                     <label class="color-option">
                         <input type="radio" name="color" value="#ec4899">
                         <div class="color-swatch" style="background: #ec4899;"></div>
                     </label>
                     <label class="color-option">
-                        <input type="radio" name="color" value="#8b5cf6">
-                        <div class="color-swatch" style="background: #8b5cf6;"></div>
+                        <input type="radio" name="color" value="var(--lavender-600)">
+                        <div class="color-swatch" style="background: var(--lavender-600);"></div>
                     </label>
                     <label class="color-option">
-                        <input type="radio" name="color" value="#ef4444">
-                        <div class="color-swatch" style="background: #ef4444;"></div>
+                        <input type="radio" name="color" value="var(--rose-500)">
+                        <div class="color-swatch" style="background: var(--rose-500);"></div>
                     </label>
                 </div>
             </div>
         </div>
         
         <!-- Step 3: Participantes -->
-        <div class="form-card" id="step-3" style="--card-color: #f59e0b; --focus-shadow: rgba(245, 158, 11, 0.1);">
+        <div class="form-card" id="step-3" style="--card-color: var(--yellow-500); --focus-shadow: rgba(245, 158, 11, 0.1);">
             <div class="card-title">
                 <i data-lucide="users" style="width: 16px;"></i>
                 Selecionar Participantes

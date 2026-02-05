@@ -92,7 +92,7 @@ renderAppHeader('Meu Perfil');
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <div style="background: #FEF2F2; color: #DC2626; padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid #FECACA; font-size: var(--font-body);">
+        <div style="background: var(--rose-50); color: var(--rose-600); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--rose-200); font-size: var(--font-body);">
             <i data-lucide="alert-circle" style="width: 18px;"></i>
             <?= $error ?>
         </div>
@@ -142,14 +142,14 @@ renderAppHeader('Meu Perfil');
                 <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="this.form.submit()">
             </div>
 
-            <h2 style="font-size: var(--font-h2); font-weight: 700; color: #0f172a; margin-bottom: 2px;">
+            <h2 style="font-size: var(--font-h2); font-weight: 700; color: var(--slate-900); margin-bottom: 2px;">
                 <?= htmlspecialchars($user['name']) ?>
             </h2>
-            <p style="color: #64748b; font-size: var(--font-body);">
+            <p style="color: var(--slate-500); font-size: var(--font-body);">
                 <?= htmlspecialchars($user['email'] ?? '') ?>
             </p>
 
-            <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: #f1f5f9; border-radius: 20px; font-size: var(--font-caption); color: #475569; font-weight: 600;">
+            <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--slate-100); border-radius: 20px; font-size: var(--font-caption); color: var(--slate-600); font-weight: 600;">
                 <i data-lucide="user" style="width: 12px;"></i>
                 Membro da Equipe
             </div>

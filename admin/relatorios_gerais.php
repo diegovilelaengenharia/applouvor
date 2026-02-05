@@ -494,22 +494,22 @@ if ($isPrintMode) {
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
         <script src="https://unpkg.com/lucide@latest"></script>
         <style>
-             body { font-family: 'Inter', sans-serif; padding: 30px; max-width: 210mm; margin: 0 auto; color: #1e293b; background: white; font-size: 10px; line-height: 1.4;}
+             body { font-family: 'Inter', sans-serif; padding: 30px; max-width: 210mm; margin: 0 auto; color: var(--slate-800); background: white; font-size: 10px; line-height: 1.4;}
              @media print { body { padding: 0; margin: 8mm; font-size: 9px; } .no-print { display: none; } @page { margin: 10mm; } }
-             h1 { font-size: 22px; margin: 0 0 4px 0; color: #0f172a; }
-             h2 { font-size: 14px; margin: 25px 0 12px 0; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; color: #0f172a; text-transform: uppercase; font-weight: 800; page-break-after: avoid; }
-             h3 { font-size: 11px; margin: 15px 0 8px 0; font-weight: 700; color: #64748b; page-break-after: avoid; }
+             h1 { font-size: 22px; margin: 0 0 4px 0; color: var(--slate-900); }
+             h2 { font-size: 14px; margin: 25px 0 12px 0; padding-bottom: 6px; border-bottom: 2px solid var(--slate-200); color: var(--slate-900); text-transform: uppercase; font-weight: 800; page-break-after: avoid; }
+             h3 { font-size: 11px; margin: 15px 0 8px 0; font-weight: 700; color: var(--slate-500); page-break-after: avoid; }
              table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 15px; page-break-inside: avoid; }
-             th { text-align: left; background: #f8fafc; padding: 5px 6px; font-weight: 700; color: #64748b; border-bottom: 1px solid #cbd5e1; }
-             td { padding: 5px 6px; border-bottom: 1px solid #f1f5f9; }
+             th { text-align: left; background: var(--slate-50); padding: 5px 6px; font-weight: 700; color: var(--slate-500); border-bottom: 1px solid var(--slate-300); }
+             td { padding: 5px 6px; border-bottom: 1px solid var(--slate-100); }
              .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
              .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
              .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-             .stat-box { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+             .stat-box { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--slate-100); }
              .stat-box:last-child { border-bottom: none; }
-             .kpi-card { border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; text-align: center; page-break-inside: avoid; }
+             .kpi-card { border: 1px solid var(--slate-200); padding: 12px; border-radius: 6px; text-align: center; page-break-inside: avoid; }
              .kpi-value { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-             .kpi-label { font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+             .kpi-label { font-size: 9px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; }
              .badge { padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 8px; display: inline-block; }
              .section { margin-bottom: 30px; page-break-inside: avoid; }
              .alert-box { padding: 10px; border-radius: 6px; margin-bottom: 15px; page-break-inside: avoid; }
@@ -520,26 +520,26 @@ if ($isPrintMode) {
     </head>
     <body>
         <div class="no-print" style="margin-bottom: 20px; text-align: right;">
-            <button onclick="window.print()" style="padding: 10px 20px; cursor: pointer; background: #0f172a; color: white; border: none; border-radius: 6px; font-weight: 600;">
+            <button onclick="window.print()" style="padding: 10px 20px; cursor: pointer; background: var(--slate-900); color: white; border: none; border-radius: 6px; font-weight: 600;">
                 <i data-lucide="printer" style="width: 16px; margin-right: 5px; vertical-align: middle;"></i> Salvar como PDF / Imprimir
             </button>
-            <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; margin-left: 10px;">Fechar</button>
+            <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer; background: #fff; border: 1px solid var(--slate-300); border-radius: 6px; margin-left: 10px;">Fechar</button>
         </div>
 
         <!-- HEADER -->
         <div style="margin-bottom: 30px;">
             <h1>Relatório Analítico Ultra Completo</h1>
-            <p style="margin: 4px 0 0; color: #64748b; font-size: 11px; font-weight: 600;">PIB Oliveira • Ministério de Louvor • <?= $titlePeriod ?></p>
+            <p style="margin: 4px 0 0; color: var(--slate-500); font-size: 11px; font-weight: 600;">PIB Oliveira • Ministério de Louvor • <?= $titlePeriod ?></p>
         </div>
 
         <!-- KPIs PRINCIPAIS -->
         <div class="grid-4">
             <?php 
                 $kpis = [
-                    ['Escalas', $kpi_scales, '#3b82f6'],
-                    ['Adesão', $rate_confirmed . '%', '#22c55e'],
+                    ['Escalas', $kpi_scales, 'var(--slate-500)'],
+                    ['Adesão', $rate_confirmed . '%', 'var(--sage-500)'],
                     ['Músicas', $kpi_songs, '#ec4899'],
-                    ['Capítulos', number_format($kpi_chapters), '#8b5cf6']
+                    ['Capítulos', number_format($kpi_chapters), 'var(--lavender-600)']
                 ];
                 foreach($kpis as $k): ?>
                 <div class="kpi-card" style="border-left: 3px solid <?= $k[2] ?>;">
@@ -565,7 +565,7 @@ if ($isPrintMode) {
                                 <td><b><?= $m['name'] ?></b></td>
                                 <td style="text-align: center;"><?= $m['confirmed'] ?>/<?= $m['total_invites'] ?></td>
                                 <td style="text-align: center;">
-                                    <span class="badge" style="background: <?= $m['rate'] >= 80 ? '#22c55e' : ($m['rate'] >= 60 ? '#f59e0b' : '#ef4444') ?>; color: white;">
+                                    <span class="badge" style="background: <?= $m['rate'] >= 80 ? 'var(--sage-500)' : ($m['rate'] >= 60 ? 'var(--yellow-500)' : 'var(--rose-500)') ?>; color: white;">
                                         <?= $m['rate'] ?>%
                                     </span>
                                 </td>
@@ -584,7 +584,7 @@ if ($isPrintMode) {
                         <?php foreach(array_slice($memberScaleCount, 0, 10) as $m): ?>
                             <tr>
                                 <td><b><?= $m['name'] ?></b></td>
-                                <td style="text-align: center; font-weight: 700; color: #3b82f6;"><?= $m['qtd'] ?></td>
+                                <td style="text-align: center; font-weight: 700; color: var(--slate-500);"><?= $m['qtd'] ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -599,7 +599,7 @@ if ($isPrintMode) {
                     <?php foreach(array_slice($topPairs, 0, 8) as $p): ?>
                     <div class="stat-box">
                         <span><?= $p['p1'] ?> & <?= $p['p2'] ?></span>
-                        <b style="color: #3b82f6;"><?= $p['qtd'] ?>x</b>
+                        <b style="color: var(--slate-500);"><?= $p['qtd'] ?>x</b>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -611,7 +611,7 @@ if ($isPrintMode) {
                     <?php foreach(array_slice($substitutions, 0, 8) as $s): ?>
                     <div class="stat-box">
                         <span style="font-size: 9px;"><?= $s['substituido'] ?> → <?= $s['substituto'] ?></span>
-                        <b style="color: #3b82f6;"><?= $s['vezes'] ?>x</b>
+                        <b style="color: var(--slate-500);"><?= $s['vezes'] ?>x</b>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -622,18 +622,18 @@ if ($isPrintMode) {
             <?php if(!empty($scaleTrend)): ?>
             <div>
                 <h3>Tendência Temporal (Escalas por Mês)</h3>
-                <div style="display: flex; align-items: flex-end; gap: 4px; height: 60px; border-bottom: 1px solid #cbd5e1;">
+                <div style="display: flex; align-items: flex-end; gap: 4px; height: 60px; border-bottom: 1px solid var(--slate-300);">
                     <?php 
                     $maxTrend = max(array_column($scaleTrend, 'qtd')) ?: 1;
                     foreach($scaleTrend as $t): 
                         $height = ($t['qtd'] / $maxTrend) * 100;
                     ?>
-                    <div style="flex: 1; background: #3b82f6; border-radius: 3px 3px 0 0; height: <?= max($height, 5) ?>%; position: relative;">
+                    <div style="flex: 1; background: var(--slate-500); border-radius: 3px 3px 0 0; height: <?= max($height, 5) ?>%; position: relative;">
                         <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: 700;"><?= $t['qtd'] ?></div>
                     </div>
                     <?php endforeach; ?>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 7px; color: #94a3b8; margin-top: 3px;">
+                <div style="display: flex; justify-content: space-between; font-size: 7px; color: var(--slate-400); margin-top: 3px;">
                     <?php foreach($scaleTrend as $t): ?>
                     <span><?= $t['month'] ?></span>
                     <?php endforeach; ?>
@@ -655,10 +655,10 @@ if ($isPrintMode) {
                         <tbody>
                         <?php foreach($topSongs as $idx => $s): ?>
                             <tr>
-                                <td style="color: #94a3b8; font-weight: 700;"><?= $idx+1 ?></td>
+                                <td style="color: var(--slate-400); font-weight: 700;"><?= $idx+1 ?></td>
                                 <td>
                                     <div style="font-weight: 600;"><?= $s['title'] ?></div>
-                                    <div style="font-size: 8px; color: #94a3b8;"><?= $s['artist'] ?></div>
+                                    <div style="font-size: 8px; color: var(--slate-400);"><?= $s['artist'] ?></div>
                                 </td>
                                 <td style="text-align: center; font-weight: 700; color: #ec4899;"><?= $s['qtd'] ?></td>
                             </tr>
@@ -736,9 +736,9 @@ if ($isPrintMode) {
                 <div class="grid-4">
                     <?php 
                     $links = [
-                        ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => '#3b82f6'],
-                        ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#22c55e'],
-                        ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => '#f59e0b'],
+                        ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => 'var(--slate-500)'],
+                        ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => 'var(--sage-500)'],
+                        ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => 'var(--yellow-500)'],
                         ['label' => 'Vídeo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
                     ];
                     foreach($links as $link):
@@ -747,7 +747,7 @@ if ($isPrintMode) {
                     <div class="kpi-card" style="border-left: 3px solid <?= $link['color'] ?>;">
                         <div class="kpi-value" style="color: <?= $link['color'] ?>;"><?= $pct ?>%</div>
                         <div class="kpi-label"><?= $link['label'] ?></div>
-                        <div style="font-size: 8px; color: #94a3b8; margin-top: 2px;"><?= $link['count'] ?>/<?= $repertoireCompleteness['total'] ?></div>
+                        <div style="font-size: 8px; color: var(--slate-400); margin-top: 2px;"><?= $link['count'] ?>/<?= $repertoireCompleteness['total'] ?></div>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -756,16 +756,16 @@ if ($isPrintMode) {
 
             <!-- Músicas Esquecidas -->
             <?php if(!empty($forgottenSongs)): ?>
-            <div class="alert-box" style="background: #fef2f2; border: 1px solid #fee2e2;">
-                <h3 style="color: #dc2626; margin-top: 0;">⚠️ Músicas Esquecidas (Não tocadas há 90+ dias)</h3>
+            <div class="alert-box" style="background: var(--rose-50); border: 1px solid var(--rose-100);">
+                <h3 style="color: var(--rose-600); margin-top: 0;">⚠️ Músicas Esquecidas (Não tocadas há 90+ dias)</h3>
                 <div class="grid-2">
                     <?php foreach(array_slice($forgottenSongs, 0, 10) as $fs): ?>
                     <div class="stat-box">
                         <div>
                             <div style="font-weight: 600; font-size: 9px;"><?= $fs['title'] ?></div>
-                            <div style="font-size: 8px; color: #94a3b8;"><?= $fs['artist'] ?></div>
+                            <div style="font-size: 8px; color: var(--slate-400);"><?= $fs['artist'] ?></div>
                         </div>
-                        <span style="color: #dc2626; font-weight: 700; font-size: 9px;"><?= $fs['dias_atras'] ?> dias</span>
+                        <span style="color: var(--rose-600); font-weight: 700; font-size: 9px;"><?= $fs['dias_atras'] ?> dias</span>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -779,18 +779,18 @@ if ($isPrintMode) {
             
             <div class="grid-3">
                 <!-- KPIs de Leitura -->
-                <div class="kpi-card" style="border-left: 3px solid #8b5cf6;">
-                    <div class="kpi-value" style="color: #8b5cf6;"><?= $adherenceRate ?>%</div>
+                <div class="kpi-card" style="border-left: 3px solid var(--lavender-600);">
+                    <div class="kpi-value" style="color: var(--lavender-600);"><?= $adherenceRate ?>%</div>
                     <div class="kpi-label">Taxa de Adesão</div>
-                    <div style="font-size: 8px; color: #94a3b8; margin-top: 2px;"><?= $adherenceData['leitores_ativos'] ?>/<?= $adherenceData['total_usuarios'] ?> membros</div>
+                    <div style="font-size: 8px; color: var(--slate-400); margin-top: 2px;"><?= $adherenceData['leitores_ativos'] ?>/<?= $adherenceData['total_usuarios'] ?> membros</div>
                 </div>
 
                 <?php if(!empty($planComparison)): ?>
                 <?php foreach($planComparison as $pc): ?>
-                <div class="kpi-card" style="border-left: 3px solid #8b5cf6;">
-                    <div class="kpi-value" style="color: #8b5cf6;"><?= $pc['capitulos'] ?></div>
+                <div class="kpi-card" style="border-left: 3px solid var(--lavender-600);">
+                    <div class="kpi-value" style="color: var(--lavender-600);"><?= $pc['capitulos'] ?></div>
                     <div class="kpi-label"><?= $pc['plano'] ?></div>
-                    <div style="font-size: 8px; color: #94a3b8; margin-top: 2px;">capítulos lidos</div>
+                    <div style="font-size: 8px; color: var(--slate-400); margin-top: 2px;">capítulos lidos</div>
                 </div>
                 <?php endforeach; ?>
                 <?php endif; ?>
@@ -805,9 +805,9 @@ if ($isPrintMode) {
                         <tbody>
                         <?php foreach($topReaders as $idx => $r): ?>
                             <tr>
-                                <td style="font-weight: 700; color: <?= $idx < 3 ? '#f59e0b' : '#94a3b8' ?>;"><?= $idx+1 ?></td>
+                                <td style="font-weight: 700; color: <?= $idx < 3 ? 'var(--yellow-500)' : 'var(--slate-400)' ?>;"><?= $idx+1 ?></td>
                                 <td><b><?= $r['name'] ?></b></td>
-                                <td style="text-align: center; font-weight: 700; color: #8b5cf6;"><?= $r['total_capitulos'] ?></td>
+                                <td style="text-align: center; font-weight: 700; color: var(--lavender-600);"><?= $r['total_capitulos'] ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -823,7 +823,7 @@ if ($isPrintMode) {
                         <?php foreach($spiritualData as $sd): ?>
                             <tr>
                                 <td><?= $sd['name'] ?></td>
-                                <td style="font-size: 8px; color: #64748b;"><?= ucfirst($sd['plan']) ?></td>
+                                <td style="font-size: 8px; color: var(--slate-500);"><?= ucfirst($sd['plan']) ?></td>
                                 <td style="text-align: center; font-weight: 700;"><?= $sd['chapters_period'] ?></td>
                             </tr>
                         <?php endforeach; ?>
@@ -872,18 +872,18 @@ if ($isPrintMode) {
             
             <!-- KPIs de Ausências -->
             <div class="grid-3">
-                <div class="kpi-card" style="border-left: 3px solid #f59e0b;">
-                    <div class="kpi-value" style="color: #f59e0b;"><?= $totalAbsences ?></div>
+                <div class="kpi-card" style="border-left: 3px solid var(--yellow-500);">
+                    <div class="kpi-value" style="color: var(--yellow-500);"><?= $totalAbsences ?></div>
                     <div class="kpi-label">Total de Ausências</div>
                 </div>
 
-                <div class="kpi-card" style="border-left: 3px solid #22c55e;">
-                    <div class="kpi-value" style="color: #22c55e;"><?= $substitutionRate ?>%</div>
+                <div class="kpi-card" style="border-left: 3px solid var(--sage-500);">
+                    <div class="kpi-value" style="color: var(--sage-500);"><?= $substitutionRate ?>%</div>
                     <div class="kpi-label">Com Substituto</div>
                 </div>
 
-                <div class="kpi-card" style="border-left: 3px solid #3b82f6;">
-                    <div class="kpi-value" style="color: #3b82f6;"><?= $audioRate ?>%</div>
+                <div class="kpi-card" style="border-left: 3px solid var(--slate-500);">
+                    <div class="kpi-value" style="color: var(--slate-500);"><?= $audioRate ?>%</div>
                     <div class="kpi-label">Com Áudio Explicativo</div>
                 </div>
             </div>
@@ -895,7 +895,7 @@ if ($isPrintMode) {
                     <?php foreach(array_slice($topAbsentMembers, 0, 10) as $m): ?>
                     <div class="stat-box">
                         <span><?= $m['name'] ?></span>
-                        <b style="color: #f59e0b;"><?= $m['qtd'] ?>x</b>
+                        <b style="color: var(--yellow-500);"><?= $m['qtd'] ?>x</b>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -920,7 +920,7 @@ if ($isPrintMode) {
                     <?php foreach($topSubstitutes as $s): ?>
                     <div class="stat-box">
                         <span><?= $s['name'] ?></span>
-                        <b style="color: #22c55e;"><?= $s['vezes'] ?>x</b>
+                        <b style="color: var(--sage-500);"><?= $s['vezes'] ?>x</b>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -939,7 +939,7 @@ if ($isPrintMode) {
                 <div class="podium">
                     <?php foreach($mvpMembers as $idx => $mvp): 
                         $heights = [90, 110, 80, 70, 60];
-                        $colors = ['#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e'];
+                        $colors = ['#fbbf24', 'var(--yellow-500)', 'var(--yellow-600)', '#b45309', '#92400e'];
                         $medals = ['🥇', '🥈', '🥉', '4º', '5º'];
                     ?>
                     <div class="podium-item">
@@ -948,8 +948,8 @@ if ($isPrintMode) {
                             <div style="font-size: 16px; font-weight: 800;"><?= $mvp['engagement_score'] ?></div>
                             <div style="font-size: 7px; opacity: 0.9;">pts</div>
                         </div>
-                        <div style="margin-top: 5px; font-weight: 700; font-size: 9px; color: #0f172a;"><?= $mvp['name'] ?></div>
-                        <div style="font-size: 7px; color: #64748b;"><?= $mvp['instrument'] ?></div>
+                        <div style="margin-top: 5px; font-weight: 700; font-size: 9px; color: var(--slate-900);"><?= $mvp['name'] ?></div>
+                        <div style="font-size: 7px; color: var(--slate-500);"><?= $mvp['instrument'] ?></div>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -973,12 +973,12 @@ if ($isPrintMode) {
                         <?php foreach($engagementData as $member): ?>
                         <tr>
                             <td><b><?= $member['name'] ?></b></td>
-                            <td style="font-size: 8px; color: #64748b;"><?= $member['instrument'] ?></td>
-                            <td style="text-align: center; font-weight: 700; color: #3b82f6;"><?= $member['escalas_confirmadas'] ?></td>
-                            <td style="text-align: center; font-weight: 700; color: #8b5cf6;"><?= $member['capitulos_lidos'] ?></td>
-                            <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#22c55e' ?>;"><?= $member['ausencias'] ?></td>
+                            <td style="font-size: 8px; color: var(--slate-500);"><?= $member['instrument'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: var(--slate-500);"><?= $member['escalas_confirmadas'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: var(--lavender-600);"><?= $member['capitulos_lidos'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? 'var(--yellow-500)' : 'var(--sage-500)' ?>;"><?= $member['ausencias'] ?></td>
                             <td style="text-align: center;">
-                                <span class="badge" style="background: <?= $member['engagement_score'] >= 70 ? '#22c55e' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>; color: white; font-size: 9px; padding: 3px 8px;">
+                                <span class="badge" style="background: <?= $member['engagement_score'] >= 70 ? 'var(--sage-500)' : ($member['engagement_score'] >= 40 ? 'var(--yellow-500)' : 'var(--rose-500)') ?>; color: white; font-size: 9px; padding: 3px 8px;">
                                     <?= $member['engagement_score'] ?>
                                 </span>
                             </td>
@@ -989,21 +989,21 @@ if ($isPrintMode) {
             </div>
 
             <!-- Legenda do Score -->
-            <div style="margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
-                <div style="font-size: 9px; font-weight: 700; margin-bottom: 5px; color: #64748b;">COMO É CALCULADO O SCORE DE ENGAJAMENTO:</div>
-                <div style="font-size: 8px; line-height: 1.6; color: #475569;">
+            <div style="margin-top: 15px; padding: 10px; background: var(--slate-50); border-radius: 6px; border: 1px solid var(--slate-200);">
+                <div style="font-size: 9px; font-weight: 700; margin-bottom: 5px; color: var(--slate-500);">COMO É CALCULADO O SCORE DE ENGAJAMENTO:</div>
+                <div style="font-size: 8px; line-height: 1.6; color: var(--slate-600);">
                     • <b>40 pontos</b> baseados em escalas confirmadas (proporcional ao membro mais escalado)<br>
                     • <b>40 pontos</b> baseados em capítulos lidos (proporcional ao maior leitor)<br>
                     • <b>-5 pontos</b> por ausência (máximo -20 pontos)<br>
-                    • <span style="color: #22c55e; font-weight: 700;">70-100 pts</span> = Excelente | 
-                    <span style="color: #f59e0b; font-weight: 700;">40-69 pts</span> = Moderado | 
-                    <span style="color: #ef4444; font-weight: 700;">0-39 pts</span> = Precisa melhorar
+                    • <span style="color: var(--sage-500); font-weight: 700;">70-100 pts</span> = Excelente | 
+                    <span style="color: var(--yellow-500); font-weight: 700;">40-69 pts</span> = Moderado | 
+                    <span style="color: var(--rose-500); font-weight: 700;">0-39 pts</span> = Precisa melhorar
                 </div>
             </div>
         </div>
 
         <!-- FOOTER -->
-        <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 8px; color: #94a3b8;">
+        <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid var(--slate-200); text-align: center; font-size: 8px; color: var(--slate-400);">
             <p style="margin: 0;">Relatório gerado em <?= date('d/m/Y \à\s H:i') ?> • PIB Oliveira - Ministério de Louvor</p>
             <p style="margin: 4px 0 0;">Sistema de Gestão de Escalas e Repertório v2.0</p>
         </div>
@@ -1021,48 +1021,48 @@ renderAppHeader('Indicadores Avançados');
 ?>
 
 <style>
-    .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; }
-    .stat-title { font-size: 14px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
-    .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+    .stat-card { background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px; }
+    .stat-title { font-size: 14px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; margin-bottom: 16px; border-bottom: 1px solid var(--slate-100); padding-bottom: 8px; }
+    .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--slate-100); }
     .list-item:last-child { border: none; }
-    .metric-big { font-size: 18px; font-weight: 800; color: #0f172a; }
-    .metric-sub { font-size: 12px; color: #64748b; }
+    .metric-big { font-size: 18px; font-weight: 800; color: var(--slate-900); }
+    .metric-sub { font-size: 12px; color: var(--slate-500); }
     
-    .heatmap { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 20px; border-bottom: 1px solid #cbd5e1; }
-    .heat-bar { flex: 1; background: #3b82f6; border-radius: 4px 4px 0 0; position: relative; transition: all 0.2s; }
-    .heat-bar:hover { background: #2563eb; }
-    .heat-bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; }
+    .heatmap { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 20px; border-bottom: 1px solid var(--slate-300); }
+    .heat-bar { flex: 1; background: var(--slate-500); border-radius: 4px 4px 0 0; position: relative; transition: all 0.2s; }
+    .heat-bar:hover { background: var(--slate-600); }
+    .heat-bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: var(--slate-800); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; }
 </style>
 
 <div class="container-fluid" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
 
      <!-- HEADER & FILTERS -->
-    <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+    <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid var(--slate-200); display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
         <div>
-            <h2 style="margin: 0; font-size: 20px; color: #0f172a;">Painel de Indicadores</h2>
-            <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b;">Análise Profunda: <strong><?= $titlePeriod ?></strong></p>
+            <h2 style="margin: 0; font-size: 20px; color: var(--slate-900);">Painel de Indicadores</h2>
+            <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--slate-500);">Análise Profunda: <strong><?= $titlePeriod ?></strong></p>
         </div>
         
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
             <form method="GET" style="display: flex; gap: 10px;">
-                <select name="period" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                <select name="period" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--slate-300);">
                     <option value="month" <?= $period=='month'?'selected':'' ?>>Mensal</option>
                     <option value="year" <?= $period=='year'?'selected':'' ?>>Anual</option>
                 </select>
-                <select name="year" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                <select name="year" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--slate-300);">
                     <?php for($y=2024; $y<=date('Y')+1; $y++): ?>
                     <option value="<?= $y ?>" <?= $year==$y?'selected':'' ?>><?= $y ?></option>
                     <?php endfor; ?>
                 </select>
                 <?php if($period=='month'): ?>
-                <select name="month" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                <select name="month" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--slate-300);">
                     <?php for($m=1; $m<=12; $m++): ?>
                     <option value="<?= $m ?>" <?= $month==$m?'selected':'' ?>><?= date('F', mktime(0,0,0,$m,1)) ?></option>
                     <?php endfor; ?>
                 </select>
                 <?php endif; ?>
             </form>
-             <button onclick="window.open('relatorios_gerais.php?print=true&period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>', '_blank')" style="background: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+             <button onclick="window.open('relatorios_gerais.php?print=true&period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>', '_blank')" style="background: var(--slate-900); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
                 <i data-lucide="printer" style="width: 16px; display:inline-block; vertical-align:middle; margin-right:5px"></i> Imprimir
             </button>
     </div>
@@ -1084,26 +1084,26 @@ renderAppHeader('Indicadores Avançados');
 
                     <!-- Membros Mais Escalados -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Membros Mais Escalados</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Membros Mais Escalados</h5>
                         <canvas id="chartMemberScales" style="max-height: 200px;"></canvas>
                     </div>
 
                     <!-- Duplas & Substituições -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Duplas Mais Frequentes</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Duplas Mais Frequentes</h5>
                         <?php foreach($topPairs as $p): ?>
                         <div class="list-item">
-                            <div style="font-weight: 600; font-size: 13px;"><?= $p['p1'] ?> <span style="color: #cbd5e1;">+</span> <?= $p['p2'] ?></div>
+                            <div style="font-weight: 600; font-size: 13px;"><?= $p['p1'] ?> <span style="color: var(--slate-300);">+</span> <?= $p['p2'] ?></div>
                             <div class="metric-big" style="font-size: 14px;"><?= $p['qtd'] ?> <span class="metric-sub">vezes</span></div>
                         </div>
                         <?php endforeach; ?>
                         
                         <?php if(!empty($substitutions)): ?>
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: #64748b;">Substituições Frequentes</h5>
+                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Substituições Frequentes</h5>
                         <?php foreach(array_slice($substitutions, 0, 3) as $s): ?>
                         <div class="list-item">
                             <div style="font-size: 12px;"><?= $s['substituido'] ?> → <?= $s['substituto'] ?></div>
-                            <div style="font-weight: 700; color: #3b82f6;"><?= $s['vezes'] ?>x</div>
+                            <div style="font-weight: 700; color: var(--slate-500);"><?= $s['vezes'] ?>x</div>
                         </div>
                         <?php endforeach; ?>
                         <?php endif; ?>
@@ -1125,15 +1125,15 @@ renderAppHeader('Indicadores Avançados');
                     
                     <!-- Top Músicas -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Top 10 Músicas</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Top 10 Músicas</h5>
                         <table style="width: 100%; font-size: 12px;">
                             <tbody>
                             <?php foreach($topSongs as $idx => $s): ?>
-                                <tr style="border-bottom: 1px solid #f1f5f9;">
-                                    <td style="padding: 6px 0; color: #94a3b8; font-weight: 700;">#<?= $idx+1 ?></td>
+                                <tr style="border-bottom: 1px solid var(--slate-100);">
+                                    <td style="padding: 6px 0; color: var(--slate-400); font-weight: 700;">#<?= $idx+1 ?></td>
                                     <td style="padding: 6px 0;">
                                         <div style="font-weight: 600;"><?= $s['title'] ?></div>
-                                        <div style="font-size: 10px; color: #94a3b8;"><?= $s['artist'] ?></div>
+                                        <div style="font-size: 10px; color: var(--slate-400);"><?= $s['artist'] ?></div>
                                     </td>
                                     <td style="text-align: right; padding: 6px 0; font-weight: 700;"><?= $s['qtd'] ?>x</td>
                                 </tr>
@@ -1144,7 +1144,7 @@ renderAppHeader('Indicadores Avançados');
 
                     <!-- Rotação & BPM -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Rotação de Músicas</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Rotação de Músicas</h5>
                         <canvas id="chartSongRotation" style="max-height: 200px;"></canvas>
                         
                         <?php if($bpmStats && $bpmStats['bpm_medio']): ?>
@@ -1158,7 +1158,7 @@ renderAppHeader('Indicadores Avançados');
 
                     <!-- Artistas, Tons & Tags -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Top Artistas</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Top Artistas</h5>
                         <?php foreach(array_slice($topArtists, 0, 5) as $a): ?>
                         <div class="list-item">
                             <span style="font-weight: 600; font-size: 13px;"><?= $a['artist'] ?></span>
@@ -1166,7 +1166,7 @@ renderAppHeader('Indicadores Avançados');
                         </div>
                         <?php endforeach; ?>
 
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: #64748b;">Tons Preferidos</h5>
+                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Tons Preferidos</h5>
                         <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                             <?php 
                             $toneMap = [
@@ -1188,14 +1188,14 @@ renderAppHeader('Indicadores Avançados');
                             foreach($topTones as $t): 
                                 $displayTone = $toneMap[$t['tone']] ?? $t['tone'];
                             ?>
-                            <div style="background: #f1f5f9; border-radius: 6px; padding: 8px 12px; text-align: center;">
-                                <div style="font-weight: 800; color: #334155; font-size: 11px; white-space: nowrap;"><?= $displayTone ?></div>
-                                <div style="font-size: 10px; color: #94a3b8;"><?= $t['qtd'] ?>x</div>
+                            <div style="background: var(--slate-100); border-radius: 6px; padding: 8px 12px; text-align: center;">
+                                <div style="font-weight: 800; color: var(--slate-700); font-size: 11px; white-space: nowrap;"><?= $displayTone ?></div>
+                                <div style="font-size: 10px; color: var(--slate-400);"><?= $t['qtd'] ?>x</div>
                             </div>
                             <?php endforeach; ?>
                         </div>
 
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: #64748b;">Tags Mais Usadas</h5>
+                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Tags Mais Usadas</h5>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <?php foreach($topTags as $t): ?>
                             <span style="background: <?= $t['color'] ?>20; color: <?= $t['color'] ?>; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;">
@@ -1209,22 +1209,22 @@ renderAppHeader('Indicadores Avançados');
                 <!-- Completude do Repertório -->
                 <?php if($repertoireCompleteness && $repertoireCompleteness['total'] > 0): ?>
                 <div style="margin-top: 30px;">
-                    <h5 style="font-size: 13px; margin: 0 0 15px 0; color: #64748b;">Completude do Repertório (Links Disponíveis)</h5>
+                    <h5 style="font-size: 13px; margin: 0 0 15px 0; color: var(--slate-500);">Completude do Repertório (Links Disponíveis)</h5>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
                         <?php 
                         $links = [
-                            ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => '#3b82f6'],
-                            ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#22c55e'],
-                            ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => '#f59e0b'],
+                            ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => 'var(--slate-500)'],
+                            ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => 'var(--sage-500)'],
+                            ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => 'var(--yellow-500)'],
                             ['label' => 'Vídeo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
                         ];
                         foreach($links as $link):
                             $pct = round(($link['count'] / $repertoireCompleteness['total']) * 100);
                         ?>
-                        <div onclick="showMissingSongs('<?= $link['label'] ?>', '<?= strtolower($link['label']) ?>')" style="padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;"><?= $link['label'] ?></div>
+                        <div onclick="showMissingSongs('<?= $link['label'] ?>', '<?= strtolower($link['label']) ?>')" style="padding: 12px; background: white; border: 1px solid var(--slate-200); border-radius: 8px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                            <div style="font-size: 11px; color: var(--slate-500); margin-bottom: 4px;"><?= $link['label'] ?></div>
                             <div style="font-size: 24px; font-weight: 800; color: <?= $link['color'] ?>;"><?= $pct ?>%</div>
-                            <div style="font-size: 10px; color: #94a3b8;"><?= $link['count'] ?>/<?= $repertoireCompleteness['total'] ?></div>
+                            <div style="font-size: 10px; color: var(--slate-400);"><?= $link['count'] ?>/<?= $repertoireCompleteness['total'] ?></div>
                             <div style="font-size: 9px; color: <?= $link['color'] ?>; margin-top: 4px; font-weight: 600;">Ver pendências →</div>
                         </div>
                         <?php endforeach; ?>
@@ -1234,15 +1234,15 @@ renderAppHeader('Indicadores Avançados');
 
                 <!-- Músicas Esquecidas -->
                 <?php if(!empty($forgottenSongs)): ?>
-                <div style="margin-top: 30px; padding: 16px; background: #fef2f2; border-radius: 8px; border: 1px solid #fee2e2;">
-                    <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #dc2626;">⚠️ Músicas Esquecidas (Não tocadas há 90+ dias)</h5>
+                <div style="margin-top: 30px; padding: 16px; background: var(--rose-50); border-radius: 8px; border: 1px solid var(--rose-100);">
+                    <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--rose-600);">⚠️ Músicas Esquecidas (Não tocadas há 90+ dias)</h5>
                     <?php foreach(array_slice($forgottenSongs, 0, 5) as $fs): ?>
                     <div class="list-item">
                         <div>
                             <div style="font-weight: 600; font-size: 13px;"><?= $fs['title'] ?></div>
-                            <div style="font-size: 11px; color: #94a3b8;"><?= $fs['artist'] ?></div>
+                            <div style="font-size: 11px; color: var(--slate-400);"><?= $fs['artist'] ?></div>
                         </div>
-                        <div style="text-align: right; color: #dc2626; font-weight: 700; font-size: 12px;">
+                        <div style="text-align: right; color: var(--rose-600); font-weight: 700; font-size: 12px;">
                             <?= $fs['dias_atras'] ?> dias
                         </div>
                     </div>
@@ -1263,7 +1263,7 @@ renderAppHeader('Indicadores Avançados');
                     
                     <!-- Ranking de Leitores -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">🏆 Top 10 Leitores</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">🏆 Top 10 Leitores</h5>
                         <?php foreach($topReaders as $idx => $r): ?>
                         <div class="list-item">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -1273,8 +1273,8 @@ renderAppHeader('Indicadores Avançados');
                                 <span style="font-weight: 600; font-size: 13px;"><?= $r['name'] ?></span>
                             </div>
                             <div style="text-align: right;">
-                                <div style="font-weight: 800; color: #8b5cf6;"><?= $r['total_capitulos'] ?></div>
-                                <div style="font-size: 10px; color: #94a3b8;">caps</div>
+                                <div style="font-weight: 800; color: var(--lavender-600);"><?= $r['total_capitulos'] ?></div>
+                                <div style="font-size: 10px; color: var(--slate-400);">caps</div>
                             </div>
                         </div>
                         <?php endforeach; ?>
@@ -1282,8 +1282,8 @@ renderAppHeader('Indicadores Avançados');
 
                     <!-- Taxa de Adesão & Comparação de Planos -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Taxa de Adesão ao Plano</h5>
-                        <div style="padding: 20px; background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); border-radius: 12px; text-align: center; color: white;">
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Taxa de Adesão ao Plano</h5>
+                        <div style="padding: 20px; background: linear-gradient(135deg, var(--lavender-600) 0%, #6d28d9 100%); border-radius: 12px; text-align: center; color: white;">
                             <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $adherenceRate ?>%</div>
                             <div style="font-size: 13px; opacity: 0.9;"><?= $adherenceData['leitores_ativos'] ?> de <?= $adherenceData['total_usuarios'] ?> membros</div>
                         </div>
@@ -1293,7 +1293,7 @@ renderAppHeader('Indicadores Avançados');
 
                     <!-- Horários de Leitura -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Horários Mais Comuns</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Horários Mais Comuns</h5>
                         <?php 
                         $hoursSorted = $readingHours; 
                         arsort($hoursSorted);
@@ -1308,26 +1308,26 @@ renderAppHeader('Indicadores Avançados');
                         </div>
                         <?php endforeach; ?>
 
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: #64748b;">Dias da Semana</h5>
+                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Dias da Semana</h5>
                         <canvas id="chartWeekdayReading" style="max-height: 150px;"></canvas>
                     </div>
                 </div>
 
                 <!-- Heatmap 24h -->
                 <div style="margin-top: 30px;">
-                    <h5 style="font-size: 13px; margin: 0 0 15px 0; color: #64748b;">Heatmap de Leituras (24 horas)</h5>
+                    <h5 style="font-size: 13px; margin: 0 0 15px 0; color: var(--slate-500);">Heatmap de Leituras (24 horas)</h5>
                     <div class="heatmap">
                         <?php 
                         $maxRead = max($readingHours) ?: 1;
                         for($h=0; $h<24; $h++): 
                            $val = $readingHours[$h] ?? 0;
                            $height = ($val / $maxRead) * 100;
-                           $color = $height > 0 ? '#8b5cf6' : '#e2e8f0';
+                           $color = $height > 0 ? 'var(--lavender-600)' : 'var(--slate-200)';
                         ?>
                         <div class="heat-bar" style="height: <?= max($height, 5) ?>%; background: <?= $color ?>;" data-val="<?= $val > 0 ? $val : '' ?>" title="<?= $h ?>h: <?= $val ?> leituras"></div>
                         <?php endfor; ?>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; margin-top: 4px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--slate-400); margin-top: 4px;">
                         <span>00h</span><span>06h</span><span>12h</span><span>18h</span><span>23h</span>
                     </div>
                 </div>
@@ -1345,17 +1345,17 @@ renderAppHeader('Indicadores Avançados');
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
                     
                     <!-- KPIs de Ausências -->
-                    <div style="padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-600) 100%); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $totalAbsences ?></div>
                         <div style="font-size: 13px; opacity: 0.9;">Total de Ausências</div>
                     </div>
 
-                    <div style="padding: 20px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: linear-gradient(135deg, var(--sage-500) 0%, var(--sage-600) 100%); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $substitutionRate ?>%</div>
                         <div style="font-size: 13px; opacity: 0.9;">Com Substituto</div>
                     </div>
 
-                    <div style="padding: 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: linear-gradient(135deg, var(--slate-500) 0%, var(--slate-600) 100%); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $audioRate ?>%</div>
                         <div style="font-size: 13px; opacity: 0.9;">Com Áudio Explicativo</div>
                     </div>
@@ -1365,7 +1365,7 @@ renderAppHeader('Indicadores Avançados');
                     
                     <!-- Membros com Mais Ausências -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Membros com Mais Ausências</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Membros com Mais Ausências</h5>
                         <?php foreach($topAbsentMembers as $m): ?>
                         <div class="list-item">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -1374,7 +1374,7 @@ renderAppHeader('Indicadores Avançados');
                                 </div>
                                 <span style="font-weight: 600; font-size: 13px;"><?= $m['name'] ?></span>
                             </div>
-                            <div style="font-weight: 700; color: #f59e0b;"><?= $m['qtd'] ?>x</div>
+                            <div style="font-weight: 700; color: var(--yellow-500);"><?= $m['qtd'] ?>x</div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -1382,7 +1382,7 @@ renderAppHeader('Indicadores Avançados');
                     <!-- Motivos Mais Comuns -->
                     <?php if(!empty($topAbsenceReasons)): ?>
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Motivos Mais Comuns</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Motivos Mais Comuns</h5>
                         <canvas id="chartAbsenceReasons" style="max-height: 200px;"></canvas>
                     </div>
                     <?php endif; ?>
@@ -1390,7 +1390,7 @@ renderAppHeader('Indicadores Avançados');
                     <!-- Membros que Mais Substituem -->
                     <?php if(!empty($topSubstitutes)): ?>
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">🦸 Membros que Mais Substituem</h5>
+                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">🦸 Membros que Mais Substituem</h5>
                         <?php foreach($topSubstitutes as $s): ?>
                         <div class="list-item">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -1399,7 +1399,7 @@ renderAppHeader('Indicadores Avançados');
                                 </div>
                                 <span style="font-weight: 600; font-size: 13px;"><?= $s['name'] ?></span>
                             </div>
-                            <div style="font-weight: 700; color: #22c55e;"><?= $s['vezes'] ?>x</div>
+                            <div style="font-weight: 700; color: var(--sage-500);"><?= $s['vezes'] ?>x</div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -1418,11 +1418,11 @@ renderAppHeader('Indicadores Avançados');
             <div id="section-mvp">
                 <!-- Pódio MVP -->
                 <div style="margin-top: 20px;">
-                    <h5 style="font-size: 13px; margin: 0 0 20px 0; color: #64748b; text-align: center;">🥇 Top 5 Membros MVP (Maior Engajamento)</h5>
+                    <h5 style="font-size: 13px; margin: 0 0 20px 0; color: var(--slate-500); text-align: center;">🥇 Top 5 Membros MVP (Maior Engajamento)</h5>
                     <div style="display: flex; justify-content: center; align-items: flex-end; gap: 12px; margin-bottom: 30px;">
                         <?php foreach($mvpMembers as $idx => $mvp): 
                             $heights = [180, 220, 160, 140, 120];
-                            $colors = ['#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e'];
+                            $colors = ['#fbbf24', 'var(--yellow-500)', 'var(--yellow-600)', '#b45309', '#92400e'];
                             $medals = ['🥇', '🥈', '🥉', '4º', '5º'];
                         ?>
                         <div style="text-align: center;">
@@ -1431,8 +1431,8 @@ renderAppHeader('Indicadores Avançados');
                                 <div style="font-size: 24px; font-weight: 800; margin-bottom: 4px;"><?= $mvp['engagement_score'] ?></div>
                                 <div style="font-size: 10px; opacity: 0.9;">pontos</div>
                             </div>
-                            <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: #0f172a;"><?= $mvp['name'] ?></div>
-                            <div style="font-size: 10px; color: #64748b;"><?= $mvp['instrument'] ?></div>
+                            <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: var(--slate-900);"><?= $mvp['name'] ?></div>
+                            <div style="font-size: 10px; color: var(--slate-500);"><?= $mvp['instrument'] ?></div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -1440,21 +1440,21 @@ renderAppHeader('Indicadores Avançados');
 
                 <!-- Tabela de Engajamento Completa -->
                 <div style="margin-top: 30px;">
-                    <h5 style="font-size: 13px; margin: 0 0 10px 0; color: #64748b;">Score de Engajamento (Todos os Membros)</h5>
+                    <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Score de Engajamento (Todos os Membros)</h5>
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                             <thead>
-                                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
-                                    <th style="padding: 10px; text-align: left; font-weight: 700; color: #64748b;">Membro</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: #64748b;">Escalas</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: #64748b;">Capítulos</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: #64748b;">Ausências</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: #64748b;">Score</th>
+                                <tr style="background: var(--slate-50); border-bottom: 2px solid var(--slate-200);">
+                                    <th style="padding: 10px; text-align: left; font-weight: 700; color: var(--slate-500);">Membro</th>
+                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Escalas</th>
+                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Capítulos</th>
+                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Ausências</th>
+                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Score</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach($engagementData as $member): ?>
-                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                <tr style="border-bottom: 1px solid var(--slate-100);">
                                     <td style="padding: 10px;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
                                             <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $member['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 11px;">
@@ -1462,15 +1462,15 @@ renderAppHeader('Indicadores Avançados');
                                             </div>
                                             <div>
                                                 <div style="font-weight: 600;"><?= $member['name'] ?></div>
-                                                <div style="font-size: 10px; color: #94a3b8;"><?= $member['instrument'] ?></div>
+                                                <div style="font-size: 10px; color: var(--slate-400);"><?= $member['instrument'] ?></div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: #3b82f6;"><?= $member['escalas_confirmadas'] ?></td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: #8b5cf6;"><?= $member['capitulos_lidos'] ?></td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#22c55e' ?>;"><?= $member['ausencias'] ?></td>
+                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);"><?= $member['escalas_confirmadas'] ?></td>
+                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: var(--lavender-600);"><?= $member['capitulos_lidos'] ?></td>
+                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? 'var(--yellow-500)' : 'var(--sage-500)' ?>;"><?= $member['ausencias'] ?></td>
                                     <td style="padding: 10px; text-align: center;">
-                                        <div style="font-size: 18px; font-weight: 800; color: <?= $member['engagement_score'] >= 70 ? '#22c55e' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>;">
+                                        <div style="font-size: 18px; font-weight: 800; color: <?= $member['engagement_score'] >= 70 ? 'var(--sage-500)' : ($member['engagement_score'] >= 40 ? 'var(--yellow-500)' : 'var(--rose-500)') ?>;">
                                             <?= $member['engagement_score'] ?>
                                         </div>
                                     </td>
@@ -1489,9 +1489,9 @@ renderAppHeader('Indicadores Avançados');
 <!-- Modal Músicas Pendentes -->
 <div id="modalMissingSongs" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
     <div style="background: white; width: 90%; max-width: 500px; border-radius: 12px; padding: 20px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
-            <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: #0f172a;">Músicas Pendentes</h3>
-            <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="background: none; border: none; cursor: pointer; color: #64748b;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--slate-100); padding-bottom: 10px;">
+            <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--slate-900);">Músicas Pendentes</h3>
+            <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="background: none; border: none; cursor: pointer; color: var(--slate-500);">
                 <i data-lucide="x" style="width: 20px;"></i>
             </button>
         </div>
@@ -1499,7 +1499,7 @@ renderAppHeader('Indicadores Avançados');
             <!-- Lista será injetada aqui -->
         </div>
         <div style="margin-top: 15px; text-align: right;">
-            <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="padding: 8px 16px; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #475569;">Fechar</button>
+            <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="padding: 8px 16px; background: var(--slate-200); border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--slate-600);">Fechar</button>
         </div>
     </div>
 </div>
@@ -1538,17 +1538,17 @@ foreach ($types as $label => $col) {
             missingSongsData[key].forEach(song => {
                 const item = document.createElement('div');
                 item.style.padding = '8px';
-                item.style.borderBottom = '1px solid #f1f5f9';
+                item.style.borderBottom = '1px solid var(--slate-100)';
                 item.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: 600; font-size: 13px; color: #334155;">${song.title}</div>
-                            <div style="font-size: 11px; color: #94a3b8;">${song.artist}</div>
+                            <div style="font-weight: 600; font-size: 13px; color: var(--slate-700);">${song.title}</div>
+                            <div style="font-size: 11px; color: var(--slate-400);">${song.artist}</div>
                         </div>
                         <a href="musica_editar.php?id=${song.id}" class="ripple" style="
                             padding: 6px 12px; 
-                            background: #eff6ff; 
-                            color: #3b82f6; 
+                            background: var(--slate-50); 
+                            color: var(--slate-500); 
                             font-size: 11px; 
                             font-weight: 600; 
                             border-radius: 6px; 
@@ -1561,7 +1561,7 @@ foreach ($types as $label => $col) {
             });
             content.appendChild(list);
         } else {
-            content.innerHTML = '<div style="text-align: center; color: #64748b; padding: 20px;">Nenhuma pendência encontrada! 🎉</div>';
+            content.innerHTML = '<div style="text-align: center; color: var(--slate-500); padding: 20px;">Nenhuma pendência encontrada! 🎉</div>';
         }
 
         modal.style.display = 'flex';
@@ -1598,7 +1598,7 @@ foreach ($types as $label => $col) {
             datasets: [{
                 label: 'Escalas',
                 data: <?= json_encode(array_column(array_slice($memberScaleCount, 0, 8), 'qtd')) ?>,
-                backgroundColor: '#3b82f6'
+                backgroundColor: 'var(--slate-500)'
             }]
         },
         options: {
@@ -1619,8 +1619,8 @@ foreach ($types as $label => $col) {
             datasets: [{
                 label: 'Escalas por Mês',
                 data: <?= json_encode(array_column($scaleTrend, 'qtd')) ?>,
-                borderColor: '#3b82f6',
-                backgroundColor: '#3b82f620',
+                borderColor: 'var(--slate-500)',
+                backgroundColor: 'var(--slate-500)20',
                 tension: 0.4,
                 fill: true
             }]
@@ -1642,7 +1642,7 @@ foreach ($types as $label => $col) {
             labels: <?= json_encode(array_column($songRotation, 'faixa')) ?>,
             datasets: [{
                 data: <?= json_encode(array_column($songRotation, 'musicas')) ?>,
-                backgroundColor: ['#3b82f6', '#22c55e', '#f59e0b', '#ec4899']
+                backgroundColor: ['var(--slate-500)', 'var(--sage-500)', 'var(--yellow-500)', '#ec4899']
             }]
         },
         options: {
@@ -1662,7 +1662,7 @@ foreach ($types as $label => $col) {
             datasets: [{
                 label: 'Capítulos Lidos',
                 data: <?= json_encode(array_column($planComparison, 'capitulos')) ?>,
-                backgroundColor: '#8b5cf6'
+                backgroundColor: 'var(--lavender-600)'
             }]
         },
         options: {
@@ -1683,7 +1683,7 @@ foreach ($types as $label => $col) {
             datasets: [{
                 label: 'Leituras',
                 data: <?= json_encode(array_column($weekdayReading, 'qtd')) ?>,
-                backgroundColor: '#8b5cf6'
+                backgroundColor: 'var(--lavender-600)'
             }]
         },
         options: {
@@ -1703,7 +1703,7 @@ foreach ($types as $label => $col) {
             labels: <?= json_encode(array_column($topAbsenceReasons, 'reason')) ?>,
             datasets: [{
                 data: <?= json_encode(array_column($topAbsenceReasons, 'qtd')) ?>,
-                backgroundColor: ['#f59e0b', '#d97706', '#b45309', '#92400e', '#78350f']
+                backgroundColor: ['var(--yellow-500)', 'var(--yellow-600)', '#b45309', '#92400e', '#78350f']
             }]
         },
         options: {

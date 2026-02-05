@@ -154,11 +154,11 @@ renderAppHeader('Pedidos de Oração');
         box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
     .prayer-card.urgent {
-        border-left: 4px solid #dc2626;
+        border-left: 4px solid var(--rose-600);
     }
     .prayer-card.answered {
-        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        border-color: #22c55e;
+        background: linear-gradient(135deg, var(--sage-50) 0%, var(--sage-100) 100%);
+        border-color: var(--sage-500);
     }
     
     /* Header */
@@ -211,7 +211,7 @@ renderAppHeader('Pedidos de Oração');
     /* Footer */
     .prayer-footer {
         padding: 12px 16px;
-        background: #f8fafc;
+        background: var(--slate-50);
         border-top: 1px solid var(--border-color);
         display: flex;
         justify-content: space-between;
@@ -232,12 +232,12 @@ renderAppHeader('Pedidos de Oração');
         border: none;
     }
     .pray-btn.not-prayed {
-        background: linear-gradient(135deg, #376ac8, #2c55a0);
+        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
         color: white;
     }
     .pray-btn.prayed {
-        background: #fef3c7;
-        color: #d97706;
+        background: var(--yellow-100);
+        color: var(--yellow-600);
     }
     .pray-btn:hover {
         transform: scale(1.05);
@@ -251,12 +251,12 @@ renderAppHeader('Pedidos de Oração');
         font-weight: 600;
         text-transform: uppercase;
     }
-    .cat-health { background: #fee2e2; color: #dc2626; }
-    .cat-family { background: #dbeafe; color: #2563eb; }
-    .cat-work { background: #fef3c7; color: #d97706; }
-    .cat-spiritual { background: #f5f3ff; color: #8b5cf6; }
-    .cat-gratitude { background: #f0fdf4; color: #16a34a; }
-    .cat-other { background: #f1f5f9; color: #64748b; }
+    .cat-health { background: var(--rose-100); color: var(--rose-600); }
+    .cat-family { background: var(--slate-100); color: var(--slate-600); }
+    .cat-work { background: var(--yellow-100); color: var(--yellow-600); }
+    .cat-spiritual { background: var(--lavender-50); color: var(--lavender-600); }
+    .cat-gratitude { background: var(--sage-50); color: var(--sage-600); }
+    .cat-other { background: var(--slate-100); color: var(--slate-500); }
     
     /* FAB */
     .fab-create {
@@ -266,7 +266,7 @@ renderAppHeader('Pedidos de Oração');
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #376ac8, #2c55a0);
+        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
         color: white;
         border: none;
         box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
@@ -307,7 +307,7 @@ renderAppHeader('Pedidos de Oração');
         background: var(--border-color);
     }
     .filter-tab.active {
-        background: linear-gradient(135deg, #376ac8, #2c55a0);
+        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
         color: white;
         border-color: transparent;
     }
@@ -316,7 +316,7 @@ renderAppHeader('Pedidos de Oração');
     .comments-section {
         display: none;
         padding: 16px;
-        background: #f8fafc;
+        background: var(--slate-50);
         border-top: 1px solid var(--border-color);
     }
     .comments-section.open {
@@ -348,8 +348,8 @@ renderAppHeader('Pedidos de Oração');
     
     /* Intercession States */
     .prayer-card.not-interceded {
-        background: linear-gradient(to right, #ffffff, #fffbeb);
-        border-left: 3px solid #f59e0b;
+        background: linear-gradient(to right, #ffffff, var(--yellow-50));
+        border-left: 3px solid var(--yellow-500);
     }
     .prayer-card.interceded {
         opacity: 0.7;
@@ -374,7 +374,7 @@ renderAppHeader('Pedidos de Oração');
         width: 100%;
         padding: 10px 12px 10px 36px;
         background-color: white;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--slate-200);
         border-radius: 12px;
         font-size: 0.9rem;
         font-weight: 500;
@@ -388,7 +388,7 @@ renderAppHeader('Pedidos de Oração');
         background-position: right 10px center;
     }
     .filter-select:focus {
-        border-color: #f59e0b;
+        border-color: var(--yellow-500);
         box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
         outline: none;
     }
@@ -407,7 +407,7 @@ renderAppHeader('Pedidos de Oração');
         align-items: center;
         justify-content: center;
         background: white;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--slate-200);
         border-radius: 12px;
         color: #718096;
         cursor: pointer;
@@ -418,8 +418,8 @@ renderAppHeader('Pedidos de Oração');
     }
     .btn-advanced-filter.active {
         background: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-        border-color: #f59e0b;
+        color: var(--yellow-500);
+        border-color: var(--yellow-500);
     }
     .btn-advanced-filter:hover {
         background: #f7fafc;
@@ -434,15 +434,15 @@ renderAppHeader('Pedidos de Oração');
     
     <?php if (!$tableExists): ?>
     <!-- Setup Required Message -->
-    <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #ebf0fa, #d7e1f4); border-radius: 16px; margin-bottom: 20px;">
+    <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, var(--slate-100), #d7e1f4); border-radius: 16px; margin-bottom: 20px;">
         <div style="background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            <i data-lucide="database" style="color: #376ac8; width: 30px; height: 30px;"></i>
+            <i data-lucide="database" style="color: var(--slate-600); width: 30px; height: 30px;"></i>
         </div>
         <h3 style="color: #1e3a8a; margin-bottom: 8px; font-weight: 700;">Configuração Necessária</h3>
-        <p style="color: #1e40af; font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
+        <p style="color: var(--slate-700); font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
             Para usar o Mural de Oração, é necessário criar as tabelas no banco de dados.
         </p>
-        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #376ac8, #2c55a0); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
+        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--slate-600), #2c55a0); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
             <i data-lucide="settings" style="width: 18px;"></i>
             Executar Setup
         </a>
@@ -465,13 +465,13 @@ renderAppHeader('Pedidos de Oração');
         <button onclick="toggleAdvancedFilters()" class="btn-advanced-filter <?= ($filterCategory !== 'all' || $showAnswered) ? 'active' : '' ?>" title="Filtros Avançados">
             <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
             <?php if ($filterCategory !== 'all' || $showAnswered): ?>
-                <span style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span>
+                <span style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: var(--yellow-500); border-radius: 50%;"></span>
             <?php endif; ?>
         </button>
         
         <!-- Botão Limpar Filtros -->
         <?php if ($filterCategory !== 'all' || $showAnswered): ?>
-        <button onclick="window.location.href='oracao.php'" class="btn-advanced-filter" style="color: #ef4444; border-color: #fecaca; background: #fef2f2;" title="Limpar Filtros">
+        <button onclick="window.location.href='oracao.php'" class="btn-advanced-filter" style="color: var(--rose-500); border-color: var(--rose-200); background: var(--rose-50);" title="Limpar Filtros">
             <i data-lucide="x" style="width: 20px; height: 20px;"></i>
         </button>
         <?php endif; ?>
@@ -493,9 +493,9 @@ renderAppHeader('Pedidos de Oração');
             <a href="?intercession=<?= $filterIntercession ?>&category=<?= $filterCategory ?><?= $showAnswered ? '' : '&answered=1' ?>" style="
                 display: inline-flex; align-items: center; gap: 6px;
                 padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
-                text-decoration: none; color: <?= $showAnswered ? '#22c55e' : 'var(--text-muted)' ?>;
-                background: <?= $showAnswered ? '#f0fdf4' : 'transparent' ?>;
-                border: 1px solid <?= $showAnswered ? '#22c55e' : 'var(--border-color)' ?>;
+                text-decoration: none; color: <?= $showAnswered ? 'var(--sage-500)' : 'var(--text-muted)' ?>;
+                background: <?= $showAnswered ? 'var(--sage-50)' : 'transparent' ?>;
+                border: 1px solid <?= $showAnswered ? 'var(--sage-500)' : 'var(--border-color)' ?>;
             ">
                 <i data-lucide="<?= $showAnswered ? 'check-circle' : 'sparkles' ?>" style="width: 14px;"></i>
                 <?= $showAnswered ? 'Ver Pendentes' : 'Ver Respondidas 🎉' ?>
@@ -553,7 +553,7 @@ renderAppHeader('Pedidos de Oração');
                     <?php if ($authorAvatar): ?>
                         <img src="<?= htmlspecialchars($authorAvatar) ?>" class="prayer-avatar" alt="">
                     <?php else: ?>
-                        <div class="prayer-avatar-placeholder" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                        <div class="prayer-avatar-placeholder" style="background: linear-gradient(135deg, #fbbf24, var(--yellow-500));">
                             <?= $prayer['is_anonymous'] ? '?' : strtoupper(substr($authorName, 0, 1)) ?>
                         </div>
                     <?php endif; ?>
@@ -567,11 +567,11 @@ renderAppHeader('Pedidos de Oração');
                     </div>
                     
                     <?php if ($prayer['is_answered']): ?>
-                        <div style="background: #22c55e; color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
+                        <div style="background: var(--sage-500); color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
                             ✓ RESPONDIDA
                         </div>
                     <?php elseif ($prayer['is_urgent']): ?>
-                        <div style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
+                        <div style="background: var(--rose-600); color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
                             🔥 URGENTE
                         </div>
                     <?php endif; ?>
@@ -603,7 +603,7 @@ renderAppHeader('Pedidos de Oração');
                     <form method="POST" style="margin: 0;">
                         <input type="hidden" name="action" value="answered">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                        <button type="submit" style="background: #dcfce7; color: #16a34a; border: none; padding: 6px 12px; border-radius: 12px; font-size: var(--font-body-sm); font-weight: 600; cursor: pointer;">
+                        <button type="submit" style="background: var(--sage-100); color: var(--sage-600); border: none; padding: 6px 12px; border-radius: 12px; font-size: var(--font-body-sm); font-weight: 600; cursor: pointer;">
                             ✓ Marcar respondida
                         </button>
                     </form>
@@ -638,7 +638,7 @@ renderAppHeader('Pedidos de Oração');
                         <input type="hidden" name="action" value="comment">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
                         <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: var(--font-body); outline: none;">
-                        <button type="submit" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                        <button type="submit" style="background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                             <i data-lucide="send" style="width: 16px;"></i>
                         </button>
                     </form>
@@ -648,15 +648,15 @@ renderAppHeader('Pedidos de Oração');
         <?php else: ?>
             <!-- Empty State -->
             <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: linear-gradient(135deg, #ebf0fa 0%, #dbeafe 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i data-lucide="heart-handshake" style="color: #376ac8; width: 40px; height: 40px;"></i>
+                <div style="background: linear-gradient(135deg, var(--slate-100) 0%, var(--slate-100) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i data-lucide="heart-handshake" style="color: var(--slate-600); width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;"><?= $showAnswered ? 'Nenhuma oração respondida' : 'Nenhum pedido ainda' ?></h3>
                 <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                     <?= $showAnswered ? 'As orações respondidas aparecerão aqui.' : 'Seja o primeiro a compartilhar um pedido de oração!' ?>
                 </p>
                 <?php if (!$showAnswered): ?>
-                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #376ac8, #2c55a0); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, var(--slate-600), #2c55a0); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                     <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
                     Novo Pedido
                 </button>
@@ -743,11 +743,11 @@ renderAppHeader('Pedidos de Oração');
             <!-- Options -->
             <div style="margin-bottom: 20px; display: flex; gap: 16px; flex-wrap: wrap;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" name="is_urgent" style="width: 18px; height: 18px; accent-color: #dc2626;">
+                    <input type="checkbox" name="is_urgent" style="width: 18px; height: 18px; accent-color: var(--rose-600);">
                     <span style="font-size: var(--font-body); font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
                 </label>
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" name="is_anonymous" style="width: 18px; height: 18px; accent-color: #64748b;">
+                    <input type="checkbox" name="is_anonymous" style="width: 18px; height: 18px; accent-color: var(--slate-500);">
                     <span style="font-size: var(--font-body); font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
                 </label>
             </div>
@@ -757,7 +757,7 @@ renderAppHeader('Pedidos de Oração');
                 <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
                     Cancelar
                 </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; font-weight: 700; cursor: pointer;">
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); color: white; font-weight: 700; cursor: pointer;">
                     Enviar Pedido
                 </button>
             </div>
@@ -774,13 +774,13 @@ renderAppHeader('Pedidos de Oração');
                 opt.style.background = 'transparent';
             });
             this.parentElement.style.borderColor = '#fbbf24';
-            this.parentElement.style.background = '#fef3c7';
+            this.parentElement.style.background = 'var(--yellow-100)';
         });
     });
     
     // Initialize first selection
     document.querySelector('.cat-option input:checked').parentElement.style.borderColor = '#fbbf24';
-    document.querySelector('.cat-option input:checked').parentElement.style.background = '#fef3c7';
+    document.querySelector('.cat-option input:checked').parentElement.style.background = 'var(--yellow-100)';
     
     function openCreateModal() {
         document.getElementById('prayerModal').style.display = 'block';

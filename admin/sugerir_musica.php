@@ -48,7 +48,7 @@ renderPageHeader('Sugerir Música', 'Envie uma sugestão para o repertório');
     }
 
     .form-label .required {
-        color: #ef4444;
+        color: var(--rose-500);
     }
 
     .form-input {
@@ -98,12 +98,12 @@ renderPageHeader('Sugerir Música', 'Envie uma sugestão para o repertório');
     }
 
     .btn-secondary {
-        background: #f1f5f9;
-        color: #64748b;
+        background: var(--slate-100);
+        color: var(--slate-500);
     }
 
     .btn-secondary:hover {
-        background: #e2e8f0;
+        background: var(--slate-200);
     }
 
     .btn-success {

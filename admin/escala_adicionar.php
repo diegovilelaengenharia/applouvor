@@ -218,7 +218,7 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
     <form method="POST" id="wizardForm">
 
         <!-- PASSO 1: Detalhes -->
-        <div class="form-card active" id="step-1" style="--card-color: #3b82f6; --focus-shadow: rgba(59, 130, 246, 0.1);">
+        <div class="form-card active" id="step-1" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
             <div class="card-title"><i data-lucide="calendar" style="width: 16px;"></i> Informações</div>
             
             <div style="margin-bottom: 20px;">
@@ -261,7 +261,7 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         </div>
 
         <!-- PASSO 2: Equipe -->
-        <div class="form-card" id="step-2" style="--card-color: #22c55e; --focus-shadow: rgba(34, 197, 94, 0.1);">
+        <div class="form-card" id="step-2" style="--card-color: var(--sage-500); --focus-shadow: rgba(34, 197, 94, 0.1);">
             <div class="card-title"><i data-lucide="users" style="width: 16px;"></i> Selecionar Equipe</div>
             
             <div style="position: relative; margin-bottom: 16px;">
@@ -283,7 +283,7 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         </div>
 
         <!-- PASSO 3: Músicas -->
-        <div class="form-card" id="step-3" style="--card-color: #f59e0b; --focus-shadow: rgba(245, 158, 11, 0.1);">
+        <div class="form-card" id="step-3" style="--card-color: var(--yellow-500); --focus-shadow: rgba(245, 158, 11, 0.1);">
             <div class="card-title"><i data-lucide="music" style="width: 16px;"></i> Selecionar Repertório</div>
 
             <div style="position: relative; margin-bottom: 16px;">
@@ -315,7 +315,7 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
             ">Próximo</button>
 
             <button type="submit" id="btn-finish" style="
-                flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #16a34a, #15803d); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); font-size: var(--font-body);
+                flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--sage-600), var(--sage-700)); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); font-size: var(--font-body);
             ">Finalizar Escala</button>
         </div>
 
