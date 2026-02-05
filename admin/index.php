@@ -352,12 +352,12 @@ renderAppHeader('Visão Geral');
 <style>
     /* Hero Section */
     .hero-section {
-        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        background: var(--slate-600);
         padding: 24px 20px;
         margin: -20px -20px 20px -20px;
         color: white;
         border-radius: 0 0 20px 20px;
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .hero-greeting {
@@ -410,8 +410,8 @@ renderAppHeader('Visão Geral');
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.5s;
+        background: transparent;
+        display: none;
     }
 
     .access-card:active {
@@ -495,36 +495,36 @@ renderAppHeader('Visão Geral');
     
     /* GESTÃO → AZUL */
     .card-blue, .card-emerald { /* Gestão: Escalas, Repertório, Membros, Agenda, Ausências */
-        background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
-        border: 1px solid #93c5fd;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
     }
     .card-blue .card-icon, .card-emerald .card-icon { color: var(--slate-600); }
 
     /* GESTÃO → AZUL CLARO (Stats/Relatórios) */
     .card-slate { /* Estatísticas e Relatórios */
-        background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
-        border: 1px solid #bfdbfe;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
     }
     .card-slate .card-icon { color: #60a5fa; }
 
     /* ESPIRITUAL → VERDE */
     .card-green, .card-cyan, .card-indigo, .card-rose { /* Espiritual: Devocional, Oração, Leitura */
-        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-        border: 1px solid #6ee7b7;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
     }
     .card-green .card-icon, .card-cyan .card-icon, .card-indigo .card-icon, .card-rose .card-icon { color: #059669; }
 
     /* COMUNICAÇÃO → ROXO */
     .card-violet, .card-purple, .card-amber, .card-fuchsia { /* Comunicação: Avisos, Aniversariantes */
-        background: linear-gradient(135deg, var(--lavender-50) 0%, #ede9fe 100%);
-        border: 1px solid #c4b5fd;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
     }
     .card-violet .card-icon, .card-purple .card-icon, .card-amber .card-icon, .card-fuchsia .card-icon { color: #7c3aed; }
 
     /* ADMIN → VERMELHO */
     .card-red { /* Líder */
-        background: linear-gradient(135deg, var(--rose-100) 0%, var(--rose-200) 100%);
-        border: 1px solid #fca5a5;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
     }
     .card-red .card-icon { color: var(--rose-600); }
 
