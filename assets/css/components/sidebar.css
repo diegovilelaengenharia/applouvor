@@ -1,5 +1,5 @@
 /* ========================================
-   SIDEBAR COLORS - PALETA PERSONALIZADA
+   SIDEBAR - DESIGN LIMPO E MODERNO
    ======================================== */
 
 /* Estilos base para Material Icons na sidebar */
@@ -17,187 +17,274 @@
     transition: all 0.2s;
 }
 
-/* 🎨 VISÃO GERAL → MULTICOLOR (Ícone especial) */
-.nav-item.nav-multicolor:hover,
-.nav-item.nav-multicolor.active {
-    background-color: var(--blue-50);
+/* ========================================
+   NAVEGAÇÃO - ESTILO UNIFICADO E LIMPO
+   ======================================== */
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin: 2px 8px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--slate-700);
+    font-weight: 500;
+    font-size: var(--font-body);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background: transparent;
 }
 
-/* Cores semânticas para navegação - GESTÃO (Azul Vibrante) */
-.nav-blue {
-    color: var(--text-main);
-    /* Texto SEMPRE neutro */
+/* Ícones - Cinza neutro por padrão */
+.nav-item svg,
+.nav-item .material-symbols-outlined {
+    color: var(--slate-500);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
 }
 
-.nav-blue:hover {
-    background: var(--blue-50);
-    color: var(--text-main);
-    /* Texto SEMPRE neutro */
+/* Hover - Efeito sutil com sombra leve */
+.nav-item:hover {
+    background: var(--slate-50);
+    color: var(--slate-900);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transform: translateX(2px);
 }
 
-.nav-blue.active {
-    background: var(--blue-100);
-    color: var(--text-main);
-    /* Texto SEMPRE neutro */
+/* Ativo - Destaque suave */
+.nav-item.active {
+    background: var(--slate-100);
+    color: var(--slate-900);
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* ========================================
+   CORES SEMÂNTICAS NO HOVER - POR CATEGORIA
+   ======================================== */
+
+/* 🔵 GESTÃO - Azul no hover */
+.nav-item.nav-blue:hover {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+}
+
+.nav-item.nav-blue:hover svg,
+.nav-item.nav-blue:hover .material-symbols-outlined {
+    color: #3b82f6;
+}
+
+.nav-item.nav-blue.active {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
     border-left: 3px solid #3b82f6;
-}
-
-/* Apenas ícones coloridos */
-.nav-blue svg {
-    color: #3b82f6 !important;
-    stroke: #3b82f6 !important;
-}
-
-.nav-blue:hover svg,
-.nav-blue.active svg {
-    color: #2563eb !important;
-    stroke: #2563eb !important;
 }
 
 .nav-item.nav-blue.active svg,
 .nav-item.nav-blue.active .material-symbols-outlined {
-    color: var(--blue-600);
+    color: #2563eb;
 }
 
-/* 🜢 ESPIRITUAL → VERDE VIBRANTE */
-.nav-item.nav-green {
-    color: var(--text-main);
-    /* Texto neutro */
+/* 🟢 ESPIRITUAL - Verde no hover */
+.nav-item.nav-green:hover {
+    background: linear-gradient(135deg, #e8f9f0 0%, #d1f2e1 100%);
+    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.12);
 }
 
-.nav-item.nav-green svg,
-.nav-item.nav-green .material-symbols-outlined {
-    color: var(--green-500);
+.nav-item.nav-green:hover svg,
+.nav-item.nav-green:hover .material-symbols-outlined {
+    color: #24CE6B;
 }
 
-.nav-item.nav-green:hover,
 .nav-item.nav-green.active {
-    background-color: var(--green-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    background: linear-gradient(135deg, #d1f2e1 0%, #a3e5c3 100%);
+    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.15);
+    border-left: 3px solid #24CE6B;
 }
 
 .nav-item.nav-green.active svg,
 .nav-item.nav-green.active .material-symbols-outlined {
-    color: var(--green-600);
+    color: #1da456;
 }
 
-/* 🜡 COMUNICAÇÃO → AMARELO VIBRANTE */
-.nav-item.nav-yellow {
-    color: var(--text-main);
-    /* Texto neutro */
+/* 🟡 COMUNICAÇÃO - Amarelo no hover */
+.nav-item.nav-yellow:hover {
+    background: linear-gradient(135deg, #fffbeb 0%, #fff4d1 100%);
+    box-shadow: 0 2px 8px rgba(255, 197, 1, 0.12);
 }
 
-.nav-item.nav-yellow svg,
-.nav-item.nav-yellow .material-symbols-outlined {
-    color: var(--yellow-500);
+.nav-item.nav-yellow:hover svg,
+.nav-item.nav-yellow:hover .material-symbols-outlined {
+    color: #FFC501;
 }
 
-.nav-item.nav-yellow:hover,
 .nav-item.nav-yellow.active {
-    background-color: var(--yellow-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    background: linear-gradient(135deg, #fff4d1 0%, #ffe9a3 100%);
+    box-shadow: 0 2px 8px rgba(255, 197, 1, 0.15);
+    border-left: 3px solid #FFC501;
 }
 
 .nav-item.nav-yellow.active svg,
 .nav-item.nav-yellow.active .material-symbols-outlined {
-    color: var(--yellow-600);
+    color: #e6b001;
 }
 
-/* Compatibilidade com classes antigas */
+/* 🔴 CRÍTICO - Vermelho no hover */
+.nav-item.nav-red:hover {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
+}
+
+.nav-item.nav-red:hover svg,
+.nav-item.nav-red:hover .material-symbols-outlined {
+    color: #ef4444;
+}
+
+.nav-item.nav-red.active {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+    border-left: 3px solid #ef4444;
+}
+
+.nav-item.nav-red.active svg,
+.nav-item.nav-red.active .material-symbols-outlined {
+    color: #dc2626;
+}
+
+/* 🎨 MULTICOLOR - Visão Geral */
+.nav-item.nav-multicolor:hover {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.12);
+}
+
+.nav-item.nav-multicolor:hover svg,
+.nav-item.nav-multicolor:hover .material-symbols-outlined {
+    color: #0ea5e9;
+}
+
+.nav-item.nav-multicolor.active {
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.15);
+    border-left: 3px solid #0ea5e9;
+}
+
+/* ========================================
+   COMPATIBILIDADE COM CLASSES ANTIGAS
+   ======================================== */
+
 .nav-item.nav-emerald {
-    /* Mapeia para azul */
-    background: inherit;
-}
-
-.nav-item.nav-emerald svg {
-    color: var(--blue-500);
-}
-
-.nav-item.nav-emerald:hover,
-.nav-item.nav-emerald.active {
-    background-color: var(--blue-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    @extend .nav-item.nav-blue;
 }
 
 .nav-item.nav-violet {
-    /* Mapeia para azul */
-    background: inherit;
-}
-
-.nav-item.nav-violet svg {
-    color: var(--blue-500);
-}
-
-.nav-item.nav-violet:hover,
-.nav-item.nav-violet.active {
-    background-color: var(--blue-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    @extend .nav-item.nav-blue;
 }
 
 .nav-item.nav-indigo {
-    /* Mapeia para verde */
-    background: inherit;
-}
-
-.nav-item.nav-indigo svg {
-    color: var(--green-500);
-}
-
-.nav-item.nav-indigo:hover,
-.nav-item.nav-indigo.active {
-    background-color: var(--green-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    @extend .nav-item.nav-green;
 }
 
 .nav-item.nav-rose {
-    /* Mapeia para verde */
-    background: inherit;
-}
-
-.nav-item.nav-rose svg {
-    color: var(--green-500);
-}
-
-.nav-item.nav-rose:hover,
-.nav-item.nav-rose.active {
-    background-color: var(--green-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    @extend .nav-item.nav-green;
 }
 
 .nav-item.nav-cyan {
-    /* Mapeia para verde */
-    background: inherit;
-}
-
-.nav-item.nav-cyan svg {
-    color: var(--green-500);
-}
-
-.nav-item.nav-cyan:hover,
-.nav-item.nav-cyan.active {
-    background-color: var(--green-100);
-    color: var(--text-main);
-    /* Texto neutro */
+    @extend .nav-item.nav-green;
 }
 
 .nav-item.nav-amber {
-    /* Mapeia para amarelo */
-    background: inherit;
+    @extend .nav-item.nav-yellow;
 }
 
-.nav-item.nav-amber svg {
-    color: var(--yellow-500);
+/* Mapeamento manual para compatibilidade */
+.nav-item.nav-emerald:hover,
+.nav-item.nav-violet:hover {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
 }
 
-.nav-item.nav-amber:hover,
-.nav-item.nav-amber.active {
-    background-color: var(--yellow-100);
-    color: var(--text-main);
-    /* Texto neutro */
+.nav-item.nav-emerald:hover svg,
+.nav-item.nav-violet:hover svg {
+    color: #3b82f6;
+}
+
+.nav-item.nav-indigo:hover,
+.nav-item.nav-rose:hover,
+.nav-item.nav-cyan:hover {
+    background: linear-gradient(135deg, #e8f9f0 0%, #d1f2e1 100%);
+    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.12);
+}
+
+.nav-item.nav-indigo:hover svg,
+.nav-item.nav-rose:hover svg,
+.nav-item.nav-cyan:hover svg {
+    color: #24CE6B;
+}
+
+.nav-item.nav-amber:hover {
+    background: linear-gradient(135deg, #fffbeb 0%, #fff4d1 100%);
+    box-shadow: 0 2px 8px rgba(255, 197, 1, 0.12);
+}
+
+.nav-item.nav-amber:hover svg {
+    color: #FFC501;
+}
+
+/* ========================================
+   DIVIDERS E LABELS
+   ======================================== */
+
+.nav-divider {
+    height: 1px;
+    background: var(--slate-200);
+    margin: 12px 16px;
+}
+
+/* ========================================
+   SIDEBAR HEADER - Logo e Nome
+   ======================================== */
+
+.sidebar-header-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    margin: 8px;
+}
+
+.sidebar-header-hover:hover {
+    background: var(--slate-50);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-logo {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-header-hover:hover .sidebar-logo {
+    transform: scale(1.05);
+}
+
+.sidebar-church-name,
+.sidebar-app-name {
+    transition: all 0.3s;
+}
+
+.sidebar-header-hover:hover .sidebar-church-name {
+    color: var(--slate-900);
+}
+
+.sidebar-header-hover:hover .sidebar-app-name {
+    color: var(--slate-600);
+}
+
+/* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .nav-item {
+        padding: 12px 14px;
+        margin: 3px 10px;
+    }
 }
