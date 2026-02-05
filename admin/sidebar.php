@@ -50,8 +50,8 @@ if (!empty($currentUser['avatar'])) {
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color: var(--slate-600); font-size: 0.95rem;">PIB Oliveira</span>
-                <span class="sidebar-text" style="font-size: 0.7rem; color: var(--slate-500); font-weight: 600;">App Louvor</span>
+                <span class="sidebar-text" style="color: var(--blue-600); font-size: 0.95rem; font-weight: 700;">PIB Oliveira</span>
+                <span class="sidebar-text" style="font-size: 0.7rem; color: var(--green-600); font-weight: 700;">App Louvor</span>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@ if (!empty($currentUser['avatar'])) {
     <nav class="sidebar-nav">
         <!-- (Botão líder removido da sidebar e movido para header) -->
 
-        <a href="<?= $baseAdmin ?>index.php" class="nav-item nav-primary <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>index.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="7" height="9" x="3" y="3" rx="1" />
                 <rect width="7" height="5" x="14" y="3" rx="1" />
