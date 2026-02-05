@@ -73,7 +73,7 @@ if (!empty($currentUser['avatar'])) {
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
 
-        <a href="<?= $baseAdmin ?>escalas.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>escalas.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 2v4" />
                 <path d="M16 2v4" />
@@ -88,7 +88,7 @@ if (!empty($currentUser['avatar'])) {
             </svg>
             <span class="sidebar-text">Escalas</span>
         </a>
-        <a href="<?= $baseAdmin ?>repertorio.php" class="nav-item nav-violet <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>repertorio.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="8" cy="18" r="4" />
                 <path d="M12 18V2l7 4" />
@@ -96,7 +96,7 @@ if (!empty($currentUser['avatar'])) {
             <span class="sidebar-text">Repertório</span>
         </a>
 
-        <a href="<?= $baseAdmin ?>historico.php" class="nav-item nav-violet <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>historico.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 3v5h5"/>
                 <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/>
@@ -115,7 +115,7 @@ if (!empty($currentUser['avatar'])) {
             <span class="sidebar-text">Membros</span>
         </a>
 
-        <a href="<?= $baseAdmin ?>indisponibilidade.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>indisponibilidade.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 2v4" />
                 <path d="M16 2v4" />
@@ -126,7 +126,7 @@ if (!empty($currentUser['avatar'])) {
             <span class="sidebar-text">Ausências</span>
         </a>
 
-        <a href="<?= $baseAdmin ?>agenda.php" class="nav-item nav-emerald <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>agenda.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 2v4" />
                 <path d="M16 2v4" />
@@ -140,7 +140,7 @@ if (!empty($currentUser['avatar'])) {
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
 
-        <a href="<?= $baseAdmin ?>devocionais.php" class="nav-item nav-indigo <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>devocionais.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                 <path d="M12 8a2 2 0 1 1-2.2 1.8" />
@@ -148,13 +148,13 @@ if (!empty($currentUser['avatar'])) {
             </svg>
             <span class="sidebar-text">Devocional</span>
         </a>
-        <a href="<?= $baseAdmin ?>oracao.php" class="nav-item nav-rose <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>oracao.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
             </svg>
             <span class="sidebar-text">Oração</span>
         </a>
-        <a href="<?= $baseAdmin ?>leitura.php" class="nav-item nav-cyan <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>leitura.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
@@ -165,7 +165,7 @@ if (!empty($currentUser['avatar'])) {
         <div class="nav-divider"></div>
         <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
 
-        <a href="<?= $baseAdmin ?>avisos.php" class="nav-item nav-amber <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>avisos.php" class="nav-item nav-yellow <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
