@@ -355,7 +355,7 @@ try {
     }
 
     .stats-badge {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: var(--gradient-rose-primary);
         color: white;
         padding: 2px 6px;
         border-radius: 10px;
@@ -405,8 +405,8 @@ try {
     }
 
     .alerts-container {
-        background: #fffbeb;
-        border: 1px solid #fde68a;
+        background: var(--slate-50);
+        border: 1px solid var(--slate-200);
         border-radius: var(--radius-lg);
         padding: 8px;
         margin-bottom: 12px;
@@ -483,7 +483,7 @@ try {
 
     <!-- 1. Gestão (Acesso Rápido) -->
     <div class="section-header">
-        <div style="background: linear-gradient(135deg, #376ac8, #2c55a0); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: var(--gradient-slate-primary); padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Gestão</h2>
@@ -501,7 +501,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #ebf0fa; color: #376ac8; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--slate-100); color: var(--slate-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="users" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -518,7 +518,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #f0f9ff; color: #0ea5e9; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="bell" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -533,7 +533,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #fee2e2; color: #ef4444; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--rose-100); color: var(--rose-500); padding: 10px; border-radius: 10px;">
                 <i data-lucide="calendar-x" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -548,7 +548,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #fdf2f8; color: #db2777; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="cake" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -563,7 +563,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #ebf0fa; color: #376ac8; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--slate-100); color: var(--slate-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="inbox" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -578,7 +578,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #faf5ff; color: #7e22ce; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--lavender-50); color: var(--lavender-700); padding: 10px; border-radius: 10px;">
                 <i data-lucide="tags" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -590,7 +590,7 @@ try {
 
     <!-- 2. Estatísticas (Separado) -->
     <div class="section-header">
-        <div style="background: linear-gradient(135deg, #3b82f6, #2563eb); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: var(--gradient-slate-primary); padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Estatísticas</h2>
@@ -605,7 +605,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #eff6ff; color: #3b82f6; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--slate-50); color: var(--slate-500); padding: 10px; border-radius: 10px;">
                  <i data-lucide="activity" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -620,7 +620,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #fdf2f8; color: #db2777; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
                  <i data-lucide="pie-chart" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -632,7 +632,7 @@ try {
 
     <!-- 3. Criar Novo -->
     <div class="section-header">
-        <div style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: var(--gradient-lavender-primary); padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Criar Novo</h2>
@@ -647,7 +647,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #f5f3ff; color: #8b5cf6; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="calendar-plus" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -662,7 +662,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-             <div style="background: #f0fdf4; color: #22c55e; padding: 10px; border-radius: 10px;">
+             <div style="background: var(--sage-50); color: var(--sage-500); padding: 10px; border-radius: 10px;">
                 <i data-lucide="music" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -677,7 +677,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #fffbeb; color: #f59e0b; padding: 10px; border-radius: 10px;">
+            <div style="background: var(--slate-50); color: var(--slate-400); padding: 10px; border-radius: 10px;">
                 <i data-lucide="megaphone" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -706,21 +706,21 @@ try {
                 $isHidden = $i > 5;
                 
                 $icon = 'circle';
-                $color = '#64748b';
-                $bg = '#f1f5f9';
+                $color = 'var(--slate-500)';
+                $bg = 'var(--slate-100)';
 
                 if ($activity['tipo'] === 'escala') {
                     $icon = 'calendar';
-                    $color = '#8b5cf6';
-                    $bg = '#f5f3ff';
+                    $color = 'var(--lavender-600)';
+                    $bg = 'var(--lavender-50)';
                 } elseif ($activity['tipo'] === 'musica') {
                     $icon = 'music';
-                    $color = '#22c55e';
-                    $bg = '#f0fdf4';
+                    $color = 'var(--sage-500)';
+                    $bg = 'var(--sage-50)';
                 } elseif ($activity['tipo'] === 'aviso') {
                     $icon = 'bell';
-                    $color = '#f59e0b';
-                    $bg = '#fffbeb';
+                    $color = 'var(--slate-400)';
+                    $bg = 'var(--slate-50)';
                 }
             ?>
                 <div class="activity-item <?= $isHidden ? 'hidden-activity' : '' ?>" style="<?= $isHidden ? 'display: none;' : '' ?>">
