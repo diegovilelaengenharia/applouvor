@@ -93,12 +93,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
         <a href="escala_adicionar.php" class="ripple" style="
             width: 48px; height: 48px; 
-            background: #22c55e; 
+            background: #376ac8; 
             color: white; 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             text-decoration: none;
-            box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(55, 106, 200, 0.2);
             transition: all 0.2s;
         ">
             <i data-lucide="plus" style="width: 24px;"></i>
@@ -152,8 +152,8 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     // Definir Tema de Cor (Moderate Palette)
                     $type = mb_strtolower($schedule['event_type']);
                     if (strpos($type, 'domingo') !== false) {
-                        $themeColor = '#22c55e'; // Green 500
-                        $themeLight = '#f0fdf4'; // Green 50
+                        $themeColor = '#376ac8'; // Smart Blue 500
+                        $themeLight = '#ebf0fa'; // Smart Blue 50
                     } elseif (strpos($type, 'ensaio') !== false) {
                         $themeColor = '#f59e0b'; // Amber 500
                         $themeLight = '#fffbeb'; // Amber 50
@@ -164,14 +164,14 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         $themeColor = '#ec4899'; // Pink 500
                         $themeLight = '#fdf2f8'; // Pink 50
                     } else {
-                        $themeColor = '#3b82f6'; // Blue 500
-                        $themeLight = '#eff6ff'; // Blue 50
+                        $themeColor = '#376ac8'; // Blue 500
+                        $themeLight = '#ebf0fa'; // Blue 50
                     }
 
                     // Sobrescrever se for HOJE (Destaque sutil)
                     if ($isToday) {
-                        $themeColor = '#22c55e'; // Green 500
-                        $themeLight = '#f0fdf4'; // Green 50
+                        $themeColor = '#376ac8'; // Smart Blue 500
+                        $themeLight = '#ebf0fa'; // Smart Blue 50
                     }
 
                     // Buscar participantes (Top 5)
@@ -211,8 +211,8 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     
                     // Cores de fundo do card baseado na data
                     if ($isToday) {
-                        $cardBg = '#f0fdf4'; // Verde muito claro
-                        $cardBorderColor = '#86efac'; // Verde claro
+                        $cardBg = '#ebf0fa'; // Blue muito claro
+                        $cardBorderColor = '#93c5fd'; // Blue claro
                     } else {
                         $cardBg = '#fefce8'; // Amarelo muito claro
                         $cardBorderColor = '#fde047'; // Amarelo claro
@@ -267,7 +267,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         <span style="
                                             font-size: 0.65rem;
                                             color: white;
-                                            background: #10b981;
+                                            background: #376ac8;
                                             padding: 3px 8px;
                                             border-radius: 6px;
                                             font-weight: 700;

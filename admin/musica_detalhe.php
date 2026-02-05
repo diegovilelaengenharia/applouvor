@@ -206,7 +206,7 @@ if (!$song) {
 
     // Definição do Status Visual
     $statusLabel = 'Normal';
-    $statusColor = '#22c55e'; // Green 500
+    $statusColor = '#376ac8'; // Smart Blue
     $statusDesc = 'Frequência equilbrada';
     $statusIcon = 'check-circle';
 
@@ -336,10 +336,10 @@ document.addEventListener(\'click\', function(e) {
 
         .sh-icon {
             width: 64px; height: 64px;
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            background: linear-gradient(135deg, #376ac8 0%, #2c55a0 100%);
             border-radius: 16px;
             display: inline-flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
+            box-shadow: 0 8px 20px rgba(55, 106, 200, 0.25);
             margin-bottom: 16px;
         }
 
@@ -508,7 +508,7 @@ document.addEventListener(\'click\', function(e) {
                 <?php if (!empty($tags)): ?>
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
                         <?php foreach ($tags as $tag): 
-                            $tagColor = $tag['color'] ?? '#22c55e';
+                            $tagColor = $tag['color'] ?? '#376ac8';
                         ?>
                             <span style="padding: 6px 14px; background: <?= $tagColor ?>15; color: <?= $tagColor ?>; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
                                 <?= htmlspecialchars($tag['name']) ?>

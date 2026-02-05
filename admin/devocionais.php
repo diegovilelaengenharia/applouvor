@@ -264,7 +264,7 @@ renderAppHeader('Devocionais');
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #376ac8, #2c55a0);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -453,7 +453,7 @@ renderAppHeader('Devocionais');
     /* Type Badges */
     .type-text { background: #ecfdf5; color: #047857; }
     .type-video { background: #fef2f2; color: #dc2626; }
-    .type-audio { background: #f5f3ff; color: #7c3aed; }
+    .type-audio { background: #ebf0fa; color: #376ac8; }
     .type-link { background: #eff6ff; color: #2563eb; }
     
     /* FAB */
@@ -464,10 +464,10 @@ renderAppHeader('Devocionais');
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #376ac8, #2c55a0);
         color: white;
         border: none;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -477,7 +477,7 @@ renderAppHeader('Devocionais');
     }
     .fab-create:hover {
         transform: scale(1.05);
-        box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 6px 25px rgba(55, 106, 200, 0.5);
     }
     
     /* Filter Tabs */
@@ -505,9 +505,9 @@ renderAppHeader('Devocionais');
         background: var(--border-color);
     }
     .filter-tab.active {
-        background: var(--primary);
+        background: #376ac8;
         color: white;
-        border-color: var(--primary);
+        border-color: #376ac8;
     }
     
     /* Reações */
@@ -518,8 +518,8 @@ renderAppHeader('Devocionais');
     }
     
     .reaction-btn.reacted {
-        background: var(--primary);
-        border-color: var(--primary);
+        background: #376ac8;
+        border-color: #376ac8;
     }
     
     .reaction-btn.reacted span {
@@ -547,7 +547,7 @@ renderAppHeader('Devocionais');
     }
     
     .devotional-card.collapsed:hover {
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        box-shadow: 0 4px 12px rgba(55, 106, 200, 0.15);
         transform: translateY(-2px);
     }
     
@@ -577,7 +577,7 @@ renderAppHeader('Devocionais');
         position: absolute;
         bottom: 12px;
         right: 16px;
-        background: var(--primary);
+        background: #376ac8;
         color: white;
         padding: 4px 10px;
         border-radius: 12px;
@@ -603,8 +603,8 @@ renderAppHeader('Devocionais');
     }
     
     .devotional-card.unread {
-        background: linear-gradient(to right, #ffffff, #f8f7ff);
-        border-left: 3px solid var(--primary);
+        background: linear-gradient(to right, #ffffff, #ebf0fa);
+        border-left: 3px solid #376ac8;
     }
     /* Barra de Filtros Inteligente */
     .filter-toolbar {

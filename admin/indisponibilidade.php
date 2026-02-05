@@ -172,7 +172,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
         <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
             <button onclick="openModal()" class="ripple" style="
                 width: 100%;
-                background: #10b981; 
+                background: #376ac8; 
                 border: none; 
                 padding: 14px 20px; 
                 border-radius: 12px; 
@@ -180,7 +180,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                 font-weight: 700; 
                 font-size: 1rem; 
                 cursor: pointer; 
-                box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2); 
+                box-shadow: 0 4px 6px -1px rgba(55, 106, 200, 0.2); 
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
@@ -232,7 +232,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                     <div style="background: white; border-radius: 16px; padding: 0; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; overflow: hidden; position: relative;">
                         
                         <!-- Barra Lateral Colorida (Opcional, decorativa) -->
-                        <div style="width: 6px; background: var(--primary);"></div>
+                        <div style="width: 6px; background: #376ac8;"></div>
 
                         <div style="flex: 1; padding: 16px; display: flex; gap: 16px; align-items: flex-start;">
                             
@@ -355,7 +355,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
                 <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 12px; text-align: center;">
                     <div id="recordingControls">
-                        <button type="button" id="btnStartRecord" onclick="startRecording()" style="background: #0ea5e9; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <button type="button" id="btnStartRecord" onclick="startRecording()" style="background: #376ac8; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                             <i data-lucide="mic" width="16"></i> Gravar Explicação
                         </button>
                         <button type="button" id="btnStopRecord" onclick="stopRecording()" style="display: none; background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; align-items: center; gap: 6px;">
@@ -395,7 +395,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeModal()" style="flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: #166534; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: #376ac8; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
                     <span id="submitText">Registrar</span>
                 </button>
             </div>

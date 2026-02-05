@@ -171,18 +171,18 @@ renderAppHeader('Avisos');
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <style>
-    /* === PALETA ROXA MODERNA === */
+    /* === PALETA SMART BLUE === */
     :root {
-        --purple-primary: #7c3aed;
-        --purple-light: #8b5cf6;
-        --purple-bg: #f5f3ff;
-        --purple-border: #e9d5ff;
+        --purple-primary: #376ac8;
+        --purple-light: #60a5fa;
+        --purple-bg: #eff6ff;
+        --purple-border: #bfdbfe;
     }
 
 
     /* === HERO SECTION SIMPLIFICADO === */
     .hero-avisos {
-        background: #f5f3ff; /* Roxo muito claro */
+        background: #eff6ff; /* Blue muito claro */
         padding: 20px;
         margin: -20px -20px 20px -20px;
         border-radius: 0 0 16px 16px;
@@ -202,7 +202,7 @@ renderAppHeader('Avisos');
     .hero-icon {
         width: 48px;
         height: 48px;
-        background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+        background: linear-gradient(135deg, #376ac8 0%, #2c55a0 100%);
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -222,14 +222,14 @@ renderAppHeader('Avisos');
     .hero-title {
         font-size: 1.25rem;
         font-weight: 700;
-        color: #5b21b6;
+        color: #1e3a8a;
         margin: 0 0 4px;
         letter-spacing: -0.01em;
     }
 
     .hero-subtitle {
         font-size: 0.875rem;
-        color: #7c3aed;
+        color: #376ac8;
         margin: 0;
         line-height: 1.4;
     }
@@ -269,7 +269,7 @@ renderAppHeader('Avisos');
 
     .search-input:focus {
         border-color: var(--purple-primary);
-        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        box-shadow: 0 0 0 4px rgba(55, 106, 200, 0.1);
     }
 
     .search-input::placeholder {
@@ -408,7 +408,7 @@ renderAppHeader('Avisos');
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid var(--purple-bg);
-        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
+        box-shadow: 0 2px 8px rgba(55, 106, 200, 0.15);
     }
 
     .aviso-avatar-placeholder {
@@ -422,7 +422,7 @@ renderAppHeader('Avisos');
         color: white;
         font-weight: 700;
         font-size: 0.9rem;
-        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
+        box-shadow: 0 2px 8px rgba(55, 106, 200, 0.15);
     }
 
     .aviso-author-info {
@@ -541,7 +541,7 @@ renderAppHeader('Avisos');
         color: white;
         border-color: var(--purple-primary);
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(124, 58, 237, 0.2);
+        box-shadow: 0 4px 8px rgba(55, 106, 200, 0.2);
     }
 
     .action-btn.danger:hover {
@@ -743,7 +743,7 @@ renderAppHeader('Avisos');
 
     .form-input:focus, .form-select:focus, .form-textarea:focus {
         border-color: var(--purple-primary);
-        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+        box-shadow: 0 0 0 4px rgba(55, 106, 200, 0.1);
     }
 
     .form-textarea {
@@ -782,12 +782,12 @@ renderAppHeader('Avisos');
     .btn-primary {
         background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
         color: white;
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);
     }
 
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+        box-shadow: 0 6px 16px rgba(55, 106, 200, 0.4);
     }
 
     /* Animations */

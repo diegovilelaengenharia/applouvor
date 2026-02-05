@@ -141,7 +141,7 @@ try {
 
 <div style="display: flex; justify-content: flex-end; padding: 0 16px; margin-bottom: -10px; position: relative; z-index: 10;">
     <button onclick="openHelpModal()" class="ripple" style="
-        background: transparent; border: none; color: var(--primary); font-weight: 600; font-size: 0.85rem;
+        background: transparent; border: none; color: #376ac8; font-weight: 600; font-size: 0.85rem;
         display: flex; align-items: center; gap: 6px; cursor: pointer;
     ">
         <i data-lucide="help-circle" width="16"></i> Entenda as Métricas
@@ -171,7 +171,7 @@ try {
     
     <a href="?tab=laboratorio" class="ripple" style="
         padding: 10px 16px; border-radius: 20px; white-space: nowrap; font-weight: 600; font-size: 0.9rem; text-decoration: none;
-        <?= $currentTab == 'laboratorio' ? 'background: #7c3aed; color: white;' : 'background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color);' ?>
+        <?= $currentTab == 'laboratorio' ? 'background: #376ac8; color: white;' : 'background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color);' ?>
     ">🧪 Laboratório</a>
 </div>
 
@@ -254,9 +254,9 @@ try {
         <div style="margin-top: 32px; text-align: center;">
             <a href="historico.php?tab=laboratorio" class="ripple" style="
                 display: inline-flex; align-items: center; gap: 8px;
-                background: #7c3aed; color: white; padding: 12px 24px;
+                background: #376ac8; color: white; padding: 12px 24px;
                 border-radius: 12px; text-decoration: none; font-weight: 700;
-                box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+                box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);
             ">
                 <i data-lucide="flask-conical" width="20"></i>
                 Ir para o Laboratório de Escolha
@@ -444,7 +444,7 @@ try {
                 <div style="
                     width: 60px; height: 60px; background: white; border: 1px solid var(--border-color);
                     border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-                    margin: 0 auto 16px auto; color: #7c3aed;
+                    margin: 0 auto 16px auto; color: #376ac8;
                 ">
                     <i data-lucide="flask-conical" width="32" height="32"></i>
                 </div>
@@ -464,7 +464,7 @@ try {
                     
                     <!-- Filtro Temporal -->
                     <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                        <input type="checkbox" name="not_played" value="1" <?= isset($_GET['not_played']) ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: #7c3aed;">
+                        <input type="checkbox" name="not_played" value="1" <?= isset($_GET['not_played']) ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: #376ac8;">
                         <div>
                             <div style="font-weight: 600;">Que não tocamos há muito tempo</div>
                             <div style="font-size: 0.8rem; color: var(--text-muted);">Pelo menos 3 meses (90 dias)</div>
@@ -506,7 +506,7 @@ try {
 
                 <button type="submit" class="ripple" style="
                     width: 100%; padding: 14px; border: none; border-radius: 12px;
-                    background: #7c3aed; color: white; font-weight: 700; font-size: 1rem;
+                    background: #376ac8; color: white; font-weight: 700; font-size: 1rem;
                     cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
                 ">
                     <i data-lucide="search" width="20"></i> Analisar e Buscar
@@ -656,7 +656,7 @@ try {
         </div>
 
         <div>
-            <h3 style="font-size: 1rem; color: #7c3aed; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">🧪 Laboratório de Escolha</h3>
+            <h3 style="font-size: 1rem; color: #376ac8; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">🧪 Laboratório de Escolha</h3>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
                 Use esta ferramenta para montar escalas equilibradas.
                 <br>Exemplo: <em>"Preciso de uma música rápida (Tag: Celebração) em Tom D para completar a escala, mas não quero repetir o que já tocamos mês passado."</em>

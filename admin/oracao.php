@@ -648,15 +648,15 @@ renderAppHeader('Pedidos de Oração');
         <?php else: ?>
             <!-- Empty State -->
             <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i data-lucide="heart-handshake" style="color: #f59e0b; width: 40px; height: 40px;"></i>
+                <div style="background: linear-gradient(135deg, #ebf0fa 0%, #dbeafe 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i data-lucide="heart-handshake" style="color: #376ac8; width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;"><?= $showAnswered ? 'Nenhuma oração respondida' : 'Nenhum pedido ainda' ?></h3>
                 <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                     <?= $showAnswered ? 'As orações respondidas aparecerão aqui.' : 'Seja o primeiro a compartilhar um pedido de oração!' ?>
                 </p>
                 <?php if (!$showAnswered): ?>
-                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #376ac8, #2c55a0); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                     <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
                     Novo Pedido
                 </button>

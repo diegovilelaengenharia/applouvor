@@ -157,13 +157,13 @@ if (!$planStarted) {
 
         .plan-card:hover {
             transform: translateY(-2px);
-            border-color: var(--primary, #16a34a);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: #376ac8;
+            box-shadow: 0 4px 12px rgba(55, 106, 200, 0.15);
         }
 
         .plan-card.selected {
-            border: 2px solid var(--primary, #16a34a);
-            background: var(--primary-subtle, #f0fdf4);
+            border: 2px solid #376ac8;
+            background: #eff6ff;
         }
         
         .plan-icon {
@@ -241,7 +241,7 @@ if (!$planStarted) {
         @media(min-width: 640px) { .date-input { width: auto; } }
 
         .btn-start {
-            background: var(--primary, #16a34a);
+            background: #376ac8;
             color: white;
             border: none;
             padding: 12px 24px;
