@@ -313,7 +313,7 @@ renderAppHeader('Visão Geral');
     align-items: center; justify-content: center;
 ">
     <div style="
-        background: #fff; width: 90%; max-width: 400px; border-radius: 20px; 
+        background: var(--bg-surface); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); 
         padding: 24px; position: relative; text-align: center;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         border-top: 6px solid var(--rose-500);
@@ -512,7 +512,7 @@ renderAppHeader('Visão Geral');
         background: var(--bg-surface);
         border: 1px solid var(--border-color);
     }
-    .card-green .card-icon, .card-cyan .card-icon, .card-indigo .card-icon, .card-rose .card-icon { color: #059669; }
+    .card-green .card-icon, .card-cyan .card-icon, .card-indigo .card-icon, .card-rose .card-icon { color: var(--primary); }
 
     /* COMUNICAÇÃO → ROXO */
     .card-violet, .card-purple, .card-amber, .card-fuchsia { /* Comunicação: Avisos, Aniversariantes */

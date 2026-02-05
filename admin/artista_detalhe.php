@@ -60,7 +60,7 @@ renderAppHeader('Artista');
 
 <!-- Hero Header Compacto -->
 <div style="
-    background: linear-gradient(135deg, var(--lavender-600) 0%, #6D28D9 100%); 
+    background: var(--lavender-600); 
     margin: -16px -16px 20px -16px; 
     padding: 16px 16px 40px 16px; 
     border-radius: 0 0 20px 20px; 
@@ -128,7 +128,7 @@ renderAppHeader('Artista');
 
     <?php foreach ($songs as $song): ?>
         <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="song-card ripple">
-            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2D7A4F 0%, #1a4d2e 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 <i data-lucide="music" style="width: 20px; height: 20px; color: white;"></i>
             </div>
             <div style="flex: 1; min-width: 0;">

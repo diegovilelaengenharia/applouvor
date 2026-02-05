@@ -69,11 +69,12 @@ body.dark-mode {
     --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.7);
 
     /* Gradientes */
-    --gradient-primary: linear-gradient(135deg, #376ac8 0%, #2c55a0 100%);
-    --gradient-elegant: linear-gradient(135deg, #0b1528 0%, #080f1c 100%);
-    --gradient-soft: linear-gradient(135deg, #162a50 0%, #0b1528 100%);
-    --gradient-vibrant: linear-gradient(135deg, #376ac8 0%, #87a5de 100%);
-    --gradient-hero: linear-gradient(135deg, #0b1528 0%, #080f1c 100%);
+    /* Gradientes Substituídos por Sólidos */
+    --gradient-primary: #376ac8;
+    --gradient-elegant: #0b1528;
+    --gradient-soft: #162a50;
+    --gradient-vibrant: #376ac8;
+    --gradient-hero: #0b1528;
 }
 
 /* === TRANSIÇÕES SUAVES === */
@@ -126,7 +127,7 @@ body.dark-mode .member-card,
 body.dark-mode .song-card,
 body.dark-mode [class*="card-"],
 body.dark-mode [class*="-card"] {
-    background: linear-gradient(145deg, #1e1e1e 0%, #252525 100%) !important;
+    background: #1e1e1e !important;
     border: 1px solid var(--border-color) !important;
     border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
@@ -222,7 +223,7 @@ body.dark-mode .popup {
 }
 
 body.dark-mode .modal-header {
-    background: linear-gradient(to right, #1e1e1e, #252525) !important;
+    background: #1e1e1e !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     color: white !important;
 }
@@ -354,8 +355,7 @@ body.dark-mode button[onclick*="openConfig"] {
 }
 
 /* Profile Dropdown Headers com gradiente branco */
-body.dark-mode [style*="linear-gradient"][style*="#ffffff"],
-body.dark-mode [style*="linear-gradient"][style*="#f8fafc"] {
+body.dark-mode [style*="#f8fafc"] {
     background: var(--bg-tertiary) !important;
 }
 
@@ -510,8 +510,8 @@ body.dark-mode [style*="color:#047857"] {
 }
 
 /* Texto Verde Médio -> Verde Claro */
-body.dark-mode [style*="color: #059669"],
-body.dark-mode [style*="color:#059669"] {
+body.dark-mode [style*="color: var(--primary)"],
+body.dark-mode [style*="color:var(--primary)"] {
     color: #6ee7b7 !important;
 }
 
@@ -627,7 +627,7 @@ body.dark-mode .sidebar-text {
 
 /* Sidebar Footer - BARRA DE PERFIL PREMIUM */
 body.dark-mode .sidebar-footer {
-    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%) !important;
+    background: #1a1a1a !important;
     border-top: 2px solid rgba(52, 211, 153, 0.2) !important;
     /* Borda verde sutil */
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
@@ -735,7 +735,7 @@ body.dark-mode .sheet-btn:active {
 
 /* Aviso Item Premium */
 body.dark-mode .aviso-item {
-    background: linear-gradient(145deg, #1e1e1e 0%, #252525 100%) !important;
+    background: #1e1e1e !important;
     border: 1px solid var(--border-color) !important;
     border-left-width: 4px !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
@@ -1562,17 +1562,9 @@ body.dark-mode [style*="background: #ffffff"] {
 }
 
 /* Calendar navigation buttons with white gradients */
-body.dark-mode button[style*="background: linear-gradient(90deg, white"] {
-    background: linear-gradient(90deg, var(--bg-surface), transparent) !important;
-}
 
-body.dark-mode button[style*="background: linear-gradient(-90deg, white"] {
-    background: linear-gradient(-90deg, var(--bg-surface), transparent) !important;
-}
 
-/* Light gradient backgrounds */
-body.dark-mode [style*="background: linear-gradient(135deg, #f8fafc"] {
-    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-surface)) !important;
+/*                        $bg = $u['avatar'] ? "url('../assets/uploads/{$u['avatar']}')" : "var(--slate-200)";  background: var(--bg-tertiary) !important;
     color: var(--text-secondary) !important;
 }
 
@@ -1705,7 +1697,7 @@ body.dark-mode [style*="background: #fffbeb"],
 body.dark-mode [style*="background: #eef2ff"],
 body.dark-mode [style*="background: #fff1f2"],
 body.dark-mode [style*="background: #eff6ff"],
-body.dark-mode [style*="background: #f0fdf4"] {
+body.dark-mode [style*="background: var(--primary-50)"] {
     background: #262626 !important;
     border-color: #3f3f46 !important;
 }
@@ -1756,8 +1748,8 @@ body.dark-mode [style*="color: #cbd5e1"] {
 }
 
 /* Card Verde (Hoje) - Dark Mode */
-body.dark-mode .timeline-card[style*="background: #f0fdf4"],
-body.dark-mode a[style*="background: #f0fdf4"] {
+body.dark-mode .timeline-card[style*="background: var(--primary-50)"],
+body.dark-mode a[style*="background: var(--primary-50)"] {
     background: #14532d !important;
     border-color: #166534 !important;
 }
@@ -1795,12 +1787,9 @@ body.dark-mode span[style*="background: #e2e8f0"][style*="color: #64748b"] {
 /* Botões Roxos - Dark Mode (Escurecer) */
 body.dark-mode button[style*="background: #8b5cf6"],
 body.dark-mode button[style*="background:#8b5cf6"],
-body.dark-mode button[style*="background: linear-gradient"][style*="8b5cf6"],
 body.dark-mode [style*="background: #8b5cf6"],
 body.dark-mode [style*="background: #a78bfa"],
-body.dark-mode [style*="background: #7c3aed"],
-body.dark-mode [style*="background: linear-gradient"][style*="violet"],
-body.dark-mode [style*="background: linear-gradient"][style*="purple"] {
+body.dark-mode [style*="background: #7c3aed"] {
     background: #5b21b6 !important;
     border-color: #6d28d9 !important;
 }

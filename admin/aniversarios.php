@@ -66,7 +66,7 @@ renderAppHeader('Aniversariantes');
         transform: translateY(-2px);
     }
     .birthday-card.today {
-        background: linear-gradient(135deg, var(--yellow-100) 0%, #fde68a 100%);
+        background: var(--yellow-100);
         border-color: #fbbf24;
     }
     
@@ -94,7 +94,7 @@ renderAppHeader('Aniversariantes');
     
     /* Date Badge */
     .birthday-date {
-        background: linear-gradient(135deg, #fbbf24, var(--yellow-500));
+        background: #fbbf24;
         color: white;
         padding: 8px 12px;
         border-radius: 12px;
@@ -189,7 +189,7 @@ renderAppHeader('Aniversariantes');
         background: var(--border-color);
     }
     .filter-tab.active {
-        background: linear-gradient(135deg, #fbbf24, var(--yellow-500));
+        background: #fbbf24;
         color: white;
         border-color: transparent;
     }
@@ -201,7 +201,7 @@ renderAppHeader('Aniversariantes');
     
     <!-- Hero Section -->
     <div style="text-align: center; padding: 20px 0 30px;">
-        <div style="background: linear-gradient(135deg, #fbbf24 0%, var(--yellow-500) 100%); width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);">
+        <div style="background: #fbbf24; width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);">
             <i data-lucide="cake" style="color: white; width: 36px; height: 36px;"></i>
         </div>
         <h2 style="font-size: var(--font-h1); font-weight: 800; color: var(--text-main); margin: 0 0 6px;">Parabéns para Você! 🎂</h2>
@@ -213,14 +213,14 @@ renderAppHeader('Aniversariantes');
     <?php if (empty($todosAniversariantes)): ?>
         <!-- Empty State -->
         <div style="text-align: center; padding: 60px 20px;">
-            <div style="background: linear-gradient(135deg, var(--yellow-100) 0%, #fde68a 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <div style="background: var(--yellow-100); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
                 <i data-lucide="calendar-heart" style="color: var(--yellow-500); width: 40px; height: 40px;"></i>
             </div>
             <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhuma data cadastrada</h3>
             <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                 Cadastre a data de nascimento dos membros para ver os aniversários.
             </p>
-            <a href="membros.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none;">
+            <a href="membros.php" style="display: inline-flex; align-items: center; gap: 8px; background: #fbbf24; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none;">
                 <i data-lucide="users" style="width: 18px;"></i>
                 Gerenciar Membros
             </a>
@@ -231,7 +231,7 @@ renderAppHeader('Aniversariantes');
         <?php if (!empty($aniversariantesMesAtual)): ?>
         <div class="month-section">
             <div class="month-header">
-                <div class="month-icon" style="background: linear-gradient(135deg, #fbbf24, var(--yellow-500));">
+                <div class="month-icon" style="background: #fbbf24;">
                     <i data-lucide="sparkles" style="color: white; width: 18px;"></i>
                 </div>
                 <span class="month-title"><?= $mesNomes[$mesAtual] ?></span>
@@ -246,11 +246,11 @@ renderAppHeader('Aniversariantes');
                         $avatar = '../assets/uploads/' . $avatar;
                     }
                     $gradients = [
-                        'linear-gradient(135deg, #667eea, #764ba2)',
-                        'linear-gradient(135deg, #f093fb, #f5576c)',
-                        'linear-gradient(135deg, #4facfe, #00f2fe)',
-                        'linear-gradient(135deg, #43e97b, #38f9d7)',
-                        'linear-gradient(135deg, #fa709a, #fee140)',
+                        '#667eea',
+                        '#f093fb',
+                        '#4facfe',
+                        '#43e97b',
+                        '#fa709a',
                     ];
                     $gradient = $gradients[array_rand($gradients)];
                 ?>
@@ -327,15 +327,15 @@ renderAppHeader('Aniversariantes');
                         $avatar = '../assets/uploads/' . $avatar;
                     }
                     $gradients = [
-                        'linear-gradient(135deg, #667eea, #764ba2)',
-                        'linear-gradient(135deg, #f093fb, #f5576c)',
-                        'linear-gradient(135deg, #4facfe, #00f2fe)',
-                        'linear-gradient(135deg, #43e97b, #38f9d7)',
+                        '#667eea',
+                        '#f093fb',
+                        '#4facfe',
+                        '#43e97b',
                     ];
                     $gradient = $gradients[array_rand($gradients)];
                 ?>
                 <div class="birthday-card">
-                    <div class="birthday-date" style="background: linear-gradient(135deg, var(--slate-400), var(--slate-500));">
+                    <div class="birthday-date" style="background: var(--slate-400);">
                         <div class="day"><?= $niver['dia'] ?></div>
                         <div class="month"><?= substr($mesNomes[$niver['mes']], 0, 3) ?></div>
                     </div>

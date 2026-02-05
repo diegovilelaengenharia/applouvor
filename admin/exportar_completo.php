@@ -33,13 +33,13 @@ echo "\xEF\xBB\xBF";
         }
 
         th {
-            background-color: #2D7A4F;
+            background-color: var(--primary);
             color: white;
             font-weight: bold;
         }
 
         .header-title {
-            background-color: #2D7A4F;
+            background-color: var(--primary);
             color: white;
             font-weight: bold;
             font-size: 14pt;

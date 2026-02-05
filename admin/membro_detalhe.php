@@ -188,7 +188,7 @@ renderAppHeader('Detalhes do Membro');
 
 <!-- Hero Header Compacto -->
 <div style="
-    background: linear-gradient(135deg, var(--sage-600) 0%, var(--sage-700) 100%); 
+    background: var(--sage-600); 
     margin: -16px -16px 20px -16px; 
     padding: 16px 16px 40px 16px; 
     border-radius: 0 0 20px 20px; 

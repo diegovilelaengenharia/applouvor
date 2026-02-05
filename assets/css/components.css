@@ -43,7 +43,8 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--gradient-vibrant);
+    background: #376ac8;
+    /* Fallback Vibrant Blue */
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
@@ -66,7 +67,8 @@
     width: 52px;
     height: 52px;
     border-radius: 14px;
-    background: var(--gradient-soft);
+    background: #162a50;
+    /* Fallback Soft */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,7 +77,8 @@
 }
 
 .quick-access-card:hover .card-icon-wrapper {
-    background: var(--gradient-primary);
+    background: #376ac8;
+    /* Fallback Primary */
     transform: scale(1.1) rotate(5deg);
 }
 
@@ -108,7 +111,7 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    background: var(--gradient-vibrant);
+    background: #376ac8;
     color: white;
     font-size: var(--font-small);
     font-weight: 700;
@@ -119,7 +122,7 @@
 
 /* === HERO SECTION - HEADER MODERNO COMPACTO === */
 .hero-section {
-    background: var(--gradient-primary);
+    background: #376ac8;
     border-radius: 0;
     padding: 16px 20px;
     margin: -20px -20px 24px -20px;
@@ -137,10 +140,7 @@
     left: -100%;
     width: 200%;
     height: 100%;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.1) 50%,
-            transparent 100%);
+    background: rgba(255, 255, 255, 0.1);
     animation: shimmer 3s infinite;
     pointer-events: none;
 }
@@ -153,11 +153,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: repeating-linear-gradient(45deg,
-            transparent,
-            transparent 10px,
-            rgba(255, 255, 255, 0.03) 10px,
-            rgba(255, 255, 255, 0.03) 20px);
+    background-image: none;
     pointer-events: none;
 }
 
@@ -210,7 +206,7 @@
 
 /* === MODERN BUTTONS === */
 .btn-gradient-primary {
-    background: var(--gradient-primary);
+    background: var(--primary);
     color: white;
     border: none;
     border-radius: 12px;
@@ -256,7 +252,7 @@
 }
 
 .btn-gradient-accent {
-    background: var(--gradient-elegant);
+    background: #1F2937;
     color: white;
     border: none;
     border-radius: 12px;
@@ -316,7 +312,7 @@
     width: 48px;
     height: 48px;
     border-radius: 12px;
-    background: var(--gradient-soft);
+    background: #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -346,7 +342,7 @@
 
 /* === BADGE NOTIFICATION === */
 .badge-notification {
-    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    background: #B91C1C;
     color: white;
     font-size: var(--font-small);
     font-weight: 700;
@@ -371,7 +367,7 @@
     border-radius: 50%;
     border: 2px solid var(--bg-secondary);
     margin-left: -12px;
-    background: var(--gradient-vibrant);
+    background: #376ac8;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -444,7 +440,7 @@
     text-align: center;
     padding: 12px 8px;
     border-radius: 12px;
-    background: var(--gradient-soft);
+    background: #e5e7eb;
 }
 
 .schedule-day {
@@ -488,8 +484,8 @@
 }
 
 .schedule-status.confirmed {
-    background: #DCFCE7;
-    color: #166534;
+    background: var(--primary-100);
+    color: var(--primary-900);
 }
 
 .schedule-status.pending {
@@ -501,7 +497,7 @@
 .settings-profile-header {
     text-align: center;
     padding: 32px 20px;
-    background: var(--gradient-soft);
+    background: #F9FAFB;
     border-radius: 20px;
     margin-bottom: 24px;
 }

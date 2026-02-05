@@ -315,7 +315,7 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
             ">Próximo</button>
 
             <button type="submit" id="btn-finish" style="
-                flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--sage-600), var(--sage-700)); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); font-size: var(--font-body);
+                flex: 2; padding: 12px; border: none; border-radius: 12px; background: var(--sage-600); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); font-size: var(--font-body);
             ">Finalizar Escala</button>
         </div>
 

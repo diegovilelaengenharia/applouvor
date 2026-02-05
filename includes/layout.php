@@ -47,7 +47,7 @@ function renderAppHeader($title, $backUrl = null)
             }
         } else {
             $userNameForAvatar = $currentUser['name'] ?? 'U';
-            $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($userNameForAvatar) . '&background=dcfce7&color=166534';
+            $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($userNameForAvatar) . '&background=dbeafe&color=1e40af';
         }
     }
     // Compartilhar com globais ou session para acesso no header
@@ -81,7 +81,7 @@ function renderAppHeader($title, $backUrl = null)
         <meta property="og:url" content="https://app.piboliveira.com.br/">
         
         <!-- PWA Meta Tags -->
-        <meta name="theme-color" content="#059669">
+        <meta name="theme-color" content="#376ac8">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-title" content="App Louvor PIB">
@@ -114,63 +114,7 @@ function renderAppHeader($title, $backUrl = null)
 
         <style>
             /* --- DESIGN SYSTEM 3.0 (Paleta Slate Refinada) --- */
-            :root {
-                /* --- PALETA SMART BLUE (Tech Identity) --- */
-                --primary-50:  #ebf0fa;
-                --primary-100: #d7e1f4;
-                --primary-200: #afc3e9;
-                --primary-300: #87a5de;
-                --primary-400: #5f88d3;
-                --primary-500: #376ac8; /* BRAND PRINCIPAL */
-                --primary-600: #2c55a0;
-                --primary-700: #213f78;
-                --primary-800: #162a50;
-                --primary-900: #0b1528;
-                --primary-950: #080f1c;
-
-                /* Variáveis Semânticas de Marca */
-                --primary: var(--primary-500);
-                --primary-hover: var(--primary-600);
-                --primary-active: var(--primary-700);
-                --primary-light: var(--primary-100);
-                --primary-subtle: var(--primary-50);
-
-                /* Paleta Slate (Neutros) - Mantida para suporte */
-                --slate-50: #f8fafc;
-                --slate-100: #f1f5f9;
-                --slate-200: #e2e8f0;
-                --slate-300: #cbd5e1;
-                --slate-400: #94a3b8;
-                --slate-500: #64748b;
-                --slate-600: #475569;
-                --slate-700: #334155;
-                --slate-800: #1e293b;
-                --slate-900: #0f172a;
-
-                /* Configurações de Tema (Light Mode Default) */
-                --bg-body: var(--slate-50);
-                --bg-surface: #ffffff;
-                --bg-muted: var(--slate-100);
-                
-                --text-main: var(--slate-900);     /* Mais contraste */
-                --text-secondary: var(--slate-600);
-                --text-muted: var(--slate-500);
-                
-                --border-color: var(--slate-200);
-                --border-subtle: var(--slate-100);
-
-                /* Espaçamento e Design */
-                --touch-target: 44px;
-                --radius-md: 8px;
-                --radius-lg: 12px;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-                --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-                
-                /* Semântica (Independentes da Marca) */
-                --success: #22c55e;
-                --warning: #f59e0b;
-                --danger: #ef4444;
-            }
+                /* Variáveis removidas - Use assets/css/design-system.css para edição centralizada */
 
             /* ... Keyframes anteriores ... */
             @keyframes fadeInUp {
@@ -242,7 +186,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* CONFIRMAR/SALVAR → VERDE */
             .btn-success {
-                background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                background: #059669;
                 color: white;
                 border: 1px solid #059669;
             }
@@ -258,7 +202,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* CANCELAR/VOLTAR → AMARELO/DOURADO */
             .btn-warning {
-                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                background: #d97706;
                 color: white;
                 border: 1px solid #d97706;
             }
@@ -274,7 +218,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* DELETAR/EXCLUIR/SAIR → VERMELHO */
             .btn-danger {
-                background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+                background: #dc2626;
                 color: white;
                 border: 1px solid #b91c1c;
             }
@@ -290,7 +234,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* NEUTRO/SECUNDÁRIO → CINZA */
             .btn-secondary {
-                background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+                background: #475569;
                 color: white;
                 border: 1px solid #475569;
             }
@@ -306,7 +250,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* PRIMARY → AZUL (para ações principais neutras) */
             .btn-primary {
-                background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+                background: #2563eb;
                 color: white;
                 border: 1px solid #1e40af;
             }
@@ -1518,7 +1462,7 @@ function renderAppHeader($title, $backUrl = null)
                         100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
                     }
                     .b-nav-item.home-3d .b-nav-icon-wrapper {
-                        background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+                        background: #0D6EFD !important;
                         color: white !important;
                         border: 1px solid rgba(255,255,255,0.3);
                         animation: pulse-blue-3d 2s infinite;
@@ -2062,7 +2006,7 @@ function renderAppHeader($title, $backUrl = null)
                     transform-origin: top right;
                 ">
                     <!-- Header do Card -->
-                    <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, #f8fafc, #ffffff); border-bottom: 1px solid var(--border-color);">
+                    <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: #ffffff; border-bottom: 1px solid var(--border-color);">
                         <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0;">
                             <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -2407,7 +2351,7 @@ function renderAppHeader($title, $backUrl = null)
                 justify-content: center;
                 width: 44px;
                 height: 44px;
-                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                background: #fef3c7;
                 border: 2px solid transparent;
                 border-radius: 12px;
                 text-decoration: none;
@@ -2424,7 +2368,7 @@ function renderAppHeader($title, $backUrl = null)
             
             /* Dark Mode - Líder: Teal Premium (Autoridade + Harmonia) */
             body.dark-mode .admin-crown-btn {
-                background: linear-gradient(145deg, rgba(13, 148, 136, 0.2), rgba(20, 184, 166, 0.15)) !important;
+                background: rgba(13, 148, 136, 0.2) !important;
                 border: 1.5px solid rgba(45, 212, 191, 0.5) !important;
                 color: #5eead4 !important;
                 box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.1), 
@@ -2432,7 +2376,7 @@ function renderAppHeader($title, $backUrl = null)
                             inset 0 1px 0 rgba(94, 234, 212, 0.1) !important;
             }
             body.dark-mode .admin-crown-btn:hover {
-                background: linear-gradient(145deg, rgba(13, 148, 136, 0.35), rgba(20, 184, 166, 0.25)) !important;
+                background: rgba(13, 148, 136, 0.35) !important;
                 border-color: #5eead4 !important;
                 box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.15),
                             0 8px 20px rgba(13, 148, 136, 0.35),
@@ -2539,7 +2483,7 @@ function renderAppHeader($title, $backUrl = null)
                 display: flex;
                 align-items: center;
                 gap: 12px;
-                background: linear-gradient(to bottom, #f8fafc, #ffffff);
+                background: #ffffff;
                 border-bottom: 1px solid var(--border-color);
             }
 
@@ -2639,7 +2583,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* Profile Header - Premium Gradient */
             body.dark-mode .profile-header {
-                background: linear-gradient(135deg, #0f766e 0%, #047857 100%) !important;
+                background: #047857 !important;
                 border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
             }
 
@@ -2673,7 +2617,7 @@ function renderAppHeader($title, $backUrl = null)
 
             /* Líder Item (Dropdown) - Teal Premium */
             body.dark-mode .lider-menu-item .icon-wrapper {
-                background: linear-gradient(145deg, rgba(13, 148, 136, 0.25), rgba(20, 184, 166, 0.2)) !important;
+                background: rgba(13, 148, 136, 0.25) !important;
                 border: 1.5px solid rgba(45, 212, 191, 0.4) !important;
                 color: #5eead4 !important;
                 box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2),
@@ -2690,7 +2634,7 @@ function renderAppHeader($title, $backUrl = null)
             }
 
             body.dark-mode .lider-menu-item:hover .icon-wrapper {
-                background: linear-gradient(145deg, rgba(13, 148, 136, 0.4), rgba(20, 184, 166, 0.3)) !important;
+                background: rgba(13, 148, 136, 0.4) !important;
                 border-color: #5eead4 !important;
                 box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3),
                             inset 0 1px 0 rgba(94, 234, 212, 0.15) !important;

@@ -36,7 +36,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     <div style="position: relative;">
         <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="ripple" style="
             width: 48px; height: 48px; 
-            background: white; 
+            background: var(--bg-surface); 
             border: 1px solid var(--slate-200); 
             color: var(--slate-500); 
             border-radius: 14px; 
@@ -58,7 +58,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             position: absolute;
             top: 56px;
             right: 0;
-            background: white;
+            background: var(--bg-surface);
             border: 1px solid var(--slate-200);
             border-radius: 12px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -99,7 +99,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             btn.style.background = 'var(--slate-100)';
         } else {
             menu.style.display = 'none';
-            btn.style.background = 'white';
+            btn.style.background = 'var(--bg-surface)';
         }
     }
     
@@ -109,7 +109,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         const btn = document.getElementById('options-menu-btn');
         if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
             menu.style.display = 'none';
-            btn.style.background = 'white';
+            btn.style.background = 'var(--bg-surface)';
         }
     });
 </script>

@@ -44,12 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
         <?php if ($success): ?>
             <div style="
                 background: rgba(5, 150, 105, 0.1);
-                border: 2px solid #059669;
+                border: 2px solid var(--primary);
                 border-radius: 12px;
                 padding: 20px;
                 margin-bottom: 20px;
             ">
-                <h3 style="color: #059669; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                <h3 style="color: var(--primary); margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
                     ✅ Instalação Concluída!
                 </h3>
                 <p style="color: var(--text-primary); margin: 0;">
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 <a href="index.php" style="
                     flex: 1;
                     padding: 14px;
-                    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+                    background: #047857;
                     color: white;
                     border: none;
                     border-radius: 8px;
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 <a href="avisos.php" style="
                     flex: 1;
                     padding: 14px;
-                    background: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
+                    background: #FFC107;
                     color: white;
                     border: none;
                     border-radius: 8px;
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 <button type="submit" name="install" value="1" style="
                     width: 100%;
                     padding: 16px;
-                    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+                    background: #047857;
                     color: white;
                     border: none;
                     border-radius: 8px;

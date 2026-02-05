@@ -30,7 +30,7 @@ renderAppHeader('Playlist Selecionada');
     .playlist-header {
         text-align: center;
         padding: 24px 16px;
-        background: linear-gradient(135deg, #2D7A4F 0%, #1a4d2e 100%);
+        background: var(--primary);
         border-radius: 12px;
         color: white;
         margin-bottom: 24px;

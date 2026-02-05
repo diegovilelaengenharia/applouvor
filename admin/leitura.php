@@ -661,9 +661,9 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <!-- CALENDAR STRIP -->
 <div style="position: relative; background: white; border-bottom: 1px solid #e5e7eb;">
-    <button onclick="scrollCalendar('left')" style="position: absolute; left: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: linear-gradient(90deg, white, transparent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-left" width="16"></i></button>
+    <button onclick="scrollCalendar('left')" style="position: absolute; left: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-left" width="16"></i></button>
     <div class="cal-strip" id="calendar-strip"></div>
-    <button onclick="scrollCalendar('right')" style="position: absolute; right: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: linear-gradient(-90deg, white, transparent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-right" width="16"></i></button>
+    <button onclick="scrollCalendar('right')" style="position: absolute; right: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-right" width="16"></i></button>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -870,9 +870,9 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 #note-desc-input a:hover { color: #065f46; }
             </style>
         </div>
-        <div style="padding: 16px 24px; background: #fff; border-top: 1px solid var(--slate-100); display: flex; justify-content: flex-end; gap: 12px;">
-            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid var(--slate-200); background: white; color: var(--slate-500); border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
-            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: #f97316; color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anotação</button>
+        <div style="padding: 16px 24px; background: var(--bg-surface); border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px;">
+            <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-muted); border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
+            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: var(--accent-orange); color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anotação</button>
         </div>
     </div>
 </div>
@@ -953,7 +953,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
 
         <!-- Motivation Banner -->
-        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 16px; color: white; margin-bottom: 24px; position: relative; overflow: hidden;">
+        <div style="background: #10b981; padding: 20px; border-radius: 16px; color: white; margin-bottom: 24px; position: relative; overflow: hidden;">
             <div style="position: absolute; right: -10px; top: -10px; opacity: 0.2; transform: rotate(15deg);">
                 <i data-lucide="trophy" width="100" height="100"></i>
             </div>
@@ -987,10 +987,10 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
             <!-- Pace Card -->
             <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                <div style="background: #ecfdf5; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 12px;">
+                <div style="background: var(--primary-50); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary); margin-bottom: 12px;">
                     <i data-lucide="book-open" width="24"></i>
                 </div>
-                <div style="font-size: 1.8rem; font-weight: 800; color: #059669; line-height: 1;"><?= $avgChapters ?></div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary); line-height: 1;"><?= $avgChapters ?></div>
                 <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (Média)</div>
             </div>
         </div>
@@ -1179,8 +1179,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             .diary-content.truncated {
                 max-height: 120px;
                 overflow: hidden;
-                mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-                -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+                mask-image: none;
             }
             .read-more-btn {
                 width: 100%;
@@ -1455,7 +1454,7 @@ function loadDay(m, d) {
     const isComplete = verses.length > 0 && savedVerses.length >= verses.length;
     
     badge.innerHTML = isComplete 
-        ? '<span class="status-badge success" style="background:var(--sage-100); color:#059669; padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Concluído</span>'
+        ? '<span class="status-badge success" style="background:var(--primary-subtle); color:var(--primary); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Concluído</span>'
         : '<span class="status-badge pending" style="background:var(--yellow-100); color:var(--yellow-600); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="clock" width="14"></i> Pendente</span>';
     
     if (verses.length === 0) {

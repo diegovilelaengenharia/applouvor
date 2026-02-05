@@ -264,7 +264,7 @@ renderAppHeader('Devocionais');
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
+        background: var(--slate-600);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -464,7 +464,7 @@ renderAppHeader('Devocionais');
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
+        background: var(--slate-600);
         color: white;
         border: none;
         box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
@@ -603,7 +603,7 @@ renderAppHeader('Devocionais');
     }
     
     .devotional-card.unread {
-        background: linear-gradient(to right, #ffffff, var(--slate-100));
+        background: var(--slate-50);
         border-left: 3px solid var(--slate-600);
     }
     /* Barra de Filtros Inteligente */
@@ -1043,7 +1043,7 @@ renderAppHeader('Devocionais');
                         <?php if ($commentAvatar): ?>
                             <img src="<?= htmlspecialchars($commentAvatar) ?>" class="comment-avatar" alt="">
                         <?php else: ?>
-                            <div class="comment-avatar" style="background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
+                            <div class="comment-avatar" style="background: #a8edea; display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
                                 <?= strtoupper(substr($comment['author_name'] ?? 'U', 0, 1)) ?>
                             </div>
                         <?php endif; ?>
@@ -1070,14 +1070,14 @@ renderAppHeader('Devocionais');
         <?php else: ?>
             <!-- Empty State -->
             <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: linear-gradient(135deg, #f3e7e9 0%, #e3eeff 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <div style="background: #f3e7e9; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
                     <i data-lucide="book-open" style="color: #667eea; width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum devocional ainda</h3>
                 <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
                     Seja o primeiro a compartilhar uma reflexão com a comunidade!
                 </p>
-                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                <button onclick="openCreateModal()" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                     <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
                     Criar Devocional
                 </button>
@@ -1180,7 +1180,7 @@ renderAppHeader('Devocionais');
                 <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
                     Cancelar
                 </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-weight: 700; cursor: pointer;">
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: #667eea; color: white; font-weight: 700; cursor: pointer;">
                     Publicar
                 </button>
             </div>

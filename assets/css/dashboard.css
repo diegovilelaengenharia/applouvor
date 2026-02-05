@@ -105,7 +105,7 @@
 .song-number {
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, #0D6EFD 0%, #0B5ED7 100%);
+    background: #0D6EFD;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -302,7 +302,7 @@
     align-items: center;
     gap: 6px;
     padding: 10px 16px;
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    background: #047857;
     color: white;
     border: none;
     border-radius: 8px;

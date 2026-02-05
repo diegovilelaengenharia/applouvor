@@ -114,7 +114,7 @@ body.dark-mode .list-title-simple {
 /* === COLOR VARIANTS FOR EVENT TYPES === */
 /* Culto Tema Especial - Verde */
 .list-card-simple.event-special::before {
-    background: #059669;
+    background: var(--primary);
 }
 
 /* Culto Domingo Manhã - Azul */

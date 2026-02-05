@@ -181,7 +181,7 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
                                     <?= $periodo ?>
                                 </span>
                                 <?php if ($item['replacement_name']): ?>
-                                    <span style="font-size: 0.8rem; color: #059669; background: #ecfdf5; padding: 2px 8px; border-radius: 4px; border: 1px solid #d1fae5; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                                    <span style="font-size: 0.8rem; color: var(--primary); background: var(--primary-50); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--primary-100); display: flex; align-items: center; gap: 4px; font-weight: 600;">
                                         <i data-lucide="user-check" width="12"></i> <?= htmlspecialchars($item['replacement_name']) ?>
                                     </span>
                                 <?php else: ?>

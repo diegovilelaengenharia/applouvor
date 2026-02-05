@@ -127,7 +127,7 @@ renderAppHeader('Leitura Bíblica');
     </div>
 
     <!-- Today's Reading (or Next Pending) -->
-    <div id="today-reading-card" class="form-card" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border: none;">
+    <div id="today-reading-card" class="form-card" style="background: #0f172a; color: white; border: none;">
         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
             <div>
                 <div style="font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; font-weight: 600;">Leitura de Hoje</div>

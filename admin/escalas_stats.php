@@ -243,15 +243,15 @@ try {
     }
 
     .rank-number.gold {
-        background: linear-gradient(135deg, #fbbf24, var(--yellow-500));
+        background: #fbbf24;
     }
 
     .rank-number.silver {
-        background: linear-gradient(135deg, #d1d5db, #9ca3af);
+        background: #d1d5db;
     }
 
     .rank-number.bronze {
-        background: linear-gradient(135deg, #f97316, #ea580c);
+        background: #f97316;
     }
 
     @media (max-width: 768px) {

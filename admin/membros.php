@@ -243,7 +243,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .badge-admin {
-        background: linear-gradient(135deg, var(--yellow-500), var(--yellow-600));
+        background: var(--yellow-500);
         color: white;
         padding: 1px 5px;
         border-radius: 6px;

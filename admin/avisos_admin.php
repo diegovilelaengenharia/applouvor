@@ -280,7 +280,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .filter-pill.active {
-        background: linear-gradient(135deg, #a78bfa, var(--lavender-600));
+        background: #a78bfa;
         color: white;
         border-color: transparent;
     }
@@ -417,7 +417,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .create-aviso-btn:hover {
-        background: #059669;
+        background: var(--primary);
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
     }
     

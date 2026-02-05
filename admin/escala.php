@@ -200,7 +200,7 @@ renderAppHeader('Escalas');
 
 <!-- Hero Header -->
 <div style="
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%); 
+    background: #047857; 
     margin: -24px -16px 32px -16px; 
     padding: 32px 24px 64px 24px; 
     border-radius: 0 0 32px 32px; 

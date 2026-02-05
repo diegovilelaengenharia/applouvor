@@ -83,7 +83,7 @@ foreach ($users as $u) {
                     <?php foreach ($users as $u):
                         // Avatar logic simplified for display
                         $initials = substr($u['name'], 0, 2);
-                        $bg = $u['avatar'] ? "url('../assets/uploads/{$u['avatar']}')" : "linear-gradient(135deg, var(--slate-200) 0%, var(--slate-300) 100%)";
+                        $bg = $u['avatar'] ? "url('../assets/uploads/{$u['avatar']}')" : "var(--slate-200)";
 
                         // Tempo decorrido
                         $last_seen = 'Nunca';

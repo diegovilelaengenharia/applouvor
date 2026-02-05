@@ -64,7 +64,7 @@ function toggleEditMode() {
             if (manageInfoBtn) manageInfoBtn.style.display = 'none';
 
             // Restaurar botão Editar (amarelo)
-            editBtn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+            editBtn.style.background = '#fbbf24';
             editBtn.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.3)';
             editBtn.style.color = 'white';
             editBtn.innerHTML = '<i data-lucide="edit-2" style="width: 16px;"></i><span>Editar</span>';

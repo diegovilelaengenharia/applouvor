@@ -48,8 +48,7 @@ body {
     --bg-tertiary: #F3F4F6;
 
     /* Cores Principais - Suaves */
-    --primary-green: #059669;
-    /* Emerald 600 */
+    --primary-green: var(--primary);
     --primary-green-light: #34D399;
     --primary-green-dark: #047857;
 
@@ -64,27 +63,27 @@ body {
     /* Header Background - Mantendo Profissional */
     --header-bg: #1F2937;
 
-    /* Gradientes - Suaves e Claros */
-    --gradient-primary: linear-gradient(135deg, #34D399 0%, #059669 100%);
-    --gradient-elegant: linear-gradient(135deg, #4B5563 0%, #1F2937 100%);
-    --gradient-soft: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
-    --gradient-dark: linear-gradient(135deg, #374151 0%, #111827 100%);
-    --gradient-hero: linear-gradient(135deg, #34D399 0%, #059669 100%);
+    /* Cores Sólidas (Substituindo Gradientes) */
+    --gradient-primary: var(--primary);
+    --gradient-elegant: #1F2937;
+    --gradient-soft: #F9FAFB;
+    --gradient-dark: #111827;
+    --gradient-hero: var(--primary);
 
-    /* Theme Gradients - Cores Padronizadas */
-    --gradient-green: linear-gradient(135deg, #34D399 0%, #059669 100%);
-    --gradient-blue: linear-gradient(135deg, #0D6EFD 0%, #0B5ED7 100%);
-    --gradient-red: linear-gradient(135deg, #DC3545 0%, #BB2D3B 100%);
-    --gradient-yellow: linear-gradient(135deg, #FFC107 0%, #FFCA2C 100%);
-    --gradient-purple: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
+    /* Theme Colors - Sólidas */
+    --gradient-green: var(--primary);
+    --gradient-blue: #0D6EFD;
+    --gradient-red: #DC3545;
+    --gradient-yellow: #FFC107;
+    --gradient-purple: #7C3AED;
 
     /* Glassmorphism */
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.6);
     --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
 
-    --accent-primary: #059669;
-    --accent-interactive: #2D7A4F;
+    --accent-primary: var(--primary);
+    --accent-interactive: var(--primary-600);
     /* Verde para destaque e interações */
 
     --text-primary: #1F2937;
@@ -94,7 +93,7 @@ body {
     --border-subtle: #E5E7EB;
     --border-focus: var(--primary-green);
 
-    --status-success: #059669;
+    --status-success: var(--success);
     --status-warning: #FFC107;
     --status-error: #DC3545;
     --status-info: #0D6EFD;
@@ -339,32 +338,32 @@ ul {
 /* Cores específicas para cada categoria */
 .nav-cat-item:nth-child(1) svg,
 .nav-cat-item:nth-child(1) i {
-    background: linear-gradient(135deg, #E6F4EA 0%, #D4E9E2 100%);
+    background: #E6F4EA;
     color: var(--primary-green);
 }
 
 .nav-cat-item:nth-child(2) svg,
 .nav-cat-item:nth-child(2) i {
-    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    background: #FEF3C7;
     color: #D97706;
 }
 
 .nav-cat-item:nth-child(3) svg,
 .nav-cat-item:nth-child(3) i {
-    background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+    background: #DBEAFE;
     color: var(--primary-blue);
 }
 
 .nav-cat-item:nth-child(4) svg,
 .nav-cat-item:nth-child(4) i {
-    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    background: #FEE2E2;
     color: #EF4444;
     /* Red */
 }
 
 .nav-cat-item:nth-child(5) svg,
 .nav-cat-item:nth-child(5) i {
-    background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%);
+    background: #E5E7EB;
     color: var(--primary-gray);
 }
 
@@ -1433,7 +1432,7 @@ body.dark-mode .compact-card {
     justify-content: center;
     min-width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: #059669;
     border-radius: 12px;
     padding: 8px;
     box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);

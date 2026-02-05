@@ -10,7 +10,7 @@ renderAppHeader('Quem Somos');
 
 <style>
     .hero-section {
-        background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%);
+        background: #047857;
         color: white;
         padding: 32px 20px 28px 20px;
         text-align: center;
@@ -160,7 +160,7 @@ renderAppHeader('Quem Somos');
     <!-- Sobre -->
     <div class="info-card animate-in" style="animation-delay: 0.1s;">
         <div class="info-card-header">
-            <div class="info-icon" style="background: linear-gradient(135deg, #047857 0%, #065f46 100%);">
+            <div class="info-icon" style="background: #047857;">
                 <i data-lucide="info" style="width: 24px; color: white;"></i>
             </div>
             <h3 class="info-title">Sobre</h3>
@@ -173,7 +173,7 @@ renderAppHeader('Quem Somos');
     <!-- Objetivo -->
     <div class="info-card animate-in" style="animation-delay: 0.2s;">
         <div class="info-card-header">
-            <div class="info-icon" style="background: linear-gradient(135deg, #0D6EFD 0%, #0B5ED7 100%);">
+            <div class="info-icon" style="background: #0D6EFD;">
                 <i data-lucide="target" style="width: 24px; color: white;"></i>
             </div>
             <h3 class="info-title">Objetivo</h3>
@@ -186,7 +186,7 @@ renderAppHeader('Quem Somos');
     <!-- Base Bíblica -->
     <div class="info-card animate-in" style="animation-delay: 0.3s;">
         <div class="info-card-header">
-            <div class="info-icon" style="background: linear-gradient(135deg, #6610f2 0%, #520dc2 100%);">
+            <div class="info-icon" style="background: #6610f2;">
                 <i data-lucide="book-open" style="width: 24px; color: white;"></i>
             </div>
             <h3 class="info-title">Base Bíblica</h3>
@@ -201,7 +201,7 @@ renderAppHeader('Quem Somos');
     <!-- Missão -->
     <div class="info-card animate-in" style="animation-delay: 0.4s;">
         <div class="info-card-header">
-            <div class="info-icon" style="background: linear-gradient(135deg, #d63384 0%, #a61e63 100%);">
+            <div class="info-icon" style="background: #d63384;">
                 <i data-lucide="flag" style="width: 24px; color: white;"></i>
             </div>
             <h3 class="info-title">Missão</h3>
@@ -214,7 +214,7 @@ renderAppHeader('Quem Somos');
     <!-- Visão -->
     <div class="info-card animate-in" style="animation-delay: 0.5s;">
         <div class="info-card-header">
-            <div class="info-icon" style="background: linear-gradient(135deg, #fd7e14 0%, #ca5a02 100%);">
+            <div class="info-icon" style="background: #fd7e14;">
                 <i data-lucide="eye" style="width: 24px; color: white;"></i>
             </div>
             <h3 class="info-title">Visão</h3>

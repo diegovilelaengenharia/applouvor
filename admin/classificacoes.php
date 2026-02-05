@@ -123,7 +123,7 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+        background: var(--primary);
         border: none;
         color: white;
         box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
@@ -226,7 +226,7 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     }
 
     .btn-action-save {
-        background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+        background: var(--primary);
         color: white;
         border: none;
         padding: 12px 20px;

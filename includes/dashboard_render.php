@@ -29,7 +29,7 @@ function renderCardEscalas($nextSchedule, $totalSchedules) {
     <a href="escalas.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                <div class="card-icon" style="background: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <i data-lucide="calendar" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($totalSchedules > 0): ?>
@@ -72,7 +72,7 @@ function renderCardRepertorio($ultimaMusica, $totalMusicas) {
     <a href="repertorio.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                <div class="card-icon" style="background: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <i data-lucide="music" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <span class="card-badge" style="background: #2563eb; color: white; border: none; font-weight: 700;"><?= $totalMusicas ?></span>
@@ -119,7 +119,7 @@ function renderCardMembros($totalMembros, $stats) {
     <a href="membros.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                <div class="card-icon" style="background: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <i data-lucide="users" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <span class="card-badge" style="background: #2563eb; color: white; border: none; font-weight: 700;"><?= $totalMembros ?></span>
@@ -197,7 +197,7 @@ function renderCardLeitura($pdo, $userId) {
     <a href="leitura.php" class="access-card card-green" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
+                <div class="card-icon" style="background: #059669; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
                     <i data-lucide="book-open" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <span class="card-badge" style="background: #059669; color: white; border: none; font-weight: 700;"><?= $percentToday ?>%</span>
@@ -216,7 +216,7 @@ function renderCardLeitura($pdo, $userId) {
                         </div>
                     </div>
                     <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.5); border-radius: 3px; overflow: hidden;">
-                        <div style="width: <?= $percentYear ?>%; height: 100%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.3s ease;"></div>
+                        <div style="width: <?= $percentYear ?>%; height: 100%; background: #059669; transition: width 0.3s ease;"></div>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -238,7 +238,7 @@ function renderCardAvisos($ultimoAviso, $unreadCount) {
     <a href="avisos.php" class="access-card card-violet" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
+                <div class="card-icon" style="background: #7c3aed; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
                     <i data-lucide="bell" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($unreadCount > 0): ?>
@@ -275,7 +275,7 @@ function renderCardAniversariantes($niverCount, $proximo = null) {
     <a href="aniversarios.php" class="access-card card-violet" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
+                <div class="card-icon" style="background: #7c3aed; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
                     <i data-lucide="cake" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <span class="card-badge" style="background: #7c3aed; color: white; border: none; font-weight: 700;"><?= $niverCount ?></span>
@@ -313,7 +313,7 @@ function renderCardDevocional() {
     <a href="devocionais.php" class="access-card card-green" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
+                <div class="card-icon" style="background: #059669; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
                     <i data-lucide="sunrise" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
             </div>
@@ -340,7 +340,7 @@ function renderCardOracao($count = 0) {
     <a href="oracao.php" class="access-card card-green" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
+                <div class="card-icon" style="background: #059669; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);">
                     <i data-lucide="heart" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($count > 0): ?>
@@ -397,7 +397,7 @@ function renderCardAgenda($nextEvent, $totalEvents) {
     <a href="agenda.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                <div class="card-icon" style="background: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <i data-lucide="calendar-days" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($totalEvents > 0): ?>
@@ -444,7 +444,7 @@ function renderCardHistorico($data) {
     <a href="historico.php" class="access-card card-blue" style="position: relative; overflow: hidden;">
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                <div class="card-icon" style="background: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <i data-lucide="history" style="width: 24px; height: 24px; color: white;"></i>
                 </div>
                 <?php if ($sugestoesCount > 0): ?>

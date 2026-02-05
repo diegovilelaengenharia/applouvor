@@ -50,19 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         :root {
             /* Light Theme */
-            --bg: #ffffff;
-            --text-main: #18181b;
-            /* Zinc 900 */
-            --text-muted: #71717a;
-            /* Zinc 500 */
-            --primary: #047857;
-            /* Emerald 700 */
-            --primary-light: #ecfdf5;
-            /* Emerald 50 */
-            --input-bg: #f4f4f5;
-            /* Zinc 100 */
-            --border: #e4e4e7;
-            /* Zinc 200 */
+            --bg: var(--bg-body);
+            --text-main: var(--text-main);
+            --text-muted: var(--text-muted);
+            --primary: var(--primary);
+            --primary-light: var(--primary-50);
+            --input-bg: var(--bg-muted);
+            --border: var(--border-color);
             --error-bg: #fef2f2;
             --error-text: #ef4444;
         }
@@ -204,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button.btn-install {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
+            background: var(--primary-light);
             color: var(--primary);
             border: 2px solid var(--primary);
             border-radius: 16px;
@@ -229,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: rgba(255, 255, 255, 0.3);
             transition: left 0.5s;
         }
 

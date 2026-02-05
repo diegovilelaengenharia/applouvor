@@ -53,7 +53,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
 
 <!-- Header Card -->
 <div style="max-width: 800px; margin: 0 auto 20px; padding: 0 16px;">
-    <div style="background: linear-gradient(135deg, var(--lavender-600), #7c3aed); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+    <div style="background: var(--lavender-600); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
                 <div style="
@@ -125,7 +125,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
                     <div style="display: flex; gap: 12px; align-items: flex-start;">
                         <div style="
                             width: 48px; height: 48px; border-radius: 10px;
-                            background: linear-gradient(135deg, var(--lavender-600), #7c3aed);
+                            background: var(--lavender-600);
                             color: white; display: flex; align-items: center; justify-content: center;
                             font-weight: 700; font-size: var(--font-h2); flex-shrink: 0;
                         ">

@@ -120,7 +120,7 @@
 
 .variant-green .btn-icon-wrapper {
     background: #ECFDF5;
-    color: #059669;
+    color: var(--primary);
 }
 
 .variant-yellow {

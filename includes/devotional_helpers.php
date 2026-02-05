@@ -172,7 +172,7 @@ function renderVerseCard($reference) {
     
     return <<<HTML
     <div style="
-        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        background: #f0f9ff;
         border-left: 4px solid #0ea5e9;
         padding: 16px;
         border-radius: 12px;

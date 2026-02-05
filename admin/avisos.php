@@ -202,7 +202,7 @@ renderAppHeader('Avisos');
     .hero-icon {
         width: 48px;
         height: 48px;
-        background: linear-gradient(135deg, var(--slate-600) 0%, #2c55a0 100%);
+        background: #2c55a0;
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -415,7 +415,7 @@ renderAppHeader('Avisos');
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        background: var(--purple-primary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -681,7 +681,7 @@ renderAppHeader('Avisos');
     }
 
     .modal-header {
-        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        background: var(--purple-primary);
         color: white;
         padding: 24px;
         border-radius: 20px 20px 0 0;
@@ -780,7 +780,7 @@ renderAppHeader('Avisos');
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, var(--purple-primary), var(--purple-light));
+        background: var(--purple-primary);
         color: white;
         box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);
     }

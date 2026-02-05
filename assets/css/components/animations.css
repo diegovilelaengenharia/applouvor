@@ -133,10 +133,7 @@
 
 /* Shimmer Loading */
 .animate-shimmer {
-    background: linear-gradient(90deg,
-            var(--gray-200) 0%,
-            var(--gray-100) 50%,
-            var(--gray-200) 100%);
+    background: var(--gray-100);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite;
 }
@@ -177,10 +174,7 @@
 /* === LOADING STATES === */
 
 .loading-skeleton {
-    background: linear-gradient(90deg,
-            var(--gray-200) 0%,
-            var(--gray-100) 50%,
-            var(--gray-200) 100%);
+    background: var(--gray-100);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
     border-radius: var(--radius-md);
