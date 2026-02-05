@@ -66,7 +66,7 @@ renderPageHeader('Sugerir Música', 'Envie uma sugestão para o repertório');
     .form-input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
     }
 
     textarea.form-input {

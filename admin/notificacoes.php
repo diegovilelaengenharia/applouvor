@@ -168,8 +168,8 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
     }
     
     .stat-card.total { color: #3b82f6; }
-    .stat-card.unread { color: #ef4444; }
-    .stat-card.read { color: #10b981; }
+    .stat-card.unread { color: #f43f5e; }
+    .stat-card.read { color: #22c55e; }
     
     .stat-value {
         font-size: 1.5rem;
@@ -408,7 +408,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         <!-- Banner Ativo (Granted) -->
         <div id="statusCardGranted" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; color: #166534;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="check" style="width: 18px; color: #10b981;"></i>
+                <i data-lucide="check" style="width: 18px; color: #22c55e;"></i>
                 <span style="font-size: 0.9rem; font-weight: 500;">Notificações ativadas neste dispositivo.</span>
             </div>
         </div>
@@ -773,7 +773,7 @@ async function loadViewsForNotification(title, createdAt) {
                 <div style="margin-bottom: 16px;">
                     <h4 style="margin: 0 0 8px 0; font-size: 1rem; font-weight: 600; color: #1e293b;">${title}</h4>
                     <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-                        <span style="color: #10b981; font-weight: 600;">✓ ${readCount} leram</span>
+                        <span style="color: #22c55e; font-weight: 600;">✓ ${readCount} leram</span>
                         <span style="color: #ef4444; font-weight: 600;">✗ ${unreadCount} não leram</span>
                     </div>
                 </div>
@@ -786,7 +786,7 @@ async function loadViewsForNotification(title, createdAt) {
                             </div>
                             <div style="text-align: right;">
                                 ${reader.is_read == 1 
-                                    ? `<span style="color: #10b981; font-weight: 600;">✓ Lida</span><br><span style="font-size: 0.75rem; color: #64748b;">${reader.read_at ? new Date(reader.read_at).toLocaleString('pt-BR') : ''}</span>`
+                                    ? `<span style="color: #22c55e; font-weight: 600;">✓ Lida</span><br><span style="font-size: 0.75rem; color: #64748b;">${reader.read_at ? new Date(reader.read_at).toLocaleString('pt-BR') : ''}</span>`
                                     : `<span style="color: #ef4444; font-weight: 600;">✗ Não lida</span>`
                                 }
                             </div>

@@ -157,13 +157,13 @@ if (!$planStarted) {
 
         .plan-card:hover {
             transform: translateY(-2px);
-            border-color: var(--primary, #047857);
+            border-color: var(--primary, #16a34a);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .plan-card.selected {
-            border: 2px solid var(--primary, #047857);
-            background: var(--primary-subtle, #ecfdf5);
+            border: 2px solid var(--primary, #16a34a);
+            background: var(--primary-subtle, #f0fdf4);
         }
         
         .plan-icon {
@@ -241,7 +241,7 @@ if (!$planStarted) {
         @media(min-width: 640px) { .date-input { width: auto; } }
 
         .btn-start {
-            background: var(--primary, #047857);
+            background: var(--primary, #16a34a);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -595,7 +595,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <style>
     /* ... (CSS preserved from original, added adjustments for 31 days columns if needed) ... */
-    :root { --primary: #6366f1; --primary-soft: #e0e7ff; --success: #10b981; }
+    :root { --primary: #3b82f6; --primary-soft: #eff6ff; --success: #22c55e; }
     /* body { background-color: #f8fafc; color: #1e293b; padding-bottom: 70px; font-family: -apple-system, sans-serif; } */
     
     /* Calendar Strip & Items */
@@ -604,20 +604,20 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     .cal-item { min-width: 56px; height: 68px; border-radius: 12px; background: #f3f4f6; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s; }
     .cal-month { font-size: var(--font-caption); font-weight: 700; text-transform: uppercase; color: #6b7280; }
     .cal-num { font-size: var(--font-h1); font-weight: 800; color: #1f2937; }
-    .cal-item.active { background: white; border-color: #047857; box-shadow: 0 2px 8px rgba(4,120,87,0.15); }
-    .cal-item.active .cal-num, .cal-item.active .cal-month { color: #065f46; }
-    .cal-item.done { background: #d1fae5; }
-    .cal-item.done .cal-num { color: #047857; }
+    .cal-item.active { background: white; border-color: #16a34a; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15); }
+    .cal-item.active .cal-num, .cal-item.active .cal-month { color: #15803d; }
+    .cal-item.done { background: #dcfce7; }
+    .cal-item.done .cal-num { color: #16a34a; }
     .cal-item.partial { background: #fef3c7; }
     .cal-progress { font-size: var(--font-caption); color: #64748b; font-weight: 600; margin-top: 4px; line-height: 1; }
-    .cal-item.done .cal-progress { color: #047857; }
+    .cal-item.done .cal-progress { color: #16a34a; }
     
     /* Verse Cards */
     .verse-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-    .verse-card.read { background: #d1fae5; border-color: #d1fae5; }
+    .verse-card.read { background: #dcfce7; border-color: #dcfce7; }
     .check-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
-    .verse-card.read .check-icon { background: #10b981; border-color: #10b981; color: white; }
-    .btn-read-link { background: #047857; color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px; }
+    .verse-card.read .check-icon { background: #22c55e; border-color: #22c55e; color: white; }
+    .btn-read-link { background: #16a34a; color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px; }
 
     /* Modals & Utils */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }

@@ -483,7 +483,7 @@ try {
 
     <!-- 1. Gestão (Acesso Rápido) -->
     <div class="section-header">
-        <div style="background: linear-gradient(135deg, #047857, #059669); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: linear-gradient(135deg, #16a34a, #15803d); padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Gestão</h2>
@@ -501,7 +501,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #ecfdf5; color: #10b981; padding: 10px; border-radius: 10px;">
+            <div style="background: #f0fdf4; color: #22c55e; padding: 10px; border-radius: 10px;">
                 <i data-lucide="users" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -563,7 +563,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #f0fdf4; color: #059669; padding: 10px; border-radius: 10px;">
+            <div style="background: #f0fdf4; color: #22c55e; padding: 10px; border-radius: 10px;">
                 <i data-lucide="inbox" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -662,7 +662,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-             <div style="background: #ecfdf5; color: #10b981; padding: 10px; border-radius: 10px;">
+             <div style="background: #f0fdf4; color: #22c55e; padding: 10px; border-radius: 10px;">
                 <i data-lucide="music" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -715,8 +715,8 @@ try {
                     $bg = '#f5f3ff';
                 } elseif ($activity['tipo'] === 'musica') {
                     $icon = 'music';
-                    $color = '#10b981';
-                    $bg = '#ecfdf5';
+                    $color = '#22c55e';
+                    $bg = '#f0fdf4';
                 } elseif ($activity['tipo'] === 'aviso') {
                     $icon = 'bell';
                     $color = '#f59e0b';

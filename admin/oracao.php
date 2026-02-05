@@ -157,8 +157,8 @@ renderAppHeader('Pedidos de Oração');
         border-left: 4px solid #dc2626;
     }
     .prayer-card.answered {
-        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-        border-color: #10b981;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-color: #22c55e;
     }
     
     /* Header */
@@ -254,8 +254,8 @@ renderAppHeader('Pedidos de Oração');
     .cat-health { background: #fee2e2; color: #dc2626; }
     .cat-family { background: #dbeafe; color: #2563eb; }
     .cat-work { background: #fef3c7; color: #d97706; }
-    .cat-spiritual { background: #f3e8ff; color: #7c3aed; }
-    .cat-gratitude { background: #dcfce7; color: #16a34a; }
+    .cat-spiritual { background: #f5f3ff; color: #8b5cf6; }
+    .cat-gratitude { background: #f0fdf4; color: #16a34a; }
     .cat-other { background: #f1f5f9; color: #64748b; }
     
     /* FAB */
@@ -493,9 +493,9 @@ renderAppHeader('Pedidos de Oração');
             <a href="?intercession=<?= $filterIntercession ?>&category=<?= $filterCategory ?><?= $showAnswered ? '' : '&answered=1' ?>" style="
                 display: inline-flex; align-items: center; gap: 6px;
                 padding: 8px 14px; border-radius: 20px; font-size: var(--font-body-sm); font-weight: 600;
-                text-decoration: none; color: <?= $showAnswered ? '#10b981' : 'var(--text-muted)' ?>;
-                background: <?= $showAnswered ? '#dcfce7' : 'transparent' ?>;
-                border: 1px solid <?= $showAnswered ? '#10b981' : 'var(--border-color)' ?>;
+                text-decoration: none; color: <?= $showAnswered ? '#22c55e' : 'var(--text-muted)' ?>;
+                background: <?= $showAnswered ? '#f0fdf4' : 'transparent' ?>;
+                border: 1px solid <?= $showAnswered ? '#22c55e' : 'var(--border-color)' ?>;
             ">
                 <i data-lucide="<?= $showAnswered ? 'check-circle' : 'sparkles' ?>" style="width: 14px;"></i>
                 <?= $showAnswered ? 'Ver Pendentes' : 'Ver Respondidas 🎉' ?>
@@ -567,7 +567,7 @@ renderAppHeader('Pedidos de Oração');
                     </div>
                     
                     <?php if ($prayer['is_answered']): ?>
-                        <div style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
+                        <div style="background: #22c55e; color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
                             ✓ RESPONDIDA
                         </div>
                     <?php elseif ($prayer['is_urgent']): ?>

@@ -88,7 +88,7 @@ foreach ($events as $event) {
 foreach ($schedules as $schedule) {
     $dayKey = $schedule['event_date'];
     if (!isset($eventsByDay[$dayKey])) $eventsByDay[$dayKey] = [];
-    $color = '#047857'; // Verde padrão para escalas
+    $color = '#16a34a'; // Verde vibrante padrão para escalas
     $eventsByDay[$dayKey][] = array_merge($schedule, [
         'source' => 'schedule',
         'title' => $schedule['event_type'],
@@ -479,7 +479,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="day-num">'.$d.'</div>';
                         
                         foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? '#059669';
+                            $color = $evt['color'] ?? '#16a34a';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             echo "<div onclick=\"window.location='$url'\" class='event-chip' style='border-left-color: $color; color: $color; background: {$color}15;'>";
                             echo htmlspecialchars($evt['title']);
@@ -524,7 +524,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="calendar-day week-view-day '.($isToday?'today':'').'">';
                         echo '<div class="day-num">'.$dayNum.'</div>';
                          foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? '#059669';
+                            $color = $evt['color'] ?? '#16a34a';
                             $startTime = date('H:i', strtotime($evt['start_datetime']));
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             
