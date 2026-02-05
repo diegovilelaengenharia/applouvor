@@ -142,6 +142,98 @@
     --breakpoint-md: 768px;
     --breakpoint-lg: 1024px;
     --breakpoint-xl: 1280px;
+
+    /* ============================================
+       SEMANTIC COLOR SYSTEM (Category-based)
+       ============================================ */
+
+    /* 🔵 GESTÃO (Azul Profissional) */
+    /* Escalas, Repertório, Membros, Agenda, Ausências, Histórico */
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+    --blue-950: #172554;
+
+    --gradient-blue-light: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    --gradient-blue-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-blue-dark: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+
+    --shadow-blue-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
+    --shadow-blue-md: 0 4px 16px rgba(59, 130, 246, 0.2);
+    --shadow-blue-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
+
+    /* 🟢 ESPIRITUAL (Verde Vida) */
+    /* Devocional, Oração, Leitura Bíblica */
+    --green-50: #f0fdf4;
+    --green-100: #dcfce7;
+    --green-200: #bbf7d0;
+    --green-300: #86efac;
+    --green-400: #4ade80;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+    --green-800: #166534;
+    --green-900: #14532d;
+    --green-950: #052e16;
+
+    --gradient-green-light: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --gradient-green-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    --gradient-green-dark: linear-gradient(135deg, #15803d 0%, #166534 100%);
+
+    --shadow-green-sm: 0 2px 8px rgba(34, 197, 94, 0.15);
+    --shadow-green-md: 0 4px 16px rgba(34, 197, 94, 0.2);
+    --shadow-green-lg: 0 8px 24px rgba(34, 197, 94, 0.25);
+
+    /* 🟣 COMUNICAÇÃO (Roxo Vibrante) */
+    /* Avisos, Notificações, Aniversariantes */
+    --purple-50: #faf5ff;
+    --purple-100: #f3e8ff;
+    --purple-200: #e9d5ff;
+    --purple-300: #d8b4fe;
+    --purple-400: #c084fc;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+    --purple-700: #7e22ce;
+    --purple-800: #6b21a8;
+    --purple-900: #581c87;
+    --purple-950: #3b0764;
+
+    --gradient-purple-light: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+    --gradient-purple-primary: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    --gradient-purple-dark: linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%);
+
+    --shadow-purple-sm: 0 2px 8px rgba(168, 85, 247, 0.15);
+    --shadow-purple-md: 0 4px 16px rgba(168, 85, 247, 0.2);
+    --shadow-purple-lg: 0 8px 24px rgba(168, 85, 247, 0.25);
+
+    /* 🔴 ADMIN (Vermelho Autoridade) */
+    /* Dashboard Líder, Configurações */
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-200: #fecaca;
+    --red-300: #fca5a5;
+    --red-400: #f87171;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+    --red-700: #b91c1c;
+    --red-800: #991b1b;
+    --red-900: #7f1d1d;
+    --red-950: #450a0a;
+
+    --gradient-red-light: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    --gradient-red-primary: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-red-dark: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+
+    --shadow-red-sm: 0 2px 8px rgba(239, 68, 68, 0.15);
+    --shadow-red-md: 0 4px 16px rgba(239, 68, 68, 0.2);
+    --shadow-red-lg: 0 8px 24px rgba(239, 68, 68, 0.25);
 }
 
 /* === RESPONSIVE TYPOGRAPHY === */

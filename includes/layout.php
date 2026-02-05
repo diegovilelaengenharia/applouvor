@@ -96,6 +96,13 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Dark Mode CSS -->
         <link rel="stylesheet" href="../assets/css/dark-mode.css">
 
+        <!-- Semantic Design System -->
+        <link rel="stylesheet" href="../assets/css/design-system.css">
+        <link rel="stylesheet" href="../assets/css/components/buttons.css">
+        <link rel="stylesheet" href="../assets/css/components/cards.css">
+        <link rel="stylesheet" href="../assets/css/components/badges.css">
+        <link rel="stylesheet" href="../assets/css/components/icons.css">
+
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 

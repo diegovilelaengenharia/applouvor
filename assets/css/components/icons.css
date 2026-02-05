@@ -1,0 +1,155 @@
+/* ============================================
+   ICONS - Semantic Design System
+   ============================================ */
+
+/* === ICON CONTAINERS === */
+.icon-container-blue {
+    width: 44px;
+    height: 44px;
+    background: var(--blue-100);
+    border: 1px solid var(--blue-200);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue-600);
+    flex-shrink: 0;
+}
+
+.icon-container-green {
+    width: 44px;
+    height: 44px;
+    background: var(--green-100);
+    border: 1px solid var(--green-200);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-600);
+    flex-shrink: 0;
+}
+
+.icon-container-purple {
+    width: 44px;
+    height: 44px;
+    background: var(--purple-100);
+    border: 1px solid var(--purple-200);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--purple-600);
+    flex-shrink: 0;
+}
+
+.icon-container-red {
+    width: 44px;
+    height: 44px;
+    background: var(--red-100);
+    border: 1px solid var(--red-200);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--red-600);
+    flex-shrink: 0;
+}
+
+/* === SOLID ICON CONTAINERS === */
+.icon-container-blue-solid {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-blue-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-blue-sm);
+}
+
+.icon-container-green-solid {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-green-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-green-sm);
+}
+
+.icon-container-purple-solid {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-purple-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-purple-sm);
+}
+
+.icon-container-red-solid {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-red-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-red-sm);
+}
+
+/* === ICON SIZES === */
+.icon-container-sm {
+    width: 32px;
+    height: 32px;
+}
+
+.icon-container-lg {
+    width: 56px;
+    height: 56px;
+}
+
+.icon-container-xl {
+    width: 64px;
+    height: 64px;
+}
+
+/* === ICON SHAPES === */
+.icon-container-circle,
+.icon-container-blue-circle,
+.icon-container-green-circle,
+.icon-container-purple-circle,
+.icon-container-red-circle {
+    border-radius: var(--radius-full);
+}
+
+/* === STANDALONE ICONS === */
+.icon-blue {
+    color: var(--blue-600);
+}
+
+.icon-green {
+    color: var(--green-600);
+}
+
+.icon-purple {
+    color: var(--purple-600);
+}
+
+.icon-red {
+    color: var(--red-600);
+}
