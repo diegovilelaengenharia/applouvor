@@ -81,7 +81,7 @@ function renderAppHeader($title, $backUrl = null)
         <meta property="og:url" content="https://app.piboliveira.com.br/">
         
         <!-- PWA Meta Tags -->
-        <meta name="theme-color" content="#047857">
+        <meta name="theme-color" content="#059669">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-title" content="App Louvor PIB">
@@ -212,10 +212,10 @@ function renderAppHeader($title, $backUrl = null)
             .btn-success {
                 background: linear-gradient(135deg, #059669 0%, #047857 100%);
                 color: white;
-                border: 1px solid #047857;
+                border: 1px solid #059669;
             }
             .btn-success:hover:not(:disabled) {
-                background: #047857;
+                background: #059669;
                 box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
                 transform: translateY(-1px);
             }
@@ -301,11 +301,11 @@ function renderAppHeader($title, $backUrl = null)
             /* Botão outline (variante) */
             .btn-outline-success {
                 background: transparent;
-                color: #059669;
-                border: 2px solid #059669;
+                color: #16a34a;
+                border: 2px solid #16a34a;
             }
             .btn-outline-success:hover {
-                background: #059669;
+                background: #16a34a;
                 color: white;
             }
 
