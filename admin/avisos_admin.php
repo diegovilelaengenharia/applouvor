@@ -927,7 +927,7 @@ renderAppHeader('Gestão de Avisos');
         
         <div id="tagsList"></div>
         
-        <button onclick="createNewTag()" class="btn-primary" style="margin-top: 16px;">
+        <button onclick="createNewTag()" class="btn-success" style="margin-top: 16px; width: 100%;">
             <i data-lucide="plus" style="width: 16px; display: inline-block; vertical-align: middle;"></i>
             Nova Tag
         </button>
