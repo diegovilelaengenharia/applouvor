@@ -1,0 +1,339 @@
+/* ========================================
+   DASHBOARD CARDS - DESIGN MODERNO E PROFISSIONAL
+   ======================================== */
+
+/* Grid de Cards */
+.quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+/* Card Base - Moderno e Profissional */
+.access-card {
+    position: relative;
+    border-radius: 16px;
+    padding: 18px 16px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Efeito de Brilho Sutil */
+.access-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 70%);
+    transform: rotate(45deg);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+/* Hover Effects */
+.access-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.access-card:hover::before {
+    opacity: 1;
+    left: 100%;
+}
+
+.access-card:active {
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Ícone do Card */
+.card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.access-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Título do Card */
+.card-title {
+    font-size: var(--font-h3);
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+    transition: color 0.2s;
+}
+
+.access-card:hover .card-title {
+    color: var(--text-main);
+}
+
+/* Info do Card */
+.card-info {
+    font-size: var(--font-body-sm);
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+/* Badge do Card */
+.card-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: var(--font-caption);
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.access-card:hover .card-badge {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   CORES POR CATEGORIA - SISTEMA SEMÂNTICO
+   ======================================== */
+
+/* 🔵 GESTÃO - Azul Profissional */
+.card-blue {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.card-blue .card-icon {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+}
+
+.card-blue .card-badge {
+    background: rgba(255, 255, 255, 0.95);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.card-blue:hover {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* 🟢 ESPIRITUAL - Verde Vibrante */
+.card-green {
+    background: linear-gradient(135deg, #e8f9f0 0%, #d1f2e1 100%);
+    border-color: rgba(36, 206, 107, 0.2);
+}
+
+.card-green .card-icon {
+    background: linear-gradient(135deg, #24CE6B 0%, #1da456 100%);
+    color: white;
+}
+
+.card-green .card-badge {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1da456;
+    border: 1px solid rgba(36, 206, 107, 0.2);
+}
+
+.card-green:hover {
+    background: linear-gradient(135deg, #d1f2e1 0%, #a3e5c3 100%);
+    border-color: rgba(36, 206, 107, 0.3);
+}
+
+/* 🟡 COMUNICAÇÃO - Amarelo Vibrante */
+.card-yellow {
+    background: linear-gradient(135deg, #fffbeb 0%, #fff4d1 100%);
+    border-color: rgba(255, 197, 1, 0.2);
+}
+
+.card-yellow .card-icon {
+    background: linear-gradient(135deg, #FFC501 0%, #e6b001 100%);
+    color: white;
+}
+
+.card-yellow .card-badge {
+    background: rgba(255, 255, 255, 0.95);
+    color: #cc9c01;
+    border: 1px solid rgba(255, 197, 1, 0.2);
+}
+
+.card-yellow:hover {
+    background: linear-gradient(135deg, #fff4d1 0%, #ffe9a3 100%);
+    border-color: rgba(255, 197, 1, 0.3);
+}
+
+/* 🔴 CRÍTICO/ESPECIAL - Vermelho */
+.card-red {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.card-red .card-icon {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.card-red .card-badge {
+    background: rgba(255, 255, 255, 0.95);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.card-red:hover {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ========================================
+   ANIMAÇÕES
+   ======================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.access-card {
+    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+/* Delay escalonado para cada card */
+.access-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.access-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.access-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.access-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.access-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.access-card:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.access-card:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.access-card:nth-child(8) {
+    animation-delay: 0.4s;
+}
+
+/* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .quick-access-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .access-card {
+        min-height: 110px;
+        padding: 16px 14px;
+    }
+
+    .card-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 375px) {
+    .quick-access-grid {
+        gap: 10px;
+    }
+
+    .access-card {
+        min-height: 100px;
+        padding: 14px 12px;
+    }
+}
+
+/* ========================================
+   HIGHLIGHT CARDS (Cards de Destaque)
+   ======================================== */
+
+.highlight-card {
+    background: var(--bg-surface);
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.highlight-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary);
+}
+
+.highlight-card:active {
+    transform: translateX(2px);
+}
+
+.highlight-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.highlight-card:hover .highlight-icon {
+    transform: scale(1.1);
+}

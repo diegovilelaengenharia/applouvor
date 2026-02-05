@@ -103,6 +103,7 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="stylesheet" href="../assets/css/design-system.css">
         <link rel="stylesheet" href="../assets/css/components/buttons.css">
         <link rel="stylesheet" href="../assets/css/components/cards.css">
+        <link rel="stylesheet" href="../assets/css/components/dashboard-cards.css">
         <link rel="stylesheet" href="../assets/css/components/badges.css">
         <link rel="stylesheet" href="../assets/css/components/icons.css">
         <link rel="stylesheet" href="../assets/css/components/sidebar.css">
