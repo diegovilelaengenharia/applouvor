@@ -228,7 +228,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         cursor: pointer; transition: all 0.2s; width: 100%;
     }
     .btn-primary {
-        background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;
+        background: var(--primary); color: white;
         box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
     }
     .btn-secondary { background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-color); }

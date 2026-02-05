@@ -212,10 +212,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
     .page-title {
         font-size: var(--font-display);
         font-weight: 800;
-        background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: var(--text-main);
         margin: 0;
     }
 
@@ -430,7 +427,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         width: 100%;
         padding: 14px 20px;
         border-radius: 12px;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--sage-700) 100%);
+        background: var(--primary);
         border: none;
         color: white;
         font-weight: 700;
@@ -658,7 +655,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 flex: 2; 
                 padding: 14px 20px; 
                 border-radius: 12px; 
-                background: linear-gradient(135deg, var(--primary) 0%, var(--sage-700) 100%); 
+                background: var(--primary); 
                 border: none; 
                 color: white; 
                 font-weight: 700; 
