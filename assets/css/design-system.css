@@ -144,96 +144,96 @@
     --breakpoint-xl: 1280px;
 
     /* ============================================
-       SEMANTIC COLOR SYSTEM (VS Code Inspired - Neutral)
+       SEMANTIC COLOR SYSTEM (Vibrant & Distinguishable)
        ============================================ */
 
-    /* 🔷 GESTÃO (Slate - Azul Acinzentado Profissional) */
+    /* 🔵 GESTÃO (Azul Vibrante) */
     /* Escalas, Repertório, Membros, Agenda, Ausências, Histórico */
-    --slate-50: #f8fafc;
-    --slate-100: #f1f5f9;
-    --slate-200: #e2e8f0;
-    --slate-300: #cbd5e1;
-    --slate-400: #94a3b8;
-    --slate-500: #64748b;
-    --slate-600: #475569;
-    --slate-700: #334155;
-    --slate-800: #1e293b;
-    --slate-900: #0f172a;
-    --slate-950: #020617;
+    --slate-50: #eff6ff;
+    --slate-100: #dbeafe;
+    --slate-200: #bfdbfe;
+    --slate-300: #93c5fd;
+    --slate-400: #60a5fa;
+    --slate-500: #3b82f6;
+    --slate-600: #2563eb;
+    --slate-700: #1d4ed8;
+    --slate-800: #1e40af;
+    --slate-900: #1e3a8a;
+    --slate-950: #172554;
 
-    --gradient-slate-light: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-    --gradient-slate-primary: linear-gradient(135deg, #64748b 0%, #475569 100%);
-    --gradient-slate-dark: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    --gradient-slate-light: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    --gradient-slate-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-slate-dark: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
 
-    --shadow-slate-sm: 0 2px 8px rgba(100, 116, 139, 0.15);
-    --shadow-slate-md: 0 4px 16px rgba(100, 116, 139, 0.2);
-    --shadow-slate-lg: 0 8px 24px rgba(100, 116, 139, 0.25);
+    --shadow-slate-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
+    --shadow-slate-md: 0 4px 16px rgba(59, 130, 246, 0.2);
+    --shadow-slate-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
 
-    /* 🌿 ESPIRITUAL (Sage - Verde Sálvia Calmo) */
+    /* 🟢 ESPIRITUAL (Verde Vibrante) */
     /* Devocional, Oração, Leitura Bíblica */
-    --sage-50: #f6f7f6;
-    --sage-100: #e8ebe8;
-    --sage-200: #d1d7d1;
-    --sage-300: #b4beb4;
-    --sage-400: #8a9b8a;
-    --sage-500: #6b7c6b;
-    --sage-600: #556355;
-    --sage-700: #3f4a3f;
-    --sage-800: #2a322a;
-    --sage-900: #1a1f1a;
-    --sage-950: #0f120f;
+    --sage-50: #f0fdf4;
+    --sage-100: #dcfce7;
+    --sage-200: #bbf7d0;
+    --sage-300: #86efac;
+    --sage-400: #4ade80;
+    --sage-500: #22c55e;
+    --sage-600: #16a34a;
+    --sage-700: #15803d;
+    --sage-800: #166534;
+    --sage-900: #14532d;
+    --sage-950: #052e16;
 
-    --gradient-sage-light: linear-gradient(135deg, #e8ebe8 0%, #d1d7d1 100%);
-    --gradient-sage-primary: linear-gradient(135deg, #6b7c6b 0%, #556355 100%);
-    --gradient-sage-dark: linear-gradient(135deg, #3f4a3f 0%, #2a322a 100%);
+    --gradient-sage-light: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --gradient-sage-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    --gradient-sage-dark: linear-gradient(135deg, #15803d 0%, #166534 100%);
 
-    --shadow-sage-sm: 0 2px 8px rgba(107, 124, 107, 0.15);
-    --shadow-sage-md: 0 4px 16px rgba(107, 124, 107, 0.2);
-    --shadow-sage-lg: 0 8px 24px rgba(107, 124, 107, 0.25);
+    --shadow-sage-sm: 0 2px 8px rgba(34, 197, 94, 0.15);
+    --shadow-sage-md: 0 4px 16px rgba(34, 197, 94, 0.2);
+    --shadow-sage-lg: 0 8px 24px rgba(34, 197, 94, 0.25);
 
-    /* 💜 COMUNICAÇÃO (Lavender - Lavanda Delicada) */
+    /* 💜 COMUNICAÇÃO (Roxo Vibrante) */
     /* Avisos, Notificações, Aniversariantes */
-    --lavender-50: #faf8ff;
-    --lavender-100: #f3f0ff;
-    --lavender-200: #e8e1ff;
-    --lavender-300: #d4c5ff;
-    --lavender-400: #b89dff;
-    --lavender-500: #9b7dff;
-    --lavender-600: #7c5ceb;
-    --lavender-700: #6344c7;
-    --lavender-800: #4e35a3;
-    --lavender-900: #3d2a7f;
-    --lavender-950: #1f1540;
+    --lavender-50: #faf5ff;
+    --lavender-100: #f3e8ff;
+    --lavender-200: #e9d5ff;
+    --lavender-300: #d8b4fe;
+    --lavender-400: #c084fc;
+    --lavender-500: #a855f7;
+    --lavender-600: #9333ea;
+    --lavender-700: #7e22ce;
+    --lavender-800: #6b21a8;
+    --lavender-900: #581c87;
+    --lavender-950: #3b0764;
 
-    --gradient-lavender-light: linear-gradient(135deg, #f3f0ff 0%, #e8e1ff 100%);
-    --gradient-lavender-primary: linear-gradient(135deg, #9b7dff 0%, #7c5ceb 100%);
-    --gradient-lavender-dark: linear-gradient(135deg, #6344c7 0%, #4e35a3 100%);
+    --gradient-lavender-light: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+    --gradient-lavender-primary: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    --gradient-lavender-dark: linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%);
 
-    --shadow-lavender-sm: 0 2px 8px rgba(155, 125, 255, 0.15);
-    --shadow-lavender-md: 0 4px 16px rgba(155, 125, 255, 0.2);
-    --shadow-lavender-lg: 0 8px 24px rgba(155, 125, 255, 0.25);
+    --shadow-lavender-sm: 0 2px 8px rgba(168, 85, 247, 0.15);
+    --shadow-lavender-md: 0 4px 16px rgba(168, 85, 247, 0.2);
+    --shadow-lavender-lg: 0 8px 24px rgba(168, 85, 247, 0.25);
 
-    /* 🌸 ADMIN (Rose - Rosa Discreto) */
+    /* 🌸 ADMIN (Rosa Vibrante) */
     /* Dashboard Líder, Configurações Admin */
-    --rose-50: #fff5f7;
-    --rose-100: #ffe8ed;
-    --rose-200: #ffd1dc;
-    --rose-300: #ffaac0;
-    --rose-400: #ff7a9a;
-    --rose-500: #f94877;
-    --rose-600: #e6265f;
-    --rose-700: #c21a4f;
-    --rose-800: #a11848;
-    --rose-900: #881844;
-    --rose-950: #4c0820;
+    --rose-50: #fdf2f8;
+    --rose-100: #fce7f3;
+    --rose-200: #fbcfe8;
+    --rose-300: #f9a8d4;
+    --rose-400: #f472b6;
+    --rose-500: #ec4899;
+    --rose-600: #db2777;
+    --rose-700: #be185d;
+    --rose-800: #9d174d;
+    --rose-900: #831843;
+    --rose-950: #500724;
 
-    --gradient-rose-light: linear-gradient(135deg, #ffe8ed 0%, #ffd1dc 100%);
-    --gradient-rose-primary: linear-gradient(135deg, #f94877 0%, #e6265f 100%);
-    --gradient-rose-dark: linear-gradient(135deg, #c21a4f 0%, #a11848 100%);
+    --gradient-rose-light: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    --gradient-rose-primary: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    --gradient-rose-dark: linear-gradient(135deg, #be185d 0%, #9d174d 100%);
 
-    --shadow-rose-sm: 0 2px 8px rgba(249, 72, 119, 0.15);
-    --shadow-rose-md: 0 4px 16px rgba(249, 72, 119, 0.2);
-    --shadow-rose-lg: 0 8px 24px rgba(249, 72, 119, 0.25);
+    --shadow-rose-sm: 0 2px 8px rgba(236, 72, 153, 0.15);
+    --shadow-rose-md: 0 4px 16px rgba(236, 72, 153, 0.2);
+    --shadow-rose-lg: 0 8px 24px rgba(236, 72, 153, 0.25);
 
     /* 🔷 RECURSOS (Teal Confiança) */
     /* Ausências, Relatórios, Estatísticas */
