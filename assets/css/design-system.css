@@ -590,3 +590,82 @@
 .rounded-full {
    border-radius: var(--radius-full);
 }
+
+    /* ============================================
+       SISTEMA PRIMARY/SECONDARY/TERTIARY
+       ============================================ */
+
+    /* ?? PRIMARY (Azul) - Gestão e Ações Principais */
+    --md-primary: var(--blue-500);
+    --md-on-primary: #ffffff;
+    --md-primary-container: var(--blue-100);
+    --md-on-primary-container: var(--blue-900);
+    --md-primary-fixed: var(--blue-400);
+    --md-primary-fixed-dim: var(--blue-500);
+    --md-on-primary-fixed: #ffffff;
+    --md-on-primary-fixed-variant: var(--blue-700);
+
+    /* ? SECONDARY (Cinza) - Elementos Secundários */
+    --md-secondary: var(--gray-500);
+    --md-on-secondary: #ffffff;
+    --md-secondary-container: var(--gray-100);
+    --md-on-secondary-container: var(--gray-900);
+    --md-secondary-fixed: var(--gray-400);
+    --md-secondary-fixed-dim: var(--gray-500);
+    --md-on-secondary-fixed: #ffffff;
+    --md-on-secondary-fixed-variant: var(--gray-700);
+
+    /* ?? TERTIARY (Ciano) - Espiritual e Destaques */
+    --md-tertiary: var(--cyan-400);
+    --md-on-tertiary: #ffffff;
+    --md-tertiary-container: var(--cyan-100);
+    --md-on-tertiary-container: var(--cyan-900);
+    --md-tertiary-fixed: var(--cyan-300);
+    --md-tertiary-fixed-dim: var(--cyan-400);
+    --md-on-tertiary-fixed: #ffffff;
+    --md-on-tertiary-fixed-variant: var(--cyan-700);
+
+    /* ?? ERROR - Destrutivo e Erros */
+    --md-error: var(--red-500);
+    --md-on-error: #ffffff;
+    --md-error-container: var(--red-100);
+    --md-on-error-container: var(--red-900);
+
+    /* ?? WARNING - Avisos e Comunicação */
+    --md-warning: var(--yellow-500);
+    --md-on-warning: var(--gray-900);
+    --md-warning-container: var(--yellow-100);
+    --md-on-warning-container: var(--yellow-900);
+
+    /* ============================================
+       SURFACE SYSTEM
+       ============================================ */
+
+    --md-surface: #ffffff;
+    --md-surface-dim: var(--gray-100);
+    --md-surface-bright: #ffffff;
+    --md-on-surface: var(--gray-900);
+    --md-on-surface-variant: var(--gray-600);
+
+    /* Surface Containers (Elevação) */
+    --md-surface-container-lowest: #ffffff;
+    --md-surface-container-low: var(--gray-50);
+    --md-surface-container: var(--gray-100);
+    --md-surface-container-high: var(--gray-200);
+    --md-surface-container-highest: var(--gray-300);
+
+    /* Outline */
+    --md-outline: var(--gray-300);
+    --md-outline-variant: var(--gray-200);
+
+    /* ============================================
+       INVERSE COLORS
+       ============================================ */
+
+    --md-inverse-surface: var(--gray-900);
+    --md-inverse-on-surface: var(--gray-50);
+    --md-inverse-primary: var(--blue-300);
+
+    /* Scrim (Overlay) */
+    --md-scrim: rgba(0, 0, 0, 0.32);
+    --md-shadow: rgba(0, 0, 0, 0.12);
