@@ -170,7 +170,7 @@ function renderSuggestions(list) {
             `;
         } else {
             const statusLabel = item.status === 'approved' 
-                ? '<span style="color:#059669; font-weight:700;">Aprovada</span>' 
+                ? '<span style="color:#16a34a; font-weight:700;">Aprovada</span>' 
                 : '<span style="color:#dc2626; font-weight:700;">Rejeitada</span>';
             actionsHtml = `<div style="flex:1; text-align:right; font-size:0.9rem;">${statusLabel}</div>`;
         }

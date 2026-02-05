@@ -121,7 +121,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         margin-right: 6px;
     }
 
-    .status-online { background-color: #10b981; }
+    .status-online { background-color: #22c55e; }
     .status-recent { background-color: #f59e0b; }
     .status-offline { background-color: #ef4444; }
 
@@ -132,7 +132,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         font-weight: 600;
     }
 
-    .badge-high { background: #dcfce7; color: #166534; }
+    .badge-high { background: #dcfce7; color: #15803d; }
     .badge-med { background: #fef9c3; color: #854d0e; }
     .badge-low { background: #fee2e2; color: #991b1b; }
     
@@ -186,7 +186,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="kpi-card">
-            <div class="kpi-icon" style="background: #ecfdf5; color: #10b981;">
+            <div class="kpi-icon" style="background: #f0fdf4; color: #22c55e;">
                 <i data-lucide="activity"></i>
             </div>
             <div>
