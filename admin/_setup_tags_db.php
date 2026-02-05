@@ -27,12 +27,12 @@ try {
 
     // Popular com alguns dados iniciais baseados na imagem
     $initialTags = [
-        ['Louvor', 'São cânticos cujas letras expressam elogio e agradecimento por aquilo que Deus fez.', '#F59E0B'], // Amarelo
-        ['Adoração', 'São cânticos cujas letras expressam reconhecimento a Deus por aquilo que Ele é.', '#8B5CF6'], // Roxo
-        ['Contemplação', 'São cânticos que se concentram em meditar na Pessoa de Deus.', '#3B82F6'], // Azul
-        ['Consagração', 'Tratam da dedicação de nossas vidas a Deus.', '#10B981'], // Verde
-        ['Alegria', 'Expressam alegria pelo Senhor e seus feitos.', '#EC4899'], // Rosa
-        ['Especiais', 'Temas como casamento, batizados, etc.', '#6366F1'] // Indigo
+        ['Louvor', 'São cânticos cujas letras expressam elogio e agradecimento por aquilo que Deus fez.', '#F59E0B'], // Amarelo (mantido)
+        ['Adoração', 'São cânticos cujas letras expressam reconhecimento a Deus por aquilo que Ele é.', '#a855f7'], // Purple 500 - Vibrante
+        ['Contemplação', 'São cânticos que se concentram em meditar na Pessoa de Deus.', '#3b82f6'], // Blue 500 (mantido)
+        ['Consagração', 'Tratam da dedicação de nossas vidas a Deus.', '#22c55e'], // Green 500 - Vibrante
+        ['Alegria', 'Expressam alegria pelo Senhor e seus feitos.', '#EC4899'], // Pink (mantido)
+        ['Especiais', 'Temas como casamento, batizados, etc.', '#6366F1'] // Indigo (mantido)
     ];
 
     $stmt = $pdo->prepare("INSERT INTO tags (name, description, color) VALUES (?, ?, ?)");

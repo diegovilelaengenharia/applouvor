@@ -50,7 +50,7 @@ if (!empty($currentUser['avatar'])) {
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color:#047857; font-size: 0.95rem;">PIB Oliveira</span>
+                <span class="sidebar-text" style="color:#059669; font-size: 0.95rem;">PIB Oliveira</span>
                 <span class="sidebar-text" style="font-size: 0.7rem; color: #64748b; font-weight: 600;">App Louvor</span>
             </div>
         </div>
@@ -196,8 +196,8 @@ if (!empty($currentUser['avatar'])) {
         --sidebar-collapsed-width: 88px;
         --sidebar-bg: #ffffff;
         --sidebar-text: #475569;
-        --brand-primary: #047857;
-        /* Emerald 700 */
+        --brand-primary: #059669;
+        /* Emerald 600 - Vibrante */
         --brand-light: #d1fae5;
         /* Emerald 100 */
         --brand-hover: #ecfdf5;
@@ -270,11 +270,11 @@ if (!empty($currentUser['avatar'])) {
     .nav-item.nav-primary:hover,
     .nav-item.nav-primary.active {
         background-color: #ecfdf5;
-        color: #047857;
+        color: #059669;
     }
 
     .nav-item.nav-primary.active svg {
-        color: #047857;
+        color: #059669;
     }
 
     /* GESTÃO → AZUL */
@@ -286,21 +286,21 @@ if (!empty($currentUser['avatar'])) {
     .nav-item.nav-blue:hover svg, .nav-item.nav-blue.active svg,
     .nav-item.nav-violet:hover svg, .nav-item.nav-violet.active svg { color: #2563eb; }
 
-    /* ESPIRITUAL → VERDE */
-    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: #10b981; }
+    /* ESPIRITUAL → VERDE VIBRANTE */
+    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: #22c55e; }
     .nav-item.nav-indigo:hover, .nav-item.nav-indigo.active,
     .nav-item.nav-rose:hover, .nav-item.nav-rose.active,
-    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: #ecfdf5; color: #059669; }
+    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: #f0fdf4; color: #16a34a; }
     .nav-item.nav-indigo:hover svg, .nav-item.nav-indigo.active svg,
     .nav-item.nav-rose:hover svg, .nav-item.nav-rose.active svg,
-    .nav-item.nav-cyan:hover svg, .nav-item.nav-cyan.active svg { color: #059669; }
+    .nav-item.nav-cyan:hover svg, .nav-item.nav-cyan.active svg { color: #16a34a; }
 
-    /* COMUNICAÇÃO → ROXO */
-    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: #8b5cf6; }
+    /* COMUNICAÇÃO → ROXO VIBRANTE */
+    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: #a855f7; }
     .nav-item.nav-amber:hover, .nav-item.nav-amber.active,
-    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: #f5f3ff; color: #7c3aed; }
+    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: #faf5ff; color: #9333ea; }
     .nav-item.nav-amber:hover svg, .nav-item.nav-amber.active svg,
-    .nav-item.nav-pink:hover svg, .nav-item.nav-pink.active svg { color: #7c3aed; }
+    .nav-item.nav-pink:hover svg, .nav-item.nav-pink.active svg { color: #9333ea; }
 
     /* Indicadores (Blue) */
     .nav-item.nav-indicators svg {
