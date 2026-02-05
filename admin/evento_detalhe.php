@@ -99,7 +99,7 @@ renderPageHeader($event['title'], '');
     
     /* Event Header */
     .event-header {
-        background: linear-gradient(135deg, <?= $event['color'] ?>20, <?= $event['color'] ?>40);
+        background: <?= $event['color'] ?>40;
         border: 1px solid <?= $event['color'] ?>;
         border-radius: 16px;
         padding: 24px;

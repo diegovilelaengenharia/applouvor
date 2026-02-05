@@ -296,13 +296,13 @@ if (!$song) {
                 display: flex; align-items: center; gap: 10px;
                 padding: 12px 16px;
                 border: none;
-                background: transparent;
-                color: var(--rose-500);
+                background: var(--rose-500);
+                color: white;
                 font-size: var(--font-body-sm);
                 font-weight: 500;
                 cursor: pointer;
                 text-align: left;
-                " onmouseover="this.style.backgroundColor=\'var(--rose-50)\'" onmouseout="this.style.backgroundColor=\'transparent\'">
+                " onmouseover="this.style.backgroundColor=\'var(--rose-600)\'" onmouseout="this.style.backgroundColor=\'var(--rose-500)\'">
                 <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
             </button>
         </form>
@@ -336,7 +336,7 @@ document.addEventListener(\'click\', function(e) {
 
         .sh-icon {
             width: 64px; height: 64px;
-            background: linear-gradient(135deg, var(--slate-600) 0%, #2c55a0 100%);
+            background: var(--slate-600);
             border-radius: 16px;
             display: inline-flex; align-items: center; justify-content: center;
             box-shadow: 0 8px 20px rgba(55, 106, 200, 0.25);
@@ -510,8 +510,7 @@ document.addEventListener(\'click\', function(e) {
                         <?php foreach ($tags as $tag): 
                             $tagColor = $tag['color'] ?? 'var(--slate-600)';
                         ?>
-                            <span style="padding: 6px 14px; background: <?= $tagColor ?>15; color: <?= $tagColor ?>; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
-                                <?= htmlspecialchars($tag['name']) ?>
+                            <span style="background: var(--slate-50); color: var(--slate-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">                             <?= htmlspecialchars($tag['name']) ?>
                             </span>
                         <?php endforeach; ?>
                     </div>
@@ -537,7 +536,7 @@ document.addEventListener(\'click\', function(e) {
                     <?php foreach ($personalTones as $pt): ?>
                         <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color);">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--slate-200); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--slate-500); font-size: 1rem; overflow: hidden;">
+                                <div style="width: 28px; height: 28px; background: var(--lavender-600); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; overflow: hidden;">
                                     <?php if ($pt['avatar']): ?>
                                         <img src="<?= htmlspecialchars($pt['avatar']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
                                     <?php else: ?>

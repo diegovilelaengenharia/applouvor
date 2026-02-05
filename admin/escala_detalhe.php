@@ -189,7 +189,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <input type="hidden" name="delete_schedule" value="1">
                     <button type="submit" id="deleteBtn" style="
                         padding: 10px 14px; border-radius: 12px;
-                        background: linear-gradient(135deg, var(--rose-500), var(--rose-600));
+                        background: var(--rose-500);
                         border: none; color: white; cursor: pointer;
                         display: flex; align-items: center; gap: 6px;
                         font-weight: 700; font-size: var(--font-body-sm);
@@ -205,7 +205,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <!-- Botão Salvar (visível apenas no modo edição) -->
                 <button id="saveBtn" onclick="saveAllChanges()" style="
                     padding: 10px 18px; border-radius: 12px;
-                    background: linear-gradient(135deg, var(--sage-500), var(--sage-600));
+                    background: var(--sage-500);
                     border: none; color: white; cursor: pointer;
                     display: none; align-items: center; gap: 6px;
                     font-weight: 700; font-size: var(--font-body-sm);
@@ -220,7 +220,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <!-- Botão Editar/Cancelar -->
                 <button id="editBtn" onclick="toggleEditMode()" style="
                     padding: 10px 18px; border-radius: 12px;
-                    background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); 
+                    background: var(--yellow-500); 
                     border: none; color: white; cursor: pointer;
                     display: flex; align-items: center; gap: 6px;
                     font-weight: 700; font-size: var(--font-body-sm);
@@ -237,7 +237,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <!-- Info Row Compacta (Ícones reduzidos) -->
         <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: <?= $schedule['notes'] ? '12px' : '0' ?>;">
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--lavender-600), #7c3aed); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: var(--lavender-600); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="clock" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
@@ -248,7 +248,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--sage-500), var(--sage-600)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: var(--sage-500); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="users" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
@@ -257,7 +257,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, var(--yellow-500), var(--yellow-600)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: var(--yellow-500); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="music" style="width: 14px; color: white;"></i>
                 </div>
                 <div>
@@ -308,9 +308,9 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     <div id="view-mode" class="view-mode">
         <!-- AUSÊNCIAS CADASTRADAS -->
         <?php if (!empty($absences)): ?>
-        <div style="background: linear-gradient(135deg, var(--rose-50) 0%, var(--rose-100) 100%); border: 1px solid var(--rose-200); border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);">
+        <div style="background: var(--rose-50); border: 1px solid var(--rose-200); border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--rose-600), var(--rose-700)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 32px; height: 32px; background: var(--rose-600); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="alert-circle" style="width: 18px; color: white;"></i>
                 </div>
                 <div>
@@ -444,7 +444,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                             <div style="display: flex; gap: 12px; align-items: flex-start;">
                                 <div style="
                                     min-width: 28px; height: 28px; 
-                                    background: linear-gradient(135deg, var(--lavender-600), #7c3aed); 
+                                    background: var(--lavender-600); 
                                     border-radius: 8px; 
                                     display: flex; align-items: center; justify-content: center;
                                     font-size: var(--font-body-sm); font-weight: 800; color: white;
@@ -457,22 +457,22 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                                     <p style="margin: 0 0 10px 0; font-size: var(--font-body-sm); color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
                                     <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
                                         <?php if ($song['category']): ?>
-                                            <span style="background: linear-gradient(135deg, var(--slate-50), var(--slate-100)); color: var(--slate-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">
+                                            <span style="background: var(--slate-50); color: var(--slate-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">
                                                 <?= htmlspecialchars($song['category']) ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['tone']): ?>
-                                            <span style="background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fed7aa;">
+                                            <span style="background: #fff7ed; color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fed7aa;">
                                                 <?= htmlspecialchars($song['tone']) ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($song['bpm']): ?>
-                                            <span style="background: linear-gradient(135deg, var(--rose-50), var(--rose-100)); color: var(--rose-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);">
+                                            <span style="background: var(--rose-50); color: var(--rose-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);">
                                                 <?= htmlspecialchars($song['bpm']) ?> BPM
                                             </span>
                                         <?php endif; ?>
                                         <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
-                                            background: linear-gradient(135deg, var(--rose-50), var(--rose-100)); color: var(--rose-500); text-decoration: none;
+                                            background: var(--rose-50); color: var(--rose-500); text-decoration: none;
                                             padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);
                                             display: inline-flex; align-items: center; gap: 3px;
                                             transition: all 0.2s;
