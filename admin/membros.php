@@ -273,9 +273,9 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     }
 
     .btn-whatsapp {
-        background: #10b981;
+        background: #22c55e;
         color: white;
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
     }
 
     .btn-phone {
@@ -682,7 +682,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 <?php
 function generateAvatarColor($name) {
-    $colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
+    $colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#06b6d4', '#3b82f6', '#6366f1', '#a855f7', '#d946ef', '#f43f5e'];
     $index = crc32($name) % count($colors);
     return $colors[$index];
 }

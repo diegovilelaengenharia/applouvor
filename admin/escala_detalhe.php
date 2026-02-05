@@ -205,14 +205,14 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <!-- Botão Salvar (visível apenas no modo edição) -->
                 <button id="saveBtn" onclick="saveAllChanges()" style="
                     padding: 10px 18px; border-radius: 12px;
-                    background: linear-gradient(135deg, #10b981, #059669);
+                    background: linear-gradient(135deg, #22c55e, #16a34a);
                     border: none; color: white; cursor: pointer;
                     display: none; align-items: center; gap: 6px;
                     font-weight: 700; font-size: var(--font-body-sm);
                     transition: all 0.2s;
-                    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.4)'"
-                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(16, 185, 129, 0.3)'">
+                    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(34, 197, 94, 0.4)'"
+                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(34, 197, 94, 0.3)'">
                     <i data-lucide="check" style="width: 16px;"></i>
                     <span>Salvar</span>
                 </button>
@@ -248,7 +248,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="users" style="width: 14px; color: white;"></i>
                 </div>
                 <div>

@@ -93,12 +93,12 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
         <a href="escala_adicionar.php" class="ripple" style="
             width: 48px; height: 48px; 
-            background: #166534; 
+            background: #22c55e; 
             color: white; 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             text-decoration: none;
-            box-shadow: 0 4px 6px -1px rgba(22, 101, 52, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.2);
             transition: all 0.2s;
         ">
             <i data-lucide="plus" style="width: 24px;"></i>
@@ -152,25 +152,25 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     // Definir Tema de Cor (Moderate Palette)
                     $type = mb_strtolower($schedule['event_type']);
                     if (strpos($type, 'domingo') !== false) {
-                        $themeColor = '#047857'; // Emerald 700 (Primary)
-                        $themeLight = '#ecfdf5'; // Emerald 50
+                        $themeColor = '#22c55e'; // Green 500
+                        $themeLight = '#f0fdf4'; // Green 50
                     } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = '#b45309'; // Amber 700
+                        $themeColor = '#f59e0b'; // Amber 500
                         $themeLight = '#fffbeb'; // Amber 50
                     } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#4338ca'; // Indigo 700
-                        $themeLight = '#eef2ff'; // Indigo 50
+                        $themeColor = '#a855f7'; // Purple 500
+                        $themeLight = '#faf5ff'; // Purple 50
                     } elseif (strpos($type, 'especial') !== false) {
-                        $themeColor = '#be123c'; // Rose 700
-                        $themeLight = '#fff1f2'; // Rose 50
+                        $themeColor = '#ec4899'; // Pink 500
+                        $themeLight = '#fdf2f8'; // Pink 50
                     } else {
-                        $themeColor = '#1d4ed8'; // Blue 700
+                        $themeColor = '#3b82f6'; // Blue 500
                         $themeLight = '#eff6ff'; // Blue 50
                     }
 
                     // Sobrescrever se for HOJE (Destaque sutil)
                     if ($isToday) {
-                        $themeColor = '#15803d'; // Green 700
+                        $themeColor = '#22c55e'; // Green 500
                         $themeLight = '#f0fdf4'; // Green 50
                     }
 
