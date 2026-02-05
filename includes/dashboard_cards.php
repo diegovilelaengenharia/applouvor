@@ -75,15 +75,15 @@ function getAllAvailableCards() {
             'admin_only' => false
         ],
         
-        // ESPIRITUAL → VERDE (#24CE6B)
+        // ESPIRITUAL → VERDE (#22d3ee)
         'leitura' => [
             'id' => 'leitura',
             'title' => 'Leitura Bíblica',
             'icon' => 'book-open',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#24CE6B', // Green 500
-            'bg' => '#ecfdf5', // Green 50
+            'color' => '#22d3ee', // Green 500
+            'bg' => '#ecfeff', // Green 50
             'url' => 'leitura.php',
             'admin_only' => false
         ],
@@ -93,8 +93,8 @@ function getAllAvailableCards() {
             'icon' => 'sunrise',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#24CE6B', // Green 500
-            'bg' => '#ecfdf5', // Green 50
+            'color' => '#22d3ee', // Green 500
+            'bg' => '#ecfeff', // Green 50
             'url' => 'devocionais.php',
             'admin_only' => false
         ],
@@ -104,8 +104,8 @@ function getAllAvailableCards() {
             'icon' => 'heart',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#24CE6B', // Green 500
-            'bg' => '#ecfdf5', // Green 50
+            'color' => '#22d3ee', // Green 500
+            'bg' => '#ecfeff', // Green 50
             'url' => 'oracao.php',
             'admin_only' => false
         ],
