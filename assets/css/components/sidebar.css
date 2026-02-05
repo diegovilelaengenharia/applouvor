@@ -17,32 +17,32 @@
     transition: all 0.2s;
 }
 
-/* Cores semânticas para navegação - GESTÃO (Azul Navy) */
+/* Cores semânticas para navegação - GESTÃO (Azul Vibrante) */
 .nav-blue {
-    color: var(--blue-600);
+    color: #3b82f6;
 }
 
 .nav-blue:hover {
     background: var(--blue-50);
-    color: var(--blue-700);
+    color: #2563eb;
 }
 
 .nav-blue.active {
     background: var(--blue-100);
-    color: var(--blue-700);
-    border-left: 3px solid var(--blue-500);
+    color: #2563eb;
+    border-left: 3px solid #3b82f6;
 }
 
-/* Forçar cor azul nos SVG */
+/* Forçar cor azul vibrante nos SVG */
 .nav-blue svg {
-    color: var(--blue-600) !important;
-    stroke: var(--blue-600) !important;
+    color: #3b82f6 !important;
+    stroke: #3b82f6 !important;
 }
 
 .nav-blue:hover svg,
 .nav-blue.active svg {
-    color: var(--blue-700) !important;
-    stroke: var(--blue-700) !important;
+    color: #2563eb !important;
+    stroke: #2563eb !important;
 }
 
 .nav-item.nav-blue.active svg,
