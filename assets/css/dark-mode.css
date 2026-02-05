@@ -1,88 +1,288 @@
 /* ========================================
-   DARK MODE - App Louvor PIB
-   Paleta de cores agradáveis (não preto puro)
+   DARK MODE - App Louvor PIB v2.0
+   Paleta Profissional Otimizada
    ======================================== */
 
 /* === VARIÁVEIS GLOBAIS DARK MODE === */
 body.dark-mode {
-    /* Backgrounds - Midnight Blue Theme (Smart Blue 950/900) */
-    --bg-primary: #080f1c;
-    /* Smart Blue 950 */
-    --bg-secondary: #0b1528;
-    /* Smart Blue 900 */
-    --bg-tertiary: #162a50;
-    /* Smart Blue 800 */
+    /* ============================================
+       BACKGROUNDS - Tons Escuros Profissionais
+       ============================================ */
 
-    /* Surface aliases */
-    --bg-body: #080f1c;
-    --bg-surface: #0b1528;
-    --bg-card: #0b1528;
+    /* Backgrounds Principais */
+    --bg-primary: #0a0a0a;
+    /* Gray 950 - Fundo principal */
+    --bg-secondary: #171717;
+    /* Gray 900 - Cards e superfícies */
+    --bg-tertiary: #262626;
+    /* Gray 800 - Elementos elevados */
 
-    /* Textos - Contraste alto em fundo azul */
-    --text-primary: rgba(235, 240, 250, 0.95);
-    --text-secondary: rgba(215, 225, 244, 0.80);
-    --text-muted: rgba(135, 165, 222, 0.60);
-    --text-main: var(--text-primary);
+    /* Surface Aliases */
+    --bg-body: #0a0a0a;
+    --bg-surface: #171717;
+    --bg-card: #171717;
+    --app-bg: #0a0a0a;
+    --card-bg: #171717;
 
-    /* Bordas - Integradas ao azul */
-    --border-color: #162a50;
-    /* Smart Blue 800 */
-    --border-subtle: #213f78;
-    /* Smart Blue 700 (mais visível se necessário) */
+    /* ============================================
+       TEXTOS - Alto Contraste
+       ============================================ */
 
-    /* Primary Colors - Smart Blue */
-    --primary: #376ac8;
-    /* Smart Blue 500 */
-    --primary-hover: #2c55a0;
-    /* Smart Blue 600 */
-    --primary-active: #213f78;
-    /* Smart Blue 700 */
-    --primary-light: #2c55a0;
-    /* Smart Blue 600 */
-    --primary-subtle: #162a50;
-    /* Smart Blue 800 (bg de badges) */
+    --text-primary: rgba(250, 250, 250, 0.98);
+    /* Quase branco */
+    --text-secondary: rgba(212, 212, 212, 0.85);
+    /* Gray 300 */
+    --text-muted: rgba(163, 163, 163, 0.70);
+    /* Gray 400 */
+    --text-main: rgba(250, 250, 250, 0.98);
 
-    /* Legacy mapping */
-    --primary-green: #376ac8;
-    --primary-green-light: #5f88d3;
-    --primary-green-dark: #2c55a0;
+    /* ============================================
+       BORDAS
+       ============================================ */
 
-    /* Accent Colors */
-    --accent-primary: #376ac8;
-    --accent-interactive: #5f88d3;
-    --primary-blue: #376ac8;
-    --primary-blue-light: #87a5de;
+    --border-color: #262626;
+    /* Gray 800 */
+    --border-subtle: #404040;
+    /* Gray 700 */
+    --border-focus: #60a5fa;
+    /* Blue 400 - Mais vibrante no escuro */
+
+    /* ============================================
+       CORES PRINCIPAIS - Versões Mais Claras
+       ============================================ */
+
+    /* 🔵 AZUL - Gestão (mais vibrante no escuro) */
+    --blue-50: #172554;
+    --blue-100: #1e3a8a;
+    --blue-200: #1e40af;
+    --blue-300: #1d4ed8;
+    --blue-400: #2563eb;
+    --blue-500: #3b82f6;
+    --blue-600: #60a5fa;
+    /* ⭐ Mais vibrante para dark */
+    --blue-700: #93c5fd;
+    --blue-800: #bfdbfe;
+    --blue-900: #dbeafe;
+    --blue-950: #eff6ff;
+
+    /* 🟢 VERDE - Espiritual (mais vibrante no escuro) */
+    --green-50: #0a4522;
+    --green-100: #106734;
+    --green-200: #158242;
+    --green-300: #1a9d50;
+    --green-400: #1fb85e;
+    --green-500: #24CE6B;
+    --green-600: #34d399;
+    /* ⭐ Mais vibrante para dark */
+    --green-700: #6ee7b7;
+    --green-800: #a7f3d0;
+    --green-900: #d1fae5;
+    --green-950: #ecfdf5;
+
+    /* 🟡 AMARELO - Comunicação (mais suave no escuro) */
+    --yellow-50: #664d00;
+    --yellow-100: #8b6501;
+    --yellow-200: #a67c01;
+    --yellow-300: #cc9c01;
+    --yellow-400: #e6b001;
+    --yellow-500: #FFC501;
+    --yellow-600: #fbbf24;
+    /* ⭐ Mais suave para dark */
+    --yellow-700: #fcd34d;
+    --yellow-800: #fde68a;
+    --yellow-900: #fef3c7;
+    --yellow-950: #fffbeb;
+
+    /* 🔴 VERMELHO - Crítico (mais vibrante no escuro) */
+    --red-50: #450a0a;
+    --red-100: #7f1d1d;
+    --red-200: #991b1b;
+    --red-300: #b91c1c;
+    --red-400: #dc2626;
+    --red-500: #ef4444;
+    --red-600: #f87171;
+    /* ⭐ Mais vibrante para dark */
+    --red-700: #fca5a5;
+    --red-800: #fecaca;
+    --red-900: #fee2e2;
+    --red-950: #fef2f2;
+
+    /* 🟣 ROXO - Liderança (mais vibrante no escuro) */
+    --purple-50: #581c87;
+    --purple-100: #6b21a8;
+    --purple-200: #7e22ce;
+    --purple-300: #9333ea;
+    --purple-400: #a855f7;
+    --purple-500: #c084fc;
+    /* ⭐ Mais vibrante para dark */
+    --purple-600: #d8b4fe;
+    --purple-700: #e9d5ff;
+    --purple-800: #f3e8ff;
+    --purple-900: #faf5ff;
+
+    /* ============================================
+       PRIMARY COLOR - Azul por padrão
+       ============================================ */
+
+    --primary: #60a5fa;
+    /* Blue 400 - Vibrante */
+    --primary-hover: #93c5fd;
+    /* Blue 300 */
+    --primary-active: #bfdbfe;
+    /* Blue 200 */
+    --primary-light: #1e40af;
+    /* Blue 800 dark */
+    --primary-foreground: #0a0a0a;
+
+    /* ============================================
+       STATUS COLORS - Versões Dark
+       ============================================ */
+
+    --success: #34d399;
+    /* Green 400 */
+    --success-light: #158242;
+    /* Green 800 dark */
+    --success-dark: #6ee7b7;
+    /* Green 700 */
+
+    --warning: #fbbf24;
+    /* Yellow 400 */
+    --warning-light: #a67c01;
+    /* Yellow 800 dark */
+    --warning-dark: #fcd34d;
+    /* Yellow 700 */
+
+    --error: #f87171;
+    /* Red 400 */
+    --error-light: #991b1b;
+    /* Red 800 dark */
+    --error-dark: #fca5a5;
+    /* Red 700 */
+
+    --info: #22d3ee;
+    /* Cyan 400 */
+    --info-light: #155e75;
+    /* Cyan 800 dark */
+    --info-dark: #67e8f9;
+    /* Cyan 300 */
+
+    --status-success: #34d399;
+    --status-warning: #fbbf24;
+    --status-error: #f87171;
+    --status-info: #22d3ee;
+
+    /* ============================================
+       ACCENT COLORS
+       ============================================ */
+
+    --accent-primary: #60a5fa;
+    /* Blue 400 */
+    --accent-interactive: #93c5fd;
+    /* Blue 300 */
     --accent-purple: #c084fc;
+    /* Purple 500 */
     --accent-purple-light: #d8b4fe;
+    /* Purple 600 */
+    --accent-pink: #f472b6;
+    /* Pink 400 */
+    --accent-orange: #fb923c;
+    /* Orange 400 */
+    --accent-teal: #22d3ee;
+    /* Cyan 400 */
 
-    /* Glassmorphism Tinted */
-    --glass-bg: rgba(11, 21, 40, 0.7);
-    --glass-border: rgba(55, 106, 200, 0.2);
+    /* ============================================
+       LEGACY MAPPING
+       ============================================ */
 
-    /* Shadows Tinted */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+    --primary-green: #34d399;
+    --primary-green-light: #6ee7b7;
+    --primary-green-dark: #1a9d50;
 
-    /* Glows */
-    --shadow-glow: 0 0 20px rgba(55, 106, 200, 0.25);
-    --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.7);
+    --primary-blue: #60a5fa;
+    --primary-blue-light: #93c5fd;
 
-    /* Gradientes */
-    /* Gradientes Substituídos por Sólidos */
-    --gradient-primary: #376ac8;
-    --gradient-elegant: #0b1528;
-    --gradient-soft: #162a50;
-    --gradient-vibrant: #376ac8;
-    --gradient-hero: #0b1528;
+    --primary-gray: #737373;
+    --primary-gray-light: #a3a3a3;
+    --primary-gray-dark: #404040;
+
+    /* ============================================
+       GLASSMORPHISM
+       ============================================ */
+
+    --glass-bg: rgba(23, 23, 23, 0.7);
+    --glass-border: rgba(96, 165, 250, 0.2);
+    --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
+
+    /* ============================================
+       SHADOWS - Mais Intensas no Dark
+       ============================================ */
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.9), 0 10px 10px -5px rgba(0, 0, 0, 0.6);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
+    --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
+    --shadow-glow: 0 0 20px rgba(96, 165, 250, 0.3);
+
+    /* Sombras Coloridas */
+    --shadow-blue-sm: 0 2px 8px rgba(96, 165, 250, 0.2);
+    --shadow-blue-md: 0 4px 16px rgba(96, 165, 250, 0.25);
+    --shadow-blue-lg: 0 8px 24px rgba(96, 165, 250, 0.3);
+    --shadow-blue-xl: 0 12px 32px rgba(96, 165, 250, 0.35);
+
+    --shadow-green-sm: 0 2px 8px rgba(52, 211, 153, 0.2);
+    --shadow-green-md: 0 4px 16px rgba(52, 211, 153, 0.25);
+    --shadow-green-lg: 0 8px 24px rgba(52, 211, 153, 0.3);
+    --shadow-green-xl: 0 12px 32px rgba(52, 211, 153, 0.35);
+
+    --shadow-yellow-sm: 0 2px 8px rgba(251, 191, 36, 0.2);
+    --shadow-yellow-md: 0 4px 16px rgba(251, 191, 36, 0.25);
+    --shadow-yellow-lg: 0 8px 24px rgba(251, 191, 36, 0.3);
+    --shadow-yellow-xl: 0 12px 32px rgba(251, 191, 36, 0.35);
+
+    --shadow-red-sm: 0 2px 8px rgba(248, 113, 113, 0.2);
+    --shadow-red-md: 0 4px 16px rgba(248, 113, 113, 0.25);
+    --shadow-red-lg: 0 8px 24px rgba(248, 113, 113, 0.3);
+    --shadow-red-xl: 0 12px 32px rgba(248, 113, 113, 0.35);
+
+    --shadow-purple-sm: 0 2px 8px rgba(192, 132, 252, 0.2);
+    --shadow-purple-md: 0 4px 16px rgba(192, 132, 252, 0.25);
+    --shadow-purple-lg: 0 8px 24px rgba(192, 132, 252, 0.3);
+    --shadow-purple-xl: 0 12px 32px rgba(192, 132, 252, 0.35);
+
+    /* ============================================
+       GRADIENTES - Sólidos para Dark
+       ============================================ */
+
+    --gradient-primary: #34d399;
+    --gradient-elegant: #171717;
+    --gradient-soft: #262626;
+    --gradient-dark: #0a0a0a;
+    --gradient-hero: #34d399;
+    --gradient-green: #34d399;
+    --gradient-blue: #60a5fa;
+    --gradient-red: #f87171;
+    --gradient-yellow: #fbbf24;
+    --gradient-purple: #c084fc;
+    --gradient-vibrant: #60a5fa;
+
+    /* Header */
+    --header-bg: #171717;
 }
 
-/* === TRANSIÇÕES SUAVES === */
+/* ============================================
+   TRANSIÇÕES SUAVES
+   ============================================ */
+
 body.dark-mode * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* === COMPONENTES GLOBAIS === */
+/* ============================================
+   COMPONENTES GLOBAIS
+   ============================================ */
 
 /* Scrollbar Dark */
 body.dark-mode ::-webkit-scrollbar {
@@ -112,9 +312,11 @@ body.dark-mode a:hover {
     color: var(--primary-green-light);
 }
 
-/* === CARDS E SUPERFÍCIES === */
+/* ============================================
+   CARDS E SUPERFÍCIES
+   ============================================ */
 
-/* Cards Globais - Força fundo escuro em todos os cards */
+/* Cards Globais */
 body.dark-mode .card,
 body.dark-mode .dashboard-card,
 body.dark-mode .quick-access-card,
@@ -127,38 +329,21 @@ body.dark-mode .member-card,
 body.dark-mode .song-card,
 body.dark-mode [class*="card-"],
 body.dark-mode [class*="-card"] {
-    background: #1e1e1e !important;
+    background: var(--bg-secondary) !important;
     border: 1px solid var(--border-color) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: var(--shadow-md) !important;
 }
 
-/* Força fundo escuro em QUALQUER elemento com background branco */
-body.dark-mode [style*="background: white"],
-body.dark-mode [style*="background:white"],
-body.dark-mode [style*="background-color: white"],
-body.dark-mode [style*="background: #fff"],
-body.dark-mode [style*="background:#fff"],
-body.dark-mode [style*="background: #ffffff"],
-body.dark-mode [style*="background:#ffffff"],
-body.dark-mode [style*="background: rgb(255"],
-body.dark-mode div[style*="border-radius"][style*="padding"],
-body.dark-mode section[style*="background"] {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
-}
-
-/* Efeito Premium Hover em Cards Interativos */
+/* Efeito Hover em Cards Interativos */
 body.dark-mode .dashboard-card:hover,
 body.dark-mode .quick-access-card:hover,
 body.dark-mode .event-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important;
-    border-top-color: var(--primary-green) !important;
-    /* Toque de cor ao passar o mouse */
+    box-shadow: var(--shadow-lg) !important;
+    border-color: var(--primary) !important;
 }
 
-/* Títulos e textos principais dentro dos cards */
+/* Títulos e textos dentro dos cards */
 body.dark-mode .card h1,
 body.dark-mode .card h2,
 body.dark-mode .card h3,
@@ -181,7 +366,7 @@ body.dark-mode [class*="card-"] p {
     color: var(--text-primary) !important;
 }
 
-/* Textos secundários e muted */
+/* Textos secundários */
 body.dark-mode .card .text-muted,
 body.dark-mode .card small,
 body.dark-mode .card .subtitle,
@@ -206,9 +391,10 @@ body.dark-mode .card-body {
     color: var(--text-primary) !important;
 }
 
-/* === MODAIS E OVERLAYS === */
+/* ============================================
+   MODAIS E OVERLAYS
+   ============================================ */
 
-/* Modais */
 body.dark-mode .modal,
 body.dark-mode .modal-content,
 body.dark-mode .modal-dialog,
@@ -216,57 +402,27 @@ body.dark-mode .modal-body,
 body.dark-mode [class*="modal-"],
 body.dark-mode .overlay,
 body.dark-mode .popup {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.95) !important;
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
     border: 1px solid var(--border-color) !important;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    box-shadow: var(--shadow-2xl) !important;
 }
 
 body.dark-mode .modal-header {
-    background: #1e1e1e !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    color: white !important;
+    background: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
 }
 
 body.dark-mode .modal-footer {
-    background: #1e1e1e !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-/* === CALENDÁRIO === */
-
-/* Calendário e suas células */
-body.dark-mode .calendar,
-body.dark-mode .calendar-grid,
-body.dark-mode .calendar-day,
-body.dark-mode .calendar-cell,
-body.dark-mode .calendar-header,
-body.dark-mode [class*="calendar-"] {
     background: var(--bg-secondary) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-primary) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
 
-body.dark-mode .calendar-day:hover {
-    background: var(--bg-tertiary) !important;
-}
+/* ============================================
+   INPUTS E FORMULÁRIOS
+   ============================================ */
 
-/* === CONTAINERS E WRAPPERS === */
-
-/* Containers principais */
-body.dark-mode .container,
-body.dark-mode .content-wrapper,
-body.dark-mode .main-content,
-body.dark-mode .page-content,
-body.dark-mode .content-area,
-body.dark-mode .wrapper {
-    background: var(--bg-primary) !important;
-    color: var(--text-primary) !important;
-}
-
-/* === INPUTS E FORMULÁRIOS === */
-
-/* Inputs de texto */
 body.dark-mode input[type="text"],
 body.dark-mode input[type="email"],
 body.dark-mode input[type="password"],
@@ -275,19 +431,18 @@ body.dark-mode input[type="number"],
 body.dark-mode input[type="tel"],
 body.dark-mode input[type="url"],
 body.dark-mode textarea {
-    background: #2a2a2a !important;
-    color: white !important;
-    border: 1px solid #404040 !important;
-    transition: all 0.2s ease;
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 body.dark-mode input:focus,
 body.dark-mode textarea:focus,
 body.dark-mode select:focus {
-    background: #333 !important;
-    border-color: var(--primary-green) !important;
-    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.2) !important;
-    color: white !important;
+    background: var(--bg-secondary) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
+    color: var(--text-primary) !important;
 }
 
 body.dark-mode input::placeholder,
@@ -295,7 +450,6 @@ body.dark-mode textarea::placeholder {
     color: var(--text-muted) !important;
 }
 
-/* Selects e dropdowns */
 body.dark-mode select {
     background: var(--bg-tertiary) !important;
     color: var(--text-primary) !important;
@@ -307,9 +461,10 @@ body.dark-mode select option {
     color: var(--text-primary) !important;
 }
 
-/* === DROPDOWNS E MENUS === */
+/* ============================================
+   DROPDOWNS E MENUS
+   ============================================ */
 
-/* Profile dropdown e outros dropdowns */
 body.dark-mode .dropdown,
 body.dark-mode .dropdown-menu,
 body.dark-mode .dropdown-content,
@@ -330,204 +485,10 @@ body.dark-mode .dropdown a:hover {
     background: var(--bg-tertiary) !important;
 }
 
-/* === BOTÕES ESPECÍFICOS === */
+/* ============================================
+   SIDEBAR
+   ============================================ */
 
-/* Botão do Líder - Premium Emerald Style */
-/* MOVIDO PARA layout.php - .admin-crown-btn e .lider-menu-item */
-
-
-/* === OVERRIDES PARA ESTILOS INLINE === */
-
-/* Bottom Sheets e Modais com gradientes brancos */
-body.dark-mode .bottom-sheet,
-body.dark-mode .bottom-sheet-header,
-body.dark-mode [id*="Sheet"],
-body.dark-mode [id*="sheet"] {
-    background: var(--bg-secondary) !important;
-}
-
-/* Config Button com gradiente branco inline */
-body.dark-mode .config-btn,
-body.dark-mode button[onclick*="openConfig"] {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
-}
-
-/* Profile Dropdown Headers com gradiente branco */
-body.dark-mode [style*="#f8fafc"] {
-    background: var(--bg-tertiary) !important;
-}
-
-/* Badges e ícones com fundo amarelo claro (#fff7ed, #fffbeb) */
-body.dark-mode [style*="#fff7ed"],
-body.dark-mode [style*="#fffbeb"] {
-    background: #78350f !important;
-    /* Amber 900 - dark version */
-    color: #fbbf24 !important;
-    /* Amber 400 */
-    border-color: #92400e !important;
-}
-
-/* Bottom Navigation */
-body.dark-mode .bottom-nav,
-body.dark-mode [class*="bottom-nav"],
-body.dark-mode [id*="bottomNav"] {
-    background: var(--bg-secondary) !important;
-    border-top-color: var(--border-color) !important;
-}
-
-/* Elementos com background-color: white inline */
-body.dark-mode [style*="background-color: white"],
-body.dark-mode [style*="background-color:white"],
-body.dark-mode [style*="background: white"],
-body.dark-mode [style*="background:white"] {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-}
-
-/* Elementos com background #fff inline */
-body.dark-mode [style*="background: #fff"],
-body.dark-mode [style*="background:#fff"] {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-}
-
-/* === PÁGINAS ESPECÍFICAS === */
-
-/* Página de Leitura Bíblica */
-body.dark-mode .selection-container,
-body.dark-mode .plan-grid,
-body.dark-mode .plan-card {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode .plan-card:hover {
-    background: var(--bg-tertiary) !important;
-}
-
-body.dark-mode .plan-title,
-body.dark-mode .plan-desc {
-    color: var(--text-primary) !important;
-}
-
-body.dark-mode .action-bar,
-body.dark-mode .date-group {
-    background: var(--bg-secondary) !important;
-}
-
-body.dark-mode .date-input {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode .btn-start {
-    background: var(--primary) !important;
-    color: white !important;
-}
-
-body.dark-mode .cal-strip {
-    background: var(--bg-secondary) !important;
-}
-
-body.dark-mode .bottom-bar {
-    background: var(--bg-secondary) !important;
-    border-top-color: var(--border-color) !important;
-}
-
-body.dark-mode .action-btn {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-}
-
-body.dark-mode .modal-overlay {
-    background: rgba(0, 0, 0, 0.8) !important;
-}
-
-body.dark-mode .editor-btn,
-body.dark-mode .emoji-btn {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
-}
-
-/* Mural de Avisos - Card branco grande */
-body.dark-mode .notice-card,
-body.dark-mode .notice-container,
-body.dark-mode .empty-state {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-}
-
-/* Formulários e páginas de adicionar/editar */
-body.dark-mode .form-container,
-body.dark-mode .form-card,
-body.dark-mode .form-group {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-}
-
-body.dark-mode .form-label {
-    color: var(--text-primary) !important;
-}
-
-/* Calendário da Agenda - Header branco */
-body.dark-mode .calendar-header,
-body.dark-mode .calendar-controls {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-}
-
-
-/* Botões de ação com fundo branco */
-body.dark-mode .btn-white,
-body.dark-mode [class*="btn-"][class*="light"] {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-}
-
-/* === CORREÇÕES DE CORES INLINE (DASHBOARD) === */
-
-/* Texto Azul Escuro -> Azul Claro */
-body.dark-mode [style*="color: #1e40af"],
-body.dark-mode [style*="color:#1e40af"] {
-    color: #60a5fa !important;
-}
-
-/* Texto Azul Médio -> Azul Claro */
-body.dark-mode [style*="color: #3b82f6"],
-body.dark-mode [style*="color:#3b82f6"] {
-    color: #93c5fd !important;
-}
-
-/* Texto Verde Escuro -> Verde Claro */
-body.dark-mode [style*="color: #047857"],
-body.dark-mode [style*="color:#047857"] {
-    color: #34d399 !important;
-}
-
-/* Texto Verde Médio -> Verde Claro */
-body.dark-mode [style*="color: var(--primary)"],
-body.dark-mode [style*="color:var(--primary)"] {
-    color: #6ee7b7 !important;
-}
-
-/* Texto Roxo Escuro -> Roxo Claro */
-body.dark-mode [style*="color: #6d28d9"],
-body.dark-mode [style*="color:#6d28d9"] {
-    color: #a78bfa !important;
-}
-
-/* Texto Roxo Médio -> Roxo Claro */
-body.dark-mode [style*="color: #7c3aed"],
-body.dark-mode [style*="color:#7c3aed"] {
-    color: #c4b5fd !important;
-}
-
-/* Sidebar */
 body.dark-mode .sidebar {
     background: var(--bg-secondary);
     border-right-color: var(--border-color);
@@ -545,76 +506,35 @@ body.dark-mode .logo-area span {
     color: var(--primary-green) !important;
 }
 
-body.dark-mode .logo-area img {
-    filter: brightness(0) invert(1);
-}
-
 body.dark-mode .sidebar-nav {
     background: transparent;
 }
 
 body.dark-mode .nav-item {
-    color: rgba(255, 255, 255, 0.85) !important;
-    /* Texto mais claro */
+    color: var(--text-secondary) !important;
 }
 
 body.dark-mode .nav-item:hover {
     background: var(--bg-tertiary);
-    color: rgba(255, 255, 255, 0.95) !important;
-    /* Texto ainda mais claro no hover */
+    color: var(--text-primary) !important;
 }
 
 body.dark-mode .nav-item.active {
     background: var(--primary-light);
-    color: rgba(255, 255, 255, 1) !important;
-    /* Branco puro quando ativo */
+    color: var(--text-primary) !important;
 }
 
-/* ÍCONES COLORIDOS - Mantém cores vibrantes */
+/* Ícones coloridos - mantém cores originais */
 body.dark-mode .nav-item svg {
-    /* Remove o filtro de cor - mantém a cor original do ícone */
     opacity: 1 !important;
 }
 
 body.dark-mode .nav-item:hover svg {
-    /* Mantém cor original no hover, apenas aumenta brilho */
     filter: brightness(1.2);
 }
 
 body.dark-mode .nav-item.active svg {
-    /* Mantém cor original quando ativo, com brilho máximo */
     filter: brightness(1.3) !important;
-}
-
-/* Sidebar specific nav items */
-body.dark-mode .nav-item.nav-primary:hover,
-body.dark-mode .nav-item.nav-primary.active {
-    background-color: var(--primary-light);
-    color: var(--primary-green-light);
-}
-
-body.dark-mode .nav-item.nav-emerald:hover,
-body.dark-mode .nav-item.nav-emerald.active {
-    background-color: var(--primary-light);
-    color: var(--primary-green-light);
-}
-
-body.dark-mode .nav-item.nav-spiritual:hover,
-body.dark-mode .nav-item.nav-spiritual.active {
-    background-color: #1e3a8a;
-    color: #93c5fd;
-}
-
-body.dark-mode .nav-item.nav-communication:hover,
-body.dark-mode .nav-item.nav-communication.active {
-    background-color: #7c2d12;
-    color: #fed7aa;
-}
-
-body.dark-mode .nav-item.nav-communication.nav-pink:hover,
-body.dark-mode .nav-item.nav-communication.nav-pink.active {
-    background-color: #831843;
-    color: #fbcfe8;
 }
 
 body.dark-mode .nav-divider {
@@ -625,76 +545,47 @@ body.dark-mode .sidebar-text {
     color: var(--text-muted);
 }
 
-/* Sidebar Footer - BARRA DE PERFIL PREMIUM */
+/* Sidebar Footer */
 body.dark-mode .sidebar-footer {
-    background: #1a1a1a !important;
-    border-top: 2px solid rgba(52, 211, 153, 0.2) !important;
-    /* Borda verde sutil */
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
-    padding: 12px !important;
+    background: var(--bg-tertiary) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
 
 body.dark-mode .user-profile-integrated {
-    color: rgba(255, 255, 255, 0.95) !important;
+    color: var(--text-primary) !important;
 }
 
 body.dark-mode .profile-link:hover {
-    background: rgba(52, 211, 153, 0.1) !important;
-    /* Hover com toque verde */
-    border-radius: 8px;
+    background: var(--bg-primary) !important;
 }
 
 body.dark-mode .user-avatar-compact {
-    border: 3px solid #34d399 !important;
-    /* Borda verde vibrante */
-    box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
+    border: 2px solid var(--primary) !important;
 }
 
 body.dark-mode .u-name {
-    color: rgba(255, 255, 255, 1) !important;
-    /* Branco puro para o nome */
-    font-weight: 600 !important;
+    color: var(--text-primary) !important;
 }
 
 body.dark-mode .u-role {
-    color: rgba(255, 255, 255, 0.70) !important;
-    /* Mais claro que antes */
+    color: var(--text-secondary) !important;
 }
 
-body.dark-mode .action-icon-subtle {
-    color: rgba(255, 255, 255, 0.70) !important;
+/* ============================================
+   BOTTOM NAVIGATION
+   ============================================ */
+
+body.dark-mode .bottom-nav,
+body.dark-mode [class*="bottom-nav"],
+body.dark-mode [id*="bottomNav"] {
+    background: var(--bg-secondary) !important;
+    border-top-color: var(--border-color) !important;
 }
 
-body.dark-mode .action-icon-subtle:hover {
-    background: rgba(52, 211, 153, 0.15) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
-    border-radius: 6px;
-}
-
-/* Sidebar Overlay */
-body.dark-mode .sidebar-overlay {
-    background: rgba(0, 0, 0, 0.7);
-}
-
-/* Sidebar Scrollbar */
-body.dark-mode .sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-body.dark-mode .sidebar::-webkit-scrollbar-thumb {
-    background: transparent;
-}
-
-body.dark-mode .sidebar:hover::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-}
-
-/* Bottom Navigation */
 body.dark-mode .bottom-nav-bar {
-    background: rgba(36, 41, 56, 0.95);
+    background: var(--bg-secondary);
     backdrop-filter: blur(12px);
     border-top-color: var(--border-color);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .b-nav-item {
@@ -702,17 +593,22 @@ body.dark-mode .b-nav-item {
 }
 
 body.dark-mode .b-nav-item.active {
-    color: var(--primary-green-light);
+    color: var(--primary);
 }
 
 body.dark-mode .b-nav-item.active .b-nav-icon-wrapper {
     background: var(--primary-light);
 }
 
-/* Bottom Sheets */
-body.dark-mode .bottom-sheet {
-    background: var(--bg-secondary);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+/* ============================================
+   BOTTOM SHEETS
+   ============================================ */
+
+body.dark-mode .bottom-sheet,
+body.dark-mode .bottom-sheet-header,
+body.dark-mode [id*="Sheet"],
+body.dark-mode [id*="sheet"] {
+    background: var(--bg-secondary) !important;
 }
 
 body.dark-mode .sheet-header {
@@ -733,20 +629,10 @@ body.dark-mode .sheet-btn:active {
     background: var(--bg-primary);
 }
 
-/* Aviso Item Premium */
-body.dark-mode .aviso-item {
-    background: #1e1e1e !important;
-    border: 1px solid var(--border-color) !important;
-    border-left-width: 4px !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-}
+/* ============================================
+   MOBILE HEADER
+   ============================================ */
 
-body.dark-mode .aviso-item:hover {
-    transform: translateX(2px);
-    background: #2a2a2a !important;
-}
-
-/* Mobile Header */
 body.dark-mode .mobile-header {
     background: var(--bg-secondary);
     border-bottom-color: var(--border-color);
@@ -764,1037 +650,73 @@ body.dark-mode .btn-menu-trigger:active {
     background: var(--border-color);
 }
 
-/* Dropdowns */
-body.dark-mode .dropdown-menu {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-    box-shadow: var(--shadow-lg);
-}
-
-body.dark-mode .dropdown-item {
-    color: var(--text-primary);
-}
-
-body.dark-mode .dropdown-item:hover {
-    background: var(--bg-tertiary);
-}
-
-/* === CARDS === */
-
-body.dark-mode .card-clean,
-body.dark-mode .card-btn,
-body.dark-mode .quick-access-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-    box-shadow: var(--shadow-sm);
-}
-
-body.dark-mode .card-btn:active,
-body.dark-mode .quick-access-card:active {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .card-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .card-subtitle {
-    color: var(--text-secondary);
-}
-
-/* Hero Section */
-body.dark-mode .hero-section {
-    background: var(--gradient-hero);
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
-}
-
-body.dark-mode .hero-greeting,
-body.dark-mode .hero-subtitle,
-body.dark-mode .hero-info {
-    color: white;
-}
-
-/* Timeline Cards */
-body.dark-mode .timeline-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .timeline-card:hover {
-    border-color: var(--primary-green);
-    box-shadow: var(--shadow-glow);
-}
-
-body.dark-mode .timeline-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .timeline-subtitle {
-    color: var(--text-secondary);
-}
-
-body.dark-mode .timeline-meta {
-    color: var(--text-muted);
-}
-
-body.dark-mode .timeline-wrapper::before {
-    background: var(--border-color);
-}
-
-/* Event Cards */
-body.dark-mode .event-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .event-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .event-footer {
-    border-top-color: var(--border-color);
-}
-
-/* Compact Cards */
-body.dark-mode .compact-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .compact-title {
-    color: var(--text-primary);
-}
-
-/* Stat Cards */
-body.dark-mode .stat-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .stat-card:hover {
-    box-shadow: var(--shadow-md);
-}
-
-body.dark-mode .stat-icon {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .stat-label {
-    color: var(--text-secondary);
-}
-
-body.dark-mode .stat-value {
-    color: var(--text-primary);
-}
-
-/* Schedule Cards */
-body.dark-mode .schedule-preview-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .schedule-preview-card:hover {
-    border-color: var(--primary-blue);
-}
-
-body.dark-mode .schedule-date-badge {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .schedule-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .schedule-time {
-    color: var(--text-secondary);
-}
-
-/* === FORMULÁRIOS === */
-
-body.dark-mode .form-input,
-body.dark-mode .form-select,
-body.dark-mode input[type="text"],
-body.dark-mode input[type="email"],
-body.dark-mode input[type="password"],
-body.dark-mode input[type="date"],
-body.dark-mode input[type="time"],
-body.dark-mode input[type="number"],
-body.dark-mode textarea,
-body.dark-mode select {
-    background: var(--bg-tertiary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-}
-
-body.dark-mode .form-input:focus,
-body.dark-mode .form-select:focus,
-body.dark-mode input:focus,
-body.dark-mode textarea:focus,
-body.dark-mode select:focus {
-    border-color: var(--primary-green);
-    background: var(--bg-secondary);
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-body.dark-mode .form-label {
-    color: var(--text-secondary);
-}
-
-body.dark-mode ::placeholder {
-    color: var(--text-muted);
-}
-
-/* === BOTÕES === */
-
-body.dark-mode .btn-primary {
-    background: var(--primary-green);
-    color: white;
-}
-
-body.dark-mode .btn-primary:hover {
-    background: var(--primary-green-dark);
-}
-
-body.dark-mode .btn-outline {
-    border-color: var(--border-color);
-    color: var(--text-primary);
-    background: transparent;
-}
-
-body.dark-mode .btn-outline:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--primary-green);
-}
-
-body.dark-mode .btn-outline:active {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .btn-ghost {
-    color: var(--text-secondary);
-}
-
-body.dark-mode .btn-ghost:hover {
-    color: var(--text-primary);
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .btn-icon {
-    color: var(--text-secondary);
-}
-
-body.dark-mode .btn-icon:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-}
-
-/* Action Buttons */
-body.dark-mode .btn-action-add,
-body.dark-mode .btn-action-save {
-    background: var(--primary-green);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-}
-
-body.dark-mode .btn-action-cancel {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-}
-
-body.dark-mode .btn-action-delete {
-    background: #ef4444;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-}
-
-/* === TABELAS === */
-
-body.dark-mode .clean-table-container {
-    background: #1e1e1e !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
-}
-
-body.dark-mode .clean-table th {
-    background: rgba(255, 255, 255, 0.03) !important;
-    color: rgba(255, 255, 255, 0.75) !important;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--border-color) !important;
-}
-
-body.dark-mode .clean-table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    color: rgba(255, 255, 255, 0.9) !important;
-}
-
-body.dark-mode .clean-table tr:hover td {
-    background: rgba(255, 255, 255, 0.02) !important;
-}
-
-body.dark-mode .table-avatar {
-    background: var(--bg-tertiary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-}
-
-/* === BADGES E PILLS === */
-
-body.dark-mode .badge-pill.admin {
-    background: #064e3b;
-    color: #6ee7b7;
-}
-
-body.dark-mode .badge-pill.user {
-    background: #713f12;
-    color: #fde047;
-}
-
-body.dark-mode .stat-pill {
-    background: var(--bg-tertiary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .text-highlight {
-    background: var(--primary-light);
-    color: var(--primary-green-light);
-}
-
-/* Tags */
-body.dark-mode .tag-purple {
-    background: #4c1d95;
-    color: #c4b5fd;
-}
-
-body.dark-mode .tag-green {
-    background: #064e3b;
-    color: #6ee7b7;
-}
-
-/* === AVATARES === */
-
-body.dark-mode .avatar-small,
-body.dark-mode .user-avatar-sm,
-body.dark-mode .avatar-placeholder {
-    border-color: var(--border-color);
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-}
-
-body.dark-mode .avatar-group .avatar-item {
-    border-color: var(--bg-secondary);
-}
-
-/* === SETTINGS PAGE === */
-
-body.dark-mode .settings-profile-header {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .settings-avatar {
-    border-color: var(--primary-green);
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .settings-name {
-    color: var(--text-primary);
-}
-
-body.dark-mode .settings-role {
-    color: var(--text-secondary);
-}
-
-body.dark-mode .settings-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .settings-item {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .settings-item:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--primary-green);
-}
-
-body.dark-mode .settings-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .settings-subtitle {
-    color: var(--text-muted);
-}
-
-body.dark-mode .settings-section-title {
-    color: var(--text-muted);
-}
-
-body.dark-mode .settings-icon svg {
-    color: var(--primary-green);
-}
-
-body.dark-mode .settings-arrow {
-    color: var(--text-muted);
-}
-
-/* === LISTAS === */
-
-body.dark-mode .list-card-simple {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .list-card-simple:active {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .list-day-simple {
-    color: var(--text-muted);
-}
-
-body.dark-mode .list-title-simple {
-    color: var(--text-primary);
-}
-
-/* === MODAIS E OVERLAYS === */
-
-body.dark-mode .modal-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .bs-overlay {
-    background: rgba(0, 0, 0, 0.7);
-}
-
-body.dark-mode .bottom-sheet-overlay {
-    background: rgba(0, 0, 0, 0.7);
-}
-
-/* === DASHBOARD === */
-
-body.dark-mode .dashboard-grid .card-btn {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .dashboard-grid .card-btn:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--primary-green);
-}
-
-/* === SECTION HEADERS === */
-
-body.dark-mode .section-header {
-    color: var(--text-primary);
-}
-
-body.dark-mode .section-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .section-action {
-    color: var(--primary-blue-light);
-}
-
-body.dark-mode .section-action:hover {
-    color: var(--primary-green-light);
-}
-
-/* === ÍCONES ESPECÍFICOS === */
-
-body.dark-mode .icon-box {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-}
-
-body.dark-mode .card-icon-wrapper {
-    background: var(--bg-tertiary);
-}
-
-body.dark-mode .card-icon-wrapper svg {
-    color: var(--primary-green);
-}
-
-body.dark-mode .quick-access-card:hover .card-icon-wrapper {
-    background: var(--gradient-primary);
-}
-
-body.dark-mode .quick-access-card:hover .card-icon-wrapper svg {
-    color: white;
-}
-
-/* === SHEET ICONS === */
-
-body.dark-mode #sheet-gestao .sheet-icon-wrapper {
-    background: #064e3b;
-    border-color: #047857;
-}
-
-body.dark-mode #sheet-gestao .sheet-icon-wrapper svg {
-    color: #6ee7b7;
-}
-
-body.dark-mode #sheet-espiritualidade .sheet-icon-wrapper {
-    background: #1e3a8a;
-    border-color: #2563eb;
-}
-
-body.dark-mode #sheet-espiritualidade .sheet-icon-wrapper svg {
-    color: #93c5fd;
-}
-
-body.dark-mode #sheet-comunicacao .sheet-icon-wrapper {
-    background: #7f1d1d;
-    border-color: #dc2626;
-}
-
-body.dark-mode #sheet-comunicacao .sheet-icon-wrapper svg {
-    color: #fca5a5;
-}
-
-/* === ELEMENTOS ESPECIAIS === */
-
-/* Reading Plan */
-body.dark-mode .reading-plan-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-/* Notices/Avisos */
-body.dark-mode .notice-card {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .notice-title {
-    color: var(--text-primary);
-}
-
-body.dark-mode .notice-content {
-    color: var(--text-secondary);
-}
-
-/* Empty States */
-body.dark-mode .empty-state {
-    color: var(--text-muted);
-}
-
-/* Dividers */
-body.dark-mode hr {
-    border-color: var(--border-color);
-}
-
-/* === AJUSTES FINAIS === */
-
-/* Garantir que imagens não fiquem muito brilhantes */
-body.dark-mode img:not([src*="logo"]) {
-    opacity: 0.9;
-}
-
-/* Ajustar logos para modo escuro */
-body.dark-mode img[src*="logo_pib_black"] {
-    filter: brightness(0) invert(1);
-}
-
-/* Garantir contraste em textos importantes */
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode h4 {
-    color: var(--text-primary);
-}
-
-body.dark-mode p {
-    color: var(--text-secondary);
-}
-
-/* Ajustar sombras de elementos flutuantes */
-body.dark-mode .floating-button,
-body.dark-mode .fab {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-/* === RESPONSIVIDADE === */
-
-@media (max-width: 768px) {
-    body.dark-mode .mobile-header {
-        background: var(--bg-secondary);
-    }
-
-    body.dark-mode #app-content {
-        background: var(--bg-primary);
-    }
-}
-
-/* === ANIMAÇÕES === */
-
-@keyframes dark-mode-fade-in {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-body.dark-mode {
-    animation: dark-mode-fade-in 0.3s ease-in-out;
-}
-
-/* ==========================================================================
-   FIXES FINAIS DE AUDITORIA (LOUVOR APP)
-   ========================================================================== */
-
-/* === AVISOS (avisos.php) === */
-/* Hero Header Roxo -> Escuro */
-body.dark-mode .hero-avisos {
-    background: #1e1b4b !important;
-    /* Indigo 950 */
-    border-bottom: 1px solid #4338ca !important;
-}
-
-body.dark-mode .hero-title {
-    color: #e0e7ff !important;
-    /* Indigo 100 */
-}
-
-body.dark-mode .hero-subtitle {
-    color: #c7d2fe !important;
-    /* Indigo 200 */
-}
-
-/* Inputs e Filtros (Avisos) */
-body.dark-mode .search-input,
-body.dark-mode .filter-button {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-main) !important;
-}
-
-body.dark-mode .search-input:focus,
-body.dark-mode .filter-button:hover,
-body.dark-mode .filter-button.active {
-    border-color: var(--primary) !important;
-    background: var(--bg-tertiary) !important;
-}
-
-/* Dropdown de Filtros */
-body.dark-mode .filter-dropdown {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode .filter-option {
-    color: var(--text-secondary) !important;
-    border-bottom: 1px solid var(--border-color) !important;
-}
-
-body.dark-mode .filter-option:hover,
-body.dark-mode .filter-option.active {
-    background: var(--bg-tertiary) !important;
-    color: var(--primary) !important;
-}
-
-/* Aviso Cards */
-body.dark-mode .aviso-card {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode .aviso-header {
-    border-bottom-color: var(--border-color) !important;
-}
-
-body.dark-mode .aviso-author-name,
-body.dark-mode .aviso-title {
-    color: var(--text-main) !important;
-}
-
-body.dark-mode .aviso-actions {
-    background: var(--bg-tertiary) !important;
-    border-top-color: var(--border-color) !important;
-}
-
-body.dark-mode .action-btn {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: rgba(255, 255, 255, 0.8) !important;
-    transition: all 0.2s ease;
-}
-
-body.dark-mode .action-btn:hover {
-    background: var(--primary) !important;
-    color: white !important;
-    border-color: var(--primary) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3) !important;
-}
-
-/* === LEITURA BÍBLICA (leitura.php) === */
-/* Régua de Calendário */
-body.dark-mode #calendar-strip,
-body.dark-mode .cal-strip {
-    background: var(--bg-surface) !important;
-    border-bottom-color: var(--border-color) !important;
-}
-
-body.dark-mode .cal-item {
-    background: var(--bg-body) !important;
-    color: var(--text-muted) !important;
-}
-
-body.dark-mode .cal-item .cal-num {
-    color: var(--text-main) !important;
-}
-
-body.dark-mode .cal-item.active {
-    background: var(--primary-subtle) !important;
-    /* Tinted background */
-    border-color: var(--primary) !important;
-}
-
-body.dark-mode .cal-item.active .cal-num {
-    color: var(--primary) !important;
-}
-
-/* Cards e Texto */
-body.dark-mode .verse-card,
-body.dark-mode .plan-card {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode #day-title {
-    color: var(--text-main) !important;
-}
-
-/* Barra Inferior e Editor de Notas */
-body.dark-mode .bottom-bar {
-    background: #1e1e1e !important;
-    border-top-color: #333 !important;
-}
-
-body.dark-mode .editor-btn {
-    background: var(--bg-tertiary) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-secondary) !important;
-}
-
-body.dark-mode #note-desc-input {
-    color: var(--text-main) !important;
-    background: transparent !important;
-}
-
-/* Modais de Leitura (corrigindo textos escuros) */
-body.dark-mode .modal-content,
-body.dark-mode [style*="background: white"] {
-    background: var(--bg-surface) !important;
-    color: var(--text-main) !important;
-}
-
-/* === AGENDA (agenda.php) === */
-/* Controles de Topo */
-body.dark-mode .agenda-controls {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode .view-toggle {
-    background: var(--bg-body) !important;
-    border-color: var(--border-color) !important;
-}
-
-body.dark-mode .view-btn {
-    color: var(--text-muted) !important;
-}
-
-body.dark-mode .view-btn.active {
-    background: var(--bg-surface) !important;
-    color: var(--primary) !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
-}
-
-body.dark-mode .nav-btn {
-    background: var(--bg-body) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-main) !important;
-}
-
-body.dark-mode .current-display {
-    color: var(--text-main) !important;
-}
-
-/* === ESCALAS (escalas.php) === */
-/* Botões de Toggle (Próximas/Past) com style inline */
-body.dark-mode #btn-future[style*="background: white"],
-body.dark-mode #btn-past[style*="background: white"] {
-    background: var(--bg-surface) !important;
-    color: var(--text-main) !important;
-    box-shadow: none !important;
-}
-
-body.dark-mode [style*="background: #e2e8f0"] {
-    /* O container cinza do toggle */
-    background: var(--bg-tertiary) !important;
-}
-
-/* Filtro Button */
-body.dark-mode button[onclick*="openSheet"][style*="background: white"] {
-    background: var(--bg-surface) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-secondary) !important;
-}
-
-/* ==========================================================================
-   ULTRA-AGGRESSIVE OVERRIDES FOR INLINE STYLES (LEITURA.PHP + OTHERS)
-   ========================================================================== */
-
-/* All elements with 'background: white' or '#fff' inline style */
+/* ============================================
+   CONTAINERS E WRAPPERS
+   ============================================ */
+
+body.dark-mode .container,
+body.dark-mode .content-wrapper,
+body.dark-mode .main-content,
+body.dark-mode .page-content,
+body.dark-mode .content-area,
+body.dark-mode .wrapper {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   OVERRIDES PARA ESTILOS INLINE
+   ============================================ */
+
+/* Elementos com background branco inline */
 body.dark-mode [style*="background: white"],
-body.dark-mode [style*="background:#fff"],
+body.dark-mode [style*="background:white"],
+body.dark-mode [style*="background-color: white"],
 body.dark-mode [style*="background: #fff"],
-body.dark-mode [style*="background: #ffffff"] {
-    background: var(--bg-surface) !important;
+body.dark-mode [style*="background:#fff"],
+body.dark-mode [style*="background: #ffffff"],
+body.dark-mode [style*="background:#ffffff"],
+body.dark-mode [style*="background: rgb(255"] {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
 }
 
-/* Calendar navigation buttons with white gradients */
+/* ============================================
+   CORREÇÕES DE CORES INLINE
+   ============================================ */
 
-
-/*                        $bg = $u['avatar'] ? "url('../assets/uploads/{$u['avatar']}')" : "var(--slate-200)";  background: var(--bg-tertiary) !important;
-    color: var(--text-secondary) !important;
-}
-
-/* Dark text colors that won't be readable on dark backgrounds */
-body.dark-mode [style*="color: #111827"],
-body.dark-mode [style*="color:#111827"],
-body.dark-mode [style*="color: #1f2937"],
-body.dark-mode [style*="color: #374151"] {
-    color: var(--text-main) !important;
-}
-
-/* ========================================
-   HEADER BUTTONS - DARK MODE ELEGANTE
-   ======================================== */
-
-/* Líder Button - Dark mode */
-body.dark-mode .admin-crown-btn {
-    background: #450a0a !important;
-    border-color: #7f1d1d !important;
-    color: #f87171 !important;
-}
-
-body.dark-mode .admin-crown-btn:hover {
-    background: #5c1818 !important;
-    border-color: #dc2626 !important;
-    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.15) !important;
-}
-
-/* Notification Button - Dark mode (Blue accent) */
-body.dark-mode .notification-btn {
-    background: #1e3a5f !important;
-    border-color: #1d4ed8 !important;
+/* Texto Azul Escuro → Azul Claro */
+body.dark-mode [style*="color: #1e40af"],
+body.dark-mode [style*="color:#1e40af"] {
     color: #60a5fa !important;
 }
 
-body.dark-mode .notification-btn:hover {
-    background: #1e40af !important;
-    border-color: #3b82f6 !important;
+/* Texto Azul Médio → Azul Claro */
+body.dark-mode [style*="color: #3b82f6"],
+body.dark-mode [style*="color:#3b82f6"] {
     color: #93c5fd !important;
-    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.2) !important;
 }
 
-/* Notification Badge - Dark mode */
-body.dark-mode .notification-badge {
-    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.4),
-        0 0 0 2px var(--bg-secondary) !important;
+/* Texto Verde Escuro → Verde Claro */
+body.dark-mode [style*="color: #047857"],
+body.dark-mode [style*="color:#047857"] {
+    color: #34d399 !important;
 }
 
-/* Config Button - Dark mode (Slate accent) */
-body.dark-mode .config-btn {
-    background: #27272a !important;
-    border-color: #3f3f46 !important;
-    color: #a1a1aa !important;
+/* Texto Verde Médio → Verde Claro */
+body.dark-mode [style*="color: var(--primary)"],
+body.dark-mode [style*="color:var(--primary)"] {
+    color: #6ee7b7 !important;
 }
 
-body.dark-mode .config-btn:hover {
-    background: #3f3f46 !important;
-    border-color: #52525b !important;
-    color: #e4e4e7 !important;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+/* Texto Roxo Escuro → Roxo Claro */
+body.dark-mode [style*="color: #6d28d9"],
+body.dark-mode [style*="color:#6d28d9"] {
+    color: #a78bfa !important;
 }
 
-/* Profile Avatar Button - Dark mode (Green accent) */
-body.dark-mode .profile-avatar-btn {
-    background: #14532d !important;
-    border-color: #166534 !important;
-}
-
-body.dark-mode .profile-avatar-btn:hover {
-    border-color: #22c55e !important;
-    box-shadow: 0 3px 8px rgba(34, 197, 94, 0.2) !important;
-}
-
-/* ========================================
-   ESCALAS PAGE - DARK MODE FIXES
-   ======================================== */
-
-/* Toggle Buttons (Próximas/Anteriores) */
-body.dark-mode [style*="background: #e2e8f0"] {
-    background: #27272a !important;
-}
-
-body.dark-mode #btn-future,
-body.dark-mode #btn-past {
-    background: transparent !important;
-    color: #a1a1aa !important;
-}
-
-body.dark-mode #btn-future[style*="background: white"],
-body.dark-mode #btn-past[style*="background: white"] {
-    background: #3f3f46 !important;
-    color: #e4e4e7 !important;
-}
-
-/* Filter Button */
-body.dark-mode button[style*="background: white"][style*="border: 1px solid #e2e8f0"] {
-    background: var(--bg-secondary) !important;
-    border-color: #3f3f46 !important;
-    color: #a1a1aa !important;
-}
-
-/* Timeline Cards */
-body.dark-mode .timeline-card,
-body.dark-mode a[style*="background: white"][style*="border-radius: 12px"] {
-    background: var(--bg-secondary) !important;
-    border-color: #3f3f46 !important;
-}
-
-/* Card Titles - Better contrast */
-body.dark-mode h3[style*="color: #1e293b"],
-body.dark-mode [style*="color: #1e293b"] {
-    color: #e4e4e7 !important;
-}
-
-body.dark-mode [style*="color: #334155"] {
-    color: #d4d4d8 !important;
-}
-
-body.dark-mode [style*="color: #64748b"] {
-    color: #a1a1aa !important;
-}
-
-body.dark-mode [style*="color: #94a3b8"] {
-    color: #71717a !important;
-}
-
-/* Date Box in Cards - Dark Mode */
-body.dark-mode [style*="background: #ecfdf5"],
-body.dark-mode [style*="background: #fffbeb"],
-body.dark-mode [style*="background: #eef2ff"],
-body.dark-mode [style*="background: #fff1f2"],
-body.dark-mode [style*="background: #eff6ff"],
-body.dark-mode [style*="background: var(--primary-50)"] {
-    background: #262626 !important;
-    border-color: #3f3f46 !important;
-}
-
-/* Empty State */
-body.dark-mode [style*="background: #f1f5f9"] {
-    background: #27272a !important;
-}
-
-/* Filter Sheet - Dark Mode */
-body.dark-mode #filterSheet>div:last-child {
-    background: var(--bg-secondary) !important;
-}
-
-body.dark-mode #filterSheet h3 {
-    color: #e4e4e7 !important;
-}
-
-body.dark-mode #filterSheet label[style*="background: #f8fafc"] {
-    background: #27272a !important;
-    border-color: #3f3f46 !important;
-}
-
-body.dark-mode #filterSheet span[style*="color: #334155"] {
-    color: #e4e4e7 !important;
-}
-
-body.dark-mode #filterSheet div[style*="background: white"] {
-    background: var(--bg-secondary) !important;
-    border-color: #3f3f46 !important;
-}
-
-body.dark-mode #filterSheet a[style*="background: #f1f5f9"] {
-    background: #27272a !important;
-    color: #a1a1aa !important;
-}
-
-/* Absence Badge - Dark Mode */
-body.dark-mode [style*="background: #fef2f2"][style*="color: #dc2626"] {
-    background: #450a0a !important;
-    color: #fca5a5 !important;
-    border-color: #7f1d1d !important;
-}
-
-/* Chevron Arrow */
-body.dark-mode [style*="color: #cbd5e1"] {
-    color: #52525b !important;
-}
-
-/* Card Verde (Hoje) - Dark Mode */
-body.dark-mode .timeline-card[style*="background: var(--primary-50)"],
-body.dark-mode a[style*="background: var(--primary-50)"] {
-    background: #14532d !important;
-    border-color: #166534 !important;
-}
-
-/* Card Amarelo (Futuro) - Dark Mode */
-body.dark-mode .timeline-card[style*="background: #fefce8"],
-body.dark-mode a[style*="background: #fefce8"] {
-    background: #422006 !important;
-    border-color: #78350f !important;
-}
-
-/* Badge de Dias (Futuro) - Dark Mode */
-body.dark-mode span[style*="background: #fef3c7"][style*="color: #92400e"] {
-    background: #78350f !important;
-    color: #fde68a !important;
-}
-
-/* Card Cinza (Passado) - Dark Mode */
-body.dark-mode .timeline-card-past,
-body.dark-mode a[style*="background: #f8fafc"][style*="border-left: 4px solid #64748b"] {
-    background: #1e1e1e !important;
-    border-color: #3f3f46 !important;
-}
-
-body.dark-mode [style*="background: #f1f5f9"][style*="color: #64748b"] {
-    background: #27272a !important;
-}
-
-/* Badge de Dias (Passado) - Dark Mode */
-body.dark-mode span[style*="background: #e2e8f0"][style*="color: #64748b"] {
-    background: #3f3f46 !important;
-    color: #a1a1aa !important;
-}
-
-/* Botões Roxos - Dark Mode (Escurecer) */
-body.dark-mode button[style*="background: #8b5cf6"],
-body.dark-mode button[style*="background:#8b5cf6"],
-body.dark-mode [style*="background: #8b5cf6"],
-body.dark-mode [style*="background: #a78bfa"],
-body.dark-mode [style*="background: #7c3aed"] {
-    background: #5b21b6 !important;
-    border-color: #6d28d9 !important;
-}
-
-body.dark-mode button[style*="background: #8b5cf6"]:hover,
-body.dark-mode [style*="background: #8b5cf6"]:hover {
-    background: #6d28d9 !important;
+/* Texto Roxo Médio → Roxo Claro */
+body.dark-mode [style*="color: #7c3aed"],
+body.dark-mode [style*="color:#7c3aed"] {
+    color: #c4b5fd !important;
 }
