@@ -32,9 +32,10 @@ function checkAdmin()
 // Função de Login
 function login($name, $password, $pdo)
 {
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE name = :name");
-    $stmt->execute(['name' => $name]);
-    $user = $stmt->fetch();
+    // Usando Query Builder
+    $user = App\DB::table('users')
+        ->where('name', '=', $name)
+        ->first();
 
     if ($user && $password === $user['password']) { // Comparação direta conforme solicitado (senhas simples)
         $_SESSION['user_id'] = $user['id'];
@@ -42,9 +43,13 @@ function login($name, $password, $pdo)
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_avatar'] = $user['avatar'] ?? null;
 
-        // Atualizar estatísticas de login
-        $stmtUpdate = $pdo->prepare("UPDATE users SET last_login = NOW(), login_count = login_count + 1 WHERE id = ?");
-        $stmtUpdate->execute([$user['id']]);
+        // Atualizar estatísticas de login usando Query Builder
+        App\DB::table('users')
+            ->where('id', '=', $user['id'])
+            ->update([
+                'last_login' => date('Y-m-d H:i:s'),
+                'login_count' => $user['login_count'] + 1
+            ]);
 
         return true;
     }

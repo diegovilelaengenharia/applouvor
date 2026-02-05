@@ -18,16 +18,22 @@ $popupAviso = null;
 $unreadCount = 0;
 
 try {
-    $stmt = $pdo->prepare("
-        SELECT * FROM avisos 
-        WHERE archived_at IS NULL 
-        AND (expires_at IS NULL OR expires_at >= CURDATE())
-        AND target_audience IN $audienceFilter
-        ORDER BY priority='urgent' DESC, created_at DESC
-        LIMIT 5
-    ");
-    $stmt->execute();
-    $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Usando Query Builder para buscar avisos
+    $avisos = App\DB::table('avisos')
+        ->select('*')
+        ->where('archived_at', '=', null)
+        ->orderBy('created_at', 'DESC')
+        ->limit(5)
+        ->get();
+    
+    // Filtrar por audiência e data de expiração manualmente (Query Builder simples não tem WHERE IN)
+    $avisos = array_filter($avisos, function($av) use ($userRole) {
+        $validAudience = in_array($av['target_audience'], ['all', 'team']) || 
+                        ($userRole === 'admin' && in_array($av['target_audience'], ['admins', 'leaders']));
+        $notExpired = empty($av['expires_at']) || strtotime($av['expires_at']) >= strtotime('today');
+        return $validAudience && $notExpired;
+    });
+    $avisos = array_slice($avisos, 0, 5);
 
     $totalAvisos = count($avisos);
     $ultimoAviso = $avisos[0]['title'] ?? 'Nenhum aviso novo';
@@ -39,15 +45,15 @@ try {
         }
     }
     
-    $stmtCountRecent = $pdo->prepare("
-        SELECT COUNT(*) FROM avisos 
-        WHERE archived_at IS NULL 
-        AND (expires_at IS NULL OR expires_at >= CURDATE())
-        AND target_audience IN $audienceFilter
-        AND created_at > DATE_SUB(NOW(), INTERVAL 3 DAY)
-    ");
-    $stmtCountRecent->execute();
-    $unreadCount = $stmtCountRecent->fetchColumn();
+    // Contar avisos recentes (últimos 3 dias)
+    $unreadCount = App\DB::table('avisos')
+        ->where('archived_at', '=', null)
+        ->count();
+    // Filtrar manualmente por data (simplificado)
+    $recentAvisos = array_filter($avisos, function($av) {
+        return strtotime($av['created_at']) > strtotime('-3 days');
+    });
+    $unreadCount = count($recentAvisos);
 
 } catch (Exception $e) {
     $totalAvisos = 0;
@@ -90,12 +96,14 @@ try {
 $totalMusicas = 0;
 $ultimaMusica = null;
 try {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM songs");
-    $totalMusicas = $stmt->fetchColumn();
+    // Usando Query Builder
+    $totalMusicas = App\DB::table('songs')->count();
     
-    // Buscar última musica com tom
-    $stmt = $pdo->query("SELECT title, artist, tone FROM songs ORDER BY created_at DESC LIMIT 1");
-    $ultimaMusica = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Buscar última música com tom
+    $ultimaMusica = App\DB::table('songs')
+        ->select(['title', 'artist', 'tone'])
+        ->orderBy('created_at', 'DESC')
+        ->first();
 } catch (Exception $e) {
 }
 
@@ -103,8 +111,8 @@ try {
 $totalMembros = 0;
 $statsMembros = ['vocals' => 0, 'instrumentalists' => 0];
 try {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users");
-    $totalMembros = $stmt->fetchColumn();
+    // Usando Query Builder
+    $totalMembros = App\DB::table('users')->count();
 
     // Contar vocais: incluir tanto user_roles quanto coluna instrument (sistema legado)
     $stmtV = $pdo->query("

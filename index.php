@@ -3,15 +3,18 @@ require_once 'includes/no-cache.php';
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
+$validator = new App\Validator();
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name']);
     $password = trim($_POST['password']);
-
-    if (empty($name) || empty($password)) {
-        $error = "Preencha todos os campos.";
-    } else {
+    
+    // Validação usando a nova classe Validator
+    $validator->required($name, 'Nome');
+    $validator->required($password, 'Senha');
+    
+    if (!$validator->hasErrors()) {
         if (login($name, $password, $pdo)) {
             // Verifica nivel e redireciona
             if ($_SESSION['user_role'] === 'admin') {
@@ -23,6 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error = "Dados incorretos.";
         }
+    } else {
+        $error = $validator->getFirstError();
     }
 }
 ?>

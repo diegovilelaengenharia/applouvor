@@ -5,13 +5,20 @@ require_once '../includes/db.php';
 require_once '../includes/layout.php';
 require_once '../includes/notification_system.php';
 
-checkLogin();
+// Usar AuthMiddleware em vez de checkLogin()
+App\AuthMiddleware::requireLogin();
 
-// Buscar todas as tags
-$allTags = $pdo->query("SELECT * FROM tags ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
+// Buscar todas as tags usando Query Builder
+$allTags = App\DB::table('tags')
+    ->orderBy('name', 'ASC')
+    ->get();
 
 // Buscar artistas únicos para autocomplete
-$artists = $pdo->query("SELECT DISTINCT artist FROM songs ORDER BY artist ASC")->fetchAll(PDO::FETCH_COLUMN);
+$artists = App\DB::table('songs')
+    ->select('DISTINCT artist')
+    ->orderBy('artist', 'ASC')
+    ->get();
+$artists = array_column($artists, 'artist'); // Converter para array simples
 
 // Processar formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -85,8 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $songTitle = $_POST['title'];
         $songArtist = $_POST['artist'];
         
-        // Buscar todos os usuários ativos
-        $users = $pdo->query("SELECT id FROM users WHERE status = 'active'")->fetchAll(PDO::FETCH_COLUMN);
+        // Buscar todos os usuários ativos usando Query Builder
+        $users = App\DB::table('users')
+            ->select('id')
+            ->where('status', '=', 'active')
+            ->get();
+        $users = array_column($users, 'id');
         
         foreach ($users as $uid) {
             if ($uid == $_SESSION['user_id']) continue; // Não notificar o próprio criador
