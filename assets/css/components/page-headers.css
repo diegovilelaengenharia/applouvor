@@ -2,6 +2,28 @@
    PAGE HEADERS - Cores Semânticas
    ============================================ */
 
+/* Cabeçalho Padrão do App (Desktop Sticky) */
+.app-page-header {
+    background: var(--bg-surface);
+    padding: 12px 16px;
+    margin: -20px -20px 24px -20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 1024px) {
+    .app-page-header {
+        display: none !important;
+    }
+}
+
+/* Legacy / Colored Headers (Mantidos para compatibilidade) */
 .page-header {
     padding: 24px;
     border-radius: var(--radius-lg);

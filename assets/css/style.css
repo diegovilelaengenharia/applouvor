@@ -1521,17 +1521,17 @@ body.dark-mode .compact-title {
     transform: scale(0.98);
 }
 
-/* Green - Save/Apply/Confirm Actions - Tom mais suave */
+/* Primary - Save/Apply/Confirm Actions - Follows Theme */
 .btn-action-save {
-    background: #047857 !important;
+    background: var(--primary-600) !important;
     color: white !important;
-    box-shadow: 0 1px 3px rgba(4, 120, 87, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     border: none;
 }
 
 .btn-action-save:hover {
-    background: #065f46 !important;
-    box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);
+    background: var(--primary-700) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .btn-action-save:active {

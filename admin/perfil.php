@@ -3,6 +3,9 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
+// Garantir CSS
+echo '<link rel="stylesheet" href="../assets/css/design-system.css">';
+
 checkLogin();
 
 $user_id = $_SESSION['user_id'];
@@ -79,13 +82,15 @@ $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
 renderAppHeader('Meu Perfil');
+renderPageHeader('Meu Perfil', 'Gerencie suas informações pessoais');
 ?>
 
-<div class="container" style="padding-top: 16px; max-width: 600px; margin: 0 auto;">
+<div class="container" style="padding-top: 16px; max-width: 600px; margin: 0 auto; padding-bottom: 24px;">
+
 
     <!-- Mensagens de Feedback -->
     <?php if ($success): ?>
-        <div style="background: var(--primary-subtle); color: var(--primary); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--primary-light); font-size: var(--font-body);">
+        <div style="background: var(--green-50); color: var(--green-700); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--green-200); font-size: var(--font-body);">
             <i data-lucide="check-circle" style="width: 18px;"></i>
             <?= $success ?>
         </div>
@@ -102,10 +107,10 @@ renderAppHeader('Meu Perfil');
         <input type="hidden" name="update_profile" value="1">
 
         <!-- Card Principal (Avatar + Info Básica) -->
-        <div style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 24px; text-align: center; border: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: var(--shadow-sm);">
+        <div style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 16px; text-align: center; border: 1px solid var(--border-color); margin-bottom: 12px; box-shadow: var(--shadow-sm);">
 
             <!-- Avatar Upload Wrapper -->
-            <div style="position: relative; width: 100px; height: 100px; margin: 0 auto 16px;">
+            <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 12px;">
                 <div style="
                     width: 100%; height: 100%; 
                     border-radius: 50%; 
@@ -129,7 +134,7 @@ renderAppHeader('Meu Perfil');
                 <label for="avatar_upload" class="ripple" style="
                     position: absolute; bottom: 0; right: 0; 
                     background: var(--primary); color: white; 
-                    width: 32px; height: 32px; 
+                    width: 28px; height: 28px; 
                     border-radius: 50%; 
                     display: flex; align-items: center; justify-content: center; 
                     cursor: pointer; 
@@ -142,35 +147,35 @@ renderAppHeader('Meu Perfil');
                 <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="this.form.submit()">
             </div>
 
-            <h2 style="font-size: var(--font-h2); font-weight: 700; color: var(--slate-900); margin-bottom: 2px;">
+            <h2 style="font-size: var(--font-h3); font-weight: 700; color: var(--slate-900); margin-bottom: 2px;">
                 <?= htmlspecialchars($user['name']) ?>
             </h2>
-            <p style="color: var(--slate-500); font-size: var(--font-body);">
+            <p style="color: var(--slate-500); font-size: var(--font-body-sm);">
                 <?= htmlspecialchars($user['email'] ?? '') ?>
             </p>
 
-            <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--slate-100); border-radius: 20px; font-size: var(--font-caption); color: var(--slate-600); font-weight: 600;">
+            <div style="margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; background: var(--slate-100); border-radius: 20px; font-size: var(--font-caption); color: var(--slate-600); font-weight: 600;">
                 <i data-lucide="user" style="width: 12px;"></i>
                 Membro da Equipe
             </div>
         </div>
 
         <!-- Section: Identidade -->
-        <div style="margin-bottom: 16px;">
-            <h3 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="margin-bottom: 12px;">
+            <h3 style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
                 <i data-lucide="id-card" style="width: 16px; color: var(--text-muted);"></i>
                 Identidade
             </h3>
 
             <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden;">
-                <div style="padding: 12px;">
+                <div style="padding: 10px;">
                     <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Nome Completo</label>
                     <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required
                         style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
 
-                <div style="border-top: 1px solid var(--border-color); padding: 12px;">
+                <div style="border-top: 1px solid var(--border-color); padding: 10px;">
                     <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">E-mail</label>
                     <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required
                         style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
@@ -198,13 +203,13 @@ renderAppHeader('Meu Perfil');
         </div>
 
         <!-- Section: Endereço -->
-        <div style="margin-bottom: 24px;">
-            <h3 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="margin-bottom: 16px;">
+            <h3 style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
                 <i data-lucide="map-pin" style="width: 16px; color: var(--text-muted);"></i>
                 Endereço
             </h3>
 
-            <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 10px; display: flex; flex-direction: column; gap: 10px;">
 
                 <div>
                     <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Rua / Logradouro</label>
@@ -213,7 +218,7 @@ renderAppHeader('Meu Perfil');
                         onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
                 </div>
 
-                <div style="display: flex; gap: 12px;">
+                <div style="display: flex; gap: 10px;">
                     <div style="flex: 1;">
                         <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Número</label>
                         <input type="text" name="address_number" value="<?= htmlspecialchars($user['address_number'] ?? '') ?>" placeholder="123"
@@ -238,7 +243,7 @@ renderAppHeader('Meu Perfil');
             background: var(--primary); 
             color: white; 
             border: none; 
-            padding: 14px; 
+            padding: 12px; 
             border-radius: var(--radius-lg); 
             font-size: var(--font-body); 
             font-weight: 700; 

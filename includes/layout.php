@@ -1742,17 +1742,7 @@ function renderAppHeader($title, $backUrl = null)
         global $_layoutUser;
         $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
-    <header class="desktop-only-header" style="
-            background: var(--bg-surface); 
-            padding: 12px 16px; 
-            margin: -20px -20px 24px -20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            position: sticky; top: 0; z-index: 40;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-        ">
+    <header class="desktop-only-header app-page-header">
         <style>
             @media (max-width: 1024px) {
                 .desktop-only-header {
@@ -2206,10 +2196,10 @@ function renderAppHeader($title, $backUrl = null)
                 
                 <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border-color);">
                     <button type="button" onclick="closeDashboardCustomization()" style="
-                        padding: 10px 20px; border: 1px solid var(--border-color); 
-                        background: transparent; border-radius: 8px; cursor: pointer; 
-                        color: var(--text-main); font-weight: 500;
-                    ">Cancelar</button>
+                        padding: 10px 20px; border: 1px solid var(--red-300); 
+                        background: var(--red-50); border-radius: 8px; cursor: pointer; 
+                        color: var(--red-700); font-weight: 600; transition: all 0.2s;
+                    " onmouseover="this.style.background='var(--red-100)'" onmouseout="this.style.background='var(--red-50)'">Cancelar</button>
                     <button type="submit" style="
                         padding: 10px 20px; background: var(--primary); 
                         color: white; border: none; border-radius: 8px; 

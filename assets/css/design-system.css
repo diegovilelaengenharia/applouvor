@@ -147,28 +147,28 @@
        SEMANTIC COLOR SYSTEM (Paleta Personalizada)
        ============================================ */
 
-    /* 🔵 GESTÃO (Azul Navy - Profissional e Confiável) */
+    /* 🔵 GESTÃO (Azul Vibrante - Profissional e Confiável) */
     /* Escalas, Repertório, Membros, Agenda, Ausências, Histórico */
-    --blue-50: #e6e9f0;
-    --blue-100: #c2cade;
-    --blue-200: #9aa7ca;
-    --blue-300: #7284b6;
-    --blue-400: #5568a7;
-    --blue-500: #011752;
-    /* Navy Blue - Principal */
-    --blue-600: #011449;
-    --blue-700: #01103d;
-    --blue-800: #010c31;
-    --blue-900: #000820;
-    --blue-950: #000410;
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    /* Vibrant Blue - Principal */
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+    --blue-950: #172554;
 
-    --gradient-blue-light: #9aa7ca;
-    --gradient-blue-primary: #011752;
-    --gradient-blue-dark: #01103d;
+    --gradient-blue-light: #93c5fd;
+    --gradient-blue-primary: #3b82f6;
+    --gradient-blue-dark: #1d4ed8;
 
-    --shadow-blue-sm: 0 2px 8px rgba(1, 23, 82, 0.15);
-    --shadow-blue-md: 0 4px 16px rgba(1, 23, 82, 0.2);
-    --shadow-blue-lg: 0 8px 24px rgba(1, 23, 82, 0.25);
+    --shadow-blue-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
+    --shadow-blue-md: 0 4px 16px rgba(59, 130, 246, 0.2);
+    --shadow-blue-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
 
     /* 🟢 ESPIRITUAL (Verde Vibrante - Vida e Esperança) */
     /* Devocional, Oração, Leitura Bíblica */
@@ -201,21 +201,21 @@
     --yellow-200: #ffe9a3;
     --yellow-300: #ffde75;
     --yellow-400: #ffd34e;
-    --yellow-500: #FFC928;
+    --yellow-500: #FFC501;
     /* Vibrant Yellow - Principal */
-    --yellow-600: #f0b820;
-    --yellow-700: #d9a518;
-    --yellow-800: #b88a14;
-    --yellow-900: #8a6710;
-    --yellow-950: #5c440a;
+    --yellow-600: #e6b001;
+    --yellow-700: #cc9c01;
+    --yellow-800: #b38801;
+    --yellow-900: #997300;
+    --yellow-950: #664d00;
 
-    --gradient-yellow-light: #ffe9a3;
-    --gradient-yellow-primary: #f0b820;
-    --gradient-yellow-dark: #b88a14;
+    --gradient-yellow-light: #ffde75;
+    --gradient-yellow-primary: #FFC501;
+    --gradient-yellow-dark: #cc9c01;
 
-    --shadow-yellow-sm: 0 2px 8px rgba(255, 201, 40, 0.15);
-    --shadow-yellow-md: 0 4px 16px rgba(255, 201, 40, 0.2);
-    --shadow-yellow-lg: 0 8px 24px rgba(255, 201, 40, 0.25);
+    --shadow-yellow-sm: 0 2px 8px rgba(255, 197, 1, 0.15);
+    --shadow-yellow-md: 0 4px 16px rgba(255, 197, 1, 0.2);
+    --shadow-yellow-lg: 0 8px 24px rgba(255, 197, 1, 0.25);
 
     /* 🔴 AÇÕES DESTRUTIVAS (Vermelho - Perigo) */
     /* Excluir, Deletar, Remover */
@@ -261,6 +261,20 @@
     /* Branco puro para cards */
     --border-color: var(--gray-200);
     /* #EBEBEB - Bordas e divisores */
+
+    /* === GLOBAL DOMAIN VARIABLES === */
+    --primary: var(--primary-600);
+    /* Cor principal do app (Botões, Destaques) */
+    --primary-hover: var(--primary-700);
+    --primary-foreground: #ffffff;
+    /* Texto sobre primary */
+
+    --bg-body: var(--gray-50);
+    /* Fundo da página */
+    --bg-surface: #ffffff;
+    /* Fundo de cards/modais */
+    --text-main: var(--gray-900);
+    --text-muted: var(--gray-500);
 
     /* Compatibilidade com código legado - mapeamento para novas cores */
     --slate-50: var(--blue-50);

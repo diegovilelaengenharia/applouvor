@@ -98,7 +98,7 @@ renderAppHeader('Início');
 
 <!-- Hero Section User -->
 <div style="
-    background: #047857; 
+    background: var(--primary); 
     margin: -24px -16px 32px -16px; 
     padding: 32px 24px 64px 24px; 
     border-radius: 0 0 32px 32px; 
@@ -163,7 +163,7 @@ renderAppHeader('Início');
     <div class="dashboard-card">
         <div class="dashboard-card-header">
             <div class="dashboard-card-title">
-                <div class="dashboard-card-icon" style="background: #047857;">
+                <div class="dashboard-card-icon" style="background: var(--primary);">
                     <i data-lucide="calendar" style="width: 20px; color: white;"></i>
                 </div>
                 Minha Próxima Escala
@@ -272,7 +272,7 @@ renderAppHeader('Início');
                 width: 48px; 
                 height: 48px; 
                 border-radius: 12px; 
-                background: #10b981;
+                background: var(--success);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -395,10 +395,10 @@ renderAppHeader('Início');
             <div id="reading-modal" class="modal-overlay active" style="z-index: 2000;">
                 <div class="modal-content" style="background: var(--bg-surface); padding: 24px; border-radius: 20px; max-width: 320px; width: 90%; text-align: center; position:relative; overflow:hidden;">
                     <!-- Decorative Background -->
-                    <div style="position:absolute; top:0; left:0; width:100%; height:6px; background: #10b981;"></div>
+                    <div style="position:absolute; top:0; left:0; width:100%; height:6px; background: var(--success);"></div>
                     
                     <div style="width: 56px; height: 56px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-                        <i data-lucide="book-open" style="width: 28px; color: #10b981;"></i>
+                        <i data-lucide="book-open" style="width: 28px; color: var(--success);"></i>
                     </div>
 
                     <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Leitura de Hoje</h3>

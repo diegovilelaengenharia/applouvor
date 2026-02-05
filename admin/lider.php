@@ -483,7 +483,7 @@ try {
 
     <!-- 1. Gestão (Acesso Rápido) -->
     <div class="section-header">
-        <div style="background: var(--gradient-slate-primary); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: #3b82f6; padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Gestão</h2>
@@ -501,7 +501,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--slate-100); color: var(--slate-600); padding: 10px; border-radius: 10px;">
+            <div style="background: #eff6ff; color: #3b82f6; padding: 10px; border-radius: 10px;">
                 <i data-lucide="users" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -518,7 +518,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
+            <div style="background: var(--blue-50); color: var(--blue-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="bell" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -533,7 +533,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--rose-100); color: var(--rose-500); padding: 10px; border-radius: 10px;">
+            <div style="background: var(--blue-50); color: var(--blue-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="calendar-x" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -548,7 +548,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
+            <div style="background: var(--yellow-50); color: var(--yellow-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="cake" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -578,7 +578,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--lavender-50); color: var(--lavender-700); padding: 10px; border-radius: 10px;">
+            <div style="background: var(--blue-50); color: var(--blue-600); padding: 10px; border-radius: 10px;">
                 <i data-lucide="tags" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -590,7 +590,7 @@ try {
 
     <!-- 2. Estatísticas (Separado) -->
     <div class="section-header">
-        <div style="background: var(--gradient-slate-primary); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: #24CE6B; padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Estatísticas</h2>
@@ -605,7 +605,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--slate-50); color: var(--slate-500); padding: 10px; border-radius: 10px;">
+            <div style="background: #e8f9f0; color: #24CE6B; padding: 10px; border-radius: 10px;">
                  <i data-lucide="activity" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -620,7 +620,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
+            <div style="background: #e8f9f0; color: #24CE6B; padding: 10px; border-radius: 10px;">
                  <i data-lucide="pie-chart" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -632,7 +632,7 @@ try {
 
     <!-- 3. Criar Novo -->
     <div class="section-header">
-        <div style="background: var(--gradient-lavender-primary); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: #FFC501; padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Criar Novo</h2>
@@ -647,7 +647,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--lavender-50); color: var(--lavender-600); padding: 10px; border-radius: 10px;">
+            <div style="background: #fffbeb; color: #FFC501; padding: 10px; border-radius: 10px;">
                 <i data-lucide="calendar-plus" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -662,7 +662,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-             <div style="background: var(--sage-50); color: var(--sage-500); padding: 10px; border-radius: 10px;">
+             <div style="background: #fffbeb; color: #FFC501; padding: 10px; border-radius: 10px;">
                 <i data-lucide="music" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">
@@ -677,7 +677,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: var(--slate-50); color: var(--slate-400); padding: 10px; border-radius: 10px;">
+            <div style="background: #fffbeb; color: #FFC501; padding: 10px; border-radius: 10px;">
                 <i data-lucide="megaphone" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">

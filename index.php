@@ -46,19 +46,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="assets/css/design-system.css">
 
     <style>
         :root {
             /* Light Theme */
-            --bg: var(--bg-body);
-            --text-main: var(--text-main);
-            --text-muted: var(--text-muted);
-            --primary: var(--primary);
+            --bg: var(--gray-50);
+            --text-main: var(--gray-900);
+            --text-muted: var(--gray-500);
+            --primary: var(--primary-600);
             --primary-light: var(--primary-50);
-            --input-bg: var(--bg-muted);
-            --border: var(--border-color);
-            --error-bg: #fef2f2;
-            --error-text: #ef4444;
+            --input-bg: var(--gray-100);
+            --border: var(--gray-200);
+            --error-bg: var(--red-50);
+            --error-text: var(--red-600);
         }
 
         body.dark-mode {

@@ -44,17 +44,47 @@ if (!empty($currentUser['avatar'])) {
 
 <div id="app-sidebar" class="sidebar">
     <!-- Cabeçalho Sidebar com Logo (Clicável para Recolher) -->
-    <div onclick="toggleSidebarDesktop()" style="padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" title="Expandir/Recolher Menu">
+    <div onclick="toggleSidebarDesktop()" style="padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s;" title="Expandir/Recolher Menu" class="sidebar-header-hover">
         <div class="logo-area" style="font-weight: 800; color: var(--slate-900); font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
             <!-- Logo Imagem -->
-            <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
+            <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" class="sidebar-logo" style="height: 40px; width: auto; object-fit: contain; transition: all 0.3s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color: var(--blue-600); font-size: 0.95rem; font-weight: 700;">PIB Oliveira</span>
-                <span class="sidebar-text" style="font-size: 0.7rem; color: var(--green-600); font-weight: 700;">App Louvor</span>
+                <span class="sidebar-text sidebar-church-name" style="
+                    color: var(--slate-700);
+                    font-size: 0.95rem; 
+                    font-weight: 700;
+                    transition: all 0.3s;
+                ">PIB Oliveira</span>
+                <span class="sidebar-text sidebar-app-name" style="
+                    color: var(--slate-500);
+                    font-size: 0.7rem; 
+                    font-weight: 600;
+                    transition: all 0.3s;
+                ">App Louvor</span>
             </div>
         </div>
     </div>
+
+    <style>
+        /* Efeito hover no header da sidebar */
+        .sidebar-header-hover:hover {
+            background: linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.05) 100%);
+        }
+
+        .sidebar-header-hover:hover .sidebar-logo {
+            transform: scale(1.05) rotate(-2deg);
+            filter: drop-shadow(0 4px 8px rgba(147, 51, 234, 0.3));
+        }
+
+        .sidebar-header-hover:hover .sidebar-church-name {
+            color: var(--purple-600);
+        }
+
+        .sidebar-header-hover:hover .sidebar-app-name {
+            color: var(--green-600);
+        }
+    </style>
 
     <!-- 2. Menu -->
     <nav class="sidebar-nav">

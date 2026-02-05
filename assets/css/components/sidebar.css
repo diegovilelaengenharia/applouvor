@@ -25,21 +25,24 @@
 
 /* Cores semânticas para navegação - GESTÃO (Azul Vibrante) */
 .nav-blue {
-    color: #3b82f6;
+    color: var(--text-main);
+    /* Texto SEMPRE neutro */
 }
 
 .nav-blue:hover {
     background: var(--blue-50);
-    color: #2563eb;
+    color: var(--text-main);
+    /* Texto SEMPRE neutro */
 }
 
 .nav-blue.active {
     background: var(--blue-100);
-    color: #2563eb;
+    color: var(--text-main);
+    /* Texto SEMPRE neutro */
     border-left: 3px solid #3b82f6;
 }
 
-/* Forçar cor azul vibrante nos SVG */
+/* Apenas ícones coloridos */
 .nav-blue svg {
     color: #3b82f6 !important;
     stroke: #3b82f6 !important;
