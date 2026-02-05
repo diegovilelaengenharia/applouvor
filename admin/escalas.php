@@ -204,17 +204,30 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $stmtAbsences->execute(['event_date' => $schedule['event_date']]);
                     $absences = $stmtAbsences->fetchAll(PDO::FETCH_ASSOC);
                     $hasAbsences = count($absences) > 0;
+
+                    // Calcular dias até o evento
+                    $today = new DateTime('today');
+                    $daysUntil = $today->diff($date)->days;
+                    
+                    // Cores de fundo do card baseado na data
+                    if ($isToday) {
+                        $cardBg = '#f0fdf4'; // Verde muito claro
+                        $cardBorderColor = '#86efac'; // Verde claro
+                    } else {
+                        $cardBg = '#fefce8'; // Amarelo muito claro
+                        $cardBorderColor = '#fde047'; // Amarelo claro
+                    }
                 ?>
 
                     <!-- Card de Evento REFINADO (Mais Sutil) -->
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card ripple" style="
                             display: block;
-                            background: white;
+                            background: <?= $cardBg ?>;
                             border-radius: 12px; 
                             border-left: 4px solid <?= $themeColor ?>;
-                            border-top: 1px solid #e2e8f0;
-                            border-right: 1px solid #e2e8f0;
-                            border-bottom: 1px solid #e2e8f0;
+                            border-top: 1px solid <?= $cardBorderColor ?>;
+                            border-right: 1px solid <?= $cardBorderColor ?>;
+                            border-bottom: 1px solid <?= $cardBorderColor ?>;
                             padding: 14px; 
                             text-decoration: none; 
                             color: inherit;
@@ -260,6 +273,15 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                             font-weight: 700;
                                             text-transform: uppercase;
                                         ">HOJE</span>
+                                    <?php else: ?>
+                                        <span style="
+                                            font-size: 0.65rem;
+                                            color: #92400e;
+                                            background: #fef3c7;
+                                            padding: 3px 8px;
+                                            border-radius: 6px;
+                                            font-weight: 600;
+                                        "><?= $daysUntil == 1 ? 'Amanhã' : 'em ' . $daysUntil . ' dias' ?></span>
                                     <?php endif; ?>
                                 </div>
 

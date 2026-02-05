@@ -1739,3 +1739,23 @@ body.dark-mode [style*="background: #fef2f2"][style*="color: #dc2626"] {
 body.dark-mode [style*="color: #cbd5e1"] {
     color: #52525b !important;
 }
+
+/* Card Verde (Hoje) - Dark Mode */
+body.dark-mode .timeline-card[style*="background: #f0fdf4"],
+body.dark-mode a[style*="background: #f0fdf4"] {
+    background: #14532d !important;
+    border-color: #166534 !important;
+}
+
+/* Card Amarelo (Futuro) - Dark Mode */
+body.dark-mode .timeline-card[style*="background: #fefce8"],
+body.dark-mode a[style*="background: #fefce8"] {
+    background: #422006 !important;
+    border-color: #78350f !important;
+}
+
+/* Badge de Dias (Futuro) - Dark Mode */
+body.dark-mode span[style*="background: #fef3c7"][style*="color: #92400e"] {
+    background: #78350f !important;
+    color: #fde68a !important;
+}
