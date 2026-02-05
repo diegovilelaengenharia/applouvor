@@ -110,9 +110,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         <!-- Filter Button (Simplificado) -->
         <button onclick="openSheet('filterSheet')" class="ripple" style="
             width: 48px; height: 48px; 
-            background: white; 
-            border: 1px solid #e2e8f0; 
-            color: #64748b; 
+            background: #f1f5f9; 
+            border: 1px solid #cbd5e1; 
+            color: #475569; 
             border-radius: 14px; 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;

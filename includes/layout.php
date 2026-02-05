@@ -610,7 +610,7 @@ function renderAppHeader($title, $backUrl = null)
                 transform: translateY(0);
             }
             
-            /* Notification Button - Neutral with subtle accent */
+            /* Notification Button - Blue accent */
             .notification-btn {
                 position: relative;
                 display: flex;
@@ -618,22 +618,22 @@ function renderAppHeader($title, $backUrl = null)
                 justify-content: center;
                 width: 40px;
                 height: 40px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
+                background: #eff6ff;
+                border: 1px solid #bfdbfe;
                 border-radius: 10px;
                 cursor: pointer;
-                color: #64748b;
+                color: #2563eb;
                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
                 transition: all 0.2s ease;
                 overflow: visible;
             }
             
             .notification-btn:hover {
-                background: #f8fafc;
-                color: #475569;
-                border-color: #cbd5e1;
+                background: #dbeafe;
+                color: #1d4ed8;
+                border-color: #93c5fd;
                 transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+                box-shadow: 0 3px 8px rgba(37, 99, 235, 0.15);
             }
             
             .notification-btn:hover svg,
@@ -670,7 +670,7 @@ function renderAppHeader($title, $backUrl = null)
                 z-index: 10;
             }
 
-            /* Config Button - Neutral style */
+            /* Config Button - Slate accent */
             .config-btn {
                 position: relative;
                 display: flex;
@@ -678,22 +678,22 @@ function renderAppHeader($title, $backUrl = null)
                 justify-content: center;
                 width: 40px;
                 height: 40px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
+                background: #f1f5f9;
+                border: 1px solid #cbd5e1;
                 border-radius: 10px;
                 flex-shrink: 0;
                 cursor: pointer;
-                color: #64748b;
+                color: #475569;
                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
                 transition: all 0.2s ease;
             }
             
             .config-btn:hover {
-                background: #f8fafc;
-                color: #475569;
-                border-color: #cbd5e1;
+                background: #e2e8f0;
+                color: #334155;
+                border-color: #94a3b8;
                 transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+                box-shadow: 0 3px 8px rgba(71, 85, 105, 0.1);
             }
             
             .config-btn:hover i,
@@ -706,13 +706,13 @@ function renderAppHeader($title, $backUrl = null)
                 100% { transform: rotate(45deg); }
             }
 
-            /* Profile Avatar Button - Clean circular style */
+            /* Profile Avatar Button - Clean circular style with green accent */
             .profile-avatar-btn {
                 width: 40px;
                 height: 40px;
                 padding: 0;
-                background: var(--bg-surface);
-                border: 2px solid var(--border-color);
+                background: #f0fdf4;
+                border: 2px solid #86efac;
                 cursor: pointer;
                 border-radius: 50%;
                 overflow: hidden;
