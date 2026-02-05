@@ -1791,3 +1791,21 @@ body.dark-mode span[style*="background: #e2e8f0"][style*="color: #64748b"] {
     background: #3f3f46 !important;
     color: #a1a1aa !important;
 }
+
+/* Botões Roxos - Dark Mode (Escurecer) */
+body.dark-mode button[style*="background: #8b5cf6"],
+body.dark-mode button[style*="background:#8b5cf6"],
+body.dark-mode button[style*="background: linear-gradient"][style*="8b5cf6"],
+body.dark-mode [style*="background: #8b5cf6"],
+body.dark-mode [style*="background: #a78bfa"],
+body.dark-mode [style*="background: #7c3aed"],
+body.dark-mode [style*="background: linear-gradient"][style*="violet"],
+body.dark-mode [style*="background: linear-gradient"][style*="purple"] {
+    background: #5b21b6 !important;
+    border-color: #6d28d9 !important;
+}
+
+body.dark-mode button[style*="background: #8b5cf6"]:hover,
+body.dark-mode [style*="background: #8b5cf6"]:hover {
+    background: #6d28d9 !important;
+}
