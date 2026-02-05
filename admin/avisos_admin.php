@@ -401,7 +401,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .create-aviso-btn {
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: #10b981;
         color: white;
         border: none;
         padding: 12px 20px;
@@ -417,7 +417,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .create-aviso-btn:hover {
-        transform: translateY(-1px);
+        background: #059669;
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
     }
     
@@ -555,7 +555,7 @@ renderAppHeader('Gestão de Avisos');
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #a78bfa, var(--lavender-600));
+        background: var(--lavender-600);
         color: white;
         border: none;
         padding: 12px 20px;
@@ -564,6 +564,10 @@ renderAppHeader('Gestão de Avisos');
         cursor: pointer;
         width: 100%;
         font-size: var(--font-body-sm);
+    }
+    
+    .btn-primary:hover {
+        background: var(--lavender-700);
     }
     
     .btn-secondary {
