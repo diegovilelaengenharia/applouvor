@@ -144,118 +144,96 @@
     --breakpoint-xl: 1280px;
 
     /* ============================================
-       SEMANTIC COLOR SYSTEM (Category-based)
+       SEMANTIC COLOR SYSTEM (VS Code Inspired - Neutral)
        ============================================ */
 
-    /* 🔵 GESTÃO (Azul Profissional) */
+    /* 🔷 GESTÃO (Slate - Azul Acinzentado Profissional) */
     /* Escalas, Repertório, Membros, Agenda, Ausências, Histórico */
-    --blue-50: #eff6ff;
-    --blue-100: #dbeafe;
-    --blue-200: #bfdbfe;
-    --blue-300: #93c5fd;
-    --blue-400: #60a5fa;
-    --blue-500: #3b82f6;
-    --blue-600: #2563eb;
-    --blue-700: #1d4ed8;
-    --blue-800: #1e40af;
-    --blue-900: #1e3a8a;
-    --blue-950: #172554;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+    --slate-950: #020617;
 
-    --gradient-blue-light: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    --gradient-blue-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    --gradient-blue-dark: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    --gradient-slate-light: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    --gradient-slate-primary: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    --gradient-slate-dark: linear-gradient(135deg, #334155 0%, #1e293b 100%);
 
-    --shadow-blue-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
-    --shadow-blue-md: 0 4px 16px rgba(59, 130, 246, 0.2);
-    --shadow-blue-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
+    --shadow-slate-sm: 0 2px 8px rgba(100, 116, 139, 0.15);
+    --shadow-slate-md: 0 4px 16px rgba(100, 116, 139, 0.2);
+    --shadow-slate-lg: 0 8px 24px rgba(100, 116, 139, 0.25);
 
-    /* 🟢 ESPIRITUAL (Verde Vida) */
+    /* 🌿 ESPIRITUAL (Sage - Verde Sálvia Calmo) */
     /* Devocional, Oração, Leitura Bíblica */
-    --green-50: #f0fdf4;
-    --green-100: #dcfce7;
-    --green-200: #bbf7d0;
-    --green-300: #86efac;
-    --green-400: #4ade80;
-    --green-500: #22c55e;
-    --green-600: #16a34a;
-    --green-700: #15803d;
-    --green-800: #166534;
-    --green-900: #14532d;
-    --green-950: #052e16;
+    --sage-50: #f6f7f6;
+    --sage-100: #e8ebe8;
+    --sage-200: #d1d7d1;
+    --sage-300: #b4beb4;
+    --sage-400: #8a9b8a;
+    --sage-500: #6b7c6b;
+    --sage-600: #556355;
+    --sage-700: #3f4a3f;
+    --sage-800: #2a322a;
+    --sage-900: #1a1f1a;
+    --sage-950: #0f120f;
 
-    --gradient-green-light: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    --gradient-green-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    --gradient-green-dark: linear-gradient(135deg, #15803d 0%, #166534 100%);
+    --gradient-sage-light: linear-gradient(135deg, #e8ebe8 0%, #d1d7d1 100%);
+    --gradient-sage-primary: linear-gradient(135deg, #6b7c6b 0%, #556355 100%);
+    --gradient-sage-dark: linear-gradient(135deg, #3f4a3f 0%, #2a322a 100%);
 
-    --shadow-green-sm: 0 2px 8px rgba(34, 197, 94, 0.15);
-    --shadow-green-md: 0 4px 16px rgba(34, 197, 94, 0.2);
-    --shadow-green-lg: 0 8px 24px rgba(34, 197, 94, 0.25);
+    --shadow-sage-sm: 0 2px 8px rgba(107, 124, 107, 0.15);
+    --shadow-sage-md: 0 4px 16px rgba(107, 124, 107, 0.2);
+    --shadow-sage-lg: 0 8px 24px rgba(107, 124, 107, 0.25);
 
-    /* 🟣 COMUNICAÇÃO (Roxo Vibrante) */
+    /* 💜 COMUNICAÇÃO (Lavender - Lavanda Delicada) */
     /* Avisos, Notificações, Aniversariantes */
-    --purple-50: #faf5ff;
-    --purple-100: #f3e8ff;
-    --purple-200: #e9d5ff;
-    --purple-300: #d8b4fe;
-    --purple-400: #c084fc;
-    --purple-500: #a855f7;
-    --purple-600: #9333ea;
-    --purple-700: #7e22ce;
-    --purple-800: #6b21a8;
-    --purple-900: #581c87;
-    --purple-950: #3b0764;
+    --lavender-50: #faf8ff;
+    --lavender-100: #f3f0ff;
+    --lavender-200: #e8e1ff;
+    --lavender-300: #d4c5ff;
+    --lavender-400: #b89dff;
+    --lavender-500: #9b7dff;
+    --lavender-600: #7c5ceb;
+    --lavender-700: #6344c7;
+    --lavender-800: #4e35a3;
+    --lavender-900: #3d2a7f;
+    --lavender-950: #1f1540;
 
-    --gradient-purple-light: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-    --gradient-purple-primary: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-    --gradient-purple-dark: linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%);
+    --gradient-lavender-light: linear-gradient(135deg, #f3f0ff 0%, #e8e1ff 100%);
+    --gradient-lavender-primary: linear-gradient(135deg, #9b7dff 0%, #7c5ceb 100%);
+    --gradient-lavender-dark: linear-gradient(135deg, #6344c7 0%, #4e35a3 100%);
 
-    --shadow-purple-sm: 0 2px 8px rgba(168, 85, 247, 0.15);
-    --shadow-purple-md: 0 4px 16px rgba(168, 85, 247, 0.2);
-    --shadow-purple-lg: 0 8px 24px rgba(168, 85, 247, 0.25);
+    --shadow-lavender-sm: 0 2px 8px rgba(155, 125, 255, 0.15);
+    --shadow-lavender-md: 0 4px 16px rgba(155, 125, 255, 0.2);
+    --shadow-lavender-lg: 0 8px 24px rgba(155, 125, 255, 0.25);
 
-    /* 🔴 ADMIN (Vermelho Autoridade) */
-    /* Dashboard Líder, Configurações */
-    --red-50: #fef2f2;
-    --red-100: #fee2e2;
-    --red-200: #fecaca;
-    --red-300: #fca5a5;
-    --red-400: #f87171;
-    --red-500: #ef4444;
-    --red-600: #dc2626;
-    --red-700: #b91c1c;
-    --red-800: #991b1b;
-    --red-900: #7f1d1d;
-    --red-950: #450a0a;
+    /* 🌸 ADMIN (Rose - Rosa Discreto) */
+    /* Dashboard Líder, Configurações Admin */
+    --rose-50: #fff5f7;
+    --rose-100: #ffe8ed;
+    --rose-200: #ffd1dc;
+    --rose-300: #ffaac0;
+    --rose-400: #ff7a9a;
+    --rose-500: #f94877;
+    --rose-600: #e6265f;
+    --rose-700: #c21a4f;
+    --rose-800: #a11848;
+    --rose-900: #881844;
+    --rose-950: #4c0820;
 
-    --gradient-red-light: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-    --gradient-red-primary: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    --gradient-red-dark: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    --gradient-rose-light: linear-gradient(135deg, #ffe8ed 0%, #ffd1dc 100%);
+    --gradient-rose-primary: linear-gradient(135deg, #f94877 0%, #e6265f 100%);
+    --gradient-rose-dark: linear-gradient(135deg, #c21a4f 0%, #a11848 100%);
 
-    --shadow-red-sm: 0 2px 8px rgba(239, 68, 68, 0.15);
-    --shadow-red-md: 0 4px 16px rgba(239, 68, 68, 0.2);
-    --shadow-red-lg: 0 8px 24px rgba(239, 68, 68, 0.25);
-
-    /* 🟠 EVENTOS (Laranja Energia) */
-    /* Agenda, Aniversariantes, Calendário */
-    --orange-50: #fff7ed;
-    --orange-100: #ffedd5;
-    --orange-200: #fed7aa;
-    --orange-300: #fdba74;
-    --orange-400: #fb923c;
-    --orange-500: #f97316;
-    --orange-600: #ea580c;
-    --orange-700: #c2410c;
-    --orange-800: #9a3412;
-    --orange-900: #7c2d12;
-    --orange-950: #431407;
-
-    --gradient-orange-light: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
-    --gradient-orange-primary: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-    --gradient-orange-dark: linear-gradient(135deg, #c2410c 0%, #9a3412 100%);
-
-    --shadow-orange-sm: 0 2px 8px rgba(249, 115, 22, 0.15);
-    --shadow-orange-md: 0 4px 16px rgba(249, 115, 22, 0.2);
-    --shadow-orange-lg: 0 8px 24px rgba(249, 115, 22, 0.25);
+    --shadow-rose-sm: 0 2px 8px rgba(249, 72, 119, 0.15);
+    --shadow-rose-md: 0 4px 16px rgba(249, 72, 119, 0.2);
+    --shadow-rose-lg: 0 8px 24px rgba(249, 72, 119, 0.25);
 
     /* 🔷 RECURSOS (Teal Confiança) */
     /* Ausências, Relatórios, Estatísticas */
