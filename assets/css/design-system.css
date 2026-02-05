@@ -234,6 +234,50 @@
     --shadow-red-sm: 0 2px 8px rgba(239, 68, 68, 0.15);
     --shadow-red-md: 0 4px 16px rgba(239, 68, 68, 0.2);
     --shadow-red-lg: 0 8px 24px rgba(239, 68, 68, 0.25);
+
+    /* 🟠 EVENTOS (Laranja Energia) */
+    /* Agenda, Aniversariantes, Calendário */
+    --orange-50: #fff7ed;
+    --orange-100: #ffedd5;
+    --orange-200: #fed7aa;
+    --orange-300: #fdba74;
+    --orange-400: #fb923c;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+    --orange-700: #c2410c;
+    --orange-800: #9a3412;
+    --orange-900: #7c2d12;
+    --orange-950: #431407;
+
+    --gradient-orange-light: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+    --gradient-orange-primary: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    --gradient-orange-dark: linear-gradient(135deg, #c2410c 0%, #9a3412 100%);
+
+    --shadow-orange-sm: 0 2px 8px rgba(249, 115, 22, 0.15);
+    --shadow-orange-md: 0 4px 16px rgba(249, 115, 22, 0.2);
+    --shadow-orange-lg: 0 8px 24px rgba(249, 115, 22, 0.25);
+
+    /* 🔷 RECURSOS (Teal Confiança) */
+    /* Ausências, Relatórios, Estatísticas */
+    --teal-50: #f0fdfa;
+    --teal-100: #ccfbf1;
+    --teal-200: #99f6e4;
+    --teal-300: #5eead4;
+    --teal-400: #2dd4bf;
+    --teal-500: #14b8a6;
+    --teal-600: #0d9488;
+    --teal-700: #0f766e;
+    --teal-800: #115e59;
+    --teal-900: #134e4a;
+    --teal-950: #042f2e;
+
+    --gradient-teal-light: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+    --gradient-teal-primary: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    --gradient-teal-dark: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+
+    --shadow-teal-sm: 0 2px 8px rgba(20, 184, 166, 0.15);
+    --shadow-teal-md: 0 4px 16px rgba(20, 184, 166, 0.2);
+    --shadow-teal-lg: 0 8px 24px rgba(20, 184, 166, 0.25);
 }
 
 /* === RESPONSIVE TYPOGRAPHY === */

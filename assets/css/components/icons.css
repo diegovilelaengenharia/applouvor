@@ -112,6 +112,62 @@
     box-shadow: var(--shadow-red-sm);
 }
 
+/* === ORANGE ICON CONTAINERS (Eventos) === */
+.icon-container-orange {
+    width: 44px;
+    height: 44px;
+    background: var(--orange-100);
+    border: 1px solid var(--orange-200);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--orange-600);
+    flex-shrink: 0;
+}
+
+.icon-container-orange-solid {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-orange-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-orange-sm);
+}
+
+/* === TEAL ICON CONTAINERS (Recursos) === */
+.icon-container-teal {
+    width: 44px;
+    height: 44px;
+    background: var(--teal-100);
+    border: 1px solid var(--teal-200);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--teal-600);
+    flex-shrink: 0;
+}
+
+.icon-container-teal-solid {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-teal-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-teal-sm);
+}
+
 /* === ICON SIZES === */
 .icon-container-sm {
     width: 32px;
@@ -152,4 +208,12 @@
 
 .icon-red {
     color: var(--red-600);
+}
+
+.icon-orange {
+    color: var(--orange-600);
+}
+
+.icon-teal {
+    color: var(--teal-600);
 }

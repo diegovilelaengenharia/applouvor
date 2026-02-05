@@ -118,6 +118,64 @@
     gap: 4px;
 }
 
+/* === ORANGE BADGES (Eventos) === */
+.badge-orange {
+    background: var(--orange-100);
+    color: var(--orange-700);
+    border: 1px solid var(--orange-300);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-caption);
+    font-weight: var(--font-bold);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-orange-solid {
+    background: var(--orange-600);
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-caption);
+    font-weight: var(--font-bold);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* === TEAL BADGES (Recursos) === */
+.badge-teal {
+    background: var(--teal-100);
+    color: var(--teal-700);
+    border: 1px solid var(--teal-300);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-caption);
+    font-weight: var(--font-bold);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-teal-solid {
+    background: var(--teal-600);
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-caption);
+    font-weight: var(--font-bold);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
 /* === BADGE SIZES === */
 .badge-sm {
     padding: 2px 8px;

@@ -103,6 +103,56 @@
     transform: translateY(0);
 }
 
+.btn-primary-orange {
+    background: var(--gradient-orange-primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-bold);
+    font-size: var(--font-body);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    box-shadow: var(--shadow-orange-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary-orange:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-orange-lg);
+}
+
+.btn-primary-orange:active {
+    transform: translateY(0);
+}
+
+.btn-primary-teal {
+    background: var(--gradient-teal-primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-bold);
+    font-size: var(--font-body);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    box-shadow: var(--shadow-teal-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary-teal:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-teal-lg);
+}
+
+.btn-primary-teal:active {
+    transform: translateY(0);
+}
+
 /* === SECONDARY BUTTONS === */
 .btn-secondary-blue {
     background: var(--blue-100);
@@ -182,6 +232,46 @@
 .btn-secondary-red:hover {
     background: var(--red-200);
     border-color: var(--red-400);
+}
+
+.btn-secondary-orange {
+    background: var(--orange-100);
+    color: var(--orange-700);
+    border: 1px solid var(--orange-300);
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-semibold);
+    font-size: var(--font-body);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secondary-orange:hover {
+    background: var(--orange-200);
+    border-color: var(--orange-400);
+}
+
+.btn-secondary-teal {
+    background: var(--teal-100);
+    color: var(--teal-700);
+    border: 1px solid var(--teal-300);
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-semibold);
+    font-size: var(--font-body);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secondary-teal:hover {
+    background: var(--teal-200);
+    border-color: var(--teal-400);
 }
 
 /* === GHOST BUTTONS === */
@@ -265,6 +355,46 @@
     color: var(--red-700);
 }
 
+.btn-ghost-orange {
+    background: transparent;
+    color: var(--orange-600);
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-semibold);
+    font-size: var(--font-body);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-ghost-orange:hover {
+    background: var(--orange-50);
+    color: var(--orange-700);
+}
+
+.btn-ghost-teal {
+    background: transparent;
+    color: var(--teal-600);
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-semibold);
+    font-size: var(--font-body);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-ghost-teal:hover {
+    background: var(--teal-50);
+    color: var(--teal-700);
+}
+
 /* === BUTTON SIZES === */
 .btn-sm {
     padding: 8px 16px;
@@ -281,7 +411,9 @@
 .btn-primary-blue:disabled,
 .btn-primary-green:disabled,
 .btn-primary-purple:disabled,
-.btn-primary-red:disabled {
+.btn-primary-red:disabled,
+.btn-primary-orange:disabled,
+.btn-primary-teal:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
