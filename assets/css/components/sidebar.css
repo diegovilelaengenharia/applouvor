@@ -59,7 +59,12 @@
     color: var(--blue-600);
 }
 
-/* 🟢 ESPIRITUAL → VERDE VIBRANTE */
+/* 🜢 ESPIRITUAL → VERDE VIBRANTE */
+.nav-item.nav-green {
+    color: var(--text-main);
+    /* Texto neutro */
+}
+
 .nav-item.nav-green svg,
 .nav-item.nav-green .material-symbols-outlined {
     color: var(--green-500);
@@ -68,7 +73,8 @@
 .nav-item.nav-green:hover,
 .nav-item.nav-green.active {
     background-color: var(--green-100);
-    color: var(--green-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-green.active svg,
@@ -76,7 +82,12 @@
     color: var(--green-600);
 }
 
-/* 🟡 COMUNICAÇÃO → AMARELO VIBRANTE */
+/* 🜡 COMUNICAÇÃO → AMARELO VIBRANTE */
+.nav-item.nav-yellow {
+    color: var(--text-main);
+    /* Texto neutro */
+}
+
 .nav-item.nav-yellow svg,
 .nav-item.nav-yellow .material-symbols-outlined {
     color: var(--yellow-500);
@@ -85,7 +96,8 @@
 .nav-item.nav-yellow:hover,
 .nav-item.nav-yellow.active {
     background-color: var(--yellow-100);
-    color: var(--yellow-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-yellow.active svg,
@@ -106,7 +118,8 @@
 .nav-item.nav-emerald:hover,
 .nav-item.nav-emerald.active {
     background-color: var(--blue-100);
-    color: var(--blue-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-violet {
@@ -121,7 +134,8 @@
 .nav-item.nav-violet:hover,
 .nav-item.nav-violet.active {
     background-color: var(--blue-100);
-    color: var(--blue-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-indigo {
@@ -136,7 +150,8 @@
 .nav-item.nav-indigo:hover,
 .nav-item.nav-indigo.active {
     background-color: var(--green-100);
-    color: var(--green-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-rose {
@@ -151,7 +166,8 @@
 .nav-item.nav-rose:hover,
 .nav-item.nav-rose.active {
     background-color: var(--green-100);
-    color: var(--green-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-cyan {
@@ -166,7 +182,8 @@
 .nav-item.nav-cyan:hover,
 .nav-item.nav-cyan.active {
     background-color: var(--green-100);
-    color: var(--green-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
 
 .nav-item.nav-amber {
@@ -181,5 +198,6 @@
 .nav-item.nav-amber:hover,
 .nav-item.nav-amber.active {
     background-color: var(--yellow-100);
-    color: var(--yellow-700);
+    color: var(--text-main);
+    /* Texto neutro */
 }
