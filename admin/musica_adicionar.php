@@ -420,8 +420,8 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
 
         <!-- Bottom Actions -->
         <div style="display: flex; gap: 12px; padding-bottom: 20px;">
-            <a href="repertorio.php" class="btn-action btn-secondary" style="flex: 1; text-decoration: none;">Cancelar</a>
-            <button type="submit" class="btn-action btn-primary" style="flex: 2;">
+            <a href="repertorio.php" class="btn-warning" style="flex: 1; text-decoration: none; text-align: center;">Cancelar</a>
+            <button type="submit" class="btn-success" style="flex: 2;">
                 <i data-lucide="check" style="width: 18px;"></i> Salvar Música
             </button>
         </div>
