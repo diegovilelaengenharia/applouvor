@@ -90,6 +90,9 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="manifest" href="/manifest.json">
         <link rel="apple-touch-icon" href="../assets/img/logo_pib_black.png">
 
+<!-- Google Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
         <!-- ├ìcones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
