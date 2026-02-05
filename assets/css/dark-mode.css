@@ -30,19 +30,19 @@ body.dark-mode {
     --border-color: #333333;
     --border-subtle: #2d2d2d;
 
-    /* Primary Colors - Mais escuras para Dark Mode */
-    --primary: #059669;
-    /* Emerald 600 - Mais escuro */
-    --primary-hover: #047857;
-    /* Emerald 700 - Hover ainda mais escuro */
+    /* Primary Colors - Equilibrado para Dark Mode */
+    --primary: #10b981;
+    /* Emerald 500 - Equilibrado */
+    --primary-hover: #059669;
+    /* Emerald 600 - Hover */
     --primary-light: #064e3b;
     /* Emerald 900 background */
     --primary-subtle: #0f392b;
     /* Very dark green background */
 
-    --primary-green: #059669;
-    --primary-green-light: #10b981;
-    --primary-green-dark: #047857;
+    --primary-green: #10b981;
+    --primary-green-light: #34d399;
+    --primary-green-dark: #059669;
 
     /* Accent Colors - Pastels */
     --accent-primary: #34d399;
@@ -130,6 +130,21 @@ body.dark-mode [class*="-card"] {
     border: 1px solid var(--border-color) !important;
     border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Força fundo escuro em QUALQUER elemento com background branco */
+body.dark-mode [style*="background: white"],
+body.dark-mode [style*="background:white"],
+body.dark-mode [style*="background-color: white"],
+body.dark-mode [style*="background: #fff"],
+body.dark-mode [style*="background:#fff"],
+body.dark-mode [style*="background: #ffffff"],
+body.dark-mode [style*="background:#ffffff"],
+body.dark-mode [style*="background: rgb(255"],
+body.dark-mode div[style*="border-radius"][style*="padding"],
+body.dark-mode section[style*="background"] {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
 }
 
 /* Efeito Premium Hover em Cards Interativos */
