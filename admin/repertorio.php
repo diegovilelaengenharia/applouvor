@@ -196,7 +196,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 'A' => '#8b5cf6', 'A#' => '#a855f7', 'Bb' => '#a855f7',
                 'B' => '#ec4899'
             ];
-            $toneColor = $toneColors[$tone] ?? '#047857';
+            $toneColor = $toneColors[$tone] ?? '#22c55e';
         ?>
             <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; background: <?= $toneColor ?>15; padding: 12px 16px; border-radius: 12px; border: 1px solid <?= $toneColor ?>30;">
                 <div style="display: flex; align-items: center; gap: 8px; color: <?= $toneColor ?>; font-weight: 700;">
@@ -234,7 +234,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     <!-- Cover Placeholder Compact -->
                     <div style="
                         width: 40px; height: 40px; flex-shrink: 0; /* Cover reduzido */
-                        background: url('https://ui-avatars.com/api/?name=<?= urlencode($song['title']) ?>&background=047857&color=fff&size=80') center/cover; 
+                        background: url('https://ui-avatars.com/api/?name=<?= urlencode($song['title']) ?>&background=22c55e&color=fff&size=80') center/cover; 
                         border-radius: 8px;
                     "></div>
 
@@ -284,7 +284,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($tags as $tag):
-                $bgHex = $tag['color'] ?? '#047857';
+                $bgHex = $tag['color'] ?? '#22c55e';
             ?>
                 <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="ripple" style="
                 display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 
@@ -419,7 +419,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($tones as $toneItem):
                 $toneName = $toneItem['name'];
-                $bgHex = $toneColors[$toneName] ?? '#047857';
+                $bgHex = $toneColors[$toneName] ?? '#22c55e';
             ?>
                 <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneName) ?>" class="ripple" style="
                 display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 12px; 

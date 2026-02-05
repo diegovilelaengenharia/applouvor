@@ -297,7 +297,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         outline: none;
         border-color: var(--card-color, var(--primary));
         background: var(--bg-surface);
-        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(4, 120, 87, 0.1));
+        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(34, 197, 94, 0.1));
     }
 
     /* Input Icon */
@@ -430,14 +430,14 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         width: 100%;
         padding: 14px 20px;
         border-radius: 12px;
-        background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, #15803d 100%);
         border: none;
         color: white;
         font-weight: 700;
         font-size: var(--font-body);
         cursor: pointer;
         transition: all 0.2s;
-        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -446,7 +446,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 
     .btn-primary-full:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
     }
 </style>
 
@@ -535,7 +535,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         </div>
 
         <!-- Card 2: Referências e Mídia -->
-        <div class="form-card" style="--card-color: #10b981; --focus-shadow: rgba(16, 185, 129, 0.1);">
+        <div class="form-card" style="--card-color: #22c55e; --focus-shadow: rgba(34, 197, 94, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="link" style="width: 14px;"></i>
@@ -611,7 +611,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 ?>
                     <label class="tag-pill-compact" style="<?= $isChecked ? 'background: var(--primary-subtle); border-color: var(--primary); color: var(--primary);' : '' ?>">
                         <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?> onchange="updateTagStyle(this)">
-                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#047857' ?>;"></span>
+                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#22c55e' ?>;"></span>
                         <?= htmlspecialchars($tag['name']) ?>
                     </label>
                 <?php endforeach; ?>
@@ -658,19 +658,19 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 flex: 2; 
                 padding: 14px 20px; 
                 border-radius: 12px; 
-                background: linear-gradient(135deg, var(--primary) 0%, #059669 100%); 
+                background: linear-gradient(135deg, var(--primary) 0%, #15803d 100%); 
                 border: none; 
                 color: white; 
                 font-weight: 700; 
                 font-size: var(--font-body);
                 cursor: pointer;
                 transition: all 0.2s;
-                box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
+                box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(4, 120, 87, 0.4)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(4, 120, 87, 0.3)'">
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(34, 197, 94, 0.4)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(34, 197, 94, 0.3)'">
                 <i data-lucide="save" style="width: 20px;"></i>
                 Salvar Alterações
             </button>
@@ -700,7 +700,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         <div id="tagsList" style="flex: 1; overflow-y: auto; margin-bottom: 24px; min-height: 150px;">
             <?php foreach ($allTags as $tag): ?>
                 <div class="tag-card-item" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border: 1px solid var(--border-color);">
-                    <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: '#047857' ?>;">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: '#22c55e' ?>;">
                         <i data-lucide="folder" style="width: 20px;"></i>
                     </div>
                     <div style="flex: 1; min-width: 0;">
@@ -737,7 +737,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
                 <label class="form-label">Cor</label>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <?php
-                    $colors = ['#047857', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#6366F1'];
+                    $colors = ['#22c55e', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#6366F1'];
                     foreach ($colors as $c): ?>
                         <label style="cursor: pointer;">
                             <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">

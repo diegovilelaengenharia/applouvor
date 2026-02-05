@@ -183,7 +183,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         outline: none;
         border-color: var(--card-color, var(--primary));
         background: var(--bg-surface);
-        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(4, 120, 87, 0.1));
+        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(34, 197, 94, 0.1));
     }
 
     /* Input Icon */
@@ -214,7 +214,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         background: var(--primary-subtle);
         border-color: var(--primary);
         color: var(--primary);
-        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.15);
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
     }
     
     .tag-dot {
@@ -229,7 +229,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
     }
     .btn-primary {
         background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;
-        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
     }
     .btn-secondary { background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-color); }
     .btn-secondary:hover { background: var(--bg-body); color: var(--text-main); }
@@ -335,7 +335,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         </div>
 
         <!-- Card 2: Referências -->
-        <div class="form-card" style="--card-color: #10b981; --focus-shadow: rgba(16, 185, 129, 0.1);">
+        <div class="form-card" style="--card-color: #22c55e; --focus-shadow: rgba(34, 197, 94, 0.1);">
             <div class="card-title">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <i data-lucide="link" style="width: 14px;"></i>
@@ -400,7 +400,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
                 <?php foreach ($allTags as $tag): ?>
                     <label class="tag-pill-compact" onclick="this.classList.toggle('active')">
                         <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>">
-                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#047857' ?>;"></span>
+                        <span class="tag-dot" style="background: <?= $tag['color'] ?: '#22c55e' ?>;"></span>
                         <span><?= htmlspecialchars($tag['name']) ?></span>
                     </label>
                 <?php endforeach; ?>

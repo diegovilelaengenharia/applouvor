@@ -206,7 +206,7 @@ if (!$song) {
 
     // Definição do Status Visual
     $statusLabel = 'Normal';
-    $statusColor = '#10b981'; // Emerald
+    $statusColor = '#22c55e'; // Green 500
     $statusDesc = 'Frequência equilbrada';
     $statusIcon = 'check-circle';
 
@@ -336,10 +336,10 @@ document.addEventListener(\'click\', function(e) {
 
         .sh-icon {
             width: 64px; height: 64px;
-            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
             border-radius: 16px;
             display: inline-flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 20px rgba(4, 120, 87, 0.25);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
             margin-bottom: 16px;
         }
 
@@ -508,7 +508,7 @@ document.addEventListener(\'click\', function(e) {
                 <?php if (!empty($tags)): ?>
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
                         <?php foreach ($tags as $tag): 
-                            $tagColor = $tag['color'] ?? '#047857';
+                            $tagColor = $tag['color'] ?? '#22c55e';
                         ?>
                             <span style="padding: 6px 14px; background: <?= $tagColor ?>15; color: <?= $tagColor ?>; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
                                 <?= htmlspecialchars($tag['name']) ?>
@@ -581,7 +581,7 @@ document.addEventListener(\'click\', function(e) {
                     <i data-lucide="external-link" width="16" style="color: #cbd5e1;"></i>
                 </a>
                 <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" class="link-item ripple" style="border: 1px solid var(--border-color);">
-                    <div class="link-icon" style="background: #ecfdf5; color: #10b981;"><i data-lucide="music" width="24"></i></div>
+                    <div class="link-icon" style="background: #f0fdf4; color: #22c55e;"><i data-lucide="music" width="24"></i></div>
                     <div class="link-info"><div class="link-title">Cifra</div><div class="link-url"><?= $song['link_cifra'] ? 'Acessar Link' : 'Não cadastrado' ?></div></div>
                     <i data-lucide="external-link" width="16" style="color: #cbd5e1;"></i>
                 </a>
