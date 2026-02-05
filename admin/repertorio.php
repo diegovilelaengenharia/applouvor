@@ -9,24 +9,8 @@ $search = $_GET['q'] ?? '';
 $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório');
+renderPageHeader('Repertório', 'Gestão de Músicas');
 ?>
-
-<!-- Page Header com Gradiente Azul -->
-<div class="page-header page-header-gestao" style="
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    padding: 32px 16px;
-    margin-bottom: 24px;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-">
-    <div style="max-width: 800px; margin: 0 auto;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 32px;">library_music</span>
-            <h1 style="margin: 0; font-size: 1.75rem; font-weight: 700;">Repertório</h1>
-        </div>
-        <p style="margin: 0; opacity: 0.95; font-size: 0.95rem;">Gerencie o repertório de músicas da PIB Oliveira</p>
-    </div>
-</div>
 <!-- Tabs Navegação com Menu -->
 <div style="display: flex; align-items: center; gap: 12px; margin: 0 16px 24px 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
     <div style="background: var(--bg-body); padding: 4px; border-radius: 12px; display: flex; flex: 1;">
