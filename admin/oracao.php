@@ -157,7 +157,7 @@ renderAppHeader('Pedidos de Oração');
         border-left: 4px solid var(--rose-600);
     }
     .prayer-card.answered {
-        background: linear-gradient(135deg, var(--sage-50) 0%, var(--sage-100) 100%);
+        background: var(--sage-50);
         border-color: var(--sage-500);
     }
     
@@ -232,7 +232,7 @@ renderAppHeader('Pedidos de Oração');
         border: none;
     }
     .pray-btn.not-prayed {
-        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
+        background: var(--slate-600);
         color: white;
     }
     .pray-btn.prayed {
@@ -266,7 +266,7 @@ renderAppHeader('Pedidos de Oração');
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
+        background: var(--slate-600);
         color: white;
         border: none;
         box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
@@ -307,7 +307,7 @@ renderAppHeader('Pedidos de Oração');
         background: var(--border-color);
     }
     .filter-tab.active {
-        background: linear-gradient(135deg, var(--slate-600), #2c55a0);
+        background: var(--slate-600);
         color: white;
         border-color: transparent;
     }
@@ -348,7 +348,7 @@ renderAppHeader('Pedidos de Oração');
     
     /* Intercession States */
     .prayer-card.not-interceded {
-        background: linear-gradient(to right, #ffffff, var(--yellow-50));
+        background: var(--bg-surface);
         border-left: 3px solid var(--yellow-500);
     }
     .prayer-card.interceded {
@@ -434,7 +434,7 @@ renderAppHeader('Pedidos de Oração');
     
     <?php if (!$tableExists): ?>
     <!-- Setup Required Message -->
-    <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, var(--slate-100), #d7e1f4); border-radius: 16px; margin-bottom: 20px;">
+    <div style="text-align: center; padding: 40px 20px; background: var(--slate-100); border-radius: 16px; margin-bottom: 20px;">
         <div style="background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             <i data-lucide="database" style="color: var(--slate-600); width: 30px; height: 30px;"></i>
         </div>
@@ -442,7 +442,7 @@ renderAppHeader('Pedidos de Oração');
         <p style="color: var(--slate-700); font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
             Para usar o Mural de Oração, é necessário criar as tabelas no banco de dados.
         </p>
-        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--slate-600), #2c55a0); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
+        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: var(--slate-600); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
             <i data-lucide="settings" style="width: 18px;"></i>
             Executar Setup
         </a>
@@ -553,7 +553,7 @@ renderAppHeader('Pedidos de Oração');
                     <?php if ($authorAvatar): ?>
                         <img src="<?= htmlspecialchars($authorAvatar) ?>" class="prayer-avatar" alt="">
                     <?php else: ?>
-                        <div class="prayer-avatar-placeholder" style="background: linear-gradient(135deg, #fbbf24, var(--yellow-500));">
+                        <div class="prayer-avatar-placeholder" style="background: var(--yellow-500);">
                             <?= $prayer['is_anonymous'] ? '?' : strtoupper(substr($authorName, 0, 1)) ?>
                         </div>
                     <?php endif; ?>
@@ -622,7 +622,7 @@ renderAppHeader('Pedidos de Oração');
                         <?php if ($commentAvatar): ?>
                             <img src="<?= htmlspecialchars($commentAvatar) ?>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="">
                         <?php else: ?>
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--lavender-200); display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
                                 <?= strtoupper(substr($comment['name'] ?? 'U', 0, 1)) ?>
                             </div>
                         <?php endif; ?>
@@ -638,7 +638,7 @@ renderAppHeader('Pedidos de Oração');
                         <input type="hidden" name="action" value="comment">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
                         <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: var(--font-body); outline: none;">
-                        <button type="submit" style="background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                        <button type="submit" style="background: var(--yellow-500); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                             <i data-lucide="send" style="width: 16px;"></i>
                         </button>
                     </form>
@@ -648,7 +648,7 @@ renderAppHeader('Pedidos de Oração');
         <?php else: ?>
             <!-- Empty State -->
             <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: linear-gradient(135deg, var(--slate-100) 0%, var(--slate-100) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <div style="background: var(--slate-200); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
                     <i data-lucide="heart-handshake" style="color: var(--slate-600); width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;"><?= $showAnswered ? 'Nenhuma oração respondida' : 'Nenhum pedido ainda' ?></h3>
@@ -656,7 +656,7 @@ renderAppHeader('Pedidos de Oração');
                     <?= $showAnswered ? 'As orações respondidas aparecerão aqui.' : 'Seja o primeiro a compartilhar um pedido de oração!' ?>
                 </p>
                 <?php if (!$showAnswered): ?>
-                <button onclick="openCreateModal()" style="background: linear-gradient(135deg, var(--slate-600), #2c55a0); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                <button onclick="openCreateModal()" style="background: var(--slate-600); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                     <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
                     Novo Pedido
                 </button>
@@ -757,7 +757,7 @@ renderAppHeader('Pedidos de Oração');
                 <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
                     Cancelar
                 </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #fbbf24, var(--yellow-500)); color: white; font-weight: 700; cursor: pointer;">
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--yellow-500); color: white; font-weight: 700; cursor: pointer;">
                     Enviar Pedido
                 </button>
             </div>
