@@ -4,7 +4,7 @@
 
 /* === PRIMARY BUTTONS === */
 .btn-primary-slate {
-    background: var(--gradient-blue-primary);
+    background: var(--slate-600);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -13,23 +13,23 @@
     font-size: var(--font-body);
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-blue-md);
+    box-shadow: var(--shadow-sm);
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 .btn-primary-slate:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-blue-lg);
+    background: var(--slate-700);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary-slate:active {
-    transform: translateY(0);
+    background: var(--slate-800);
 }
 
 .btn-primary-sage {
-    background: var(--gradient-green-primary);
+    background: var(--sage-600);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -38,23 +38,23 @@
     font-size: var(--font-body);
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-green-md);
+    box-shadow: var(--shadow-sm);
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 .btn-primary-sage:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-green-lg);
+    background: var(--sage-700);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary-sage:active {
-    transform: translateY(0);
+    background: var(--sage-800);
 }
 
 .btn-primary-lavender {
-    background: var(--gradient-yellow-primary);
+    background: var(--yellow-600);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -63,23 +63,23 @@
     font-size: var(--font-body);
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-yellow-md);
+    box-shadow: var(--shadow-sm);
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 .btn-primary-lavender:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-yellow-lg);
+    background: var(--yellow-700);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary-lavender:active {
-    transform: translateY(0);
+    background: var(--yellow-800);
 }
 
 .btn-primary-rose {
-    background: var(--gradient-red-primary);
+    background: var(--rose-600);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -88,19 +88,19 @@
     font-size: var(--font-body);
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-red-md);
+    box-shadow: var(--shadow-sm);
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 .btn-primary-rose:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-red-lg);
+    background: var(--rose-700);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary-rose:active {
-    transform: translateY(0);
+    background: var(--rose-800);
 }
 
 /* === SECONDARY BUTTONS === */
