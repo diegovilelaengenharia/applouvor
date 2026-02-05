@@ -167,7 +167,7 @@ try {
     }
 
     .stat-hero {
-        background: linear-gradient(135deg, var(--slate-500) 0%, var(--slate-700) 100%);
+        background: var(--slate-600);
         color: white;
         padding: 24px 20px;
         border-radius: 16px;
@@ -253,15 +253,15 @@ try {
     }
 
     .rank-number.gold {
-        background: linear-gradient(135deg, #fbbf24, var(--yellow-500));
+        background: var(--yellow-500);
     }
 
     .rank-number.silver {
-        background: linear-gradient(135deg, #d1d5db, #9ca3af);
+        background: var(--slate-400);
     }
 
     .rank-number.bronze {
-        background: linear-gradient(135deg, #f97316, #ea580c);
+        background: #f97316;
     }
 
     @media (max-width: 768px) {

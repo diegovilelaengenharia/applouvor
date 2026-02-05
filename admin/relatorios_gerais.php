@@ -1283,7 +1283,7 @@ renderAppHeader('Indicadores Avançados');
                     <!-- Taxa de Adesão & Comparação de Planos -->
                     <div>
                         <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Taxa de Adesão ao Plano</h5>
-                        <div style="padding: 20px; background: linear-gradient(135deg, var(--lavender-600) 0%, #6d28d9 100%); border-radius: 12px; text-align: center; color: white;">
+                        <div style="padding: 20px; background: var(--lavender-600); border-radius: 12px; text-align: center; color: white;">
                             <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $adherenceRate ?>%</div>
                             <div style="font-size: 13px; opacity: 0.9;"><?= $adherenceData['leitores_ativos'] ?> de <?= $adherenceData['total_usuarios'] ?> membros</div>
                         </div>
@@ -1345,17 +1345,17 @@ renderAppHeader('Indicadores Avançados');
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
                     
                     <!-- KPIs de Ausências -->
-                    <div style="padding: 20px; background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-600) 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: var(--yellow-500); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $totalAbsences ?></div>
                         <div style="font-size: 13px; opacity: 0.9;">Total de Ausências</div>
                     </div>
 
-                    <div style="padding: 20px; background: linear-gradient(135deg, var(--sage-500) 0%, var(--sage-600) 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: var(--sage-500); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $substitutionRate ?>%</div>
                         <div style="font-size: 13px; opacity: 0.9;">Com Substituto</div>
                     </div>
 
-                    <div style="padding: 20px; background: linear-gradient(135deg, var(--slate-500) 0%, var(--slate-600) 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: var(--slate-500); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $audioRate ?>%</div>
                         <div style="font-size: 13px; opacity: 0.9;">Com Áudio Explicativo</div>
                     </div>
@@ -1426,7 +1426,7 @@ renderAppHeader('Indicadores Avançados');
                             $medals = ['🥇', '🥈', '🥉', '4º', '5º'];
                         ?>
                         <div style="text-align: center;">
-                            <div style="width: 100px; height: <?= $heights[$idx] ?>px; background: linear-gradient(180deg, <?= $colors[$idx] ?> 0%, <?= $colors[$idx] ?>99 100%); border-radius: 8px 8px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px; color: white; position: relative;">
+                            <div style="width: 100px; height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px; color: white; position: relative;">
                                 <div style="font-size: 28px; margin-bottom: 4px;"><?= $medals[$idx] ?></div>
                                 <div style="font-size: 24px; font-weight: 800; margin-bottom: 4px;"><?= $mvp['engagement_score'] ?></div>
                                 <div style="font-size: 10px; opacity: 0.9;">pontos</div>
