@@ -1,250 +1,100 @@
 /* ========================================
-   App Louvor - Design System Variables v1.0
+   App Louvor - Design System v2.0
+   Sistema de Cores Profissional e Coeso
    ======================================== */
 
 :root {
-    /* === TYPOGRAPHY (Optimized Mobile Base) === */
-    --font-display: 1.5rem;
-    /* 24px - Hero titles */
-    --font-h1: 1.25rem;
-    /* 20px - Page titles */
-    --font-h2: 1.125rem;
-    /* 18px - Section titles */
-    --font-h3: 1rem;
-    /* 16px - Card titles */
-    --font-body: 0.9375rem;
-    /* 15px - Regular text (Optimized) */
-    --font-body-sm: 0.8125rem;
-    /* 13px - Secondary text */
-    --font-caption: 0.75rem;
-    /* 12px - Meta info */
-    --font-small: 0.75rem;
+    /* ============================================
+       TIPOGRAFIA
+       ============================================ */
+    
+    /* Tamanhos de Fonte */
+    --font-display: 1.5rem;      /* 24px - Hero titles */
+    --font-h1: 1.25rem;          /* 20px - Page titles */
+    --font-h2: 1.125rem;         /* 18px - Section titles */
+    --font-h3: 1rem;             /* 16px - Card titles */
+    --font-body: 0.9375rem;      /* 15px - Regular text */
+    --font-body-sm: 0.8125rem;   /* 13px - Secondary text */
+    --font-caption: 0.75rem;     /* 12px - Meta info */
+    --font-small: 0.75rem;       /* 12px - Small text */
 
+    /* Pesos de Fonte */
     --font-regular: 400;
     --font-medium: 500;
     --font-semibold: 600;
     --font-bold: 700;
     --font-extrabold: 800;
 
+    /* Altura de Linha */
     --line-height-tight: 1.2;
     --line-height-normal: 1.5;
     --line-height-relaxed: 1.75;
 
-    /* === COLORS - PRIMARY (Smart Blue) === */
-    --primary-50: #ebf0fa;
-    --primary-100: #d7e1f4;
-    --primary-200: #afc3e9;
-    --primary-300: #87a5de;
-    --primary-400: #5f88d3;
-    --primary-500: #376ac8;
-    /* BRAND PRINCIPAL */
-    --primary-600: #2c55a0;
-    --primary-700: #213f78;
-    --primary-800: #162a50;
-    --primary-900: #0b1528;
-    --primary-950: #080f1c;
-
-    /* === COLORS - SEMANTIC === */
-    --success: #10B981;
-    --success-light: #D1FAE5;
-    --success-dark: #047857;
-
-    --warning: #F59E0B;
-    --warning-light: #FEF3C7;
-    --warning-dark: #D97706;
-
-    --error: #EF4444;
-    --error-light: #FEE2E2;
-    --error-dark: #DC2626;
-
-    --info: #3B82F6;
-    --info-light: #DBEAFE;
-    --info-dark: #2563EB;
-
-    /* === COLORS - NEUTRAL (Grayscale) === */
-    --gray-50: #F9FAFB;
-    --gray-100: #F3F4F6;
-    --gray-200: #E5E7EB;
-    --gray-300: #D1D5DB;
-    --gray-400: #9CA3AF;
-    --gray-500: #6B7280;
-    --gray-600: #4B5563;
-    --gray-700: #374151;
-    --gray-800: #1F2937;
-    --gray-900: #111827;
-
-    /* === COLORS - ACCENT === */
-    --accent-purple: #8B5CF6;
-    --accent-pink: #EC4899;
-    --accent-orange: #F97316;
-    --accent-teal: #14B8A6;
-
-    /* === SPACING (Compact 4px/8px base) === */
-    --space-0: 0;
-    --space-1: 0.25rem;
-    /* 4px */
-    --space-2: 0.5rem;
-    /* 8px */
-    --space-3: 0.75rem;
-    /* 12px */
-    --space-4: 1rem;
-    /* 16px */
-    --space-5: 1.25rem;
-    /* 20px */
-    --space-6: 1.5rem;
-    /* 24px */
-    --space-8: 2rem;
-    /* 32px */
-    --space-10: 2.5rem;
-    /* 40px */
-    --space-12: 3rem;
-    /* 48px */
-    --space-16: 4rem;
-    /* 64px */
-    --space-20: 5rem;
-    /* 80px */
-
-    /* === SHADOWS & ELEVATION === */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    /* Smoother */
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-    /* === BORDER RADIUS === */
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --radius-2xl: 20px;
-    --radius-3xl: 24px;
-    --radius-full: 9999px;
-
-    /* === TRANSITIONS === */
-    --duration-fast: 150ms;
-    --duration-normal: 300ms;
-    --duration-slow: 500ms;
-
-    --ease-in: cubic-bezier(0.4, 0, 1, 1);
-    --ease-out: cubic-bezier(0, 0, 0.2, 1);
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* === ICONS === */
-    --icon-xs: 12px;
-    --icon-sm: 16px;
-    --icon-md: 20px;
-    --icon-lg: 24px;
-    --icon-xl: 32px;
-
-    /* === BREAKPOINTS (for reference) === */
-    --breakpoint-sm: 640px;
-    --breakpoint-md: 768px;
-    --breakpoint-lg: 1024px;
-    --breakpoint-xl: 1280px;
-
     /* ============================================
-       SEMANTIC COLOR SYSTEM (Paleta Personalizada)
+       PALETA DE CORES PRINCIPAL
        ============================================ */
 
-    /* 🔵 GESTÃO (Azul Vibrante - Profissional e Confiável) */
-    /* Escalas, Repertório, Membros, Agenda, Ausências, Histórico */
+    /* 🔵 AZUL - Gestão (#3b82f6)
+       Escalas, Repertório, Membros, Agenda, Histórico */
     --blue-50: #eff6ff;
     --blue-100: #dbeafe;
     --blue-200: #bfdbfe;
     --blue-300: #93c5fd;
     --blue-400: #60a5fa;
-    --blue-500: #3b82f6;
-    /* Vibrant Blue - Principal */
+    --blue-500: #3b82f6;    /* ⭐ Principal */
     --blue-600: #2563eb;
     --blue-700: #1d4ed8;
     --blue-800: #1e40af;
     --blue-900: #1e3a8a;
     --blue-950: #172554;
 
-    --gradient-blue-light: #93c5fd;
-    --gradient-blue-primary: #3b82f6;
-    --gradient-blue-dark: #1d4ed8;
-
-    --shadow-blue-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
-    --shadow-blue-md: 0 4px 16px rgba(59, 130, 246, 0.2);
-    --shadow-blue-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
-
-    /* 🟢 ESPIRITUAL (Verde Vibrante - Vida e Esperança) */
-    /* Devocional, Oração, Leitura Bíblica */
-    --green-50: #e8f9f0;
-    --green-100: #d4f4e1;
-    --green-200: #ADDABE;
-    /* Mint Green - Tom suave */
-    --green-300: #7ee5a0;
-    --green-400: #51d983;
-    --green-500: #24CE6B;
-    /* Vibrant Green - Principal */
+    /* 🟢 VERDE - Espiritual (#24CE6B)
+       Devocional, Oração, Leitura Bíblica */
+    --green-50: #ecfdf5;
+    --green-100: #d1fae5;
+    --green-200: #a7f3d0;
+    --green-300: #6ee7b7;
+    --green-400: #34d399;
+    --green-500: #24CE6B;   /* ⭐ Principal */
     --green-600: #1fb85e;
     --green-700: #1a9d50;
     --green-800: #158242;
     --green-900: #106734;
     --green-950: #0a4522;
 
-    --gradient-green-light: #ADDABE;
-    --gradient-green-primary: #1fb85e;
-    --gradient-green-dark: #158242;
-
-    --shadow-green-sm: 0 2px 8px rgba(36, 206, 107, 0.15);
-    --shadow-green-md: 0 4px 16px rgba(36, 206, 107, 0.2);
-    --shadow-green-lg: 0 8px 24px rgba(36, 206, 107, 0.25);
-
-    /* 🟡 COMUNICAÇÃO (Amarelo Vibrante - Atenção e Otimismo) */
-    /* Avisos, Notificações, Aniversariantes */
+    /* 🟡 AMARELO - Comunicação (#FFC501)
+       Avisos, Notificações, Aniversários */
     --yellow-50: #fffbeb;
-    --yellow-100: #fff4d1;
-    --yellow-200: #ffe9a3;
-    --yellow-300: #ffde75;
-    --yellow-400: #ffd34e;
-    --yellow-500: #FFC501;
-    /* Vibrant Yellow - Principal */
+    --yellow-100: #fef3c7;
+    --yellow-200: #fde68a;
+    --yellow-300: #fcd34d;
+    --yellow-400: #fbbf24;
+    --yellow-500: #FFC501;  /* ⭐ Principal */
     --yellow-600: #e6b001;
     --yellow-700: #cc9c01;
-    --yellow-800: #b38801;
-    --yellow-900: #997300;
+    --yellow-800: #a67c01;
+    --yellow-900: #8b6501;
     --yellow-950: #664d00;
 
-    --gradient-yellow-light: #ffde75;
-    --gradient-yellow-primary: #FFC501;
-    --gradient-yellow-dark: #cc9c01;
-
-    --shadow-yellow-sm: 0 2px 8px rgba(255, 197, 1, 0.15);
-    --shadow-yellow-md: 0 4px 16px rgba(255, 197, 1, 0.2);
-    --shadow-yellow-lg: 0 8px 24px rgba(255, 197, 1, 0.25);
-
-    /* 🔴 AÇÕES DESTRUTIVAS (Vermelho - Perigo) */
-    /* Excluir, Deletar, Remover */
+    /* 🔴 VERMELHO - Crítico/Destrutivo (#ef4444)
+       Excluir, Deletar, Ações Destrutivas */
     --red-50: #fef2f2;
     --red-100: #fee2e2;
     --red-200: #fecaca;
     --red-300: #fca5a5;
     --red-400: #f87171;
-    --red-500: #ef4444;
+    --red-500: #ef4444;     /* ⭐ Principal */
     --red-600: #dc2626;
     --red-700: #b91c1c;
     --red-800: #991b1b;
     --red-900: #7f1d1d;
     --red-950: #450a0a;
 
-    --gradient-red-light: #fecaca;
-    --gradient-red-primary: #dc2626;
-    --gradient-red-dark: #991b1b;
-
-    --shadow-red-sm: 0 2px 8px rgba(239, 68, 68, 0.15);
-    --shadow-red-md: 0 4px 16px rgba(239, 68, 68, 0.2);
-    --shadow-red-lg: 0 8px 24px rgba(239, 68, 68, 0.25);
-
-    /* ⚪ NEUTRO (Cinza - Base da Paleta) */
-    /* Fundos, Divisores, Ações Genéricas */
+    /* ⚪ CINZA - Neutro
+       Fundos, Bordas, Textos */
     --gray-50: #fafafa;
     --gray-100: #f5f5f5;
-    --gray-200: #EBEBEB;
-    /* Light Gray - Base da paleta */
+    --gray-200: #e5e5e5;
     --gray-300: #d4d4d4;
     --gray-400: #a3a3a3;
     --gray-500: #737373;
@@ -254,29 +104,257 @@
     --gray-900: #171717;
     --gray-950: #0a0a0a;
 
-    /* Cores de fundo do app */
-    --app-bg: var(--gray-100);
-    /* #f5f5f5 - Fundo principal */
-    --card-bg: #ffffff;
-    /* Branco puro para cards */
-    --border-color: var(--gray-200);
-    /* #EBEBEB - Bordas e divisores */
+    /* ============================================
+       CORES SECUNDÁRIAS E ACENTOS
+       ============================================ */
 
-    /* === GLOBAL DOMAIN VARIABLES === */
-    --primary: var(--primary-600);
-    /* Cor principal do app (Botões, Destaques) */
-    --primary-hover: var(--primary-700);
-    --primary-foreground: #ffffff;
-    /* Texto sobre primary */
+    /* 🟣 ROXO - Liderança/Premium */
+    --purple-50: #faf5ff;
+    --purple-100: #f3e8ff;
+    --purple-200: #e9d5ff;
+    --purple-300: #d8b4fe;
+    --purple-400: #c084fc;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+    --purple-700: #7e22ce;
+    --purple-800: #6b21a8;
+    --purple-900: #581c87;
 
+    /* 🔶 LARANJA - Atenção/Destaque */
+    --orange-50: #fff7ed;
+    --orange-100: #ffedd5;
+    --orange-200: #fed7aa;
+    --orange-300: #fdba74;
+    --orange-400: #fb923c;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+    --orange-700: #c2410c;
+    --orange-800: #9a3412;
+    --orange-900: #7c2d12;
+
+    /* 🩵 CIANO - Informação */
+    --cyan-50: #ecfeff;
+    --cyan-100: #cffafe;
+    --cyan-200: #a5f3fc;
+    --cyan-300: #67e8f9;
+    --cyan-400: #22d3ee;
+    --cyan-500: #06b6d4;
+    --cyan-600: #0891b2;
+    --cyan-700: #0e7490;
+    --cyan-800: #155e75;
+    --cyan-900: #164e63;
+
+    /* 🩷 ROSA - Especial */
+    --pink-50: #fdf2f8;
+    --pink-100: #fce7f3;
+    --pink-200: #fbcfe8;
+    --pink-300: #f9a8d4;
+    --pink-400: #f472b6;
+    --pink-500: #ec4899;
+    --pink-600: #db2777;
+    --pink-700: #be185d;
+    --pink-800: #9d174d;
+    --pink-900: #831843;
+
+    /* ============================================
+       GRADIENTES
+       ============================================ */
+
+    /* Gradientes Azul */
+    --gradient-blue: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+    --gradient-blue-soft: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
+    
+    /* Gradientes Verde */
+    --gradient-green: linear-gradient(135deg, #6ee7b7 0%, #24CE6B 50%, #1a9d50 100%);
+    --gradient-green-soft: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    
+    /* Gradientes Amarelo */
+    --gradient-yellow: linear-gradient(135deg, #fcd34d 0%, #FFC501 50%, #e6b001 100%);
+    --gradient-yellow-soft: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    
+    /* Gradientes Roxo */
+    --gradient-purple: linear-gradient(135deg, #d8b4fe 0%, #a855f7 50%, #7e22ce 100%);
+    
+    /* Gradientes Especiais */
+    --gradient-sunset: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ef4444 100%);
+    --gradient-ocean: linear-gradient(135deg, #22d3ee 0%, #3b82f6 50%, #6366f1 100%);
+    --gradient-forest: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+
+    /* ============================================
+       SOMBRAS COLORIDAS
+       ============================================ */
+
+    /* Sombras Azul */
+    --shadow-blue-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
+    --shadow-blue-md: 0 4px 16px rgba(59, 130, 246, 0.2);
+    --shadow-blue-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
+    --shadow-blue-xl: 0 12px 32px rgba(59, 130, 246, 0.3);
+
+    /* Sombras Verde */
+    --shadow-green-sm: 0 2px 8px rgba(36, 206, 107, 0.15);
+    --shadow-green-md: 0 4px 16px rgba(36, 206, 107, 0.2);
+    --shadow-green-lg: 0 8px 24px rgba(36, 206, 107, 0.25);
+    --shadow-green-xl: 0 12px 32px rgba(36, 206, 107, 0.3);
+
+    /* Sombras Amarelo */
+    --shadow-yellow-sm: 0 2px 8px rgba(255, 197, 1, 0.15);
+    --shadow-yellow-md: 0 4px 16px rgba(255, 197, 1, 0.2);
+    --shadow-yellow-lg: 0 8px 24px rgba(255, 197, 1, 0.25);
+    --shadow-yellow-xl: 0 12px 32px rgba(255, 197, 1, 0.3);
+
+    /* Sombras Vermelho */
+    --shadow-red-sm: 0 2px 8px rgba(239, 68, 68, 0.15);
+    --shadow-red-md: 0 4px 16px rgba(239, 68, 68, 0.2);
+    --shadow-red-lg: 0 8px 24px rgba(239, 68, 68, 0.25);
+    --shadow-red-xl: 0 12px 32px rgba(239, 68, 68, 0.3);
+
+    /* Sombras Roxo */
+    --shadow-purple-sm: 0 2px 8px rgba(168, 85, 247, 0.15);
+    --shadow-purple-md: 0 4px 16px rgba(168, 85, 247, 0.2);
+    --shadow-purple-lg: 0 8px 24px rgba(168, 85, 247, 0.25);
+    --shadow-purple-xl: 0 12px 32px rgba(168, 85, 247, 0.3);
+
+    /* Sombras Neutras */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+    --shadow-glow: none;
+
+    /* ============================================
+       ESPAÇAMENTO
+       ============================================ */
+    
+    --space-0: 0;
+    --space-1: 0.25rem;    /* 4px */
+    --space-2: 0.5rem;     /* 8px */
+    --space-3: 0.75rem;    /* 12px */
+    --space-4: 1rem;       /* 16px */
+    --space-5: 1.25rem;    /* 20px */
+    --space-6: 1.5rem;     /* 24px */
+    --space-8: 2rem;       /* 32px */
+    --space-10: 2.5rem;    /* 40px */
+    --space-12: 3rem;      /* 48px */
+    --space-16: 4rem;      /* 64px */
+    --space-20: 5rem;      /* 80px */
+
+    /* ============================================
+       BORDER RADIUS
+       ============================================ */
+    
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+    --radius-3xl: 24px;
+    --radius-full: 9999px;
+
+    /* ============================================
+       TRANSIÇÕES
+       ============================================ */
+    
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ============================================
+       ÍCONES
+       ============================================ */
+    
+    --icon-xs: 12px;
+    --icon-sm: 16px;
+    --icon-md: 20px;
+    --icon-lg: 24px;
+    --icon-xl: 32px;
+
+    /* ============================================
+       VARIÁVEIS SEMÂNTICAS GLOBAIS
+       ============================================ */
+
+    /* Backgrounds */
+    --bg-primary: var(--gray-50);
+    --bg-secondary: #ffffff;
+    --bg-tertiary: var(--gray-100);
     --bg-body: var(--gray-50);
-    /* Fundo da página */
     --bg-surface: #ffffff;
-    /* Fundo de cards/modais */
-    --text-main: var(--gray-900);
-    --text-muted: var(--gray-500);
+    --bg-card: #ffffff;
+    --app-bg: var(--gray-100);
+    --card-bg: #ffffff;
 
-    /* Compatibilidade com código legado - mapeamento para novas cores */
+    /* Textos */
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-600);
+    --text-muted: var(--gray-400);
+    --text-main: var(--gray-900);
+
+    /* Bordas */
+    --border-color: var(--gray-200);
+    --border-subtle: var(--gray-200);
+    --border-focus: var(--blue-500);
+
+    /* Primary Color (Azul por padrão) */
+    --primary: var(--blue-500);
+    --primary-hover: var(--blue-600);
+    --primary-active: var(--blue-700);
+    --primary-light: var(--blue-100);
+    --primary-foreground: #ffffff;
+
+    /* Status Colors */
+    --success: var(--green-500);
+    --success-light: var(--green-100);
+    --success-dark: var(--green-700);
+    
+    --warning: var(--yellow-500);
+    --warning-light: var(--yellow-100);
+    --warning-dark: var(--yellow-700);
+    
+    --error: var(--red-500);
+    --error-light: var(--red-100);
+    --error-dark: var(--red-700);
+    
+    --info: var(--cyan-500);
+    --info-light: var(--cyan-100);
+    --info-dark: var(--cyan-700);
+
+    --status-success: var(--green-500);
+    --status-warning: var(--yellow-500);
+    --status-error: var(--red-500);
+    --status-info: var(--cyan-500);
+
+    /* Accent Colors */
+    --accent-primary: var(--blue-500);
+    --accent-interactive: var(--blue-600);
+    --accent-purple: var(--purple-500);
+    --accent-purple-light: var(--purple-300);
+    --accent-pink: var(--pink-500);
+    --accent-orange: var(--orange-500);
+    --accent-teal: var(--cyan-600);
+
+    /* ============================================
+       COMPATIBILIDADE COM CÓDIGO LEGADO
+       ============================================ */
+
+    /* Primary Colors Legacy */
+    --primary-green: var(--green-500);
+    --primary-green-light: var(--green-400);
+    --primary-green-dark: var(--green-700);
+    
+    --primary-blue: var(--blue-500);
+    --primary-blue-light: var(--blue-400);
+    
+    --primary-gray: var(--gray-500);
+    --primary-gray-light: var(--gray-400);
+    --primary-gray-dark: var(--gray-700);
+
+    /* Slate → Blue */
     --slate-50: var(--blue-50);
     --slate-100: var(--blue-100);
     --slate-200: var(--blue-200);
@@ -289,6 +367,7 @@
     --slate-900: var(--blue-900);
     --slate-950: var(--blue-950);
 
+    /* Sage → Green */
     --sage-50: var(--green-50);
     --sage-100: var(--green-100);
     --sage-200: var(--green-200);
@@ -301,6 +380,7 @@
     --sage-900: var(--green-900);
     --sage-950: var(--green-950);
 
+    /* Lavender → Yellow */
     --lavender-50: var(--yellow-50);
     --lavender-100: var(--yellow-100);
     --lavender-200: var(--yellow-200);
@@ -313,6 +393,7 @@
     --lavender-900: var(--yellow-900);
     --lavender-950: var(--yellow-950);
 
+    /* Rose → Red */
     --rose-50: var(--red-50);
     --rose-100: var(--red-100);
     --rose-200: var(--red-200);
@@ -325,21 +406,21 @@
     --rose-900: var(--red-900);
     --rose-950: var(--red-950);
 
-    /* Gradientes legados */
-    --gradient-slate-light: var(--gradient-blue-light);
-    --gradient-slate-primary: var(--gradient-blue-primary);
-    --gradient-slate-dark: var(--gradient-blue-dark);
-    --gradient-sage-light: var(--gradient-green-light);
-    --gradient-sage-primary: var(--gradient-green-primary);
-    --gradient-sage-dark: var(--gradient-green-dark);
-    --gradient-lavender-light: var(--gradient-yellow-light);
-    --gradient-lavender-primary: var(--gradient-yellow-primary);
-    --gradient-lavender-dark: var(--gradient-yellow-dark);
-    --gradient-rose-light: var(--gradient-red-light);
-    --gradient-rose-primary: var(--gradient-red-primary);
-    --gradient-rose-dark: var(--gradient-red-dark);
+    /* Gradientes Legados */
+    --gradient-slate-light: var(--blue-300);
+    --gradient-slate-primary: var(--blue-500);
+    --gradient-slate-dark: var(--blue-700);
+    --gradient-sage-light: var(--green-300);
+    --gradient-sage-primary: var(--green-500);
+    --gradient-sage-dark: var(--green-700);
+    --gradient-lavender-light: var(--yellow-300);
+    --gradient-lavender-primary: var(--yellow-500);
+    --gradient-lavender-dark: var(--yellow-700);
+    --gradient-rose-light: var(--red-300);
+    --gradient-rose-primary: var(--red-500);
+    --gradient-rose-dark: var(--red-700);
 
-    /* Sombras legadas */
+    /* Sombras Legadas */
     --shadow-slate-sm: var(--shadow-blue-sm);
     --shadow-slate-md: var(--shadow-blue-md);
     --shadow-slate-lg: var(--shadow-blue-lg);
@@ -352,184 +433,96 @@
     --shadow-rose-sm: var(--shadow-red-sm);
     --shadow-rose-md: var(--shadow-red-md);
     --shadow-rose-lg: var(--shadow-red-lg);
+
+    /* Gradientes Sólidos Legados */
+    --gradient-primary: var(--green-500);
+    --gradient-elegant: var(--gray-800);
+    --gradient-soft: var(--gray-100);
+    --gradient-dark: var(--gray-900);
+    --gradient-hero: var(--green-500);
+    --gradient-green: var(--green-500);
+    --gradient-blue: var(--blue-500);
+    --gradient-red: var(--red-500);
+    --gradient-yellow: var(--yellow-500);
+    --gradient-purple: var(--purple-500);
+    --gradient-vibrant: var(--blue-500);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+
+    /* Header */
+    --header-bg: var(--gray-900);
+    --header-height: 60px;
+    --bottom-nav-height: 80px;
+    --border-radius-lg: 16px;
+    --border-radius-md: 8px;
 }
 
-/* === RESPONSIVE TYPOGRAPHY === */
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
 @media (max-width: 768px) {
     :root {
         --font-display: 1.75rem;
-        /* Reduced from previous large value if any */
         --font-h1: 1.25rem;
-        /* 20px - Good balance */
         --font-h2: 1rem;
-        /* 16px */
         --font-h3: 0.9375rem;
-        /* 15px */
         --font-body: 0.9375rem;
-        /* 15px - Readable but compact */
     }
 }
 
-/* === UTILITY CLASSES === */
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
 
 /* Typography */
-.text-display {
-    font-size: var(--font-display);
-    font-weight: var(--font-extrabold);
-    letter-spacing: -0.5px;
-}
-
-.text-h1 {
-    font-size: var(--font-h1);
-    font-weight: var(--font-bold);
-    letter-spacing: -0.5px;
-}
-
-.text-h2 {
-    font-size: var(--font-h2);
-    font-weight: var(--font-semibold);
-}
-
-.text-h3 {
-    font-size: var(--font-h3);
-    font-weight: var(--font-semibold);
-}
-
-.text-body {
-    font-size: var(--font-body);
-    font-weight: var(--font-regular);
-}
-
-.text-body-sm {
-    font-size: var(--font-body-sm);
-    font-weight: var(--font-regular);
-}
-
-.text-caption {
-    font-size: var(--font-caption);
-    font-weight: var(--font-regular);
-}
+.text-display { font-size: var(--font-display); font-weight: var(--font-extrabold); letter-spacing: -0.5px; }
+.text-h1 { font-size: var(--font-h1); font-weight: var(--font-bold); letter-spacing: -0.5px; }
+.text-h2 { font-size: var(--font-h2); font-weight: var(--font-semibold); }
+.text-h3 { font-size: var(--font-h3); font-weight: var(--font-semibold); }
+.text-body { font-size: var(--font-body); font-weight: var(--font-regular); }
+.text-body-sm { font-size: var(--font-body-sm); font-weight: var(--font-regular); }
+.text-caption { font-size: var(--font-caption); font-weight: var(--font-regular); }
 
 /* Colors */
-.text-primary {
-    color: var(--gray-800);
-}
+.text-primary { color: var(--gray-800); }
+.text-secondary { color: var(--gray-600); }
+.text-muted { color: var(--gray-400); }
 
-.text-secondary {
-    color: var(--gray-600);
-}
-
-.text-muted {
-    color: var(--gray-400);
-}
-
-.bg-primary {
-    background-color: var(--primary-500);
-}
-
-.bg-success {
-    background-color: var(--success);
-}
-
-.bg-warning {
-    background-color: var(--warning);
-}
-
-.bg-error {
-    background-color: var(--error);
-}
-
-.bg-info {
-    background-color: var(--info);
-}
+.bg-primary { background-color: var(--primary); }
+.bg-success { background-color: var(--success); }
+.bg-warning { background-color: var(--warning); }
+.bg-error { background-color: var(--error); }
+.bg-info { background-color: var(--info); }
 
 /* Spacing */
-.p-0 {
-    padding: var(--space-0);
-}
+.p-0 { padding: var(--space-0); }
+.p-1 { padding: var(--space-1); }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.p-4 { padding: var(--space-4); }
+.p-5 { padding: var(--space-5); }
+.p-6 { padding: var(--space-6); }
 
-.p-1 {
-    padding: var(--space-1);
-}
-
-.p-2 {
-    padding: var(--space-2);
-}
-
-.p-3 {
-    padding: var(--space-3);
-}
-
-.p-4 {
-    padding: var(--space-4);
-}
-
-.p-5 {
-    padding: var(--space-5);
-}
-
-.p-6 {
-    padding: var(--space-6);
-}
-
-.m-0 {
-    margin: var(--space-0);
-}
-
-.m-1 {
-    margin: var(--space-1);
-}
-
-.m-2 {
-    margin: var(--space-2);
-}
-
-.m-3 {
-    margin: var(--space-3);
-}
-
-.m-4 {
-    margin: var(--space-4);
-}
-
-.m-5 {
-    margin: var(--space-5);
-}
-
-.m-6 {
-    margin: var(--space-6);
-}
+.m-0 { margin: var(--space-0); }
+.m-1 { margin: var(--space-1); }
+.m-2 { margin: var(--space-2); }
+.m-3 { margin: var(--space-3); }
+.m-4 { margin: var(--space-4); }
+.m-5 { margin: var(--space-5); }
+.m-6 { margin: var(--space-6); }
 
 /* Shadows */
-.shadow-sm {
-    box-shadow: var(--shadow-sm);
-}
-
-.shadow-md {
-    box-shadow: var(--shadow-md);
-}
-
-.shadow-lg {
-    box-shadow: var(--shadow-lg);
-}
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
 
 /* Border Radius */
-.rounded-sm {
-    border-radius: var(--radius-sm);
-}
-
-.rounded-md {
-    border-radius: var(--radius-md);
-}
-
-.rounded-lg {
-    border-radius: var(--radius-lg);
-}
-
-.rounded-xl {
-    border-radius: var(--radius-xl);
-}
-
-.rounded-full {
-    border-radius: var(--radius-full);
-}
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-full { border-radius: var(--radius-full); }
