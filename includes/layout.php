@@ -106,6 +106,8 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="stylesheet" href="../assets/css/components/badges.css">
         <link rel="stylesheet" href="../assets/css/components/icons.css">
         <link rel="stylesheet" href="../assets/css/components/sidebar.css">
+        <link rel="stylesheet" href="../assets/css/components/page-headers.css">
+        <link rel="stylesheet" href="../assets/css/components/animations.css">
 
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
