@@ -1,155 +1,105 @@
 /* ============================================
-   CARDS - Semantic Design System
+   CARDS - Neutral Design System (VS Code Inspired)
    ============================================ */
 
-/* === BLUE CARDS (Gestão) === */
-.card-blue {
-    background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
-    border: 1px solid var(--blue-200);
+/* === SLATE CARDS (Gestão) === */
+.card-slate {
+    background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
+    border: 1px solid var(--slate-200);
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-blue-sm);
+    box-shadow: var(--shadow-slate-sm);
     transition: all var(--duration-normal) var(--ease-out);
 }
 
-.card-blue:hover {
-    border-color: var(--blue-400);
-    box-shadow: var(--shadow-blue-md);
+.card-slate:hover {
+    border-color: var(--slate-400);
+    box-shadow: var(--shadow-slate-md);
     transform: translateY(-2px);
 }
 
-.card-blue-solid {
-    background: var(--gradient-blue-primary);
+.card-slate-solid {
+    background: var(--gradient-slate-primary);
     color: white;
     border: none;
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-blue-md);
+    box-shadow: var(--shadow-slate-md);
 }
 
-/* === GREEN CARDS (Espiritual) === */
-.card-green {
-    background: linear-gradient(135deg, var(--green-50) 0%, var(--green-100) 100%);
-    border: 1px solid var(--green-200);
+/* === SAGE CARDS (Espiritual) === */
+.card-sage {
+    background: linear-gradient(135deg, var(--sage-50) 0%, var(--sage-100) 100%);
+    border: 1px solid var(--sage-200);
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-green-sm);
+    box-shadow: var(--shadow-sage-sm);
     transition: all var(--duration-normal) var(--ease-out);
 }
 
-.card-green:hover {
-    border-color: var(--green-400);
-    box-shadow: var(--shadow-green-md);
+.card-sage:hover {
+    border-color: var(--sage-400);
+    box-shadow: var(--shadow-sage-md);
     transform: translateY(-2px);
 }
 
-.card-green-solid {
-    background: var(--gradient-green-primary);
+.card-sage-solid {
+    background: var(--gradient-sage-primary);
     color: white;
     border: none;
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-green-md);
+    box-shadow: var(--shadow-sage-md);
 }
 
-/* === PURPLE CARDS (Comunicação) === */
-.card-purple {
-    background: linear-gradient(135deg, var(--purple-50) 0%, var(--purple-100) 100%);
-    border: 1px solid var(--purple-200);
+/* === LAVENDER CARDS (Comunicação) === */
+.card-lavender {
+    background: linear-gradient(135deg, var(--lavender-50) 0%, var(--lavender-100) 100%);
+    border: 1px solid var(--lavender-200);
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-purple-sm);
+    box-shadow: var(--shadow-lavender-sm);
     transition: all var(--duration-normal) var(--ease-out);
 }
 
-.card-purple:hover {
-    border-color: var(--purple-400);
-    box-shadow: var(--shadow-purple-md);
+.card-lavender:hover {
+    border-color: var(--lavender-400);
+    box-shadow: var(--shadow-lavender-md);
     transform: translateY(-2px);
 }
 
-.card-purple-solid {
-    background: var(--gradient-purple-primary);
+.card-lavender-solid {
+    background: var(--gradient-lavender-primary);
     color: white;
     border: none;
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-purple-md);
+    box-shadow: var(--shadow-lavender-md);
 }
 
-/* === RED CARDS (Admin) === */
-.card-red {
-    background: linear-gradient(135deg, var(--red-50) 0%, var(--red-100) 100%);
-    border: 1px solid var(--red-200);
+/* === ROSE CARDS (Admin) === */
+.card-rose {
+    background: linear-gradient(135deg, var(--rose-50) 0%, var(--rose-100) 100%);
+    border: 1px solid var(--rose-200);
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-red-sm);
+    box-shadow: var(--shadow-rose-sm);
     transition: all var(--duration-normal) var(--ease-out);
 }
 
-.card-red:hover {
-    border-color: var(--red-400);
-    box-shadow: var(--shadow-red-md);
+.card-rose:hover {
+    border-color: var(--rose-400);
+    box-shadow: var(--shadow-rose-md);
     transform: translateY(-2px);
 }
 
-.card-red-solid {
-    background: var(--gradient-red-primary);
+.card-rose-solid {
+    background: var(--gradient-rose-primary);
     color: white;
     border: none;
     border-radius: var(--radius-xl);
     padding: 16px;
-    box-shadow: var(--shadow-red-md);
-}
-
-/* === ORANGE CARDS (Eventos) === */
-.card-orange {
-    background: linear-gradient(135deg, var(--orange-50) 0%, var(--orange-100) 100%);
-    border: 1px solid var(--orange-200);
-    border-radius: var(--radius-xl);
-    padding: 16px;
-    box-shadow: var(--shadow-orange-sm);
-    transition: all var(--duration-normal) var(--ease-out);
-}
-
-.card-orange:hover {
-    border-color: var(--orange-400);
-    box-shadow: var(--shadow-orange-md);
-    transform: translateY(-2px);
-}
-
-.card-orange-solid {
-    background: var(--gradient-orange-primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius-xl);
-    padding: 16px;
-    box-shadow: var(--shadow-orange-md);
-}
-
-/* === TEAL CARDS (Recursos) === */
-.card-teal {
-    background: linear-gradient(135deg, var(--teal-50) 0%, var(--teal-100) 100%);
-    border: 1px solid var(--teal-200);
-    border-radius: var(--radius-xl);
-    padding: 16px;
-    box-shadow: var(--shadow-teal-sm);
-    transition: all var(--duration-normal) var(--ease-out);
-}
-
-.card-teal:hover {
-    border-color: var(--teal-400);
-    box-shadow: var(--shadow-teal-md);
-    transform: translateY(-2px);
-}
-
-.card-teal-solid {
-    background: var(--gradient-teal-primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius-xl);
-    padding: 16px;
-    box-shadow: var(--shadow-teal-md);
+    box-shadow: var(--shadow-rose-md);
 }
 
 /* === CARD HEADER === */

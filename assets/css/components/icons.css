@@ -1,65 +1,65 @@
 /* ============================================
-   ICONS - Semantic Design System
+   ICONS - Neutral Design System (VS Code Inspired)
    ============================================ */
 
 /* === ICON CONTAINERS === */
-.icon-container-blue {
+.icon-container-slate {
     width: 44px;
     height: 44px;
-    background: var(--blue-100);
-    border: 1px solid var(--blue-200);
+    background: var(--slate-100);
+    border: 1px solid var(--slate-200);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--blue-600);
+    color: var(--slate-600);
     flex-shrink: 0;
 }
 
-.icon-container-green {
+.icon-container-sage {
     width: 44px;
     height: 44px;
-    background: var(--green-100);
-    border: 1px solid var(--green-200);
+    background: var(--sage-100);
+    border: 1px solid var(--sage-200);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--green-600);
+    color: var(--sage-600);
     flex-shrink: 0;
 }
 
-.icon-container-purple {
+.icon-container-lavender {
     width: 44px;
     height: 44px;
-    background: var(--purple-100);
-    border: 1px solid var(--purple-200);
+    background: var(--lavender-100);
+    border: 1px solid var(--lavender-200);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--purple-600);
+    color: var(--lavender-600);
     flex-shrink: 0;
 }
 
-.icon-container-red {
+.icon-container-rose {
     width: 44px;
     height: 44px;
-    background: var(--red-100);
-    border: 1px solid var(--red-200);
+    background: var(--rose-100);
+    border: 1px solid var(--rose-200);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--red-600);
+    color: var(--rose-600);
     flex-shrink: 0;
 }
 
 /* === SOLID ICON CONTAINERS === */
-.icon-container-blue-solid {
+.icon-container-slate-solid {
     width: 44px;
     height: 44px;
-    background: var(--gradient-blue-primary);
+    background: var(--gradient-slate-primary);
     border: none;
     border-radius: var(--radius-lg);
     display: flex;
@@ -67,13 +67,13 @@
     justify-content: center;
     color: white;
     flex-shrink: 0;
-    box-shadow: var(--shadow-blue-sm);
+    box-shadow: var(--shadow-slate-sm);
 }
 
-.icon-container-green-solid {
+.icon-container-sage-solid {
     width: 44px;
     height: 44px;
-    background: var(--gradient-green-primary);
+    background: var(--gradient-sage-primary);
     border: none;
     border-radius: var(--radius-lg);
     display: flex;
@@ -81,13 +81,13 @@
     justify-content: center;
     color: white;
     flex-shrink: 0;
-    box-shadow: var(--shadow-green-sm);
+    box-shadow: var(--shadow-sage-sm);
 }
 
-.icon-container-purple-solid {
+.icon-container-lavender-solid {
     width: 44px;
     height: 44px;
-    background: var(--gradient-purple-primary);
+    background: var(--gradient-lavender-primary);
     border: none;
     border-radius: var(--radius-lg);
     display: flex;
@@ -95,13 +95,13 @@
     justify-content: center;
     color: white;
     flex-shrink: 0;
-    box-shadow: var(--shadow-purple-sm);
+    box-shadow: var(--shadow-lavender-sm);
 }
 
-.icon-container-red-solid {
+.icon-container-rose-solid {
     width: 44px;
     height: 44px;
-    background: var(--gradient-red-primary);
+    background: var(--gradient-rose-primary);
     border: none;
     border-radius: var(--radius-lg);
     display: flex;
@@ -109,63 +109,7 @@
     justify-content: center;
     color: white;
     flex-shrink: 0;
-    box-shadow: var(--shadow-red-sm);
-}
-
-/* === ORANGE ICON CONTAINERS (Eventos) === */
-.icon-container-orange {
-    width: 44px;
-    height: 44px;
-    background: var(--orange-100);
-    border: 1px solid var(--orange-200);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--orange-600);
-    flex-shrink: 0;
-}
-
-.icon-container-orange-solid {
-    width: 44px;
-    height: 44px;
-    background: var(--gradient-orange-primary);
-    border: none;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-orange-sm);
-}
-
-/* === TEAL ICON CONTAINERS (Recursos) === */
-.icon-container-teal {
-    width: 44px;
-    height: 44px;
-    background: var(--teal-100);
-    border: 1px solid var(--teal-200);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--teal-600);
-    flex-shrink: 0;
-}
-
-.icon-container-teal-solid {
-    width: 44px;
-    height: 44px;
-    background: var(--gradient-teal-primary);
-    border: none;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-teal-sm);
+    box-shadow: var(--shadow-rose-sm);
 }
 
 /* === ICON SIZES === */
@@ -186,34 +130,26 @@
 
 /* === ICON SHAPES === */
 .icon-container-circle,
-.icon-container-blue-circle,
-.icon-container-green-circle,
-.icon-container-purple-circle,
-.icon-container-red-circle {
+.icon-container-slate-circle,
+.icon-container-sage-circle,
+.icon-container-lavender-circle,
+.icon-container-rose-circle {
     border-radius: var(--radius-full);
 }
 
 /* === STANDALONE ICONS === */
-.icon-blue {
-    color: var(--blue-600);
+.icon-slate {
+    color: var(--slate-600);
 }
 
-.icon-green {
-    color: var(--green-600);
+.icon-sage {
+    color: var(--sage-600);
 }
 
-.icon-purple {
-    color: var(--purple-600);
+.icon-lavender {
+    color: var(--lavender-600);
 }
 
-.icon-red {
-    color: var(--red-600);
-}
-
-.icon-orange {
-    color: var(--orange-600);
-}
-
-.icon-teal {
-    color: var(--teal-600);
+.icon-rose {
+    color: var(--rose-600);
 }

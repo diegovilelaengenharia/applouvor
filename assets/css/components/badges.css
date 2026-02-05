@@ -1,12 +1,12 @@
 /* ============================================
-   BADGES - Semantic Design System
+   BADGES - Neutral Design System (VS Code Inspired)
    ============================================ */
 
-/* === BLUE BADGES (Gestão) === */
-.badge-blue {
-    background: var(--blue-100);
-    color: var(--blue-700);
-    border: 1px solid var(--blue-300);
+/* === SLATE BADGES (Gestão) === */
+.badge-slate {
+    background: var(--slate-100);
+    color: var(--slate-700);
+    border: 1px solid var(--slate-300);
     padding: 4px 12px;
     border-radius: var(--radius-full);
     font-size: var(--font-caption);
@@ -18,8 +18,8 @@
     letter-spacing: 0.5px;
 }
 
-.badge-blue-solid {
-    background: var(--blue-600);
+.badge-slate-solid {
+    background: var(--slate-600);
     color: white;
     border: none;
     padding: 4px 12px;
@@ -31,11 +31,11 @@
     gap: 4px;
 }
 
-/* === GREEN BADGES (Espiritual) === */
-.badge-green {
-    background: var(--green-100);
-    color: var(--green-700);
-    border: 1px solid var(--green-300);
+/* === SAGE BADGES (Espiritual) === */
+.badge-sage {
+    background: var(--sage-100);
+    color: var(--sage-700);
+    border: 1px solid var(--sage-300);
     padding: 4px 12px;
     border-radius: var(--radius-full);
     font-size: var(--font-caption);
@@ -47,8 +47,8 @@
     letter-spacing: 0.5px;
 }
 
-.badge-green-solid {
-    background: var(--green-600);
+.badge-sage-solid {
+    background: var(--sage-600);
     color: white;
     border: none;
     padding: 4px 12px;
@@ -60,11 +60,11 @@
     gap: 4px;
 }
 
-/* === PURPLE BADGES (Comunicação) === */
-.badge-purple {
-    background: var(--purple-100);
-    color: var(--purple-700);
-    border: 1px solid var(--purple-300);
+/* === LAVENDER BADGES (Comunicação) === */
+.badge-lavender {
+    background: var(--lavender-100);
+    color: var(--lavender-700);
+    border: 1px solid var(--lavender-300);
     padding: 4px 12px;
     border-radius: var(--radius-full);
     font-size: var(--font-caption);
@@ -76,8 +76,8 @@
     letter-spacing: 0.5px;
 }
 
-.badge-purple-solid {
-    background: var(--purple-600);
+.badge-lavender-solid {
+    background: var(--lavender-600);
     color: white;
     border: none;
     padding: 4px 12px;
@@ -89,11 +89,11 @@
     gap: 4px;
 }
 
-/* === RED BADGES (Admin) === */
-.badge-red {
-    background: var(--red-100);
-    color: var(--red-700);
-    border: 1px solid var(--red-300);
+/* === ROSE BADGES (Admin) === */
+.badge-rose {
+    background: var(--rose-100);
+    color: var(--rose-700);
+    border: 1px solid var(--rose-300);
     padding: 4px 12px;
     border-radius: var(--radius-full);
     font-size: var(--font-caption);
@@ -105,66 +105,8 @@
     letter-spacing: 0.5px;
 }
 
-.badge-red-solid {
-    background: var(--red-600);
-    color: white;
-    border: none;
-    padding: 4px 12px;
-    border-radius: var(--radius-full);
-    font-size: var(--font-caption);
-    font-weight: var(--font-bold);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* === ORANGE BADGES (Eventos) === */
-.badge-orange {
-    background: var(--orange-100);
-    color: var(--orange-700);
-    border: 1px solid var(--orange-300);
-    padding: 4px 12px;
-    border-radius: var(--radius-full);
-    font-size: var(--font-caption);
-    font-weight: var(--font-bold);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-orange-solid {
-    background: var(--orange-600);
-    color: white;
-    border: none;
-    padding: 4px 12px;
-    border-radius: var(--radius-full);
-    font-size: var(--font-caption);
-    font-weight: var(--font-bold);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* === TEAL BADGES (Recursos) === */
-.badge-teal {
-    background: var(--teal-100);
-    color: var(--teal-700);
-    border: 1px solid var(--teal-300);
-    padding: 4px 12px;
-    border-radius: var(--radius-full);
-    font-size: var(--font-caption);
-    font-weight: var(--font-bold);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-teal-solid {
-    background: var(--teal-600);
+.badge-rose-solid {
+    background: var(--rose-600);
     color: white;
     border: none;
     padding: 4px 12px;
