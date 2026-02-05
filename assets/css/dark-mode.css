@@ -1575,13 +1575,13 @@ body.dark-mode [style*="color: #374151"] {
 
 /* Líder Button - Dark mode */
 body.dark-mode .admin-crown-btn {
-    background: var(--bg-secondary) !important;
+    background: #450a0a !important;
     border-color: #7f1d1d !important;
     color: #f87171 !important;
 }
 
 body.dark-mode .admin-crown-btn:hover {
-    background: #292524 !important;
+    background: #5c1818 !important;
     border-color: #dc2626 !important;
     box-shadow: 0 3px 8px rgba(239, 68, 68, 0.15) !important;
 }

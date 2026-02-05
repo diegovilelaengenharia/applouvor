@@ -579,7 +579,7 @@ function renderAppHeader($title, $backUrl = null)
                 justify-content: center;
                 width: 40px;
                 height: 40px;
-                background: var(--bg-surface);
+                background: #fef2f2;
                 border: 1px solid #fca5a5;
                 border-radius: 10px;
                 text-decoration: none;
@@ -590,7 +590,7 @@ function renderAppHeader($title, $backUrl = null)
             }
             
             .admin-crown-btn:hover {
-                background: #fef2f2;
+                background: #fee2e2;
                 border-color: #f87171;
                 transform: translateY(-1px);
                 box-shadow: 0 3px 8px rgba(239, 68, 68, 0.15);
