@@ -144,118 +144,200 @@
     --breakpoint-xl: 1280px;
 
     /* ============================================
-       SEMANTIC COLOR SYSTEM (Vibrant & Distinguishable)
+       SEMANTIC COLOR SYSTEM (Paleta Personalizada)
        ============================================ */
 
-    /* 🔵 GESTÃO (Azul Vibrante) */
+    /* 🔵 GESTÃO (Azul Navy - Profissional e Confiável) */
     /* Escalas, Repertório, Membros, Agenda, Ausências, Histórico */
-    --slate-50: #eff6ff;
-    --slate-100: #dbeafe;
-    --slate-200: #bfdbfe;
-    --slate-300: #93c5fd;
-    --slate-400: #60a5fa;
-    --slate-500: #3b82f6;
-    --slate-600: #2563eb;
-    --slate-700: #1d4ed8;
-    --slate-800: #1e40af;
-    --slate-900: #1e3a8a;
-    --slate-950: #172554;
+    --blue-50: #e6e9f0;
+    --blue-100: #c2cade;
+    --blue-200: #9aa7ca;
+    --blue-300: #7284b6;
+    --blue-400: #5568a7;
+    --blue-500: #011752;
+    /* Navy Blue - Principal */
+    --blue-600: #011449;
+    --blue-700: #01103d;
+    --blue-800: #010c31;
+    --blue-900: #000820;
+    --blue-950: #000410;
 
-    --gradient-slate-light: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    --gradient-slate-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    --gradient-slate-dark: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    --gradient-blue-light: linear-gradient(135deg, #c2cade 0%, #9aa7ca 100%);
+    --gradient-blue-primary: linear-gradient(135deg, #011752 0%, #011449 100%);
+    --gradient-blue-dark: linear-gradient(135deg, #01103d 0%, #010c31 100%);
 
-    --shadow-slate-sm: 0 2px 8px rgba(59, 130, 246, 0.15);
-    --shadow-slate-md: 0 4px 16px rgba(59, 130, 246, 0.2);
-    --shadow-slate-lg: 0 8px 24px rgba(59, 130, 246, 0.25);
+    --shadow-blue-sm: 0 2px 8px rgba(1, 23, 82, 0.15);
+    --shadow-blue-md: 0 4px 16px rgba(1, 23, 82, 0.2);
+    --shadow-blue-lg: 0 8px 24px rgba(1, 23, 82, 0.25);
 
-    /* 🟢 ESPIRITUAL (Verde Vibrante) */
+    /* 🟢 ESPIRITUAL (Verde Vibrante - Vida e Esperança) */
     /* Devocional, Oração, Leitura Bíblica */
-    --sage-50: #f0fdf4;
-    --sage-100: #dcfce7;
-    --sage-200: #bbf7d0;
-    --sage-300: #86efac;
-    --sage-400: #4ade80;
-    --sage-500: #22c55e;
-    --sage-600: #16a34a;
-    --sage-700: #15803d;
-    --sage-800: #166534;
-    --sage-900: #14532d;
-    --sage-950: #052e16;
+    --green-50: #e8f9f0;
+    --green-100: #d4f4e1;
+    --green-200: #ADDABE;
+    /* Mint Green - Tom suave */
+    --green-300: #7ee5a0;
+    --green-400: #51d983;
+    --green-500: #24CE6B;
+    /* Vibrant Green - Principal */
+    --green-600: #1fb85e;
+    --green-700: #1a9d50;
+    --green-800: #158242;
+    --green-900: #106734;
+    --green-950: #0a4522;
 
-    --gradient-sage-light: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    --gradient-sage-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    --gradient-sage-dark: linear-gradient(135deg, #15803d 0%, #166534 100%);
+    --gradient-green-light: linear-gradient(135deg, #d4f4e1 0%, #ADDABE 100%);
+    --gradient-green-primary: linear-gradient(135deg, #24CE6B 0%, #1fb85e 100%);
+    --gradient-green-dark: linear-gradient(135deg, #1a9d50 0%, #158242 100%);
 
-    --shadow-sage-sm: 0 2px 8px rgba(34, 197, 94, 0.15);
-    --shadow-sage-md: 0 4px 16px rgba(34, 197, 94, 0.2);
-    --shadow-sage-lg: 0 8px 24px rgba(34, 197, 94, 0.25);
+    --shadow-green-sm: 0 2px 8px rgba(36, 206, 107, 0.15);
+    --shadow-green-md: 0 4px 16px rgba(36, 206, 107, 0.2);
+    --shadow-green-lg: 0 8px 24px rgba(36, 206, 107, 0.25);
 
-    /* 💜 COMUNICAÇÃO (Roxo Vibrante) */
+    /* 🟡 COMUNICAÇÃO (Amarelo Vibrante - Atenção e Otimismo) */
     /* Avisos, Notificações, Aniversariantes */
-    --lavender-50: #faf5ff;
-    --lavender-100: #f3e8ff;
-    --lavender-200: #e9d5ff;
-    --lavender-300: #d8b4fe;
-    --lavender-400: #c084fc;
-    --lavender-500: #a855f7;
-    --lavender-600: #9333ea;
-    --lavender-700: #7e22ce;
-    --lavender-800: #6b21a8;
-    --lavender-900: #581c87;
-    --lavender-950: #3b0764;
+    --yellow-50: #fffbeb;
+    --yellow-100: #fff4d1;
+    --yellow-200: #ffe9a3;
+    --yellow-300: #ffde75;
+    --yellow-400: #ffd34e;
+    --yellow-500: #FFC928;
+    /* Vibrant Yellow - Principal */
+    --yellow-600: #f0b820;
+    --yellow-700: #d9a518;
+    --yellow-800: #b88a14;
+    --yellow-900: #8a6710;
+    --yellow-950: #5c440a;
 
-    --gradient-lavender-light: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-    --gradient-lavender-primary: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-    --gradient-lavender-dark: linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%);
+    --gradient-yellow-light: linear-gradient(135deg, #fff4d1 0%, #ffe9a3 100%);
+    --gradient-yellow-primary: linear-gradient(135deg, #FFC928 0%, #f0b820 100%);
+    --gradient-yellow-dark: linear-gradient(135deg, #d9a518 0%, #b88a14 100%);
 
-    --shadow-lavender-sm: 0 2px 8px rgba(168, 85, 247, 0.15);
-    --shadow-lavender-md: 0 4px 16px rgba(168, 85, 247, 0.2);
-    --shadow-lavender-lg: 0 8px 24px rgba(168, 85, 247, 0.25);
+    --shadow-yellow-sm: 0 2px 8px rgba(255, 201, 40, 0.15);
+    --shadow-yellow-md: 0 4px 16px rgba(255, 201, 40, 0.2);
+    --shadow-yellow-lg: 0 8px 24px rgba(255, 201, 40, 0.25);
 
-    /* 🌸 ADMIN (Rosa Vibrante) */
-    /* Dashboard Líder, Configurações Admin */
-    --rose-50: #fdf2f8;
-    --rose-100: #fce7f3;
-    --rose-200: #fbcfe8;
-    --rose-300: #f9a8d4;
-    --rose-400: #f472b6;
-    --rose-500: #ec4899;
-    --rose-600: #db2777;
-    --rose-700: #be185d;
-    --rose-800: #9d174d;
-    --rose-900: #831843;
-    --rose-950: #500724;
+    /* 🔴 AÇÕES DESTRUTIVAS (Vermelho - Perigo) */
+    /* Excluir, Deletar, Remover */
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-200: #fecaca;
+    --red-300: #fca5a5;
+    --red-400: #f87171;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+    --red-700: #b91c1c;
+    --red-800: #991b1b;
+    --red-900: #7f1d1d;
+    --red-950: #450a0a;
 
-    --gradient-rose-light: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-    --gradient-rose-primary: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-    --gradient-rose-dark: linear-gradient(135deg, #be185d 0%, #9d174d 100%);
+    --gradient-red-light: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    --gradient-red-primary: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-red-dark: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
 
-    --shadow-rose-sm: 0 2px 8px rgba(236, 72, 153, 0.15);
-    --shadow-rose-md: 0 4px 16px rgba(236, 72, 153, 0.2);
-    --shadow-rose-lg: 0 8px 24px rgba(236, 72, 153, 0.25);
+    --shadow-red-sm: 0 2px 8px rgba(239, 68, 68, 0.15);
+    --shadow-red-md: 0 4px 16px rgba(239, 68, 68, 0.2);
+    --shadow-red-lg: 0 8px 24px rgba(239, 68, 68, 0.25);
 
-    /* 🔷 RECURSOS (Teal Confiança) */
-    /* Ausências, Relatórios, Estatísticas */
-    --teal-50: #f0fdfa;
-    --teal-100: #ccfbf1;
-    --teal-200: #99f6e4;
-    --teal-300: #5eead4;
-    --teal-400: #2dd4bf;
-    --teal-500: #14b8a6;
-    --teal-600: #0d9488;
-    --teal-700: #0f766e;
-    --teal-800: #115e59;
-    --teal-900: #134e4a;
-    --teal-950: #042f2e;
+    /* ⚪ NEUTRO (Cinza - Base da Paleta) */
+    /* Fundos, Divisores, Ações Genéricas */
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #EBEBEB;
+    /* Light Gray - Base da paleta */
+    --gray-300: #d4d4d4;
+    --gray-400: #a3a3a3;
+    --gray-500: #737373;
+    --gray-600: #525252;
+    --gray-700: #404040;
+    --gray-800: #262626;
+    --gray-900: #171717;
+    --gray-950: #0a0a0a;
 
-    --gradient-teal-light: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
-    --gradient-teal-primary: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
-    --gradient-teal-dark: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+    /* Cores de fundo do app */
+    --app-bg: var(--gray-100);
+    /* #f5f5f5 - Fundo principal */
+    --card-bg: #ffffff;
+    /* Branco puro para cards */
+    --border-color: var(--gray-200);
+    /* #EBEBEB - Bordas e divisores */
 
-    --shadow-teal-sm: 0 2px 8px rgba(20, 184, 166, 0.15);
-    --shadow-teal-md: 0 4px 16px rgba(20, 184, 166, 0.2);
-    --shadow-teal-lg: 0 8px 24px rgba(20, 184, 166, 0.25);
+    /* Compatibilidade com código legado - mapeamento para novas cores */
+    --slate-50: var(--blue-50);
+    --slate-100: var(--blue-100);
+    --slate-200: var(--blue-200);
+    --slate-300: var(--blue-300);
+    --slate-400: var(--blue-400);
+    --slate-500: var(--blue-500);
+    --slate-600: var(--blue-600);
+    --slate-700: var(--blue-700);
+    --slate-800: var(--blue-800);
+    --slate-900: var(--blue-900);
+    --slate-950: var(--blue-950);
+
+    --sage-50: var(--green-50);
+    --sage-100: var(--green-100);
+    --sage-200: var(--green-200);
+    --sage-300: var(--green-300);
+    --sage-400: var(--green-400);
+    --sage-500: var(--green-500);
+    --sage-600: var(--green-600);
+    --sage-700: var(--green-700);
+    --sage-800: var(--green-800);
+    --sage-900: var(--green-900);
+    --sage-950: var(--green-950);
+
+    --lavender-50: var(--yellow-50);
+    --lavender-100: var(--yellow-100);
+    --lavender-200: var(--yellow-200);
+    --lavender-300: var(--yellow-300);
+    --lavender-400: var(--yellow-400);
+    --lavender-500: var(--yellow-500);
+    --lavender-600: var(--yellow-600);
+    --lavender-700: var(--yellow-700);
+    --lavender-800: var(--yellow-800);
+    --lavender-900: var(--yellow-900);
+    --lavender-950: var(--yellow-950);
+
+    --rose-50: var(--red-50);
+    --rose-100: var(--red-100);
+    --rose-200: var(--red-200);
+    --rose-300: var(--red-300);
+    --rose-400: var(--red-400);
+    --rose-500: var(--red-500);
+    --rose-600: var(--red-600);
+    --rose-700: var(--red-700);
+    --rose-800: var(--red-800);
+    --rose-900: var(--red-900);
+    --rose-950: var(--red-950);
+
+    /* Gradientes legados */
+    --gradient-slate-light: var(--gradient-blue-light);
+    --gradient-slate-primary: var(--gradient-blue-primary);
+    --gradient-slate-dark: var(--gradient-blue-dark);
+    --gradient-sage-light: var(--gradient-green-light);
+    --gradient-sage-primary: var(--gradient-green-primary);
+    --gradient-sage-dark: var(--gradient-green-dark);
+    --gradient-lavender-light: var(--gradient-yellow-light);
+    --gradient-lavender-primary: var(--gradient-yellow-primary);
+    --gradient-lavender-dark: var(--gradient-yellow-dark);
+    --gradient-rose-light: var(--gradient-red-light);
+    --gradient-rose-primary: var(--gradient-red-primary);
+    --gradient-rose-dark: var(--gradient-red-dark);
+
+    /* Sombras legadas */
+    --shadow-slate-sm: var(--shadow-blue-sm);
+    --shadow-slate-md: var(--shadow-blue-md);
+    --shadow-slate-lg: var(--shadow-blue-lg);
+    --shadow-sage-sm: var(--shadow-green-sm);
+    --shadow-sage-md: var(--shadow-green-md);
+    --shadow-sage-lg: var(--shadow-green-lg);
+    --shadow-lavender-sm: var(--shadow-yellow-sm);
+    --shadow-lavender-md: var(--shadow-yellow-md);
+    --shadow-lavender-lg: var(--shadow-yellow-lg);
+    --shadow-rose-sm: var(--shadow-red-sm);
+    --shadow-rose-md: var(--shadow-red-md);
+    --shadow-rose-lg: var(--shadow-red-lg);
 }
 
 /* === RESPONSIVE TYPOGRAPHY === */
