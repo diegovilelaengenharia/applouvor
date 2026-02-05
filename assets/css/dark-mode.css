@@ -1759,3 +1759,20 @@ body.dark-mode span[style*="background: #fef3c7"][style*="color: #92400e"] {
     background: #78350f !important;
     color: #fde68a !important;
 }
+
+/* Card Cinza (Passado) - Dark Mode */
+body.dark-mode .timeline-card-past,
+body.dark-mode a[style*="background: #f8fafc"][style*="border-left: 4px solid #64748b"] {
+    background: #1e1e1e !important;
+    border-color: #3f3f46 !important;
+}
+
+body.dark-mode [style*="background: #f1f5f9"][style*="color: #64748b"] {
+    background: #27272a !important;
+}
+
+/* Badge de Dias (Passado) - Dark Mode */
+body.dark-mode span[style*="background: #e2e8f0"][style*="color: #64748b"] {
+    background: #3f3f46 !important;
+    color: #a1a1aa !important;
+}

@@ -416,27 +416,148 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 <p>Nenhum histórico recente.</p>
             </div>
         <?php else: ?>
-            <div id="view-timeline-past" class="timeline-container" style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 100px;">
+            <div id="view-timeline-past" class="timeline-container" style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 100px;">
                 <?php foreach ($pastSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
+                    
+                    // Calcular quantos dias atrás
+                    $today = new DateTime('today');
+                    $daysAgo = $date->diff($today)->days;
+                    
+                    // Cor cinza para escalas passadas
+                    $themeColor = '#64748b'; // Slate 500
+                    $themeLight = '#f1f5f9'; // Slate 100
+                    $cardBg = '#f8fafc'; // Slate 50
+                    $cardBorderColor = '#e2e8f0'; // Slate 200
+                    
+                    // Buscar participantes (Top 5)
+                    $stmtUsersPast = $pdo->prepare("
+                        SELECT u.name, u.photo, u.avatar_color 
+                        FROM schedule_users su 
+                        JOIN users u ON su.user_id = u.id 
+                        WHERE su.schedule_id = ? 
+                        LIMIT 5
+                    ");
+                    $stmtUsersPast->execute([$schedule['id']]);
+                    $participantsPast = $stmtUsersPast->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    // Contar total participantes
+                    $stmtCountPast = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
+                    $stmtCountPast->execute([$schedule['id']]);
+                    $totalParticipantsPast = $stmtCountPast->fetchColumn();
+                    $extraCountPast = max(0, $totalParticipantsPast - 5);
                 ?>
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="ripple" style="
-                        display: flex; align-items: center; gap: 16px;
-                        padding: 16px 20px; 
-                        background: var(--bg-surface); 
-                        border-radius: var(--radius-md); 
-                        border: 1px solid var(--border-color);
-                        text-decoration: none; color: inherit; 
-                        opacity: 0.75;
-                    ">
-                        <div style="text-align: center; min-width: 40px; color: var(--text-muted);">
-                            <div style="font-weight: 700; font-size: var(--font-h3);"><?= $date->format('d/m') ?></div>
+                    <!-- Card de Evento Passado (Cinza) -->
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card-past ripple" style="
+                            display: block;
+                            background: <?= $cardBg ?>;
+                            border-radius: 12px; 
+                            border-left: 4px solid <?= $themeColor ?>;
+                            border-top: 1px solid <?= $cardBorderColor ?>;
+                            border-right: 1px solid <?= $cardBorderColor ?>;
+                            border-bottom: 1px solid <?= $cardBorderColor ?>;
+                            padding: 14px; 
+                            text-decoration: none; 
+                            color: inherit;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+                            transition: all 0.2s ease;
+                            position: relative;
+                        ">
+
+                        <div style="display: flex; gap: 14px; align-items: flex-start;">
+
+                            <!-- Data Box (Cinza) -->
+                            <div style="
+                                background: <?= $themeLight ?>;
+                                color: <?= $themeColor ?>;
+                                min-width: 56px;
+                                height: 56px;
+                                padding: 6px;
+                                border-radius: 10px; 
+                                text-align: center;
+                                border: 1px solid <?= $themeColor ?>20;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                align-items: center;
+                            ">
+                                <div style="font-weight: 700; font-size: 1.3rem; line-height: 1;"><?= $date->format('d') ?></div>
+                                <div style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; margin-top: 2px; opacity: 0.8;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                            </div>
+
+                            <!-- Infos do Evento -->
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                                    <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #64748b; line-height: 1.3;">
+                                        <?= htmlspecialchars($schedule['event_type']) ?>
+                                    </h3>
+                                    <span style="
+                                        font-size: 0.65rem;
+                                        color: #64748b;
+                                        background: #e2e8f0;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                    "><?= $daysAgo == 1 ? 'Ontem' : 'há ' . $daysAgo . ' dias' ?></span>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; font-weight: 500;">
+                                    <div style="display: flex; align-items: center; gap: 4px;">
+                                        <i data-lucide="clock" style="width: 14px;"></i> <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
+                                    </div>
+                                    <?php if ($totalParticipantsPast > 0): ?>
+                                        <div style="display: flex; align-items: center; gap: 4px;">
+                                            <i data-lucide="users" style="width: 14px;"></i> <?= $totalParticipantsPast ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Avatares (Cinza) -->
+                                <?php if (!empty($participantsPast)): ?>
+                                    <div style="display: flex; align-items: center;">
+                                        <?php foreach ($participantsPast as $i => $p):
+                                            $zIndex = 10 - $i;
+                                            $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
+                                        ?>
+                                            <div style="
+                                                width: 28px; height: 28px; border-radius: 50%; 
+                                                border: 2px solid white;
+                                                background: <?= $p['avatar_color'] ?: '#94a3b8' ?>;
+                                                margin-left: <?= $i > 0 ? '-8px' : '0' ?>;
+                                                z-index: <?= $zIndex ?>;
+                                                display: flex; align-items: center; justify-content: center;
+                                                color: white; font-size: 0.7rem; font-weight: 700; overflow: hidden;
+                                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                                filter: grayscale(30%);
+                                            ">
+                                                <?php if ($photoUrl): ?>
+                                                    <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%);">
+                                                <?php else: ?>
+                                                    <?= strtoupper(substr($p['name'], 0, 1)) ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <?php if ($extraCountPast > 0): ?>
+                                            <div style="
+                                                font-size: 0.75rem;
+                                                color: #94a3b8;
+                                                font-weight: 600;
+                                                margin-left: 6px;
+                                            ">+<?= $extraCountPast ?></div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Equipe não definida</span>
+                                <?php endif; ?>
+
+                            </div>
+
+                            <!-- Icon Seta -->
+                            <div style="align-self: center; color: #cbd5e1;">
+                                <i data-lucide="chevron-right" style="width: 20px;"></i>
+                            </div>
+
                         </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($schedule['event_type']) ?></div>
-                            <div style="font-size: var(--font-body-sm); color: var(--text-muted);">Realizado</div>
-                        </div>
-                        <i data-lucide="chevron-right" style="width: 18px; color: var(--border-color);"></i>
                     </a>
                 <?php endforeach; ?>
             </div>
