@@ -100,24 +100,39 @@ function renderAppHeader($title, $backUrl = null)
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 
         <style>
-            /* --- DESIGN SYSTEM 2.5 (Compact & Mobile First) --- */
+            /* --- DESIGN SYSTEM 3.0 (Paleta Slate Refinada) --- */
             :root {
                 /* Cores Principais - Emerald (Sofisticado) */
-                --primary: #047857;
-                --primary-hover: #065f46;
+                --primary: #059669;
+                --primary-hover: #047857;
                 --primary-light: #d1fae5;
                 --primary-subtle: #ecfdf5;
 
-                /* Tons Neutros */
-                --bg-body: #f8fafc;
-                --bg-surface: #ffffff;
-                --text-main: #334155;
-                --text-muted: #64748b;
-                --border-color: #e2e8f0;
+                /* Paleta Slate (Neutros Refinados) */
+                --slate-50: #f8fafc;
+                --slate-100: #f1f5f9;
+                --slate-200: #e2e8f0;
+                --slate-300: #cbd5e1;
+                --slate-400: #94a3b8;
+                --slate-500: #64748b;
+                --slate-600: #475569;
+                --slate-700: #334155;
+                --slate-800: #1e293b;
+                --slate-900: #0f172a;
 
-                /* Espa├ºamento Compacto Mobile First */
+                /* Mapeamento de tons neutros para Slate */
+                --bg-body: var(--slate-50);
+                --bg-surface: #ffffff;
+                --bg-muted: var(--slate-100);
+                --text-main: var(--slate-700);
+                --text-secondary: var(--slate-600);
+                --text-muted: var(--slate-500);
+                --border-color: var(--slate-200);
+                --border-subtle: var(--slate-100);
+
+                /* Espaçamento Compacto Mobile First */
                 --touch-target: 44px;
-                /* M├¡nimo aceit├ível reduzido */
+                /* Mínimo aceitável reduzido */
                 --radius-md: 8px;
                 --radius-lg: 12px;
                 /* Mais quadrado, mais moderno */
