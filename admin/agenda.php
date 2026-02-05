@@ -88,7 +88,7 @@ foreach ($events as $event) {
 foreach ($schedules as $schedule) {
     $dayKey = $schedule['event_date'];
     if (!isset($eventsByDay[$dayKey])) $eventsByDay[$dayKey] = [];
-    $color = '#16a34a'; // Verde vibrante padrão para escalas
+    $color = '#376ac8'; // Smart Blue padrão para escalas
     $eventsByDay[$dayKey][] = array_merge($schedule, [
         'source' => 'schedule',
         'title' => $schedule['event_type'],
@@ -268,9 +268,9 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
         border-radius: 6px;
         margin-bottom: 4px;
         cursor: pointer;
-        background: #ecfdf5;
-        color: #065f46;
-        border-left: 3px solid #059669;
+        background: #ebf0fa;
+        color: #213f78;
+        border-left: 3px solid #376ac8;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -334,7 +334,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.4);
+        box-shadow: 0 4px 12px rgba(55, 106, 200, 0.4);
         cursor: pointer;
         z-index: 100;
         transition: transform 0.2s;
@@ -479,7 +479,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="day-num">'.$d.'</div>';
                         
                         foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? '#16a34a';
+                            $color = $evt['color'] ?? '#376ac8';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             echo "<div onclick=\"window.location='$url'\" class='event-chip' style='border-left-color: $color; color: $color; background: {$color}15;'>";
                             echo htmlspecialchars($evt['title']);
@@ -524,7 +524,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="calendar-day week-view-day '.($isToday?'today':'').'">';
                         echo '<div class="day-num">'.$dayNum.'</div>';
                          foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? '#16a34a';
+                            $color = $evt['color'] ?? '#376ac8';
                             $startTime = date('H:i', strtotime($evt['start_datetime']));
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             

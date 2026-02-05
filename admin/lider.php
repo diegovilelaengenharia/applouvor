@@ -483,7 +483,7 @@ try {
 
     <!-- 1. Gestão (Acesso Rápido) -->
     <div class="section-header">
-        <div style="background: linear-gradient(135deg, #16a34a, #15803d); padding: 8px; border-radius: 8px; color: white;">
+        <div style="background: linear-gradient(135deg, #376ac8, #2c55a0); padding: 8px; border-radius: 8px; color: white;">
             <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
         </div>
         <h2>Gestão</h2>
@@ -501,7 +501,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #f0fdf4; color: #22c55e; padding: 10px; border-radius: 10px;">
+            <div style="background: #ebf0fa; color: #376ac8; padding: 10px; border-radius: 10px;">
                 <i data-lucide="users" style="width: 20px;"></i>
             </div>
             <div style="text-align: center;">
@@ -563,7 +563,7 @@ try {
             padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
             text-decoration: none; transition: all 0.2s; box-shadow: var(--shadow-sm);
         ">
-            <div style="background: #f0fdf4; color: #22c55e; padding: 10px; border-radius: 10px;">
+            <div style="background: #ebf0fa; color: #376ac8; padding: 10px; border-radius: 10px;">
                 <i data-lucide="inbox" style="width: 20px;"></i>
             </div>
              <div style="text-align: center;">

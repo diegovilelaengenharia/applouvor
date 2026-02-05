@@ -50,7 +50,7 @@ if (!empty($currentUser['avatar'])) {
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color:#22c55e; font-size: 0.95rem;">PIB Oliveira</span>
+                <span class="sidebar-text" style="color:#376ac8; font-size: 0.95rem;">PIB Oliveira</span>
                 <span class="sidebar-text" style="font-size: 0.7rem; color: #64748b; font-weight: 600;">App Louvor</span>
             </div>
         </div>
@@ -196,12 +196,9 @@ if (!empty($currentUser['avatar'])) {
         --sidebar-collapsed-width: 88px;
         --sidebar-bg: #ffffff;
         --sidebar-text: #475569;
-        --brand-primary: #22c55e;
-        /* Green 500 - Vibrante */
-        --brand-light: #f0fdf4;
-        /* Green 50 */
+        --brand-primary: #376ac8; /* Smart Blue 500 */
+        --brand-light: #ebf0fa;   /* Smart Blue 50 */
         --brand-hover: #f1f5f9;
-        /* Slate 100 - Neutro */
     }
 
     /* Sidebar Layout */
@@ -274,7 +271,7 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .nav-item.nav-primary.active svg {
-        color: var(--primary, #22c55e);
+        color: var(--primary, #376ac8);
     }
 
     /* GESTÃO → NEUTRO COM ACENTO AZUL */
@@ -285,7 +282,7 @@ if (!empty($currentUser['avatar'])) {
     
     .nav-item.nav-emerald.active svg,
     .nav-item.nav-blue.active svg,
-    .nav-item.nav-violet.active svg { color: #3b82f6; }
+    .nav-item.nav-violet.active svg { color: #376ac8; }
 
     /* ESPIRITUAL → NEUTRO COM ACENTO VERDE */
     .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: #94a3b8; }
@@ -295,7 +292,7 @@ if (!empty($currentUser['avatar'])) {
     
     .nav-item.nav-indigo.active svg,
     .nav-item.nav-rose.active svg,
-    .nav-item.nav-cyan.active svg { color: #22c55e; }
+    .nav-item.nav-cyan.active svg { color: #376ac8; }
 
     /* COMUNICAÇÃO → NEUTRO COM ACENTO ROXO */
     .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: #94a3b8; }

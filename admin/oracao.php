@@ -232,7 +232,7 @@ renderAppHeader('Pedidos de Oração');
         border: none;
     }
     .pray-btn.not-prayed {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: linear-gradient(135deg, #376ac8, #2c55a0);
         color: white;
     }
     .pray-btn.prayed {
@@ -266,10 +266,10 @@ renderAppHeader('Pedidos de Oração');
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: linear-gradient(135deg, #376ac8, #2c55a0);
         color: white;
         border: none;
-        box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+        box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -307,7 +307,7 @@ renderAppHeader('Pedidos de Oração');
         background: var(--border-color);
     }
     .filter-tab.active {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: linear-gradient(135deg, #376ac8, #2c55a0);
         color: white;
         border-color: transparent;
     }
@@ -434,15 +434,15 @@ renderAppHeader('Pedidos de Oração');
     
     <?php if (!$tableExists): ?>
     <!-- Setup Required Message -->
-    <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 16px; margin-bottom: 20px;">
+    <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #ebf0fa, #d7e1f4); border-radius: 16px; margin-bottom: 20px;">
         <div style="background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            <i data-lucide="database" style="color: #f59e0b; width: 30px; height: 30px;"></i>
+            <i data-lucide="database" style="color: #376ac8; width: 30px; height: 30px;"></i>
         </div>
-        <h3 style="color: #92400e; margin-bottom: 8px; font-weight: 700;">Configuração Necessária</h3>
-        <p style="color: #a16207; font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
+        <h3 style="color: #1e3a8a; margin-bottom: 8px; font-weight: 700;">Configuração Necessária</h3>
+        <p style="color: #1e40af; font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
             Para usar o Mural de Oração, é necessário criar as tabelas no banco de dados.
         </p>
-        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);">
+        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #376ac8, #2c55a0); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
             <i data-lucide="settings" style="width: 18px;"></i>
             Executar Setup
         </a>

@@ -102,13 +102,27 @@ function renderAppHeader($title, $backUrl = null)
         <style>
             /* --- DESIGN SYSTEM 3.0 (Paleta Slate Refinada) --- */
             :root {
-                /* Cores Principais - Emerald (Sofisticado) */
-                --primary: #059669;
-                --primary-hover: #047857;
-                --primary-light: #d1fae5;
-                --primary-subtle: #ecfdf5;
+                /* --- PALETA SMART BLUE (Tech Identity) --- */
+                --primary-50:  #ebf0fa;
+                --primary-100: #d7e1f4;
+                --primary-200: #afc3e9;
+                --primary-300: #87a5de;
+                --primary-400: #5f88d3;
+                --primary-500: #376ac8; /* BRAND PRINCIPAL */
+                --primary-600: #2c55a0;
+                --primary-700: #213f78;
+                --primary-800: #162a50;
+                --primary-900: #0b1528;
+                --primary-950: #080f1c;
 
-                /* Paleta Slate (Neutros Refinados) */
+                /* Variáveis Semânticas de Marca */
+                --primary: var(--primary-500);
+                --primary-hover: var(--primary-600);
+                --primary-active: var(--primary-700);
+                --primary-light: var(--primary-100);
+                --primary-subtle: var(--primary-50);
+
+                /* Paleta Slate (Neutros) - Mantida para suporte */
                 --slate-50: #f8fafc;
                 --slate-100: #f1f5f9;
                 --slate-200: #e2e8f0;
@@ -120,24 +134,29 @@ function renderAppHeader($title, $backUrl = null)
                 --slate-800: #1e293b;
                 --slate-900: #0f172a;
 
-                /* Mapeamento de tons neutros para Slate */
+                /* Configurações de Tema (Light Mode Default) */
                 --bg-body: var(--slate-50);
                 --bg-surface: #ffffff;
                 --bg-muted: var(--slate-100);
-                --text-main: var(--slate-700);
+                
+                --text-main: var(--slate-900);     /* Mais contraste */
                 --text-secondary: var(--slate-600);
                 --text-muted: var(--slate-500);
+                
                 --border-color: var(--slate-200);
                 --border-subtle: var(--slate-100);
 
-                /* Espaçamento Compacto Mobile First */
+                /* Espaçamento e Design */
                 --touch-target: 44px;
-                /* Mínimo aceitável reduzido */
                 --radius-md: 8px;
                 --radius-lg: 12px;
-                /* Mais quadrado, mais moderno */
                 --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
                 --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+                
+                /* Semântica (Independentes da Marca) */
+                --success: #22c55e;
+                --warning: #f59e0b;
+                --danger: #ef4444;
             }
 
             /* ... Keyframes anteriores ... */

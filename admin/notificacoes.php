@@ -167,7 +167,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         background: currentColor;
     }
     
-    .stat-card.total { color: #3b82f6; }
+    .stat-card.total { color: #376ac8; }
     .stat-card.unread { color: #f43f5e; }
     .stat-card.read { color: #22c55e; }
     

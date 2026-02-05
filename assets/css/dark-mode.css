@@ -5,80 +5,75 @@
 
 /* === VARIÁVEIS GLOBAIS DARK MODE === */
 body.dark-mode {
-    /* Backgrounds - Confortável (não preto puro para reduzir fadiga) */
-    --bg-primary: #121212;
-    /* Cinza muito escuro - mais confortável que preto puro */
-    --bg-secondary: #1a1a1a;
-    /* Base para cards - contraste suave */
-    --bg-tertiary: #242424;
-    /* Base para inputs/hovers - contraste balanceado */
+    /* Backgrounds - Midnight Blue Theme (Smart Blue 950/900) */
+    --bg-primary: #080f1c;
+    /* Smart Blue 950 */
+    --bg-secondary: #0b1528;
+    /* Smart Blue 900 */
+    --bg-tertiary: #162a50;
+    /* Smart Blue 800 */
 
     /* Surface aliases */
-    --bg-body: #121212;
-    --bg-surface: #1a1a1a;
+    --bg-body: #080f1c;
+    --bg-surface: #0b1528;
+    --bg-card: #0b1528;
 
-    /* Textos - Contraste confortável (não branco puro) */
-    --text-primary: rgba(255, 255, 255, 0.92);
-    /* Principal - ótimo contraste sem ser agressivo */
-    --text-secondary: rgba(255, 255, 255, 0.78);
-    /* Secundário - contraste reduzido mas legível */
-    --text-muted: rgba(255, 255, 255, 0.55);
-    /* Muted - suficiente para leitura ocasional */
-    --text-main: rgba(255, 255, 255, 0.92);
+    /* Textos - Contraste alto em fundo azul */
+    --text-primary: rgba(235, 240, 250, 0.95);
+    --text-secondary: rgba(215, 225, 244, 0.80);
+    --text-muted: rgba(135, 165, 222, 0.60);
+    --text-main: var(--text-primary);
 
-    /* Bordas - Visíveis mas sutis */
-    --border-color: #333333;
-    /* Mais claro para melhor definição */
-    --border-subtle: #2a2a2a;
+    /* Bordas - Integradas ao azul */
+    --border-color: #162a50;
+    /* Smart Blue 800 */
+    --border-subtle: #213f78;
+    /* Smart Blue 700 (mais visível se necessário) */
 
-    /* Primary Colors - Verde Vibrante mas confortável */
-    --primary: #22c55e;
-    /* Green 500 - Vibrante */
-    --primary-hover: #16a34a;
-    /* Green 600 */
-    --primary-light: #166534;
-    /* Green 800 - backgrounds escuros */
-    --primary-subtle: #14532d;
-    /* Green 900 */
+    /* Primary Colors - Smart Blue */
+    --primary: #376ac8;
+    /* Smart Blue 500 */
+    --primary-hover: #2c55a0;
+    /* Smart Blue 600 */
+    --primary-active: #213f78;
+    /* Smart Blue 700 */
+    --primary-light: #2c55a0;
+    /* Smart Blue 600 */
+    --primary-subtle: #162a50;
+    /* Smart Blue 800 (bg de badges) */
 
-    --primary-green: #22c55e;
-    --primary-green-light: #4ade80;
-    --primary-green-dark: #16a34a;
+    /* Legacy mapping */
+    --primary-green: #376ac8;
+    --primary-green-light: #5f88d3;
+    --primary-green-dark: #2c55a0;
 
-    /* Accent Colors - Cores Vibrantes com bom contraste */
-    --accent-primary: #22c55e;
-    /* Verde vibrante */
-    --accent-interactive: #4ade80;
-    /* Verde claro */
-    --primary-blue: #60a5fa;
-    /* Blue 400 - melhor contraste em fundo escuro */
-    --primary-blue-light: #93c5fd;
-    /* Blue 300 */
+    /* Accent Colors */
+    --accent-primary: #376ac8;
+    --accent-interactive: #5f88d3;
+    --primary-blue: #376ac8;
+    --primary-blue-light: #87a5de;
     --accent-purple: #c084fc;
-    /* Purple 400 - melhor contraste */
     --accent-purple-light: #d8b4fe;
-    /* Purple 300 */
 
-    /* Glassmorphism Dark */
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.14);
+    /* Glassmorphism Tinted */
+    --glass-bg: rgba(11, 21, 40, 0.7);
+    --glass-border: rgba(55, 106, 200, 0.2);
 
-    /* Shadows Dark - Suaves */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+    /* Shadows Tinted */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
 
-    /* Glows sutis */
-    --shadow-glow: 0 0 20px rgba(34, 197, 94, 0.12);
-    --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.6);
+    /* Glows */
+    --shadow-glow: 0 0 20px rgba(55, 106, 200, 0.25);
+    --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.7);
 
-    /* Gradientes vibrantes */
-    --gradient-primary: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-    --gradient-elegant: linear-gradient(135deg, #1a1a1a 0%, #121212 100%);
-    --gradient-soft: linear-gradient(135deg, #242424 0%, #1a1a1a 100%);
-    --gradient-vibrant: linear-gradient(135deg, #22c55e 0%, #3b82f6 100%);
-    --gradient-hero: linear-gradient(135deg, #1a1a1a 0%, #121212 100%);
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, #376ac8 0%, #2c55a0 100%);
+    --gradient-elegant: linear-gradient(135deg, #0b1528 0%, #080f1c 100%);
+    --gradient-soft: linear-gradient(135deg, #162a50 0%, #0b1528 100%);
+    --gradient-vibrant: linear-gradient(135deg, #376ac8 0%, #87a5de 100%);
+    --gradient-hero: linear-gradient(135deg, #0b1528 0%, #080f1c 100%);
 }
 
 /* === TRANSIÇÕES SUAVES === */
