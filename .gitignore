@@ -9,6 +9,8 @@
 # Arquivos de configuração sensíveis
 # IMPORTANTE: config.php contém credenciais do banco
 # includes/config.php
+.env
+composer.lock
 
 # Arquivos de sistema
 .DS_Store

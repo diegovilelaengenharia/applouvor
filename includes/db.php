@@ -17,6 +17,10 @@ try {
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    
+    // Inicializa Query Builder com a conexão
+    App\DB::setConnection($pdo);
+    
 } catch (PDOException $e) {
     // Se for erro de "Unknown database", informa
     if ($e->getCode() == 1049) {

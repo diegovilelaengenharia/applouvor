@@ -1,0 +1,26 @@
+{
+    "name": "pib-oliveira/app-louvor",
+    "description": "Sistema de Gestão do Ministério de Louvor - PIB Oliveira",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Diego T. N. Vilela",
+            "email": "diego@example.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "includes/classes/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}
