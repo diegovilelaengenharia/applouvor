@@ -313,8 +313,8 @@ try {
 
     <!-- KPIs Grid -->
     <div class="kpi-grid">
-        <div class="kpi-card" style="border-left: 4px solid #10b981;">
-            <div class="kpi-value" style="color: #10b981;"><?= $totalSongs - $neverPlayed ?></div>
+        <div class="kpi-card" style="border-left: 4px solid #22c55e;">
+            <div class="kpi-value" style="color: #22c55e;"><?= $totalSongs - $neverPlayed ?></div>
             <div class="kpi-label">Músicas Tocadas</div>
         </div>
 
@@ -362,7 +362,7 @@ try {
                             <?= htmlspecialchars($song['artist']) ?>
                         </div>
                     </div>
-                    <div style="background: #ecfdf5; color: #047857; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
+                    <div style="background: #f0fdf4; color: #22c55e; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
                         <?= $song['play_count'] ?>x
                     </div>
                 </div>
@@ -382,7 +382,7 @@ try {
                 <?php foreach ($topArtists as $artist): ?>
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                         <span style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($artist['artist']) ?></span>
-                        <span style="background: #ecfdf5; color: #047857; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
+                        <span style="background: #f0fdf4; color: #22c55e; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;">
                             <?= $artist['play_count'] ?>
                         </span>
                     </div>

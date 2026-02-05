@@ -537,7 +537,7 @@ if ($isPrintMode) {
             <?php 
                 $kpis = [
                     ['Escalas', $kpi_scales, '#3b82f6'],
-                    ['Adesão', $rate_confirmed . '%', '#10b981'],
+                    ['Adesão', $rate_confirmed . '%', '#22c55e'],
                     ['Músicas', $kpi_songs, '#ec4899'],
                     ['Capítulos', number_format($kpi_chapters), '#8b5cf6']
                 ];
@@ -565,7 +565,7 @@ if ($isPrintMode) {
                                 <td><b><?= $m['name'] ?></b></td>
                                 <td style="text-align: center;"><?= $m['confirmed'] ?>/<?= $m['total_invites'] ?></td>
                                 <td style="text-align: center;">
-                                    <span class="badge" style="background: <?= $m['rate'] >= 80 ? '#10b981' : ($m['rate'] >= 60 ? '#f59e0b' : '#ef4444') ?>; color: white;">
+                                    <span class="badge" style="background: <?= $m['rate'] >= 80 ? '#22c55e' : ($m['rate'] >= 60 ? '#f59e0b' : '#ef4444') ?>; color: white;">
                                         <?= $m['rate'] ?>%
                                     </span>
                                 </td>
@@ -737,7 +737,7 @@ if ($isPrintMode) {
                     <?php 
                     $links = [
                         ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => '#3b82f6'],
-                        ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#10b981'],
+                        ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#22c55e'],
                         ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => '#f59e0b'],
                         ['label' => 'Vídeo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
                     ];
@@ -877,8 +877,8 @@ if ($isPrintMode) {
                     <div class="kpi-label">Total de Ausências</div>
                 </div>
 
-                <div class="kpi-card" style="border-left: 3px solid #10b981;">
-                    <div class="kpi-value" style="color: #10b981;"><?= $substitutionRate ?>%</div>
+                <div class="kpi-card" style="border-left: 3px solid #22c55e;">
+                    <div class="kpi-value" style="color: #22c55e;"><?= $substitutionRate ?>%</div>
                     <div class="kpi-label">Com Substituto</div>
                 </div>
 
@@ -920,7 +920,7 @@ if ($isPrintMode) {
                     <?php foreach($topSubstitutes as $s): ?>
                     <div class="stat-box">
                         <span><?= $s['name'] ?></span>
-                        <b style="color: #10b981;"><?= $s['vezes'] ?>x</b>
+                        <b style="color: #22c55e;"><?= $s['vezes'] ?>x</b>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -976,9 +976,9 @@ if ($isPrintMode) {
                             <td style="font-size: 8px; color: #64748b;"><?= $member['instrument'] ?></td>
                             <td style="text-align: center; font-weight: 700; color: #3b82f6;"><?= $member['escalas_confirmadas'] ?></td>
                             <td style="text-align: center; font-weight: 700; color: #8b5cf6;"><?= $member['capitulos_lidos'] ?></td>
-                            <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#10b981' ?>;"><?= $member['ausencias'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#22c55e' ?>;"><?= $member['ausencias'] ?></td>
                             <td style="text-align: center;">
-                                <span class="badge" style="background: <?= $member['engagement_score'] >= 70 ? '#10b981' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>; color: white; font-size: 9px; padding: 3px 8px;">
+                                <span class="badge" style="background: <?= $member['engagement_score'] >= 70 ? '#22c55e' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>; color: white; font-size: 9px; padding: 3px 8px;">
                                     <?= $member['engagement_score'] ?>
                                 </span>
                             </td>
@@ -995,7 +995,7 @@ if ($isPrintMode) {
                     • <b>40 pontos</b> baseados em escalas confirmadas (proporcional ao membro mais escalado)<br>
                     • <b>40 pontos</b> baseados em capítulos lidos (proporcional ao maior leitor)<br>
                     • <b>-5 pontos</b> por ausência (máximo -20 pontos)<br>
-                    • <span style="color: #10b981; font-weight: 700;">70-100 pts</span> = Excelente | 
+                    • <span style="color: #22c55e; font-weight: 700;">70-100 pts</span> = Excelente | 
                     <span style="color: #f59e0b; font-weight: 700;">40-69 pts</span> = Moderado | 
                     <span style="color: #ef4444; font-weight: 700;">0-39 pts</span> = Precisa melhorar
                 </div>
@@ -1214,7 +1214,7 @@ renderAppHeader('Indicadores Avançados');
                         <?php 
                         $links = [
                             ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => '#3b82f6'],
-                            ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#10b981'],
+                            ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => '#22c55e'],
                             ['label' => 'Áudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => '#f59e0b'],
                             ['label' => 'Vídeo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
                         ];
@@ -1350,7 +1350,7 @@ renderAppHeader('Indicadores Avançados');
                         <div style="font-size: 13px; opacity: 0.9;">Total de Ausências</div>
                     </div>
 
-                    <div style="padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; text-align: center; color: white;">
+                    <div style="padding: 20px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border-radius: 12px; text-align: center; color: white;">
                         <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $substitutionRate ?>%</div>
                         <div style="font-size: 13px; opacity: 0.9;">Com Substituto</div>
                     </div>
@@ -1399,7 +1399,7 @@ renderAppHeader('Indicadores Avançados');
                                 </div>
                                 <span style="font-weight: 600; font-size: 13px;"><?= $s['name'] ?></span>
                             </div>
-                            <div style="font-weight: 700; color: #10b981;"><?= $s['vezes'] ?>x</div>
+                            <div style="font-weight: 700; color: #22c55e;"><?= $s['vezes'] ?>x</div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -1468,9 +1468,9 @@ renderAppHeader('Indicadores Avançados');
                                     </td>
                                     <td style="padding: 10px; text-align: center; font-weight: 700; color: #3b82f6;"><?= $member['escalas_confirmadas'] ?></td>
                                     <td style="padding: 10px; text-align: center; font-weight: 700; color: #8b5cf6;"><?= $member['capitulos_lidos'] ?></td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#10b981' ?>;"><?= $member['ausencias'] ?></td>
+                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? '#f59e0b' : '#22c55e' ?>;"><?= $member['ausencias'] ?></td>
                                     <td style="padding: 10px; text-align: center;">
-                                        <div style="font-size: 18px; font-weight: 800; color: <?= $member['engagement_score'] >= 70 ? '#10b981' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>;">
+                                        <div style="font-size: 18px; font-weight: 800; color: <?= $member['engagement_score'] >= 70 ? '#22c55e' : ($member['engagement_score'] >= 40 ? '#f59e0b' : '#ef4444') ?>;">
                                             <?= $member['engagement_score'] ?>
                                         </div>
                                     </td>
@@ -1642,7 +1642,7 @@ foreach ($types as $label => $col) {
             labels: <?= json_encode(array_column($songRotation, 'faixa')) ?>,
             datasets: [{
                 data: <?= json_encode(array_column($songRotation, 'musicas')) ?>,
-                backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899']
+                backgroundColor: ['#3b82f6', '#22c55e', '#f59e0b', '#ec4899']
             }]
         },
         options: {

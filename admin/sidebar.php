@@ -50,7 +50,7 @@ if (!empty($currentUser['avatar'])) {
             <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" style="height: 40px; width: auto; object-fit: contain;">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text" style="color:#059669; font-size: 0.95rem;">PIB Oliveira</span>
+                <span class="sidebar-text" style="color:#22c55e; font-size: 0.95rem;">PIB Oliveira</span>
                 <span class="sidebar-text" style="font-size: 0.7rem; color: #64748b; font-weight: 600;">App Louvor</span>
             </div>
         </div>
@@ -196,12 +196,12 @@ if (!empty($currentUser['avatar'])) {
         --sidebar-collapsed-width: 88px;
         --sidebar-bg: #ffffff;
         --sidebar-text: #475569;
-        --brand-primary: #059669;
-        /* Emerald 600 - Vibrante */
-        --brand-light: #d1fae5;
-        /* Emerald 100 */
-        --brand-hover: #ecfdf5;
-        /* Emerald 50 */
+        --brand-primary: #22c55e;
+        /* Green 500 - Vibrante */
+        --brand-light: #f0fdf4;
+        /* Green 50 */
+        --brand-hover: #f1f5f9;
+        /* Slate 100 - Neutro */
     }
 
     /* Sidebar Layout */
@@ -269,38 +269,41 @@ if (!empty($currentUser['avatar'])) {
     /* Colors Classes restored */
     .nav-item.nav-primary:hover,
     .nav-item.nav-primary.active {
-        background-color: #ecfdf5;
-        color: #059669;
+        background-color: var(--bg-surface-hover, #f1f5f9);
+        color: var(--text-main, #334155);
     }
 
     .nav-item.nav-primary.active svg {
-        color: #059669;
+        color: var(--primary, #22c55e);
     }
 
-    /* GESTÃO → AZUL */
-    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: #3b82f6; }
+    /* GESTÃO → NEUTRO COM ACENTO AZUL */
+    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: #94a3b8; }
     .nav-item.nav-emerald:hover, .nav-item.nav-emerald.active,
     .nav-item.nav-blue:hover, .nav-item.nav-blue.active,
-    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: #eff6ff; color: #2563eb; }
-    .nav-item.nav-emerald:hover svg, .nav-item.nav-emerald.active svg,
-    .nav-item.nav-blue:hover svg, .nav-item.nav-blue.active svg,
-    .nav-item.nav-violet:hover svg, .nav-item.nav-violet.active svg { color: #2563eb; }
+    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: var(--bg-surface-hover, #f1f5f9); color: var(--text-main, #334155); }
+    
+    .nav-item.nav-emerald.active svg,
+    .nav-item.nav-blue.active svg,
+    .nav-item.nav-violet.active svg { color: #3b82f6; }
 
-    /* ESPIRITUAL → VERDE VIBRANTE */
-    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: #22c55e; }
+    /* ESPIRITUAL → NEUTRO COM ACENTO VERDE */
+    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: #94a3b8; }
     .nav-item.nav-indigo:hover, .nav-item.nav-indigo.active,
     .nav-item.nav-rose:hover, .nav-item.nav-rose.active,
-    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: #f0fdf4; color: #16a34a; }
-    .nav-item.nav-indigo:hover svg, .nav-item.nav-indigo.active svg,
-    .nav-item.nav-rose:hover svg, .nav-item.nav-rose.active svg,
-    .nav-item.nav-cyan:hover svg, .nav-item.nav-cyan.active svg { color: #16a34a; }
+    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: var(--bg-surface-hover, #f1f5f9); color: var(--text-main, #334155); }
+    
+    .nav-item.nav-indigo.active svg,
+    .nav-item.nav-rose.active svg,
+    .nav-item.nav-cyan.active svg { color: #22c55e; }
 
-    /* COMUNICAÇÃO → ROXO VIBRANTE */
-    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: #a855f7; }
+    /* COMUNICAÇÃO → NEUTRO COM ACENTO ROXO */
+    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: #94a3b8; }
     .nav-item.nav-amber:hover, .nav-item.nav-amber.active,
-    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: #faf5ff; color: #9333ea; }
-    .nav-item.nav-amber:hover svg, .nav-item.nav-amber.active svg,
-    .nav-item.nav-pink:hover svg, .nav-item.nav-pink.active svg { color: #9333ea; }
+    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: var(--bg-surface-hover, #f1f5f9); color: var(--text-main, #334155); }
+    
+    .nav-item.nav-amber.active svg,
+    .nav-item.nav-pink.active svg { color: #a855f7; }
 
     /* Indicadores (Blue) */
     .nav-item.nav-indicators svg {
