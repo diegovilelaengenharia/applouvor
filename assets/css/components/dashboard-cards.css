@@ -2,96 +2,93 @@
    DASHBOARD CARDS - DESIGN NEUTRO
    ======================================== */
 
-/* Grid de Cards */
 .quick-access-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
 }
 
 @media (min-width: 768px) {
     .quick-access-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 16px;
     }
 }
 
-/* Card Base - Minimalista */
+/* Card Base */
 .access-card {
     position: relative;
-    border-radius: 12px;
-    padding: 20px 18px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-4);
     min-height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-decoration: none;
     overflow: hidden;
-    transition: all 0.2s ease;
-    background: #FFFFFF;
-    border: 1px solid #E1E4E8;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all var(--transition-base);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
 }
 
-/* Hover - Elevação sutil */
 .access-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
 }
 
 .access-card:active {
     transform: translateY(-1px);
 }
 
-/* Ícone do Card */
+/* Ícone */
 .card-icon {
     width: 44px;
     height: 44px;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
-    transition: all 0.2s ease;
-    background: #F4F5F7;
-    color: #4E5D78;
+    margin-bottom: var(--space-3);
+    transition: all var(--transition-base);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
 }
 
 .access-card:hover .card-icon {
     transform: scale(1.05);
 }
 
-/* Título do Card */
+/* Título */
 .card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1A1F36;
-    margin: 0 0 6px 0;
+    font-size: var(--font-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2) 0;
     line-height: 1.2;
 }
 
-/* Info do Card */
+/* Info */
 .card-info {
-    font-size: 0.875rem;
-    color: #8B95A8;
+    font-size: var(--font-sm);
+    color: var(--text-tertiary);
     margin: 0;
     line-height: 1.4;
-    font-weight: 500;
+    font-weight: var(--font-normal);
 }
 
-/* Badge do Card */
+/* Badge */
 .card-badge {
     position: absolute;
-    top: 14px;
-    right: 14px;
+    top: var(--space-3);
+    right: var(--space-3);
     padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: #F4F5F7;
-    color: #4E5D78;
-    transition: all 0.2s ease;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-xs);
+    font-weight: var(--font-bold);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all var(--transition-base);
 }
 
 .access-card:hover .card-badge {
@@ -99,108 +96,91 @@
 }
 
 /* ========================================
-   CORES POR CATEGORIA - ACENTOS NO HOVER
+   CORES POR CATEGORIA
    ======================================== */
 
-/* 🔵 GESTÃO - Azul (#3b82f6) */
+/* Azul - Gestão */
 .card-blue:hover,
 .card-emerald:hover,
 .card-violet:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+    border-color: var(--blue-500);
 }
 
 .card-blue:hover .card-icon,
 .card-emerald:hover .card-icon,
 .card-violet:hover .card-icon {
-    background: #F0F4FF;
-    color: #3b82f6;
+    background: var(--blue-50);
+    color: var(--blue-600);
 }
 
 .card-blue:hover .card-badge,
 .card-emerald:hover .card-badge,
 .card-violet:hover .card-badge {
-    background: #3b82f6;
+    background: var(--blue-500);
     color: white;
 }
 
-/* 🟢 ESPIRITUAL - Verde (#24CE6B) */
+/* Verde - Espiritual */
 .card-green:hover,
 .card-cyan:hover,
 .card-indigo:hover,
 .card-rose:hover {
-    border-color: #24CE6B;
-    box-shadow: 0 4px 12px rgba(36, 206, 107, 0.12);
+    border-color: var(--green-500);
 }
 
 .card-green:hover .card-icon,
 .card-cyan:hover .card-icon,
 .card-indigo:hover .card-icon,
 .card-rose:hover .card-icon {
-    background: #ECFDF5;
-    color: #24CE6B;
+    background: var(--green-50);
+    color: var(--green-600);
 }
 
 .card-green:hover .card-badge,
 .card-cyan:hover .card-badge,
 .card-indigo:hover .card-badge,
 .card-rose:hover .card-badge {
-    background: #24CE6B;
+    background: var(--green-500);
     color: white;
 }
 
-/* 🟡 COMUNICAÇÃO - Amarelo (#FFC501) */
+/* Âmbar - Comunicação */
 .card-yellow:hover,
 .card-amber:hover,
 .card-pink:hover,
 .card-fuchsia:hover {
-    border-color: #FFC501;
-    box-shadow: 0 4px 12px rgba(255, 197, 1, 0.12);
+    border-color: var(--amber-500);
 }
 
 .card-yellow:hover .card-icon,
 .card-amber:hover .card-icon,
 .card-pink:hover .card-icon,
 .card-fuchsia:hover .card-icon {
-    background: #FFFBEB;
-    color: #CC9C01;
+    background: var(--amber-50);
+    color: var(--amber-600);
 }
 
 .card-yellow:hover .card-badge,
 .card-amber:hover .card-badge,
 .card-pink:hover .card-badge,
 .card-fuchsia:hover .card-badge {
-    background: #FFC501;
-    color: #1A1F36;
+    background: var(--amber-500);
+    color: var(--text-primary);
 }
 
-/* 🔴 CRÍTICO - Vermelho */
+/* Vermelho - Crítico */
 .card-red:hover {
-    border-color: #ef4444;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.12);
+    border-color: var(--red-500);
 }
 
 .card-red:hover .card-icon {
-    background: #FEF2F2;
-    color: #ef4444;
+    background: var(--red-50);
+    color: var(--red-500);
 }
 
 .card-red:hover .card-badge {
-    background: #ef4444;
+    background: var(--red-500);
     color: white;
-}
-
-/* ⚪ NEUTRO - Cinza */
-.card-slate:hover,
-.card-gray:hover {
-    border-color: #6B7280;
-    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.12);
-}
-
-.card-slate:hover .card-icon,
-.card-gray:hover .card-icon {
-    background: #F9FAFB;
-    color: #4E5D78;
 }
 
 /* ========================================
@@ -223,7 +203,6 @@
     animation: fadeInUp 0.3s ease backwards;
 }
 
-/* Delay escalonado */
 .access-card:nth-child(1) {
     animation-delay: 0.05s;
 }
@@ -263,12 +242,12 @@
 @media (max-width: 768px) {
     .quick-access-grid {
         grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-        gap: 12px;
+        gap: var(--space-3);
     }
 
     .access-card {
         min-height: 110px;
-        padding: 18px 16px;
+        padding: var(--space-4);
     }
 
     .card-icon {
@@ -279,12 +258,11 @@
 
 @media (max-width: 375px) {
     .quick-access-grid {
-        gap: 10px;
+        gap: var(--space-2);
     }
 
     .access-card {
         min-height: 100px;
-        padding: 16px 14px;
     }
 }
 
@@ -293,24 +271,24 @@
    ======================================== */
 
 .highlight-card {
-    background: #FFFFFF;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #E1E4E8;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    margin-bottom: 12px;
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-3);
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: var(--space-4);
     text-decoration: none;
     color: inherit;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
 }
 
 .highlight-card:hover {
     transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-color: #3b82f6;
+    box-shadow: var(--shadow-md);
+    border-color: var(--blue-500);
 }
 
 .highlight-card:active {
@@ -320,13 +298,13 @@
 .highlight-icon {
     width: 48px;
     height: 48px;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #F4F5F7;
-    transition: all 0.2s ease;
+    background: var(--bg-secondary);
+    transition: all var(--transition-base);
 }
 
 .highlight-card:hover .highlight-icon {
