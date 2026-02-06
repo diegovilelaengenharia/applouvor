@@ -1,8 +1,8 @@
 /* ========================================
-   SIDEBAR MODERNA - PALETA ADOBE COLOR
+   SIDEBAR MODERNA - DESIGN NEUTRO
    ======================================== */
 
-/* Estilos base para Material Icons na sidebar */
+/* Estilos base para Material Icons */
 .material-symbols-outlined {
     font-size: 24px;
     width: 24px;
@@ -14,114 +14,99 @@
 
 .nav-item .material-symbols-outlined {
     font-size: 22px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
 /* ========================================
-   NAVEGAÇÃO - DESIGN PROFISSIONAL
+   NAVEGAÇÃO - MINIMALISTA
    ======================================== */
 
 .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
-    margin: 4px 12px;
-    border-radius: 12px;
+    padding: 10px 16px;
+    margin: 2px 12px;
+    border-radius: 8px;
     text-decoration: none;
-    color: var(--slate-700);
+    color: #4E5D78;
     font-weight: 500;
     font-size: 0.9375rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     position: relative;
     background: transparent;
+    border-left: 3px solid transparent;
 }
 
-/* Ícones - Cinza neutro por padrão */
+/* Ícones - Cinza neutro */
 .nav-item svg,
 .nav-item .material-symbols-outlined {
-    color: var(--slate-500);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #8B95A8;
+    transition: all 0.2s ease;
     flex-shrink: 0;
 }
 
-/* Hover - Efeito sutil com elevação */
+/* Hover - Fundo sutil */
 .nav-item:hover {
-    background: var(--md-surface-container-low);
-    color: var(--md-on-surface);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    transform: translateX(4px);
+    background: #F4F5F7;
+    color: #1A1F36;
 }
 
-/* Ativo - Destaque visual */
+.nav-item:hover svg,
+.nav-item:hover .material-symbols-outlined {
+    color: #4E5D78;
+}
+
+/* Active - Destaque mínimo */
 .nav-item.active {
-    background: var(--md-surface-container);
-    color: var(--md-on-surface);
+    background: #F4F5F7;
+    color: #1A1F36;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ========================================
-   CORES SEMÂNTICAS - PALETA ADOBE COLOR
+   CORES POR CATEGORIA - ACENTOS SUTIS
    ======================================== */
 
-/* 🟠 GESTÃO - Laranja (#FFB629) */
+/* 🔵 GESTÃO - Azul (#3b82f6) */
 .nav-item.nav-blue:hover,
 .nav-item.nav-emerald:hover,
 .nav-item.nav-violet:hover {
-    background: linear-gradient(135deg, #FFF8E6 0%, #FFEDD1 100%);
-    box-shadow: 0 4px 12px rgba(255, 182, 41, 0.15);
-}
-
-.nav-item.nav-blue:hover svg,
-.nav-item.nav-blue:hover .material-symbols-outlined,
-.nav-item.nav-emerald:hover svg,
-.nav-item.nav-violet:hover svg {
-    color: #FFB629;
-    transform: scale(1.1);
+    background: #F0F4FF;
+    border-left-color: #3b82f6;
 }
 
 .nav-item.nav-blue.active,
 .nav-item.nav-emerald.active,
 .nav-item.nav-violet.active {
-    background: linear-gradient(135deg, #FFEDD1 0%, #FFE2A3 100%);
-    box-shadow: 0 4px 16px rgba(255, 182, 41, 0.2);
-    border-left: 4px solid #FFB629;
+    background: #F0F4FF;
+    border-left-color: #3b82f6;
+    color: #3b82f6;
 }
 
 .nav-item.nav-blue.active svg,
 .nav-item.nav-blue.active .material-symbols-outlined,
 .nav-item.nav-emerald.active svg,
 .nav-item.nav-violet.active svg {
-    color: #E6A324;
-    transform: scale(1.05);
+    color: #3b82f6;
 }
 
-/* 🔵 ESPIRITUAL - Azul Petróleo (#75C9E3) */
+/* 🟢 ESPIRITUAL - Verde (#24CE6B) */
 .nav-item.nav-green:hover,
 .nav-item.nav-indigo:hover,
 .nav-item.nav-rose:hover,
 .nav-item.nav-cyan:hover {
-    background: linear-gradient(135deg, #E6F7FB 0%, #D1F0F7 100%);
-    box-shadow: 0 4px 12px rgba(117, 201, 227, 0.15);
-}
-
-.nav-item.nav-green:hover svg,
-.nav-item.nav-green:hover .material-symbols-outlined,
-.nav-item.nav-indigo:hover svg,
-.nav-item.nav-rose:hover svg,
-.nav-item.nav-cyan:hover svg {
-    color: #75C9E3;
-    transform: scale(1.1);
+    background: #ECFDF5;
+    border-left-color: #24CE6B;
 }
 
 .nav-item.nav-green.active,
 .nav-item.nav-indigo.active,
 .nav-item.nav-rose.active,
 .nav-item.nav-cyan.active {
-    background: linear-gradient(135deg, #D1F0F7 0%, #B8E8F3 100%);
-    box-shadow: 0 4px 16px rgba(117, 201, 227, 0.2);
-    border-left: 4px solid #75C9E3;
+    background: #ECFDF5;
+    border-left-color: #24CE6B;
+    color: #24CE6B;
 }
 
 .nav-item.nav-green.active svg,
@@ -129,88 +114,57 @@
 .nav-item.nav-indigo.active svg,
 .nav-item.nav-rose.active svg,
 .nav-item.nav-cyan.active svg {
-    color: #5AB8D1;
-    transform: scale(1.05);
+    color: #24CE6B;
 }
 
 /* 🟡 COMUNICAÇÃO - Amarelo (#FFC501) */
 .nav-item.nav-yellow:hover,
 .nav-item.nav-amber:hover,
 .nav-item.nav-pink:hover {
-    background: linear-gradient(135deg, #FFFBEB 0%, #FFF4D1 100%);
-    box-shadow: 0 4px 12px rgba(255, 197, 1, 0.15);
-}
-
-.nav-item.nav-yellow:hover svg,
-.nav-item.nav-yellow:hover .material-symbols-outlined,
-.nav-item.nav-amber:hover svg,
-.nav-item.nav-pink:hover svg {
-    color: #FFC501;
-    transform: scale(1.1);
+    background: #FFFBEB;
+    border-left-color: #FFC501;
 }
 
 .nav-item.nav-yellow.active,
 .nav-item.nav-amber.active,
 .nav-item.nav-pink.active {
-    background: linear-gradient(135deg, #FFF4D1 0%, #FFE9A3 100%);
-    box-shadow: 0 4px 16px rgba(255, 197, 1, 0.2);
-    border-left: 4px solid #FFC501;
+    background: #FFFBEB;
+    border-left-color: #FFC501;
+    color: #CC9C01;
 }
 
 .nav-item.nav-yellow.active svg,
 .nav-item.nav-yellow.active .material-symbols-outlined,
 .nav-item.nav-amber.active svg,
 .nav-item.nav-pink.active svg {
-    color: #E6B001;
-    transform: scale(1.05);
+    color: #CC9C01;
 }
 
 /* 🔴 CRÍTICO - Vermelho */
 .nav-item.nav-red:hover {
-    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
-}
-
-.nav-item.nav-red:hover svg,
-.nav-item.nav-red:hover .material-symbols-outlined {
-    color: #EF4444;
-    transform: scale(1.1);
+    background: #FEF2F2;
+    border-left-color: #ef4444;
 }
 
 .nav-item.nav-red.active {
-    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
-    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
-    border-left: 4px solid #EF4444;
+    background: #FEF2F2;
+    border-left-color: #ef4444;
+    color: #ef4444;
 }
 
 .nav-item.nav-red.active svg,
 .nav-item.nav-red.active .material-symbols-outlined {
-    color: #DC2626;
-    transform: scale(1.05);
+    color: #ef4444;
 }
 
 /* 🎨 MULTICOLOR - Visão Geral */
 .nav-item.nav-multicolor:hover {
-    background: linear-gradient(135deg,
-            rgba(255, 182, 41, 0.1) 0%,
-            rgba(117, 201, 227, 0.1) 50%,
-            rgba(165, 197, 194, 0.1) 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.nav-item.nav-multicolor:hover svg,
-.nav-item.nav-multicolor:hover .material-symbols-outlined {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    transform: scale(1.1);
+    background: #F0F9FF;
 }
 
 .nav-item.nav-multicolor.active {
-    background: linear-gradient(135deg,
-            rgba(255, 182, 41, 0.15) 0%,
-            rgba(117, 201, 227, 0.15) 50%,
-            rgba(165, 197, 194, 0.15) 100%);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    border-left: 4px solid #FFB629;
+    background: #F0F9FF;
+    border-left-color: #3b82f6;
 }
 
 /* ========================================
@@ -219,55 +173,43 @@
 
 .nav-divider {
     height: 1px;
-    background: var(--md-outline-variant);
+    background: #E1E4E8;
     margin: 16px 16px;
 }
 
-/* Labels de categoria */
-.sidebar-text[style*="text-transform: uppercase"] {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--md-on-surface-variant);
-    letter-spacing: 0.8px;
-}
-
 /* ========================================
-   SIDEBAR HEADER - Logo e Nome
+   SIDEBAR HEADER
    ======================================== */
 
 .sidebar-header-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 12px;
+    transition: all 0.2s ease;
+    border-radius: 8px;
     margin: 8px;
 }
 
 .sidebar-header-hover:hover {
-    background: linear-gradient(135deg,
-            rgba(255, 182, 41, 0.05) 0%,
-            rgba(117, 201, 227, 0.05) 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    background: #F4F5F7;
 }
 
 .sidebar-logo {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
 .sidebar-header-hover:hover .sidebar-logo {
-    transform: scale(1.08) rotate(-2deg);
-    filter: drop-shadow(0 4px 8px rgba(255, 182, 41, 0.3));
+    transform: scale(1.05);
 }
 
 .sidebar-church-name,
 .sidebar-app-name {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
 .sidebar-header-hover:hover .sidebar-church-name {
-    color: #FFB629;
+    color: #1A1F36;
 }
 
 .sidebar-header-hover:hover .sidebar-app-name {
-    color: #75C9E3;
+    color: #4E5D78;
 }
 
 /* ========================================
@@ -276,27 +218,7 @@
 
 @media (max-width: 768px) {
     .nav-item {
-        padding: 14px 16px;
-        margin: 4px 10px;
+        padding: 12px 14px;
+        margin: 3px 10px;
     }
-}
-
-/* ========================================
-   ANIMAÇÕES SUAVES
-   ======================================== */
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.nav-item {
-    animation: slideIn 0.3s ease-out;
 }
