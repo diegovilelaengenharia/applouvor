@@ -1,5 +1,5 @@
 /* ========================================
-   SIDEBAR - DESIGN LIMPO E MODERNO
+   SIDEBAR MODERNA - PALETA ADOBE COLOR
    ======================================== */
 
 /* Estilos base para Material Icons na sidebar */
@@ -14,25 +14,25 @@
 
 .nav-item .material-symbols-outlined {
     font-size: 22px;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ========================================
-   NAVEGAÇÃO - ESTILO UNIFICADO E LIMPO
+   NAVEGAÇÃO - DESIGN PROFISSIONAL
    ======================================== */
 
 .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 12px;
-    margin: 2px 8px;
-    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 4px 12px;
+    border-radius: 12px;
     text-decoration: none;
     color: var(--slate-700);
     font-weight: 500;
-    font-size: var(--font-body);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.9375rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     background: transparent;
 }
@@ -41,195 +41,176 @@
 .nav-item svg,
 .nav-item .material-symbols-outlined {
     color: var(--slate-500);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
 }
 
-/* Hover - Efeito sutil com sombra leve */
+/* Hover - Efeito sutil com elevação */
 .nav-item:hover {
-    background: var(--slate-50);
-    color: var(--slate-900);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    transform: translateX(2px);
+    background: var(--md-surface-container-low);
+    color: var(--md-on-surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transform: translateX(4px);
 }
 
-/* Ativo - Destaque suave */
+/* Ativo - Destaque visual */
 .nav-item.active {
-    background: var(--slate-100);
-    color: var(--slate-900);
+    background: var(--md-surface-container);
+    color: var(--md-on-surface);
     font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ========================================
-   CORES SEMÂNTICAS NO HOVER - POR CATEGORIA
+   CORES SEMÂNTICAS - PALETA ADOBE COLOR
    ======================================== */
 
-/* 🔵 GESTÃO - Azul no hover */
-.nav-item.nav-blue:hover {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+/* 🟠 GESTÃO - Laranja (#FFB629) */
+.nav-item.nav-blue:hover,
+.nav-item.nav-emerald:hover,
+.nav-item.nav-violet:hover {
+    background: linear-gradient(135deg, #FFF8E6 0%, #FFEDD1 100%);
+    box-shadow: 0 4px 12px rgba(255, 182, 41, 0.15);
 }
 
 .nav-item.nav-blue:hover svg,
-.nav-item.nav-blue:hover .material-symbols-outlined {
-    color: #3b82f6;
+.nav-item.nav-blue:hover .material-symbols-outlined,
+.nav-item.nav-emerald:hover svg,
+.nav-item.nav-violet:hover svg {
+    color: #FFB629;
+    transform: scale(1.1);
 }
 
-.nav-item.nav-blue.active {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
-    border-left: 3px solid #3b82f6;
+.nav-item.nav-blue.active,
+.nav-item.nav-emerald.active,
+.nav-item.nav-violet.active {
+    background: linear-gradient(135deg, #FFEDD1 0%, #FFE2A3 100%);
+    box-shadow: 0 4px 16px rgba(255, 182, 41, 0.2);
+    border-left: 4px solid #FFB629;
 }
 
 .nav-item.nav-blue.active svg,
-.nav-item.nav-blue.active .material-symbols-outlined {
-    color: #2563eb;
+.nav-item.nav-blue.active .material-symbols-outlined,
+.nav-item.nav-emerald.active svg,
+.nav-item.nav-violet.active svg {
+    color: #E6A324;
+    transform: scale(1.05);
 }
 
-/* 🟢 ESPIRITUAL - Verde no hover */
-.nav-item.nav-green:hover {
-    background: linear-gradient(135deg, #e8f9f0 0%, #d1f2e1 100%);
-    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.12);
+/* 🔵 ESPIRITUAL - Azul Petróleo (#75C9E3) */
+.nav-item.nav-green:hover,
+.nav-item.nav-indigo:hover,
+.nav-item.nav-rose:hover,
+.nav-item.nav-cyan:hover {
+    background: linear-gradient(135deg, #E6F7FB 0%, #D1F0F7 100%);
+    box-shadow: 0 4px 12px rgba(117, 201, 227, 0.15);
 }
 
 .nav-item.nav-green:hover svg,
-.nav-item.nav-green:hover .material-symbols-outlined {
-    color: #24CE6B;
+.nav-item.nav-green:hover .material-symbols-outlined,
+.nav-item.nav-indigo:hover svg,
+.nav-item.nav-rose:hover svg,
+.nav-item.nav-cyan:hover svg {
+    color: #75C9E3;
+    transform: scale(1.1);
 }
 
-.nav-item.nav-green.active {
-    background: linear-gradient(135deg, #d1f2e1 0%, #a3e5c3 100%);
-    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.15);
-    border-left: 3px solid #24CE6B;
+.nav-item.nav-green.active,
+.nav-item.nav-indigo.active,
+.nav-item.nav-rose.active,
+.nav-item.nav-cyan.active {
+    background: linear-gradient(135deg, #D1F0F7 0%, #B8E8F3 100%);
+    box-shadow: 0 4px 16px rgba(117, 201, 227, 0.2);
+    border-left: 4px solid #75C9E3;
 }
 
 .nav-item.nav-green.active svg,
-.nav-item.nav-green.active .material-symbols-outlined {
-    color: #1da456;
+.nav-item.nav-green.active .material-symbols-outlined,
+.nav-item.nav-indigo.active svg,
+.nav-item.nav-rose.active svg,
+.nav-item.nav-cyan.active svg {
+    color: #5AB8D1;
+    transform: scale(1.05);
 }
 
-/* 🟡 COMUNICAÇÃO - Amarelo no hover */
-.nav-item.nav-yellow:hover {
-    background: linear-gradient(135deg, #fffbeb 0%, #fff4d1 100%);
-    box-shadow: 0 2px 8px rgba(255, 197, 1, 0.12);
+/* 🟡 COMUNICAÇÃO - Amarelo (#FFC501) */
+.nav-item.nav-yellow:hover,
+.nav-item.nav-amber:hover,
+.nav-item.nav-pink:hover {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FFF4D1 100%);
+    box-shadow: 0 4px 12px rgba(255, 197, 1, 0.15);
 }
 
 .nav-item.nav-yellow:hover svg,
-.nav-item.nav-yellow:hover .material-symbols-outlined {
+.nav-item.nav-yellow:hover .material-symbols-outlined,
+.nav-item.nav-amber:hover svg,
+.nav-item.nav-pink:hover svg {
     color: #FFC501;
+    transform: scale(1.1);
 }
 
-.nav-item.nav-yellow.active {
-    background: linear-gradient(135deg, #fff4d1 0%, #ffe9a3 100%);
-    box-shadow: 0 2px 8px rgba(255, 197, 1, 0.15);
-    border-left: 3px solid #FFC501;
+.nav-item.nav-yellow.active,
+.nav-item.nav-amber.active,
+.nav-item.nav-pink.active {
+    background: linear-gradient(135deg, #FFF4D1 0%, #FFE9A3 100%);
+    box-shadow: 0 4px 16px rgba(255, 197, 1, 0.2);
+    border-left: 4px solid #FFC501;
 }
 
 .nav-item.nav-yellow.active svg,
-.nav-item.nav-yellow.active .material-symbols-outlined {
-    color: #e6b001;
+.nav-item.nav-yellow.active .material-symbols-outlined,
+.nav-item.nav-amber.active svg,
+.nav-item.nav-pink.active svg {
+    color: #E6B001;
+    transform: scale(1.05);
 }
 
-/* 🔴 CRÍTICO - Vermelho no hover */
+/* 🔴 CRÍTICO - Vermelho */
 .nav-item.nav-red:hover {
-    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
+    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
 .nav-item.nav-red:hover svg,
 .nav-item.nav-red:hover .material-symbols-outlined {
-    color: #ef4444;
+    color: #EF4444;
+    transform: scale(1.1);
 }
 
 .nav-item.nav-red.active {
-    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
-    border-left: 3px solid #ef4444;
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+    border-left: 4px solid #EF4444;
 }
 
 .nav-item.nav-red.active svg,
 .nav-item.nav-red.active .material-symbols-outlined {
-    color: #dc2626;
+    color: #DC2626;
+    transform: scale(1.05);
 }
 
 /* 🎨 MULTICOLOR - Visão Geral */
 .nav-item.nav-multicolor:hover {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.12);
+    background: linear-gradient(135deg,
+            rgba(255, 182, 41, 0.1) 0%,
+            rgba(117, 201, 227, 0.1) 50%,
+            rgba(165, 197, 194, 0.1) 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-item.nav-multicolor:hover svg,
 .nav-item.nav-multicolor:hover .material-symbols-outlined {
-    color: #0ea5e9;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transform: scale(1.1);
 }
 
 .nav-item.nav-multicolor.active {
-    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.15);
-    border-left: 3px solid #0ea5e9;
-}
-
-/* ========================================
-   COMPATIBILIDADE COM CLASSES ANTIGAS
-   ======================================== */
-
-.nav-item.nav-emerald {
-    @extend .nav-item.nav-blue;
-}
-
-.nav-item.nav-violet {
-    @extend .nav-item.nav-blue;
-}
-
-.nav-item.nav-indigo {
-    @extend .nav-item.nav-green;
-}
-
-.nav-item.nav-rose {
-    @extend .nav-item.nav-green;
-}
-
-.nav-item.nav-cyan {
-    @extend .nav-item.nav-green;
-}
-
-.nav-item.nav-amber {
-    @extend .nav-item.nav-yellow;
-}
-
-/* Mapeamento manual para compatibilidade */
-.nav-item.nav-emerald:hover,
-.nav-item.nav-violet:hover {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
-}
-
-.nav-item.nav-emerald:hover svg,
-.nav-item.nav-violet:hover svg {
-    color: #3b82f6;
-}
-
-.nav-item.nav-indigo:hover,
-.nav-item.nav-rose:hover,
-.nav-item.nav-cyan:hover {
-    background: linear-gradient(135deg, #e8f9f0 0%, #d1f2e1 100%);
-    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.12);
-}
-
-.nav-item.nav-indigo:hover svg,
-.nav-item.nav-rose:hover svg,
-.nav-item.nav-cyan:hover svg {
-    color: #24CE6B;
-}
-
-.nav-item.nav-amber:hover {
-    background: linear-gradient(135deg, #fffbeb 0%, #fff4d1 100%);
-    box-shadow: 0 2px 8px rgba(255, 197, 1, 0.12);
-}
-
-.nav-item.nav-amber:hover svg {
-    color: #FFC501;
+    background: linear-gradient(135deg,
+            rgba(255, 182, 41, 0.15) 0%,
+            rgba(117, 201, 227, 0.15) 50%,
+            rgba(165, 197, 194, 0.15) 100%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-left: 4px solid #FFB629;
 }
 
 /* ========================================
@@ -238,8 +219,16 @@
 
 .nav-divider {
     height: 1px;
-    background: var(--slate-200);
-    margin: 12px 16px;
+    background: var(--md-outline-variant);
+    margin: 16px 16px;
+}
+
+/* Labels de categoria */
+.sidebar-text[style*="text-transform: uppercase"] {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--md-on-surface-variant);
+    letter-spacing: 0.8px;
 }
 
 /* ========================================
@@ -253,8 +242,10 @@
 }
 
 .sidebar-header-hover:hover {
-    background: var(--slate-50);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    background: linear-gradient(135deg,
+            rgba(255, 182, 41, 0.05) 0%,
+            rgba(117, 201, 227, 0.05) 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .sidebar-logo {
@@ -262,20 +253,21 @@
 }
 
 .sidebar-header-hover:hover .sidebar-logo {
-    transform: scale(1.05);
+    transform: scale(1.08) rotate(-2deg);
+    filter: drop-shadow(0 4px 8px rgba(255, 182, 41, 0.3));
 }
 
 .sidebar-church-name,
 .sidebar-app-name {
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-header-hover:hover .sidebar-church-name {
-    color: var(--slate-900);
+    color: #FFB629;
 }
 
 .sidebar-header-hover:hover .sidebar-app-name {
-    color: var(--slate-600);
+    color: #75C9E3;
 }
 
 /* ========================================
@@ -284,7 +276,27 @@
 
 @media (max-width: 768px) {
     .nav-item {
-        padding: 12px 14px;
-        margin: 3px 10px;
+        padding: 14px 16px;
+        margin: 4px 10px;
     }
+}
+
+/* ========================================
+   ANIMAÇÕES SUAVES
+   ======================================== */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.nav-item {
+    animation: slideIn 0.3s ease-out;
 }
