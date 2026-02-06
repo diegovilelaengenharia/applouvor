@@ -42,17 +42,17 @@
        PALETA DE CORES PRINCIPAL
        ============================================ */
 
-   /* 🔵 AZUL - Gestão (#3b82f6)
+   /* 🔵 AZUL - Gestão (#FFB629)
        Escalas, Repertório, Membros, Agenda, Histórico */
    --blue-50: #eff6ff;
    --blue-100: #dbeafe;
    --blue-200: #bfdbfe;
    --blue-300: #93c5fd;
-   --blue-400: #60a5fa;
-   --blue-500: #3b82f6;
+   --blue-400: #FFB629;
+   --blue-500: #FFB629;
    /* ⭐ Principal */
-   --blue-600: #2563eb;
-   --blue-700: #1d4ed8;
+   --blue-600: #E6A324;
+   --blue-700: #CC901F;
    --blue-800: #1e40af;
    --blue-900: #1e3a8a;
    --blue-950: #172554;
@@ -121,7 +121,7 @@
        ============================================ */
 
    /* Gradientes Azul */
-   --gradient-blue: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+   --gradient-blue: linear-gradient(135deg, #FFB629 0%, #FFB629 50%, #E6A324 100%);
    --gradient-blue-soft: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
 
    /* Gradientes Verde */

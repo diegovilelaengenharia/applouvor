@@ -5,14 +5,14 @@
 
 function getAllAvailableCards() {
     return [
-        // GESTÃO → AZUL (#3b82f6)
+        // GESTÃO → AZUL (#FFB629)
         'escalas' => [
             'id' => 'escalas',
             'title' => 'Escalas',
             'icon' => 'calendar',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#3b82f6', // Blue 500
+            'color' => '#FFB629', // Blue 500
             'bg' => '#eff6ff', // Blue 50
             'url' => 'escalas.php',
             'admin_only' => false
@@ -23,7 +23,7 @@ function getAllAvailableCards() {
             'icon' => 'music',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#3b82f6', // Blue 500
+            'color' => '#FFB629', // Blue 500
             'bg' => '#eff6ff', // Blue 50
             'url' => 'repertorio.php',
             'admin_only' => false
@@ -34,7 +34,7 @@ function getAllAvailableCards() {
             'icon' => 'users',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#3b82f6', // Blue 500
+            'color' => '#FFB629', // Blue 500
             'bg' => '#eff6ff', // Blue 50
             'url' => 'membros.php',
             'admin_only' => false
@@ -46,7 +46,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar-days',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#3b82f6', // Blue 500
+            'color' => '#FFB629', // Blue 500
             'bg' => '#eff6ff', // Blue 50
             'url' => 'agenda.php',
             'admin_only' => false
@@ -57,7 +57,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar-x',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#3b82f6', // Blue 500
+            'color' => '#FFB629', // Blue 500
             'bg' => '#eff6ff', // Blue 50
             'url' => 'indisponibilidade.php',
             'admin_only' => false
@@ -69,20 +69,20 @@ function getAllAvailableCards() {
             'icon' => 'history',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#3b82f6', // Blue 500
+            'color' => '#FFB629', // Blue 500
             'bg' => '#eff6ff', // Blue 50
             'url' => 'historico.php',
             'admin_only' => false
         ],
         
-        // ESPIRITUAL → VERDE (#22d3ee)
+        // ESPIRITUAL → VERDE (#75C9E3)
         'leitura' => [
             'id' => 'leitura',
             'title' => 'Leitura Bíblica',
             'icon' => 'book-open',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#22d3ee', // Green 500
+            'color' => '#75C9E3', // Green 500
             'bg' => '#ecfeff', // Green 50
             'url' => 'leitura.php',
             'admin_only' => false
@@ -93,7 +93,7 @@ function getAllAvailableCards() {
             'icon' => 'sunrise',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#22d3ee', // Green 500
+            'color' => '#75C9E3', // Green 500
             'bg' => '#ecfeff', // Green 50
             'url' => 'devocionais.php',
             'admin_only' => false
@@ -104,7 +104,7 @@ function getAllAvailableCards() {
             'icon' => 'heart',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#22d3ee', // Green 500
+            'color' => '#75C9E3', // Green 500
             'bg' => '#ecfeff', // Green 50
             'url' => 'oracao.php',
             'admin_only' => false
