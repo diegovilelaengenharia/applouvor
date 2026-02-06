@@ -117,236 +117,10 @@ function renderAppHeader($title, $backUrl = null)
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 
         <style>
-            /* --- DESIGN SYSTEM 3.0 (Paleta Slate Refinada) --- */
-                /* Variáveis removidas - Use assets/css/design-system.css para edição centralizada */
-
-            /* ... Keyframes anteriores ... */
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .animate-in {
-                animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                opacity: 0;
-            }
-
-            .animate-in:nth-child(1) {
-                animation-delay: 0.05s;
-            }
-
-            .animate-in:nth-child(2) {
-                animation-delay: 0.1s;
-            }
-
-            .animate-in:nth-child(3) {
-                animation-delay: 0.15s;
-            }
-
-            .animate-in:nth-child(4) {
-                animation-delay: 0.2s;
-            }
-
             /* View Transition Fixes */
             ::view-transition-old(root),
             ::view-transition-new(root) {
                 animation-duration: 0.3s;
-            }
-
-            /* Global Dark Mode - Now handled by dark-mode.css */
-
-            /* ========================================
-               SISTEMA DE BOTÕES PADRONIZADOS
-               ======================================== */
-            
-            /* Base para todos os botões */
-            .btn, .btn-success, .btn-warning, .btn-danger, .btn-secondary, .btn-primary {
-                padding: 10px 20px;
-                border-radius: 8px;
-                font-weight: 600;
-                font-size: 0.9375rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                border: none;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                text-decoration: none;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            }
-
-            .btn:disabled, .btn-success:disabled, .btn-warning:disabled, .btn-danger:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
-
-            /* CONFIRMAR/SALVAR → VERDE */
-            .btn-success {
-                background: #059669;
-                color: white;
-                border: 1px solid #059669;
-            }
-            .btn-success:hover:not(:disabled) {
-                background: #059669;
-                box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-                transform: translateY(-1px);
-            }
-            .btn-success:active:not(:disabled) {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
-            }
-
-            /* CANCELAR/VOLTAR → AMARELO/DOURADO */
-            .btn-warning {
-                background: #d97706;
-                color: white;
-                border: 1px solid #d97706;
-            }
-            .btn-warning:hover:not(:disabled) {
-                background: #d97706;
-                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-                transform: translateY(-1px);
-            }
-            .btn-warning:active:not(:disabled) {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
-            }
-
-            /* DELETAR/EXCLUIR/SAIR → VERMELHO */
-            .btn-danger {
-                background: #dc2626;
-                color: white;
-                border: 1px solid #b91c1c;
-            }
-            .btn-danger:hover:not(:disabled) {
-                background: #b91c1c;
-                box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-                transform: translateY(-1px);
-            }
-            .btn-danger:active:not(:disabled) {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
-            }
-
-            /* NEUTRO/SECUNDÁRIO → CINZA */
-            .btn-secondary {
-                background: #475569;
-                color: white;
-                border: 1px solid #475569;
-            }
-            .btn-secondary:hover:not(:disabled) {
-                background: #475569;
-                box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
-                transform: translateY(-1px);
-            }
-            .btn-secondary:active:not(:disabled) {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(100, 116, 139, 0.2);
-            }
-
-            /* PRIMARY → AZUL (para ações principais neutras) */
-            .btn-primary {
-                background: #2563eb;
-                color: white;
-                border: 1px solid #1e40af;
-            }
-            .btn-primary:hover:not(:disabled) {
-                background: #1e40af;
-                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-                transform: translateY(-1px);
-            }
-            .btn-primary:active:not(:disabled) {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-            }
-
-            /* Tamanhos de botões */
-            .btn-sm {
-                padding: 6px 12px;
-                font-size: 0.8125rem;
-            }
-            .btn-lg {
-                padding: 14px 28px;
-                font-size: 1rem;
-            }
-
-            /* Botão outline (variante) */
-            .btn-outline-success {
-                background: transparent;
-                color: #16a34a;
-                border: 2px solid #16a34a;
-            }
-            .btn-outline-success:hover {
-                background: #16a34a;
-                color: white;
-            }
-
-            .btn-outline-danger {
-                background: transparent;
-                color: #dc2626;
-                border: 2px solid #dc2626;
-            }
-            .btn-outline-danger:hover {
-                background: #dc2626;
-                color: white;
-            }
-
-            /* ======================================== */
-
-            * {
-                box-sizing: border-box;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            body {
-                font-family: 'Inter', sans-serif;
-                margin: 0;
-                background-color: var(--bg-body);
-                color: var(--text-main);
-                font-size: 0.85rem;
-                /* ~13.6px - Leitura densa e profissional */
-                line-height: 1.5;
-                padding-bottom: 80px;
-                /* Prote├º├úo Floating Button */
-            }
-
-            /* Tipografia Compacta */
-            h1,
-            h2,
-            h3,
-            h4 {
-                color: var(--text-main);
-                margin: 0;
-                letter-spacing: -0.025em;
-                /* T├¡tulos mais tight */
-            }
-
-            h1 {
-                font-size: 1.35rem;
-                font-weight: 700;
-            }
-
-            h2 {
-                font-size: 1.15rem;
-                font-weight: 700;
-            }
-
-            h3 {
-                font-size: 1rem;
-                font-weight: 600;
-            }
-
-            h4 {
-                font-size: 0.9rem;
-                font-weight: 600;
             }
 
             /* Main Content Ajustado */
@@ -374,7 +148,7 @@ function renderAppHeader($title, $backUrl = null)
                 position: sticky;
                 top: 0;
                 z-index: 90;
-                border-bottom: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-subtle);
                 box-shadow: var(--shadow-sm);
                 margin: -20px -20px 24px -20px;
             }
@@ -388,7 +162,7 @@ function renderAppHeader($title, $backUrl = null)
                 padding: 0;
                 margin-left: -12px;
                 cursor: pointer;
-                color: var(--text-main);
+                color: var(--text-primary);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -397,14 +171,14 @@ function renderAppHeader($title, $backUrl = null)
             }
 
             .btn-menu-trigger:active {
-                background: var(--border-color);
+                background: var(--bg-surface-active);
             }
 
             .page-title {
                 font-size: 1.125rem;
                 /* 18px */
                 font-weight: 700;
-                color: var(--text-main);
+                color: var(--text-primary);
                 flex: 1;
             }
 
@@ -417,320 +191,8 @@ function renderAppHeader($title, $backUrl = null)
                     margin-left: 0 !important;
                 }
             }
-
-            /* Utilit├írios Universais */
-            .ripple {
-                position: relative;
-                overflow: hidden;
-                transform: translate3d(0, 0, 0);
-            }
-
-            .ripple:after {
-                content: "";
-                display: block;
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                pointer-events: none;
-                background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-                background-repeat: no-repeat;
-                background-position: 50%;
-                transform: scale(10, 10);
-                opacity: 0;
-                transition: transform .5s, opacity 1s;
-            }
-
-            .ripple:active:after {
-                transform: scale(0, 0);
-                opacity: 0.2;
-                transition: 0s;
-            }
-
-            /* Animations (Vibe Coding) */
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .animate-in {
-                animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                opacity: 0;
-                /* Come├ºa invis├¡vel */
-            }
-
-            /* Stagger delays for multiple items */
-            .animate-in:nth-child(1) {
-                animation-delay: 0.1s;
-            }
-
-            .animate-in:nth-child(2) {
-                animation-delay: 0.15s;
-            }
-
-            .animate-in:nth-child(3) {
-                animation-delay: 0.2s;
-            }
-
-            .animate-in:nth-child(4) {
-                animation-delay: 0.25s;
-            }
-
-            /* View Transition Fixes */
-            ::view-transition-old(root),
-            ::view-transition-new(root) {
-                animation-duration: 0.3s;
-            }
-
-            /* Mini Toggle Switch for Profile Dropdown */
-            .toggle-switch-mini {
-                position: relative;
-                display: inline-block;
-                width: 36px;
-                height: 20px;
-            }
-
-            .toggle-switch-mini input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-
-            .slider-mini {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #cbd5e1;
-                transition: .3s;
-                border-radius: 34px;
-            }
-
-            .slider-mini:before {
-                position: absolute;
-                content: "";
-                height: 14px;
-                width: 14px;
-                left: 3px;
-                bottom: 3px;
-                background-color: white;
-                transition: .3s;
-                border-radius: 50%;
-            }
-
-            input:checked+.slider-mini {
-                background-color: var(--primary);
-            }
-
-            input:checked+.slider-mini:before {
-                transform: translateX(16px);
-            }
             
-            /* ========================================
-               HEADER BUTTONS - ELEGANT UNIFIED DESIGN
-               ======================================== */
-            
-            /* Base style for all header action buttons */
-            .header-btn-base {
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 40px;
-                height: 40px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-            }
-            
-            .header-btn-base:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-            }
-            
-            .header-btn-base:active {
-                transform: translateY(0);
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-            }
-            
-            /* Líder Button - Subtle red accent */
-            .admin-crown-btn {
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 40px;
-                height: 40px;
-                background: #fef2f2;
-                border: 1px solid #fca5a5;
-                border-radius: 10px;
-                text-decoration: none;
-                cursor: pointer;
-                color: #dc2626;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-                transition: all 0.2s ease;
-            }
-            
-            .admin-crown-btn:hover {
-                background: #fee2e2;
-                border-color: #f87171;
-                transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(239, 68, 68, 0.15);
-            }
-            
-            .admin-crown-btn:hover i,
-            .admin-crown-btn:hover svg {
-                animation: crown-bounce 0.4s ease;
-            }
-            
-            @keyframes crown-bounce {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-2px); }
-            }
-            
-            .admin-crown-btn:active {
-                transform: translateY(0);
-            }
-            
-            /* Notification Button - Blue accent */
-            .notification-btn {
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 40px;
-                height: 40px;
-                background: #eff6ff;
-                border: 1px solid #bfdbfe;
-                border-radius: 10px;
-                cursor: pointer;
-                color: #2563eb;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-                transition: all 0.2s ease;
-                overflow: visible;
-            }
-            
-            .notification-btn:hover {
-                background: #dbeafe;
-                color: #1d4ed8;
-                border-color: #93c5fd;
-                transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(37, 99, 235, 0.15);
-            }
-            
-            .notification-btn:hover svg,
-            .notification-btn:hover i {
-                animation: bell-swing 0.5s ease;
-            }
-            
-            @keyframes bell-swing {
-                0%, 100% { transform: rotate(0deg); }
-                25% { transform: rotate(8deg); }
-                50% { transform: rotate(-6deg); }
-                75% { transform: rotate(4deg); }
-            }
-            
-            .notification-btn:active {
-                transform: translateY(0);
-            }
-            
-            /* Notification Badge - Elegant red dot */
-            .notification-badge {
-                position: absolute;
-                top: -4px;
-                right: -4px;
-                background: #ef4444;
-                color: white;
-                font-size: 10px;
-                font-weight: 700;
-                padding: 2px 5px;
-                border-radius: 8px;
-                min-width: 16px;
-                text-align: center;
-                box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3),
-                           0 0 0 2px var(--bg-surface);
-                z-index: 10;
-            }
-
-            /* Config Button - Slate accent */
-            .config-btn {
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 40px;
-                height: 40px;
-                background: #f1f5f9;
-                border: 1px solid #cbd5e1;
-                border-radius: 10px;
-                flex-shrink: 0;
-                cursor: pointer;
-                color: #475569;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-                transition: all 0.2s ease;
-            }
-            
-            .config-btn:hover {
-                background: #e2e8f0;
-                color: #334155;
-                border-color: #94a3b8;
-                transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(71, 85, 105, 0.1);
-            }
-            
-            .config-btn:hover i,
-            .config-btn:hover svg {
-                animation: gear-spin 0.5s ease;
-            }
-            
-            @keyframes gear-spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(45deg); }
-            }
-
-            /* Profile Avatar Button - Clean circular style with green accent */
-            .profile-avatar-btn {
-                width: 40px;
-                height: 40px;
-                padding: 0;
-                background: #f0fdf4;
-                border: 2px solid #86efac;
-                cursor: pointer;
-                border-radius: 50%;
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.2s ease;
-                position: relative;
-                color: #64748b;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-            }
-            
-            .profile-avatar-btn:hover {
-                border-color: #10b981;
-                transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(16, 185, 129, 0.12);
-            }
-            
-            .profile-avatar-btn:active {
-                transform: translateY(0);
-            }
-            
-            
+            /* Notification Dropdown (Specific to Layout) */
             .notification-dropdown {
                 display: none;
                 position: absolute;
@@ -739,9 +201,9 @@ function renderAppHeader($title, $backUrl = null)
                 width: 320px;
                 max-width: calc(100vw - 24px);
                 background: var(--bg-surface);
-                border: 1px solid var(--border-color);
+                border: 1px solid var(--border-subtle);
                 border-radius: 14px;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                box-shadow: var(--shadow-lg);
                 z-index: 1000;
                 overflow: hidden;
             }
@@ -752,16 +214,10 @@ function renderAppHeader($title, $backUrl = null)
             }
             
             @keyframes fadeInDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
-            
+        </style>            
             .notification-header {
                 padding: 12px 14px;
                 border-bottom: 1px solid var(--border-color);

@@ -13,12 +13,12 @@
 /* Dashboard */
 @import url('dashboard.css');
 
-/* Dark Mode */
+/* Dark Mode - Importado APÓS tudo para garantir overrides se necessário, 
+   embora o design-system trate a maioria */
 @import url('dark-mode.css');
 
 /* Roles System */
 @import url('roles.css');
-
 
 /* PWA Fullscreen Adjustments */
 html {
@@ -32,7 +32,10 @@ body {
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
-    /* Remove highlight azul ao toque */
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    line-height: 1.5;
 }
 
 /* Ajuste para entalhe do iPhone (Safe Area) */
@@ -41,106 +44,12 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-:root {
-    /* --- Paleta Suave e Moderna (Lighter) --- */
-    --bg-primary: #F9FAFB;
-    --bg-secondary: #FFFFFF;
-    --bg-tertiary: #F3F4F6;
-
-    /* Cores Principais - Suaves */
-    --primary-green: var(--primary);
-    --primary-green-light: #34D399;
-    --primary-green-dark: #047857;
-
-    --primary-gray: #6B7280;
-    --primary-gray-light: #9CA3AF;
-    --primary-gray-dark: #374151;
-
-    --primary-blue: #2563EB;
-    /* Royal Blue Suave */
-    --primary-blue-light: #60A5FA;
-
-    /* Header Background - Mantendo Profissional */
-    --header-bg: #1F2937;
-
-    /* Cores Sólidas (Substituindo Gradientes) */
-    --gradient-primary: var(--primary);
-    --gradient-elegant: #1F2937;
-    --gradient-soft: #F9FAFB;
-    --gradient-dark: #111827;
-    --gradient-hero: var(--primary);
-
-    /* Theme Colors - Sólidas */
-    --gradient-green: var(--primary);
-    --gradient-blue: #0D6EFD;
-    --gradient-red: #DC3545;
-    --gradient-yellow: #FFC107;
-    --gradient-purple: #7C3AED;
-
-    /* Glassmorphism */
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.6);
-    --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
-
-    --accent-primary: var(--primary);
-    --accent-interactive: var(--primary-600);
-    /* Verde para destaque e interações */
-
-    --text-primary: #1F2937;
-    --text-secondary: #4B5563;
-    --text-muted: #9CA3AF;
-
-    --border-subtle: #E5E7EB;
-    --border-focus: var(--primary-green);
-
-    --status-success: var(--success);
-    --status-warning: #FFC107;
-    --status-error: #DC3545;
-    --status-info: #0D6EFD;
-
-    /* Spacing & Layout */
-    --header-height: 60px;
-    --bottom-nav-height: 80px;
-    --border-radius-lg: 16px;
-    --border-radius-md: 8px;
-
-    /* Shadows Muito Suaves */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    --shadow-glow: none;
-    --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-}
-
-/* Dark Mode */
-body.dark-mode {
-    --bg-primary: #1A202C;
-    --bg-secondary: #2D3748;
-    --bg-tertiary: #4A5568;
-
-    --accent-primary: #E6F4EA;
-    --accent-interactive: #3D9B6D;
-
-    --text-primary: #F7FAFC;
-    --text-secondary: #A0AEC0;
-    --border-subtle: #4A5568;
-    --border-focus: var(--primary-green);
-
-    /* Glassmorphism Dark */
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-
-    /* Shadows Dark */
-    --shadow-glow: 0 4px 20px rgba(61, 155, 109, 0.3);
-    --shadow-elevated: 0 12px 48px rgba(61, 155, 109, 0.2);
-}
-
-/* Reset */
+/* Reset Global Específico */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-family);
     -webkit-tap-highlight-color: transparent;
 }
 

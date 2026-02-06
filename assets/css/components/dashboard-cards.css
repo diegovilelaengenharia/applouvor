@@ -1,12 +1,15 @@
 /* ========================================
    DASHBOARD CARDS - DESIGN NEUTRO
+   Refactored for New Design System
    ======================================== */
 
 .quick-access-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: var(--space-4);
-    margin-bottom: var(--space-6);
+    gap: 1rem;
+    /* var(--space-4) */
+    margin-bottom: 1.5rem;
+    /* var(--space-6) */
 }
 
 @media (min-width: 768px) {
@@ -19,22 +22,24 @@
 .access-card {
     position: relative;
     border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-4);
+    padding: 1.25rem 1rem;
+    /* var(--space-5) var(--space-4) */
     min-height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-decoration: none;
     overflow: hidden;
-    transition: all var(--transition-base);
+    transition: all 0.3s ease;
     background: var(--bg-surface);
-    border: 1px solid var(--border-light);
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-sm);
 }
 
 .access-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    border-color: var(--border-medium);
 }
 
 .access-card:active {
@@ -49,9 +54,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: var(--space-3);
-    transition: all var(--transition-base);
-    background: var(--bg-secondary);
+    margin-bottom: 0.75rem;
+    /* var(--space-3) */
+    transition: all 0.2s ease;
+    background: var(--bg-surface-hover);
     color: var(--text-secondary);
 }
 
@@ -61,34 +67,34 @@
 
 /* Título */
 .card-title {
-    font-size: var(--font-base);
-    font-weight: var(--font-semibold);
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--text-primary);
-    margin: 0 0 var(--space-2) 0;
+    margin: 0 0 0.5rem 0;
     line-height: 1.2;
 }
 
 /* Info */
 .card-info {
-    font-size: var(--font-sm);
+    font-size: 0.875rem;
     color: var(--text-tertiary);
     margin: 0;
     line-height: 1.4;
-    font-weight: var(--font-normal);
+    font-weight: 400;
 }
 
 /* Badge */
 .card-badge {
     position: absolute;
-    top: var(--space-3);
-    right: var(--space-3);
+    top: 0.75rem;
+    right: 0.75rem;
     padding: 4px 10px;
     border-radius: var(--radius-lg);
-    font-size: var(--font-xs);
-    font-weight: var(--font-bold);
-    background: var(--bg-secondary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--bg-surface-hover);
     color: var(--text-secondary);
-    transition: all var(--transition-base);
+    transition: all 0.2s ease;
 }
 
 .access-card:hover .card-badge {
@@ -96,7 +102,7 @@
 }
 
 /* ========================================
-   CORES POR CATEGORIA
+   CORES POR CATEGORIA (Semantic Overrides)
    ======================================== */
 
 /* Azul - Gestão */
@@ -111,6 +117,13 @@
 .card-violet:hover .card-icon {
     background: var(--blue-50);
     color: var(--blue-600);
+}
+
+body.dark-mode .card-blue:hover .card-icon,
+body.dark-mode .card-emerald:hover .card-icon,
+body.dark-mode .card-violet:hover .card-icon {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--blue-500);
 }
 
 .card-blue:hover .card-badge,
@@ -134,6 +147,14 @@
 .card-rose:hover .card-icon {
     background: var(--green-50);
     color: var(--green-600);
+}
+
+body.dark-mode .card-green:hover .card-icon,
+body.dark-mode .card-cyan:hover .card-icon,
+body.dark-mode .card-indigo:hover .card-icon,
+body.dark-mode .card-rose:hover .card-icon {
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--green-500);
 }
 
 .card-green:hover .card-badge,
@@ -160,12 +181,20 @@
     color: var(--amber-600);
 }
 
+body.dark-mode .card-yellow:hover .card-icon,
+body.dark-mode .card-amber:hover .card-icon,
+body.dark-mode .card-pink:hover .card-icon,
+body.dark-mode .card-fuchsia:hover .card-icon {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--amber-500);
+}
+
 .card-yellow:hover .card-badge,
 .card-amber:hover .card-badge,
 .card-pink:hover .card-badge,
 .card-fuchsia:hover .card-badge {
     background: var(--amber-500);
-    color: var(--text-primary);
+    color: var(--slate-900);
 }
 
 /* Vermelho - Crítico */
@@ -175,6 +204,11 @@
 
 .card-red:hover .card-icon {
     background: var(--red-50);
+    color: var(--red-500);
+}
+
+body.dark-mode .card-red:hover .card-icon {
+    background: rgba(239, 68, 68, 0.2);
     color: var(--red-500);
 }
 
@@ -200,7 +234,7 @@
 }
 
 .access-card {
-    animation: fadeInUp 0.3s ease backwards;
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .access-card:nth-child(1) {
@@ -242,12 +276,12 @@
 @media (max-width: 768px) {
     .quick-access-grid {
         grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-        gap: var(--space-3);
+        gap: 0.75rem;
     }
 
     .access-card {
         min-height: 110px;
-        padding: var(--space-4);
+        padding: 1rem;
     }
 
     .card-icon {
@@ -258,7 +292,7 @@
 
 @media (max-width: 375px) {
     .quick-access-grid {
-        gap: var(--space-2);
+        gap: 0.5rem;
     }
 
     .access-card {
@@ -267,22 +301,22 @@
 }
 
 /* ========================================
-   HIGHLIGHT CARDS
+   HIGHLIGHT CARDS (Leader/Notifications)
    ======================================== */
 
 .highlight-card {
     background: var(--bg-surface);
     border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    border: 1px solid var(--border-light);
+    padding: 1rem;
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-sm);
-    margin-bottom: var(--space-3);
+    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
-    gap: var(--space-4);
+    gap: 1rem;
     text-decoration: none;
     color: inherit;
-    transition: all var(--transition-base);
+    transition: all 0.2s ease;
 }
 
 .highlight-card:hover {
@@ -303,8 +337,8 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: var(--bg-secondary);
-    transition: all var(--transition-base);
+    background: var(--bg-surface-hover);
+    transition: all 0.2s ease;
 }
 
 .highlight-card:hover .highlight-icon {
