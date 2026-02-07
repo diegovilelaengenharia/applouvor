@@ -259,12 +259,12 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 }
 
 .btn-form-primary {
-    background: var(--lavender-100);
-    color: var(--lavender-700);
+    background: var(--slate-100);
+    color: var(--slate-700);
 }
 
 .btn-form-primary:hover {
-    background: var(--lavender-200);
+    background: var(--slate-200);
 }
 
 .btn-form-success {
@@ -273,8 +273,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 }
 
 .btn-form-danger {
-    background: var(--rose-100);
-    color: var(--rose-600);
+    background: var(--rose-50);
+    color: var(--rose-500);
     padding: 8px;
 }
 
@@ -304,53 +304,74 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
     color: var(--text-muted);
 }
 
-/* Participantes Grid */
-.participants-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+/* Participantes - Estilo igual ao members.php */
+.participants-list {
+    display: flex;
+    flex-direction: column;
     gap: 8px;
 }
 
-.participant-item {
+.participant-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    background: var(--bg-body);
-    border-radius: 8px;
-    border: 1px solid var(--border-subtle);
+    gap: 12px;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
 }
 
-.participant-item:hover {
-    border-color: var(--border-color);
+.participant-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.participant-avatar-sm {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+.participant-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 0.85rem;
+    font-weight: 800;
+    font-size: 1.1rem;
     color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     flex-shrink: 0;
 }
 
+.participant-info {
+    flex: 1;
+    min-width: 0;
+}
+
 .participant-name {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
     color: var(--text-primary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
 }
 
 .participant-roles {
     display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.role-badge {
+    display: inline-flex;
+    align-items: center;
     gap: 3px;
-    font-size: 0.85rem;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
 }
 
 /* Lista de Músicas */
@@ -374,13 +395,13 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 }
 
 .song-item:hover {
-    border-color: var(--lavender-300);
+    border-color: var(--slate-300);
 }
 
 .song-order {
     min-width: 28px;
     height: 28px;
-    background: var(--lavender-500);
+    background: var(--slate-500);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -422,8 +443,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 }
 
 .badge-tone { background: var(--amber-100); color: var(--amber-700); }
-.badge-bpm { background: var(--rose-100); color: var(--rose-600); }
-.badge-cat { background: var(--lavender-100); color: var(--lavender-700); }
+.badge-bpm { background: var(--slate-100); color: var(--slate-600); }
+.badge-cat { background: var(--slate-100); color: var(--slate-600); }
 
 /* Observações */
 .notes-box {
@@ -626,26 +647,26 @@ $avatarColors = [
                 Nenhum participante escalado
             </div>
         <?php else: ?>
-            <div class="participants-grid">
+            <div class="participants-list">
                 <?php foreach ($team as $member): 
                     $firstLetter = strtoupper(substr($member['name'], 0, 1));
                     $avatarBg = $avatarColors[$firstLetter] ?? '#8b5cf6';
                 ?>
-                    <div class="participant-item">
-                        <div class="participant-avatar-sm" style="background: <?= $avatarBg ?>;">
+                    <div class="participant-card">
+                        <div class="participant-avatar" style="background: <?= $avatarBg ?>;">
                             <?= $firstLetter ?>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
+                        <div class="participant-info">
                             <div class="participant-name"><?= htmlspecialchars($member['name']) ?></div>
                             <div class="participant-roles">
                                 <?php 
                                 $mRoles = $userRoles[$member['user_id']] ?? [];
                                 if (empty($mRoles) && $member['instrument']) {
-                                    echo '<span style="font-size: 0.7rem; color: var(--text-muted);">' . htmlspecialchars($member['instrument']) . '</span>';
+                                    echo '<span class="role-badge">' . htmlspecialchars($member['instrument']) . '</span>';
                                 } else {
                                     foreach ($mRoles as $role): 
                                 ?>
-                                    <span title="<?= htmlspecialchars($role['name']) ?>"><?= $role['icon'] ?></span>
+                                    <span class="role-badge"><span class="role-icon"><?= $role['icon'] ?></span> <?= htmlspecialchars($role['name']) ?></span>
                                 <?php 
                                     endforeach; 
                                 }
