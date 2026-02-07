@@ -377,20 +377,15 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
     <!-- Members List (Timeline/Compact Style) -->
     <div class="members-list">
-        <?php foreach ($users as $user): 
-            $userColor = generateAvatarColor($user['name']);
-            // Convert simple hex to rgba for backgrounds
-            // Simple hack: use the color as border, and a generic light bg or opacity if handled by js/css
-            // Here we use inline styles for the specific color logic
-        ?>
+        <?php foreach ($users as $user): ?>
             <!-- Compact Card Structure -->
             <div class="compact-card" 
                  data-name="<?= strtolower($user['name']) ?>" 
                  data-role="<?= strtolower($user['instrument'] ?? '') ?>"
-                 style="border-left-color: <?= $userColor ?>;">
+                 style="border-left-color: var(--primary);">
                 
                 <!-- Avatar/Icon -->
-                <div class="compact-card-icon rounded" style="background: <?= $userColor ?>15; color: <?= $userColor ?>; width: 40px; height: 40px;">
+                <div class="compact-card-icon rounded" style="background: rgba(55, 106, 200, 0.1); color: var(--primary); width: 40px; height: 40px;">
                     <?php 
                     $initial = strtoupper(substr($user['name'], 0, 1));
                     if (!empty($user['avatar'])) {
