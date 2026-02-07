@@ -275,6 +275,13 @@ renderPageHeader($page_title, $page_subtitle);
     min-width: 0;
 }
 
+.avatar-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+}
+
 .avatar-circle {
     width: 100%;
     height: 100%;
