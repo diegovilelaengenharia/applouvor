@@ -40,7 +40,8 @@ function renderUnifiedCard($config) {
     
     // Determinar cor do card
     $cardColor = $categoryColorMap[$config['category']] ?? 'blue';
-    $cardClass = "card-{$cardColor}";
+    $extraClasses = $config['extra_classes'] ?? '';
+    $cardClass = "card-{$cardColor} {$extraClasses}";
     
     // Determinar tipo de badge (se existir)
     $badgeType = $config['badge']['type'] ?? $categoryBadgeMap[$config['category']] ?? 'badge-info';
@@ -146,92 +147,73 @@ function renderCardEscalas($nextSchedule, $totalSchedules) {
     ]);
 }
 
-// Renderizar card de Repertório (PRO - ENHANCED)
+// Renderizar card de Repertório (UNIFIED)
 function renderCardRepertorio($ultimaMusica, $totalMusicas) {
-    ?>
-    <a href="repertorio.php" class="access-card card-blue" aria-label="Ver detalhes do Repertório">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="music"></i>
+    ob_start();
+    if ($ultimaMusica): ?>
+        <div class="info-highlight">
+            <div class="info-primary text-truncate">
+                <?= htmlspecialchars($ultimaMusica['title']) ?>
             </div>
-            <span class="card-badge badge-info" aria-label="<?= $totalMusicas ?> músicas">
-                <i data-lucide="music" style="width:14px;height:14px;"></i>
-                <?= $totalMusicas ?>
-            </span>
-
-            <h3 class="card-title">Repertório</h3>
-            
-            <div class="card-info">
-                <?php if ($ultimaMusica): ?>
-                    <div class="info-highlight">
-                        <div class="info-primary text-truncate">
-                            <?= htmlspecialchars($ultimaMusica['title']) ?>
-                        </div>
-                        <div class="info-secondary flex-between">
-                            <span class="text-truncate"><?= htmlspecialchars($ultimaMusica['artist']) ?></span>
-                            <?php if(!empty($ultimaMusica['tone'])): ?>
-                                <span class="tone-tag">
-                                    <?= htmlspecialchars($ultimaMusica['tone']) ?>
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <span class="text-muted">Biblioteca vazia</span>
+            <div class="info-secondary flex-between">
+                <span class="text-truncate"><?= htmlspecialchars($ultimaMusica['artist']) ?></span>
+                <?php if(!empty($ultimaMusica['tone'])): ?>
+                    <span class="tone-tag">
+                        <?= htmlspecialchars($ultimaMusica['tone']) ?>
+                    </span>
                 <?php endif; ?>
             </div>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">
-                <i data-lucide="library" class="icon-tiny"></i>
-                <?= $totalMusicas ?> músicas
-            </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-        </div>
-    </a>
-    <?php
+    <?php else: ?>
+        <span class="text-muted">Biblioteca vazia</span>
+    <?php endif;
+    $content = ob_get_clean();
+    
+    renderUnifiedCard([
+        'id' => 'repertorio',
+        'title' => 'Repertório',
+        'icon' => 'music',
+        'category' => 'gestao',
+        'url' => 'repertorio.php',
+        'badge' => ['count' => $totalMusicas, 'icon' => 'music', 'label' => "$totalMusicas músicas"],
+        'content' => $content,
+        'footer' => ['icon' => 'library', 'text' => "$totalMusicas músicas"]
+    ]);
 }
 
-// Renderizar card de Membros (PRO - ENHANCED)
+// Renderizar card de Membros (UNIFIED)
 function renderCardMembros($totalMembros, $stats) {
+    ob_start();
     ?>
-    <a href="membros.php" class="access-card card-blue" aria-label="Ver detalhes de Membros">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="users"></i>
+    <div class="info-highlight">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value"><?= $stats['vocals'] ?></div>
+                <div class="stat-label">Vocais</div>
             </div>
-            <span class="card-badge badge-info" aria-label="<?= $totalMembros ?> membros">
-                <i data-lucide="users" style="width:14px;height:14px;"></i>
-                <?= $totalMembros ?>
-            </span>
-
-            <h3 class="card-title">Membros</h3>
-            
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value"><?= $stats['vocals'] ?></div>
-                            <div class="stat-label">Vocais</div>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <div class="stat-value"><?= $stats['instrumentalists'] ?></div>
-                            <div class="stat-label">Instrumentos</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-value"><?= $stats['instrumentalists'] ?></div>
+                <div class="stat-label">Instrumentos</div>
             </div>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Ver equipe completa</span>
-            <span class="link-text float-right">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-        </div>
-    </a>
+    </div>
     <?php
+    $content = ob_get_clean();
+    
+    renderUnifiedCard([
+        'id' => 'membros',
+        'title' => 'Membros',
+        'icon' => 'users',
+        'category' => 'gestao',
+        'url' => 'membros.php',
+        'badge' => ['count' => $totalMembros, 'icon' => 'users', 'label' => "$totalMembros membros"],
+        'content' => $content,
+        'footer' => ['text' => 'Ver equipe completa']
+    ]);
 }
 
-// Renderizar card de Leitura (ENHANCED)
+// Renderizar card de Leitura (UNIFIED)
 function renderCardLeitura($pdo, $userId) {
     require_once '../includes/reading_plan.php';
     
@@ -276,197 +258,185 @@ function renderCardLeitura($pdo, $userId) {
     $todayTotal = count($todayVerses);
     $percentToday = $todayTotal > 0 ? round(($todayProgress / $todayTotal) * 100) : 0;
     $percentYear = round(($displayDayGlobal / 365) * 100);
+
+    ob_start();
     ?>
-    <a href="leitura.php" class="access-card card-green" aria-label="Ver detalhes da Leitura Bíblica">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="book-open"></i>
+    <div class="info-highlight">
+        <div class="flex-between mb-1">
+            <div>
+                <div class="highlight-title">Dia <?= $displayDayGlobal ?></div>
+                <div class="stat-label">de 365 dias</div>
             </div>
-            <span class="card-badge badge-success" aria-label="<?= $percentToday ?>% completo hoje">
-                <?= $percentToday ?>%
-            </span>
-            <h3 class="card-title">Leitura Bíblica</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="flex-between mb-1">
-                        <div>
-                            <div class="highlight-title">Dia <?= $displayDayGlobal ?></div>
-                            <div class="stat-label">de 365 dias</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="highlight-title"><?= $percentYear ?>%</div>
-                            <div class="stat-label">completo</div>
-                        </div>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: <?= $percentYear ?>%;"></div>
-                    </div>
-                </div>
+            <div class="text-right">
+                <div class="highlight-title"><?= $percentYear ?>%</div>
+                <div class="stat-label">completo</div>
             </div>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">
-                <i data-lucide="check-circle" class="icon-tiny"></i>
-                Hoje: <?= $todayProgress ?>/<?= $todayTotal ?>
-            </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: <?= $percentYear ?>%;"></div>
         </div>
-    </a>
+    </div>
     <?php
+    $content = ob_get_clean();
+    
+    renderUnifiedCard([
+        'id' => 'leitura',
+        'title' => 'Leitura Bíblica',
+        'icon' => 'book-open',
+        'category' => 'espiritual',
+        'url' => 'leitura.php',
+        'badge' => ['count' => $percentToday, 'label' => "$percentToday% completo hoje"],
+        'content' => $content,
+        'footer' => [
+            'icon' => 'check-circle',
+            'text' => "Hoje: $todayProgress/$todayTotal"
+        ]
+    ]);
 }
 
-// Renderizar card de Avisos (PRO - ENHANCED)
+// Renderizar card de Avisos (UNIFIED)
 function renderCardAvisos($ultimoAviso, $unreadCount) {
-    // Definir classe extra para avisos não lidos
-    $extraClass = ($unreadCount > 0) ? 'card-urgent-glow' : '';
+    ob_start();
     ?>
-    <a href="avisos.php" class="access-card card-amber <?= $extraClass ?>" aria-label="Ver todos os Avisos">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="bell"></i>
-            </div>
-            <?php if ($unreadCount > 0): ?>
-                <span class="card-badge badge-warning badge-pulse" aria-label="<?= $unreadCount ?> avisos não lidos">
-                    <i data-lucide="bell" style="width:14px;height:14px;"></i>
-                    <?= $unreadCount ?>
-                </span>
-            <?php endif; ?>
-            <h3 class="card-title">Avisos</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <p class="text-clamp-2">
-                        <?= htmlspecialchars($ultimoAviso) ?>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer-row">
-            <?php if ($unreadCount > 0): ?>
-                <span class="footer-text text-urgent">
-                    <i data-lucide="alert-circle" class="icon-tiny"></i>
-                    <?= $unreadCount ?> novo(s)
-                </span>
-            <?php else: ?>
-                <span class="footer-text">Tudo em dia</span>
-            <?php endif; ?>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-        </div>
-    </a>
+    <div class="info-highlight">
+        <p class="text-clamp-2">
+            <?= htmlspecialchars($ultimoAviso) ?>
+        </p>
+    </div>
     <?php
+    $content = ob_get_clean();
+    
+    $footerText = 'Tudo em dia';
+    if ($unreadCount > 0) {
+        $footerText = '<span class="text-urgent"><i data-lucide="alert-circle" class="icon-tiny"></i> ' . $unreadCount . ' novo(s)</span>';
+    }
+
+    renderUnifiedCard([
+        'id' => 'avisos',
+        'title' => 'Avisos',
+        'icon' => 'bell',
+        'category' => 'comunicacao',
+        'url' => 'avisos.php',
+        'extra_classes' => ($unreadCount > 0) ? 'card-urgent-glow' : '',
+        'badge' => $unreadCount > 0 ? [
+            'count' => $unreadCount,
+            'icon' => 'bell',
+            'label' => "$unreadCount avisos não lidos",
+            'pulse' => true,
+            'type' => 'badge-warning'
+        ] : null,
+        'content' => $content,
+        'footer' => [
+            'text' => $footerText
+        ]
+    ]);
 }
 
-// Renderizar card de Aniversariantes (PRO - ENHANCED)
+// Renderizar card de Aniversariantes (UNIFIED)
 function renderCardAniversariantes($niverCount, $proximo = null) {
-    ?>
-    <a href="aniversarios.php" class="access-card card-amber" aria-label="Ver lista de Aniversariantes">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="cake"></i>
+    ob_start();
+    if ($proximo): ?>
+        <div class="info-highlight">
+            <div class="highlight-title">
+                🎉 <?= htmlspecialchars(explode(' ', $proximo['name'])[0]) ?>
             </div>
-            <span class="card-badge badge-warning" aria-label="<?= $niverCount ?> aniversariantes este mês">
-                <i data-lucide="cake" style="width:14px;height:14px;"></i>
-                <?= $niverCount ?>
-            </span>
-            <h3 class="card-title">Aniversariantes</h3>
-            <div class="card-info">
-                <?php if ($proximo): ?>
-                    <div class="info-highlight">
-                        <div class="highlight-title">
-                            🎉 <?= htmlspecialchars(explode(' ', $proximo['name'])[0]) ?>
-                        </div>
-                        <div class="highlight-subtitle">
-                            Próximo: Dia <?= $proximo['dia'] ?>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <span class="text-muted">Ninguém mais este mês</span>
-                <?php endif; ?>
+            <div class="highlight-subtitle">
+                Próximo: Dia <?= $proximo['dia'] ?>
             </div>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">
-                <?= $niverCount ?> neste mês
-            </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-        </div>
-    </a>
-    <?php
+    <?php else: ?>
+        <span class="text-muted">Ninguém mais este mês</span>
+    <?php endif;
+    $content = ob_get_clean();
+
+    renderUnifiedCard([
+        'id' => 'aniversariantes',
+        'title' => 'Aniversariantes',
+        'icon' => 'cake',
+        'category' => 'comunicacao',
+        'url' => 'aniversarios.php',
+        'badge' => [
+            'count' => $niverCount,
+            'icon' => 'cake',
+            'label' => "$niverCount aniversariantes este mês",
+            'type' => 'badge-warning'
+        ],
+        'content' => $content,
+        'footer' => [
+            'text' => "$niverCount neste mês"
+        ]
+    ]);
 }
 
-// Renderizar card de Devocional (ENHANCED)
+// Renderizar card de Devocional (UNIFIED)
 function renderCardDevocional() {
     $hoje = date('d/m');
+    
+    ob_start();
     ?>
-    <a href="devocionais.php" class="access-card card-green" aria-label="Ver Devocional diário">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="sunrise"></i>
-            </div>
-            <h3 class="card-title">Devocional</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="highlight-title">
-                        ☀️ Reflexão Diária
-                    </div>
-                    <div class="highlight-subtitle">
-                        Hoje, <?= $hoje ?>
-                    </div>
-                </div>
-            </div>
+    <div class="info-highlight">
+        <div class="highlight-title">
+            ☀️ Reflexão Diária
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Separar um tempo</span>
-            <span class="link-text float-right">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+        <div class="highlight-subtitle">
+            Hoje, <?= $hoje ?>
         </div>
-    </a>
+    </div>
     <?php
+    $content = ob_get_clean();
+
+    renderUnifiedCard([
+        'id' => 'devocional',
+        'title' => 'Devocional',
+        'icon' => 'sunrise',
+        'category' => 'espiritual',
+        'url' => 'devocionais.php',
+        'badge' => null,
+        'content' => $content,
+        'footer' => [
+            'text' => 'Separar um tempo'
+        ]
+    ]);
 }
 
-// Renderizar card de Oração (ENHANCED)
+// Renderizar card de Oração (UNIFIED)
 function renderCardOracao($count = 0) {
+    ob_start();
     ?>
-    <a href="oracao.php" class="access-card card-green" aria-label="Ver pedidos de Oração">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="heart"></i>
+    <div class="info-highlight">
+        <?php if ($count > 0): ?>
+            <div class="highlight-title big">
+                <?= $count ?> <?= $count == 1 ? 'pedido' : 'pedidos' ?>
             </div>
-            <?php if ($count > 0): ?>
-                <span class="card-badge badge-success" aria-label="<?= $count ?> pedidos de oração">
-                    <i data-lucide="heart" style="width:14px;height:14px;"></i>
-                    <?= $count ?>
-                </span>
-            <?php endif; ?>
-            <h3 class="card-title">Oração</h3>
-            <div class="card-info">
-                <?php if ($count > 0): ?>
-                    <div class="info-highlight">
-                        <div class="highlight-title big">
-                            <?= $count ?> <?= $count == 1 ? 'pedido' : 'pedidos' ?>
-                        </div>
-                        <div class="highlight-subtitle">
-                            🙏 Ativos na lista
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <div class="info-highlight">
-                        <span class="highlight-subtitle">Nenhum pedido ativo</span>
-                    </div>
-                <?php endif; ?>
+            <div class="highlight-subtitle">
+                🙏 Ativos na lista
             </div>
-        </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Intercessão</span>
-            <?php if ($count > 0): ?>
-                <span class="link-text float-right">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-            <?php else: ?>
-                <span class="link-text float-right">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-            <?php endif; ?>
-        </div>
-    </a>
+        <?php else: ?>
+            <span class="highlight-subtitle">Nenhum pedido ativo</span>
+        <?php endif; ?>
+    </div>
     <?php
+    $content = ob_get_clean();
+
+    renderUnifiedCard([
+        'id' => 'oracao',
+        'title' => 'Oração',
+        'icon' => 'heart',
+        'category' => 'espiritual',
+        'url' => 'oracao.php',
+        'badge' => $count > 0 ? [
+            'count' => $count,
+            'icon' => 'heart',
+            'label' => "$count pedidos de oração"
+        ] : null,
+        'content' => $content,
+        'footer' => [
+            'text' => 'Intercessão'
+        ]
+    ]);
 }
 
-// Renderizar card de Agenda (ENHANCED)
+// Renderizar card de Agenda (UNIFIED)
 function renderCardAgenda($nextEvent, $totalEvents) {
     $countdown = '';
     $dateDisplay = '';
@@ -488,88 +458,79 @@ function renderCardAgenda($nextEvent, $totalEvents) {
         $dateDisplay = $date->format('d/m \à\s H:i');
         $eventName = htmlspecialchars($nextEvent['title'] ?? 'Evento');
     }
-    ?>
-    <a href="agenda.php" class="access-card card-blue" aria-label="Ver Agenda de eventos">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="calendar-days"></i>
+    
+    ob_start();
+    if ($nextEvent): ?>
+        <div class="info-highlight">
+            <div class="info-primary text-truncate">
+                <?= $eventName ?>
             </div>
-            <?php if ($totalEvents > 0): ?>
-                <span class="card-badge badge-info" aria-label="<?= $totalEvents ?> eventos agendados">
-                    <i data-lucide="calendar-days" style="width:14px;height:14px;"></i>
-                    <?= $totalEvents ?>
-                </span>
-            <?php endif; ?>
-            
-            <h3 class="card-title">Agenda</h3>
-            
-            <div class="card-info">
-                <?php if ($nextEvent): ?>
-                    <div class="info-highlight">
-                        <div class="info-primary text-truncate">
-                            <?= $eventName ?>
-                        </div>
-                        <div class="info-secondary">
-                            <i data-lucide="calendar" class="icon-tiny"></i>
-                            <?= $dateDisplay ?>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <span class="text-muted">Nenhum evento agendado</span>
-                <?php endif; ?>
+            <div class="info-secondary">
+                <i data-lucide="calendar" class="icon-tiny"></i>
+                <?= $dateDisplay ?>
             </div>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">
-                <i data-lucide="clock" class="icon-tiny"></i>
-                <?= $countdown ?>
-            </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-        </div>
-    </a>
-    <?php
+    <?php else: ?>
+        <span class="text-muted">Nenhum evento agendado</span>
+    <?php endif;
+    $content = ob_get_clean();
+
+    renderUnifiedCard([
+        'id' => 'agenda',
+        'title' => 'Agenda',
+        'icon' => 'calendar-days',
+        'category' => 'gestao',
+        'url' => 'agenda.php',
+        'badge' => $totalEvents > 0 ? [
+            'count' => $totalEvents,
+            'icon' => 'calendar-days',
+            'label' => "$totalEvents eventos agendados"
+        ] : null,
+        'content' => $content,
+        'footer' => [
+            'icon' => 'clock',
+            'text' => $countdown
+        ]
+    ]);
 }
 
-// Renderizar card de Histórico (NEW - Styled as Blue/Management)
+// Renderizar card de Histórico (UNIFIED)
 function renderCardHistorico($data) {
     $lastCulto = $data['last_culto'];
     $sugestoesCount = $data['sugestoes_count'];
     $dateDisplay = $lastCulto ? date('d/m', strtotime($lastCulto['event_date'])) : '--/--';
     $typeDisplay = $lastCulto ? htmlspecialchars($lastCulto['event_type']) : 'Nenhum registro';
+    
+    ob_start();
     ?>
-    <a href="historico.php" class="access-card card-blue" aria-label="Ver Histórico de cultos">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="history"></i>
-            </div>
-            <?php if ($sugestoesCount > 0): ?>
-                <span class="card-badge text-urgent" title="Sugestões de músicas">
-                    <i data-lucide="lightbulb" class="icon-tiny"></i>
-                    <?= $sugestoesCount ?>
-                </span>
-            <?php endif; ?>
-            
-            <h3 class="card-title">Histórico</h3>
-            
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="info-primary">
-                        Último: <?= $dateDisplay ?>
-                    </div>
-                    <div class="info-secondary text-truncate">
-                        <?= $typeDisplay ?>
-                    </div>
-                </div>
-            </div>
+    <div class="info-highlight">
+        <div class="info-primary">
+            Último: <?= $dateDisplay ?>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">
-                Análise Completa
-            </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+        <div class="info-secondary text-truncate">
+            <?= $typeDisplay ?>
         </div>
-    </a>
+    </div>
     <?php
+    $content = ob_get_clean();
+
+    renderUnifiedCard([
+        'id' => 'historico',
+        'title' => 'Histórico',
+        'icon' => 'history',
+        'category' => 'gestao',
+        'url' => 'historico.php',
+        'badge' => $sugestoesCount > 0 ? [
+            'count' => $sugestoesCount,
+            'icon' => 'lightbulb',
+            'label' => "$sugestoesCount sugestões",
+            'type' => 'badge-info' // Using standard info badge instead of text-urgent
+        ] : null,
+        'content' => $content,
+        'footer' => [
+            'text' => 'Análise Completa'
+        ]
+    ]);
 }
 
 // Renderizar card genérico melhorado
