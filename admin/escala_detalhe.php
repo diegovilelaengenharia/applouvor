@@ -169,320 +169,305 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 .edit-mode-hidden { display: none; }
 .view-mode-hidden { display: none; }
 
-/* === DESIGN ÚNICO - ESCALA DETALHE === */
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
+/* === LAYOUT UNIFICADO TIPO FORMULÁRIO === */
 
-@keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-    50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-}
-
-.hero-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 24px;
-    position: relative;
+/* Container Principal */
+.unified-form-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
 }
 
-.hero-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 3s infinite;
-    pointer-events: none;
-}
-
-.hero-date-box {
-    width: 80px;
-    height: 80px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    animation: float 3s ease-in-out infinite;
-}
-
-.hero-date-day {
-    font-size: 2.2rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-}
-
-.hero-date-month {
-    font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #764ba2;
-    margin-top: 4px;
-    letter-spacing: 1px;
-}
-
-.hero-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    margin: 0 0 6px 0;
-}
-
-.hero-subtitle {
-    color: rgba(255,255,255,0.9);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.hero-stats {
-    display: flex;
-    gap: 20px;
-    margin-top: 12px;
-}
-
-.hero-stat {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    padding: 8px 14px;
-    border-radius: 30px;
-    color: white;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: 1px solid rgba(255,255,255,0.3);
-}
-
-.hero-actions {
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.btn-hero {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn-hero-primary {
-    background: white;
-    color: #764ba2;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-.btn-hero-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-.btn-hero-danger {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
-}
-
-.btn-hero-danger:hover {
-    background: rgba(239, 68, 68, 0.9);
-}
-
-/* Section Titles */
-.section-title-gradient {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 3px solid;
-    border-image: linear-gradient(90deg, #667eea, #764ba2, #f093fb) 1;
-}
-
-.section-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-.section-icon-green { background: linear-gradient(135deg, #10b981, #34d399); }
-.section-icon-purple { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
-
-.section-text {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-/* Participant Cards */
-.participant-card-premium {
-    background: linear-gradient(145deg, #ffffff, #f8f9ff);
-    border: 1px solid rgba(139, 92, 246, 0.15);
-    border-radius: 16px;
-    padding: 16px;
+/* Header Compacto */
+.form-header {
     display: flex;
     align-items: center;
     gap: 14px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+    padding: 16px 20px;
+    background: var(--bg-body);
+    border-bottom: 1px solid var(--border-color);
 }
 
-.participant-card-premium::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-    opacity: 0;
-    transition: opacity 0.3s;
+.form-date-box {
+    min-width: 52px;
+    text-align: center;
+    padding: 8px 12px;
+    background: var(--slate-100);
+    border-radius: 8px;
 }
 
-.participant-card-premium:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.2);
-    border-color: rgba(139, 92, 246, 0.3);
+.form-date-day {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-primary);
 }
 
-.participant-card-premium:hover::before {
-    opacity: 1;
+.form-date-month {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 2px;
 }
 
-.participant-avatar-premium {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
+.form-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 2px 0;
+}
+
+.form-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.form-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.form-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.form-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.btn-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.btn-form-primary {
+    background: var(--lavender-100);
+    color: var(--lavender-700);
+}
+
+.btn-form-primary:hover {
+    background: var(--lavender-200);
+}
+
+.btn-form-success {
+    background: var(--sage-100);
+    color: var(--sage-700);
+}
+
+.btn-form-danger {
+    background: var(--rose-100);
+    color: var(--rose-600);
+    padding: 8px;
+}
+
+/* Seções do Formulário */
+.form-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.form-section-title i {
+    color: var(--text-muted);
+}
+
+/* Participantes Grid */
+.participants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.participant-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg-body);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.participant-item:hover {
+    border-color: var(--border-color);
+}
+
+.participant-avatar-sm {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
-    font-size: 1.3rem;
+    font-weight: 700;
+    font-size: 0.85rem;
     color: white;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    position: relative;
-}
-
-.participant-avatar-premium::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent);
-    pointer-events: none;
-}
-
-/* Song Cards */
-.song-card-premium {
-    background: linear-gradient(145deg, #ffffff, #faf5ff);
-    border: 1px solid rgba(139, 92, 246, 0.1);
-    border-left: 5px solid;
-    border-image: linear-gradient(to bottom, #667eea, #f093fb) 1;
-    border-radius: 0 16px 16px 0;
-    padding: 18px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
-    color: inherit;
-}
-
-.song-card-premium:hover {
-    transform: translateX(8px);
-    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
-    background: linear-gradient(145deg, #ffffff, #f3e8ff);
-}
-
-.song-number {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 1.1rem;
-    color: white;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     flex-shrink: 0;
 }
 
-.song-badge {
-    display: inline-flex;
+.participant-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.participant-roles {
+    display: flex;
+    gap: 3px;
+    font-size: 0.85rem;
+}
+
+/* Lista de Músicas */
+.songs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.song-item {
+    display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.7rem;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--bg-body);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s;
+}
+
+.song-item:hover {
+    border-color: var(--lavender-300);
+}
+
+.song-order {
+    min-width: 28px;
+    height: 28px;
+    background: var(--lavender-500);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.song-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.song-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.song-artist {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.song-badges {
+    display: flex;
+    gap: 6px;
+}
+
+.song-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
     font-weight: 700;
 }
 
-.badge-tone { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
-.badge-bpm { background: linear-gradient(135deg, #fce7f3, #fbcfe8); color: #9d174d; }
-.badge-category { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: #3730a3; }
+.badge-tone { background: var(--amber-100); color: var(--amber-700); }
+.badge-bpm { background: var(--rose-100); color: var(--rose-600); }
+.badge-cat { background: var(--lavender-100); color: var(--lavender-700); }
 
+/* Observações */
+.notes-box {
+    padding: 12px;
+    background: var(--amber-50);
+    border-radius: 8px;
+    border: 1px solid var(--amber-200);
+}
+
+.notes-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--amber-600);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.notes-text {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--amber-800);
+}
+
+/* Responsivo */
 @media (max-width: 640px) {
-    .hero-card {
-        padding: 20px;
-        flex-direction: column;
-        text-align: center;
-    }
-    .hero-date-box {
-        width: 70px;
-        height: 70px;
-        margin-bottom: 16px;
-    }
-    .hero-stats {
-        justify-content: center;
+    .form-header {
         flex-wrap: wrap;
+        gap: 12px;
     }
-    .hero-actions {
-        margin-top: 16px;
+    .form-actions {
         width: 100%;
-        justify-content: center;
+        justify-content: flex-end;
     }
-    .participant-card-premium {
-        padding: 12px;
+    .participants-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>
 
 <?php
-// Cores do avatar baseadas no tipo
+// Cores do avatar baseadas na letra
 $avatarColors = [
     'A' => '#ef4444', 'B' => '#f97316', 'C' => '#eab308', 'D' => '#22c55e',
     'E' => '#14b8a6', 'F' => '#3b82f6', 'G' => '#8b5cf6', 'H' => '#ec4899',
@@ -494,101 +479,80 @@ $avatarColors = [
 ];
 ?>
 
-<!-- Hero Card -->
-<div class="schedule-detail-container">
-    <div class="hero-card" style="display: flex; align-items: center; gap: 20px;">
-        
-        <!-- Date Box -->
-        <div class="hero-date-box">
-            <div class="hero-date-day"><?= $date->format('d') ?></div>
-            <div class="hero-date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+<!-- CONTAINER FORMULÁRIO UNIFICADO -->
+<div class="schedule-detail-container unified-form-container">
+    
+    <!-- Header Compacto -->
+    <div class="form-header">
+        <div class="form-date-box">
+            <div class="form-date-day"><?= $date->format('d') ?></div>
+            <div class="form-date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
         </div>
-
-        <!-- Content -->
+        
         <div style="flex: 1; min-width: 0;">
-            <h1 id="display-event-name" class="hero-title">
-                <?= htmlspecialchars($schedule['event_type']) ?>
-            </h1>
-            <div id="display-event-date" class="hero-subtitle">
-                <?= $diaSemana ?>, <?= $date->format('d/m/Y') ?>
-            </div>
-
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <i data-lucide="clock" width="14"></i>
+            <h1 id="display-event-name" class="form-title"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+            <p id="display-event-date" class="form-subtitle"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></p>
+            <div class="form-meta">
+                <div class="form-meta-item">
+                    <i data-lucide="clock" width="12"></i>
                     <span id="display-event-time"><?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?></span>
                 </div>
-                <div class="hero-stat">
-                    <i data-lucide="users" width="14"></i>
-                    <?= count($team) ?> pessoas
+                <div class="form-meta-item">
+                    <i data-lucide="users" width="12"></i>
+                    <?= count($team) ?>
                 </div>
-                <div class="hero-stat">
-                    <i data-lucide="music" width="14"></i>
-                    <?= count($songs) ?> músicas
+                <div class="form-meta-item">
+                    <i data-lucide="music" width="12"></i>
+                    <?= count($songs) ?>
                 </div>
             </div>
         </div>
-
-        <!-- Actions -->
-        <div class="hero-actions">
+        
+        <div class="form-actions">
             <?php if ($_SESSION['user_role'] === 'admin'): ?>
             <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');" style="margin: 0;">
                 <input type="hidden" name="delete_schedule" value="1">
-                <button type="submit" class="btn-hero btn-hero-danger">
-                    <i data-lucide="trash-2" width="16"></i>
+                <button type="submit" class="btn-form btn-form-danger">
+                    <i data-lucide="trash-2" width="14"></i>
                 </button>
             </form>
             <?php endif; ?>
-            
-            <button id="saveBtn" onclick="saveAllChanges()" class="btn-hero btn-hero-primary" style="display: none;">
-                <i data-lucide="check" width="16"></i>
-                Salvar
+            <button id="saveBtn" onclick="saveAllChanges()" class="btn-form btn-form-success" style="display: none;">
+                <i data-lucide="check" width="14"></i> Salvar
             </button>
-            
-            <button id="editBtn" onclick="toggleEditMode()" class="btn-hero btn-hero-primary">
-                <i data-lucide="edit-2" width="16"></i>
-                Editar
+            <button id="editBtn" onclick="toggleEditMode()" class="btn-form btn-form-primary">
+                <i data-lucide="edit-2" width="14"></i> Editar
             </button>
         </div>
     </div>
-
+    
     <!-- Observações -->
     <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
-        <div id="display-notes-container" style="padding: 16px; background: linear-gradient(145deg, #fefce8, #fef9c3); border-radius: 16px; border: 2px solid #fde047; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(253, 224, 71, 0.3);">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #eab308, #facc15); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="lightbulb" style="width: 14px; color: white;"></i>
-                </div>
-                <span style="font-size: 0.8rem; font-weight: 800; color: #854d0e; text-transform: uppercase; letter-spacing: 0.5px;">Observações do Líder</span>
-            </div>
-            <div id="display-notes-text" style="font-size: 0.9rem; line-height: 1.5; color: #713f12; font-weight: 500;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+    <div class="form-section">
+        <div class="notes-box">
+            <div class="notes-label"><i data-lucide="lightbulb" width="12"></i> Observações</div>
+            <div id="display-notes-text" class="notes-text"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
         </div>
+    </div>
     <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
-        <div id="display-notes-container" style="display: none; padding: 16px; background: linear-gradient(145deg, #fefce8, #fef9c3); border-radius: 16px; border: 2px solid #fde047; margin-bottom: 24px;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #eab308, #facc15); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="lightbulb" style="width: 14px; color: white;"></i>
-                </div>
-                <span style="font-size: 0.8rem; font-weight: 800; color: #854d0e; text-transform: uppercase;">Observações do Líder</span>
-            </div>
-            <div id="display-notes-text" style="font-size: 0.9rem; line-height: 1.5; color: #713f12;"></div>
+    <div id="display-notes-container" class="form-section" style="display: none;">
+        <div class="notes-box">
+            <div class="notes-label"><i data-lucide="lightbulb" width="12"></i> Observações</div>
+            <div id="display-notes-text" class="notes-text"></div>
         </div>
+    </div>
     <?php endif; ?>
-
-    <!-- Botão Gerenciar -->
+    
     <?php if ($_SESSION['user_role'] === 'admin'): ?>
     <button id="btn-manage-info" class="edit-mode-item" onclick="openModal('modal-event')" style="
-        display: none; width: 100%; margin-bottom: 24px; padding: 14px; 
-        background: linear-gradient(145deg, #f3e8ff, #ede9fe); 
-        border: 2px dashed #a78bfa; border-radius: 16px; 
-        color: #7c3aed; font-weight: 700; cursor: pointer; 
-        align-items: center; justify-content: center; gap: 8px; 
-        transition: all 0.3s;
+        display: none; width: calc(100% - 40px); margin: 0 20px 12px; padding: 10px; 
+        background: var(--lavender-50); border: 1px dashed var(--lavender-300); border-radius: 8px; 
+        color: var(--lavender-600); font-weight: 600; font-size: 0.8rem; cursor: pointer; 
+        align-items: center; justify-content: center; gap: 6px; transition: all 0.15s;
     ">
-        <i data-lucide="settings-2" style="width: 20px;"></i> Gerenciar Informações
+        <i data-lucide="settings-2" style="width: 14px;"></i> Gerenciar Informações
     </button>
     <?php endif; ?>
-</div>
 
 <!-- Content -->
 <div class="schedule-detail-container">
@@ -650,120 +614,85 @@ $avatarColors = [
         </div>
         <?php endif; ?>
 
-        <!-- PARTICIPANTES -->
-        <div style="margin-bottom: 40px;">
-            <div class="section-title-gradient">
-                <div class="section-icon section-icon-green">
-                    <i data-lucide="users" style="width: 20px;"></i>
-                </div>
-                <span class="section-text">Participantes (<?= count($team) ?>)</span>
-            </div>
-            
-            <?php if (empty($team)): ?>
-                <div style="text-align: center; padding: 50px 20px; background: linear-gradient(145deg, #f8fafc, #f1f5f9); border-radius: 20px; border: 2px dashed #cbd5e1;">
-                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #94a3b8, #64748b); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i data-lucide="user-plus" style="width: 28px; color: white;"></i>
-                    </div>
-                    <p style="color: #64748b; font-size: 1rem; margin: 0; font-weight: 600;">Nenhum participante escalado</p>
-                </div>
-            <?php else: ?>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
-                    <?php foreach ($team as $member): 
-                        $firstLetter = strtoupper(substr($member['name'], 0, 1));
-                        $avatarBg = $avatarColors[$firstLetter] ?? '#8b5cf6';
-                    ?>
-                        <div class="participant-card-premium">
-                            <div class="participant-avatar-premium" style="background: linear-gradient(135deg, <?= $avatarBg ?>, <?= $avatarBg ?>dd);">
-                                <?= $firstLetter ?>
-                            </div>
-                            <div style="flex: 1; min-width: 0;">
-                                <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    <?= htmlspecialchars($member['name']) ?>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                    <?php 
-                                    $mRoles = $userRoles[$member['user_id']] ?? [];
-                                    if (empty($mRoles) && $member['instrument']) {
-                                        echo '<span style="font-size: 0.8rem; color: #64748b; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); padding: 3px 10px; border-radius: 20px; font-weight: 600;">' . htmlspecialchars($member['instrument']) . '</span>';
-                                    } else {
-                                        foreach ($mRoles as $role): 
-                                    ?>
-                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 1.1rem; cursor: help; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"><?= $role['icon'] ?></span>
-                                    <?php 
-                                        endforeach; 
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+    <!-- SEÇÃO PARTICIPANTES -->
+    <div class="form-section">
+        <div class="form-section-title">
+            <i data-lucide="users" width="14"></i>
+            Participantes (<?= count($team) ?>)
         </div>
         
-        <!-- REPERTÓRIO -->
-        <div style="margin-bottom: 40px;">
-            <div class="section-title-gradient">
-                <div class="section-icon section-icon-purple">
-                    <i data-lucide="music" style="width: 20px;"></i>
-                </div>
-                <span class="section-text">Repertório (<?= count($songs) ?>)</span>
+        <?php if (empty($team)): ?>
+            <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.8rem;">
+                Nenhum participante escalado
             </div>
-            
-            <?php if (empty($songs)): ?>
-                <div style="text-align: center; padding: 50px 20px; background: linear-gradient(145deg, #faf5ff, #f3e8ff); border-radius: 20px; border: 2px dashed #c4b5fd;">
-                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8b5cf6, #a78bfa); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i data-lucide="music-2" style="width: 28px; color: white;"></i>
+        <?php else: ?>
+            <div class="participants-grid">
+                <?php foreach ($team as $member): 
+                    $firstLetter = strtoupper(substr($member['name'], 0, 1));
+                    $avatarBg = $avatarColors[$firstLetter] ?? '#8b5cf6';
+                ?>
+                    <div class="participant-item">
+                        <div class="participant-avatar-sm" style="background: <?= $avatarBg ?>;">
+                            <?= $firstLetter ?>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div class="participant-name"><?= htmlspecialchars($member['name']) ?></div>
+                            <div class="participant-roles">
+                                <?php 
+                                $mRoles = $userRoles[$member['user_id']] ?? [];
+                                if (empty($mRoles) && $member['instrument']) {
+                                    echo '<span style="font-size: 0.7rem; color: var(--text-muted);">' . htmlspecialchars($member['instrument']) . '</span>';
+                                } else {
+                                    foreach ($mRoles as $role): 
+                                ?>
+                                    <span title="<?= htmlspecialchars($role['name']) ?>"><?= $role['icon'] ?></span>
+                                <?php 
+                                    endforeach; 
+                                }
+                                ?>
+                            </div>
+                        </div>
                     </div>
-                    <p style="color: #7c3aed; font-size: 1rem; margin: 0; font-weight: 600;">Nenhuma música selecionada</p>
-                </div>
-            <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 14px;">
-                    <?php foreach ($songs as $index => $song): ?>
-                        <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-card-premium">
-                            <!-- Número -->
-                            <div class="song-number">
-                                <?= $index + 1 ?>
-                            </div>
-
-                            <!-- Conteúdo -->
-                            <div style="flex: 1; min-width: 0;">
-                                <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    <?= htmlspecialchars($song['title']) ?>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                    <span style="font-size: 0.85rem; color: #64748b; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></span>
-                                    
-                                    <?php if ($song['tone']): ?>
-                                        <span class="song-badge badge-tone">
-                                            🎵 <?= htmlspecialchars($song['tone']) ?>
-                                        </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if ($song['bpm']): ?>
-                                        <span class="song-badge badge-bpm">
-                                            ⚡ <?= htmlspecialchars($song['bpm']) ?> BPM
-                                        </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if ($song['category']): ?>
-                                        <span class="song-badge badge-category">
-                                            🏷️ <?= htmlspecialchars($song['category']) ?>
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-
-                            <!-- Arrow -->
-                            <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <i data-lucide="chevron-right" style="width: 16px; color: white;"></i>
-                            </div>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
+        
+    <!-- SEÇÃO REPERTÓRIO -->
+    <div class="form-section">
+        <div class="form-section-title">
+            <i data-lucide="music" width="14"></i>
+            Repertório (<?= count($songs) ?>)
+        </div>
+        
+        <?php if (empty($songs)): ?>
+            <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.8rem;">
+                Nenhuma música selecionada
+            </div>
+        <?php else: ?>
+            <div class="songs-list">
+                <?php foreach ($songs as $index => $song): ?>
+                    <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-item">
+                        <div class="song-order"><?= $index + 1 ?></div>
+                        <div class="song-info">
+                            <div class="song-title"><?= htmlspecialchars($song['title']) ?></div>
+                            <div class="song-artist"><?= htmlspecialchars($song['artist']) ?></div>
+                        </div>
+                        <div class="song-badges">
+                            <?php if ($song['tone']): ?>
+                                <span class="song-badge badge-tone"><?= htmlspecialchars($song['tone']) ?></span>
+                            <?php endif; ?>
+                            <?php if ($song['bpm']): ?>
+                                <span class="song-badge badge-bpm"><?= htmlspecialchars($song['bpm']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <i data-lucide="chevron-right" width="14" style="color: var(--text-muted);"></i>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div><!-- Fecha unified-form-container -->
     
     <!-- MODO EDIÇÃO OTIMIZADO -->
     <div id="edit-mode" class="edit-mode edit-mode-hidden">
