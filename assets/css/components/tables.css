@@ -1,0 +1,139 @@
+/* ============================================
+   TABLES - Standardized Table Styles
+   ============================================ */
+
+.table-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    /* Force scroll on small screens */
+}
+
+/* Headers */
+.table th {
+    text-align: left;
+    padding: 14px 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    background: var(--bg-app);
+    /* Slightly different from surface */
+    border-bottom: 1px solid var(--border-medium);
+    white-space: nowrap;
+}
+
+/* Cells */
+.table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover td {
+    background: var(--bg-surface-hover);
+}
+
+/* Avatar Cell */
+.td-avatar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.td-avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--slate-200);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--slate-600);
+    overflow: hidden;
+}
+
+.td-avatar-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Status Badges within Tables */
+.badge-table {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-table.success {
+    background: var(--green-100);
+    color: var(--green-700);
+}
+
+.badge-table.warning {
+    background: var(--amber-100);
+    color: var(--amber-700);
+}
+
+.badge-table.error {
+    background: var(--red-100);
+    color: var(--red-700);
+}
+
+.badge-table.neutral {
+    background: var(--slate-100);
+    color: var(--slate-600);
+}
+
+/* Actions Column */
+.td-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn-icon-table {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-icon-table:hover {
+    background: var(--bg-surface-active);
+    color: var(--text-primary);
+}
+
+.btn-icon-table.delete:hover {
+    background: var(--red-50);
+    color: var(--red-600);
+}

@@ -315,31 +315,19 @@ renderAppHeader('Visão Geral');
 
 <!-- MODAL URGENTE AUTOMÁTICO -->
 <?php if ($popupAviso): ?>
-<div id="urgentModal" style="
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    z-index: 2000; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
-    align-items: center; justify-content: center;
-">
-    <div style="
-        background: var(--bg-surface); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); 
-        padding: 24px; position: relative; text-align: center;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        border-top: 6px solid var(--rose-500);
-    ">
-        <div style="background: var(--rose-100); color: var(--rose-600); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-            <i data-lucide="alert-triangle" width="24"></i>
+<div id="urgentModal" class="urgent-modal-overlay">
+    <div class="urgent-modal-card">
+        <div class="urgent-icon-wrapper">
+            <i data-lucide="alert-triangle" width="28" height="28"></i>
         </div>
-        <h3 style="margin: 0 0 8px 0; font-size: var(--font-h1); font-weight: 800; color: #1f2937;">Aviso Urgente</h3>
-        <p style="margin: 0 0 16px 0; font-size: var(--font-h3); font-weight: 700; color: #374151;">
+        <h3 class="urgent-title">Aviso Urgente</h3>
+        <p class="urgent-subtitle">
             <?= htmlspecialchars($popupAviso['title']) ?>
         </p>
-        <div style="text-align: left; background: #f9fafb; padding: 12px; border-radius: 8px; font-size: var(--font-body); color: #4b5563; margin-bottom: 20px; max-height: 200px; overflow-y: auto;">
+        <div class="urgent-body">
             <?= $popupAviso['message'] ?>
         </div>
-        <button onclick="closeUrgentModal()" style="
-            width: 100%; padding: 12px; background: var(--rose-500); color: white; border: none; border-radius: 12px;
-            font-weight: 700; font-size: var(--font-h3); cursor: pointer;
-        ">
+        <button onclick="closeUrgentModal()" class="btn-urgent-action">
             Entendido
         </button>
     </div>
@@ -357,84 +345,77 @@ renderAppHeader('Visão Geral');
 </script>
 <?php endif; ?>
 
-
-
 <?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
 
-<div style="max-width: 600px; margin: 0 auto;">
+<!-- DASHBOARD CONTAINER (Removido max-width inline) -->
+<div class="dashboard-container">
+    <?php
+    require_once '../includes/dashboard_render.php';
+    
+    // Dados para renderização
+    $renderData = [
+        'pdo' => $pdo,
+        'userId' => $userId,
+        'nextSchedule' => $nextSchedule,
+        'totalSchedules' => $totalSchedules,
+        'ultimaMusica' => $ultimaMusica,
+        'totalMusicas' => $totalMusicas,
+        'ultimoAviso' => $ultimoAviso,
+        'unreadCount' => $unreadCount,
+        'niverCount' => $aniversariantesCount,
+        'proximoNiver' => $proximoAniversariante,
+        'totalMembros' => $totalMembros,
+        'statsMembros' => $statsMembros,
+        'oracaoCount' => $oracaoCount,
+        'nextEvent' => $nextEvent,
+        'totalEvents' => $totalEvents,
+        'historicoData' => $historicoData
+    ];
 
+    // 1. Agrupar cards configurados pelo usuário
+    $groupedCards = [];
+    $cardsOrder = []; 
 
-    <!-- QUICK ACCESS GRID -->
-    <!-- DASHBOARD ORGANIZADO POR TÓPICOS -->
-    <div class="dashboard-container">
-        <?php
-        require_once '../includes/dashboard_render.php';
-        
-        // Dados para renderização
-        $renderData = [
-            'pdo' => $pdo,
-            'userId' => $userId,
-            'nextSchedule' => $nextSchedule,
-            'totalSchedules' => $totalSchedules,
-            'ultimaMusica' => $ultimaMusica,
-            'totalMusicas' => $totalMusicas,
-            'ultimoAviso' => $ultimoAviso,
-            'unreadCount' => $unreadCount,
-            'niverCount' => $aniversariantesCount,
-            'proximoNiver' => $proximoAniversariante,
-            'totalMembros' => $totalMembros,
-            'statsMembros' => $statsMembros,
-            'oracaoCount' => $oracaoCount,
-            'nextEvent' => $nextEvent,
-            'totalEvents' => $totalEvents,
-            'historicoData' => $historicoData
-        ];
+    // Mapeamento de categorias e ordem de exibição
+    $categoryOrder = ['Gestão', 'Espírito', 'Comunica', 'Admin', 'Extras'];
+    
+    // Preparar grupos
+    foreach ($categoryOrder as $cat) {
+        $groupedCards[$cat] = [];
+    }
 
-        // 1. Agrupar cards configurados pelo usuário
-        $groupedCards = [];
-        $cardsOrder = []; // Manter ordem relativa se necessário, ou usar a ordem da categoria
-
-        // Mapeamento de categorias e ordem de exibição
-        $categoryOrder = ['Gestão', 'Espírito', 'Comunica', 'Admin', 'Extras'];
-        
-        // Preparar grupos
-        foreach ($categoryOrder as $cat) {
-            $groupedCards[$cat] = [];
-        }
-
-        // Distribuir cards nos grupos
-        foreach ($userDashboardSettings as $setting) {
-            $cardId = $setting['card_id'];
-            if (isset($allCardsDefinitions[$cardId])) {
-                $cardDef = $allCardsDefinitions[$cardId];
-                $catName = $cardDef['category_name'];
-                
-                // Fallback para 'Extras' se categoria desconhecida
-                if (!isset($groupedCards[$catName])) {
-                    $catName = 'Extras';
-                    if (!isset($groupedCards['Extras'])) $groupedCards['Extras'] = [];
-                }
-                
-                $groupedCards[$catName][] = $cardId;
-            }
-        }
-
-        // 2. Renderizar Seções
-        foreach ($categoryOrder as $categoryName) {
-            if (empty($groupedCards[$categoryName])) continue;
+    // Distribuir cards nos grupos
+    foreach ($userDashboardSettings as $setting) {
+        $cardId = $setting['card_id'];
+        if (isset($allCardsDefinitions[$cardId])) {
+            $cardDef = $allCardsDefinitions[$cardId];
+            $catName = $cardDef['category_name'];
             
-            // Título da Seção (ex: Gestão)
-            echo "<h2 class='section-title' style='margin-top: 24px; margin-bottom: 12px; font-size: 1rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;'>{$categoryName}</h2>";
-            
-            // Grid da Seção
-            echo '<div class="quick-access-grid">';
-            foreach ($groupedCards[$categoryName] as $cardId) {
-                renderDashboardCard($cardId, $renderData);
+            // Fallback para 'Extras' se categoria desconhecida
+            if (!isset($groupedCards[$catName])) {
+                $catName = 'Extras';
+                if (!isset($groupedCards['Extras'])) $groupedCards['Extras'] = [];
             }
-            echo '</div>';
+            
+            $groupedCards[$catName][] = $cardId;
         }
-        ?>
-    </div>
+    }
 
+    // 2. Renderizar Seções
+    foreach ($categoryOrder as $categoryName) {
+        if (empty($groupedCards[$categoryName])) continue;
+        
+        // Título da Seção
+        echo "<h2 class='section-title'>{$categoryName}</h2>";
+        
+        // Grid da Seção
+        echo '<div class="quick-access-grid">';
+        foreach ($groupedCards[$categoryName] as $cardId) {
+            renderDashboardCard($cardId, $renderData);
+        }
+        echo '</div>';
+    }
+    ?>
+</div>
 
 <?php renderAppFooter(); ?>

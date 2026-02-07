@@ -80,3 +80,86 @@
         margin-bottom: 16px;
     }
 }
+
+/* ============================================
+   NOTIFICATION BUTTON DESIGN (PREMIUM)
+   ============================================ */
+
+.notification-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    /* Premium Squircle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    /* Prevent layout shift on border change */
+}
+
+/* Hover State */
+.notification-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+/* Active/Unread State (Injected via JS but cleaner to have class support) */
+.notification-btn.has-unread {
+    background: #fffbeb;
+    /* Amber 50 */
+    color: #d97706;
+    /* Amber 600 */
+    border-color: #fcd34d;
+    /* Amber 300 */
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
+}
+
+/* Badge Design */
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: #ef4444;
+    /* Red 500 */
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-surface);
+    /* White border to separate from icon */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Pulse Animation (Soft) */
+@keyframes pulse-soft {
+    0% {
+        box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.2);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(217, 119, 6, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+    }
+}
+
+.notification-btn[style*="d97706"] {
+    /* Fallback/Hook for JS inline styles */
+    animation: pulse-soft 2s infinite;
+}

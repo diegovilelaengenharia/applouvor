@@ -217,7 +217,7 @@ function renderAppHeader($title, $backUrl = null)
                 from { opacity: 0; transform: translateY(-10px); }
                 to { opacity: 1; transform: translateY(0); }
             }
-        </style>            
+            /* Notification Dropdown (Specific to Layout) */
             .notification-header {
                 padding: 12px 14px;
                 border-bottom: 1px solid var(--border-color);
@@ -448,6 +448,23 @@ function renderAppHeader($title, $backUrl = null)
                 font-weight: 600;
                 text-decoration: none;
                 font-size: 14px;
+            }
+
+            /* FIX: Avatar Profile Button Size */
+            .profile-avatar-btn {
+                width: 38px;
+                height: 38px;
+                border-radius: 50%;
+                cursor: pointer;
+                overflow: hidden;
+                border: 1px solid var(--border-subtle);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--bg-tertiary);
+                color: var(--text-secondary);
+                padding: 0;
+                flex-shrink: 0;
             }
         
         </style>

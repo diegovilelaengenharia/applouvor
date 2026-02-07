@@ -13,6 +13,13 @@
 /* Dashboard */
 @import url('dashboard.css');
 
+/* Forms & Tables (Standardized) */
+@import url('components/forms.css');
+@import url('components/tables.css');
+
+/* Pages */
+@import url('pages/escalas.css');
+
 /* Dark Mode - Importado APÓS tudo para garantir overrides se necessário, 
    embora o design-system trate a maioria */
 @import url('dark-mode.css');
@@ -140,10 +147,14 @@ ul {
 }
 
 .user-avatar-sm,
-.avatar-placeholder {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+.avatar-placeholder,
+.profile-avatar-btn {
+    width: 44px;
+    /* Standardize Header Size */
+    height: 44px;
+    /* Standardize Header Size */
+    border-radius: 14px;
+    /* Standardize Header Radius (Squircle) */
     cursor: pointer;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
@@ -154,6 +165,8 @@ ul {
     font-weight: 700;
     background: var(--bg-tertiary);
     color: var(--text-secondary);
+    padding: 0;
+    /* Reset for button */
 }
 
 .dropdown-menu {

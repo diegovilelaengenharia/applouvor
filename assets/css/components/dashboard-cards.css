@@ -1,230 +1,48 @@
 /* ========================================
-   DASHBOARD CARDS - DESIGN NEUTRO
-   Refactored for New Design System
+   DASHBOARD CARDS - MOBILE FIRST
+   Refactored for Touch & Visibility
    ======================================== */
 
 .quick-access-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1rem;
-    /* var(--space-4) */
-    margin-bottom: 1.5rem;
-    /* var(--space-6) */
+    margin-bottom: 2rem;
 }
 
 @media (min-width: 768px) {
     .quick-access-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
     }
 }
 
 /* Card Base */
 .access-card {
     position: relative;
-    border-radius: var(--radius-lg);
-    padding: 1.25rem 1rem;
-    /* var(--space-5) var(--space-4) */
-    min-height: 120px;
+    border-radius: 20px;
+    padding: 0;
+    /* Removing padding from container to handle header/footer separately */
+    min-height: 150px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     text-decoration: none;
     overflow: hidden;
-    transition: all 0.3s ease;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    /* Default Background (will be overridden by themes) */
+    background: #f8fafc;
+
+    /* PREMIUM: Fade-in entrance animation */
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
-.access-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-medium);
-}
-
-.access-card:active {
-    transform: translateY(-1px);
-}
-
-/* Ícone */
-.card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.75rem;
-    /* var(--space-3) */
-    transition: all 0.2s ease;
-    background: var(--bg-surface-hover);
-    color: var(--text-secondary);
-}
-
-.access-card:hover .card-icon {
-    transform: scale(1.05);
-}
-
-/* Título */
-.card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0 0 0.5rem 0;
-    line-height: 1.2;
-}
-
-/* Info */
-.card-info {
-    font-size: 0.875rem;
-    color: var(--text-tertiary);
-    margin: 0;
-    line-height: 1.4;
-    font-weight: 400;
-}
-
-/* Badge */
-.card-badge {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    padding: 4px 10px;
-    border-radius: var(--radius-lg);
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: var(--bg-surface-hover);
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
-}
-
-.access-card:hover .card-badge {
-    transform: scale(1.05);
-}
-
-/* ========================================
-   CORES POR CATEGORIA (Semantic Overrides)
-   ======================================== */
-
-/* Azul - Gestão */
-.card-blue:hover,
-.card-emerald:hover,
-.card-violet:hover {
-    border-color: var(--blue-500);
-}
-
-.card-blue:hover .card-icon,
-.card-emerald:hover .card-icon,
-.card-violet:hover .card-icon {
-    background: var(--blue-50);
-    color: var(--blue-600);
-}
-
-body.dark-mode .card-blue:hover .card-icon,
-body.dark-mode .card-emerald:hover .card-icon,
-body.dark-mode .card-violet:hover .card-icon {
-    background: rgba(59, 130, 246, 0.2);
-    color: var(--blue-500);
-}
-
-.card-blue:hover .card-badge,
-.card-emerald:hover .card-badge,
-.card-violet:hover .card-badge {
-    background: var(--blue-500);
-    color: white;
-}
-
-/* Verde - Espiritual */
-.card-green:hover,
-.card-cyan:hover,
-.card-indigo:hover,
-.card-rose:hover {
-    border-color: var(--green-500);
-}
-
-.card-green:hover .card-icon,
-.card-cyan:hover .card-icon,
-.card-indigo:hover .card-icon,
-.card-rose:hover .card-icon {
-    background: var(--green-50);
-    color: var(--green-600);
-}
-
-body.dark-mode .card-green:hover .card-icon,
-body.dark-mode .card-cyan:hover .card-icon,
-body.dark-mode .card-indigo:hover .card-icon,
-body.dark-mode .card-rose:hover .card-icon {
-    background: rgba(34, 197, 94, 0.2);
-    color: var(--green-500);
-}
-
-.card-green:hover .card-badge,
-.card-cyan:hover .card-badge,
-.card-indigo:hover .card-badge,
-.card-rose:hover .card-badge {
-    background: var(--green-500);
-    color: white;
-}
-
-/* Âmbar - Comunicação */
-.card-yellow:hover,
-.card-amber:hover,
-.card-pink:hover,
-.card-fuchsia:hover {
-    border-color: var(--amber-500);
-}
-
-.card-yellow:hover .card-icon,
-.card-amber:hover .card-icon,
-.card-pink:hover .card-icon,
-.card-fuchsia:hover .card-icon {
-    background: var(--amber-50);
-    color: var(--amber-600);
-}
-
-body.dark-mode .card-yellow:hover .card-icon,
-body.dark-mode .card-amber:hover .card-icon,
-body.dark-mode .card-pink:hover .card-icon,
-body.dark-mode .card-fuchsia:hover .card-icon {
-    background: rgba(245, 158, 11, 0.2);
-    color: var(--amber-500);
-}
-
-.card-yellow:hover .card-badge,
-.card-amber:hover .card-badge,
-.card-pink:hover .card-badge,
-.card-fuchsia:hover .card-badge {
-    background: var(--amber-500);
-    color: var(--slate-900);
-}
-
-/* Vermelho - Crítico */
-.card-red:hover {
-    border-color: var(--red-500);
-}
-
-.card-red:hover .card-icon {
-    background: var(--red-50);
-    color: var(--red-500);
-}
-
-body.dark-mode .card-red:hover .card-icon {
-    background: rgba(239, 68, 68, 0.2);
-    color: var(--red-500);
-}
-
-.card-red:hover .card-badge {
-    background: var(--red-500);
-    color: white;
-}
-
-/* ========================================
-   ANIMAÇÕES
-   ======================================== */
-
+/* Entrance Animation */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(24px);
     }
 
     to {
@@ -233,10 +51,7 @@ body.dark-mode .card-red:hover .card-icon {
     }
 }
 
-.access-card {
-    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-}
-
+/* Stagger delay for sequential appearance */
 .access-card:nth-child(1) {
     animation-delay: 0.05s;
 }
@@ -269,78 +84,682 @@ body.dark-mode .card-red:hover .card-icon {
     animation-delay: 0.4s;
 }
 
+.access-card:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+.access-card:nth-child(10) {
+    animation-delay: 0.5s;
+}
+
+.access-card:nth-child(11) {
+    animation-delay: 0.55s;
+}
+
+.access-card:nth-child(12) {
+    animation-delay: 0.6s;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .access-card {
+        animation: none;
+    }
+}
+
+/* PREMIUM: Enhanced hover state */
+.access-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.15);
+}
+
+.access-card:active {
+    transform: scale(0.98);
+}
+
+/* Card Content Area */
+.card-content {
+    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Icon Container */
+.card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    /* Default gradient fallback */
+    background: white;
+    color: var(--text-secondary);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* PREMIUM: Icon rotation on card hover */
+.access-card:hover .card-icon {
+    transform: rotate(8deg) scale(1.08);
+}
+
+.card-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5px;
+}
+
+/* Typography - Professional & Clean */
+.card-title {
+    font-size: 1.15rem;
+    /* Slightly larger */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    /* More breathing room */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    /* Tighter for modern look */
+}
+
+.card-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Badge - Highlighted */
+.card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    /* Softer shadow */
+    color: var(--text-primary);
+    transform: scale(1);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.access-card:hover .card-badge {
+    transform: scale(1.1);
+}
+
+@keyframes pulse-badge {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+.card-badge {
+    animation: pulse-badge 3s infinite;
+    /* Slower pulse */
+}
+
+/* PREMIUM: Contextual Badge Colors */
+.badge-alert {
+    background: #dc2626;
+    color: white;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.badge-info {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.badge-success {
+    background: #16a34a;
+    color: white;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+}
+
+.badge-warning {
+    background: #d97706;
+    color: white;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+}
+
+.badge-spiritual {
+    background: #7c3aed;
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+/* PREMIUM: Badge bounce animation on update */
+@keyframes badgeBounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.card-badge.updated {
+    animation: badgeBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Badge icon sizing */
+.card-badge i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Highlight Info Sections (Professional Look) */
+.info-highlight {
+    margin-top: 10px;
+    margin-bottom: 4px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.highlight-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.highlight-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+
+/* Footer/Action Area (Pricing Plan Style) */
+.card-footer-row {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    /* Integrated padding */
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    /* Harmonized: No separate background */
+    border-top: none;
+    /* Removed separator */
+    min-height: auto;
+}
+
+/* Footer Link -> Pill Button (Get Started Style) */
+.link-text {
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    /* Pill Shape */
+    transition: all 0.2s ease;
+    background: var(--bg-surface);
+    /* Default fallback */
+    border: 1px solid transparent;
+}
+
+.footer-text {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+
 /* ========================================
-   RESPONSIVIDADE
+   THEMES (Vibrant Colors + Pricing Shapes)
    ======================================== */
 
-@media (max-width: 768px) {
+/* General Shape Refinements */
+.access-card {
+    border-radius: 24px;
+    /* Pricing Plan Roundness */
+    border-width: 0;
+    /* Cleaner look */
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+    /* Float effect */
+}
+
+/* BLUE THEME */
+.card-blue {
+    background: #eff6ff;
+    /* Soft Blue Background */
+}
+
+.card-blue .card-icon {
+    background: white;
+    /* Contrast against blue card */
+    color: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    border-radius: 16px;
+    /* Squircle Icon */
+}
+
+/* Badge handled globally */
+
+.card-blue .info-highlight {
+    background: white;
+    /* "Feature" shape */
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Pill Button Shape for Link - COMPACT & FIXED */
+.card-blue .link-text,
+.card-green .link-text,
+.card-amber .link-text,
+.card-red .link-text {
+    width: 120px;
+    /* Compact size */
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border-radius: 50px;
+    margin-top: 0;
+    font-weight: 800;
+    font-size: 0.65rem;
+    /* Smaller for compact button */
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    /* Tighter spacing */
+    display: inline-flex;
+    gap: 4px;
+    /* Smaller gap */
+    white-space: nowrap;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* BLUE THEME BUTTON */
+.card-blue .link-text {
+    background: #2563eb;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+.card-blue .link-text:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
+    filter: brightness(1.1);
+    /* Subtle lift */
+}
+
+
+/* GREEN THEME */
+.card-green {
+    background: #f0fdf4;
+}
+
+.card-green .card-icon {
+    background: white;
+    color: #16a34a;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+    border-radius: 16px;
+}
+
+/* Badge handled globally */
+
+.card-green .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* GREEN THEME BUTTON */
+.card-green .link-text {
+    background: #16a34a;
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+}
+
+.card-green .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+
+/* AMBER THEME */
+.card-amber,
+.card-yellow {
+    background: #fffbeb;
+}
+
+.card-amber .card-icon {
+    background: white;
+    color: #d97706;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
+    border-radius: 16px;
+}
+
+/* Badge handled globally */
+
+.card-amber .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(217, 119, 6, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* AMBER THEME BUTTON */
+.card-amber .link-text {
+    background: #d97706;
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
+}
+
+.card-amber .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+
+/* RED THEME */
+.card-red {
+    background: #fef2f2;
+}
+
+.card-red .card-icon {
+    background: white;
+    color: #dc2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+/* Badge handled globally */
+
+.card-red .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* RED THEME BUTTON */
+.card-red .link-text {
+    background: #dc2626;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+}
+
+.card-red .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+
+/* DARK MODE (Harmonized) */
+body.dark-mode .access-card {
+    background: var(--bg-surface);
+    /* Dark surface */
+    border-color: var(--border-subtle);
+}
+
+body.dark-mode .card-footer-row {
+    background: transparent;
+    border-top: none;
+}
+
+/* Dark Mode Theme specific overrides */
+body.dark-mode .card-blue {
+    background: rgba(37, 99, 235, 0.1);
+}
+
+body.dark-mode .card-green {
+    background: rgba(22, 163, 74, 0.1);
+}
+
+body.dark-mode .card-violet {
+    background: rgba(126, 34, 206, 0.1);
+}
+
+body.dark-mode .card-amber {
+    background: rgba(217, 119, 6, 0.1);
+}
+
+body.dark-mode .card-red {
+    background: rgba(220, 38, 38, 0.1);
+}
+
+body.dark-mode .info-highlight {
+    background: rgba(255, 255, 255, 0.05);
+    /* Translucent in dark mode */
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .card-icon {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* Creative Updates for Secondary Info (Icons & Tags) */
+
+/* 1. Team Icon Gradient (Escalas) */
+.card-blue .info-secondary i {
+    color: white;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    padding: 4px;
+    border-radius: 6px;
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2);
+}
+
+.card-blue .info-secondary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--blue-700);
+    font-weight: 600;
+}
+
+/* 2. Tone Tag (Repertório) */
+.tone-tag {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    box-shadow: 0 2px 5px rgba(217, 119, 6, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}
+
+/* 3. Event Type Badge (General) */
+.info-primary {
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+/* Admin/Crown Icon specific small styling if appeared here */
+.icon-tiny {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+/* ========================================
+   PREMIUM ENHANCEMENTS
+   Skeleton, Responsiveness, Accessibility
+   ======================================== */
+
+/* PREMIUM: Skeleton Loading State */
+.card-skeleton {
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.03) 25%,
+            rgba(0, 0, 0, 0.06) 50%,
+            rgba(0, 0, 0, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 12px;
+    height: 20px;
+    margin-bottom: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.04) 25%,
+            rgba(0, 0, 0, 0.08) 50%,
+            rgba(0, 0, 0, 0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+}
+
+.skeleton-title {
+    width: 60%;
+    height: 24px;
+}
+
+.skeleton-text {
+    width: 80%;
+    height: 16px;
+}
+
+.skeleton-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 28px;
+    border-radius: 50px;
+}
+
+/* PREMIUM: Extra Small Screen Responsiveness */
+@media (max-width: 360px) {
     .quick-access-grid {
-        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        grid-template-columns: 1fr;
         gap: 0.75rem;
     }
 
     .access-card {
-        min-height: 110px;
-        padding: 1rem;
+        min-height: 140px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-info {
+        font-size: 0.85rem;
+    }
+
+    .link-text {
+        width: 120px !important;
+        font-size: 0.65rem !important;
+    }
+
+    .card-badge {
+        font-size: 0.75rem;
+        padding: 4px 10px;
     }
 
     .card-icon {
         width: 40px;
         height: 40px;
     }
+
+    .card-icon svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
-@media (max-width: 375px) {
-    .quick-access-grid {
-        gap: 0.5rem;
-    }
+/* PREMIUM: Accessibility - WCAG AA Compliance */
 
+/* Focus visible for keyboard navigation */
+.access-card:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 4px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.link-text:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
     .access-card {
-        min-height: 100px;
+        border: 2px solid currentColor;
+    }
+
+    .card-badge {
+        border: 2px solid currentColor;
     }
 }
 
-/* ========================================
-   HIGHLIGHT CARDS (Leader/Notifications)
-   ======================================== */
-
-.highlight-card {
-    background: var(--bg-surface);
-    border-radius: var(--radius-lg);
-    padding: 1rem;
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s ease;
+/* Ensure minimum touch target size (44x44px) */
+.link-text {
+    min-height: 44px;
+    min-width: 44px;
 }
 
-.highlight-card:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--blue-500);
-}
+/* Skip animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
 
-.highlight-card:active {
-    transform: translateX(2px);
-}
+    .card-skeleton,
+    .skeleton-icon,
+    .card-badge,
+    .access-card:hover .card-icon {
+        animation: none;
+        transition: none;
+    }
 
-.highlight-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    background: var(--bg-surface-hover);
-    transition: all 0.2s ease;
-}
-
-.highlight-card:hover .highlight-icon {
-    transform: scale(1.05);
+    .access-card:hover {
+        transform: none;
+    }
 }

@@ -5,14 +5,14 @@
 
 function getAllAvailableCards() {
     return [
-        // GESTÃO → AZUL (#FFB629)
+        // GESTÃO → AZUL (#2563eb)
         'escalas' => [
             'id' => 'escalas',
             'title' => 'Escalas',
             'icon' => 'calendar',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#FFB629', // Blue 500
+            'color' => '#2563eb', // Blue 600
             'bg' => '#eff6ff', // Blue 50
             'url' => 'escalas.php',
             'admin_only' => false
@@ -23,7 +23,7 @@ function getAllAvailableCards() {
             'icon' => 'music',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#FFB629', // Blue 500
+            'color' => '#2563eb', // Blue 600
             'bg' => '#eff6ff', // Blue 50
             'url' => 'repertorio.php',
             'admin_only' => false
@@ -34,7 +34,7 @@ function getAllAvailableCards() {
             'icon' => 'users',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#FFB629', // Blue 500
+            'color' => '#2563eb', // Blue 600
             'bg' => '#eff6ff', // Blue 50
             'url' => 'membros.php',
             'admin_only' => false
@@ -46,7 +46,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar-days',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#FFB629', // Blue 500
+            'color' => '#2563eb', // Blue 600
             'bg' => '#eff6ff', // Blue 50
             'url' => 'agenda.php',
             'admin_only' => false
@@ -57,7 +57,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar-x',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#FFB629', // Blue 500
+            'color' => '#2563eb', // Blue 600
             'bg' => '#eff6ff', // Blue 50
             'url' => 'indisponibilidade.php',
             'admin_only' => false
@@ -69,7 +69,7 @@ function getAllAvailableCards() {
             'icon' => 'history',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#FFB629', // Blue 500
+            'color' => '#2563eb', // Blue 600
             'bg' => '#eff6ff', // Blue 50
             'url' => 'historico.php',
             'admin_only' => false
@@ -111,15 +111,15 @@ function getAllAvailableCards() {
         ],
 
         
-        // COMUNICAÇÃO → AMARELO (#FFC501)
+        // COMUNICAÇÃO → AMARELO (#d97706)
         'avisos' => [
             'id' => 'avisos',
             'title' => 'Avisos',
             'icon' => 'bell',
             'category' => 'comunica',
             'category_name' => 'Comunicação',
-            'color' => '#FFC501', // Yellow 500
-            'bg' => '#fffbeb', // Yellow 50
+            'color' => '#d97706', // Amber 600
+            'bg' => '#fffbeb', // Amber 50
             'url' => 'avisos.php',
             'admin_only' => false
         ],
@@ -129,8 +129,8 @@ function getAllAvailableCards() {
             'icon' => 'cake',
             'category' => 'comunica',
             'category_name' => 'Comunicação',
-            'color' => '#FFC501', // Yellow 500
-            'bg' => '#fffbeb', // Yellow 50
+            'color' => '#d97706', // Amber 600
+            'bg' => '#fffbeb', // Amber 50
             'url' => 'aniversarios.php',
             'admin_only' => false
         ],

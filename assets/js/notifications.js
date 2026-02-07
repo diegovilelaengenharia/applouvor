@@ -178,18 +178,36 @@ function updateBadge() {
         }
     }
 
-    // 2. Mobile Button (Mesmo estilo do Desktop - Amarelo)
+    // 2. Mobile / Global Button
     const btnMobile = document.getElementById('notificationBtn');
 
     if (btnMobile) {
         if (unreadCount > 0) {
-            btnMobile.style.background = '#fef3c7';
-            btnMobile.style.color = '#d97706';
-            btnMobile.style.borderColor = '#fcd34d';
+            // Apply Amber/Yellow Highlight
+            btnMobile.style.background = '#fef3c7'; // Amber 100
+            btnMobile.style.color = '#d97706';      // Amber 600
+            btnMobile.style.borderColor = '#fcd34d'; // Amber 300
+
+            // Pulse animation for attention
+            btnMobile.style.animation = 'pulse-soft 2s infinite';
+
+            // Ensure badge is visible
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+                badge.style.display = 'flex';
+                badge.textContent = unreadCount;
+            }
         } else {
+            // Reset to default
             btnMobile.style.background = '';
             btnMobile.style.color = '';
             btnMobile.style.borderColor = '';
+            btnMobile.style.animation = '';
+
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+                badge.style.display = 'none';
+            }
         }
     }
 }

@@ -33,21 +33,24 @@ function initDashboardCustomization() {
 // Definições de todos os cards disponíveis (sincronizado com dashboard_cards.php)
 function loadAllCardsDefinitions() {
     allCards = {
-        // GESTÃO → AZUL
+        // GESTÃO → AZUL (#2563eb / #eff6ff)
         escalas: { title: 'Escalas', icon: 'calendar', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
         repertorio: { title: 'Repertório', icon: 'music', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
         membros: { title: 'Membros', icon: 'users', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
         agenda: { title: 'Agenda', icon: 'calendar-days', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
         ausencias: { title: 'Ausências', icon: 'calendar-x', category: 'Gestão', color: '#2563eb', bg: '#eff6ff' },
 
-        // ESPÍRITO → VERDE
+        // ESPÍRITO → VERDE (#059669 / #ecfdf5)
         leitura: { title: 'Leitura Bíblica', icon: 'book-open', category: 'Espírito', color: '#059669', bg: '#ecfdf5' },
         devocional: { title: 'Devocional', icon: 'sunrise', category: 'Espírito', color: '#059669', bg: '#ecfdf5' },
         oracao: { title: 'Oração', icon: 'heart', category: 'Espírito', color: '#059669', bg: '#ecfdf5' },
 
-        // COMUNICAÇÃO → ROXO
-        avisos: { title: 'Avisos', icon: 'bell', category: 'Comunica', color: '#7c3aed', bg: '#f5f3ff' },
-        aniversarios: { title: 'Aniversários', icon: 'cake', category: 'Comunica', color: '#7c3aed', bg: '#f5f3ff' }
+        // COMUNICAÇÃO → ÂMBAR (Previously Purple) (#d97706 / #fffbeb)
+        avisos: { title: 'Avisos', icon: 'bell', category: 'Comunica', color: '#d97706', bg: '#fffbeb' },
+        aniversarios: { title: 'Aniversários', icon: 'cake', category: 'Comunica', color: '#d97706', bg: '#fffbeb' },
+        
+        // ADMIN → VERMELHO (Se houver futuros cards admin)
+        historico: { title: 'Histórico', icon: 'history', category: 'Admin', color: '#2563eb', bg: '#eff6ff' }
     };
 }
 
@@ -62,11 +65,13 @@ async function openDashboardCustomization() {
             dashboardSettings = data.settings;
             renderCustomizationModal();
         } else {
-            alert('Erro ao carregar configurações');
+            // Fallback se falhar API
+            renderCustomizationModal();
         }
     } catch (error) {
         console.error('Erro:', error);
-        alert('Erro ao carregar configurações');
+        // Fallback visual mesmo com erro
+        renderCustomizationModal();
     }
 }
 
@@ -83,109 +88,125 @@ function renderCustomizationModal() {
         <style>
             #dashboardCustomizationModal {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+                background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
                 z-index: 9999; display: flex; align-items: center; justify-content: center;
-                animation: fadeIn 0.2s;
+                animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             }
             
             .customize-modal-content {
-                background: var(--bg-surface); width: 90%; max-width: 500px;
-                max-height: 80vh; border-radius: 16px; overflow: hidden;
-                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+                background: var(--bg-surface); width: 90%; max-width: 520px;
+                max-height: 85vh; border-radius: 20px; overflow: hidden;
+                box-shadow: 0 20px 60px -10px rgba(0,0,0,0.3);
                 display: flex; flex-direction: column;
+                border: 1px solid var(--border-subtle);
+                animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
             
             .customize-modal-header {
-                padding: 20px 24px; border-bottom: 1px solid var(--border-color);
+                padding: 20px 24px; border-bottom: 1px solid var(--border-subtle);
                 display: flex; align-items: center; justify-content: space-between;
+                background: var(--bg-surface);
             }
             
             .customize-modal-header h3 {
                 margin: 0; font-size: 1.25rem; font-weight: 700;
-                color: var(--text-main);
+                color: var(--text-primary);
+                letter-spacing: -0.02em;
             }
             
             .customize-modal-body {
-                padding: 20px 24px; overflow-y: auto; flex: 1;
+                padding: 24px; overflow-y: auto; flex: 1;
+                background: var(--bg-app); /* Ligeiramente diferente */
             }
             
             .customize-description {
-                color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;
+                color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;
+                line-height: 1.5;
             }
             
             .customize-grid {
-                display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+                display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
             }
             
             .customize-card-label {
-                display: flex; align-items: center; gap: 10px; padding: 12px;
-                border: 1px solid var(--border-color); border-radius: 12px;
-                cursor: pointer; transition: all 0.2s; background: var(--bg-body);
+                display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+                border: 1px solid var(--border-subtle); border-radius: 14px;
+                cursor: pointer; transition: all 0.2s ease; 
+                background: var(--bg-surface);
+                position: relative;
+                overflow: hidden;
             }
             
             .customize-card-label:hover {
-                border-color: var(--primary); background: var(--bg-surface);
+                border-color: var(--border-medium); 
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-sm);
             }
             
-            .customize-card-label input {
-                width: 18px; height: 18px; accent-color: var(--primary);
+            .customize-card-label input[type="checkbox"] {
+                width: 20px; height: 20px; 
+                accent-color: var(--primary);
+                cursor: pointer;
             }
             
             .customize-card-icon {
-                width: 28px; height: 28px; border-radius: 8px;
+                width: 36px; height: 36px; border-radius: 10px;
                 display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
             }
             
             .customize-card-title {
-                font-weight: 500; font-size: 0.85rem; color: var(--text-main);
+                font-weight: 600; font-size: 0.9rem; color: var(--text-primary);
             }
             
             .customize-modal-footer {
-                padding: 16px 24px; border-top: 1px solid var(--border-color);
+                padding: 20px 24px; border-top: 1px solid var(--border-subtle);
                 display: flex; gap: 12px; justify-content: flex-end;
+                background: var(--bg-surface);
             }
             
             .customize-btn {
-                padding: 10px 20px; border-radius: 8px; font-weight: 600;
+                padding: 12px 24px; border-radius: 12px; font-weight: 600;
                 cursor: pointer; transition: all 0.2s; border: none;
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
             
             .customize-btn-primary {
                 background: var(--primary); color: white;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             }
             
             .customize-btn-primary:hover {
-                opacity: 0.9;
+                background: var(--primary-dark);
+                transform: translateY(-1px);
             }
             
             .customize-btn-secondary {
-                background: transparent; color: var(--text-main);
-                border: 1px solid var(--border-color);
+                background: transparent; color: var(--text-secondary);
+                border: 1px solid transparent;
             }
             
             .customize-btn-secondary:hover {
-                background: var(--bg-body);
+                background: var(--bg-surface-hover);
+                color: var(--text-primary);
             }
             
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         </style>
         
         <div class="customize-modal-content">
             <div class="customize-modal-header">
                 <h3>Personalizar Acesso Rápido</h3>
-                <button onclick="closeDashboardCustomization()" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 8px;">
-                    <i data-lucide="x" style="width: 20px;"></i>
+                <button onclick="closeDashboardCustomization()" style="background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 8px;">
+                    <i data-lucide="x" style="width: 24px;"></i>
                 </button>
             </div>
             
             <div class="customize-modal-body">
-                <p class="customize-description">Selecione os atalhos que deseja exibir no seu painel.</p>
+                <p class="customize-description">Selecione quais cartões você deseja visualizar na tela inicial.</p>
                 <div class="customize-grid" id="customizeCardsList">
-                    <!-- Cards serão inseridos aqui -->
+                    <!-- Cards inseridos aqui -->
                 </div>
             </div>
             
