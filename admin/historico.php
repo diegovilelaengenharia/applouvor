@@ -713,13 +713,40 @@ try {
             
             <?php if (!empty($topTags)): ?>
             <div class="table-container">
-                <table>
+                <style>
+                    /* Estilo Minimalista Dedicado */
+                    .minimal-table th {
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                        font-size: 0.8rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        border-bottom: 2px solid var(--border-subtle);
+                        padding-bottom: 12px;
+                    }
+                    .minimal-table td {
+                        padding: 16px 8px;
+                        border-bottom: 1px solid var(--border-subtle);
+                        color: var(--text-primary);
+                    }
+                    .minimal-table tr:last-child td {
+                        border-bottom: none;
+                    }
+                    .tag-indicator {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 4px;
+                        display: inline-block;
+                        margin-right: 8px;
+                    }
+                </style>
+                <table class="minimal-table">
                     <thead>
                         <tr>
-                            <th style="width: 10%; text-align: center;">#</th>
-                            <th style="width: 35%;">Tag</th>
-                            <th style="width: 20%; text-align: center;">Execuções</th>
-                            <th style="width: 20%; text-align: center;">% do Total</th>
+                            <th style="width: 5%; text-align: center;">#</th>
+                            <th style="width: 40%;">Tag / Estilo</th>
+                            <th style="width: 25%; text-align: center;">Execuções</th>
+                            <th style="width: 15%; text-align: center;">% Total</th>
                             <th style="width: 15%; text-align: center;">Tendência</th>
                         </tr>
                     </thead>
@@ -733,49 +760,23 @@ try {
                             $percentTotal = $totalExec > 0 ? round(($tag['uses_period'] / $totalExec) * 100, 1) : 0;
                         ?>
                         <tr>
-                            <td style="text-align: center;">
-                                <div style="
-                                    width: 32px; height: 32px; 
-                                    background: <?= $tag['color'] ?>20;
-                                    color: <?= $tag['color'] ?>;
-                                    border-radius: 8px;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    font-weight: 700;
-                                    margin: 0 auto;
-                                "><?= $rank++ ?></div>
+                            <td style="text-align: center; color: var(--text-tertiary); font-weight: 600;">
+                                <?= $rank++ ?>
                             </td>
                             <td>
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="
-                                        width: 40px; height: 40px; 
-                                        background: <?= $tag['color'] ?>; 
-                                        border-radius: 10px;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        color: white;
-                                        flex-shrink: 0;
-                                    ">
-                                        <i data-lucide="tag" width="20"></i>
-                                    </div>
+                                <div style="display: flex; align-items: center;">
+                                    <span class="tag-indicator" style="background: <?= $tag['color'] ?>;"></span>
                                     <div>
                                         <div class="font-bold text-primary"><?= htmlspecialchars($tag['name']) ?></div>
-                                        <div class="text-xs text-secondary"><?= $tag['uses_total'] ?? 0 ?> execuções no total</div>
+                                        <div class="text-xs text-secondary mt-0.5"><?= $tag['uses_total'] ?? 0 ?> no histórico</div>
                                     </div>
                                 </div>
                             </td>
                             <td style="text-align: center;">
-                                <div class="font-bold text-primary" style="font-size: 1.1rem;"><?= $tag['uses_period'] ?>x</div>
+                                <div class="font-bold text-primary"><?= $tag['uses_period'] ?></div>
                             </td>
-                            <td>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                    <span class="badge-slate badge-sm" style="font-weight: 700;"><?= $percentTotal ?>%</span>
-                                    <div class="progress-bar-container" style="height: 6px; width: 100%;">
-                                        <div class="progress-bar" style="width: <?= $percent ?>%; background: <?= $tag['color'] ?>;"></div>
-                                    </div>
-                                </div>
+                            <td style="text-align: center;">
+                                <span class="text-sm text-secondary"><?= $percentTotal ?>%</span>
                             </td>
                             <td style="text-align: center;">
                                 <?php 
@@ -783,7 +784,7 @@ try {
                                 $trendColor = $trend == 'up' ? 'var(--green-500)' : ($trend == 'down' ? 'var(--red-500)' : 'var(--slate-400)');
                                 $trendIcon = $trend == 'up' ? 'trending-up' : ($trend == 'down' ? 'trending-down' : 'minus');
                                 ?>
-                                <i data-lucide="<?= $trendIcon ?>" width="20" style="color: <?= $trendColor ?>;"></i>
+                                <i data-lucide="<?= $trendIcon ?>" width="18" style="color: <?= $trendColor ?>; opacity: 0.8;"></i>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -807,13 +808,13 @@ try {
             
             <?php if (!empty($usoTons)): ?>
             <div class="table-container">
-                <table>
+                <table class="minimal-table">
                     <thead>
                         <tr>
                             <th style="width: 15%; text-align: center;">Tom</th>
-                            <th style="width: 45%;">Frequência</th>
+                            <th style="width: 50%;">Frequência de Uso</th>
                             <th style="width: 20%; text-align: center;">Execuções</th>
-                            <th style="width: 20%; text-align: center;">% do Total</th>
+                            <th style="width: 15%; text-align: center;">% Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -832,29 +833,20 @@ try {
                         ?>
                         <tr>
                             <td style="text-align: center;">
-                                <div class="font-bold text-primary font-mono" style="
-                                    background: <?= $barColor ?>20;
-                                    color: <?= $barColor ?>;
-                                    padding: 8px;
-                                    border-radius: 8px;
-                                    font-size: 1.1rem;
-                                    display: inline-block;
-                                    min-width: 50px;
-                                "><?= $ton['tone'] ?></div>
+                                <div class="font-bold text-primary font-mono" style="font-size: 1rem;"><?= $ton['tone'] ?></div>
                             </td>
                             <td>
-                                <div class="progress-bar-container" style="height: 32px; background: var(--bg-body); border-radius: 8px;">
-                                    <div class="progress-bar flex items-center pl-3 text-white text-sm font-bold" 
-                                         style="width: <?= $width ?>%; background: <?= $barColor ?>; border-radius: 8px;">
-                                         <?= $width > 20 ? $ton['uses_period'] . 'x' : '' ?>
+                                <div class="progress-bar-container" style="height: 6px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                                    <div class="progress-bar" 
+                                         style="width: <?= $width ?>%; background: <?= $barColor ?>; border-radius: 4px;">
                                     </div>
                                 </div>
                             </td>
                             <td style="text-align: center;">
-                                <div class="font-bold text-primary" style="font-size: 1.1rem;"><?= $ton['uses_period'] ?>x</div>
+                                <div class="font-bold text-primary"><?= $ton['uses_period'] ?></div>
                             </td>
                             <td style="text-align: center;">
-                                <span class="badge-slate badge-sm" style="font-weight: 700;"><?= $percentTotal ?>%</span>
+                                <span class="text-sm text-secondary"><?= $percentTotal ?>%</span>
                             </td>
                         </tr>
                         <?php endforeach; ?>
