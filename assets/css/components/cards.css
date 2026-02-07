@@ -211,3 +211,248 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
 }
+
+/* ============================================
+   COMPACT CARD SYSTEM - Sistema Centralizado
+   ============================================ */
+
+/* --- BASE COMPACT CARD (Horizontal) --- */
+.compact-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--blue-500);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+}
+
+.compact-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* --- COMPACT CARD ICON/BADGE --- */
+.compact-card-icon {
+    min-width: 42px;
+    height: 42px;
+    background: var(--slate-100);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.compact-card-icon.rounded {
+    border-radius: 50%;
+}
+
+/* --- COMPACT CARD CONTENT --- */
+.compact-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.compact-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compact-card-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* --- COMPACT CARD ARROW --- */
+.compact-card-arrow {
+    color: var(--text-tertiary);
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   EVENT CARD SYSTEM - Para Escalas
+   ============================================ */
+
+/* --- BASE EVENT CARD --- */
+.event-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--blue-500);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-card.past {
+    opacity: 0.7;
+    filter: saturate(0.6);
+}
+
+.event-card.past:hover {
+    opacity: 1;
+    filter: saturate(1);
+}
+
+/* --- EVENT CARD DATE BOX --- */
+.event-card-date {
+    min-width: 56px;
+    height: 56px;
+    background: var(--blue-100);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.event-card-date-day {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--blue-600);
+}
+
+.event-card-date-month {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--blue-600);
+    opacity: 0.9;
+    margin-top: 3px;
+}
+
+/* --- EVENT CARD CONTENT --- */
+.event-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.event-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.event-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-card-badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.event-card-badge.today {
+    background: var(--red-100);
+    color: var(--red-700);
+    text-transform: uppercase;
+}
+
+.event-card-badge.upcoming {
+    background: var(--blue-100);
+    color: var(--blue-700);
+}
+
+.event-card-badge.past {
+    background: var(--slate-100);
+    color: var(--slate-600);
+}
+
+.event-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.event-card-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* --- EVENT CARD AVATARS --- */
+.event-card-avatars {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.event-card-avatar-group {
+    display: flex;
+    align-items: center;
+}
+
+.event-card-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--blue-500);
+    border: 2px solid var(--bg-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+}
+
+.event-card-avatar:not(:first-child) {
+    margin-left: -10px;
+}
+
+.event-card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.event-card-avatar-more {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    margin-left: 4px;
+}

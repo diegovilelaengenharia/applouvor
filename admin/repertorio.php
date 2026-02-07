@@ -63,6 +63,9 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <a href="musica_adicionar.php" class="dropdown-item">
                 <i data-lucide="plus" width="16"></i> Adicionar Música
             </a>
+            <a href="classificacoes.php" class="dropdown-item">
+                <i data-lucide="tags" width="16"></i> Gerenciar TAGs
+            </a>
             <?php endif; ?>
         </div>
     </div>
@@ -206,33 +209,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 }
             ?>
                 <!-- COMPACT MUSIC CARD -->
-                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" style="
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    padding: 10px 14px;
-                    background: var(--bg-surface);
-                    border: 1px solid var(--border-subtle);
-                    border-left: 3px solid var(--blue-500);
-                    border-radius: 10px;
-                    text-decoration: none;
-                    color: inherit;
-                    transition: all 0.2s;
-                    margin-bottom: 8px;
-                " onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="compact-card">
                     
                     <!-- Tom Badge -->
-                    <div style="
-                        min-width: 42px;
-                        height: 42px;
-                        background: var(--slate-100);
-                        border-radius: 8px;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        flex-shrink: 0;
-                    ">
+                    <div class="compact-card-icon">
                         <?php if ($song['tone']): ?>
                             <div style="font-size: 1rem; font-weight: 800; line-height: 1; color: var(--text-primary);"><?= $song['tone'] ?></div>
                             <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; margin-top: 2px;">TOM</div>
@@ -242,11 +222,11 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     </div>
 
                     <!-- Conteúdo -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div class="compact-card-content">
+                        <div class="compact-card-title">
                             <?= htmlspecialchars($song['title']) ?>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <div class="compact-card-subtitle">
                             <span><?= htmlspecialchars($song['artist']) ?></span>
                             <?php if (!empty($songTags)): ?>
                                 <?php foreach (array_slice($songTags, 0, 2) as $tag): ?>
@@ -259,7 +239,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     </div>
 
                     <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary); opacity: 0.5; flex-shrink: 0;"></i>
+                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
                 </a>
             <?php endforeach; ?>
             
@@ -281,61 +261,27 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($tags as $tag): $bgHex = $tag['color'] ?? 'var(--sage-500)'; ?>
-                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" style="
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    padding: 10px 14px;
-                    background: var(--bg-surface);
-                    border: 1px solid var(--border-subtle);
-                    border-left: 3px solid <?= $bgHex ?>;
-                    border-radius: 10px;
-                    text-decoration: none;
-                    color: inherit;
-                    transition: all 0.2s;
-                    margin-bottom: 8px;
-                " onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>;">
                     
                     <!-- Ícone -->
-                    <div style="
-                        min-width: 42px;
-                        height: 42px;
-                        background: <?= $bgHex ?>15;
-                        border-radius: 8px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-shrink: 0;
-                        color: <?= $bgHex ?>;
-                    ">
+                    <div class="compact-card-icon" style="background: <?= $bgHex ?>15; color: <?= $bgHex ?>;">
                         <i data-lucide="folder-heart" width="20"></i>
                     </div>
 
                     <!-- Conteúdo -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">
+                    <div class="compact-card-content">
+                        <div class="compact-card-title">
                             <?= htmlspecialchars($tag['name']) ?>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                        <div class="compact-card-subtitle">
                             <?= $tag['count'] ?> músicas
                         </div>
                     </div>
 
                     <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary); opacity: 0.5; flex-shrink: 0;"></i>
+                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
                 </a>
             <?php endforeach; ?>
-            
-            <a href="classificacoes.php" class="timeline-card" style="border-left-color: var(--slate-400); border-style: dashed; background: var(--bg-body);">
-                <div class="card-content-wrapper">
-                    <div class="date-box" style="background: var(--bg-surface); color: var(--text-tertiary);">
-                        <i data-lucide="plus" width="24"></i>
-                    </div>
-                    <div class="event-details-col">
-                        <h3 class="event-title" style="color: var(--text-secondary);">Gerenciar TAGs</h3>
-                    </div>
-                </div>
-            </a>
         </div>
     <?php endif; ?>
 
@@ -349,50 +295,25 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($artists as $artist): ?>
-                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" style="
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    padding: 10px 14px;
-                    background: var(--bg-surface);
-                    border: 1px solid var(--border-subtle);
-                    border-left: 3px solid var(--violet-500);
-                    border-radius: 10px;
-                    text-decoration: none;
-                    color: inherit;
-                    transition: all 0.2s;
-                    margin-bottom: 8px;
-                " onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card" style="border-left-color: var(--violet-500);">
                     
                     <!-- Avatar -->
-                    <div style="
-                        min-width: 42px;
-                        height: 42px;
-                        background: var(--violet-500);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-shrink: 0;
-                        color: white;
-                        font-size: 1rem;
-                        font-weight: 700;
-                    ">
+                    <div class="compact-card-icon rounded" style="background: var(--violet-500); color: white; font-size: 1rem; font-weight: 700;">
                         <?= strtoupper(substr($artist['name'], 0, 1)) ?>
                     </div>
 
                     <!-- Conteúdo -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">
+                    <div class="compact-card-content">
+                        <div class="compact-card-title">
                             <?= htmlspecialchars($artist['name']) ?>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                        <div class="compact-card-subtitle">
                             <?= $artist['count'] ?> músicas
                         </div>
                     </div>
 
                     <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary); opacity: 0.5; flex-shrink: 0;"></i>
+                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
                 </a>
             <?php endforeach; ?>
         </div>
@@ -413,48 +334,25 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <?php foreach ($tones as $toneItem):
                 $bgHex = $toneColors[$toneItem['name']] ?? 'var(--slate-500)';
             ?>
-                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" style="
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    padding: 10px 14px;
-                    background: var(--bg-surface);
-                    border: 1px solid var(--border-subtle);
-                    border-left: 3px solid <?= $bgHex ?>;
-                    border-radius: 10px;
-                    text-decoration: none;
-                    color: inherit;
-                    transition: all 0.2s;
-                    margin-bottom: 8px;
-                " onmouseover="this.style.transform='translateX(4px)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>;">
                     
                     <!-- Ícone Musical -->
-                    <div style="
-                        min-width: 42px;
-                        height: 42px;
-                        background: <?= $bgHex ?>15;
-                        border-radius: 8px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-shrink: 0;
-                        color: <?= $bgHex ?>;
-                    ">
+                    <div class="compact-card-icon" style="background: <?= $bgHex ?>15; color: <?= $bgHex ?>;">
                         <i data-lucide="music" width="20"></i>
                     </div>
 
                     <!-- Conteúdo -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">
+                    <div class="compact-card-content">
+                        <div class="compact-card-title">
                             Tom <?= htmlspecialchars($toneItem['name']) ?>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                        <div class="compact-card-subtitle">
                             <?= $toneItem['count'] ?> músicas
                         </div>
                     </div>
 
                     <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary); opacity: 0.5; flex-shrink: 0;"></i>
+                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
                 </a>
             <?php endforeach; ?>
         </div>
