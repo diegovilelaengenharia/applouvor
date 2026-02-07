@@ -373,6 +373,7 @@ renderPageHeader($page_title, $page_subtitle);
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     border: 1px solid #e5e7eb;
     margin-bottom: 12px;
+    text-align: left;
 }
 
 .section-header {
@@ -382,6 +383,7 @@ renderPageHeader($page_title, $page_subtitle);
     margin-bottom: 14px;
     padding-bottom: 10px;
     border-bottom: 2px solid #f3f4f6;
+    text-align: left;
 }
 
 .section-icon {
