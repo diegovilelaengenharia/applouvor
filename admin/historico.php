@@ -811,10 +811,9 @@ try {
                 <table class="minimal-table">
                     <thead>
                         <tr>
-                            <th style="width: 15%; text-align: center;">Tom</th>
-                            <th style="width: 50%;">Frequência de Uso</th>
-                            <th style="width: 20%; text-align: center;">Execuções</th>
-                            <th style="width: 15%; text-align: center;">% Total</th>
+                            <th style="width: 20%; text-align: center;">Tom</th>
+                            <th style="width: 40%; text-align: center;">Execuções</th>
+                            <th style="width: 40%; text-align: center;">% Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -826,21 +825,11 @@ try {
                             'F' => 'var(--blue-500)', 'G' => 'var(--purple-500)', 'A' => 'var(--pink-500)', 'B' => 'var(--teal-500)'
                         ];
                         foreach ($usoTons as $ton):
-                            $width = max(5, ($ton['uses_period'] / $maxTonUses) * 100);
-                            $baseTone = substr($ton['tone'], 0, 1);
-                            $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
                             $percentTotal = $totalTonExec > 0 ? round(($ton['uses_period'] / $totalTonExec) * 100, 1) : 0;
                         ?>
                         <tr>
                             <td style="text-align: center;">
                                 <div class="font-bold text-primary font-mono" style="font-size: 1rem;"><?= $ton['tone'] ?></div>
-                            </td>
-                            <td>
-                                <div class="progress-bar-container" style="height: 6px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
-                                    <div class="progress-bar" 
-                                         style="width: <?= $width ?>%; background: <?= $barColor ?>; border-radius: 4px;">
-                                    </div>
-                                </div>
                             </td>
                             <td style="text-align: center;">
                                 <div class="font-bold text-primary"><?= $ton['uses_period'] ?></div>
