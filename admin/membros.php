@@ -197,23 +197,161 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         pointer-events: none;
     }
 
-    /* Modal Styles (kept from original but cleaned up) */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); }
-    .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 450px; background: var(--bg-surface); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-xl); max-height: 90vh; overflow-y: auto; }
-    .modal-header { text-align: center; margin-bottom: 24px; }
-    .modal-header h2 { font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0 0 4px 0; }
-    .modal-header p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
-    .form-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-primary); font-size: 0.9rem; }
-    .form-input:focus { outline: none; border-color: var(--primary); }
-    .roles-container { max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-body); }
-    .roles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .role-option { display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 6px; background: var(--bg-surface); border: 1px solid var(--border-color); cursor: pointer; }
-    .role-option:hover { border-color: var(--primary); background: var(--primary-light); }
-    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
-    .btn-cancel { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); font-weight: 600; cursor: pointer; }
-    .btn-submit { flex: 2; padding: 10px; border-radius: 8px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
+
+    /* Modal Styles */
+    .modal { 
+        display: none; 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        z-index: 1000; 
+        background: rgba(0,0,0,0.5); 
+        backdrop-filter: blur(2px); 
+    }
+    
+    .modal-content { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%); 
+        width: 90%; 
+        max-width: 450px; 
+        background: white !important; 
+        border-radius: 20px; 
+        padding: 24px; 
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+        max-height: 90vh; 
+        overflow-y: auto; 
+    }
+    
+    .modal-header { 
+        text-align: center; 
+        margin-bottom: 24px; 
+    }
+    
+    .modal-header h2 { 
+        font-size: 1.25rem; 
+        font-weight: 800; 
+        color: #1a1a1a !important; 
+        margin: 0 0 4px 0; 
+    }
+    
+    .modal-header p { 
+        color: #666 !important; 
+        font-size: 0.9rem; 
+        margin: 0; 
+    }
+    
+    .form-group { 
+        margin-bottom: 16px; 
+    }
+    
+    .form-label { 
+        display: block; 
+        font-size: 0.9rem; 
+        font-weight: 600; 
+        color: #1a1a1a !important; 
+        margin-bottom: 6px; 
+    }
+    
+    .form-input { 
+        width: 100%; 
+        padding: 10px; 
+        border-radius: 8px; 
+        border: 1px solid #ddd; 
+        background: #f9f9f9 !important; 
+        color: #1a1a1a !important; 
+        font-size: 0.9rem; 
+    }
+    
+    .form-input:focus { 
+        outline: none; 
+        border-color: var(--primary); 
+        background: white !important;
+    }
+    
+    .roles-container { 
+        max-height: 200px; 
+        overflow-y: auto; 
+        border: 1px solid #ddd; 
+        border-radius: 8px; 
+        padding: 8px; 
+        background: #f9f9f9 !important; 
+    }
+    
+    .roles-grid { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 8px; 
+    }
+    
+    .role-option { 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        padding: 6px; 
+        border-radius: 6px; 
+        background: white !important; 
+        border: 1px solid #ddd; 
+        cursor: pointer; 
+    }
+    
+    .role-option:hover { 
+        border-color: var(--primary); 
+        background: #e8f5e9 !important; 
+    }
+    
+    .role-option span {
+        color: #1a1a1a !important;
+    }
+    
+    .role-checkbox {
+        accent-color: var(--primary);
+    }
+    
+    .modal-actions { 
+        display: flex; 
+        gap: 12px; 
+        margin-top: 24px; 
+    }
+    
+    .btn-cancel { 
+        flex: 1; 
+        padding: 12px; 
+        border-radius: 8px; 
+        border: 1px solid #ddd; 
+        background: white !important; 
+        color: #666 !important; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: all 0.2s;
+    }
+    
+    .btn-cancel:hover {
+        background: #f5f5f5 !important;
+        border-color: #999;
+    }
+    
+    .btn-submit { 
+        flex: 2; 
+        padding: 12px; 
+        border-radius: 8px; 
+        border: none; 
+        background: var(--primary) !important; 
+        color: white !important; 
+        font-weight: 700; 
+        cursor: pointer; 
+        transition: all 0.2s;
+    }
+    
+    .btn-submit:hover {
+        background: var(--green-700) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
 
     /* Role Badge in List */
     .list-role-badge {
