@@ -342,27 +342,33 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhum participante escalado</p>
                 </div>
             <?php else: ?>
-                <div class="participants-grid">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                     <?php foreach ($team as $member): ?>
-                        <div class="participant-card">
-                            <div class="participant-avatar" style="background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>;">
+                        <div class="compact-card">
+                            <!-- Avatar -->
+                            <div class="compact-card-icon rounded" style="background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>; color: white; font-weight: 800; font-size: 1.1rem;">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
-                            <div class="participant-name"><?= htmlspecialchars($member['name']) ?></div>
-                            <div class="participant-roles">
-                                <?php 
-                                $mRoles = $userRoles[$member['user_id']] ?? [];
-                                if (empty($mRoles) && $member['instrument']) {
-                                    // Fallback legacy
-                                    echo '<span style="font-size: var(--font-caption); color: #6b7280; font-weight: 500;">' . htmlspecialchars($member['instrument']) . '</span>';
-                                } else {
-                                    foreach ($mRoles as $role): 
-                                ?>
-                                    <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: var(--font-body-sm); cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
-                                <?php 
-                                    endforeach; 
-                                }
-                                ?>
+
+                            <!-- Conteúdo -->
+                            <div class="compact-card-content">
+                                <div class="compact-card-title">
+                                    <?= htmlspecialchars($member['name']) ?>
+                                </div>
+                                <div class="compact-card-subtitle">
+                                    <?php 
+                                    $mRoles = $userRoles[$member['user_id']] ?? [];
+                                    if (empty($mRoles) && $member['instrument']) {
+                                        echo '<span>' . htmlspecialchars($member['instrument']) . '</span>';
+                                    } else {
+                                        foreach ($mRoles as $role): 
+                                    ?>
+                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 1rem; cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
+                                    <?php 
+                                        endforeach; 
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
