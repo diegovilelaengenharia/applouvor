@@ -133,14 +133,16 @@ $kpiCards = [
 try {
     $sqlTags = "
         SELECT 
-            t.name, t.color,
-            COUNT(ss.id) as uses_period
+            t.id, t.name, t.color,
+            COUNT(CASE WHEN sc.event_date >= :dateLimit THEN 1 END) as uses_period,
+            COUNT(ss.id) as uses_total
         FROM tags t
         JOIN song_tags st ON t.id = st.tag_id
-        JOIN schedule_songs ss ON st.song_id = ss.song_id
-        JOIN schedules sc ON ss.schedule_id = sc.id
-        WHERE sc.event_date >= :dateLimit AND sc.event_date < CURDATE()
+        JOIN songs s ON st.song_id = s.id
+        JOIN schedule_songs ss ON s.id = ss.song_id
+        JOIN schedules sc ON ss.schedule_id = sc.id AND sc.event_date < CURDATE()
         GROUP BY t.id, t.name, t.color
+        HAVING uses_period > 0
         ORDER BY uses_period DESC
         LIMIT 10
     ";
