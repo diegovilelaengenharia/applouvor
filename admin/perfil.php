@@ -533,19 +533,108 @@ renderPageHeader($page_title, $page_subtitle);
     border: 1px solid #fca5a5;
 }
 
+
 @media (max-width: 768px) {
+    .profile-container {
+        padding: 12px;
+    }
+    
     .profile-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
     
     .profile-sidebar {
         position: static;
     }
     
+    .avatar-card {
+        padding: 24px 16px;
+    }
+    
+    .avatar-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 12px;
+    }
+    
+    .avatar-edit-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .profile-name {
+        font-size: 1.25rem;
+    }
+    
+    .form-section {
+        padding: 16px;
+    }
+    
+    .section-header {
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+    }
+    
+    .section-title {
+        font-size: 1rem;
+    }
+    
     .form-row {
         grid-template-columns: 1fr;
     }
+    
+    .roles-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 12px 20px;
+    }
 }
+
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 8px;
+    }
+    
+    .avatar-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-name {
+        font-size: 1.125rem;
+    }
+    
+    .form-section {
+        padding: 12px;
+        border-radius: 12px;
+    }
+    
+    .form-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 12px;
+    }
+    
+    .roles-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .role-checkbox-label {
+        padding: 12px;
+    }
+}
+
 </style>
 
 <div class="profile-container">
