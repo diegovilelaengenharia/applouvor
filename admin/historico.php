@@ -892,6 +892,7 @@ try {
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.2);
         ">
             <div style="
                 width: 56px; height: 56px; 
@@ -915,6 +916,8 @@ try {
             max-width: 800px; 
             margin-left: auto; 
             margin-right: auto;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         ">
             <div style="margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
                 <h3 class="font-bold text-primary flex items-center gap-2" style="font-size: 1.1rem;">
@@ -1065,9 +1068,28 @@ try {
                             
                             <div style="display: flex; gap: 8px; margin-top: 8px;">
                                 <?php if ($res['tone']): ?>
-                                    <span class="badge-slate badge-sm">
-                                        <?= $res['tone'] ?>
-                                    </span>
+                                    <?php 
+                            // Cores Hex para os tons (mesma paleta do gráfico)
+                            $tonColors = [
+                                'C' => '#ef4444', // Red 500
+                                'D' => '#f59e0b', // Amber 500
+                                'E' => '#22c55e', // Green 500
+                                'F' => '#3b82f6', // Blue 500
+                                'G' => '#a855f7', // Purple 500
+                                'A' => '#ec4899', // Pink 500
+                                'B' => '#14b8a6'  // Teal 500
+                            ];
+                            $baseTone = substr($res['tone'], 0, 1);
+                            $badgeColor = $tonColors[$baseTone] ?? '#64748b';
+                            ?>
+                            <span class="badge" style="
+                                background-color: <?= $badgeColor ?>20; 
+                                color: <?= $badgeColor ?>; 
+                                border: 1px solid <?= $badgeColor ?>40;
+                                font-weight: 800;
+                            ">
+                                <?= $res['tone'] ?>
+                            </span>
                                 <?php endif; ?>
                                 
                                 <span class="badge-blue badge-sm">
