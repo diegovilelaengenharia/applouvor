@@ -827,28 +827,7 @@ try {
                     gap: 12px; 
                     border-left: 3px solid <?= $barColor ?>;
                     background: linear-gradient(to right, <?= $barColor ?>08, transparent);
-                    position: relative;
                 ">
-                    <?php if ($ton['tone'] === 'G'): ?>
-                        <div style="
-                            position: absolute; 
-                            top: -6px; 
-                            right: -6px; 
-                            background: <?= $barColor ?>; 
-                            color: white; 
-                            border-radius: 50%; 
-                            width: 20px; 
-                            height: 20px; 
-                            display: flex; 
-                            align-items: center; 
-                            justify-content: center; 
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-                            z-index: 10;
-                        " title="Tom mais comum">
-                            <i data-lucide="star" width="12" fill="white"></i>
-                        </div>
-                    <?php endif; ?>
-
                     <!-- Ícone / Tom -->
                     <div style="
                         width: 40px; height: 40px; 
