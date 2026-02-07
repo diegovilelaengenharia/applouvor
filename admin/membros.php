@@ -129,36 +129,41 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid transparent;
+        border: 1px solid var(--border-subtle);
         transition: all 0.2s;
         cursor: pointer;
         color: var(--text-secondary);
-        background: transparent;
+        background: var(--bg-surface);
+        flex-shrink: 0; /* Prevent button from shrinking */
     }
 
     .btn-action-icon:hover {
         background: var(--bg-surface-active);
         color: var(--text-primary);
-        border-color: var(--border-subtle);
+        border-color: var(--border-color);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .btn-action-whatsapp {
         color: var(--green-600);
         background: var(--green-50);
-        border-color: var(--green-100);
+        border-color: var(--green-200);
     }
     .btn-action-whatsapp:hover {
         background: var(--green-100);
         color: var(--green-700);
-        border-color: var(--green-200);
+        border-color: var(--green-300);
     }
     
     .btn-action-delete {
         color: var(--red-500);
+        border-color: var(--red-100);
     }
     .btn-action-delete:hover {
         background: var(--red-50);
         color: var(--red-600);
+        border-color: var(--red-200);
     }
 
     .search-box {
