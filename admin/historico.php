@@ -811,13 +811,19 @@ try {
                 <?php 
                 $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
                 $totalTonExec = array_sum(array_column($usoTons, 'uses_period'));
+                // Cores Hexadecimais para garantir compatibilidade
                 $tonColors = [
-                    'C' => 'var(--red-500)', 'D' => 'var(--amber-500)', 'E' => 'var(--green-500)', 
-                    'F' => 'var(--blue-500)', 'G' => 'var(--purple-500)', 'A' => 'var(--pink-500)', 'B' => 'var(--teal-500)'
+                    'C' => '#ef4444', // Red 500
+                    'D' => '#f59e0b', // Amber 500
+                    'E' => '#22c55e', // Green 500
+                    'F' => '#3b82f6', // Blue 500
+                    'G' => '#a855f7', // Purple 500
+                    'A' => '#ec4899', // Pink 500
+                    'B' => '#14b8a6'  // Teal 500
                 ];
                 foreach ($usoTons as $ton):
                     $baseTone = substr($ton['tone'], 0, 1);
-                    $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
+                    $barColor = $tonColors[$baseTone] ?? '#64748b'; // Slate 500
                     $percentTotal = $totalTonExec > 0 ? round(($ton['uses_period'] / $totalTonExec) * 100, 1) : 0;
                 ?>
                 <div class="card-neutral" style="
