@@ -447,8 +447,15 @@ button#btnStopRecord:focus {
     let audioChunks = [];
 
     async function startRecording() {
+        // Troca os botões IMEDIATAMENTE
+        document.getElementById('btnStartRecord').style.display = 'none';
+        document.getElementById('btnStopRecord').style.display = 'inline-flex';
+        
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             alert('Erro: Microfone não disponível (HTTPS necessário).');
+            // Reverte os botões em caso de erro
+            document.getElementById('btnStartRecord').style.display = 'inline-flex';
+            document.getElementById('btnStopRecord').style.display = 'none';
             return;
         }
         try {
@@ -456,8 +463,6 @@ button#btnStopRecord:focus {
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             audioChunks = [];
-            document.getElementById('btnStartRecord').style.display = 'none';
-            document.getElementById('btnStopRecord').style.display = 'inline-flex';
 
             mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
             mediaRecorder.onstop = () => {
@@ -474,6 +479,9 @@ button#btnStopRecord:focus {
             };
         } catch (err) {
             alert("Erro ao gravar: " + err.message);
+            // Reverte os botões em caso de erro
+            document.getElementById('btnStartRecord').style.display = 'inline-flex';
+            document.getElementById('btnStopRecord').style.display = 'none';
         }
     }
 
