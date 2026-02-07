@@ -703,90 +703,168 @@ try {
     <div class="container fade-in">
         
         <!-- TAGS -->
-        <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-            <i data-lucide="tag" class="text-primary"></i>
-            Tags Mais Cantadas (Últimos <?= $period ?> dias)
-        </h3>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 48px;">
-            <?php foreach ($topTags as $tag): 
-                $maxUses = !empty($topTags) ? $topTags[0]['uses_period'] : 1;
-                $percent = ($tag['uses_period'] / $maxUses) * 100;
-            ?>
-            <div class="card-neutral" style="padding: 16px;">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                    <div style="
-                        width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-                        background: <?= $tag['color'] ?>; color: white;
-                        display: flex; align-items: center; justify-content: center;
-                        box-shadow: 0 2px 8px <?= $tag['color'] ?>40;
-                    ">
-                        <i data-lucide="tag" width="22"></i>
-                    </div>
-                    <div style="flex: 1; min-width: 0;">
-                        <div class="font-bold text-primary" style="font-size: 0.95rem; margin-bottom: 4px;"><?= htmlspecialchars($tag['name']) ?></div>
-                        <div class="text-xs text-secondary"><?= $tag['uses_period'] ?> execuções</div>
-                    </div>
-                    <div class="badge-slate badge-sm" style="font-weight: 700; font-size: 0.85rem;"><?= round($percent) ?>%</div>
-                </div>
-                <div class="progress-bar-container" style="height: 8px;">
-                    <div class="progress-bar" style="width: <?= $percent ?>%; background: <?= $tag['color'] ?>; box-shadow: 0 1px 4px <?= $tag['color'] ?>40;"></div>
-                </div>
-            </div>
-            <?php endforeach; ?>
+        <div class="card-neutral" style="padding: 20px; margin-bottom: 32px;">
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                <i data-lucide="tag" width="20"></i>
+                Tags Mais Cantadas (Últimos <?= $period ?> dias)
+            </h3>
             
-            <?php if (empty($topTags)): ?>
-                <div class="card-neutral" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+            <?php if (!empty($topTags)): ?>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 10%; text-align: center;">#</th>
+                            <th style="width: 35%;">Tag</th>
+                            <th style="width: 20%; text-align: center;">Execuções</th>
+                            <th style="width: 20%; text-align: center;">% do Total</th>
+                            <th style="width: 15%; text-align: center;">Tendência</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $maxUses = !empty($topTags) ? $topTags[0]['uses_period'] : 1;
+                        $totalExec = array_sum(array_column($topTags, 'uses_period'));
+                        $rank = 1;
+                        foreach ($topTags as $tag): 
+                            $percent = ($tag['uses_period'] / $maxUses) * 100;
+                            $percentTotal = $totalExec > 0 ? round(($tag['uses_period'] / $totalExec) * 100, 1) : 0;
+                        ?>
+                        <tr>
+                            <td style="text-align: center;">
+                                <div style="
+                                    width: 32px; height: 32px; 
+                                    background: <?= $tag['color'] ?>20;
+                                    color: <?= $tag['color'] ?>;
+                                    border-radius: 8px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-weight: 700;
+                                    margin: 0 auto;
+                                "><?= $rank++ ?></div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="
+                                        width: 40px; height: 40px; 
+                                        background: <?= $tag['color'] ?>; 
+                                        border-radius: 10px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        color: white;
+                                        flex-shrink: 0;
+                                    ">
+                                        <i data-lucide="tag" width="20"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-primary"><?= htmlspecialchars($tag['name']) ?></div>
+                                        <div class="text-xs text-secondary"><?= $tag['uses_total'] ?> execuções no total</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="font-bold text-primary" style="font-size: 1.1rem;"><?= $tag['uses_period'] ?>x</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                    <span class="badge-slate badge-sm" style="font-weight: 700;"><?= $percentTotal ?>%</span>
+                                    <div class="progress-bar-container" style="height: 6px; width: 100%;">
+                                        <div class="progress-bar" style="width: <?= $percent ?>%; background: <?= $tag['color'] ?>;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <?php 
+                                $trend = $tag['uses_period'] >= 3 ? 'up' : ($tag['uses_period'] == 1 ? 'down' : 'stable');
+                                $trendColor = $trend == 'up' ? 'var(--green-500)' : ($trend == 'down' ? 'var(--red-500)' : 'var(--slate-400)');
+                                $trendIcon = $trend == 'up' ? 'trending-up' : ($trend == 'down' ? 'trending-down' : 'minus');
+                                ?>
+                                <i data-lucide="<?= $trendIcon ?>" width="20" style="color: <?= $trendColor ?>;"></i>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
+                <div class="text-center text-tertiary p-8">
                     <i data-lucide="tag" width="48" style="opacity: 0.2; margin-bottom: 12px;"></i>
-                    <p class="text-tertiary">Nenhuma tag registrada neste período.</p>
+                    <p>Nenhuma tag registrada neste período.</p>
                 </div>
             <?php endif; ?>
         </div>
 
         <!-- TONS -->
-        <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-            <i data-lucide="music" class="text-primary"></i>
-            Distribuição de Tons (Nas Execuções)
-        </h3>
-        
         <div class="card-neutral" style="padding: 20px;">
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                <?php 
-                $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
-                $tonColors = [
-                    'C' => '#ef4444', 'D' => '#f59e0b', 'E' => '#10b981', 
-                    'F' => '#3b82f6', 'G' => '#8b5cf6', 'A' => '#ec4899', 'B' => '#14b8a6'
-                ];
-                foreach ($usoTons as $ton):
-                    $width = max(5, ($ton['uses_period'] / $maxTonUses) * 100);
-                    $baseTone = substr($ton['tone'], 0, 1);
-                    $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
-                ?>
-                <div style="display: grid; grid-template-columns: 60px 1fr 60px; align-items: center; gap: 12px;">
-                    <div class="font-bold text-primary text-center font-mono" style="
-                        background: <?= $barColor ?>20;
-                        color: <?= $barColor ?>;
-                        padding: 6px;
-                        border-radius: 8px;
-                        font-size: 1rem;
-                    "><?= $ton['tone'] ?></div>
-                    <div class="progress-bar-container" style="height: 28px; background: var(--bg-body); border-radius: 8px;">
-                        <div class="progress-bar flex items-center pl-3 text-white text-sm font-bold" 
-                             style="width: <?= $width ?>%; background: <?= $barColor ?>; border-radius: 8px; box-shadow: 0 2px 8px <?= $barColor ?>40;">
-                             <?= $width > 15 ? $ton['uses_period'] . 'x' : '' ?>
-                        </div>
-                    </div>
-                    <div class="font-bold text-primary text-center" style="font-size: 1rem;"><?= $ton['uses_period'] ?>x</div>
-                </div>
-                <?php endforeach; ?>
-                
-                <?php if (empty($usoTons)): ?>
-                    <div class="text-center text-tertiary p-8">
-                        <i data-lucide="music" width="48" style="opacity: 0.2; margin-bottom: 12px;"></i>
-                        <p>Nenhum tom registrado neste período.</p>
-                    </div>
-                <?php endif; ?>
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                <i data-lucide="music" width="20"></i>
+                Distribuição de Tons (Nas Execuções)
+            </h3>
+            
+            <?php if (!empty($usoTons)): ?>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%; text-align: center;">Tom</th>
+                            <th style="width: 45%;">Frequência</th>
+                            <th style="width: 20%; text-align: center;">Execuções</th>
+                            <th style="width: 20%; text-align: center;">% do Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
+                        $totalTonExec = array_sum(array_column($usoTons, 'uses_period'));
+                        $tonColors = [
+                            'C' => 'var(--red-500)', 'D' => 'var(--amber-500)', 'E' => 'var(--green-500)', 
+                            'F' => 'var(--blue-500)', 'G' => 'var(--purple-500)', 'A' => 'var(--pink-500)', 'B' => 'var(--teal-500)'
+                        ];
+                        foreach ($usoTons as $ton):
+                            $width = max(5, ($ton['uses_period'] / $maxTonUses) * 100);
+                            $baseTone = substr($ton['tone'], 0, 1);
+                            $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
+                            $percentTotal = $totalTonExec > 0 ? round(($ton['uses_period'] / $totalTonExec) * 100, 1) : 0;
+                        ?>
+                        <tr>
+                            <td style="text-align: center;">
+                                <div class="font-bold text-primary font-mono" style="
+                                    background: <?= $barColor ?>20;
+                                    color: <?= $barColor ?>;
+                                    padding: 8px;
+                                    border-radius: 8px;
+                                    font-size: 1.1rem;
+                                    display: inline-block;
+                                    min-width: 50px;
+                                "><?= $ton['tone'] ?></div>
+                            </td>
+                            <td>
+                                <div class="progress-bar-container" style="height: 32px; background: var(--bg-body); border-radius: 8px;">
+                                    <div class="progress-bar flex items-center pl-3 text-white text-sm font-bold" 
+                                         style="width: <?= $width ?>%; background: <?= $barColor ?>; border-radius: 8px;">
+                                         <?= $width > 20 ? $ton['uses_period'] . 'x' : '' ?>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="font-bold text-primary" style="font-size: 1.1rem;"><?= $ton['uses_period'] ?>x</div>
+                            </td>
+                            <td style="text-align: center;">
+                                <span class="badge-slate badge-sm" style="font-weight: 700;"><?= $percentTotal ?>%</span>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
+            <?php else: ?>
+                <div class="text-center text-tertiary p-8">
+                    <i data-lucide="music" width="48" style="opacity: 0.2; margin-bottom: 12px;"></i>
+                    <p>Nenhum tom registrado neste período.</p>
+                </div>
+            <?php endif; ?>
         </div>
         
     </div>
