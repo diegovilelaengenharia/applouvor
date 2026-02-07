@@ -224,7 +224,7 @@
     padding: 10px 14px;
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-left: 3px solid var(--blue-500);
+    border-left: 4px solid var(--blue-500);
     border-radius: 10px;
     text-decoration: none;
     color: inherit;

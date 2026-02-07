@@ -261,10 +261,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($tags as $tag): $bgHex = $tag['color'] ?? 'var(--sage-500)'; ?>
-                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>;">
+                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>; background: <?= $bgHex ?>08;">
                     
                     <!-- Ícone -->
-                    <div class="compact-card-icon" style="background: <?= $bgHex ?>15; color: <?= $bgHex ?>;">
+                    <div class="compact-card-icon" style="background: <?= $bgHex ?>20; color: <?= $bgHex ?>;">
                         <i data-lucide="folder-heart" width="20"></i>
                     </div>
 
@@ -274,7 +274,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                             <?= htmlspecialchars($tag['name']) ?>
                         </div>
                         <div class="compact-card-subtitle">
-                            <?= $tag['count'] ?> músicas
+                            <?= $tag['count'] ?> música<?= $tag['count'] > 1 ? 's' : '' ?>
                         </div>
                     </div>
 
@@ -307,6 +307,38 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     'Y' => '#60a5fa', 'Z' => '#38bdf8'
                 ];
                 $avatarColor = $avatarColors[$firstLetter] ?? '#6b7280';
+                
+                // Buscar tags mais usadas pelo artista
+                try {
+                    $sqlTags = "
+                        SELECT t.name, t.color, COUNT(*) as usage_count
+                        FROM songs s
+                        JOIN song_tags st ON s.id = st.song_id
+                        JOIN tags t ON st.tag_id = t.id
+                        WHERE s.artist = :artist
+                        GROUP BY t.id
+                        ORDER BY usage_count DESC
+                        LIMIT 2
+                    ";
+                    $stmtTags = $pdo->prepare($sqlTags);
+                    $stmtTags->execute(['artist' => $artist['name']]);
+                    $artistTags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+                } catch (Exception $e) { $artistTags = []; }
+                
+                // Buscar tons mais usados pelo artista
+                try {
+                    $sqlTones = "
+                        SELECT tone, COUNT(*) as usage_count
+                        FROM songs
+                        WHERE artist = :artist AND tone IS NOT NULL AND tone != ''
+                        GROUP BY tone
+                        ORDER BY usage_count DESC
+                        LIMIT 2
+                    ";
+                    $stmtTones = $pdo->prepare($sqlTones);
+                    $stmtTones->execute(['artist' => $artist['name']]);
+                    $artistTones = $stmtTones->fetchAll(PDO::FETCH_ASSOC);
+                } catch (Exception $e) { $artistTones = []; }
             ?>
                 <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card" style="border-left-color: <?= $avatarColor ?>;">
                     
@@ -321,7 +353,26 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                             <?= htmlspecialchars($artist['name']) ?>
                         </div>
                         <div class="compact-card-subtitle">
-                            <?= $artist['count'] ?> música<?= $artist['count'] > 1 ? 's' : '' ?>
+                            <span style="font-weight: 600;"><?= $artist['count'] ?> música<?= $artist['count'] > 1 ? 's' : '' ?></span>
+                            
+                            <?php if (!empty($artistTones)): ?>
+                                <span style="opacity: 0.6;">•</span>
+                                <span style="display: flex; align-items: center; gap: 3px;">
+                                    <i data-lucide="music" width="11"></i>
+                                    <?php 
+                                    $tonesList = array_column($artistTones, 'tone');
+                                    echo htmlspecialchars(implode(', ', $tonesList));
+                                    ?>
+                                </span>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($artistTags)): ?>
+                                <?php foreach ($artistTags as $tag): ?>
+                                    <span style="background: <?= $tag['color'] ?>15; color: <?= $tag['color'] ?>; padding: 1px 5px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                        <?= htmlspecialchars($tag['name']) ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -374,10 +425,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <?php foreach ($tones as $toneItem):
                 $bgHex = $toneColors[$toneItem['name']] ?? 'var(--slate-500)';
             ?>
-                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>;">
+                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>; background: <?= $bgHex ?>08;">
                     
                     <!-- Ícone Musical -->
-                    <div class="compact-card-icon" style="background: <?= $bgHex ?>15; color: <?= $bgHex ?>;">
+                    <div class="compact-card-icon" style="background: <?= $bgHex ?>20; color: <?= $bgHex ?>;">
                         <i data-lucide="music" width="20"></i>
                     </div>
 
@@ -387,7 +438,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                             Tom <?= htmlspecialchars($toneItem['name']) ?>
                         </div>
                         <div class="compact-card-subtitle">
-                            <?= $toneItem['count'] ?> músicas
+                            <?= $toneItem['count'] ?> música<?= $toneItem['count'] > 1 ? 's' : '' ?>
                         </div>
                     </div>
 
