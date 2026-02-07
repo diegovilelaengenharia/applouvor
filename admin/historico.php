@@ -343,8 +343,8 @@ try {
     }
     
     .filter-chip.active {
-        background: var(--primary);
-        border-color: var(--primary);
+        background: var(--slate-700);
+        border-color: var(--slate-700);
         color: white;
     }
     
