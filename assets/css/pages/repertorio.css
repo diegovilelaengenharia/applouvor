@@ -204,6 +204,23 @@
     padding: 0 16px 100px 16px;
 }
 
+/* Grid de 2 colunas para Tons */
+.results-grid-2col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 16px 100px 16px;
+}
+
+/* Mobile: 1 coluna */
+@media (max-width: 640px) {
+    .results-grid-2col {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* --- TAGS LIST & ARTISTS (Layout Específico) --- */
 /* (Reutiliza classes existentes ou define novas se necessário,
     mas tentando usar o padrão global timeline-card onde possível) */

@@ -412,7 +412,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             $tones = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) { $tones = []; }
     ?>
-        <div class="results-list">
+        <div class="results-grid-2col">
             <?php foreach ($tones as $toneItem):
                 $bgHex = $toneColors[$toneItem['name']] ?? 'var(--slate-500)';
             ?>
