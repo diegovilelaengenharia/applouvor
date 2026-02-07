@@ -113,401 +113,168 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 ?>
 
 <style>
-    .members-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 16px;
+    /* Custom Actions Layout for Members Card */
+    .member-actions-wrapper {
+        display: flex;
+        gap: 6px;
+        margin-left: auto; /* Push to right */
+        padding-left: 12px;
+        border-left: 1px solid var(--border-subtle);
+    }
+
+    .btn-action-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+        color: var(--text-secondary);
+        background: transparent;
+    }
+
+    .btn-action-icon:hover {
+        background: var(--bg-surface-active);
+        color: var(--text-primary);
+        border-color: var(--border-subtle);
+    }
+
+    .btn-action-whatsapp {
+        color: var(--green-600);
+        background: var(--green-50);
+        border-color: var(--green-100);
+    }
+    .btn-action-whatsapp:hover {
+        background: var(--green-100);
+        color: var(--green-700);
+        border-color: var(--green-200);
+    }
+    
+    .btn-action-delete {
+        color: var(--red-500);
+    }
+    .btn-action-delete:hover {
+        background: var(--red-50);
+        color: var(--red-600);
     }
 
     .search-box {
         position: relative;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
-
+    
     .search-box input {
         width: 100%;
-        padding: 14px 14px 14px 48px;
+        padding: 12px 16px 12px 44px;
         border-radius: 12px;
         border: 1px solid var(--border-color);
-        font-size: var(--font-body);
-        outline: none;
-        transition: all 0.2s;
         background: var(--bg-surface);
-        color: var(--text-main);
-        box-shadow: var(--shadow-sm);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        transition: all 0.2s;
     }
-
+    
     .search-box input:focus {
+        outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 4px var(--primary-subtle);
+        box-shadow: 0 0 0 3px var(--primary-light);
     }
-
+    
     .search-icon {
         position: absolute;
-        left: 16px;
+        left: 14px;
         top: 50%;
         transform: translateY(-50%);
-        color: var(--text-muted);
-        width: 20px;
+        color: var(--text-tertiary);
+        pointer-events: none;
     }
 
-    .members-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 80px;
-    }
+    /* Modal Styles (kept from original but cleaned up) */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); }
+    .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 450px; background: var(--bg-surface); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-xl); max-height: 90vh; overflow-y: auto; }
+    .modal-header { text-align: center; margin-bottom: 24px; }
+    .modal-header h2 { font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0 0 4px 0; }
+    .modal-header p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    .form-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-primary); font-size: 0.9rem; }
+    .form-input:focus { outline: none; border-color: var(--primary); }
+    .roles-container { max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-body); }
+    .roles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .role-option { display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 6px; background: var(--bg-surface); border: 1px solid var(--border-color); cursor: pointer; }
+    .role-option:hover { border-color: var(--primary); background: var(--primary-light); }
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .btn-cancel { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); font-weight: 600; cursor: pointer; }
+    .btn-submit { flex: 2; padding: 10px; border-radius: 8px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
 
-    .member-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        padding: 12px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        transition: all 0.2s;
-        box-shadow: var(--shadow-sm);
-        cursor: pointer;
-        position: relative;
-    }
-
-    .member-card:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        border-color: var(--primary);
-    }
-
-    .member-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: var(--font-h1);
-        color: white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        flex-shrink: 0;
-    }
-
-    .member-avatar img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .member-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .member-name {
-        font-size: var(--font-body);
-        font-weight: 700;
-        color: var(--text-main);
-        margin: 0 0 4px 0;
-        line-height: 1.2;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        flex-wrap: wrap;
-    }
-
-    .member-roles {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        margin-top: 2px;
-    }
-
-    .role-badge {
+    /* Role Badge in List */
+    .list-role-badge {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
-        padding: 2px 6px;
-        border-radius: 5px;
-        font-size: var(--font-caption);
-        font-weight: 600;
-        color: var(--text-main);
-        background: var(--bg-body);
-        border: 1px solid var(--border-color);
-    }
-
-    .role-icon {
-        font-size: var(--font-caption);
-    }
-
-    .badge-admin {
-        background: var(--yellow-500);
-        color: white;
-        padding: 1px 5px;
-        border-radius: 6px;
-        font-size: 0.65rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .member-actions {
-        display: flex;
         gap: 4px;
-        flex-shrink: 0;
-    }
-
-    .action-btn {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 7px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-decoration: none;
-    }
-
-    .btn-whatsapp {
-        background: var(--sage-500);
-        color: white;
-        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
-    }
-
-    .btn-phone {
-        background: var(--bg-body);
-        color: var(--text-muted);
-        border: 1px solid var(--border-color);
-    }
-
-    .btn-edit {
-        background: var(--primary);
-        color: white;
-        box-shadow: 0 2px 8px rgba(22, 101, 52, 0.3);
-    }
-
-    .btn-delete {
-        background: var(--rose-500);
-        color: white;
-        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-    }
-
-    .action-btn:hover {
-        transform: scale(1.05);
-    }
-
-    .fab {
-        display: none; /* Botão removido */
-    }
-
-    /* Modal Styles */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1000;
-        background: rgba(0,0,0,0.5);
-        backdrop-filter: blur(2px);
-    }
-
-    .modal-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90%;
-        max-width: 450px;
-        background: var(--bg-surface);
-        border-radius: 20px;
-        padding: 28px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .modal-header {
-        text-align: center;
-        margin-bottom: 24px;
-    }
-
-    .modal-header h2 {
-        font-size: var(--font-display);
-        font-weight: 800;
-        color: var(--text-main);
-        margin: 0 0 4px 0;
-    }
-
-    .modal-header p {
-        color: var(--text-muted);
-        font-size: var(--font-body);
-        margin: 0;
-    }
-
-    .form-group {
-        margin-bottom: 18px;
-    }
-
-    .form-label {
-        display: block;
-        font-size: var(--font-body);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.7rem;
         font-weight: 600;
-        color: var(--text-main);
-        margin-bottom: 8px;
-    }
-
-    .form-input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
         background: var(--bg-body);
-        color: var(--text-main);
-        font-size: var(--font-body);
-        transition: all 0.2s;
-    }
-
-    .form-input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px var(--primary-subtle);
-        background: var(--bg-surface);
-    }
-
-    .roles-container {
-        max-height: 200px;
-        overflow-y: auto;
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        padding: 12px;
-        background: var(--bg-body);
-    }
-
-    .roles-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .role-option {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 8px;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .role-option:hover {
-        border-color: var(--primary);
-        background: var(--primary-subtle);
-    }
-
-    .role-checkbox {
-        accent-color: var(--primary);
-        width: 16px;
-        height: 16px;
-    }
-
-    .modal-actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 24px;
-    }
-
-    .btn-cancel {
-        flex: 1;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-surface);
-        color: var(--text-muted);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .btn-submit {
-        flex: 2;
-        padding: 12px;
-        border-radius: 10px;
-        border: none;
-        background: var(--text-main);
-        color: white;
-        font-weight: 700;
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.2s;
-    }
-
-    .btn-submit:hover, .btn-cancel:hover {
-        transform: translateY(-1px);
-    }
-
-    @media (max-width: 768px) {
-        .members-grid {
-            gap: 10px;
-        }
+        color: var(--text-secondary);
+        border: 1px solid var(--border-subtle);
     }
 </style>
 
-<div class="members-container">
+<div class="members-container" style="max-width: 800px; margin: 0 auto;">
     <!-- Search Bar -->
     <div class="search-box">
-        <i data-lucide="search" class="search-icon"></i>
+        <i data-lucide="search" class="search-icon" width="20"></i>
         <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()">
     </div>
 
-    <!-- Members Grid -->
-    <div class="members-grid">
-        <?php foreach ($users as $user): ?>
-            <div class="member-card" data-name="<?= strtolower($user['name']) ?>" data-role="<?= strtolower($user['instrument'] ?? '') ?>">
-                <!-- Avatar -->
-                <div class="member-avatar" style="background: <?= generateAvatarColor($user['name']) ?>">
+    <!-- Members List (Timeline/Compact Style) -->
+    <div class="members-list">
+        <?php foreach ($users as $user): 
+            $userColor = generateAvatarColor($user['name']);
+            // Convert simple hex to rgba for backgrounds
+            // Simple hack: use the color as border, and a generic light bg or opacity if handled by js/css
+            // Here we use inline styles for the specific color logic
+        ?>
+            <!-- Compact Card Structure -->
+            <div class="compact-card" 
+                 data-name="<?= strtolower($user['name']) ?>" 
+                 data-role="<?= strtolower($user['instrument'] ?? '') ?>"
+                 style="border-left-color: <?= $userColor ?>;">
+                
+                <!-- Avatar/Icon -->
+                <div class="compact-card-icon rounded" style="background: <?= $userColor ?>15; color: <?= $userColor ?>; width: 40px; height: 40px;">
                     <?php 
                     $initial = strtoupper(substr($user['name'], 0, 1));
                     if (!empty($user['avatar'])) {
                         $avatarPath = $user['avatar'];
-                        // Fix path if it doesn't already have path info or http
                         if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
                             $avatarPath = '../assets/uploads/' . $avatarPath;
-                        } elseif (strpos($avatarPath, 'assets/uploads') !== false && strpos($avatarPath, '../') === false) {
-                             // If it has assets/uploads but not ../ (assuming relative from root), prepend ../
-                             // But be careful if it already has it.
-                             // Simplest way: if it starts with 'assets/', prepend '../'
-                             if (strpos($avatarPath, 'assets/') === 0) {
-                                 $avatarPath = '../' . $avatarPath;
-                             }
+                        } elseif (strpos($avatarPath, 'assets/') === 0) {
+                             $avatarPath = '../' . $avatarPath;
                         }
                         
-                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" onerror=\"this.style.display='none'; this.nextElementSibling.style.display='block';\">";
-                        echo "<span style='display:none;' class='fallback-initial'>" . $initial . "</span>";
+                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" style=\"width:100%; height:100%; object-fit:cover; border-radius:50%;\" onerror=\"this.style.display='none'; this.nextElementSibling.style.display='block';\">";
+                        echo "<span style='display:none;' class='fallback-initial font-bold text-lg'>" . $initial . "</span>";
                     } else {
-                        echo $initial;
+                        echo "<span class='font-bold text-lg'>" . $initial . "</span>";
                     }
                     ?>
                 </div>
 
-                <!-- Info -->
-                <div class="member-info">
-                    <div class="member-name">
+                <!-- Content -->
+                <div class="compact-card-content">
+                    <div class="compact-card-title" style="display: flex; align-items: center; gap: 6px;">
                         <?= htmlspecialchars($user['name']) ?>
                         <?php if ($user['role'] === 'admin'): ?>
-                            <span class="badge-admin">ADM</span>
+                            <span style="background: var(--yellow-500); color: white; padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;">ADM</span>
                         <?php endif; ?>
                     </div>
-
-                    <!-- Roles -->
-                    <div class="member-roles">
+                    <div class="compact-card-subtitle" style="margin-top: 2px;">
                         <?php 
                         if (!empty($user['roles'])): 
                             $uniqueRoles = [];
@@ -518,38 +285,46 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                                     $uniqueRoles[] = $r;
                                 }
                             }
-                            foreach ($uniqueRoles as $role): 
+                            // Show max 3 roles to keep it compact
+                            $displayRoles = array_slice($uniqueRoles, 0, 4);
+                            foreach ($displayRoles as $role): 
                         ?>
-                            <span class="role-badge" style="border-left: 3px solid <?= $role['color'] ?>;">
-                                <span class="role-icon"><?= $role['icon'] ?></span>
+                            <span class="list-role-badge">
+                                <span><?= $role['icon'] ?></span>
                                 <span><?= htmlspecialchars($role['name']) ?></span>
                             </span>
                         <?php 
                             endforeach;
+                            if(count($uniqueRoles) > 4) { echo "<span style='font-size:0.7rem; opacity:0.7;'>+" . (count($uniqueRoles) - 4) . "</span>"; }
                         else: 
                         ?>
-                            <span style="font-size: var(--font-caption); color: var(--text-muted); font-style: italic;">
-                                <?= htmlspecialchars($user['instrument'] ?: 'Sem função') ?>
+                            <span style="font-size: 0.8rem; color: var(--text-tertiary); font-style: italic;">
+                                <?= htmlspecialchars($user['instrument'] ?: 'Sem função definida') ?>
                             </span>
                         <?php endif; ?>
                     </div>
                 </div>
 
+                <!-- Users Stats / Meta (Optional - e.g. Phone) -->
+                <!-- <div style="font-size: 0.8rem; color: var(--text-tertiary); display:none; @media(min-width:768px){display:block;}">
+                   <?= htmlspecialchars($user['instrument']) ?>
+                </div> -->
+
                 <!-- Actions -->
-                <div class="member-actions">
-                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="action-btn btn-whatsapp" title="WhatsApp">
-                        <i data-lucide="message-circle" style="width: 16px;"></i>
+                <div class="member-actions-wrapper">
+                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="btn-action-icon btn-action-whatsapp" title="WhatsApp">
+                        <i data-lucide="message-circle" width="18"></i>
                     </a>
                     
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <button onclick='openEditModal(<?= json_encode($user) ?>)' class="action-btn btn-edit" title="Editar">
-                            <i data-lucide="edit-3" style="width: 16px;"></i>
+                        <button onclick='openEditModal(<?= json_encode($user) ?>)' class="btn-action-icon" title="Editar">
+                            <i data-lucide="edit-3" width="18"></i>
                         </button>
-                        <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0;">
+                        <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0; display:flex;">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                            <button type="submit" class="action-btn btn-delete" title="Excluir">
-                                <i data-lucide="trash-2" style="width: 16px;"></i>
+                            <button type="submit" class="btn-action-icon btn-action-delete" title="Excluir">
+                                <i data-lucide="trash-2" width="18"></i>
                             </button>
                         </form>
                     <?php endif; ?>
@@ -561,8 +336,8 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 <!-- FAB (Admin Only) -->
 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-    <button onclick="openAddModal()" class="fab">
-        <i data-lucide="plus" style="width: 28px;"></i>
+    <button onclick="openAddModal()" class="fab" style="position: fixed; bottom: 84px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 90; transition: transform 0.2s;">
+        <i data-lucide="plus" width="28"></i>
     </button>
 <?php endif; ?>
 
@@ -600,7 +375,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                                 <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox">
                                 <span style="display: flex; align-items: center; gap: 6px;">
                                     <span><?= $role['icon'] ?></span>
-                                    <span style="font-weight: 500; font-size: var(--font-body-sm);"><?= $role['name'] ?></span>
+                                    <span style="font-weight: 500; font-size: 0.85rem; color: var(--text-secondary);"><?= $role['name'] ?></span>
                                 </span>
                             </label>
                         <?php endforeach; ?>
@@ -618,7 +393,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
             <div class="form-group">
                 <label class="form-label">Senha de Acesso</label>
                 <input type="text" name="password" id="userPass" required class="form-input" placeholder="4 dígitos para login">
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
+                <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
             </div>
 
             <div class="modal-actions">
@@ -632,7 +407,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 <script>
     function filterMembers() {
         const term = document.getElementById('memberSearch').value.toLowerCase();
-        const cards = document.querySelectorAll('.member-card');
+        const cards = document.querySelectorAll('.compact-card');
 
         cards.forEach(card => {
             const name = card.getAttribute('data-name');
