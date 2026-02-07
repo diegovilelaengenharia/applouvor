@@ -172,7 +172,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
         <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
             <button onclick="openModal()" class="ripple" style="
                 width: 100%;
-                background: var(--slate-600); 
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
                 border: none; 
                 padding: 14px 20px; 
                 border-radius: 12px; 
@@ -180,7 +180,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                 font-weight: 700; 
                 font-size: 1rem; 
                 cursor: pointer; 
-                box-shadow: 0 4px 6px -1px rgba(55, 106, 200, 0.2); 
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); 
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
@@ -199,8 +199,8 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
         <?php if (empty($my_items)): ?>
             <div style="text-align: center; padding: 40px; background: white; border-radius: 16px; border: 1px dashed var(--slate-300);">
-                <div style="background: var(--slate-100); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-                    <i data-lucide="calendar" style="color: var(--slate-400);" width="28"></i>
+                <div style="background: var(--blue-50); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                    <i data-lucide="calendar" style="color: var(--blue-400);" width="28"></i>
                 </div>
                 <p style="color: var(--slate-500); margin: 0; font-weight: 500;">Nenhuma ausência futura.</p>
             </div>
@@ -232,12 +232,12 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
                     <div style="background: white; border-radius: 16px; padding: 0; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; overflow: hidden; position: relative;">
                         
                         <!-- Barra Lateral Colorida (Opcional, decorativa) -->
-                        <div style="width: 6px; background: var(--slate-600);"></div>
+                        <div style="width: 6px; background: var(--blue-600);"></div>
 
                         <div style="flex: 1; padding: 16px; display: flex; gap: 16px; align-items: flex-start;">
                             
                             <!-- Bloco de Data -->
-                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: var(--sage-50); border-radius: 12px; color: var(--sage-700); border: 1px solid var(--sage-100);">
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: var(--blue-50); border-radius: 12px; color: var(--blue-700); border: 1px solid var(--blue-100);">
                                 <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;"><?= $monthStr ?></span>
                                 <span style="font-size: 1.4rem; font-weight: 800; line-height: 1; margin-top: 2px;"><?= $dayStr ?></span>
                             </div>
@@ -316,29 +316,7 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 <!-- MODAL E SCRIPTS (Mantidos iguais, apenas ajustando visual se necessário) -->
 <!-- ... código do modal e JS ... -->
 <style>
-/* FORÇA a cor do botão de gravação */
-button#btnStartRecord,
-button#btnStopRecord {
-    background: var(--slate-600) !important;
-    color: white !important;
-}
-button#btnStartRecord:hover {
-    background: #dc2626 !important; /* Vermelho */
-}
-button#btnStartRecord:active,
-button#btnStartRecord:focus {
-    background: #b91c1c !important; /* Vermelho escuro */
-}
-button#btnStopRecord {
-    background: var(--rose-500) !important;
-}
-button#btnStopRecord:hover {
-    background: var(--rose-600) !important;
-}
-button#btnStopRecord:active,
-button#btnStopRecord:focus {
-    background: var(--rose-700) !important;
-}
+/* Botões de gravação agora usam classes do buttons.css */
 </style>
 <div id="absenceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
     <div id="formCard" class="fade-in-up" style="background: var(--bg-surface); width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); position: relative;">
@@ -348,7 +326,7 @@ button#btnStopRecord:focus {
         </button>
 
         <h3 id="formTitle" style="margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-size: 1.25rem;">
-            <i data-lucide="calendar-plus" style="color: var(--primary);" width="24"></i>
+            <i data-lucide="calendar-plus" style="color: var(--blue-600);" width="24"></i>
             Nova Indisponibilidade
         </h3>
 
@@ -359,41 +337,71 @@ button#btnStopRecord:focus {
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Início</label>
-                    <input type="date" name="start_date" id="startDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body);">
+                    <input type="date" name="start_date" id="startDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); outline-color: var(--blue-500);">
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Fim (Opcional)</label>
-                    <input type="date" name="end_date" id="endDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body);">
+                    <input type="date" name="end_date" id="endDate" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); outline-color: var(--blue-500);">
                 </div>
             </div>
 
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Motivo Resumido</label>
-                <input type="text" name="reason" id="reason" placeholder="Ex: Viagem, Trabalho..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body);">
+                <input type="text" name="reason" id="reason" placeholder="Ex: Viagem, Trabalho..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); outline-color: var(--blue-500);">
             </div>
 
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Observação / Áudio</label>
-                <textarea name="observation" id="observation" rows="2" placeholder="Explique..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); margin-bottom: 10px;"></textarea>
+                <textarea name="observation" id="observation" rows="2" placeholder="Explique..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); margin-bottom: 10px; outline-color: var(--blue-500);"></textarea>
                 
                 <input type="file" name="audio_file" id="audioInput" accept="audio/*" style="display: none;">
 
                 <div style="background: var(--slate-50); border: 1px dashed var(--slate-300); border-radius: 12px; padding: 12px; text-align: center;">
-                    <div id="recordingControls">
-                        <button type="button" id="btnStartRecord" onclick="startRecording()" style="background: var(--slate-600); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='var(--slate-700)'" onmouseout="this.style.background='var(--slate-600)'" onmousedown="this.style.background='var(--slate-800)'" onmouseup="this.style.background='var(--slate-700)'">
-                            <i data-lucide="mic" width="16"></i> Gravar Explicação
+                    <div id="recordingControls" style="display: flex; justify-content: center; gap: 10px;">
+                        <button type="button" id="btnStartRecord" onclick="startRecording()" style="
+                            width: 100%;
+                            padding: 12px;
+                            background: white;
+                            border: 1px solid var(--blue-300);
+                            color: var(--blue-600);
+                            border-radius: 8px;
+                            font-weight: 600;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 8px;
+                            transition: all 0.2s;
+                            cursor: pointer;
+                        " onmouseover="this.style.background='var(--blue-50)'; this.style.borderColor='var(--blue-400)'" onmouseout="this.style.background='white'; this.style.borderColor='var(--blue-300)'">
+                            <i data-lucide="mic" width="18"></i> Gravar Explicação (Opcional)
                         </button>
-                        <button type="button" id="btnStopRecord" onclick="stopRecording()" style="display: none; background: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                            <i data-lucide="square" width="16"></i> Parar
+                        <button type="button" id="btnStopRecord" onclick="stopRecording()" style="
+                            display: none;
+                            width: 100%;
+                            padding: 12px;
+                            background: var(--red-50);
+                            border: 1px solid var(--red-200);
+                            color: var(--red-600);
+                            border-radius: 8px;
+                            font-weight: 600;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 8px;
+                            cursor: pointer;
+                            animation: pulse 1.5s infinite;
+                        ">
+                            <i data-lucide="square" width="18" fill="currentColor"></i> Parar Gravação
                         </button>
                     </div>
 
                     <div id="audioPreviewContainer" style="display: none; margin-top: 10px;">
                         <audio id="audioPlayer" controls style="width: 100%; height: 36px;"></audio>
-                        <button type="button" onclick="clearAudio()" style="margin-top: 6px; background: none; border: none; color: var(--rose-500); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">Remover Áudio</button>
+                        <button type="button" onclick="clearAudio()" class="btn-ghost-rose btn-sm" style="margin-top: 6px;">
+                            <i data-lucide="trash-2" width="14"></i> Remover Áudio
+                        </button>
                     </div>
 
-                    <div id="existingAudioContainer" style="display: none; margin-top: 10px; border-top: 1px solid var(--slate-200); paddingTop: 10px;">
+                    <div id="existingAudioContainer" style="display: none; margin-top: 10px; border-top: 1px solid var(--slate-200); padding-top: 10px;">
                         <p style="font-size: 0.75rem; color: var(--slate-500); margin-bottom: 4px;">Áudio Salvo</p>
                         <audio id="existingAudioPlayer" controls style="width: 100%; height: 36px;"></audio>
                     </div>
@@ -407,7 +415,7 @@ button#btnStopRecord:focus {
                 <div style="position: relative;">
                     <input type="text" list="users_datalist" id="replacementSearch" placeholder="Busque o nome..." required
                         onchange="updateReplacementId(this)"
-                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body);">
+                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); outline-color: var(--blue-500);">
                     <input type="hidden" name="replacement_id" id="replacement_id_input">
                     <datalist id="users_datalist">
                         <?php foreach ($users_list as $u): ?>
@@ -420,7 +428,7 @@ button#btnStopRecord:focus {
 
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeModal()" style="flex: 1; background: var(--slate-200); color: var(--slate-600); border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: var(--slate-600); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                <button type="submit" id="submitBtn" class="ripple" style="flex: 2; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
                     <span id="submitText">Registrar</span>
                 </button>
             </div>
@@ -449,12 +457,12 @@ button#btnStopRecord:focus {
     async function startRecording() {
         // Troca os botões IMEDIATAMENTE
         document.getElementById('btnStartRecord').style.display = 'none';
-        document.getElementById('btnStopRecord').style.display = 'inline-flex';
+        document.getElementById('btnStopRecord').style.display = 'flex';
         
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             alert('Erro: Microfone não disponível (HTTPS necessário).');
             // Reverte os botões em caso de erro
-            document.getElementById('btnStartRecord').style.display = 'inline-flex';
+            document.getElementById('btnStartRecord').style.display = 'flex';
             document.getElementById('btnStopRecord').style.display = 'none';
             return;
         }
@@ -480,7 +488,7 @@ button#btnStopRecord:focus {
         } catch (err) {
             alert("Erro ao gravar: " + err.message);
             // Reverte os botões em caso de erro
-            document.getElementById('btnStartRecord').style.display = 'inline-flex';
+            document.getElementById('btnStartRecord').style.display = 'flex';
             document.getElementById('btnStopRecord').style.display = 'none';
         }
     }
@@ -490,7 +498,7 @@ button#btnStopRecord:focus {
             mediaRecorder.stop();
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
-        document.getElementById('btnStartRecord').style.display = 'inline-flex';
+        document.getElementById('btnStartRecord').style.display = 'flex';
         document.getElementById('btnStopRecord').style.display = 'none';
     }
 
@@ -540,7 +548,7 @@ button#btnStopRecord:focus {
         clearAudio();
         document.getElementById('existingAudioContainer').style.display = 'none';
         document.getElementById('existingAudioPlayer').src = '';
-        document.getElementById('formTitle').innerHTML = '<i data-lucide="calendar-plus" style="color:var(--primary)"></i> Nova Indisponibilidade';
+        document.getElementById('formTitle').innerHTML = '<i data-lucide="calendar-plus" style="color:var(--blue-600)"></i> Nova Indisponibilidade';
         document.getElementById('submitText').innerText = 'Registrar';
         lucide.createIcons();
     }

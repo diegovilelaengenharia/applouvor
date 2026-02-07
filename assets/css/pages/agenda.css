@@ -1,0 +1,507 @@
+/* Agenda / Calendar Page Styles */
+.agenda-container {
+    max-width: 1400px;
+    /* Wider for calendar */
+    margin: 0 auto;
+    padding: 24px 16px 100px;
+}
+
+/* --- Controls Header --- */
+.agenda-controls {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    padding: 20px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 300px;
+}
+
+.current-display {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    text-align: center;
+    min-width: 180px;
+}
+
+/* Custom Nav Buttons */
+.calendar-nav-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-subtle);
+    background: white;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--slate-600);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.calendar-nav-btn:hover {
+    background: var(--slate-50);
+    color: var(--blue-600);
+    border-color: var(--blue-200);
+}
+
+.calendar-nav-btn:active {
+    background: var(--blue-50);
+    transform: scale(0.95);
+}
+
+/* View Toggle (Segmented Control) */
+.view-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--slate-100);
+    padding: 4px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+}
+
+.view-btn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.view-btn.active {
+    background: white;
+    color: var(--blue-600);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Calendar Grid --- */
+.calendar-wrapper {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.week-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--slate-50);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.week-header-day {
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--bg-surface);
+    gap: 0;
+    /* Remove gap */
+}
+
+.calendar-day {
+    background: var(--bg-surface);
+    min-height: 140px;
+    padding: 12px;
+    position: relative;
+    transition: all 0.2s ease;
+    border-right: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.calendar-day:nth-child(7n) {
+    border-right: none;
+}
+
+.calendar-day:hover {
+    background-color: #fafafa;
+    transform: scale(1.002);
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius-md);
+}
+
+.calendar-day.other-month {
+    background: #fcfcfc;
+    /* Diagonal stripe pattern for other month */
+    background-image: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            #f8fafc 10px,
+            #f8fafc 20px);
+}
+
+.calendar-day.today {
+    background: var(--blue-50);
+}
+
+.day-header {
+    display: flex;
+    justify-content: flex-end;
+    /* Right align numbers */
+    margin-bottom: 8px;
+}
+
+.day-num {
+    font-weight: 600;
+    font-size: 0.9rem;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-secondary);
+}
+
+.today .day-num {
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+    color: white;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+    transform: scale(1.1);
+}
+
+.other-month .day-num {
+    color: var(--text-tertiary);
+    opacity: 0.5;
+}
+
+/* Event Chips */
+.event-chip {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: var(--radius-md);
+    margin-bottom: 6px;
+    cursor: pointer;
+    background: white;
+    border: 1px solid var(--border-subtle);
+    border-left-width: 4px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.event-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+/* Variants - Adjusted via inline styles in PHP but defaults here */
+.event-chip.type-escala {
+    border-left-color: var(--blue-500);
+    background: var(--blue-50);
+    color: var(--blue-800);
+    border: 1px solid var(--blue-100);
+    border-left-width: 4px;
+    /* Ensure overwrite */
+}
+
+.event-chip.type-evento {
+    border-left-color: var(--amber-500);
+    background: var(--amber-50);
+    color: var(--amber-800);
+    border: 1px solid var(--amber-100);
+    border-left-width: 4px;
+}
+
+.event-time {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    margin-right: 4px;
+    font-weight: 500;
+}
+
+/* List View */
+.list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.list-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.list-item:hover {
+    transform: translateX(4px);
+    border-color: var(--blue-300);
+    background: var(--slate-50);
+    box-shadow: var(--shadow-sm);
+}
+
+.list-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--slate-300);
+    /* Default */
+    transition: background 0.2s;
+}
+
+.list-item:hover::before {
+    background: var(--blue-500);
+}
+
+.date-badge {
+    background: var(--slate-50);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    text-align: center;
+    min-width: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.date-badge .day {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-primary);
+}
+
+.date-badge .month {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+}
+
+/* FAB - Floating Action Button */
+.fab {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+}
+
+.fab:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.fab:active {
+    transform: scale(0.95);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .agenda-container {
+        padding: 12px 8px 100px;
+    }
+
+    .agenda-controls {
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+    }
+
+    .nav-group {
+        width: 100%;
+        justify-content: space-between;
+        min-width: auto;
+    }
+
+    .current-display {
+        font-size: 1.1rem;
+        min-width: auto;
+    }
+
+    .calendar-nav-btn {
+        width: 44px;
+        height: 44px;
+        /* Larger touch target */
+    }
+
+    .view-toggle {
+        width: 100%;
+    }
+
+    .view-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 8px;
+        font-size: 0.8rem;
+        min-height: 44px;
+        /* Better touch target */
+    }
+
+    /* Calendar Grid Mobile */
+    .calendar-wrapper {
+        border-radius: 12px;
+    }
+
+    .week-header-day {
+        padding: 10px 4px;
+        font-size: 0.7rem;
+    }
+
+    .calendar-day {
+        min-height: 90px;
+        padding: 6px;
+    }
+
+    .day-num {
+        width: 26px;
+        height: 26px;
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    /* Event chips as dots on mobile */
+    .calendar-body .event-chip {
+        padding: 0;
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        border: none !important;
+        margin: 3px 2px;
+        display: inline-block;
+        font-size: 0;
+        min-width: 8px;
+    }
+
+    .event-chip.type-escala {
+        background: var(--blue-500) !important;
+    }
+
+    .event-chip.type-evento {
+        background: var(--amber-500) !important;
+    }
+
+    /* List View Mobile Optimization */
+    .list-wrapper {
+        gap: 12px;
+    }
+
+    .list-item {
+        padding: 16px;
+        gap: 16px;
+        border-radius: 12px;
+    }
+
+    .date-badge {
+        min-width: 60px;
+        padding: 10px;
+    }
+
+    .date-badge .day {
+        font-size: 1.4rem;
+    }
+
+    .date-badge .month {
+        font-size: 0.7rem;
+    }
+
+    /* FAB Mobile */
+    .fab {
+        bottom: 24px;
+        right: 16px;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5), 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .agenda-container {
+        padding: 8px 4px 100px;
+    }
+
+    .current-display {
+        font-size: 1rem;
+    }
+
+    .calendar-day {
+        min-height: 70px;
+        padding: 4px;
+    }
+
+    .day-num {
+        width: 22px;
+        height: 22px;
+        font-size: 0.75rem;
+    }
+
+    .event-chip {
+        height: 6px;
+        width: 6px;
+        margin: 2px 1px;
+    }
+}

@@ -1,34 +1,8 @@
-﻿/* Fontes */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-/* Modern Enhancements */
-@import url('modern-enhancements.css');
-
-/* Components */
-@import url('components.css');
-
-/* Animations */
-@import url('animations.css');
-
-/* Dashboard */
-@import url('dashboard.css');
-
-/* Forms & Tables (Standardized) */
-@import url('components/forms.css');
-@import url('components/forms.css');
-@import url('components/tables.css');
-@import url('components/timeline-cards.css');
-
-/* Pages */
-@import url('pages/escalas.css');
-@import url('pages/repertorio.css');
-
-/* Dark Mode - Importado APÓS tudo para garantir overrides se necessário, 
-   embora o design-system trate a maioria */
-@import url('dark-mode.css');
-
-/* Roles System */
-@import url('roles.css');
+﻿/* ==========================================================================
+   LEGACY STYLES (Formerly style.css)
+   Mantido para compatibilidade.
+   AVISO: NÃO ADICIONE NOVOS ESTILOS AQUI. USE OS COMPONENTES.
+   ========================================================================== */
 
 /* PWA Fullscreen Adjustments */
 html {
@@ -37,55 +11,8 @@ html {
     overflow-y: auto;
 }
 
-body {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    background-color: var(--bg-app);
-    color: var(--text-primary);
-    font-family: var(--font-family);
-    line-height: 1.5;
-}
-
-/* Ajuste para entalhe do iPhone (Safe Area) */
-body {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* Reset Global Específico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: var(--font-family);
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    background-color: var(--app-bg);
-    /* Cinza suave #f5f5f5 */
-    color: var(--text-primary);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    font-size: var(--font-h3);
-    /* Melhor leitura em mobile */
-    padding-bottom: calc(var(--bottom-nav-height) + 20px);
-    /* Espaço extra para scroll */
-    padding-left: 0 !important;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-ul {
-    list-style: none;
-}
+/* REMOVIDO: Reset Global Agressivo e Body Padding */
+/* O design-system.css cuida disso agora */
 
 /* === LAYOUT STRUCTURE === */
 

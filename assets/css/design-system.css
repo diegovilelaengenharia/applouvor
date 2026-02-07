@@ -146,6 +146,12 @@ body.dark-mode {
 }
 
 /* Reset Global Básico */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--bg-app);
     color: var(--text-primary);

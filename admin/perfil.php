@@ -3,8 +3,6 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Garantir CSS
-echo '<link rel="stylesheet" href="../assets/css/design-system.css">';
 
 checkLogin();
 

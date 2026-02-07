@@ -883,13 +883,13 @@ try {
     <div class="container fade-in">
         <!-- Header com Design Premium -->
         <div style="
-            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             border-radius: 20px;
             padding: 32px 24px;
             margin-bottom: 32px;
             text-align: center;
             color: white;
-            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
             position: relative;
             overflow: hidden;
         ">
@@ -929,15 +929,12 @@ try {
         ">
             <h3 class="font-bold text-primary mb-6 flex items-center gap-3" style="font-size: 1.25rem;">
                 <div style="
-                    background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-700) 100%); 
-                    padding: 10px; 
-                    border-radius: 10px; 
-                    color: white;
+                    color: var(--blue-600);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                 ">
-                    <i data-lucide="filter" width="22"></i>
+                    <i data-lucide="filter" width="24"></i>
                 </div>
                 O que você está procurando?
             </h3>
@@ -952,7 +949,7 @@ try {
                         <label class="text-sm font-bold text-primary mb-3 block">Tom da Música</label>
                         <div style="position: relative;">
                             <i data-lucide="music" width="18" style="position: absolute; left: 14px; top: 14px; color: var(--text-tertiary);"></i>
-                            <select name="tone_filter" class="w-full transition-all focus:ring-2 focus:ring-purple-500" style="
+                            <select name="tone_filter" class="w-full transition-all focus:ring-2 focus:ring-blue-500" style="
                                 padding: 12px 12px 12px 42px;
                                 border: 1px solid var(--border-subtle);
                                 border-radius: 12px;
@@ -984,7 +981,7 @@ try {
                         <label class="text-sm font-bold text-primary mb-3 block">Estilo ou Tag</label>
                         <div style="position: relative;">
                             <i data-lucide="tag" width="18" style="position: absolute; left: 14px; top: 14px; color: var(--text-tertiary);"></i>
-                            <select name="tag_filter" class="w-full transition-all focus:ring-2 focus:ring-purple-500" style="
+                            <select name="tag_filter" class="w-full transition-all focus:ring-2 focus:ring-blue-500" style="
                                 padding: 12px 12px 12px 42px;
                                 border: 1px solid var(--border-subtle);
                                 border-radius: 12px;
@@ -1023,9 +1020,9 @@ try {
                         display: flex;
                         align-items: center;
                         gap: 10px;
-                        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+                        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
                         color: white !important;
-                        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+                        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
                         border: none;
                         cursor: pointer;
                         transition: all 0.2s ease;

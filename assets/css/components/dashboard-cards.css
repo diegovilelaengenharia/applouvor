@@ -155,14 +155,12 @@
 /* Typography - Professional & Clean */
 .card-title {
     font-size: 1.15rem;
-    /* Slightly larger */
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--slate-800);
+    /* Default dark color */
     margin: 0 0 0.5rem 0;
-    /* More breathing room */
     line-height: 1.2;
     letter-spacing: -0.02em;
-    /* Tighter for modern look */
 }
 
 .card-info {
@@ -364,11 +362,14 @@
 
 .card-blue .card-icon {
     background: white;
-    /* Contrast against blue card */
     color: #2563eb;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
     border-radius: 16px;
-    /* Squircle Icon */
+}
+
+.card-blue .card-title {
+    color: #1e40af;
+    /* Blue 800 */
 }
 
 /* Badge handled globally */
@@ -382,13 +383,20 @@
     border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* Pill Button Shape for Link - COMPACT & FIXED */
+/* BLUE THEME BUTTON */
 .card-blue .link-text,
 .card-green .link-text,
+.card-emerald .link-text,
 .card-amber .link-text,
-.card-red .link-text {
+.card-yellow .link-text,
+.card-red .link-text,
+.card-rose .link-text,
+.card-violet .link-text,
+.card-indigo .link-text,
+.card-cyan .link-text,
+.card-fuchsia .link-text,
+.card-slate .link-text {
     width: 120px;
-    /* Compact size */
     height: 32px;
     justify-content: center;
     align-items: center;
@@ -397,13 +405,10 @@
     margin-top: 0;
     font-weight: 800;
     font-size: 0.65rem;
-    /* Smaller for compact button */
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    /* Tighter spacing */
     display: inline-flex;
     gap: 4px;
-    /* Smaller gap */
     white-space: nowrap;
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -433,6 +438,11 @@
     color: #16a34a;
     box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
     border-radius: 16px;
+}
+
+.card-green .card-title {
+    color: #166534;
+    /* Green 800 */
 }
 
 /* Badge handled globally */
@@ -470,6 +480,11 @@
     border-radius: 16px;
 }
 
+.card-amber .card-title {
+    color: #92400e;
+    /* Amber 800 */
+}
+
 /* Badge handled globally */
 
 .card-amber .info-highlight {
@@ -503,6 +518,11 @@
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
 }
 
+.card-red .card-title {
+    color: #991b1b;
+    /* Red 800 */
+}
+
 /* Badge handled globally */
 
 .card-red .info-highlight {
@@ -519,6 +539,183 @@
 }
 
 .card-red .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+
+/* EMERALD THEME */
+.card-emerald {
+    background: #ecfdf5;
+}
+
+.card-emerald .card-icon {
+    background: white;
+    color: #059669;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+}
+
+.card-emerald .card-title {
+    color: #065f46;
+    /* Emerald 800 */
+}
+
+.card-emerald .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-emerald .link-text {
+    background: #059669;
+    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+}
+
+.card-emerald .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* VIOLET/INDIGO THEME */
+.card-violet,
+.card-indigo {
+    background: #f5f3ff;
+}
+
+.card-violet .card-icon,
+.card-indigo .card-icon {
+    background: white;
+    color: #7c3aed;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+}
+
+.card-violet .card-title,
+.card-indigo .card-title {
+    color: #5b21b6;
+    /* Violet 800 */
+}
+
+.card-violet .info-highlight,
+.card-indigo .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-violet .link-text,
+.card-indigo .link-text {
+    background: #7c3aed;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+}
+
+.card-violet .link-text:hover,
+.card-indigo .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* CYAN THEME */
+.card-cyan {
+    background: #ecfeff;
+}
+
+.card-cyan .card-icon {
+    background: white;
+    color: #0891b2;
+    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+}
+
+.card-cyan .card-title {
+    color: #155e75;
+    /* Cyan 800 */
+}
+
+.card-cyan .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-cyan .link-text {
+    background: #0891b2;
+    box-shadow: 0 4px 10px rgba(8, 145, 178, 0.3);
+}
+
+.card-cyan .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* SLATE THEME */
+.card-slate {
+    background: #f1f5f9;
+}
+
+.card-slate .card-icon {
+    background: white;
+    color: #475569;
+    box-shadow: 0 4px 12px rgba(71, 85, 105, 0.15);
+}
+
+.card-slate .card-title {
+    color: #1e293b;
+    /* Slate 800 */
+}
+
+.card-slate .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(71, 85, 105, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-slate .link-text {
+    background: #475569;
+    box-shadow: 0 4px 10px rgba(71, 85, 105, 0.3);
+}
+
+.card-slate .link-text:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* FUCHSIA THEME */
+.card-fuchsia {
+    background: #fdf4ff;
+}
+
+.card-fuchsia .card-icon {
+    background: white;
+    color: #c026d3;
+    box-shadow: 0 4px 12px rgba(192, 38, 211, 0.15);
+}
+
+.card-fuchsia .card-title {
+    color: #86198f;
+    /* Fuchsia 800 */
+}
+
+.card-fuchsia .info-highlight {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(192, 38, 211, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-fuchsia .link-text {
+    background: #c026d3;
+    box-shadow: 0 4px 10px rgba(192, 38, 211, 0.3);
+}
+
+.card-fuchsia .link-text:hover {
     transform: translateY(-2px);
     filter: brightness(1.1);
 }

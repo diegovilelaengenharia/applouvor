@@ -102,289 +102,18 @@ renderAppHeader('Agenda');
 renderPageHeader('Agenda', 'Calendário e eventos do ministério');
 ?>
 
-<style>
-    body { background: var(--bg-body); }
-    
-    .agenda-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 16px 12px 100px;
-    }
-    
-    /* Header Controls */
-    .agenda-controls {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 24px;
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        flex-wrap: wrap;
-        box-shadow: var(--shadow-sm);
-    }
-    
-    .nav-group {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex: 1;
-        min-width: 280px;
-    }
-    
-    .nav-btn {
-        width: 36px;
-        height: 36px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-body);
-        border-radius: 8px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-main);
-        transition: all 0.2s;
-    }
-    
-    .nav-btn:hover {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-    
-    .current-display {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: var(--text-main);
-        flex: 1;
-        text-align: center;
-    }
-    
-    .view-toggle {
-        display: flex;
-        gap: 4px;
-        background: var(--bg-body);
-        padding: 4px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-    }
-    
-    .view-btn {
-        padding: 8px 16px;
-        border: none;
-        background: transparent;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--text-muted);
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    
-    .view-btn.active {
-        background: white;
-        color: var(--primary);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    /* Grid Styles */
-    .calendar-wrapper {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: var(--shadow-sm);
-    }
-    
-    .week-header {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        background: var(--slate-50);
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .week-header-day {
-        padding: 12px 8px;
-        text-align: center;
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        text-transform: uppercase;
-    }
-    
-    .calendar-body {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        /* Se for month view, auto rows. Se week view, 1 linha fixa min-height maior */
-    }
-    
-    .calendar-day {
-        min-height: <?= $viewMode === 'week' ? '400px' : '120px' ?>;
-        border-right: 1px solid var(--border-color);
-        border-bottom: 1px solid var(--border-color);
-        padding: 8px;
-        background: white;
-        position: relative;
-    }
-    
-    .calendar-day:nth-child(7n) {
-        border-right: none;
-    }
-    
-    .calendar-day.other-month {
-        background: #f9fafb;
-        color: #9ca3af;
-    }
-    
-    .calendar-day.today {
-        background: var(--sage-50);
-    }
-    
-    .day-num {
-        font-weight: 700;
-        font-size: 0.9rem;
-        width: 28px;
-        height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        margin-bottom: 8px;
-    }
-    
-    .calendar-day.today .day-num {
-        background: var(--primary);
-        color: white;
-    }
-    
-    /* Event Chips in Calendar */
-    .event-chip {
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 6px;
-        margin-bottom: 4px;
-        cursor: pointer;
-        background: var(--slate-100);
-        color: #213f78;
-        border-left: 3px solid var(--slate-600);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        transition: transform 0.1s;
-    }
-    
-    .event-chip:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    /* Week View Specifics */
-    .week-view-day {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    /* List View Styles */
-    .list-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .list-item {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        transition: transform 0.2s;
-    }
-    .list-item:hover {
-        transform: translateX(4px);
-        border-color: var(--primary);
-    }
-    
-    .date-box {
-        background: var(--slate-100);
-        border-radius: 10px;
-        padding: 10px;
-        text-align: center;
-        min-width: 60px;
-    }
-    .date-box .day { font-size: 1.25rem; font-weight: 800; line-height: 1; }
-    .date-box .month { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; color: var(--text-muted); }
-    
-    /* FAB */
-    .fab {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        width: 56px;
-        height: 56px;
-        background: var(--primary);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(55, 106, 200, 0.4);
-        cursor: pointer;
-        z-index: 100;
-        transition: transform 0.2s;
-        text-decoration: none;
-    }
-    .fab:hover { transform: scale(1.1); }
-    
-    @media (max-width: 768px) {
-        .calendar-day {
-            min-height: <?= $viewMode === 'week' ? '150px' : '60px' ?>;
-            font-size: 0.8rem;
-            padding: 4px;
-        }
-        .week-header-day { font-size: 0.7rem; padding: 8px 2px; }
-        
-        /* Transform chips into dots on mobile month view */
-        @media (max-width: 640px) {
-            .calendar-day .event-chip { 
-                width: 8px; 
-                height: 8px; 
-                padding: 0; 
-                font-size: 0;
-                border: none !important;
-                border-radius: 50%;
-                margin: 2px 1px;
-                display: inline-block;
-                /* Use css var or important to override inline styles if needed, 
-                   but inline style sets background-color with opacity. 
-                   We need solid color. 
-                   We can use 'color' property which is set inline, to set background. */
-                background-color: currentColor !important;
-                opacity: 0.8;
-            }
-        }
-        
-        .nav-group { min-width: auto; }
-        .current-display { font-size: 0.95rem; }
-    }
-</style>
+<!-- Estilos movidos para assets/css/pages/agenda.css -->
 
 
 
 <div class="agenda-container">
     <div class="agenda-controls">
         <div class="nav-group">
-            <button class="nav-btn" onclick="navigate(-1)">
+            <button class="calendar-nav-btn" onclick="navigate(-1)">
                 <i data-lucide="chevron-left" width="20"></i>
             </button>
             <div class="current-display"><?= $displayTitle ?></div>
-            <button class="nav-btn" onclick="navigate(1)">
+            <button class="calendar-nav-btn" onclick="navigate(1)">
                 <i data-lucide="chevron-right" width="20"></i>
             </button>
         </div>
@@ -423,7 +152,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                     $color = $item['color'] ?? '#047857';
             ?>
                 <a href="<?= $item['source'] === 'schedule' ? 'escala_detalhe.php?id='.$item['id'] : 'evento_detalhe.php?id='.$item['id'] ?>" class="list-item" style="text-decoration: none; color: inherit;">
-                    <div class="date-box">
+                    <div class="date-badge">
                         <div class="day"><?= date('d', strtotime($item['start_datetime'])) ?></div>
                         <div class="month"><?= date('M', strtotime($item['start_datetime'])) ?></div>
                     </div>
@@ -479,9 +208,9 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="day-num">'.$d.'</div>';
                         
                         foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? 'var(--slate-600)';
+                            $typeClass = $evt['source'] === 'schedule' ? 'type-escala' : 'type-evento';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip' style='border-left-color: $color; color: $color; background: {$color}15;'>";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass'>";
                             echo htmlspecialchars($evt['title']);
                             echo "</div>";
                         }
@@ -524,12 +253,11 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         echo '<div class="calendar-day week-view-day '.($isToday?'today':'').'">';
                         echo '<div class="day-num">'.$dayNum.'</div>';
                          foreach($dayEvents as $evt) {
-                            $color = $evt['color'] ?? 'var(--slate-600)';
-                            $startTime = date('H:i', strtotime($evt['start_datetime']));
+                            $typeClass = $evt['source'] === 'schedule' ? 'type-escala' : 'type-evento';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip' style='border-left-color: $color; color: $color; background: {$color}15; padding: 8px;'>";
-                            echo "<div style='font-size:0.7rem; opacity:0.8'>$startTime</div>";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass' style='height: auto; white-space: normal;'>";
+                            echo "<div class='event-time'>$startTime</div>";
                             echo "<div style='font-weight:600'>".htmlspecialchars($evt['title'])."</div>";
                             echo "</div>";
                         }
@@ -614,6 +342,37 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     }
     
     lucide.createIcons();
+    
+    // Mobile Swipe Gestures
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    const calendarWrapper = document.querySelector('.calendar-wrapper, .list-wrapper');
+    if (calendarWrapper && window.innerWidth <= 768) {
+        calendarWrapper.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        calendarWrapper.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe left - next
+                    navigate(1);
+                } else {
+                    // Swipe right - previous
+                    navigate(-1);
+                }
+            }
+        }
+    }
 </script>
 
 <?php renderAppFooter(); ?>
