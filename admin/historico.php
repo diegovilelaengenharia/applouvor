@@ -889,6 +889,9 @@ try {
             padding: 24px;
             margin-bottom: 24px;
             text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         ">
             <div style="
                 width: 56px; height: 56px; 
@@ -905,23 +908,47 @@ try {
             <p style="opacity: 0.9;">Encontre a música perfeita para completar sua escala.</p>
         </div>
 
-        <!-- Filtros -->
-        <div class="card-neutral" style="padding: 20px; margin-bottom: 24px;">
-            <h3 class="font-bold text-primary mb-4 flex items-center gap-2">
-                <i data-lucide="filter" width="18"></i>
-                Estou procurando uma música...
-            </h3>
+        <!-- Filtros Centralizados -->
+        <div class="card-neutral" style="
+            padding: 24px; 
+            margin-bottom: 32px; 
+            max-width: 800px; 
+            margin-left: auto; 
+            margin-right: auto;
+        ">
+            <div style="margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+                <h3 class="font-bold text-primary flex items-center gap-2" style="font-size: 1.1rem;">
+                    <div style="background: var(--bg-surface-active); padding: 8px; border-radius: 8px; color: var(--primary);">
+                        <i data-lucide="filter" width="20"></i>
+                    </div>
+                    Filtros de Busca
+                </h3>
+            </div>
             
             <form action="" method="GET">
                 <input type="hidden" name="tab" value="laboratorio">
                 <input type="hidden" name="search" value="1">
 
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                    <!-- Filtro Tom -->
                     <div class="form-group">
-                        <label class="form-label text-sm font-bold text-secondary mb-2 block">No Tom:</label>
-                        <select name="tone_filter" class="form-select w-full p-3 rounded-lg border border-slate-200">
+                        <label class="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
+                            <i data-lucide="music" width="14"></i>
+                            No Tom:
+                        </label>
+                        <select name="tone_filter" class="w-full" style="
+                            padding: 12px;
+                            border: 1px solid var(--border-subtle);
+                            border-radius: 12px;
+                            background: var(--bg-surface);
+                            color: var(--text-primary);
+                            font-size: 0.95rem;
+                            appearance: none;
+                            background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e&quot;);
+                            background-position: right 0.5rem center;
+                            background-repeat: no-repeat;
+                            background-size: 1.5em 1.5em;
+                        ">
                             <option value="">Qualquer tom</option>
                             <?php 
                             $tonsOpcoes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
@@ -933,18 +960,24 @@ try {
                         </select>
                     </div>
 
-                    <div>
+                    <!-- Filtro Tag -->
+                    <div class="form-group">
                         <label class="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
                             <i data-lucide="tag" width="14"></i>
-                            Com Tag:
+                            Com Estilo/Tag:
                         </label>
                         <select name="tag_filter" class="w-full" style="
-                            padding: 10px 12px;
+                            padding: 12px;
                             border: 1px solid var(--border-subtle);
-                            border-radius: 8px;
+                            border-radius: 12px;
                             background: var(--bg-surface);
                             color: var(--text-primary);
                             font-size: 0.95rem;
+                            appearance: none;
+                            background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e&quot;);
+                            background-position: right 0.5rem center;
+                            background-repeat: no-repeat;
+                            background-size: 1.5em 1.5em;
                         ">
                             <option value="">Qualquer estilo</option>
                             <?php 
@@ -959,8 +992,18 @@ try {
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary-slate w-full justify-center">
-                    <i data-lucide="search" width="20"></i> Analisar e Buscar
+                <button type="submit" class="btn-primary w-full" style="
+                    justify-content: center; 
+                    padding: 14px; 
+                    border-radius: 12px;
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                ">
+                    <i data-lucide="search" width="20"></i> 
+                    Analisar e Buscar Músicas
                 </button>
             </form>
         </div>
