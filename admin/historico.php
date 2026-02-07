@@ -825,11 +825,26 @@ try {
                             'F' => 'var(--blue-500)', 'G' => 'var(--purple-500)', 'A' => 'var(--pink-500)', 'B' => 'var(--teal-500)'
                         ];
                         foreach ($usoTons as $ton):
+                            $baseTone = substr($ton['tone'], 0, 1);
+                            $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
                             $percentTotal = $totalTonExec > 0 ? round(($ton['uses_period'] / $totalTonExec) * 100, 1) : 0;
                         ?>
                         <tr>
                             <td style="text-align: center;">
-                                <div class="font-bold text-primary font-mono" style="font-size: 1rem;"><?= $ton['tone'] ?></div>
+                                <div style="
+                                    display: inline-block;
+                                    padding: 6px 12px;
+                                    border-radius: 8px;
+                                    background: <?= $barColor ?>20;
+                                    color: <?= $barColor ?>;
+                                    font-weight: 800;
+                                    font-family: monospace;
+                                    font-size: 1.1rem;
+                                    border: 1px solid <?= $barColor ?>40;
+                                    min-width: 60px;
+                                ">
+                                    <?= $ton['tone'] ?>
+                                </div>
                             </td>
                             <td style="text-align: center;">
                                 <div class="font-bold text-primary"><?= $ton['uses_period'] ?></div>
