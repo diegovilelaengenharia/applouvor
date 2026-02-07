@@ -163,115 +163,83 @@ renderAppHeader('Escala');
 renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m/Y'));
 ?>
 
+<link rel="stylesheet" href="../assets/css/pages/escala-detalhe.css">
+
 <style>
 .edit-mode-hidden { display: none; }
 .view-mode-hidden { display: none; }
 </style>
 
-<!-- Info Card Moderno -->
-<div style="max-width: 800px; margin: 0 auto 20px; padding: 0 16px;">
-    <div style="background: var(--bg-surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+<!-- Header Card -->
+<div class="schedule-detail-container">
+    <div class="schedule-header-card">
         <!-- Header com Botões -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-            <div style="flex: 1;">
-                <!-- Modo Visualização (Edição via Modal agora) -->
-                <div>
-                    <h1 id="display-event-name" style="margin: 0 0 4px 0; font-size: 1.75rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-                    <div id="display-event-date" style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
-                </div>
+        <div class="schedule-header-top">
+            <div class="schedule-title-section">
+                <h1 id="display-event-name"><?= htmlspecialchars($schedule['event_type']) ?></h1>
+                <div id="display-event-date" class="schedule-date"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
             </div>
             
             <!-- Botões de Ação -->
-            <div style="display: flex; gap: 8px;">
-                <!-- Botão Excluir (Admin) -->
+            <div class="schedule-actions">
                 <?php if ($_SESSION['user_role'] === 'admin'): ?>
                 <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.');" style="margin: 0;">
                     <input type="hidden" name="delete_schedule" value="1">
-                    <button type="submit" id="deleteBtn" style="
-                        padding: 10px 14px; border-radius: 12px;
-                        background: var(--rose-500);
-                        border: none; color: white; cursor: pointer;
-                        display: flex; align-items: center; gap: 6px;
-                        font-weight: 700; font-size: var(--font-body-sm);
-                        transition: all 0.2s;
-                        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)'"
-                       onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(239, 68, 68, 0.3)'">
+                    <button type="submit" class="btn-schedule-action btn-delete">
                         <i data-lucide="trash-2" style="width: 16px;"></i>
+                        <span>Excluir</span>
                     </button>
                 </form>
                 <?php endif; ?>
-
-                <!-- Botão Salvar (visível apenas no modo edição) -->
-                <button id="saveBtn" onclick="saveAllChanges()" style="
-                    padding: 10px 18px; border-radius: 12px;
-                    background: var(--sage-500);
-                    border: none; color: white; cursor: pointer;
-                    display: none; align-items: center; gap: 6px;
-                    font-weight: 700; font-size: var(--font-body-sm);
-                    transition: all 0.2s;
-                    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(34, 197, 94, 0.4)'"
-                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(34, 197, 94, 0.3)'">
+                
+                <button id="saveBtn" onclick="saveAllChanges()" class="btn-schedule-action btn-save" style="display: none;">
                     <i data-lucide="check" style="width: 16px;"></i>
                     <span>Salvar</span>
                 </button>
                 
-                <!-- Botão Editar/Cancelar -->
-                <button id="editBtn" onclick="toggleEditMode()" style="
-                    padding: 10px 18px; border-radius: 12px;
-                    background: var(--yellow-500); 
-                    border: none; color: white; cursor: pointer;
-                    display: flex; align-items: center; gap: 6px;
-                    font-weight: 700; font-size: var(--font-body-sm);
-                    transition: all 0.2s;
-                    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(251, 191, 36, 0.4)'"
-                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(251, 191, 36, 0.3)'">
+                <button id="editBtn" onclick="toggleEditMode()" class="btn-schedule-action btn-edit">
                     <i data-lucide="edit-2" style="width: 16px;"></i>
                     <span>Editar</span>
                 </button>
             </div>
         </div>
         
-        <!-- Info Row Compacta (Ícones reduzidos) -->
-        <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: <?= $schedule['notes'] ? '12px' : '0' ?>;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: var(--lavender-600); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="clock" style="width: 14px; color: white;"></i>
+        <!-- Info Grid -->
+        <div class="schedule-info-grid">
+            <div class="schedule-info-item">
+                <div class="schedule-info-icon" style="background: var(--lavender-600);">
+                    <i data-lucide="clock" style="width: 16px; color: white;"></i>
                 </div>
-                <div>
-                    <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Horário</div>
-                    <div id="display-event-time" style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);">
+                <div class="schedule-info-content">
+                    <div class="schedule-info-label">Horário</div>
+                    <div id="display-event-time" class="schedule-info-value">
                         <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                     </div>
                 </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: var(--sage-500); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="users" style="width: 14px; color: white;"></i>
+            <div class="schedule-info-item">
+                <div class="schedule-info-icon" style="background: var(--sage-500);">
+                    <i data-lucide="users" style="width: 16px; color: white;"></i>
                 </div>
-                <div>
-                    <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Equipe</div>
-                    <div style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);"><?= count($team) ?></div>
+                <div class="schedule-info-content">
+                    <div class="schedule-info-label">Equipe</div>
+                    <div class="schedule-info-value"><?= count($team) ?></div>
                 </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 28px; height: 28px; background: var(--yellow-500); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="music" style="width: 14px; color: white;"></i>
+            <div class="schedule-info-item">
+                <div class="schedule-info-icon" style="background: var(--yellow-500);">
+                    <i data-lucide="music" style="width: 16px; color: white;"></i>
                 </div>
-                <div>
-                    <div style="font-size: var(--font-caption); color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;">Músicas</div>
-                    <div style="font-size: var(--font-body); font-weight: 700; color: var(--text-main);"><?= count($songs) ?></div>
+                <div class="schedule-info-content">
+                    <div class="schedule-info-label">Músicas</div>
+                    <div class="schedule-info-value"><?= count($songs) ?></div>
                 </div>
             </div>
         </div>
-        
 
-        
         <!-- Observações (Apenas para Administradores) -->
         <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
-            <div id="display-notes-container" style="padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100);">
+            <div id="display-notes-container" style="padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-top: 16px;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                     <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
                     <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
@@ -279,7 +247,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                 <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
             </div>
         <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
-            <div id="display-notes-container" style="display: none; padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100);">
+            <div id="display-notes-container" style="display: none; padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-top: 16px;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                     <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
                     <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
@@ -302,7 +270,7 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 </div>
 
 <!-- Content -->
-<div style="max-width: 800px; margin: 0 auto; padding: 0 16px 100px;">
+<div class="schedule-detail-container">
     
     <!-- MODO VISUALIZAÇÃO -->
     <div id="view-mode" class="view-mode">
@@ -362,8 +330,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         <?php endif; ?>
 
         <!-- PARTICIPANTES -->
-        <div style="margin-bottom: 24px;">
-            <h3 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+        <div class="schedule-section">
+            <h3 class="schedule-section-title">
                 <i data-lucide="users" style="width: 20px; color: var(--primary);"></i>
                 Participantes (<?= count($team) ?>)
             </h3>
@@ -374,43 +342,28 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhum participante escalado</p>
                 </div>
             <?php else: ?>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;">
+                <div class="participants-grid">
                     <?php foreach ($team as $member): ?>
-                        <div style="
-                            background: white; 
-                            border-radius: 14px; 
-                            padding: 12px; 
-                            text-align: center; 
-                            border: 1px solid #e5e7eb;
-                            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-                            transition: all 0.2s;
-                        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.08)'" 
-                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04)'">
-                            <div style="
-                                width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px;
-                                background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>;
-                                color: white; display: flex; align-items: center; justify-content: center;
-                                font-weight: 700; font-size: var(--font-h2);
-                                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-                            ">
+                        <div class="participant-card">
+                            <div class="participant-avatar" style="background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>;">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
-                                <div style="font-weight: 700; font-size: var(--font-body-sm); color: #1f2937; margin-bottom: 3px;"><?= htmlspecialchars($member['name']) ?></div>
-                                <div style="display: flex; justify-content: center; gap: 4px; flex-wrap: wrap;">
-                                    <?php 
-                                    $mRoles = $userRoles[$member['user_id']] ?? [];
-                                    if (empty($mRoles) && $member['instrument']) {
-                                        // Fallback legacy
-                                        echo '<span style="font-size: var(--font-caption); color: #6b7280; font-weight: 500;">' . htmlspecialchars($member['instrument']) . '</span>';
-                                    } else {
-                                        foreach ($mRoles as $role): 
-                                    ?>
-                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: var(--font-body-sm); cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
-                                    <?php 
-                                        endforeach; 
-                                    }
-                                    ?>
-                                </div>
+                            <div class="participant-name"><?= htmlspecialchars($member['name']) ?></div>
+                            <div class="participant-roles">
+                                <?php 
+                                $mRoles = $userRoles[$member['user_id']] ?? [];
+                                if (empty($mRoles) && $member['instrument']) {
+                                    // Fallback legacy
+                                    echo '<span style="font-size: var(--font-caption); color: #6b7280; font-weight: 500;">' . htmlspecialchars($member['instrument']) . '</span>';
+                                } else {
+                                    foreach ($mRoles as $role): 
+                                ?>
+                                    <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: var(--font-body-sm); cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
+                                <?php 
+                                    endforeach; 
+                                }
+                                ?>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
