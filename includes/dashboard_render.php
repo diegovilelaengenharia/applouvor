@@ -3,7 +3,90 @@
  * Funções helper para renderizar cards dinamicamente no dashboard
  */
 
-// Renderizar card de Escalas (PRO - ENHANCED)
+// ============================================================================
+// UNIFIED CARD RENDERING SYSTEM
+// ============================================================================
+
+/**
+ * Renderiza um card unificado do dashboard
+ * Todos os cards compartilham a mesma estrutura HTML, variando apenas:
+ * - Cores (por categoria)
+ * - Conteúdo dinâmico
+ * 
+ * @param array $config Configuração do card com as seguintes chaves:
+ *   - id: string - ID único do card
+ *   - title: string - Título do card
+ *   - icon: string - Nome do ícone Lucide
+ *   - category: string - Categoria (gestao|espiritual|comunicacao)
+ *   - url: string - URL de destino
+ *   - badge: array|null - Configuração do badge ['count' => int, 'icon' => string, 'label' => string]
+ *   - content: string - HTML do conteúdo dinâmico
+ *   - footer: array - Configuração do footer ['text' => string, 'icon' => string|null]
+ */
+function renderUnifiedCard($config) {
+    // Mapeamento de categoria para cor do card
+    $categoryColorMap = [
+        'gestao' => 'blue',
+        'espiritual' => 'green',
+        'comunicacao' => 'amber'
+    ];
+    
+    // Mapeamento de categoria para tipo de badge
+    $categoryBadgeMap = [
+        'gestao' => 'badge-info',
+        'espiritual' => 'badge-success',
+        'comunicacao' => 'badge-warning'
+    ];
+    
+    // Determinar cor do card
+    $cardColor = $categoryColorMap[$config['category']] ?? 'blue';
+    $cardClass = "card-{$cardColor}";
+    
+    // Determinar tipo de badge (se existir)
+    $badgeType = $config['badge']['type'] ?? $categoryBadgeMap[$config['category']] ?? 'badge-info';
+    
+    ?>
+    <a href="<?= $config['url'] ?>" class="access-card <?= $cardClass ?>" aria-label="Ver detalhes de <?= $config['title'] ?>">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="<?= $config['icon'] ?>"></i>
+            </div>
+            
+            <?php if (isset($config['badge']) && $config['badge']['count'] > 0): ?>
+                <span class="card-badge <?= $badgeType ?><?= isset($config['badge']['pulse']) && $config['badge']['pulse'] ? ' badge-pulse' : '' ?>" 
+                      aria-label="<?= $config['badge']['label'] ?>">
+                    <?php if (isset($config['badge']['icon'])): ?>
+                        <i data-lucide="<?= $config['badge']['icon'] ?>" style="width:14px;height:14px;"></i>
+                    <?php endif; ?>
+                    <?= $config['badge']['count'] ?>
+                </span>
+            <?php endif; ?>
+            
+            <h3 class="card-title"><?= $config['title'] ?></h3>
+            
+            <div class="card-info">
+                <?= $config['content'] ?>
+            </div>
+        </div>
+        
+        <div class="card-footer-row">
+            <span class="footer-text">
+                <?php if (isset($config['footer']['icon'])): ?>
+                    <i data-lucide="<?= $config['footer']['icon'] ?>" class="icon-tiny"></i>
+                <?php endif; ?>
+                <?= $config['footer']['text'] ?>
+            </span>
+            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+        </div>
+    </a>
+    <?php
+}
+
+// ============================================================================
+// LEGACY CARD FUNCTIONS (mantidas para compatibilidade)
+// ============================================================================
+
+// Renderizar card de Escalas (UNIFIED)
 function renderCardEscalas($nextSchedule, $totalSchedules) {
     $countdown = '';
     $dateDisplay = '';
@@ -25,46 +108,42 @@ function renderCardEscalas($nextSchedule, $totalSchedules) {
         $dateDisplay = $date->format('d/m') . ' - ' . htmlspecialchars($nextSchedule['event_type']);
         $roleDisplay = htmlspecialchars($nextSchedule['my_role'] ?? 'Membro da Equipe');
     }
-    ?>
-    <a href="escalas.php" class="access-card card-blue" aria-label="Ver detalhes de Escalas">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="calendar"></i>
+    
+    // Preparar conteúdo dinâmico
+    ob_start();
+    if ($nextSchedule): ?>
+        <div class="info-highlight">
+            <div class="info-primary">
+                <?= $dateDisplay ?>
             </div>
-            <?php if ($totalSchedules > 0): ?>
-                <span class="card-badge badge-info" aria-label="<?= $totalSchedules ?> escalas">
-                    <i data-lucide="calendar" style="width:14px;height:14px;"></i>
-                    <?= $totalSchedules ?>
-                </span>
-            <?php endif; ?>
-            
-            <h3 class="card-title">Escalas</h3>
-            
-            <div class="card-info">
-                <?php if ($nextSchedule): ?>
-                    <div class="info-highlight">
-                        <div class="info-primary">
-                            <?= $dateDisplay ?>
-                        </div>
-                        <div class="info-secondary">
-                            <i data-lucide="user" class="icon-tiny"></i>
-                            <?= $roleDisplay ?>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <span class="text-muted">Nenhuma escala próxima</span>
-                <?php endif; ?>
+            <div class="info-secondary">
+                <i data-lucide="user" class="icon-tiny"></i>
+                <?= $roleDisplay ?>
             </div>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">
-                <i data-lucide="clock" class="icon-tiny"></i>
-                <?= $countdown ?>
-            </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
-        </div>
-    </a>
-    <?php
+    <?php else: ?>
+        <span class="text-muted">Nenhuma escala próxima</span>
+    <?php endif;
+    $content = ob_get_clean();
+    
+    // Renderizar usando sistema unificado
+    renderUnifiedCard([
+        'id' => 'escalas',
+        'title' => 'Escalas',
+        'icon' => 'calendar',
+        'category' => 'gestao',
+        'url' => 'escalas.php',
+        'badge' => $totalSchedules > 0 ? [
+            'count' => $totalSchedules,
+            'icon' => 'calendar',
+            'label' => "$totalSchedules escalas"
+        ] : null,
+        'content' => $content,
+        'footer' => [
+            'icon' => 'clock',
+            'text' => $countdown
+        ]
+    ]);
 }
 
 // Renderizar card de Repertório (PRO - ENHANCED)
