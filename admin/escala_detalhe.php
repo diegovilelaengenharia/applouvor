@@ -352,9 +352,19 @@ $themeLight = 'var(--lavender-50)';
         <?php endif; ?>
 
         <!-- PARTICIPANTES -->
-        <div class="schedule-section">
-            <h3 class="schedule-section-title">
-                <i data-lucide="users" style="width: 20px; color: var(--primary);"></i>
+        <div style="margin-bottom: 32px;">
+            <h3 style="
+                font-size: 1rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 0 0 16px 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding-bottom: 12px;
+                border-bottom: 2px solid var(--border-subtle);
+            ">
+                <i data-lucide="users" style="width: 18px; color: var(--sage-500);"></i>
                 Participantes (<?= count($team) ?>)
             </h3>
             
@@ -364,28 +374,63 @@ $themeLight = 'var(--lavender-50)';
                     <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhum participante escalado</p>
                 </div>
             <?php else: ?>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                <div style="
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                ">
                     <?php foreach ($team as $member): ?>
-                        <div class="compact-card">
+                        <div style="
+                            background: var(--bg-surface);
+                            border: 1px solid var(--border-subtle);
+                            border-radius: 12px;
+                            padding: 12px;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            transition: all 0.2s;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)'">
                             <!-- Avatar -->
-                            <div class="compact-card-icon rounded" style="background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>; color: white; font-weight: 800; font-size: 1.1rem;">
+                            <div style="
+                                width: 44px;
+                                height: 44px;
+                                border-radius: 50%;
+                                background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>;
+                                color: white;
+                                font-weight: 800;
+                                font-size: 1rem;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-shrink: 0;
+                                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                            ">
                                 <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
 
                             <!-- Conteúdo -->
-                            <div class="compact-card-content">
-                                <div class="compact-card-title">
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="
+                                    font-weight: 700;
+                                    font-size: 0.875rem;
+                                    color: var(--text-primary);
+                                    margin-bottom: 2px;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                ">
                                     <?= htmlspecialchars($member['name']) ?>
                                 </div>
-                                <div class="compact-card-subtitle">
+                                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
                                     <?php 
                                     $mRoles = $userRoles[$member['user_id']] ?? [];
                                     if (empty($mRoles) && $member['instrument']) {
-                                        echo '<span>' . htmlspecialchars($member['instrument']) . '</span>';
+                                        echo '<span style="font-size: 0.75rem; color: var(--text-secondary);">' . htmlspecialchars($member['instrument']) . '</span>';
                                     } else {
                                         foreach ($mRoles as $role): 
                                     ?>
-                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 1rem; cursor: help; filter: grayscale(0.2);"><?= $role['icon'] ?></span>
+                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 0.95rem; cursor: help; filter: grayscale(0.1);"><?= $role['icon'] ?></span>
                                     <?php 
                                         endforeach; 
                                     }
@@ -399,9 +444,19 @@ $themeLight = 'var(--lavender-50)';
         </div>
         
         <!-- REPERTÓRIO -->
-        <div class="schedule-section">
-            <h3 class="schedule-section-title">
-                <i data-lucide="music" style="width: 20px; color: var(--primary);"></i>
+        <div style="margin-bottom: 32px;">
+            <h3 style="
+                font-size: 1rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 0 0 16px 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding-bottom: 12px;
+                border-bottom: 2px solid var(--border-subtle);
+            ">
+                <i data-lucide="music" style="width: 18px; color: var(--lavender-600);"></i>
                 Repertório (<?= count($songs) ?>)
             </h3>
             
