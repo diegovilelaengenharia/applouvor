@@ -321,10 +321,10 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
     color: white !important;
 }
 #btnStartRecord:hover {
-    background: var(--slate-700) !important;
+    background: #dc2626 !important; /* Vermelho */
 }
 #btnStartRecord:active {
-    background: var(--slate-800) !important;
+    background: #b91c1c !important; /* Vermelho escuro */
 }
 #btnStopRecord {
     background: var(--rose-500) !important;
