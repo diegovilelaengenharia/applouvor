@@ -15,57 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit("Acesso negado. Apenas administradores podem realizar esta ação.");
         }
 
-        $userIdRole = null;
-
-        // Adicionar novo membro
-        if ($_POST['action'] === 'add') {
-            $stmt = $pdo->prepare("INSERT INTO users (name, role, instrument, phone, password) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([
-                $_POST['name'],
-                $_POST['role'],
-                $_POST['instrument'],
-                $_POST['phone'],
-                $_POST['password']
-            ]);
-            $userIdRole = $pdo->lastInsertId();
-        }
-        // Atualizar membro
-        elseif ($_POST['action'] === 'edit') {
-            $stmt = $pdo->prepare("UPDATE users SET name = ?, role = ?, instrument = ?, phone = ?, password = ? WHERE id = ?");
-            $params = [
-                $_POST['name'],
-                $_POST['role'],
-                $_POST['instrument'],
-                $_POST['phone'],
-                $_POST['password'],
-                $_POST['id']
-            ];
-            $stmt->execute($params);
-            $userIdRole = $_POST['id'];
-        }
         // Excluir membro
-        elseif ($_POST['action'] === 'delete') {
+        if ($_POST['action'] === 'delete') {
             $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
             $stmt->execute([$_POST['id']]);
             header("Location: membros.php");
             exit;
         }
-
-        // --- PROCESSAR FUNÇÕES (ROLES) ---
-        if ($userIdRole) {
-            $stmtDel = $pdo->prepare("DELETE FROM user_roles WHERE user_id = ?");
-            $stmtDel->execute([$userIdRole]);
-
-            if (isset($_POST['roles']) && is_array($_POST['roles'])) {
-                $stmtIns = $pdo->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)");
-                foreach ($_POST['roles'] as $roleId) {
-                    $stmtIns->execute([$userIdRole, $roleId]);
-                }
-            }
-        }
-
-        header("Location: membros.php");
-        exit;
     }
 }
 
@@ -164,6 +120,17 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         background: var(--red-50);
         color: var(--red-600);
         border-color: var(--red-200);
+    }
+    
+    .btn-action-profile {
+        color: var(--primary);
+        background: rgba(55, 106, 200, 0.1);
+        border-color: rgba(55, 106, 200, 0.2);
+    }
+    .btn-action-profile:hover {
+        background: rgba(55, 106, 200, 0.2);
+        color: var(--primary);
+        border-color: rgba(55, 106, 200, 0.3);
     }
 
     .search-box {
@@ -458,10 +425,16 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                         <i data-lucide="message-circle" width="18"></i>
                     </a>
                     
+                    <?php if ($user['id'] == $_SESSION['user_id']): ?>
+                        <a href="perfil.php" class="btn-action-icon btn-action-profile" title="Meu Perfil">
+                            <i data-lucide="user" width="18"></i>
+                        </a>
+                    <?php endif; ?>
+                    
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <button onclick='openEditModal(<?= json_encode($user) ?>)' class="btn-action-icon" title="Editar">
+                        <a href="perfil.php?id=<?= $user['id'] ?>" class="btn-action-icon" title="Editar Perfil">
                             <i data-lucide="edit-3" width="18"></i>
-                        </button>
+                        </a>
                         <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0; display:flex;">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= $user['id'] ?>">
@@ -478,73 +451,11 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 <!-- FAB (Admin Only) -->
 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-    <button onclick="openAddModal()" class="fab" style="position: fixed; bottom: 84px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 90; transition: transform 0.2s;">
+    <a href="perfil.php?new=1" class="fab" style="position: fixed; bottom: 84px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 90; transition: transform 0.2s; text-decoration: none;">
         <i data-lucide="plus" width="28"></i>
-    </button>
+    </a>
 <?php endif; ?>
 
-<!-- Modal Add/Edit -->
-<div id="memberModal" class="modal" onclick="if(event.target === this) closeModal()">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle">Novo Membro</h2>
-            <p>Gerencie as informações de acesso</p>
-        </div>
-
-        <form method="POST" id="memberForm">
-            <input type="hidden" name="action" id="formAction" value="add">
-            <input type="hidden" name="id" id="userId">
-
-            <div class="form-group">
-                <label class="form-label">Nome Completo</label>
-                <input type="text" name="name" id="userName" required class="form-input" placeholder="Ex: João da Silva">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Permissão</label>
-                <select name="role" id="userRole" class="form-input">
-                    <option value="user">Membro</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Funções / Instrumentos</label>
-                <div class="roles-container">
-                    <div class="roles-grid">
-                        <?php foreach ($allRoles as $role): ?>
-                            <label class="role-option">
-                                <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" class="role-checkbox">
-                                <span style="display: flex; align-items: center; gap: 6px;">
-                                    <span><?= $role['icon'] ?></span>
-                                    <span style="font-weight: 500; font-size: 0.85rem; color: var(--text-secondary);"><?= $role['name'] ?></span>
-                                </span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            </div>
-
-            <input type="hidden" name="instrument" id="userInst" value="">
-
-            <div class="form-group">
-                <label class="form-label">WhatsApp</label>
-                <input type="text" name="phone" id="userPhone" class="form-input" placeholder="(37) 99999-9999">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Senha de Acesso</label>
-                <input type="text" name="password" id="userPass" required class="form-input" placeholder="4 dígitos para login">
-                <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
-            </div>
-
-            <div class="modal-actions">
-                <button type="button" onclick="closeModal()" class="btn-cancel">Cancelar</button>
-                <button type="submit" class="btn-submit">Salvar</button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <script>
     function filterMembers() {
@@ -560,40 +471,6 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                 card.style.display = 'none';
             }
         });
-    }
-
-    function openAddModal() {
-        document.getElementById('modalTitle').innerText = 'Novo Membro';
-        document.getElementById('formAction').value = 'add';
-        document.getElementById('memberForm').reset();
-        document.getElementById('userId').value = '';
-        document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
-        document.getElementById('memberModal').style.display = 'block';
-    }
-
-    function openEditModal(user) {
-        document.getElementById('modalTitle').innerText = 'Editar Membro';
-        document.getElementById('formAction').value = 'edit';
-        document.getElementById('userId').value = user.id;
-        document.getElementById('userName').value = user.name;
-        document.getElementById('userInst').value = user.instrument;
-        document.getElementById('userPhone').value = user.phone;
-        document.getElementById('userPass').value = user.password;
-        document.getElementById('userRole').value = user.role;
-
-        document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
-        if (user.roles && user.roles.length > 0) {
-            user.roles.forEach(role => {
-                const checkbox = document.querySelector(`.role-checkbox[value="${role.id}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-        }
-
-        document.getElementById('memberModal').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('memberModal').style.display = 'none';
     }
 </script>
 
