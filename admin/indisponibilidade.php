@@ -315,6 +315,27 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 
 <!-- MODAL E SCRIPTS (Mantidos iguais, apenas ajustando visual se necessário) -->
 <!-- ... código do modal e JS ... -->
+<style>
+#btnStartRecord, #btnStopRecord {
+    background: var(--slate-600) !important;
+    color: white !important;
+}
+#btnStartRecord:hover {
+    background: var(--slate-700) !important;
+}
+#btnStartRecord:active {
+    background: var(--slate-800) !important;
+}
+#btnStopRecord {
+    background: var(--rose-500) !important;
+}
+#btnStopRecord:hover {
+    background: var(--rose-600) !important;
+}
+#btnStopRecord:active {
+    background: var(--rose-700) !important;
+}
+</style>
 <div id="absenceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
     <div id="formCard" class="fade-in-up" style="background: var(--bg-surface); width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); position: relative;">
         
