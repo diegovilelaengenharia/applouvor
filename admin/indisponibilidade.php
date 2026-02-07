@@ -316,23 +316,27 @@ renderPageHeader('Ausências de Escala', 'Informe suas ausências');
 <!-- MODAL E SCRIPTS (Mantidos iguais, apenas ajustando visual se necessário) -->
 <!-- ... código do modal e JS ... -->
 <style>
-#btnStartRecord, #btnStopRecord {
+/* FORÇA a cor do botão de gravação */
+button#btnStartRecord,
+button#btnStopRecord {
     background: var(--slate-600) !important;
     color: white !important;
 }
-#btnStartRecord:hover {
+button#btnStartRecord:hover {
     background: #dc2626 !important; /* Vermelho */
 }
-#btnStartRecord:active {
+button#btnStartRecord:active,
+button#btnStartRecord:focus {
     background: #b91c1c !important; /* Vermelho escuro */
 }
-#btnStopRecord {
+button#btnStopRecord {
     background: var(--rose-500) !important;
 }
-#btnStopRecord:hover {
+button#btnStopRecord:hover {
     background: var(--rose-600) !important;
 }
-#btnStopRecord:active {
+button#btnStopRecord:active,
+button#btnStopRecord:focus {
     background: var(--rose-700) !important;
 }
 </style>

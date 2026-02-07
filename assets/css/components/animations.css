@@ -193,6 +193,13 @@ button:active,
     transform: scale(0.98);
 }
 
+/* Exceção para botões de gravação de áudio */
+#btnStartRecord:active,
+#btnStopRecord:active {
+    transform: scale(0.98);
+    /* A cor de fundo é definida em cada página específica */
+}
+
 /* Links */
 a {
     transition: color 0.2s ease;
