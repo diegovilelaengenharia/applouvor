@@ -881,133 +881,159 @@ try {
 <?php elseif ($currentTab == 'laboratorio'): ?>
     
     <div class="container fade-in">
-        <!-- Header Compacto -->
-        <div class="card-primary" style="
-            background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-700) 100%);
-            color: white; 
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
+        <!-- Header com Design Premium -->
+        <div style="
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            border-radius: 20px;
+            padding: 32px 24px;
+            margin-bottom: 32px;
             text-align: center;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.2);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+            position: relative;
+            overflow: hidden;
         ">
-            <div style="
-                width: 56px; height: 56px; 
-                background: rgba(255,255,255,0.2); 
-                border-radius: 50%; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                margin: 0 auto 12px auto;
-            ">
-                <i data-lucide="flask-conical" width="28" height="28" style="color: white;"></i>
+            <!-- Elementos decorativos de fundo -->
+            <div style="position: absolute; top: -10px; right: -10px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: -20px; left: -20px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+
+            <div style="position: relative; z-index: 10;">
+                <div style="
+                    width: 64px; height: 64px; 
+                    background: rgba(255,255,255,0.2); 
+                    border-radius: 16px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    margin: 0 auto 16px auto;
+                    backdrop-filter: blur(5px);
+                    border: 1px solid rgba(255,255,255,0.3);
+                ">
+                    <i data-lucide="flask-conical" width="32" height="32" style="color: white;"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold mb-3 tracking-tight">Laboratório de Repertório</h2>
+                <p style="font-size: 1.1rem; opacity: 0.95; max-width: 600px; margin: 0 auto;">
+                    Analisamos seu histórico para sugerir a música perfeita que seu time já conhece.
+                </p>
             </div>
-            <h2 class="text-2xl font-bold mb-2">Laboratório de Escolha</h2>
-            <p style="opacity: 0.9;">Encontre a música perfeita para completar sua escala.</p>
         </div>
 
-        <!-- Filtros Centralizados -->
+        <!-- Filtros em Card Flutuante -->
         <div class="card-neutral" style="
-            padding: 24px; 
-            margin-bottom: 32px; 
-            max-width: 800px; 
-            margin-left: auto; 
-            margin-right: auto;
+            padding: 32px; 
+            margin-bottom: 40px; 
+            border-radius: 20px;
             border: 1px solid var(--border-subtle);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            background: var(--bg-surface);
         ">
-            <div style="margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
-                <h3 class="font-bold text-primary flex items-center gap-2" style="font-size: 1.1rem;">
-                    <div style="background: var(--bg-surface-active); padding: 8px; border-radius: 8px; color: var(--primary);">
-                        <i data-lucide="filter" width="20"></i>
-                    </div>
-                    Filtros de Busca
-                </h3>
-            </div>
+            <h3 class="font-bold text-primary mb-6 flex items-center gap-3" style="font-size: 1.25rem;">
+                <div style="
+                    background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-700) 100%); 
+                    padding: 10px; 
+                    border-radius: 10px; 
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                    <i data-lucide="filter" width="22"></i>
+                </div>
+                O que você está procurando?
+            </h3>
             
             <form action="" method="GET">
                 <input type="hidden" name="tab" value="laboratorio">
                 <input type="hidden" name="search" value="1">
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px;">
                     <!-- Filtro Tom -->
                     <div class="form-group">
-                        <label class="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
-                            <i data-lucide="music" width="14"></i>
-                            No Tom:
-                        </label>
-                        <select name="tone_filter" class="w-full" style="
-                            padding: 12px;
-                            border: 1px solid var(--border-subtle);
-                            border-radius: 12px;
-                            background: var(--bg-surface);
-                            color: var(--text-primary);
-                            font-size: 0.95rem;
-                            appearance: none;
-                            background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e&quot;);
-                            background-position: right 0.5rem center;
-                            background-repeat: no-repeat;
-                            background-size: 1.5em 1.5em;
-                        ">
-                            <option value="">Qualquer tom</option>
-                            <?php 
-                            $tonsOpcoes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-                            foreach($tonsOpcoes as $t) {
-                                $sel = ($_GET['tone_filter'] ?? '') == $t ? 'selected' : '';
-                                echo "<option value='$t' $sel>$t (e variações)</option>";
-                            }
-                            ?>
-                        </select>
+                        <label class="text-sm font-bold text-primary mb-3 block">Tom da Música</label>
+                        <div style="position: relative;">
+                            <i data-lucide="music" width="18" style="position: absolute; left: 14px; top: 14px; color: var(--text-tertiary);"></i>
+                            <select name="tone_filter" class="w-full transition-all focus:ring-2 focus:ring-purple-500" style="
+                                padding: 12px 12px 12px 42px;
+                                border: 1px solid var(--border-subtle);
+                                border-radius: 12px;
+                                background: var(--bg-body);
+                                color: var(--text-primary);
+                                font-size: 1rem;
+                                height: 48px;
+                                cursor: pointer;
+                                appearance: none; /* Remove seta padrão */
+                                background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+                                background-repeat: no-repeat;
+                                background-position: right 1rem center;
+                                background-size: 0.65em auto;
+                            ">
+                                <option value="">Todos os tons</option>
+                                <?php 
+                                $tonsOpcoes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+                                foreach($tonsOpcoes as $t) {
+                                    $sel = ($_GET['tone_filter'] ?? '') == $t ? 'selected' : '';
+                                    echo "<option value='$t' $sel>$t (Maior)</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Filtro Tag -->
                     <div class="form-group">
-                        <label class="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
-                            <i data-lucide="tag" width="14"></i>
-                            Com Estilo/Tag:
-                        </label>
-                        <select name="tag_filter" class="w-full" style="
-                            padding: 12px;
-                            border: 1px solid var(--border-subtle);
-                            border-radius: 12px;
-                            background: var(--bg-surface);
-                            color: var(--text-primary);
-                            font-size: 0.95rem;
-                            appearance: none;
-                            background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e&quot;);
-                            background-position: right 0.5rem center;
-                            background-repeat: no-repeat;
-                            background-size: 1.5em 1.5em;
-                        ">
-                            <option value="">Qualquer estilo</option>
-                            <?php 
-                            // Buscar todas as tags
-                            $tagsAll = $pdo->query("SELECT id, name FROM tags ORDER BY name")->fetchAll();
-                            foreach($tagsAll as $tg) {
-                                $sel = ($_GET['tag_filter'] ?? '') == $tg['id'] ? 'selected' : '';
-                                echo "<option value='{$tg['id']}' $sel>{$tg['name']}</option>";
-                            }
-                            ?>
-                        </select>
+                        <label class="text-sm font-bold text-primary mb-3 block">Estilo ou Tag</label>
+                        <div style="position: relative;">
+                            <i data-lucide="tag" width="18" style="position: absolute; left: 14px; top: 14px; color: var(--text-tertiary);"></i>
+                            <select name="tag_filter" class="w-full transition-all focus:ring-2 focus:ring-purple-500" style="
+                                padding: 12px 12px 12px 42px;
+                                border: 1px solid var(--border-subtle);
+                                border-radius: 12px;
+                                background: var(--bg-body);
+                                color: var(--text-primary);
+                                font-size: 1rem;
+                                height: 48px;
+                                cursor: pointer;
+                                appearance: none;
+                                background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+                                background-repeat: no-repeat;
+                                background-position: right 1rem center;
+                                background-size: 0.65em auto;
+                            ">
+                                <option value="">Todos os estilos</option>
+                                <?php 
+                                // Buscar todas as tags
+                                $tagsAll = $pdo->query("SELECT id, name FROM tags ORDER BY name")->fetchAll();
+                                foreach($tagsAll as $tg) {
+                                    $sel = ($_GET['tag_filter'] ?? '') == $tg['id'] ? 'selected' : '';
+                                    echo "<option value='{$tg['id']}' $sel>{$tg['name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary w-full" style="
-                    justify-content: center; 
-                    padding: 14px; 
-                    border-radius: 12px;
-                    font-weight: 600;
-                    letter-spacing: 0.5px;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                ">
-                    <i data-lucide="search" width="20"></i> 
-                    Analisar e Buscar Músicas
-                </button>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="submit" style="
+                        padding: 14px 32px; 
+                        border-radius: 12px;
+                        font-weight: 700;
+                        font-size: 1rem;
+                        letter-spacing: 0.5px;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+                        color: white !important;
+                        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+                        border: none;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    " onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+                        <i data-lucide="sparkles" width="20"></i> 
+                        Analisar e Buscar
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -1054,69 +1080,66 @@ try {
                 $labResults = $stmtLab->fetchAll(PDO::FETCH_ASSOC);
             } catch (Exception $e) { $labResults = []; }
         ?>
-            <h3 class="text-lg font-bold text-primary mt-8 mb-4">Resultados da Análise (<?= count($labResults) ?>)</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h3 class="text-xl font-bold text-primary">Resultados Sugeridos</h3>
+                <span class="badge-neutral badge-sm"><?= count($labResults) ?> músicas encontradas</span>
+            </div>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 100px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div class="results-list">
                 <?php foreach ($labResults as $res): 
-                     $links = getExternalLinks($res['title'], $res['artist']);
+                     // Buscar tags para esta música (Igual ao Repertório)
+                     $stmtSongTags = $pdo->prepare("SELECT t.id, t.name, t.color FROM tags t JOIN song_tags st ON t.id = st.tag_id WHERE st.song_id = ? ORDER BY t.name");
+                     $stmtSongTags->execute([$res['id']]);
+                     $songTags = $stmtSongTags->fetchAll(PDO::FETCH_ASSOC);
                 ?>
-                <div class="card-neutral p-4 flex flex-col gap-3">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <div class="font-bold text-primary text-lg"><?= htmlspecialchars($res['title']) ?></div>
-                            <div class="text-sm text-secondary"><?= htmlspecialchars($res['artist']) ?></div>
-                            
-                            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                <?php if ($res['tone']): ?>
-                                    <?php 
-                            // Cores Hex para os tons (mesma paleta do gráfico)
-                            $tonColors = [
-                                'C' => '#ef4444', // Red 500
-                                'D' => '#f59e0b', // Amber 500
-                                'E' => '#22c55e', // Green 500
-                                'F' => '#3b82f6', // Blue 500
-                                'G' => '#a855f7', // Purple 500
-                                'A' => '#ec4899', // Pink 500
-                                'B' => '#14b8a6'  // Teal 500
-                            ];
-                            $baseTone = substr($res['tone'], 0, 1);
-                            $badgeColor = $tonColors[$baseTone] ?? '#64748b';
-                            ?>
-                            <span class="badge" style="
-                                background-color: <?= $badgeColor ?>20; 
-                                color: <?= $badgeColor ?>; 
-                                border: 1px solid <?= $badgeColor ?>40;
-                                font-weight: 800;
-                            ">
-                                <?= $res['tone'] ?>
-                            </span>
-                                <?php endif; ?>
-                                
-                                <span class="badge-blue badge-sm">
-                                    <?php 
-                                        if (!$res['last_played']) echo "Nunca tocada";
-                                        else echo $res['days_since'] . " dias sem tocar";
-                                    ?>
-                                </span>
-                            </div>
-                        </div>
-                        <a href="musica_detalhe.php?id=<?= $res['id'] ?>" class="text-primary hover:text-blue-600"><i data-lucide="chevron-right"></i></a>
-                    </div>
+                <!-- COMPACT MUSIC CARD (Igual Repertório) -->
+                <a href="musica_detalhe.php?id=<?= $res['id'] ?>" class="compact-card">
                     
-                    <!-- Botões de Ação Rápida -->
-                    <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-subtle); padding-top: 12px;">
-                        <a href="<?= $links['cifraclub'] ?>" target="_blank" class="btn-ghost-lavender btn-sm flex-1 justify-center">Cifra</a>
-                        <a href="<?= $links['youtube'] ?>" target="_blank" class="btn-ghost-rose btn-sm flex-1 justify-center">YouTube</a>
-                        <a href="<?= $links['spotify'] ?>" target="_blank" class="btn-ghost-sage btn-sm flex-1 justify-center">Spotify</a>
+                    <!-- Tom Badge -->
+                    <div class="compact-card-icon">
+                        <?php if ($res['tone']): ?>
+                            <div style="font-size: 1rem; font-weight: 800; line-height: 1; color: var(--text-primary);"><?= $res['tone'] ?></div>
+                            <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; margin-top: 2px;">TOM</div>
+                        <?php else: ?>
+                            <i data-lucide="music" width="20" style="opacity:0.3"></i>
+                        <?php endif; ?>
                     </div>
-                </div>
+
+                    <!-- Conteúdo -->
+                    <div class="compact-card-content">
+                        <div class="compact-card-title">
+                            <?= htmlspecialchars($res['title']) ?>
+                        </div>
+                        <div class="compact-card-subtitle">
+                            <span><?= htmlspecialchars($res['artist']) ?></span>
+                            <?php if (!empty($songTags)): ?>
+                                <?php foreach (array_slice($songTags, 0, 2) as $tag): ?>
+                                    <span style="background: <?= $tag['color'] ?>15; color: <?= $tag['color'] ?>; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                        <?= htmlspecialchars($tag['name']) ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            
+                            <!-- Indicador de Histórico (Extra do Laboratório) -->
+                            <span class="badge-blue badge-sm" style="margin-left: 8px;">
+                                <?php 
+                                    if (!$res['last_played']) echo "Nunca tocada";
+                                    else echo $res['days_since'] . " dias";
+                                ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Seta -->
+                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
+                </a>
                 <?php endforeach; ?>
                 
                 <?php if (empty($labResults)): ?>
-                    <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">
-                        <i data-lucide="search-x" width="48" style="opacity: 0.3; margin-bottom: 12px;"></i>
-                        <p>Nenhuma música encontrada com estes filtros.</p>
-                        <p class="text-sm">Tente filtros menos específicos.</p>
+                    <div style="text-align: center; padding: 60px 40px; color: var(--text-tertiary); background: var(--bg-surface); border-radius: 16px; border: 1px dashed var(--border-subtle);">
+                        <i data-lucide="search-x" width="48" style="opacity: 0.3; margin-bottom: 16px;"></i>
+                        <p class="font-bold text-lg mb-2">Nenhuma música encontrada</p>
+                        <p class="text-sm">Tente filtros menos específicos ou limpe a busca.</p>
                     </div>
                 <?php endif; ?>
             </div>
