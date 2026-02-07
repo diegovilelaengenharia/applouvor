@@ -285,7 +285,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                                     $uniqueRoles[] = $r;
                                 }
                             }
-                            // Show max 3 roles to keep it compact
+                            // Show max 4 roles to keep it compact
                             $displayRoles = array_slice($uniqueRoles, 0, 4);
                             foreach ($displayRoles as $role): 
                         ?>
@@ -295,7 +295,11 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                             </span>
                         <?php 
                             endforeach;
-                            if(count($uniqueRoles) > 4) { echo "<span style='font-size:0.7rem; opacity:0.7;'>+" . (count($uniqueRoles) - 4) . "</span>"; }
+                            if(count($uniqueRoles) > 4): 
+                        ?>
+                            <span style='font-size:0.7rem; opacity:0.7;'>+<?= (count($uniqueRoles) - 4) ?></span>
+                        <?php 
+                            endif;
                         else: 
                         ?>
                             <span style="font-size: 0.8rem; color: var(--text-tertiary); font-style: italic;">
