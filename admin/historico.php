@@ -849,9 +849,19 @@ try {
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label text-sm font-bold text-secondary mb-2 block">Com Tag:</label>
-                        <select name="tag_filter" class="form-select w-full p-3 rounded-lg border border-slate-200">
+                    <div>
+                        <label class="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
+                            <i data-lucide="tag" width="14"></i>
+                            Com Tag:
+                        </label>
+                        <select name="tag_filter" class="w-full" style="
+                            padding: 10px 12px;
+                            border: 1px solid var(--border-subtle);
+                            border-radius: 8px;
+                            background: var(--bg-surface);
+                            color: var(--text-primary);
+                            font-size: 0.95rem;
+                        ">
                             <option value="">Qualquer estilo</option>
                             <?php 
                             // Buscar todas as tags
@@ -916,7 +926,7 @@ try {
         ?>
             <h3 class="text-lg font-bold text-primary mt-8 mb-4">Resultados da Análise (<?= count($labResults) ?>)</h3>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 100px;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 100px; max-width: 800px; margin-left: auto; margin-right: auto;">
                 <?php foreach ($labResults as $res): 
                      $links = getExternalLinks($res['title'], $res['artist']);
                 ?>
