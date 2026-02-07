@@ -797,57 +797,41 @@ try {
 <?php elseif ($currentTab == 'laboratorio'): ?>
     
     <div class="container fade-in">
-        <div class="card-primary p-8 text-center mb-8" style="
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        <!-- Header Compacto -->
+        <div class="card-primary" style="
+            background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-700) 100%);
             color: white; 
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
         ">
             <div style="
-                position: absolute;
-                top: -50px;
-                right: -50px;
-                width: 200px;
-                height: 200px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50%;
-            "></div>
-            <div style="
-                width: 80px; height: 80px; 
+                width: 56px; height: 56px; 
                 background: rgba(255,255,255,0.2); 
                 border-radius: 50%; 
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
-                margin: 0 auto 20px auto;
-                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-                position: relative;
+                margin: 0 auto 12px auto;
             ">
-                <i data-lucide="flask-conical" width="40" height="40" style="color: white;"></i>
+                <i data-lucide="flask-conical" width="28" height="28" style="color: white;"></i>
             </div>
-            <h2 class="text-3xl font-bold mb-3" style="text-shadow: 0 2px 4px rgba(0,0,0,0.2);">Laboratório de Escolha</h2>
-            <p style="font-size: 1.1rem; opacity: 0.95;">Encontre a música perfeita para completar sua escala.</p>
+            <h2 class="text-2xl font-bold mb-2">Laboratório de Escolha</h2>
+            <p style="opacity: 0.9;">Encontre a música perfeita para completar sua escala.</p>
         </div>
 
-        <div class="card-neutral">
-            <h3 class="card-title mb-6 flex items-center gap-2">
-                <i data-lucide="filter" width="18"></i> Estou procurando uma música...
+        <!-- Filtros -->
+        <div class="card-neutral" style="padding: 20px; margin-bottom: 24px;">
+            <h3 class="font-bold text-primary mb-4 flex items-center gap-2">
+                <i data-lucide="filter" width="18"></i>
+                Estou procurando uma música...
             </h3>
-
+            
             <form action="" method="GET">
                 <input type="hidden" name="tab" value="laboratorio">
                 <input type="hidden" name="search" value="1">
 
-                <div class="form-group mb-6">
-                    <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 12px;">
-                        <input type="checkbox" name="not_played" value="1" <?= isset($_GET['not_played']) ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: var(--primary);">
-                        <div>
-                            <div class="font-bold text-primary">Que não tocamos há muito tempo</div>
-                            <div class="text-sm text-secondary">Pelo menos 3 meses (90 dias)</div>
-                        </div>
-                    </label>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
