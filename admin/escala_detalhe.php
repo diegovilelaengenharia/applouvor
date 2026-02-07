@@ -168,123 +168,422 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 <style>
 .edit-mode-hidden { display: none; }
 .view-mode-hidden { display: none; }
+
+/* === DESIGN ÚNICO - ESCALA DETALHE === */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+}
+
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+}
+
+.hero-date-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: float 3s ease-in-out infinite;
+}
+
+.hero-date-day {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.hero-date-month {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #764ba2;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+.hero-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    margin: 0 0 6px 0;
+}
+
+.hero-subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 20px;
+    margin-top: 12px;
+}
+
+.hero-stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    padding: 8px 14px;
+    border-radius: 30px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.hero-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-hero {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-hero-primary {
+    background: white;
+    color: #764ba2;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-hero-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.btn-hero-danger {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-hero-danger:hover {
+    background: rgba(239, 68, 68, 0.9);
+}
+
+/* Section Titles */
+.section-title-gradient {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, #667eea, #764ba2, #f093fb) 1;
+}
+
+.section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.section-icon-green { background: linear-gradient(135deg, #10b981, #34d399); }
+.section-icon-purple { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+
+.section-text {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* Participant Cards */
+.participant-card-premium {
+    background: linear-gradient(145deg, #ffffff, #f8f9ff);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.participant-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.participant-card-premium:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.participant-card-premium:hover::before {
+    opacity: 1;
+}
+
+.participant-avatar-premium {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.participant-avatar-premium::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent);
+    pointer-events: none;
+}
+
+/* Song Cards */
+.song-card-premium {
+    background: linear-gradient(145deg, #ffffff, #faf5ff);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    border-left: 5px solid;
+    border-image: linear-gradient(to bottom, #667eea, #f093fb) 1;
+    border-radius: 0 16px 16px 0;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: inherit;
+}
+
+.song-card-premium:hover {
+    transform: translateX(8px);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+    background: linear-gradient(145deg, #ffffff, #f3e8ff);
+}
+
+.song-number {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: white;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    flex-shrink: 0;
+}
+
+.song-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.badge-tone { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
+.badge-bpm { background: linear-gradient(135deg, #fce7f3, #fbcfe8); color: #9d174d; }
+.badge-category { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: #3730a3; }
+
+@media (max-width: 640px) {
+    .hero-card {
+        padding: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-date-box {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 16px;
+    }
+    .hero-stats {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .hero-actions {
+        margin-top: 16px;
+        width: 100%;
+        justify-content: center;
+    }
+    .participant-card-premium {
+        padding: 12px;
+    }
+}
 </style>
 
 <?php
-// Definir cores do tema baseado no tipo de evento
-$themeColor = 'var(--lavender-600)';
-$themeLight = 'var(--lavender-50)';
+// Cores do avatar baseadas no tipo
+$avatarColors = [
+    'A' => '#ef4444', 'B' => '#f97316', 'C' => '#eab308', 'D' => '#22c55e',
+    'E' => '#14b8a6', 'F' => '#3b82f6', 'G' => '#8b5cf6', 'H' => '#ec4899',
+    'I' => '#f43f5e', 'J' => '#f59e0b', 'K' => '#10b981', 'L' => '#06b6d4',
+    'M' => '#6366f1', 'N' => '#d946ef', 'O' => '#f472b6', 'P' => '#fb923c',
+    'Q' => '#84cc16', 'R' => '#2dd4bf', 'S' => '#818cf8', 'T' => '#c084fc',
+    'U' => '#fb7185', 'V' => '#facc15', 'W' => '#4ade80', 'X' => '#22d3ee',
+    'Y' => '#a78bfa', 'Z' => '#e879f9'
+];
 ?>
 
-<!-- Header Card -->
+<!-- Hero Card -->
 <div class="schedule-detail-container">
-    <div style="
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 16px;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-subtle);
-        border-left: 4px solid <?= $themeColor ?>;
-        border-radius: 12px;
-        margin-bottom: 24px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    ">
+    <div class="hero-card" style="display: flex; align-items: center; gap: 20px;">
         
-        <!-- Data -->
-        <div style="
-            min-width: 64px;
-            height: 64px;
-            background: <?= $themeLight ?>;
-            border: 1px solid <?= $themeColor ?>30;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        ">
-            <div style="font-size: 1.6rem; font-weight: 800; line-height: 1; color: <?= $themeColor ?>;"><?= $date->format('d') ?></div>
-            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: <?= $themeColor ?>; opacity: 0.9; margin-top: 3px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+        <!-- Date Box -->
+        <div class="hero-date-box">
+            <div class="hero-date-day"><?= $date->format('d') ?></div>
+            <div class="hero-date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
         </div>
 
-        <!-- Conteúdo Central -->
+        <!-- Content -->
         <div style="flex: 1; min-width: 0;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
-                <h1 id="display-event-name" style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0;">
-                    <?= htmlspecialchars($schedule['event_type']) ?>
-                </h1>
-            </div>
-
-            <div id="display-event-date" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">
+            <h1 id="display-event-name" class="hero-title">
+                <?= htmlspecialchars($schedule['event_type']) ?>
+            </h1>
+            <div id="display-event-date" class="hero-subtitle">
                 <?= $diaSemana ?>, <?= $date->format('d/m/Y') ?>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap;">
-                <span style="display: flex; align-items: center; gap: 4px;">
-                    <i data-lucide="clock" width="13"></i>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <i data-lucide="clock" width="14"></i>
                     <span id="display-event-time"><?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?></span>
-                </span>
-                <span style="display: flex; align-items: center; gap: 4px;">
-                    <i data-lucide="users" width="13"></i>
-                    <?= count($team) ?>
-                </span>
-                <span style="display: flex; align-items: center; gap: 4px;">
-                    <i data-lucide="music" width="13"></i>
-                    <?= count($songs) ?>
-                </span>
+                </div>
+                <div class="hero-stat">
+                    <i data-lucide="users" width="14"></i>
+                    <?= count($team) ?> pessoas
+                </div>
+                <div class="hero-stat">
+                    <i data-lucide="music" width="14"></i>
+                    <?= count($songs) ?> músicas
+                </div>
             </div>
         </div>
 
-        <!-- Botões de Ação -->
-        <div style="display: flex; gap: 8px; flex-shrink: 0;">
+        <!-- Actions -->
+        <div class="hero-actions">
             <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.');" style="margin: 0;">
+            <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala?');" style="margin: 0;">
                 <input type="hidden" name="delete_schedule" value="1">
-                <button type="submit" class="btn-schedule-action btn-delete">
-                    <i data-lucide="trash-2" style="width: 16px;"></i>
-                    <span>Excluir</span>
+                <button type="submit" class="btn-hero btn-hero-danger">
+                    <i data-lucide="trash-2" width="16"></i>
                 </button>
             </form>
             <?php endif; ?>
             
-            <button id="saveBtn" onclick="saveAllChanges()" class="btn-schedule-action btn-save" style="display: none;">
-                <i data-lucide="check" style="width: 16px;"></i>
-                <span>Salvar</span>
+            <button id="saveBtn" onclick="saveAllChanges()" class="btn-hero btn-hero-primary" style="display: none;">
+                <i data-lucide="check" width="16"></i>
+                Salvar
             </button>
             
-            <button id="editBtn" onclick="toggleEditMode()" class="btn-schedule-action btn-edit">
-                <i data-lucide="edit-2" style="width: 16px;"></i>
-                <span>Editar</span>
+            <button id="editBtn" onclick="toggleEditMode()" class="btn-hero btn-hero-primary">
+                <i data-lucide="edit-2" width="16"></i>
+                Editar
             </button>
         </div>
     </div>
 
-    <!-- Observações (Apenas para Administradores) -->
+    <!-- Observações -->
     <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
-        <div id="display-notes-container" style="padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-bottom: 24px;">
-            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
-                <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
+        <div id="display-notes-container" style="padding: 16px; background: linear-gradient(145deg, #fefce8, #fef9c3); border-radius: 16px; border: 2px solid #fde047; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(253, 224, 71, 0.3);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #eab308, #facc15); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="lightbulb" style="width: 14px; color: white;"></i>
+                </div>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #854d0e; text-transform: uppercase; letter-spacing: 0.5px;">Observações do Líder</span>
             </div>
-            <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+            <div id="display-notes-text" style="font-size: 0.9rem; line-height: 1.5; color: #713f12; font-weight: 500;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
         </div>
     <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
-        <div id="display-notes-container" style="display: none; padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-bottom: 24px;">
-            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
-                <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
+        <div id="display-notes-container" style="display: none; padding: 16px; background: linear-gradient(145deg, #fefce8, #fef9c3); border-radius: 16px; border: 2px solid #fde047; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #eab308, #facc15); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="lightbulb" style="width: 14px; color: white;"></i>
+                </div>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #854d0e; text-transform: uppercase;">Observações do Líder</span>
             </div>
-            <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"></div>
+            <div id="display-notes-text" style="font-size: 0.9rem; line-height: 1.5; color: #713f12;"></div>
         </div>
     <?php endif; ?>
 
-    <!-- Botão Gerenciar Informações (Modo Edição - Apenas Admin) -->
+    <!-- Botão Gerenciar -->
     <?php if ($_SESSION['user_role'] === 'admin'): ?>
     <button id="btn-manage-info" class="edit-mode-item" onclick="openModal('modal-event')" style="
-        display: none; width: 100%; margin-bottom: 24px; padding: 12px; 
-        background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; 
-        color: var(--primary); font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+        display: none; width: 100%; margin-bottom: 24px; padding: 14px; 
+        background: linear-gradient(145deg, #f3e8ff, #ede9fe); 
+        border: 2px dashed #a78bfa; border-radius: 16px; 
+        color: #7c3aed; font-weight: 700; cursor: pointer; 
+        align-items: center; justify-content: center; gap: 8px; 
+        transition: all 0.3s;
     ">
         <i data-lucide="settings-2" style="width: 20px;"></i> Gerenciar Informações
     </button>
@@ -352,85 +651,44 @@ $themeLight = 'var(--lavender-50)';
         <?php endif; ?>
 
         <!-- PARTICIPANTES -->
-        <div style="margin-bottom: 32px;">
-            <h3 style="
-                font-size: 1rem;
-                font-weight: 700;
-                color: var(--text-primary);
-                margin: 0 0 16px 0;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding-bottom: 12px;
-                border-bottom: 2px solid var(--border-subtle);
-            ">
-                <i data-lucide="users" style="width: 18px; color: var(--sage-500);"></i>
-                Participantes (<?= count($team) ?>)
-            </h3>
+        <div style="margin-bottom: 40px;">
+            <div class="section-title-gradient">
+                <div class="section-icon section-icon-green">
+                    <i data-lucide="users" style="width: 20px;"></i>
+                </div>
+                <span class="section-text">Participantes (<?= count($team) ?>)</span>
+            </div>
             
             <?php if (empty($team)): ?>
-                <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
-                    <i data-lucide="user-plus" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                    <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhum participante escalado</p>
+                <div style="text-align: center; padding: 50px 20px; background: linear-gradient(145deg, #f8fafc, #f1f5f9); border-radius: 20px; border: 2px dashed #cbd5e1;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #94a3b8, #64748b); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i data-lucide="user-plus" style="width: 28px; color: white;"></i>
+                    </div>
+                    <p style="color: #64748b; font-size: 1rem; margin: 0; font-weight: 600;">Nenhum participante escalado</p>
                 </div>
             <?php else: ?>
-                <div style="
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 10px;
-                ">
-                    <?php foreach ($team as $member): ?>
-                        <div style="
-                            background: var(--bg-surface);
-                            border: 1px solid var(--border-subtle);
-                            border-radius: 12px;
-                            padding: 12px;
-                            display: flex;
-                            align-items: center;
-                            gap: 10px;
-                            transition: all 0.2s;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)'">
-                            <!-- Avatar -->
-                            <div style="
-                                width: 44px;
-                                height: 44px;
-                                border-radius: 50%;
-                                background: <?= $member['avatar_color'] ?: 'var(--slate-200)' ?>;
-                                color: white;
-                                font-weight: 800;
-                                font-size: 1rem;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                flex-shrink: 0;
-                                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-                            ">
-                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+                    <?php foreach ($team as $member): 
+                        $firstLetter = strtoupper(substr($member['name'], 0, 1));
+                        $avatarBg = $avatarColors[$firstLetter] ?? '#8b5cf6';
+                    ?>
+                        <div class="participant-card-premium">
+                            <div class="participant-avatar-premium" style="background: linear-gradient(135deg, <?= $avatarBg ?>, <?= $avatarBg ?>dd);">
+                                <?= $firstLetter ?>
                             </div>
-
-                            <!-- Conteúdo -->
                             <div style="flex: 1; min-width: 0;">
-                                <div style="
-                                    font-weight: 700;
-                                    font-size: 0.875rem;
-                                    color: var(--text-primary);
-                                    margin-bottom: 2px;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                ">
+                                <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                     <?= htmlspecialchars($member['name']) ?>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                     <?php 
                                     $mRoles = $userRoles[$member['user_id']] ?? [];
                                     if (empty($mRoles) && $member['instrument']) {
-                                        echo '<span style="font-size: 0.75rem; color: var(--text-secondary);">' . htmlspecialchars($member['instrument']) . '</span>';
+                                        echo '<span style="font-size: 0.8rem; color: #64748b; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); padding: 3px 10px; border-radius: 20px; font-weight: 600;">' . htmlspecialchars($member['instrument']) . '</span>';
                                     } else {
                                         foreach ($mRoles as $role): 
                                     ?>
-                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 0.95rem; cursor: help; filter: grayscale(0.1);"><?= $role['icon'] ?></span>
+                                        <span title="<?= htmlspecialchars($role['name']) ?>" style="font-size: 1.1rem; cursor: help; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"><?= $role['icon'] ?></span>
                                     <?php 
                                         endforeach; 
                                     }
@@ -444,67 +702,62 @@ $themeLight = 'var(--lavender-50)';
         </div>
         
         <!-- REPERTÓRIO -->
-        <div style="margin-bottom: 32px;">
-            <h3 style="
-                font-size: 1rem;
-                font-weight: 700;
-                color: var(--text-primary);
-                margin: 0 0 16px 0;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding-bottom: 12px;
-                border-bottom: 2px solid var(--border-subtle);
-            ">
-                <i data-lucide="music" style="width: 18px; color: var(--lavender-600);"></i>
-                Repertório (<?= count($songs) ?>)
-            </h3>
+        <div style="margin-bottom: 40px;">
+            <div class="section-title-gradient">
+                <div class="section-icon section-icon-purple">
+                    <i data-lucide="music" style="width: 20px;"></i>
+                </div>
+                <span class="section-text">Repertório (<?= count($songs) ?>)</span>
+            </div>
             
             <?php if (empty($songs)): ?>
-                <div style="text-align: center; padding: 40px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px dashed var(--border-color);">
-                    <i data-lucide="music-2" style="width: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                    <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhuma música selecionada</p>
+                <div style="text-align: center; padding: 50px 20px; background: linear-gradient(145deg, #faf5ff, #f3e8ff); border-radius: 20px; border: 2px dashed #c4b5fd;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8b5cf6, #a78bfa); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i data-lucide="music-2" style="width: 28px; color: white;"></i>
+                    </div>
+                    <p style="color: #7c3aed; font-size: 1rem; margin: 0; font-weight: 600;">Nenhuma música selecionada</p>
                 </div>
             <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 14px;">
                     <?php foreach ($songs as $index => $song): ?>
-                        <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="compact-card">
-                            <!-- Número da Ordem -->
-                            <div class="compact-card-icon" style="background: var(--lavender-600); color: white; font-weight: 800; font-size: 0.875rem;">
+                        <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-card-premium">
+                            <!-- Número -->
+                            <div class="song-number">
                                 <?= $index + 1 ?>
                             </div>
 
                             <!-- Conteúdo -->
-                            <div class="compact-card-content">
-                                <div class="compact-card-title">
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                     <?= htmlspecialchars($song['title']) ?>
                                 </div>
-                                <div class="compact-card-subtitle">
-                                    <span><?= htmlspecialchars($song['artist']) ?></span>
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <span style="font-size: 0.85rem; color: #64748b; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></span>
                                     
                                     <?php if ($song['tone']): ?>
-                                        <span style="opacity: 0.6;">•</span>
-                                        <span style="background: #fff7ed; color: #ea580c; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
-                                            <?= htmlspecialchars($song['tone']) ?>
+                                        <span class="song-badge badge-tone">
+                                            🎵 <?= htmlspecialchars($song['tone']) ?>
                                         </span>
                                     <?php endif; ?>
                                     
                                     <?php if ($song['bpm']): ?>
-                                        <span style="background: var(--rose-50); color: var(--rose-600); padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
-                                            <?= htmlspecialchars($song['bpm']) ?> BPM
+                                        <span class="song-badge badge-bpm">
+                                            ⚡ <?= htmlspecialchars($song['bpm']) ?> BPM
                                         </span>
                                     <?php endif; ?>
                                     
                                     <?php if ($song['category']): ?>
-                                        <span style="background: var(--slate-50); color: var(--slate-600); padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
-                                            <?= htmlspecialchars($song['category']) ?>
+                                        <span class="song-badge badge-category">
+                                            🏷️ <?= htmlspecialchars($song['category']) ?>
                                         </span>
                                     <?php endif; ?>
                                 </div>
                             </div>
 
-                            <!-- Seta -->
-                            <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
+                            <!-- Arrow -->
+                            <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i data-lucide="chevron-right" style="width: 16px; color: white;"></i>
+                            </div>
                         </a>
                     <?php endforeach; ?>
                 </div>
