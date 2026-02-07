@@ -548,7 +548,7 @@ function renderCardGeneric($cardId, $cardDef) {
         </div>
         <div class="card-footer-row">
             <span class="footer-text">Acessar</span>
-            <span class="link-text">Ver Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
         </div>
     </a>
     <?php
