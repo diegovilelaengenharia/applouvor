@@ -227,24 +227,342 @@ renderAppHeader($page_title);
 renderPageHeader($page_title, $page_subtitle);
 ?>
 
-<div class="container" style="padding-top: 16px; max-width: 600px; margin: 0 auto; padding-bottom: 24px;">
+<style>
+.profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+}
 
+.profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+}
 
+.profile-sidebar {
+    position: sticky;
+    top: 24px;
+}
+
+.avatar-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 16px;
+}
+
+.avatar-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-initial {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #9ca3af;
+}
+
+.avatar-edit-btn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.avatar-edit-btn:hover {
+    transform: scale(1.1);
+}
+
+.change-photo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+}
+
+.change-photo-btn:hover {
+    background: white;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.profile-email {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+.profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #dbeafe;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1e40af;
+}
+
+.form-section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.section-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--primary);
+}
+
+.section-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    color: #111827;
+    background: #f9fafb;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(55, 106, 200, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 12px;
+}
+
+.roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.role-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.role-checkbox-label:hover {
+    border-color: var(--primary);
+    background: rgba(55, 106, 200, 0.03);
+}
+
+.role-checkbox-label input:checked ~ .role-info {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.role-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: #374151;
+    transition: all 0.2s;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: white;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-secondary:hover {
+    background: #f9fafb;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.alert {
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+
+.alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+@media (max-width: 768px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-sidebar {
+        position: static;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="profile-container">
     <!-- Mensagens de Feedback -->
     <?php if ($success): ?>
-        <div style="background: var(--green-50); color: var(--green-700); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--green-200); font-size: var(--font-body);">
-            <i data-lucide="check-circle" style="width: 18px;"></i>
+        <div class="alert alert-success">
+            <i data-lucide="check-circle" style="width: 20px;"></i>
             <?= $success ?>
         </div>
     <?php endif; ?>
 
     <?php if ($error): ?>
-        <div style="background: var(--rose-50); color: var(--rose-600); padding: 12px; border-radius: 12px; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 12px; border: 1px solid var(--rose-200); font-size: var(--font-body);">
-            <i data-lucide="alert-circle" style="width: 18px;"></i>
+        <div class="alert alert-error">
+            <i data-lucide="alert-circle" style="width: 20px;"></i>
             <?= $error ?>
         </div>
     <?php endif; ?>
-
 
     <form method="POST" enctype="multipart/form-data">
         <?php if ($is_creating_new): ?>
@@ -254,268 +572,159 @@ renderPageHeader($page_title, $page_subtitle);
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
         <?php endif; ?>
 
-        <!-- Card Principal (Avatar + Info Básica) -->
-        <div style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 16px; text-align: center; border: 1px solid var(--border-color); margin-bottom: 12px; box-shadow: var(--shadow-sm);">
-
-            <!-- Avatar Upload Wrapper -->
-            <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 8px;">
-                <div style="
-                    width: 100%; height: 100%; 
-                    border-radius: 50%; 
-                    overflow: hidden; 
-                    border: 4px solid var(--bg-surface); 
-                    box-shadow: 0 0 0 2px var(--border-color);
-                    background: var(--bg-body);
-                    display: flex; align-items: center; justify-content: center;
-                ">
-                    <?php if (!empty($user['avatar'])): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview"
-                            style="width: 100%; height: 100%; object-fit: cover;">
-                    <?php else: ?>
-                        <span style="font-size: 2.5rem; font-weight: 700; color: var(--text-muted);" id="avatar_initial">
-                            <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
-                        </span>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Botão Editar Foto (ícone) -->
-                <label for="avatar_upload" class="ripple" style="
-                    position: absolute; bottom: 0; right: 0; 
-                    background: var(--primary); color: white; 
-                    width: 28px; height: 28px; 
-                    border-radius: 50%; 
-                    display: flex; align-items: center; justify-content: center; 
-                    cursor: pointer; 
-                    border: 3px solid var(--bg-surface);
-                    box-shadow: var(--shadow-sm);
-                    transition: transform 0.2s;
-                ">
-                    <i data-lucide="camera" style="width: 16px;"></i>
-                </label>
-                <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
-            </div>
-            
-            <!-- Botão Mudar Foto -->
-            <label for="avatar_upload" style="
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                padding: 6px 12px;
-                background: var(--bg-body);
-                border: 1px solid var(--border-color);
-                border-radius: 20px;
-                font-size: var(--font-caption);
-                font-weight: 600;
-                color: var(--text-secondary);
-                cursor: pointer;
-                transition: all 0.2s;
-                margin-bottom: 8px;
-            " onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" 
-               onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-secondary)'">
-                <i data-lucide="image" style="width: 14px;"></i>
-                Mudar Foto
-            </label>
-
-            <h2 style="font-size: var(--font-h3); font-weight: 700; color: var(--slate-900); margin-bottom: 2px;">
-                <?= !empty($user['name']) ? htmlspecialchars($user['name']) : 'Novo Usuário' ?>
-            </h2>
-            <p style="color: var(--slate-500); font-size: var(--font-body-sm);">
-                <?= htmlspecialchars($user['email'] ?? '') ?>
-            </p>
-
-            <div style="margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; background: var(--slate-100); border-radius: 20px; font-size: var(--font-caption); color: var(--slate-600); font-weight: 600;">
-                <i data-lucide="user" style="width: 12px;"></i>
-                <?= $is_creating_new ? 'Novo Membro' : 'Membro da Equipe' ?>
-            </div>
-        </div>
-
-        <!-- Section: Identidade -->
-        <div style="margin-bottom: 12px;">
-            <h3 style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="id-card" style="width: 16px; color: var(--text-muted);"></i>
-                Identidade
-            </h3>
-
-            <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden;">
-                <div style="padding: 10px;">
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Nome Completo</label>
-                    <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                </div>
-
-                <div style="border-top: 1px solid var(--border-color); padding: 10px;">
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">E-mail</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                </div>
-
-                <div style="border-top: 1px solid var(--border-color); padding: 12px;">
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
-                        Telefone / WhatsApp
-                    </label>
-                    <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                </div>
-
-                <div style="border-top: 1px solid var(--border-color); padding: 12px;">
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">
-                        Data de Nascimento
-                    </label>
-                    <input type="date" name="birth_date" value="<?= htmlspecialchars($user['birth_date'] ?? '') ?>"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                </div>
-            </div>
-        </div>
-
-        <?php if (($_SESSION['user_role'] ?? '') === 'admin'): ?>
-        <!-- Section: Permissões (Admin Only) -->
-        <div style="margin-bottom: 12px;">
-            <h3 style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="shield" style="width: 16px; color: var(--text-muted);"></i>
-                Permissões
-            </h3>
-
-            <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden;">
-                <div style="padding: 10px;">
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Nível de Acesso</label>
-                    <select name="role" style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                        <option value="user" <?= $user['role'] === 'user' ? 'selected' : '' ?>>Membro</option>
-                        <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
-                    </select>
-                </div>
-
-                <div style="border-top: 1px solid var(--border-color); padding: 10px;">
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Senha de Acesso</label>
-                    <input type="text" name="password" value="<?= htmlspecialchars($user['password'] ?? '') ?>" <?= $is_creating_new ? 'required' : '' ?> placeholder="<?= $is_creating_new ? '4 dígitos' : 'Deixe em branco para n��o alterar' ?>"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                    <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section: Funções/Instrumentos (Admin Only) -->
-        <div style="margin-bottom: 12px;">
-            <h3 style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="music" style="width: 16px; color: var(--text-muted);"></i>
-                Funções / Instrumentos
-            </h3>
-
-            <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 12px;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px;">
-                    <?php foreach ($allRoles as $role): ?>
-                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s; background: var(--bg-body);"
-                            onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(55, 106, 200, 0.05)'" 
-                            onmouseout="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                            <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" 
-                                <?= in_array($role['id'], $user_roles) ? 'checked' : '' ?>
-                                style="width: 16px; height: 16px; cursor: pointer;">
-                            <span style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-                                <span><?= $role['icon'] ?></span>
-                                <span style="font-weight: 500; color: var(--text-secondary);"><?= $role['name'] ?></span>
-                            </span>
+        <div class="profile-grid">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <div class="avatar-card">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-circle">
+                            <?php if (!empty($user['avatar'])): ?>
+                                <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview" alt="Avatar">
+                            <?php else: ?>
+                                <span class="avatar-initial" id="avatar_initial">
+                                    <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                        <label for="avatar_upload" class="avatar-edit-btn">
+                            <i data-lucide="camera" style="width: 18px;"></i>
                         </label>
-                    <?php endforeach; ?>
+                        <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
+                    </div>
+
+                    <label for="avatar_upload" class="change-photo-btn">
+                        <i data-lucide="image" style="width: 16px;"></i>
+                        Mudar Foto
+                    </label>
+
+                    <h2 class="profile-name">
+                        <?= !empty($user['name']) ? htmlspecialchars($user['name']) : 'Novo Usuário' ?>
+                    </h2>
+                    <p class="profile-email"><?= htmlspecialchars($user['email'] ?? '') ?></p>
+
+                    <div class="profile-badge">
+                        <i data-lucide="user" style="width: 12px;"></i>
+                        <?= $is_creating_new ? 'Novo Membro' : 'Membro da Equipe' ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div>
+                <!-- Dados Pessoais -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i data-lucide="user" class="section-icon"></i>
+                        <h3 class="section-title">Dados Pessoais</h3>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required class="form-input" placeholder="Digite o nome completo">
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required class="form-input" placeholder="exemplo@email.com">
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Telefone / WhatsApp</label>
+                        <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" class="form-input" placeholder="(37) 99999-9999">
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Data de Nascimento</label>
+                        <input type="date" name="birth_date" value="<?= htmlspecialchars($user['birth_date'] ?? '') ?>" class="form-input">
+                    </div>
+                </div>
+
+                <?php if (($_SESSION['user_role'] ?? '') === 'admin'): ?>
+                <!-- Permissões -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i data-lucide="shield" class="section-icon"></i>
+                        <h3 class="section-title">Permissões e Acesso</h3>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Nível de Acesso</label>
+                        <select name="role" class="form-input">
+                            <option value="user" <?= $user['role'] === 'user' ? 'selected' : '' ?>>Membro</option>
+                            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Senha de Acesso</label>
+                        <input type="text" name="password" value="<?= htmlspecialchars($user['password'] ?? '') ?>" <?= $is_creating_new ? 'required' : '' ?> class="form-input" placeholder="<?= $is_creating_new ? '4 dígitos' : 'Deixe em branco para não alterar' ?>">
+                        <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
+                    </div>
+                </div>
+
+                <!-- Funções/Instrumentos -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i data-lucide="music" class="section-icon"></i>
+                        <h3 class="section-title">Funções / Instrumentos</h3>
+                    </div>
+
+                    <div class="roles-grid">
+                        <?php foreach ($allRoles as $role): ?>
+                            <label class="role-checkbox-label">
+                                <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" <?= in_array($role['id'], $user_roles) ? 'checked' : '' ?> style="width: 18px; height: 18px; cursor: pointer;">
+                                <span class="role-info">
+                                    <span><?= $role['icon'] ?></span>
+                                    <span><?= $role['name'] ?></span>
+                                </span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Endereço -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i data-lucide="map-pin" class="section-icon"></i>
+                        <h3 class="section-title">Endereço</h3>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Rua / Logradouro</label>
+                        <input type="text" name="address_street" value="<?= htmlspecialchars($user['address_street'] ?? '') ?>" class="form-input" placeholder="Ex: Av. Maracanã">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label class="form-label">Número</label>
+                            <input type="text" name="address_number" value="<?= htmlspecialchars($user['address_number'] ?? '') ?>" class="form-input" placeholder="123">
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Bairro</label>
+                            <input type="text" name="address_neighborhood" value="<?= htmlspecialchars($user['address_neighborhood'] ?? '') ?>" class="form-input" placeholder="Centro">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <?php if (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']): ?>
+                    <a href="membros.php" class="btn btn-secondary">
+                        <i data-lucide="arrow-left" style="width: 18px;"></i>
+                        Voltar
+                    </a>
+                    <?php endif; ?>
+                    
+                    <button type="submit" class="btn btn-primary" style="flex: <?= (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']) ? '2' : '1' ?>;">
+                        <i data-lucide="<?= $is_creating_new ? 'user-plus' : 'save' ?>" style="width: 20px;"></i>
+                        <?= $is_creating_new ? 'Criar Membro' : 'Salvar Alterações' ?>
+                    </button>
                 </div>
             </div>
         </div>
-        <?php endif; ?>
-
-        <!-- Section: Endereço -->
-        <div style="margin-bottom: 16px;">
-            <h3 style="font-size: var(--font-body-sm); font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="map-pin" style="width: 16px; color: var(--text-muted);"></i>
-                Endereço
-            </h3>
-
-            <div style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 10px; display: flex; flex-direction: column; gap: 10px;">
-
-                <div>
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Rua / Logradouro</label>
-                    <input type="text" name="address_street" value="<?= htmlspecialchars($user['address_street'] ?? '') ?>" placeholder="Ex: Av. Maracanã"
-                        style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                        onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <div style="flex: 1;">
-                        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Número</label>
-                        <input type="text" name="address_number" value="<?= htmlspecialchars($user['address_number'] ?? '') ?>" placeholder="123"
-                            style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                            onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                    </div>
-
-                    <div style="flex: 2;">
-                        <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Bairro</label>
-                        <input type="text" name="address_neighborhood" value="<?= htmlspecialchars($user['address_neighborhood'] ?? '') ?>" placeholder="Centro"
-                            style="width: 100%; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: var(--font-body); color: var(--text-main); outline: none; transition: border 0.2s; background: var(--bg-body);"
-                            onfocus="this.style.borderColor='var(--primary)'; this.style.background='var(--bg-surface)'" onblur="this.style.borderColor='var(--border-color)'; this.style.background='var(--bg-body)'">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-
-        <!-- Action Buttons -->
-        <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <?php if (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']): ?>
-            <a href="membros.php" style="
-                flex: 1;
-                background: var(--bg-surface); 
-                color: var(--text-secondary); 
-                border: 1px solid var(--border-color);
-                padding: 14px 20px; 
-                border-radius: var(--radius-lg); 
-                font-size: var(--font-body); 
-                font-weight: 600; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                gap: 8px;
-                cursor: pointer;
-                box-shadow: var(--shadow-sm);
-                transition: all 0.2s;
-                text-decoration: none;
-            " onmouseover="this.style.background='var(--bg-body)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" 
-               onmouseout="this.style.background='var(--bg-surface)'; this.style.borderColor='var(--border-color)'; this.style.color='var(--text-secondary)'">
-                <i data-lucide="arrow-left" style="width: 18px;"></i>
-                Voltar
-            </a>
-            <?php endif; ?>
-            
-            <button type="submit" class="ripple" style="
-                flex: <?= (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']) ? '2' : '1' ?>;
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                color: white; 
-                border: none; 
-                padding: 14px 20px; 
-                border-radius: var(--radius-lg); 
-                font-size: var(--font-body); 
-                font-weight: 700; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                gap: 10px;
-                cursor: pointer;
-                box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'" 
-               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(16, 185, 129, 0.3)'">
-                <i data-lucide="<?= $is_creating_new ? 'user-plus' : 'save' ?>" style="width: 20px;"></i>
-                <?= $is_creating_new ? 'Criar Membro' : 'Salvar Alterações' ?>
-            </button>
-        </div>
-
     </form>
-
-    <div style="height: 48px;"></div> <!-- Spacer Footer -->
-
 </div>
 
 <script>
@@ -530,8 +739,7 @@ function previewImage(input) {
             if (preview) {
                 preview.src = e.target.result;
             } else if (initial && initial.parentElement) {
-                // Replace initial with image
-                initial.parentElement.innerHTML = '<img src="' + e.target.result + '" id="avatar_preview" style="width: 100%; height: 100%; object-fit: cover;">';
+                initial.parentElement.innerHTML = '<img src="' + e.target.result + '" id="avatar_preview" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">';
             }
         };
         
