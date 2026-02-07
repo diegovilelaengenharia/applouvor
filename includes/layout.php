@@ -503,9 +503,15 @@ function renderAppHeader($title, $backUrl = null)
                     </button>
                 <?php else: ?>
                     <div style="display: flex; gap: 4px; align-items: center; margin-left: -12px;">
-                        <button onclick="history.back()" class="btn-menu-trigger" style="margin-left: 0;" title="Voltar">
-                            <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
-                        </button>
+                        <?php if($backUrl): ?>
+                            <a href="<?= $backUrl ?>" class="btn-menu-trigger" style="margin-left: 0; display:flex; align-items:center; justify-content:center; text-decoration:none; color:inherit;" title="Voltar">
+                                <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
+                            </a>
+                        <?php else: ?>
+                            <button onclick="history.back()" class="btn-menu-trigger" style="margin-left: 0;" title="Voltar">
+                                <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
+                            </button>
+                        <?php endif; ?>
                         <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="Início">
                             <i data-lucide="home" style="width: 24px; height: 24px;"></i>
                         </a>
