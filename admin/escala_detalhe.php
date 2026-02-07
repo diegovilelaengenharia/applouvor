@@ -371,8 +371,8 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
         </div>
         
         <!-- REPERTÓRIO -->
-        <div>
-            <h3 style="font-size: var(--font-h3); font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+        <div class="schedule-section">
+            <h3 class="schedule-section-title">
                 <i data-lucide="music" style="width: 20px; color: var(--primary);"></i>
                 Repertório (<?= count($songs) ?>)
             </h3>
@@ -383,60 +383,46 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
                     <p style="color: var(--text-muted); font-size: var(--font-body); margin: 0;">Nenhuma música selecionada</p>
                 </div>
             <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
                     <?php foreach ($songs as $index => $song): ?>
-                        <div style="
-                            background: white; 
-                            border-radius: 14px; 
-                            padding: 14px; 
-                            border: 1px solid #e5e7eb;
-                            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-                            transition: all 0.2s;
-                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.08)'" 
-                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.04)'">
-                            <div style="display: flex; gap: 12px; align-items: flex-start;">
-                                <div style="
-                                    min-width: 28px; height: 28px; 
-                                    background: var(--lavender-600); 
-                                    border-radius: 8px; 
-                                    display: flex; align-items: center; justify-content: center;
-                                    font-size: var(--font-body-sm); font-weight: 800; color: white;
-                                    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.25);
-                                ">
-                                    <?= $index + 1 ?>
+                        <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="compact-card">
+                            <!-- Número da Ordem -->
+                            <div class="compact-card-icon" style="background: var(--lavender-600); color: white; font-weight: 800; font-size: 0.875rem;">
+                                <?= $index + 1 ?>
+                            </div>
+
+                            <!-- Conteúdo -->
+                            <div class="compact-card-content">
+                                <div class="compact-card-title">
+                                    <?= htmlspecialchars($song['title']) ?>
                                 </div>
-                                <div style="flex: 1;">
-                                    <h4 style="margin: 0 0 3px 0; font-size: var(--font-body); font-weight: 700; color: #1f2937;"><?= htmlspecialchars($song['title']) ?></h4>
-                                    <p style="margin: 0 0 10px 0; font-size: var(--font-body-sm); color: #6b7280; font-weight: 500;"><?= htmlspecialchars($song['artist']) ?></p>
-                                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-                                        <?php if ($song['category']): ?>
-                                            <span style="background: var(--slate-50); color: var(--slate-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #bfdbfe;">
-                                                <?= htmlspecialchars($song['category']) ?>
-                                            </span>
-                                        <?php endif; ?>
-                                        <?php if ($song['tone']): ?>
-                                            <span style="background: #fff7ed; color: #ea580c; padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid #fed7aa;">
-                                                <?= htmlspecialchars($song['tone']) ?>
-                                            </span>
-                                        <?php endif; ?>
-                                        <?php if ($song['bpm']): ?>
-                                            <span style="background: var(--rose-50); color: var(--rose-600); padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);">
-                                                <?= htmlspecialchars($song['bpm']) ?> BPM
-                                            </span>
-                                        <?php endif; ?>
-                                        <a href="https://www.youtube.com/results?search_query=<?= urlencode($song['title'] . ' ' . $song['artist']) ?>" target="_blank" style="
-                                            background: var(--rose-50); color: var(--rose-500); text-decoration: none;
-                                            padding: 4px 10px; border-radius: 7px; font-size: var(--font-caption); font-weight: 700; border: 1px solid var(--rose-200);
-                                            display: inline-flex; align-items: center; gap: 3px;
-                                            transition: all 0.2s;
-                                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 2px 6px rgba(239, 68, 68, 0.2)'" 
-                                           onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-                                            <i data-lucide="youtube" style="width: 11px;"></i> YouTube
-                                        </a>
-                                    </div>
+                                <div class="compact-card-subtitle">
+                                    <span><?= htmlspecialchars($song['artist']) ?></span>
+                                    
+                                    <?php if ($song['tone']): ?>
+                                        <span style="opacity: 0.6;">•</span>
+                                        <span style="background: #fff7ed; color: #ea580c; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                            <?= htmlspecialchars($song['tone']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($song['bpm']): ?>
+                                        <span style="background: var(--rose-50); color: var(--rose-600); padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                            <?= htmlspecialchars($song['bpm']) ?> BPM
+                                        </span>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($song['category']): ?>
+                                        <span style="background: var(--slate-50); color: var(--slate-600); padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                            <?= htmlspecialchars($song['category']) ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                        </div>
+
+                            <!-- Seta -->
+                            <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
