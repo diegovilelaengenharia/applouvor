@@ -170,103 +170,125 @@ renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m
 .view-mode-hidden { display: none; }
 </style>
 
+<?php
+// Definir cores do tema baseado no tipo de evento
+$themeColor = 'var(--lavender-600)';
+$themeLight = 'var(--lavender-50)';
+?>
+
 <!-- Header Card -->
 <div class="schedule-detail-container">
-    <div class="schedule-header-card">
-        <!-- Header com Botões -->
-        <div class="schedule-header-top">
-            <div class="schedule-title-section">
-                <h1 id="display-event-name"><?= htmlspecialchars($schedule['event_type']) ?></h1>
-                <div id="display-event-date" class="schedule-date"><?= $diaSemana ?>, <?= $date->format('d/m/Y') ?></div>
-            </div>
-            
-            <!-- Botões de Ação -->
-            <div class="schedule-actions">
-                <?php if ($_SESSION['user_role'] === 'admin'): ?>
-                <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.');" style="margin: 0;">
-                    <input type="hidden" name="delete_schedule" value="1">
-                    <button type="submit" class="btn-schedule-action btn-delete">
-                        <i data-lucide="trash-2" style="width: 16px;"></i>
-                        <span>Excluir</span>
-                    </button>
-                </form>
-                <?php endif; ?>
-                
-                <button id="saveBtn" onclick="saveAllChanges()" class="btn-schedule-action btn-save" style="display: none;">
-                    <i data-lucide="check" style="width: 16px;"></i>
-                    <span>Salvar</span>
-                </button>
-                
-                <button id="editBtn" onclick="toggleEditMode()" class="btn-schedule-action btn-edit">
-                    <i data-lucide="edit-2" style="width: 16px;"></i>
-                    <span>Editar</span>
-                </button>
-            </div>
-        </div>
+    <div style="
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-left: 4px solid <?= $themeColor ?>;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    ">
         
-        <!-- Info Grid -->
-        <div class="schedule-info-grid">
-            <div class="schedule-info-item">
-                <div class="schedule-info-icon" style="background: var(--lavender-600);">
-                    <i data-lucide="clock" style="width: 16px; color: white;"></i>
-                </div>
-                <div class="schedule-info-content">
-                    <div class="schedule-info-label">Horário</div>
-                    <div id="display-event-time" class="schedule-info-value">
-                        <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
-                    </div>
-                </div>
+        <!-- Data -->
+        <div style="
+            min-width: 64px;
+            height: 64px;
+            background: <?= $themeLight ?>;
+            border: 1px solid <?= $themeColor ?>30;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        ">
+            <div style="font-size: 1.6rem; font-weight: 800; line-height: 1; color: <?= $themeColor ?>;"><?= $date->format('d') ?></div>
+            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: <?= $themeColor ?>; opacity: 0.9; margin-top: 3px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+        </div>
+
+        <!-- Conteúdo Central -->
+        <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+                <h1 id="display-event-name" style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0;">
+                    <?= htmlspecialchars($schedule['event_type']) ?>
+                </h1>
             </div>
-            <div class="schedule-info-item">
-                <div class="schedule-info-icon" style="background: var(--sage-500);">
-                    <i data-lucide="users" style="width: 16px; color: white;"></i>
-                </div>
-                <div class="schedule-info-content">
-                    <div class="schedule-info-label">Equipe</div>
-                    <div class="schedule-info-value"><?= count($team) ?></div>
-                </div>
+
+            <div id="display-event-date" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">
+                <?= $diaSemana ?>, <?= $date->format('d/m/Y') ?>
             </div>
-            <div class="schedule-info-item">
-                <div class="schedule-info-icon" style="background: var(--yellow-500);">
-                    <i data-lucide="music" style="width: 16px; color: white;"></i>
-                </div>
-                <div class="schedule-info-content">
-                    <div class="schedule-info-label">Músicas</div>
-                    <div class="schedule-info-value"><?= count($songs) ?></div>
-                </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="clock" width="13"></i>
+                    <span id="display-event-time"><?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?></span>
+                </span>
+                <span style="display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="users" width="13"></i>
+                    <?= count($team) ?>
+                </span>
+                <span style="display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="music" width="13"></i>
+                    <?= count($songs) ?>
+                </span>
             </div>
         </div>
 
-        <!-- Observações (Apenas para Administradores) -->
-        <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
-            <div id="display-notes-container" style="padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-top: 16px;">
-                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                    <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
-                </div>
-                <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
-            </div>
-        <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
-            <div id="display-notes-container" style="display: none; padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-top: 16px;">
-                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                    <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
-                </div>
-                <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"></div>
-            </div>
-        <?php endif; ?>
-
-        <!-- Botão Gerenciar Informações (Modo Edição - Apenas Admin) -->
-        <?php if ($_SESSION['user_role'] === 'admin'): ?>
-        <button id="btn-manage-info" class="edit-mode-item" onclick="openModal('modal-event')" style="
-            display: none; width: 100%; margin-top: 16px; padding: 12px; 
-            background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; 
-            color: var(--primary); font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
-        ">
-            <i data-lucide="settings-2" style="width: 20px;"></i> Gerenciar Informações
-        </button>
-        <?php endif; ?>
+        <!-- Botões de Ação -->
+        <div style="display: flex; gap: 8px; flex-shrink: 0;">
+            <?php if ($_SESSION['user_role'] === 'admin'): ?>
+            <form method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.');" style="margin: 0;">
+                <input type="hidden" name="delete_schedule" value="1">
+                <button type="submit" class="btn-schedule-action btn-delete">
+                    <i data-lucide="trash-2" style="width: 16px;"></i>
+                    <span>Excluir</span>
+                </button>
+            </form>
+            <?php endif; ?>
+            
+            <button id="saveBtn" onclick="saveAllChanges()" class="btn-schedule-action btn-save" style="display: none;">
+                <i data-lucide="check" style="width: 16px;"></i>
+                <span>Salvar</span>
+            </button>
+            
+            <button id="editBtn" onclick="toggleEditMode()" class="btn-schedule-action btn-edit">
+                <i data-lucide="edit-2" style="width: 16px;"></i>
+                <span>Editar</span>
+            </button>
+        </div>
     </div>
+
+    <!-- Observações (Apenas para Administradores) -->
+    <?php if ($_SESSION['user_role'] === 'admin' && $schedule['notes']): ?>
+        <div id="display-notes-container" style="padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
+            </div>
+            <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"><?= nl2br(htmlspecialchars($schedule['notes'])) ?></div>
+        </div>
+    <?php elseif ($_SESSION['user_role'] === 'admin'): ?>
+        <div id="display-notes-container" style="display: none; padding: 12px; background: var(--yellow-50); border-radius: 12px; border: 1px solid var(--yellow-100); margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                <i data-lucide="info" style="width: 14px; color: var(--yellow-500);"></i>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--yellow-500); text-transform: uppercase;">Observações do Líder</span>
+            </div>
+            <div id="display-notes-text" style="font-size: 0.85rem; line-height: 1.4; color: #78350f;"></div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Botão Gerenciar Informações (Modo Edição - Apenas Admin) -->
+    <?php if ($_SESSION['user_role'] === 'admin'): ?>
+    <button id="btn-manage-info" class="edit-mode-item" onclick="openModal('modal-event')" style="
+        display: none; width: 100%; margin-bottom: 24px; padding: 12px; 
+        background: var(--bg-body); border: 2px dashed var(--border-color); border-radius: 12px; 
+        color: var(--primary); font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+    ">
+        <i data-lucide="settings-2" style="width: 20px;"></i> Gerenciar Informações
+    </button>
+    <?php endif; ?>
 </div>
 
 <!-- Content -->
