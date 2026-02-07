@@ -295,10 +295,6 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($artists as $artist): 
-                // Cor padrão para todos os artistas (consistente)
-                $avatarColor = 'var(--violet-500)';
-                $firstLetter = strtoupper(substr($artist['name'], 0, 1));
-                
                 // Buscar tags mais usadas pelo artista
                 try {
                     $sqlTags = "
@@ -331,11 +327,11 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                     $artistTones = $stmtTones->fetchAll(PDO::FETCH_ASSOC);
                 } catch (Exception $e) { $artistTones = []; }
             ?>
-                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card" style="border-left-color: <?= $avatarColor ?>;">
+                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card">
                     
-                    <!-- Avatar -->
-                    <div class="compact-card-icon rounded" style="background: <?= $avatarColor ?>; color: white; font-size: 1.1rem; font-weight: 800;">
-                        <?= $firstLetter ?>
+                    <!-- Ícone de Artista -->
+                    <div class="compact-card-icon">
+                        <i data-lucide="user" width="20" style="opacity: 0.5;"></i>
                     </div>
 
                     <!-- Conteúdo -->
@@ -348,7 +344,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                             
                             <?php if (!empty($artistTones)): ?>
                                 <span style="opacity: 0.6;">•</span>
-                                <span style="display: flex; align-items: center; gap: 3px;">
+                                <span style="display: inline-flex; align-items: center; gap: 3px;">
                                     <i data-lucide="music" width="11"></i>
                                     <?php 
                                     $tonesList = array_column($artistTones, 'tone');
