@@ -235,15 +235,45 @@ renderPageHeader($page_title, $page_subtitle);
 }
 
 .profile-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.avatar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.change-photo-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.change-photo-text:hover {
+    color: var(--primary);
+}
+
+.profile-info-card {
     background: white;
     border-radius: 12px;
     padding: 20px 24px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     border: 1px solid #e5e7eb;
-    margin-bottom: 16px;
     display: flex;
-    align-items: center;
-    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
 }
 
 
@@ -366,6 +396,7 @@ renderPageHeader($page_title, $page_subtitle);
     font-size: 1rem;
     font-weight: 700;
     color: #111827;
+    text-align: left;
 }
 
 .form-field {
@@ -523,19 +554,21 @@ renderPageHeader($page_title, $page_subtitle);
     }
     
     .profile-header {
-        flex-direction: column;
-        text-align: center;
-        padding: 16px;
+        grid-template-columns: 1fr;
         gap: 12px;
     }
     
-    .profile-info {
-        width: 100%;
+    .avatar-card {
+        padding: 16px;
+    }
+    
+    .profile-info-card {
+        padding: 16px;
+        text-align: center;
     }
     
     .profile-info-header {
-        flex-direction: column;
-        gap: 8px;
+        justify-content: center;
     }
     
     .avatar-wrapper {
@@ -648,23 +681,30 @@ renderPageHeader($page_title, $page_subtitle);
 
         <!-- Profile Header -->
         <div class="profile-header">
-            <div class="avatar-wrapper">
-                <div class="avatar-circle">
-                    <?php if (!empty($user['avatar'])): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview" alt="Avatar">
-                    <?php else: ?>
-                        <span class="avatar-initial" id="avatar_initial">
-                            <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
-                        </span>
-                    <?php endif; ?>
+            <!-- Avatar Card -->
+            <div class="avatar-card">
+                <div class="avatar-wrapper">
+                    <div class="avatar-circle">
+                        <?php if (!empty($user['avatar'])): ?>
+                            <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview" alt="Avatar">
+                        <?php else: ?>
+                            <span class="avatar-initial" id="avatar_initial">
+                                <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                    <label for="avatar_upload" class="avatar-edit-btn">
+                        <i data-lucide="camera" style="width: 14px;"></i>
+                    </label>
+                    <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
                 </div>
-                <label for="avatar_upload" class="avatar-edit-btn">
-                    <i data-lucide="camera" style="width: 14px;"></i>
+                <label for="avatar_upload" class="change-photo-text">
+                    Mudar Foto
                 </label>
-                <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
             </div>
 
-            <div class="profile-info">
+            <!-- Info Card -->
+            <div class="profile-info-card">
                 <div class="profile-info-header">
                     <h2 class="profile-name">
                         <?= !empty($user['name']) ? htmlspecialchars($user['name']) : 'Novo Usuário' ?>
