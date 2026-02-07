@@ -235,26 +235,31 @@ renderPageHeader($page_title, $page_subtitle);
 }
 
 .profile-header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 16px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
     margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.avatar-card {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    border: 1px solid #bae6fd;
+.avatar-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    border: 1px solid #bae6fd;
 }
 
+
 .change-photo-text {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     color: #6b7280;
     font-weight: 600;
     cursor: pointer;
@@ -265,23 +270,9 @@ renderPageHeader($page_title, $page_subtitle);
     color: var(--primary);
 }
 
-.profile-info-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    border: 1px solid #e5e7eb;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-
-.avatar-wrapper {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    flex-shrink: 0;
+.profile-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .avatar-circle {
@@ -554,21 +545,22 @@ renderPageHeader($page_title, $page_subtitle);
     }
     
     .profile-header {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-    
-    .avatar-card {
-        padding: 16px;
-    }
-    
-    .profile-info-card {
-        padding: 16px;
+        flex-direction: column;
         text-align: center;
+        padding: 16px;
+    }
+    
+    .avatar-section {
+        width: 100%;
+    }
+    
+    .profile-info {
+        width: 100%;
     }
     
     .profile-info-header {
-        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
     }
     
     .avatar-wrapper {
@@ -681,8 +673,8 @@ renderPageHeader($page_title, $page_subtitle);
 
         <!-- Profile Header -->
         <div class="profile-header">
-            <!-- Avatar Card -->
-            <div class="avatar-card">
+            <!-- Avatar Section -->
+            <div class="avatar-section">
                 <div class="avatar-wrapper">
                     <div class="avatar-circle">
                         <?php if (!empty($user['avatar'])): ?>
@@ -703,8 +695,8 @@ renderPageHeader($page_title, $page_subtitle);
                 </label>
             </div>
 
-            <!-- Info Card -->
-            <div class="profile-info-card">
+            <!-- Profile Info -->
+            <div class="profile-info">
                 <div class="profile-info-header">
                     <h2 class="profile-name">
                         <?= !empty($user['name']) ? htmlspecialchars($user['name']) : 'Novo Usuário' ?>
