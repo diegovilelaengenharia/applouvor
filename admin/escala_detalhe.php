@@ -163,7 +163,7 @@ renderAppHeader('Escala');
 renderPageHeader($schedule['event_type'], $diaSemana . ', ' . $date->format('d/m/Y'));
 ?>
 
-<link rel="stylesheet" href="../assets/css/pages/escala-detalhe.css">
+<link rel="stylesheet" href="../assets/css/pages/escala-detalhe.css?v=<?= time() ?>">
 
 <style>
 .edit-mode-hidden { display: none; }
