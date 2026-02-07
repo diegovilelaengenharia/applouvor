@@ -802,60 +802,62 @@ try {
         <!-- TONS -->
         <div class="card-neutral" style="padding: 20px;">
             <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                <i data-lucide="music" width="20"></i>
+                        <i data-lucide="music" width="20"></i>
                 Distribuição de Tons (Nas Execuções)
             </h3>
             
             <?php if (!empty($usoTons)): ?>
-            <div class="table-container">
-                <table class="minimal-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%; text-align: center;">Tom</th>
-                            <th style="width: 40%; text-align: center;">Execuções</th>
-                            <th style="width: 40%; text-align: center;">% Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
-                        $totalTonExec = array_sum(array_column($usoTons, 'uses_period'));
-                        $tonColors = [
-                            'C' => 'var(--red-500)', 'D' => 'var(--amber-500)', 'E' => 'var(--green-500)', 
-                            'F' => 'var(--blue-500)', 'G' => 'var(--purple-500)', 'A' => 'var(--pink-500)', 'B' => 'var(--teal-500)'
-                        ];
-                        foreach ($usoTons as $ton):
-                            $baseTone = substr($ton['tone'], 0, 1);
-                            $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
-                            $percentTotal = $totalTonExec > 0 ? round(($ton['uses_period'] / $totalTonExec) * 100, 1) : 0;
-                        ?>
-                        <tr>
-                            <td style="text-align: center;">
-                                <div style="
-                                    display: inline-block;
-                                    padding: 6px 12px;
-                                    border-radius: 8px;
-                                    background: <?= $barColor ?>20;
-                                    color: <?= $barColor ?>;
-                                    font-weight: 800;
-                                    font-family: monospace;
-                                    font-size: 1.1rem;
-                                    border: 1px solid <?= $barColor ?>40;
-                                    min-width: 60px;
-                                ">
-                                    <?= $ton['tone'] ?>
-                                </div>
-                            </td>
-                            <td style="text-align: center;">
-                                <div class="font-bold text-primary"><?= $ton['uses_period'] ?></div>
-                            </td>
-                            <td style="text-align: center;">
-                                <span class="text-sm text-secondary"><?= $percentTotal ?>%</span>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+                <?php 
+                $maxTonUses = !empty($usoTons) ? $usoTons[0]['uses_period'] : 1;
+                $totalTonExec = array_sum(array_column($usoTons, 'uses_period'));
+                $tonColors = [
+                    'C' => 'var(--red-500)', 'D' => 'var(--amber-500)', 'E' => 'var(--green-500)', 
+                    'F' => 'var(--blue-500)', 'G' => 'var(--purple-500)', 'A' => 'var(--pink-500)', 'B' => 'var(--teal-500)'
+                ];
+                foreach ($usoTons as $ton):
+                    $baseTone = substr($ton['tone'], 0, 1);
+                    $barColor = $tonColors[$baseTone] ?? 'var(--slate-500)';
+                    $percentTotal = $totalTonExec > 0 ? round(($ton['uses_period'] / $totalTonExec) * 100, 1) : 0;
+                ?>
+                <div class="card-neutral" style="
+                    padding: 12px; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 12px; 
+                    border-left: 3px solid <?= $barColor ?>;
+                    background: linear-gradient(to right, <?= $barColor ?>08, transparent);
+                ">
+                    <!-- Ícone / Tom -->
+                    <div style="
+                        width: 40px; height: 40px; 
+                        background: <?= $barColor ?>20; 
+                        color: <?= $barColor ?>;
+                        border-radius: 8px;
+                        display: flex; flex-direction: column;
+                        align-items: center; justify-content: center;
+                        font-family: monospace;
+                        line-height: 1;
+                        flex-shrink: 0;
+                    ">
+                        <span style="font-size: 1.1rem; font-weight: 800;"><?= $ton['tone'] ?></span>
+                    </div>
+
+                    <!-- Dados -->
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px;">
+                            <span class="text-primary font-bold" style="font-size: 1.1rem;"><?= $ton['uses_period'] ?>x</span>
+                            <span class="text-xs text-secondary">execuções</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="progress-bar-container" style="height: 4px; flex: 1; background: var(--border-subtle);">
+                                <div class="progress-bar" style="width: <?= $percentTotal ?>%; background: <?= $barColor ?>;"></div>
+                            </div>
+                            <span class="text-xs font-bold" style="color: <?= $barColor ?>;"><?= $percentTotal ?>%</span>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
             <?php else: ?>
                 <div class="text-center text-tertiary p-8">
