@@ -440,27 +440,56 @@ renderPageHeader($page_title, $page_subtitle);
             </div>
         </div>
 
-        <!-- Botão Salvar Fixo (ou no final) -->
-        <button type="submit" class="ripple" style="
-            width: 100%; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: var(--radius-lg); 
-            font-size: var(--font-body); 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            transition: background 0.2s;
-        ">
-            <i data-lucide="save" style="width: 18px;"></i>
-            Salvar Alterações
-        </button>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <?php if (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']): ?>
+            <a href="membros.php" style="
+                flex: 1;
+                background: var(--bg-surface); 
+                color: var(--text-secondary); 
+                border: 1px solid var(--border-color);
+                padding: 14px 20px; 
+                border-radius: var(--radius-lg); 
+                font-size: var(--font-body); 
+                font-weight: 600; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                gap: 8px;
+                cursor: pointer;
+                box-shadow: var(--shadow-sm);
+                transition: all 0.2s;
+                text-decoration: none;
+            " onmouseover="this.style.background='var(--bg-body)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" 
+               onmouseout="this.style.background='var(--bg-surface)'; this.style.borderColor='var(--border-color)'; this.style.color='var(--text-secondary)'">
+                <i data-lucide="arrow-left" style="width: 18px;"></i>
+                Voltar
+            </a>
+            <?php endif; ?>
+            
+            <button type="submit" class="ripple" style="
+                flex: <?= (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']) ? '2' : '1' ?>;
+                background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+                color: white; 
+                border: none; 
+                padding: 14px 20px; 
+                border-radius: var(--radius-lg); 
+                font-size: var(--font-body); 
+                font-weight: 700; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                gap: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 14px rgba(55, 106, 200, 0.3);
+                transition: all 0.3s ease;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(55, 106, 200, 0.4)'" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(55, 106, 200, 0.3)'">
+                <i data-lucide="<?= $is_creating_new ? 'user-plus' : 'save' ?>" style="width: 20px;"></i>
+                <?= $is_creating_new ? 'Criar Membro' : 'Salvar Alterações' ?>
+            </button>
+        </div>
 
     </form>
 
