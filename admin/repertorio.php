@@ -294,12 +294,25 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         } catch (Exception $e) { $artists = []; }
     ?>
         <div class="results-list">
-            <?php foreach ($artists as $artist): ?>
-                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card" style="border-left-color: var(--violet-500);">
+            <?php foreach ($artists as $artist): 
+                // Sistema de cores para avatares baseado na primeira letra
+                $firstLetter = strtoupper(substr($artist['name'], 0, 1));
+                $avatarColors = [
+                    'A' => '#ef4444', 'B' => '#f97316', 'C' => '#f59e0b', 'D' => '#eab308',
+                    'E' => '#84cc16', 'F' => '#22c55e', 'G' => '#10b981', 'H' => '#14b8a6',
+                    'I' => '#06b6d4', 'J' => '#0ea5e9', 'K' => '#3b82f6', 'L' => '#6366f1',
+                    'M' => '#8b5cf6', 'N' => '#a855f7', 'O' => '#c026d3', 'P' => '#d946ef',
+                    'Q' => '#ec4899', 'R' => '#f43f5e', 'S' => '#fb7185', 'T' => '#f472b6',
+                    'U' => '#e879f9', 'V' => '#c084fc', 'W' => '#a78bfa', 'X' => '#818cf8',
+                    'Y' => '#60a5fa', 'Z' => '#38bdf8'
+                ];
+                $avatarColor = $avatarColors[$firstLetter] ?? '#6b7280';
+            ?>
+                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card" style="border-left-color: <?= $avatarColor ?>;">
                     
                     <!-- Avatar -->
-                    <div class="compact-card-icon rounded" style="background: var(--violet-500); color: white; font-size: 1rem; font-weight: 700;">
-                        <?= strtoupper(substr($artist['name'], 0, 1)) ?>
+                    <div class="compact-card-icon rounded" style="background: <?= $avatarColor ?>; color: white; font-size: 1.1rem; font-weight: 800;">
+                        <?= $firstLetter ?>
                     </div>
 
                     <!-- Conteúdo -->
@@ -308,7 +321,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                             <?= htmlspecialchars($artist['name']) ?>
                         </div>
                         <div class="compact-card-subtitle">
-                            <?= $artist['count'] ?> músicas
+                            <?= $artist['count'] ?> música<?= $artist['count'] > 1 ? 's' : '' ?>
                         </div>
                     </div>
 
@@ -321,9 +334,36 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 
     <!-- Conteúdo: Tons -->
     <?php if ($tab === 'tons'):
-        // (Copy tone logic if needed or adapt)
-        // ... (Simplified for brevity, assuming similar structure)
-        $toneColors = ['C' => 'var(--rose-500)', 'C#' => '#f97316', 'Db' => '#f97316', 'D' => 'var(--yellow-500)', 'E' => 'var(--sage-500)', 'F' => '#14b8a6', 'G' => 'var(--slate-500)', 'A' => 'var(--lavender-600)', 'B' => '#ec4899'];
+        // Sistema Completo de Cores para Tons Musicais
+        $toneColors = [
+            // Naturais
+            'C' => '#ef4444',      // Vermelho vibrante (Dó)
+            'D' => '#f97316',      // Laranja (Ré)
+            'E' => '#eab308',      // Amarelo (Mi)
+            'F' => '#22c55e',      // Verde (Fá)
+            'G' => '#3b82f6',      // Azul (Sol)
+            'A' => '#8b5cf6',      // Roxo (Lá)
+            'B' => '#ec4899',      // Rosa (Si)
+            
+            // Sustenidos (#)
+            'C#' => '#dc2626',     // Vermelho escuro
+            'D#' => '#ea580c',     // Laranja escuro
+            'E#' => '#ca8a04',     // Amarelo escuro (raro, = F)
+            'F#' => '#16a34a',     // Verde escuro
+            'G#' => '#2563eb',     // Azul escuro
+            'A#' => '#7c3aed',     // Roxo escuro
+            'B#' => '#db2777',     // Rosa escuro (raro, = C)
+            
+            // Bemóis (b)
+            'Cb' => '#f87171',     // Vermelho claro (raro, = B)
+            'Db' => '#fb923c',     // Laranja claro
+            'Eb' => '#fbbf24',     // Amarelo claro
+            'Fb' => '#4ade80',     // Verde claro (raro, = E)
+            'Gb' => '#60a5fa',     // Azul claro
+            'Ab' => '#a78bfa',     // Roxo claro
+            'Bb' => '#f472b6',     // Rosa claro
+        ];
+        
         try {
             $sql = "SELECT tone as name, COUNT(*) as count FROM songs WHERE tone IS NOT NULL AND tone != '' GROUP BY tone ORDER BY tone ASC";
             $stmt = $pdo->query($sql);
