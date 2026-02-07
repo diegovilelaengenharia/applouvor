@@ -242,11 +242,11 @@ renderPageHeader($page_title, $page_subtitle);
 }
 
 .avatar-card {
-    background: white;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    border: 1px solid #e5e7eb;
+    border: 1px solid #bae6fd;
     display: flex;
     flex-direction: column;
     align-items: center;
