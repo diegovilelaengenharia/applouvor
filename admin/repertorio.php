@@ -295,18 +295,9 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($artists as $artist): 
-                // Sistema de cores para avatares baseado na primeira letra
+                // Cor padrão para todos os artistas (consistente)
+                $avatarColor = 'var(--violet-500)';
                 $firstLetter = strtoupper(substr($artist['name'], 0, 1));
-                $avatarColors = [
-                    'A' => '#ef4444', 'B' => '#f97316', 'C' => '#f59e0b', 'D' => '#eab308',
-                    'E' => '#84cc16', 'F' => '#22c55e', 'G' => '#10b981', 'H' => '#14b8a6',
-                    'I' => '#06b6d4', 'J' => '#0ea5e9', 'K' => '#3b82f6', 'L' => '#6366f1',
-                    'M' => '#8b5cf6', 'N' => '#a855f7', 'O' => '#c026d3', 'P' => '#d946ef',
-                    'Q' => '#ec4899', 'R' => '#f43f5e', 'S' => '#fb7185', 'T' => '#f472b6',
-                    'U' => '#e879f9', 'V' => '#c084fc', 'W' => '#a78bfa', 'X' => '#818cf8',
-                    'Y' => '#60a5fa', 'Z' => '#38bdf8'
-                ];
-                $avatarColor = $avatarColors[$firstLetter] ?? '#6b7280';
                 
                 // Buscar tags mais usadas pelo artista
                 try {
