@@ -762,7 +762,7 @@ try {
                                     </div>
                                     <div>
                                         <div class="font-bold text-primary"><?= htmlspecialchars($tag['name']) ?></div>
-                                        <div class="text-xs text-secondary"><?= $tag['uses_total'] ?> execuções no total</div>
+                                        <div class="text-xs text-secondary"><?= $tag['uses_total'] ?? 0 ?> execuções no total</div>
                                     </div>
                                 </div>
                             </td>
