@@ -15,10 +15,13 @@
 
 /* Forms & Tables (Standardized) */
 @import url('components/forms.css');
+@import url('components/forms.css');
 @import url('components/tables.css');
+@import url('components/timeline-cards.css');
 
 /* Pages */
 @import url('pages/escalas.css');
+@import url('pages/repertorio.css');
 
 /* Dark Mode - Importado APÓS tudo para garantir overrides se necessário, 
    embora o design-system trate a maioria */
