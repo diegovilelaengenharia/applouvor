@@ -404,6 +404,15 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             'Gb' => '#60a5fa',     // Azul claro
             'Ab' => '#a78bfa',     // Roxo claro
             'Bb' => '#f472b6',     // Rosa claro
+            
+            // Menores (m) - mesma cor base, levemente ajustada
+            'Cm' => '#ef4444', 'C#m' => '#dc2626', 'Dbm' => '#fb923c',
+            'Dm' => '#f97316', 'D#m' => '#ea580c', 'Ebm' => '#fbbf24',
+            'Em' => '#eab308', 'E#m' => '#ca8a04', 'Fbm' => '#4ade80',
+            'Fm' => '#22c55e', 'F#m' => '#16a34a', 'Gbm' => '#60a5fa',
+            'Gm' => '#3b82f6', 'G#m' => '#2563eb', 'Abm' => '#a78bfa',
+            'Am' => '#8b5cf6', 'A#m' => '#7c3aed', 'Bbm' => '#f472b6',
+            'Bm' => '#ec4899', 'B#m' => '#db2777', 'Cbm' => '#f87171',
         ];
         
         try {
