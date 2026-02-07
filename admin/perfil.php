@@ -258,7 +258,7 @@ renderPageHeader($page_title, $page_subtitle);
         <div style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 16px; text-align: center; border: 1px solid var(--border-color); margin-bottom: 12px; box-shadow: var(--shadow-sm);">
 
             <!-- Avatar Upload Wrapper -->
-            <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 12px;">
+            <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 8px;">
                 <div style="
                     width: 100%; height: 100%; 
                     border-radius: 50%; 
@@ -269,16 +269,16 @@ renderPageHeader($page_title, $page_subtitle);
                     display: flex; align-items: center; justify-content: center;
                 ">
                     <?php if (!empty($user['avatar'])): ?>
-                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>"
+                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview"
                             style="width: 100%; height: 100%; object-fit: cover;">
                     <?php else: ?>
-                        <span style="font-size: 2.5rem; font-weight: 700; color: var(--text-muted);">
+                        <span style="font-size: 2.5rem; font-weight: 700; color: var(--text-muted);" id="avatar_initial">
                             <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
                         </span>
                     <?php endif; ?>
                 </div>
 
-                <!-- Botão Editar Foto -->
+                <!-- Botão Editar Foto (ícone) -->
                 <label for="avatar_upload" class="ripple" style="
                     position: absolute; bottom: 0; right: 0; 
                     background: var(--primary); color: white; 
@@ -292,8 +292,29 @@ renderPageHeader($page_title, $page_subtitle);
                 ">
                     <i data-lucide="camera" style="width: 16px;"></i>
                 </label>
-                <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*">
+                <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
             </div>
+            
+            <!-- Botão Mudar Foto -->
+            <label for="avatar_upload" style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                background: var(--bg-body);
+                border: 1px solid var(--border-color);
+                border-radius: 20px;
+                font-size: var(--font-caption);
+                font-weight: 600;
+                color: var(--text-secondary);
+                cursor: pointer;
+                transition: all 0.2s;
+                margin-bottom: 8px;
+            " onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" 
+               onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-secondary)'">
+                <i data-lucide="image" style="width: 14px;"></i>
+                Mudar Foto
+            </label>
 
             <h2 style="font-size: var(--font-h3); font-weight: 700; color: var(--slate-900); margin-bottom: 2px;">
                 <?= !empty($user['name']) ? htmlspecialchars($user['name']) : 'Novo Usuário' ?>
@@ -470,7 +491,7 @@ renderPageHeader($page_title, $page_subtitle);
             
             <button type="submit" class="ripple" style="
                 flex: <?= (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']) ? '2' : '1' ?>;
-                background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
                 color: white; 
                 border: none; 
                 padding: 14px 20px; 
@@ -482,10 +503,10 @@ renderPageHeader($page_title, $page_subtitle);
                 justify-content: center; 
                 gap: 10px;
                 cursor: pointer;
-                box-shadow: 0 4px 14px rgba(55, 106, 200, 0.3);
+                box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
                 transition: all 0.3s ease;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(55, 106, 200, 0.4)'" 
-               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(55, 106, 200, 0.3)'">
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(16, 185, 129, 0.3)'">
                 <i data-lucide="<?= $is_creating_new ? 'user-plus' : 'save' ?>" style="width: 20px;"></i>
                 <?= $is_creating_new ? 'Criar Membro' : 'Salvar Alterações' ?>
             </button>
@@ -496,5 +517,27 @@ renderPageHeader($page_title, $page_subtitle);
     <div style="height: 48px;"></div> <!-- Spacer Footer -->
 
 </div>
+
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const preview = document.getElementById('avatar_preview');
+            const initial = document.getElementById('avatar_initial');
+            
+            if (preview) {
+                preview.src = e.target.result;
+            } else if (initial && initial.parentElement) {
+                // Replace initial with image
+                initial.parentElement.innerHTML = '<img src="' + e.target.result + '" id="avatar_preview" style="width: 100%; height: 100%; object-fit: cover;">';
+            }
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 
 <?php renderAppFooter(); ?>
