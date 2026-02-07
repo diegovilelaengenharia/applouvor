@@ -229,37 +229,29 @@ renderPageHeader($page_title, $page_subtitle);
 
 <style>
 .profile-container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 24px;
+    padding: 16px;
 }
 
-.profile-grid {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-.profile-sidebar {
-    position: sticky;
-    top: 24px;
-}
-
-.avatar-card {
+.profile-header {
     background: white;
-    border-radius: 16px;
-    padding: 32px 24px;
-    text-align: center;
+    border-radius: 12px;
+    padding: 20px 24px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     border: 1px solid #e5e7eb;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
+
 
 .avatar-wrapper {
     position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 16px;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
 }
 
 .avatar-circle {
@@ -288,15 +280,15 @@ renderPageHeader($page_title, $page_subtitle);
 
 .avatar-edit-btn {
     position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 36px;
-    height: 36px;
+    bottom: 0;
+    right: 0;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: var(--primary);
     color: white;
     border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,85 +300,76 @@ renderPageHeader($page_title, $page_subtitle);
     transform: scale(1.1);
 }
 
-.change-photo-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #6b7280;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 16px;
+.profile-info {
+    flex: 1;
+    min-width: 0;
 }
 
-.change-photo-btn:hover {
-    background: white;
-    border-color: var(--primary);
-    color: var(--primary);
+.profile-info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
 }
 
 .profile-name {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: #111827;
-    margin-bottom: 4px;
+    margin: 0;
 }
 
 .profile-email {
     font-size: 0.875rem;
     color: #6b7280;
-    margin-bottom: 12px;
+    margin: 0;
 }
 
 .profile-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
+    gap: 4px;
+    padding: 4px 10px;
     background: #dbeafe;
-    border-radius: 20px;
-    font-size: 0.75rem;
+    border-radius: 12px;
+    font-size: 0.6875rem;
     font-weight: 600;
     color: #1e40af;
+    white-space: nowrap;
 }
 
 .form-section {
     background: white;
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: 12px;
+    padding: 16px 20px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     border: 1px solid #e5e7eb;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .section-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #f3f4f6;
 }
 
 .section-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     color: var(--primary);
 }
 
 .section-title {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #111827;
 }
 
 .form-field {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .form-field:last-child {
@@ -539,23 +522,25 @@ renderPageHeader($page_title, $page_subtitle);
         padding: 12px;
     }
     
-    .profile-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+        gap: 12px;
     }
     
-    .profile-sidebar {
-        position: static;
+    .profile-info {
+        width: 100%;
     }
     
-    .avatar-card {
-        padding: 24px 16px;
+    .profile-info-header {
+        flex-direction: column;
+        gap: 8px;
     }
     
     .avatar-wrapper {
         width: 100px;
         height: 100px;
-        margin: 0 auto 12px;
     }
     
     .avatar-edit-btn {
@@ -661,45 +646,39 @@ renderPageHeader($page_title, $page_subtitle);
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
         <?php endif; ?>
 
-        <div class="profile-grid">
-            <!-- Sidebar -->
-            <div class="profile-sidebar">
-                <div class="avatar-card">
-                    <div class="avatar-wrapper">
-                        <div class="avatar-circle">
-                            <?php if (!empty($user['avatar'])): ?>
-                                <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview" alt="Avatar">
-                            <?php else: ?>
-                                <span class="avatar-initial" id="avatar_initial">
-                                    <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                        <label for="avatar_upload" class="avatar-edit-btn">
-                            <i data-lucide="camera" style="width: 18px;"></i>
-                        </label>
-                        <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
-                    </div>
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-wrapper">
+                <div class="avatar-circle">
+                    <?php if (!empty($user['avatar'])): ?>
+                        <img src="../assets/uploads/<?= htmlspecialchars($user['avatar']) ?>" id="avatar_preview" alt="Avatar">
+                    <?php else: ?>
+                        <span class="avatar-initial" id="avatar_initial">
+                            <?= !empty($user['name']) ? strtoupper(substr($user['name'], 0, 1)) : 'U' ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                <label for="avatar_upload" class="avatar-edit-btn">
+                    <i data-lucide="camera" style="width: 14px;"></i>
+                </label>
+                <input type="file" id="avatar_upload" name="avatar" style="display: none;" accept="image/*" onchange="previewImage(this)">
+            </div>
 
-                    <label for="avatar_upload" class="change-photo-btn">
-                        <i data-lucide="image" style="width: 16px;"></i>
-                        Mudar Foto
-                    </label>
-
+            <div class="profile-info">
+                <div class="profile-info-header">
                     <h2 class="profile-name">
                         <?= !empty($user['name']) ? htmlspecialchars($user['name']) : 'Novo Usuário' ?>
                     </h2>
-                    <p class="profile-email"><?= htmlspecialchars($user['email'] ?? '') ?></p>
-
                     <div class="profile-badge">
-                        <i data-lucide="user" style="width: 12px;"></i>
+                        <i data-lucide="user" style="width: 10px;"></i>
                         <?= $is_creating_new ? 'Novo Membro' : 'Membro da Equipe' ?>
                     </div>
                 </div>
+                <p class="profile-email"><?= htmlspecialchars($user['email'] ?? '') ?></p>
             </div>
+        </div>
 
-            <!-- Main Content -->
-            <div>
+        <!-- Form Sections -->
                 <!-- Dados Pessoais -->
                 <div class="form-section">
                     <div class="section-header">
@@ -811,8 +790,6 @@ renderPageHeader($page_title, $page_subtitle);
                         <?= $is_creating_new ? 'Criar Membro' : 'Salvar Alterações' ?>
                     </button>
                 </div>
-            </div>
-        </div>
     </form>
 </div>
 
