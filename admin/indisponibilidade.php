@@ -383,8 +383,8 @@ button#btnStopRecord:focus {
                         <button type="button" id="btnStartRecord" onclick="startRecording()" style="background: var(--slate-600); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='var(--slate-700)'" onmouseout="this.style.background='var(--slate-600)'" onmousedown="this.style.background='var(--slate-800)'" onmouseup="this.style.background='var(--slate-700)'">
                             <i data-lucide="mic" width="16"></i> Gravar Explicação
                         </button>
-                        <button type="button" id="btnStopRecord" onclick="stopRecording()" style="display: none; background: var(--rose-500); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; align-items: center; gap: 6px;">
-                            <div style="width: 10px; height: 10px; background: white; border-radius: 2px;"></div> Parar
+                        <button type="button" id="btnStopRecord" onclick="stopRecording()" style="display: none; background: var(--rose-500); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                            <i data-lucide="square" width="16"></i> Parar
                         </button>
                     </div>
 
