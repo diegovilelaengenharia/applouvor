@@ -1,0 +1,3 @@
+Version: 2026-02-08 00:11
+Last Update: Settings button fixes
+Commit: 634e2c6
