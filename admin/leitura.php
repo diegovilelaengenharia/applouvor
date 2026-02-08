@@ -1573,45 +1573,45 @@ body.dark-mode .stat-card-compact {
 }
 
 .media-btn#record-audio-btn {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
     color: white;
-    border-color: #ef4444;
+    border-color: #fca5a5;
 }
 
 .media-btn#record-audio-btn:hover {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-    border-color: #dc2626;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+    border-color: #f87171;
+    box-shadow: 0 4px 12px rgba(252, 165, 165, 0.3);
 }
 
 .media-btn#record-audio-btn.recording {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    border-color: #f59e0b;
+    background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+    border-color: #fcd34d;
     animation: pulse 1.5s infinite;
 }
 
 .media-btn#attach-audio-btn {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
     color: white;
-    border-color: #8b5cf6;
+    border-color: #c4b5fd;
 }
 
 .media-btn#attach-audio-btn:hover {
-    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-    border-color: #7c3aed;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+    border-color: #a78bfa;
+    box-shadow: 0 4px 12px rgba(196, 181, 253, 0.3);
 }
 
 .media-btn#attach-image-btn {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
     color: white;
-    border-color: #10b981;
+    border-color: #6ee7b7;
 }
 
 .media-btn#attach-image-btn:hover {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    border-color: #059669;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    border-color: #34d399;
+    box-shadow: 0 4px 12px rgba(110, 231, 183, 0.3);
 }
 
 @keyframes pulse {
