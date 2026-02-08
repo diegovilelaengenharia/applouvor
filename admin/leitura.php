@@ -667,7 +667,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         📊 Dashboard
     </button>
     <button class="tab-btn" onclick="switchReadingTab('reading')" id="btn-tab-reading">
-        📖 Leitura
+        📖 Texto Bíblico
     </button>
 </div>
 
@@ -796,19 +796,19 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     
     <div id="verses-list"></div>
 </div>
-</div> <!-- End reading tab -->
 
-<!-- BOTTOM BAR -->
-
-<!-- BOTTOM BAR -->
+<!-- BOTTOM BAR (Inside Reading Tab) -->
 <div class="bottom-bar">
     <button class="action-btn btn-orange-light" onclick="openNoteModal()">
         <i data-lucide="pen-line" width="18"></i> Anotar
     </button>
     <button class="action-btn btn-blue-light" onclick="openConfig('diario')">
-        <i data-lucide="book" width="18"></i> Meu Di├írio
+        <i data-lucide="book" width="18"></i> Meu Diário
     </button>
 </div>
+
+</div> <!-- End reading tab -->
+
 <div id="save-toast" style="position:fixed; top:90px; left:50%; transform:translateX(-50%); background:var(--slate-800); color:white; padding:8px 16px; border-radius:20px; opacity:0; pointer-events:none; z-index:2000; transition:opacity 0.3s; display:flex; align-items:center; gap:8px;"><i data-lucide="check" width="14"></i> Salvo auto</div>
 
 <!-- INCLUDES: Modals -->
