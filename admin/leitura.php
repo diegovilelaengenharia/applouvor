@@ -1541,14 +1541,14 @@ body.dark-mode .stat-card-compact {
 
 .attachment-options {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.625rem;
     flex-wrap: wrap;
 }
 
 .media-btn,
 .upload-label {
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
+    padding: 0.75rem 1.125rem;
+    border-radius: 10px;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
@@ -1556,7 +1556,7 @@ body.dark-mode .stat-card-compact {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border: 1px solid #e5e7eb;
+    border: 1.5px solid #e5e7eb;
     background: white;
     color: #64748b;
 }
@@ -1566,7 +1566,8 @@ body.dark-mode .stat-card-compact {
     background: #f8fafc;
     border-color: #cbd5e1;
     color: #1e293b;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .media-btn#record-audio-btn {
@@ -1578,6 +1579,7 @@ body.dark-mode .stat-card-compact {
 .media-btn#record-audio-btn:hover {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
     border-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .media-btn#record-audio-btn.recording {
