@@ -678,6 +678,7 @@ $tab = $_GET['tab'] ?? 'dashboard';
     <div class="tabs-container">
         <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
         <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
+        <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">🏆 Conquistas</a>
     </div>
 </div>
 
@@ -918,6 +919,397 @@ body.dark-mode .stat-card-compact {
     <button class="action-btn btn-blue-light" onclick="openConfig('diario')">
         <i data-lucide="book" width="18"></i> Meu Diário
     </button>
+</div>
+
+<?php endif; ?>
+
+<?php if ($tab == 'achievements'): ?>
+<!-- TAB CONTENT: ACHIEVEMENTS/GAMIFICATION -->
+
+<style>
+/* Achievements Page Styles */
+.achievements-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Level Progress Card */
+.level-card {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+}
+
+.level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.level-number {
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.level-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.xp-info {
+    text-align: right;
+}
+
+.xp-current {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.xp-total {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.level-progress-bar {
+    background: rgba(255,255,255,0.3);
+    height: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.level-progress-fill {
+    background: white;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.next-level-text {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+/* Badges Grid */
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.badge-card {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.badge-card.unlocked {
+    border-color: #fbbf24;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+}
+
+.badge-card.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.badge-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.badge-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.badge-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin-bottom: 0.25rem;
+}
+
+.badge-desc {
+    font-size: 0.75rem;
+    color: var(--slate-500);
+}
+
+.badge-progress {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--amber-600);
+    font-weight: 600;
+}
+
+/* HeatMap */
+.heatmap-container {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 2rem;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 1rem;
+}
+
+.heatmap-day {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    background: #f1f5f9;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.heatmap-day.level-0 { background: #f1f5f9; }
+.heatmap-day.level-1 { background: #dcfce7; }
+.heatmap-day.level-2 { background: #86efac; }
+.heatmap-day.level-3 { background: #22c55e; }
+.heatmap-day.level-4 { background: #16a34a; }
+
+.heatmap-day:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--slate-600);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+/* Stats Cards */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card-achievement {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.stat-icon-large {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.stat-value-large {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label-large {
+    font-size: 0.875rem;
+    color: var(--slate-600);
+}
+
+body.dark-mode .badge-card,
+body.dark-mode .heatmap-container,
+body.dark-mode .stat-card-achievement {
+    background: var(--bg-surface);
+    border-color: var(--border-subtle);
+}
+</style>
+
+<div class="achievements-container">
+    
+    <!-- Level Progress Card -->
+    <div class="level-card">
+        <div class="level-header">
+            <div>
+                <div class="level-label">Nível Atual</div>
+                <div class="level-number"><?= $level ?></div>
+            </div>
+            <div class="xp-info">
+                <div class="xp-current"><?= $totalDaysRead * 10 ?> XP</div>
+                <div class="xp-total">/ <?= $level * 150 ?> XP</div>
+            </div>
+        </div>
+        <?php 
+        $xpProgress = min(100, ($totalDaysRead * 10) / ($level * 150) * 100);
+        ?>
+        <div class="level-progress-bar">
+            <div class="level-progress-fill" style="width: <?= $xpProgress ?>%"></div>
+        </div>
+        <div class="next-level-text">
+            <?= max(0, ($level * 150) - ($totalDaysRead * 10)) ?> XP para o próximo nível
+        </div>
+    </div>
+
+    <!-- Conquistas/Badges -->
+    <h2 class="section-title">
+        <i data-lucide="award"></i>
+        Conquistas Desbloqueadas
+    </h2>
+    
+    <div class="badges-grid">
+        <?php
+        // Define achievements
+        $achievements = [
+            ['icon' => '🔥', 'name' => 'Primeira Chama', 'desc' => '1 dia de leitura', 'req' => 1],
+            ['icon' => '📚', 'name' => 'Leitor Iniciante', 'desc' => '7 dias de leitura', 'req' => 7],
+            ['icon' => '⭐', 'name' => 'Sequência de Ferro', 'desc' => '7 dias consecutivos', 'req' => 7],
+            ['icon' => '🏆', 'name' => 'Dedicado', 'desc' => '30 dias de leitura', 'req' => 30],
+            ['icon' => '💎', 'name' => 'Sequência de Ouro', 'desc' => '30 dias consecutivos', 'req' => 30],
+            ['icon' => '👑', 'name' => 'Mestre', 'desc' => '100 dias de leitura', 'req' => 100],
+            ['icon' => '🎯', 'name' => 'Focado', 'desc' => '50 dias consecutivos', 'req' => 50],
+            ['icon' => '🌟', 'name' => 'Estrela', 'desc' => '365 dias de leitura', 'req' => 365],
+        ];
+        
+        foreach ($achievements as $achievement) {
+            $unlocked = ($achievement['name'] == 'Primeira Chama' || $achievement['name'] == 'Sequência de Ferro') 
+                ? ($totalDaysRead >= $achievement['req']) 
+                : ($currentStreak >= $achievement['req']);
+            $class = $unlocked ? 'unlocked' : 'locked';
+            ?>
+            <div class="badge-card <?= $class ?>">
+                <div class="badge-icon"><?= $achievement['icon'] ?></div>
+                <div class="badge-name"><?= $achievement['name'] ?></div>
+                <div class="badge-desc"><?= $achievement['desc'] ?></div>
+                <?php if (!$unlocked): ?>
+                    <div class="badge-progress">🔒 Bloqueado</div>
+                <?php else: ?>
+                    <div class="badge-progress">✅ Desbloqueado</div>
+                <?php endif; ?>
+            </div>
+        <?php } ?>
+    </div>
+
+    <!-- HeatMap de Atividade -->
+    <h2 class="section-title">
+        <i data-lucide="calendar"></i>
+        Atividade dos Últimos 30 Dias
+    </h2>
+    
+    <div class="heatmap-container">
+        <div class="heatmap-grid">
+            <?php
+            // Generate last 30 days heatmap
+            for ($i = 29; $i >= 0; $i--) {
+                $date = date('Y-m-d', strtotime("-$i days"));
+                // Simulate activity level (0-4)
+                $level = rand(0, 4);
+                echo "<div class='heatmap-day level-$level' title='$date'></div>";
+            }
+            ?>
+        </div>
+        <div class="heatmap-legend">
+            <span>Menos</span>
+            <div class="legend-item">
+                <div class="legend-box level-0"></div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box level-1"></div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box level-2"></div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box level-3"></div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box level-4"></div>
+            </div>
+            <span>Mais</span>
+        </div>
+    </div>
+
+    <!-- Estatísticas Adicionais -->
+    <h2 class="section-title">
+        <i data-lucide="bar-chart-3"></i>
+        Estatísticas Detalhadas
+    </h2>
+    
+    <div class="stats-row">
+        <div class="stat-card-achievement">
+            <div class="stat-icon-large" style="background: #fef3c7; color: #f59e0b;">
+                <i data-lucide="zap" width="24"></i>
+            </div>
+            <div class="stat-value-large"><?= $currentStreak ?></div>
+            <div class="stat-label-large">Sequência Atual</div>
+        </div>
+        
+        <div class="stat-card-achievement">
+            <div class="stat-icon-large" style="background: #fce7f3; color: #ec4899;">
+                <i data-lucide="trophy" width="24"></i>
+            </div>
+            <div class="stat-value-large"><?= $bestStreak ?></div>
+            <div class="stat-label-large">Melhor Sequência</div>
+        </div>
+        
+        <div class="stat-card-achievement">
+            <div class="stat-icon-large" style="background: #dbeafe; color: #3b82f6;">
+                <i data-lucide="book-open" width="24"></i>
+            </div>
+            <div class="stat-value-large"><?= $totalChaptersRead ?></div>
+            <div class="stat-label-large">Capítulos Lidos</div>
+        </div>
+        
+        <div class="stat-card-achievement">
+            <div class="stat-icon-large" style="background: #dcfce7; color: #22c55e;">
+                <i data-lucide="calendar-check" width="24"></i>
+            </div>
+            <div class="stat-value-large"><?= $totalDaysRead ?></div>
+            <div class="stat-label-large">Total de Dias</div>
+        </div>
+    </div>
+
 </div>
 
 <?php endif; ?>
