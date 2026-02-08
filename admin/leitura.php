@@ -758,6 +758,67 @@ $tab = $_GET['tab'] ?? 'dashboard';
         </div>
     </a>
 
+    <!-- Card: Melhor Sequência -->
+    <a href="#" class="access-card card-violet">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="trophy" width="22"></i>
+            </div>
+            <h3 class="card-title">Recorde</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $bestStreak ?></div>
+                    <div class="highlight-subtitle">melhor sequência</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer-row">
+            <span class="footer-text">Seu melhor</span>
+        </div>
+    </a>
+
+    <!-- Card: Livros Lidos -->
+    <a href="#" class="access-card card-emerald">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="library" width="22"></i>
+            </div>
+            <h3 class="card-title">Livros</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <?php 
+                    // Contar livros únicos lidos
+                    $booksRead = count(array_unique(array_column($allReadings, 'book')));
+                    ?>
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $booksRead ?></div>
+                    <div class="highlight-subtitle">livros diferentes</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer-row">
+            <span class="footer-text">Variedade</span>
+        </div>
+    </a>
+
+    <!-- Card: Total de Dias -->
+    <a href="#" class="access-card card-slate">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="calendar-check" width="22"></i>
+            </div>
+            <h3 class="card-title">Dias Lidos</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $totalDaysRead ?></div>
+                    <div class="highlight-subtitle">dias com leitura</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer-row">
+            <span class="footer-text">Total geral</span>
+        </div>
+    </a>
+
 </div>
 
 <?php endif; ?>
