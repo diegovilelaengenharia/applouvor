@@ -1,6 +1,5 @@
 ﻿<?php
 // admin/leitura.php
-header('Content-Type: text/html; charset=UTF-8');
 require_once '../includes/auth.php';
 require_once '../includes/layout.php';
 
@@ -112,7 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+
 // --- LOAD SETTINGS & STATE ---
+header('Content-Type: text/html; charset=UTF-8');
 $stmt = $pdo->prepare("SELECT setting_key, setting_value FROM user_settings WHERE user_id = ?"); $stmt->execute([$userId]); $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
 $startDateStr = $settings['reading_plan_start_date'] ?? null;
