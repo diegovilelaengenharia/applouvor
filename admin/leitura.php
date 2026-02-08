@@ -613,11 +613,9 @@ $planData = [
 if (isset($planData[$planType][$planDayIndex])) {
     $todayReadings = $planData[$planType][$planDayIndex];
     
-    // Check completion status
+    // Mark all as not completed for now (simplified)
     foreach ($todayReadings as &$reading) {
-        $stmt = $pdo->prepare("SELECT completed_at FROM reading_progress WHERE user_id = ? AND reference = ? AND DATE(completed_at) = CURDATE()");
-        $stmt->execute([$userId, $reading['reference']]);
-        $reading['completed_at'] = $stmt->fetchColumn();
+        $reading['completed_at'] = null;
     }
 }
 
