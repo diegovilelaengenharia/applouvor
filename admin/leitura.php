@@ -884,41 +884,377 @@ body.dark-mode .stat-card-compact {
 <?php endif; ?>
 
 <?php if ($tab == 'reading'): ?>
-<!-- TAB CONTENT: READING -->
+<!-- TAB CONTENT: READING - REDESIGNED -->
 
-<!-- CALENDAR STRIP -->
+<style>
+/* Reading Tab - Modern Redesign */
+.reading-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
 
-<div style="position: relative; background: white; border-bottom: 1px solid #e5e7eb;">
-    <button onclick="scrollCalendar('left')" style="position: absolute; left: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-left" width="16"></i></button>
-    <div class="cal-strip" id="calendar-strip"></div>
-    <button onclick="scrollCalendar('right')" style="position: absolute; right: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-right" width="16"></i></button>
-</div>
+/* Header Compacto */
+.reading-header {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    border-radius: 16px;
+    padding: 1.25rem;
+    color: white;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+}
 
-<!-- MAIN CONTENT -->
-<div style="max-width: 800px; margin: 0 auto; padding: 16px;">
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+.reading-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
+.reading-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
 
-        <div style="display: flex; justify-content: space-between; align-items: start;">
-            <div>
-                <div style="font-size: var(--font-caption); font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Leitura de Hoje</div>
-                <h1 id="day-title" style="margin: 0; font-size: var(--font-display); font-weight: 800; color: #111827; letter-spacing: -0.5px;">Carregando...</h1>
-            </div>
-            <div id="status-badge-container"></div>
+/* Day Navigator */
+.day-navigator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    background: white;
+    border-radius: 12px;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slate-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: var(--slate-100);
+    border-color: var(--slate-300);
+}
+
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.current-day {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    text-align: center;
+    flex: 1;
+}
+
+/* Passage Cards */
+.passages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.passage-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.passage-card.status-unread {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+
+.passage-card.status-reading {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.passage-card.status-complete {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.passage-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.passage-checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid #d1d5db;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: #16a34a;
+}
+
+.passage-info {
+    flex: 1;
+}
+
+.passage-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin-bottom: 0.25rem;
+}
+
+.passage-description {
+    font-size: 0.875rem;
+    color: var(--slate-600);
+}
+
+.passage-progress {
+    margin-bottom: 0.75rem;
+}
+
+.progress-bar-container {
+    background: #e5e7eb;
+    height: 6px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.375rem;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.75rem;
+    color: var(--slate-500);
+    font-weight: 600;
+}
+
+.passage-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-passage {
+    flex: 1;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+}
+
+.btn-passage-primary {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-passage-primary:hover {
+    background: #15803d;
+}
+
+.btn-passage-secondary {
+    background: var(--slate-100);
+    color: var(--slate-700);
+    border: 1px solid var(--slate-200);
+}
+
+.btn-passage-secondary:hover {
+    background: var(--slate-200);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 0.875rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slate-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.action-btn:hover {
+    background: var(--slate-50);
+    border-color: var(--slate-300);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .reading-container {
+        padding: 0.75rem;
+    }
+    
+    .reading-header {
+        padding: 1rem;
+    }
+    
+    .reading-title {
+        font-size: 1.125rem;
+    }
+    
+    .day-navigator {
+        padding: 0.5rem;
+    }
+    
+    .nav-btn {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .nav-btn span {
+        display: none;
+    }
+    
+    .passage-card {
+        padding: 0.875rem;
+    }
+    
+    .btn-passage {
+        font-size: 0.8125rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+body.dark-mode .passage-card,
+body.dark-mode .day-navigator,
+body.dark-mode .action-btn {
+    background: var(--bg-surface);
+    border-color: var(--border-subtle);
+}
+</style>
+
+<div class="reading-container">
+    
+    <!-- Header -->
+    <div class="reading-header">
+        <div class="reading-title">
+            <i data-lucide="book-open" width="20"></i>
+            Leitura de Hoje - Dia <?= $planDayIndex ?>
+        </div>
+        <div class="reading-subtitle">
+            Plano: <?= ucfirst($planType) ?> • <?= count($todayReadings) ?> passagens
         </div>
     </div>
-    
-    <div id="verses-list"></div>
-</div>
 
-<!-- BOTTOM BAR (Inside Reading Tab) -->
-<div class="bottom-bar">
-    <button class="action-btn btn-orange-light" onclick="openNoteModal()">
-        <i data-lucide="pen-line" width="18"></i> Anotar
-    </button>
-    <button class="action-btn btn-blue-light" onclick="openConfig('diario')">
-        <i data-lucide="book" width="18"></i> Meu Diário
-    </button>
+    <!-- Day Navigator -->
+    <div class="day-navigator">
+        <button class="nav-btn" <?= $planDayIndex <= 1 ? 'disabled' : '' ?> onclick="window.location.href='?tab=reading&day=<?= $planDayIndex - 1 ?>'">
+            <i data-lucide="chevron-left" width="16"></i>
+            <span>Anterior</span>
+        </button>
+        <div class="current-day">Dia <?= $planDayIndex ?></div>
+        <button class="nav-btn" onclick="window.location.href='?tab=reading&day=<?= $planDayIndex + 1 ?>'">
+            <span>Próximo</span>
+            <i data-lucide="chevron-right" width="16"></i>
+        </button>
+    </div>
+
+    <!-- Passages List -->
+    <div class="passages-list">
+        <?php foreach ($todayReadings as $index => $reading): 
+            $isComplete = !empty($reading['completed_at']);
+            $status = $isComplete ? 'complete' : 'unread';
+            $progress = $isComplete ? 100 : 0;
+        ?>
+        <div class="passage-card status-<?= $status ?>">
+            <div class="passage-header">
+                <input type="checkbox" class="passage-checkbox" <?= $isComplete ? 'checked' : '' ?>>
+                <div class="passage-info">
+                    <div class="passage-title"><?= htmlspecialchars($reading['reference']) ?></div>
+                    <div class="passage-description">
+                        <?php
+                        // Simple description based on book
+                        $book = explode(' ', $reading['reference'])[0];
+                        $descriptions = [
+                            'Gênesis' => 'O livro dos começos',
+                            'Mateus' => 'O Evangelho do Reino',
+                            'Salmos' => 'Louvor e adoração',
+                            'Provérbios' => 'Sabedoria prática',
+                            'Atos' => 'A igreja primitiva'
+                        ];
+                        echo $descriptions[$book] ?? 'Leitura bíblica';
+                        ?>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="passage-progress">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: <?= $progress ?>%"></div>
+                </div>
+                <div class="progress-text"><?= $progress ?>% lido</div>
+            </div>
+            
+            <div class="passage-actions">
+                <button class="btn-passage btn-passage-primary">
+                    <i data-lucide="book-open" width="16"></i>
+                    <?= $isComplete ? 'Reler' : 'Começar Leitura' ?>
+                </button>
+                <button class="btn-passage btn-passage-secondary">
+                    <i data-lucide="pencil" width="16"></i>
+                    Anotar
+                </button>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="action-btn" onclick="window.location.href='#diary'">
+            <i data-lucide="book-text" width="18"></i>
+            Meu Diário
+        </button>
+        <button class="action-btn" onclick="alert('Calendário em breve!')">
+            <i data-lucide="calendar" width="18"></i>
+            Calendário
+        </button>
+    </div>
+
 </div>
 
 <?php endif; ?>
