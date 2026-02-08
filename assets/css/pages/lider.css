@@ -300,6 +300,100 @@
 }
 
 
+
+/* --- SIMPLE CARD VARIANT (V3 - Restored) --- */
+.action-card.simple {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-primary);
+    height: auto;
+    min-height: 120px;
+}
+
+.action-card.simple:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.action-card.simple .card-title {
+    color: var(--text-primary);
+    text-shadow: none;
+}
+
+.action-card.simple .card-subtitle {
+    color: var(--text-secondary);
+}
+
+.action-card.simple .card-icon-glass {
+    background: var(--bg-surface-active);
+    color: var(--text-secondary);
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+/* Color Variants for Simple Cards */
+.action-card.simple.blue .card-icon-glass {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.action-card.simple.indigo .card-icon-glass {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.action-card.simple.purple .card-icon-glass {
+    background: #f3e8ff;
+    color: #7e22ce;
+}
+
+.action-card.simple.red .card-icon-glass {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.action-card.simple.orange .card-icon-glass {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+.action-card.simple.amber .card-icon-glass {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.action-card.simple.yellow .card-icon-glass {
+    background: #fef9c3;
+    color: #ca8a04;
+}
+
+.action-card.simple.green .card-icon-glass {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.action-card.simple.emerald .card-icon-glass {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.action-card.simple.teal .card-icon-glass {
+    background: #f0fdfa;
+    color: #0d9488;
+}
+
+.action-card.simple.slate .card-icon-glass {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.action-card.simple:hover .card-icon-glass {
+    transform: scale(1.1);
+}
+
+
 /* --- MOBILE ADJUSTMENTS --- */
 @media (max-width: 768px) {
     .kpi-hero {

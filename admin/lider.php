@@ -89,7 +89,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
         </h2>
 
         <div class="dashboard-grid">
-            <a href="membros.php" class="action-card color-blue-gradient">
+            <a href="membros.php" class="action-card simple blue">
                 <div class="card-icon-glass">
                     <i data-lucide="users"></i>
                 </div>
@@ -99,7 +99,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
 
-            <a href="notificacoes.php" class="action-card color-indigo-gradient">
+            <a href="notificacoes.php" class="action-card simple indigo">
                 <div class="card-icon-glass">
                     <i data-lucide="bell"></i>
                 </div>
@@ -109,7 +109,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
 
-            <a href="indisponibilidades_equipe.php" class="action-card color-cyan-gradient">
+            <a href="indisponibilidades_equipe.php" class="action-card simple red">
                 <div class="card-icon-glass">
                     <i data-lucide="calendar-off"></i>
                 </div>
@@ -119,7 +119,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
 
-            <a href="sugestoes_musicas.php" class="action-card color-slate-gradient">
+            <a href="sugestoes_musicas.php" class="action-card simple slate">
                 <div class="card-icon-glass">
                     <i data-lucide="inbox"></i>
                 </div>
@@ -129,7 +129,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
             
-            <a href="classificacoes.php" class="action-card color-slate-gradient">
+            <a href="classificacoes.php" class="action-card simple slate">
                 <div class="card-icon-glass">
                     <i data-lucide="tags"></i>
                 </div>
@@ -148,7 +148,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
         </h2>
 
         <div class="dashboard-grid">
-            <a href="stats_equipe.php" class="action-card color-emerald-gradient">
+            <a href="stats_equipe.php" class="action-card simple emerald">
                 <div class="card-icon-glass">
                     <i data-lucide="activity"></i>
                 </div>
@@ -158,7 +158,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
 
-            <a href="relatorios_gerais.php" class="action-card color-teal-gradient">
+            <a href="relatorios_gerais.php" class="action-card simple teal">
                 <div class="card-icon-glass">
                     <i data-lucide="pie-chart"></i>
                 </div>
@@ -177,7 +177,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
         </h2>
 
         <div class="dashboard-grid">
-            <a href="escala_adicionar.php" class="action-card color-amber-gradient">
+            <a href="escala_adicionar.php" class="action-card simple amber">
                 <div class="card-icon-glass">
                     <i data-lucide="calendar-plus"></i>
                 </div>
@@ -187,7 +187,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
 
-            <a href="musica_adicionar.php" class="action-card color-orange-gradient">
+            <a href="musica_adicionar.php" class="action-card simple orange">
                 <div class="card-icon-glass">
                     <i data-lucide="music"></i>
                 </div>
@@ -197,7 +197,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
                 </div>
             </a>
 
-            <a href="avisos_admin.php" class="action-card color-yellow-gradient">
+            <a href="avisos_admin.php" class="action-card simple yellow">
                 <div class="card-icon-glass">
                     <i data-lucide="megaphone"></i>
                 </div>
