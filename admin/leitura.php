@@ -1221,14 +1221,17 @@ body.dark-mode .action-btn {
 <div class="reading-container">
     
     <!-- Header -->
-    <div class="reading-header">
-        <div class="reading-title">
-            <i data-lucide="book-open" width="20"></i>
-            Leitura de Hoje - Dia <?= $planDayIndex ?>
+    <div class="reading-header" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+        <div style="flex: 1;">
+            <div class="reading-title">
+                <i data-lucide="book-open" width="20"></i>
+                Leitura de Hoje - Dia <?= $planDayIndex ?>
+            </div>
+            <div class="reading-subtitle">
+                <?= $planInfo['title'] ?>
+            </div>
         </div>
-        <div class="reading-subtitle">
-            <?= $planInfo['title'] ?>
-        </div>
+        
         <?php
         // Calcular status do plano baseado na data de início
         $daysRead = $totalDaysRead; // Total de dias que o usuário já leu
@@ -1241,28 +1244,30 @@ body.dark-mode .action-btn {
         $daysDelay = max(0, $expectedDay - $daysRead);
         $isOnTrack = $daysRead >= $expectedDay;
         ?>
-        <div style="display: flex; gap: 1rem; margin-top: 0.75rem; font-size: 0.875rem; flex-wrap: wrap;">
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
             <?php if ($isOnTrack): ?>
             <!-- Em dia -->
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(76,175,80,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #2e7d32;">
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(76,175,80,0.3); padding: 0.5rem 0.875rem; border-radius: 8px; color: #2e7d32; font-size: 0.875rem; white-space: nowrap;">
                 <i data-lucide="check-circle" width="16"></i>
-                <span><strong>Em dia!</strong> Você está acompanhando o plano</span>
+                <span><strong>Em dia!</strong></span>
             </div>
             <?php else: ?>
             <!-- Atrasado -->
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,152,0,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #e65100;">
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,152,0,0.3); padding: 0.5rem 0.875rem; border-radius: 8px; color: #e65100; font-size: 0.875rem; white-space: nowrap;">
                 <i data-lucide="alert-circle" width="16"></i>
                 <span><strong><?= $daysDelay ?> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</strong></span>
             </div>
             <?php endif; ?>
             
             <!-- Informação adicional -->
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.2); padding: 0.375rem 0.75rem; border-radius: 8px;">
-                <i data-lucide="book-open" width="16"></i>
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.2); padding: 0.375rem 0.75rem; border-radius: 8px; font-size: 0.8125rem; white-space: nowrap;">
+                <i data-lucide="book-open" width="14"></i>
                 <span><?= $daysRead ?> de <?= $expectedDay ?> dias lidos</span>
             </div>
         </div>
     </div>
+
 
 
     <!-- Day Navigator -->
