@@ -486,6 +486,25 @@
                 <h1>Reunião de Alinhamento<br>e Planejamento 2026</h1>
                 <p class="subtitle">PIB Oliveira • Ministério de Música</p>
                 <p style="color: var(--gray-400); font-size: 1.25rem; margin-top: 60px;">08 de Fevereiro de 2026</p>
+                <button onclick="window.print()" style="
+                    margin-top: 60px;
+                    padding: 16px 40px;
+                    background: var(--gradient-blue);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 12px;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 113, 227, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 113, 227, 0.3)'">
+                    <i class="fas fa-download"></i>
+                    Baixar PDF
+                </button>
             </div>
         </div>
 
