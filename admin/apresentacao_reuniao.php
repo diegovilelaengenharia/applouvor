@@ -804,6 +804,25 @@
             </div>
         </div>
 
+        <!-- Slide 10.5: QR Code -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill green">ACESSO RÁPIDO</span>
+                <h2 style="margin-bottom: 60px;">Acesse o App Louvor</h2>
+                <div style="background: white; padding: 40px; border-radius: 24px; display: inline-block; box-shadow: 0 20px 60px rgba(0,0,0,0.1);">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://vilela.eng.br/applouvor" 
+                         alt="QR Code App Louvor" 
+                         style="width: 400px; height: 400px; display: block;">
+                </div>
+                <p style="font-size: 2rem; color: var(--gray-400); margin-top: 60px;">
+                    Escaneie com a câmera do celular
+                </p>
+                <p style="font-size: 1.5rem; color: var(--gray-400); margin-top: 20px;">
+                    <strong>vilela.eng.br/applouvor</strong>
+                </p>
+            </div>
+        </div>
+
         <!-- Slide 11: O que é -->
         <div class="slide">
             <div class="slide-content">
