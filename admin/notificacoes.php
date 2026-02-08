@@ -414,12 +414,24 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         </div>
 
         <!-- Banner Ativo (Granted) -->
-        <div id="statusCardGranted" style="display: none; background: var(--sage-50); border: 1px solid var(--sage-200); border-radius: 8px; padding: 12px 16px; color: var(--sage-800);">
+        <div id="statusCardGranted" style="display: none; background: #ecfdf5; border: 1px solid #10b981; border-radius: 12px; padding: 16px; color: #065f46; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1), 0 2px 4px -1px rgba(16, 185, 129, 0.06); animation: pulse-green 2s infinite;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <i data-lucide="check" style="width: 18px; color: var(--sage-500);"></i>
-                <span style="font-size: 0.9rem; font-weight: 500;">Notificações ativadas neste dispositivo.</span>
+                <div style="background: #10b981; color: white; padding: 6px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                    <span style="font-size: 1rem; font-weight: 700; display: block;">Notificações Ativadas!</span>
+                    <span style="font-size: 0.85rem; opacity: 0.9;">Você receberá alertas neste dispositivo.</span>
+                </div>
             </div>
         </div>
+        <style>
+            @keyframes pulse-green {
+                0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+                70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            }
+        </style>
 
         <!-- Banner Bloqueado (Denied) -->
         <div id="statusCardDenied" style="display: none; background: var(--rose-50); border: 1px solid var(--rose-200); border-radius: 8px; padding: 12px 16px; color: var(--rose-700);">
