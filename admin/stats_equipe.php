@@ -37,7 +37,6 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
     .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -47,19 +46,21 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
     .kpi-card {
         background: var(--bg-surface);
-        padding: 20px;
-        border-radius: var(--radius-lg);
+        padding: 24px;
+        border-radius: 16px;
         border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         display: flex;
         align-items: center;
         gap: 16px;
+        transition: transform 0.2s;
     }
+    .kpi-card:hover { transform: translateY(-2px); }
 
     .kpi-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -68,40 +69,57 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
     .user-table {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-        font-size: 0.9rem;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 0;
     }
 
     .user-table th {
         text-align: left;
-        padding: 12px 16px;
-        color: var(--text-muted);
+        padding: 16px 20px;
+        color: var(--text-secondary);
         font-weight: 600;
-        font-size: 0.8rem;
-        border-bottom: 2px solid var(--border-color);
-        background: var(--bg-main);
+        font-size: 0.85rem;
+        background: var(--bg-surface-active);
+        border-bottom: 1px solid var(--border-color);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .user-table td {
-        padding: 14px 16px;
+        padding: 16px 20px;
         border-bottom: 1px solid var(--border-color);
-        color: var(--text-main);
+        color: var(--text-primary);
+        vertical-align: middle;
+        background: var(--bg-surface);
+        transition: background 0.15s;
     }
 
+    .user-table tr:hover td {
+        background: var(--bg-surface-active);
+    }
+    
     .user-table tr:last-child td {
         border-bottom: none;
     }
 
+    /* Fixed Avatar Styles */
     .user-profile {
         display: flex;
         align-items: center;
         gap: 12px;
     }
 
+    .avatar-wrapper {
+        position: relative;
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+    }
+
     .avatar-circle {
-        width: 36px;
-        height: 36px;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
         background: var(--primary-light);
         color: var(--primary);
@@ -109,38 +127,56 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 16px;
         object-fit: cover;
+        border: 2px solid var(--bg-surface);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
-    .status-dot {
-        width: 8px;
-        height: 8px;
+    .status-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
-        display: inline-block;
-        margin-right: 6px;
+        border: 2px solid var(--bg-surface);
     }
 
-    .status-online { background-color: var(--sage-500); }
-    .status-recent { background-color: var(--yellow-500); }
-    .status-offline { background-color: var(--rose-500); }
+    .status-online { background-color: #10b981; }
+    .status-recent { background-color: #f59e0b; }
+    .status-offline { background-color: #ef4444; }
 
+    /* Badges with Effects */
     .badge {
-        padding: 4px 10px;
+        padding: 6px 12px;
         border-radius: 20px;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        text-transform: uppercase;
     }
 
-    .badge-high { background: var(--sage-100); color: var(--sage-700); }
-    .badge-med { background: var(--yellow-100); color: var(--yellow-800); }
-    .badge-low { background: var(--rose-100); color: var(--rose-700); }
-    
+    .badge-high { 
+        background: #dcfce7; color: #15803d; 
+        box-shadow: 0 2px 4px rgba(22, 163, 74, 0.1);
+    }
+    .badge-med { 
+        background: #fef9c3; color: #854d0e; 
+        box-shadow: 0 2px 4px rgba(234, 179, 8, 0.1);
+    }
+    .badge-low { 
+        background: #fee2e2; color: #991b1b; 
+        box-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
         .user-table thead { display: none; }
         .user-table, .user-table tbody, .user-table tr, .user-table td {
-            display: block;
-            width: 100%;
+            display: block; width: 100%;
         }
         .user-table tr {
             margin-bottom: 16px;
@@ -148,13 +184,15 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 12px;
             border: 1px solid var(--border-color);
             padding: 12px;
+            box-shadow: var(--shadow-sm);
         }
         .user-table td {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            text-align: right;
         }
         .user-table td:last-child {
             border-bottom: none;
@@ -162,14 +200,15 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         .user-table td::before {
             content: attr(data-label);
             font-weight: 600;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             font-size: 0.8rem;
+            text-align: left;
         }
         .user-profile {
-            margin-bottom: 8px;
+            flex-direction: row;
+            text-align: left;
         }
     }
-</style>
 
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
 
@@ -262,41 +301,46 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                     <tr>
                         <td data-label="Membro">
                             <div class="user-profile">
-                                <?php if ($member['avatar']): ?>
-                                    <img src="<?= htmlspecialchars($member['avatar']) ?>" class="avatar-circle" alt="<?= htmlspecialchars($member['name']) ?>">
-                                <?php else: ?>
-                                    <div class="avatar-circle">
-                                        <?= strtoupper(substr($member['name'], 0, 1)) ?>
-                                    </div>
-                                <?php endif; ?>
+                                <div class="avatar-wrapper">
+                                    <?php if ($member['avatar']): 
+                                        $avatarUrl = strpos($member['avatar'], 'http') === 0 ? $member['avatar'] : '../assets/uploads/' . $member['avatar'];
+                                    ?>
+                                        <img src="<?= htmlspecialchars($avatarUrl) ?>" class="avatar-circle" alt="<?= htmlspecialchars($member['name']) ?>">
+                                    <?php else: ?>
+                                        <div class="avatar-circle">
+                                            <?= strtoupper(substr($member['name'], 0, 1)) ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="status-indicator <?= $status_class ?>" title="<?= $status_text ?>"></div>
+                                </div>
                                 <div>
-                                    <div style="font-weight: 600; color: var(--text-main);"><?= htmlspecialchars($member['name']) ?></div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);"><?= ucfirst($member['role']) ?></div>
+                                    <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);"><?= ucfirst($member['role']) ?></div>
                                 </div>
                             </div>
                         </td>
                         <td data-label="Último Acesso">
-                            <div style="display: flex; align-items: center;">
-                                <span class="status-dot <?= $status_class ?>" title="<?= $status_text ?>"></span>
-                                <div>
-                                    <div style="font-weight: 500; font-size: 0.9rem;"><?= $time_text ?></div>
-                                    <?php if($member['last_login']): ?>
-                                        <div style="font-size: 0.7rem; color: var(--text-muted);"><?= date('d/m/Y H:i', strtotime($member['last_login'])) ?></div>
-                                    <?php endif; ?>
-                                </div>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= $time_text ?></div>
+                                <?php if($member['last_login']): ?>
+                                    <div style="font-size: 0.75rem; color: var(--text-tertiary);"><?= date('d/m H:i', strtotime($member['last_login'])) ?></div>
+                                <?php endif; ?>
                             </div>
                         </td>
                         <td data-label="Frequência">
-                            <div style="font-weight: 600;"><?= $member['login_count'] ?> <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">acessos</span></div>
+                            <div style="font-weight: 700; color: var(--text-primary);"><?= $member['login_count'] ?></div>
+                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">acessos</div>
                         </td>
                         <td data-label="Escalas (60d)">
-                            <div style="font-weight: 600;"><?= $member['scale_count'] ?></div>
+                            <div style="font-weight: 700; color: var(--text-primary);"><?= $member['scale_count'] ?></div>
                         </td>
                         <td data-label="Leitura (30d)">
-                            <div style="font-weight: 600;"><?= $member['reading_activity'] ?> <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">caps</span></div>
+                            <div style="font-weight: 700; color: var(--text-primary);"><?= $member['reading_activity'] ?></div>
+                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">capítulos</div>
                         </td>
                         <td data-label="Engajamento">
                             <span class="badge <?= $score_class ?>">
+                                <?php if($score >= 7): ?><i data-lucide="trending-up" width="14"></i><?php endif; ?>
                                 <?= $score >= 7 ? 'Alto' : ($score >= 4 ? 'Médio' : 'Baixo') ?>
                             </span>
                         </td>
