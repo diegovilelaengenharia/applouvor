@@ -3,11 +3,8 @@
 require_once '../includes/auth.php';
 require_once '../includes/layout.php';
 
+
 checkLogin(); 
-
-// Load Reading Page CSS
-echo '<link rel="stylesheet" href="../assets/css/pages/leitura.css?v=' . time() . '">';
-
 
 // AUTOLOAD: Título na Tabela
 try {
@@ -124,8 +121,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 
+
 // --- LOAD SETTINGS & STATE ---
 header('Content-Type: text/html; charset=UTF-8');
+echo '<link rel="stylesheet" href="../assets/css/pages/leitura.css?v=' . time() . '">';
 $stmt = $pdo->prepare("SELECT setting_key, setting_value FROM user_settings WHERE user_id = ?"); $stmt->execute([$userId]); $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
 $startDateStr = $settings['reading_plan_start_date'] ?? null;
