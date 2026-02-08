@@ -88,7 +88,7 @@
 
         /* Typography */
         h1 {
-            font-size: 5rem;
+            font-size: 6rem;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -0.02em;
@@ -97,7 +97,7 @@
         }
 
         h2 {
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             font-weight: 700;
             line-height: 1.2;
             letter-spacing: -0.01em;
@@ -106,21 +106,21 @@
         }
 
         h3 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 600;
             color: var(--gray-900);
             margin-bottom: 16px;
         }
 
         p {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             line-height: 1.6;
             color: var(--gray-400);
             font-weight: 400;
         }
 
         .subtitle {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--gray-400);
             font-weight: 500;
             margin-bottom: 40px;
@@ -222,7 +222,7 @@
         }
 
         .card p {
-            font-size: 1.125rem;
+            font-size: 1.5rem;
             line-height: 1.6;
         }
 
@@ -235,7 +235,7 @@
         }
 
         .feature-list li {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             padding: 24px 0;
             border-bottom: 1px solid var(--gray-100);
             display: flex;
@@ -820,35 +820,7 @@
             </div>
         </div>
 
-        <!-- Slide 15: Tecnologias -->
-        <div class="slide">
-            <div class="slide-content">
-                <span class="pill orange">TECNOLOGIAS</span>
-                <h2>Arquitetura Moderna</h2>
-                <div class="grid-2" style="margin-top: 60px;">
-                    <div class="card">
-                        <i class="fas fa-code card-icon blue"></i>
-                        <h3>Backend Robusto</h3>
-                        <p>PHP 7.4+ com arquitetura PSR-4, MySQL com PDO, segurança avançada</p>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-paint-brush card-icon green"></i>
-                        <h3>Frontend Premium</h3>
-                        <p>HTML5, CSS3 com Design System próprio, JavaScript moderno</p>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-server card-icon orange"></i>
-                        <h3>Infraestrutura</h3>
-                        <p>Hostinger, Git/GitHub, deploy automático, PWA instalável</p>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-shield-alt card-icon purple"></i>
-                        <h3>Segurança</h3>
-                        <p>HTTPS, criptografia, CSRF protection, conformidade LGPD</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Slide 16: Estatísticas -->
         <div class="slide">
