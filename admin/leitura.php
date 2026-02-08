@@ -397,8 +397,7 @@ if (!$planStarted) {
 
     // Open configuration modal
     function openConfig() {
-        // For now, redirect to settings tab or show alert
-        window.location.href = '?tab=reading#settings';
+        alert('Configurações em breve! Por enquanto, use as abas acima para navegar entre Texto Bíblico, Estatísticas e Conquistas.');
     }
     
     // Alias for settings modal
