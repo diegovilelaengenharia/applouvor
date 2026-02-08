@@ -1588,6 +1588,30 @@ body.dark-mode .stat-card-compact {
     animation: pulse 1.5s infinite;
 }
 
+.media-btn#attach-audio-btn {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+    border-color: #8b5cf6;
+}
+
+.media-btn#attach-audio-btn:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    border-color: #7c3aed;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.media-btn#attach-image-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-color: #10b981;
+}
+
+.media-btn#attach-image-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-color: #059669;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
@@ -1899,12 +1923,12 @@ body.dark-mode .action-btn {
                                 <i data-lucide="mic" width="16"></i>
                                 <span id="record-btn-text">Gravar Áudio</span>
                             </button>
-                            <label for="audio-upload" class="media-btn upload-label">
+                            <label for="audio-upload" id="attach-audio-btn" class="media-btn upload-label">
                                 <i data-lucide="music" width="16"></i>
                                 <span>Anexar Áudio</span>
                                 <input type="file" id="audio-upload" accept="audio/*" style="display: none;" onchange="handleAudioUpload(this)">
                             </label>
-                            <label for="image-upload" class="media-btn upload-label">
+                            <label for="image-upload" id="attach-image-btn" class="media-btn upload-label">
                                 <i data-lucide="image" width="16"></i>
                                 <span>Anexar Imagem</span>
                                 <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
@@ -1927,13 +1951,17 @@ body.dark-mode .action-btn {
                 </div>
                 
                 <div class="diary-actions">
+                    <button class="diary-btn secondary" onclick="closeDiaryModal()">
+                        <i data-lucide="x" width="16"></i>
+                        Cancelar
+                    </button>
+                    <button class="diary-btn secondary" onclick="clearDiary()">
+                        <i data-lucide="trash-2" width="16"></i>
+                        Limpar
+                    </button>
                     <button class="diary-btn primary" onclick="saveDiaryNote()">
                         <i data-lucide="save" width="16"></i>
                         Salvar Anotação
-                    </button>
-                    <button class="diary-btn secondary" onclick="clearDiary()">
-                        <i data-lucide="x" width="16"></i>
-                        Limpar
                     </button>
                 </div>
             </div>
