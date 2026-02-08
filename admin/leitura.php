@@ -395,6 +395,12 @@ if (!$planStarted) {
             }
         });
 
+    // Open configuration modal
+    function openConfig() {
+        // For now, redirect to settings tab or show alert
+        window.location.href = '?tab=reading#settings';
+    }
+    
     // Alias for settings modal
     function openSettingsModal() {
         openConfig();
