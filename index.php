@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/no-cache.php';
+require_once 'includes/no-cache.php'; // Force refresh
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
