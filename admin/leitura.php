@@ -1388,7 +1388,7 @@ body.dark-mode .stat-card-compact {
 }
 
 .diary-modal-body {
-    padding: 2rem;
+    padding: 1.75rem 2rem;
     max-height: calc(85vh - 120px);
     overflow-y: auto;
 }
@@ -1402,7 +1402,7 @@ body.dark-mode .stat-card-compact {
 }
 
 .diary-field {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .diary-field:last-of-type {
@@ -1411,11 +1411,10 @@ body.dark-mode .stat-card-compact {
 
 .diary-field label {
     display: block;
-    font-size: 0.9375rem;
-    font-weight: 700;
-    color: #334155;
-    margin-bottom: 0.625rem;
-    letter-spacing: -0.01em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.5rem;
 }
 
 .diary-input,
@@ -1445,9 +1444,9 @@ body.dark-mode .stat-card-compact {
 
 .diary-actions {
     display: flex;
-    gap: 0.75rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
+    gap: 0.625rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
     border-top: 1px solid #e5e7eb;
 }
 
@@ -1547,7 +1546,7 @@ body.dark-mode .stat-card-compact {
 
 .media-btn,
 .upload-label {
-    padding: 0.625rem 1rem;
+    padding: 0.625rem 0.875rem;
     border-radius: 8px;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -1559,7 +1558,7 @@ body.dark-mode .stat-card-compact {
     border: 1.5px solid #e5e7eb;
     background: white;
     color: #64748b;
-    min-width: 130px;
+    flex: 1;
     justify-content: center;
 }
 
