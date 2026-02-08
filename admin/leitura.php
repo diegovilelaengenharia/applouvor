@@ -703,8 +703,8 @@ $tab = $_GET['tab'] ?? 'reading';
         <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
         <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Estatísticas</a>
         <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">🏆 Conquistas</a>
-        <button onclick="alert('Configurações em breve!')" style="margin-left: auto; background: var(--slate-50); border: 1px solid var(--slate-200); padding: 0.5rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--slate-600);" title="Configurações">
-            ⚙️
+        <button onclick="openSettingsModal()" style="margin-left: auto; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none; padding: 0.625rem 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; color: white; font-weight: 600; font-size: 0.875rem; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);" title="Configurações" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(59, 130, 246, 0.3)'">
+            ⚙️ Configurações
         </button>
     </div>
 </div>
