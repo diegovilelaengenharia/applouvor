@@ -1,0 +1,723 @@
+/* assets/css/pages/devocionais.css */
+/* Estilos da Página de Devocionais - Tema Verde (Espiritualidade) */
+
+:root {
+    /* Redefinindo Primary para Verde #16A34A */
+    --primary: #16A34A;
+    /* green-600 */
+    --primary-hover: #15803d;
+    /* green-700 */
+    --primary-light: #dcfce7;
+    /* green-100 */
+    --primary-subtle: #f0fdf4;
+    /* green-50 */
+
+    --bg-surface: #ffffff;
+    --border-color: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Devocionais Cards */
+.devotional-card {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 20px;
+}
+
+.devotional-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-light);
+}
+
+/* Header do Card */
+.dev-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dev-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dev-avatar-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.dev-author-info {
+    flex: 1;
+}
+
+.dev-author-name {
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.dev-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.dev-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Content */
+.dev-content {
+    padding: 16px;
+}
+
+.dev-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.dev-text {
+    color: var(--text-body);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.dev-text p {
+    margin: 0 0 8px;
+}
+
+/* Media Embed */
+.dev-media {
+    margin: 12px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.dev-media iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+}
+
+/* Tags */
+.dev-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 16px 16px;
+}
+
+.dev-tag {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    background: var(--bg-body);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+/* Footer/Comments */
+.dev-footer {
+    padding: 12px 16px;
+    background: var(--slate-50);
+    border-top: 1px solid var(--border-color);
+}
+
+.dev-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.dev-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.dev-action-btn:hover {
+    background: var(--primary-subtle);
+    color: var(--primary);
+}
+
+/* Comments Section */
+.comments-section {
+    display: none;
+    padding: 16px;
+    background: var(--slate-50);
+    border-top: 1px solid var(--border-color);
+}
+
+.comments-section.open {
+    display: block;
+}
+
+.comment-submit {
+    padding: 10px 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.comment-submit:hover {
+    background: var(--primary-hover);
+}
+
+/* Type Badges */
+.type-text {
+    background: var(--primary-subtle);
+    color: var(--primary);
+}
+
+.type-video {
+    background: var(--rose-50);
+    color: var(--rose-600);
+}
+
+.type-audio {
+    background: var(--slate-100);
+    color: var(--slate-600);
+}
+
+/* FAB */
+.fab-create {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fab-create:hover {
+    transform: scale(1.05);
+    background: var(--primary-hover);
+    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
+}
+
+/* Filter Toolbar */
+.filter-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.filter-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+    outline: none;
+}
+
+.filter-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--primary);
+}
+
+.btn-advanced-filter {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+.btn-advanced-filter.active {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-advanced-filter:hover {
+    background: var(--bg-body);
+    color: var(--primary);
+    border-color: var(--primary-light);
+}
+
+/* Filter Pills (Nova Interface de Busca) */
+.filter-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--border-medium);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-pill:hover {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.filter-pill.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+}
+
+/* Cards Lidos vs Não Lidos */
+.devotional-card.unread {
+    background: var(--bg-surface);
+    border-left: 3px solid var(--primary);
+}
+
+/* MODAL & FORM STYLING - PREMIUM PLUS */
+#devotionalModal .modal-content {
+    animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+#devotionalModal input[type="text"],
+#devotionalModal input[type="url"],
+#devotionalModal select,
+#devotionalModal textarea {
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    width: 100%;
+    outline: none;
+    color: var(--text-main);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+#devotionalModal input[type="text"]:focus,
+#devotionalModal input[type="url"]:focus,
+#devotionalModal select:focus {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px var(--primary-subtle), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* Custom Tag Badges (Checkbox Hidden) */
+#devotionalModal .dev-tag-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background: white;
+    color: var(--text-muted);
+    user-select: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+#devotionalModal .dev-tag-option:hover {
+    background: var(--bg-body);
+    color: var(--text-main);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#devotionalModal .dev-tag-option input {
+    display: none;
+}
+
+/* Checked State */
+#devotionalModal .dev-tag-option:has(input:checked) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+/* Editor Styling */
+.ql-toolbar.ql-snow {
+    border: 1px solid var(--border-color) !important;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background: var(--bg-body);
+}
+
+.ql-container.ql-snow {
+    border: 1px solid var(--border-color) !important;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Modal Buttons */
+#devotionalModal button[type="button"] {
+    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+#devotionalModal button[type="button"]:hover {
+    background: var(--bg-body);
+    color: var(--text-main);
+    border-color: var(--text-muted);
+}
+
+#devotionalModal button[type="submit"] {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: white;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    transition: all 0.2s;
+}
+
+/* TABS SYSTEM */
+/* TABS SYSTEM (Match Repertorio) */
+.page-tabs {
+    background: var(--slate-100);
+    padding: 6px;
+    border-radius: 16px;
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.tab-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+}
+
+.tab-btn.active::after {
+    display: none;
+    /* Removed underline style */
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* DUAL FAB SYSTEM */
+.fab-container {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+    align-items: flex-end;
+}
+
+.fab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+}
+
+.fab-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.fab-devotional {
+    background: linear-gradient(135deg, #16A34A 0%, #15803d 100%);
+    /* Green */
+}
+
+.fab-prayer {
+    background: linear-gradient(135deg, #D97706 0%, #b45309 100%);
+    /* Amber/Gold */
+}
+
+/* PRAYER CARDS (Ported from oracao.css) */
+.prayer-card {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.prayer-header {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.prayer-user-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.prayer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.prayer-meta h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.prayer-meta span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.prayer-content {
+    padding: 16px;
+}
+
+.prayer-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--text-main);
+}
+
+.prayer-description {
+    font-size: 0.95rem;
+    color: var(--text-body);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.cat-badge {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.cat-health {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.cat-family {
+    background: #dbeafe;
+    color: #2563EB;
+}
+
+.cat-work {
+    background: #fef3c7;
+    color: #D97706;
+}
+
+.cat-spiritual {
+    background: #dcfce7;
+    color: #16A34A;
+}
+
+.cat-gratitude {
+    background: #fffbeb;
+    /* Was purple, now Amber light */
+    color: #D97706;
+    /* Was purple, now Amber dark */
+}
+
+.cat-other {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.prayer-footer {
+    padding: 12px 16px;
+    background: var(--bg-body);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+}
+
+.pray-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: white;
+    color: var(--text-muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pray-action-btn.active {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #fee2e2;
+}
+
+.pray-action-btn:hover {
+    transform: translateY(-1px);
+}

@@ -1,0 +1,554 @@
+/* assets/css/pages/oracao.css */
+/* Estilos da Página de Oração - Tema Verde (Espiritualidade) */
+
+:root {
+    /* Redefinindo Primary para Verde nesta página */
+    --primary: #22c55e;
+    /* green-500 */
+    --primary-hover: #16a34a;
+    /* green-600 */
+    --primary-light: #dcfce7;
+    /* green-100 */
+    --primary-subtle: #f0fdf4;
+    /* green-50 */
+
+    --bg-surface: #ffffff;
+    --border-color: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Prayer Cards - Premium Design */
+.prayer-card {
+    background: var(--bg-surface);
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
+}
+
+.prayer-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-light);
+}
+
+.prayer-card.urgent {
+    border-left: 4px solid var(--rose-600);
+}
+
+.prayer-card.answered {
+    background: var(--primary-subtle);
+    border-color: var(--primary);
+}
+
+/* Header */
+.prayer-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.prayer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prayer-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Content */
+.prayer-content {
+    padding: 14px;
+}
+
+.prayer-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prayer-description {
+    color: var(--text-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Footer */
+.prayer-footer {
+    padding: 12px 16px;
+    background: var(--slate-50);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Pray Button */
+.pray-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.pray-btn.not-prayed {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+.pray-btn.not-prayed:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-subtle);
+}
+
+.pray-btn.prayed {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.pray-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Content Expansion */
+.prayer-content {
+    padding: 14px;
+    position: relative;
+}
+
+.prayer-description {
+    color: var(--text-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Collapsed State */
+.prayer-card.collapsed .prayer-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.expand-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 40%);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-top: -20px;
+}
+
+.prayer-card.collapsed .expand-indicator {
+    display: flex;
+}
+
+.category-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.cat-health {
+    background: var(--rose-100);
+    color: var(--rose-600);
+}
+
+.cat-family {
+    background: var(--slate-100);
+    color: var(--slate-600);
+}
+
+.cat-work {
+    background: var(--yellow-100);
+    color: var(--yellow-600);
+}
+
+.cat-spiritual {
+    background: var(--primary-subtle);
+    color: var(--primary);
+}
+
+.cat-gratitude {
+    background: var(--sage-50);
+    color: var(--sage-600);
+}
+
+.cat-other {
+    background: var(--slate-100);
+    color: var(--slate-500);
+}
+
+/* FAB with Green Theme */
+.fab-create {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fab-create:hover {
+    transform: scale(1.05);
+    background: var(--primary-hover);
+    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+
+.filter-tab {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+}
+
+.filter-tab:hover {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border-color: var(--primary-light);
+}
+
+.filter-tab.active {
+    background: var(--primary);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+}
+
+/* Comments Section */
+.comments-section {
+    display: none;
+    padding: 16px;
+    background: var(--slate-50);
+    border-top: 1px solid var(--border-color);
+}
+
+.comments-section.open {
+    display: block;
+}
+
+.comment-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+/* Intercession States */
+.prayer-card.not-interceded {
+    background: var(--bg-surface);
+    border-left: 3px solid var(--yellow-500);
+}
+
+.prayer-card.interceded {
+    opacity: 0.9;
+    border-left: 3px solid var(--primary);
+}
+
+/* Filter Toolbar */
+.filter-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.filter-group {
+    flex: 1;
+    position: relative;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.filter-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+    outline: none;
+}
+
+.filter-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--primary);
+}
+
+.btn-advanced-filter {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+    position: relative;
+}
+
+.btn-advanced-filter.active {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-advanced-filter:hover {
+    background: var(--bg-body);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Empty State Button */
+.btn-new-prayer {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-new-prayer:hover {
+    background: var(--primary-hover);
+}
+
+/* Modal Styling Overrides */
+/* MODAL & FORM STYLING - PREMIUM PLUS */
+#prayerModal .modal-content {
+    animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+#prayerModal input[type="text"],
+#prayerModal select,
+#prayerModal textarea {
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    width: 100%;
+    outline: none;
+    color: var(--text-main);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+#prayerModal input[type="text"]:focus,
+#prayerModal select:focus {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px var(--primary-subtle), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* Custom Category Options - Cards */
+.cat-option {
+    border: 1px solid transparent;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    /* Soft shadow instead of border */
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cat-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Selected State - Colorful Borders */
+.cat-option:has(input:checked) {
+    border-color: var(--primary);
+    background: var(--primary-subtle);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.cat-option input:checked+span {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+/* Icons in cards */
+.cat-option span:first-of-type {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Editor Styling */
+.ql-toolbar.ql-snow {
+    border: 1px solid var(--border-color) !important;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background: var(--bg-body);
+}
+
+.ql-container.ql-snow {
+    border: 1px solid var(--border-color) !important;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Modal Buttons */
+#prayerModal button[type="button"] {
+    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+#prayerModal button[type="button"]:hover {
+    background: var(--bg-body);
+    color: var(--text-main);
+    border-color: var(--text-muted);
+}
+
+#prayerModal button[type="submit"] {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: white;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    transition: all 0.2s;
+}
+
+#prayerModal button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+}
+
+/* Checkboxes (Urgent/Anonymous) */
+#prayerModal input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    vertical-align: middle;
+    transition: all 0.2s;
+}
+
+#prayerModal input[type="checkbox"]:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}

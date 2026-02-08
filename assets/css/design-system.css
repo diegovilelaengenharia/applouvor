@@ -28,23 +28,23 @@
     /* Gestão / Primary (Blue) */
     --blue-50: #eff6ff;
     --blue-100: #dbeafe;
-    --blue-500: #3b82f6;
-    --blue-600: #2563eb;
-    --blue-700: #1d4ed8;
+    --blue-500: #2563EB;
+    --blue-600: #1d4ed8;
+    --blue-700: #1e40af;
 
     /* Espiritual (Green) */
     --green-50: #f0fdf4;
     --green-100: #dcfce7;
-    --green-500: #22c55e;
-    --green-600: #16a34a;
-    --green-700: #15803d;
+    --green-500: #16A34A;
+    --green-600: #15803d;
+    --green-700: #14532d;
 
-    /* Comunicação (Amber/Yellow) */
+    /* Comunicação (Amber/Yellow/Purple Consolidated) */
     --amber-50: #fffbeb;
     --amber-100: #fef3c7;
-    --amber-500: #f59e0b;
-    --amber-600: #d97706;
-    --amber-700: #b45309;
+    --amber-500: #D97706;
+    --amber-600: #b45309;
+    --amber-700: #78350f;
 
     /* Critical / Error (Red) */
     --red-50: #fef2f2;

@@ -23,7 +23,7 @@ if (!$event) {
 
 // Buscar participantes
 $stmtPart = $pdo->prepare("
-    SELECT ep.*, u.name, u.instrument, u.avatar
+    SELECT ep.*, u.name, u.instrument, u.avatar, u.avatar_color
     FROM event_participants ep
     JOIN users u ON ep.user_id = u.id
     WHERE ep.event_id = ?
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_presence'])) 
         WHERE event_id = ? AND user_id = ?
     ");
     $stmtConfirm->execute([$eventId, $_SESSION['user_id']]);
-    header("Location: evento_detalhe.php?id=$eventId");
+    header("Location: evento_detalhe.php?id=$eventId&msg=confirmed");
     exit;
 }
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['decline_presence'])) 
         WHERE event_id = ? AND user_id = ?
     ");
     $stmtDecline->execute([$eventId, $_SESSION['user_id']]);
-    header("Location: evento_detalhe.php?id=$eventId");
+    header("Location: evento_detalhe.php?id=$eventId&msg=declined");
     exit;
 }
 
@@ -63,6 +63,38 @@ foreach ($participants as $p) {
         $userParticipant = $p;
         break;
     }
+}
+
+// Mensagens de Feedback
+$msg = $_GET['msg'] ?? '';
+$feedbackClass = '';
+$feedbackText = '';
+
+if ($msg === 'confirmed') {
+    $feedbackClass = 'feedback-success';
+    $feedbackText = 'Presença confirmada com sucesso! 🎸';
+} elseif ($msg === 'declined') {
+    $feedbackClass = 'feedback-error';
+    $feedbackText = 'Ausência registrada. Sentiremos sua falta! 😢';
+}
+
+// Função auxiliar para data em PT-BR (Windows safe)
+function formDataPtBr($dateString) {
+    $timestamp = strtotime($dateString);
+    $semana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    $mes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    
+    $dSemana = $semana[date('w', $timestamp)];
+    $dMes = $mes[date('n', $timestamp) - 1];
+    $dia = date('d', $timestamp);
+    $ano = date('Y', $timestamp);
+    
+    return "$dSemana, $dia de $dMes de $ano";
+}
+
+function getMesAbbrev($dateString) {
+    $meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+    return $meses[date('n', strtotime($dateString)) - 1];
 }
 
 // Mapas de tipos e cores
@@ -88,263 +120,92 @@ renderAppHeader('Detalhes do Evento');
 renderPageHeader($event['title'], '');
 ?>
 
-<style>
-    body { background: var(--bg-body); }
-    
-    .detail-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 16px 12px 100px;
-    }
-    
-    /* Event Header */
-    .event-header {
-        background: <?= $event['color'] ?>40;
-        border: 1px solid <?= $event['color'] ?>;
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 16px;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .event-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: <?= $event['color'] ?>;
-    }
-    
-    .event-type-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        background: <?= $event['color'] ?>;
-        color: white;
-        border-radius: 8px;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
-    
-    .event-title-large {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--text-main);
-        margin-bottom: 16px;
-    }
-    
-    .event-meta-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-    }
-    
-    .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--text-main);
-        font-size: 0.9375rem;
-    }
-    
-    .meta-item i {
-        color: <?= $event['color'] ?>;
-        width: 20px;
-    }
-    
-    /* Info Card */
-    .info-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 16px;
-        box-shadow: var(--shadow-sm);
-    }
-    
-    .card-title-small {
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .description-text {
-        color: var(--text-secondary);
-        line-height: 1.6;
-        white-space: pre-wrap;
-    }
-    
-    /* Participants List */
-    .participant-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background: var(--bg-body);
-    }
-    
-    .participant-item.confirmed {
-        background: #ecfdf520;
-        border-color: #10b981;
-    }
-    
-    .participant-item.declined {
-        background: var(--rose-50)20;
-        border-color: #f87171;
-        opacity: 0.7;
-    }
-    
-    .participant-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-    
-    .participant-info {
-        flex: 1;
-    }
-    
-    .participant-name {
-        font-weight: 700;
-        font-size: 0.9375rem;
-        color: var(--text-main);
-    }
-    
-    .participant-role {
-        font-size: 0.8125rem;
-        color: var(--text-muted);
-    }
-    
-    .status-badge {
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-    
-    .status-pending {
-        background: var(--yellow-100);
-        color: #92400e;
-    }
-    
-    .status-confirmed {
-        background: #d1fae5;
-        color: #065f46;
-    }
-    
-    .status-declined {
-        background: var(--rose-100);
-        color: var(--rose-700);
-    }
-    
-    /* Action Buttons */
-    .action-buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 24px;
-        flex-wrap: wrap;
-    }
-    
-    @media (max-width: 768px) {
-        .action-buttons {
-            position: fixed;
-            bottom: 80px;
-            left: 0;
-            right: 0;
-            background: var(--bg-surface);
-            border-top: 1px solid var(--border-color);
-            padding: 12px 16px;
-            margin: 0;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            z-index: 50;
-        }
-        
-        .detail-container {
-            padding-bottom: 180px;
-        }
-    }
-</style>
+<!-- Import CSS External -->
+<link rel="stylesheet" href="../assets/css/pages/evento-detalhe.css?v=<?= time() ?>">
 
 <div class="detail-container">
-    <!-- Event Header -->
-    <div class="event-header">
-        <div class="event-type-badge">
-            <i data-lucide="<?= $typeIcons[$event['event_type']] ?? 'calendar' ?>" style="width: 14px;"></i>
-            <?= $typeLabels[$event['event_type']] ?? 'Evento' ?>
-        </div>
-        
-        <h1 class="event-title-large"><?= htmlspecialchars($event['title']) ?></h1>
-        
-        <div class="event-meta-grid">
-            <div class="meta-item">
-                <i data-lucide="calendar"></i>
-                <span>
-                    <?php
-                    $date = new DateTime($event['start_datetime']);
-                    echo $date->format('d/m/Y');
-                    ?>
-                </span>
+
+    <!-- FEEDBACK MESSAGE -->
+    <?php if ($feedbackText): ?>
+    <div class="feedback-message <?= $feedbackClass ?>">
+        <?php if($msg === 'confirmed'): ?>
+            <i data-lucide="check-circle" width="20"></i>
+        <?php else: ?>
+            <i data-lucide="info" width="20"></i>
+        <?php endif; ?>
+        <?= htmlspecialchars($feedbackText) ?>
+    </div>
+    <script>
+        // Auto hide functionality if desired, or just leave it
+        setTimeout(function() {
+            const msg = document.querySelector('.feedback-message');
+            if(msg) msg.style.opacity = '0.5';
+        }, 5000);
+    </script>
+    <?php endif; ?>
+
+    <!-- EVENT SUMMARY CARD -->
+    <div class="event-info-card">
+        <div class="event-main-row">
+            <div class="event-date-box">
+                <?php 
+                $dateObj = new DateTime($event['start_datetime']);
+                ?>
+                <div class="event-day"><?= $dateObj->format('d') ?></div>
+                <div class="event-month"><?= getMesAbbrev($event['start_datetime']) ?></div>
+            </div>
+            <div class="event-details">
+                <div class="event-type"><?= htmlspecialchars($event['title']) ?></div>
+                <div class="event-meta">
+                    <i data-lucide="<?= $typeIcons[$event['event_type']] ?? 'calendar' ?>" width="14"></i> <?= $typeLabels[$event['event_type']] ?? 'Evento' ?>
+                </div>
+                <div class="event-meta" style="margin-top: 4px;">
+                    <i data-lucide="calendar" width="14"></i> <?= formDataPtBr($event['start_datetime']) ?>
+                </div>
+                <div class="event-meta" style="margin-top: 4px;">
+                    <i data-lucide="clock" width="14"></i> <?= date('H:i', strtotime($event['start_datetime'])) ?> - <?= date('H:i', strtotime($event['end_datetime'])) ?>
+                </div>
+                <?php if ($event['location']): ?>
+                <div class="event-meta" style="margin-top: 4px;">
+                    <i data-lucide="map-pin" width="14"></i> <?= htmlspecialchars($event['location']) ?>
+                </div>
+                <?php endif; ?>
             </div>
             
-            <div class="meta-item">
-                <i data-lucide="clock"></i>
-                <span>
-                    <?php
-                    if ($event['all_day']) {
-                        echo 'Dia todo';
-                    } else {
-                        $start = new DateTime($event['start_datetime']);
-                        $end = $event['end_datetime'] ? new DateTime($event['end_datetime']) : null;
-                        echo $start->format('H:i');
-                        if ($end) echo ' - ' . $end->format('H:i');
-                    }
-                    ?>
-                </span>
-            </div>
-            
-            <?php if ($event['location']): ?>
-            <div class="meta-item">
-                <i data-lucide="map-pin"></i>
-                <span><?= htmlspecialchars($event['location']) ?></span>
+            <?php if ($event['created_by'] == $_SESSION['user_id'] || $_SESSION['user_role'] === 'admin'): ?>
+            <div>
+                <a href="evento_editar.php?id=<?= $event['id'] ?>" class="btn-icon btn-edit" title="Editar" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                    <i data-lucide="edit-2" width="16"></i>
+                </a>
             </div>
             <?php endif; ?>
-            
-            <div class="meta-item">
-                <i data-lucide="user"></i>
-                <span>Por <?= htmlspecialchars($event['creator_name'] ?? 'Sistema') ?></span>
+        </div>
+
+        <?php if($event['description']): ?>
+        <div class="event-notes">
+            <strong><i data-lucide="align-left" width="14" style="vertical-align:middle"></i> Descrição:</strong><br>
+            <?= nl2br(htmlspecialchars($event['description'])) ?>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <!-- PARTICIPANTS SECTION -->
+    <div class="detail-section">
+        <div class="section-header">
+            <?php
+                $confirmedCount = 0;
+                foreach ($participants as $p) {
+                    if ($p['status'] == 'confirmed') $confirmedCount++;
+                }
+            ?>
+            <div class="section-title">
+                Participantes <span class="section-count"><?= count($participants) ?></span>
+                <?php if($confirmedCount > 0): ?>
+                    <span style="font-size: 0.85rem; color: var(--green-600); font-weight: 600; margin-left: 8px;">
+                        <i data-lucide="check" width="12" style="vertical-align: middle"></i> <?= $confirmedCount ?> confirmados
+                    </span>
+                <?php endif; ?>
             </div>
-        </div>
-    </div>
-    
-    <!-- Description -->
-    <?php if ($event['description']): ?>
-    <div class="info-card">
-        <div class="card-title-small">
-            <i data-lucide="file-text" style="width: 18px;"></i>
-            Descrição
-        </div>
-        <div class="description-text"><?= htmlspecialchars($event['description']) ?></div>
-    </div>
-    <?php endif; ?>
-    
-    <!-- Participants -->
-    <div class="info-card">
-        <div class="card-title-small">
-            <i data-lucide="users" style="width: 18px;"></i>
-            Participantes (<?= count($participants) ?>)
         </div>
         
         <?php if (empty($participants)): ?>
@@ -352,28 +213,42 @@ renderPageHeader($event['title'], '');
                 Nenhum participante convidado
             </p>
         <?php else: ?>
-            <?php foreach ($participants as $p):
-                $statusClass = 'status-' . $p['status'];
-                $statusLabel = [
-                    'pending' => 'Pendente',
-                    'confirmed' => 'Confirmado',
-                    'declined' => 'Recusou'
-                ];
-                
-                $photo = !empty($p['avatar']) ? $p['avatar'] : 
-                         'https://ui-avatars.com/api/?name=' . urlencode($p['name']) . '&background=dcfce7&color=166534';
-            ?>
-                <div class="participant-item <?= $p['status'] ?>">
-                    <img src="<?= $photo ?>" alt="<?= htmlspecialchars($p['name']) ?>" class="participant-avatar">
-                    <div class="participant-info">
-                        <div class="participant-name"><?= htmlspecialchars($p['name']) ?></div>
-                        <div class="participant-role"><?= htmlspecialchars($p['instrument'] ?: 'Membro') ?></div>
+            <div class="participant-list-grid">
+                <?php foreach ($participants as $p):
+                    $statusClass = $p['status']; // confirmed, pending, declined
+                    $photo = !empty($p['avatar']) ? $p['avatar'] : null;
+                    if($photo && strpos($photo, 'uploads') === false && strpos($photo, 'http') === false) {
+                        $photo = '../assets/uploads/' . $photo;
+                    }
+                    $initials = strtoupper(substr($p['name'], 0, 1));
+                ?>
+                <div class="member-card status-<?= $p['status'] ?>">
+                    <div class="member-avatar" style="background: <?= $p['avatar_color'] ?? '#ccc' ?>;">
+                        <?php if($photo): ?>
+                            <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($p['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        <?php else: ?>
+                            <?= $initials ?>
+                        <?php endif; ?>
+                        <?php if($p['status'] == 'confirmed'): ?>
+                            <div class="status-indicator-icon confirmed"><i data-lucide="check" width="10" height="10"></i></div>
+                        <?php else: ?>
+                            <div class="status-indicator <?= $statusClass ?>"></div>
+                        <?php endif; ?>
                     </div>
-                    <span class="status-badge <?= $statusClass ?>">
-                        <?= $statusLabel[$p['status']] ?>
-                    </span>
+                    <div class="member-info">
+                        <div class="member-name"><?= htmlspecialchars($p['name']) ?></div>
+                        <div class="member-role">
+                            <?= htmlspecialchars($p['instrument'] ?: 'Membro') ?>
+                            <?php if($p['status'] == 'confirmed'): ?>
+                                <span class="badge-confirmed">Confirmado</span>
+                            <?php elseif($p['status'] == 'declined'): ?>
+                                <span class="badge-declined">Recusou</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
     </div>
     
@@ -382,35 +257,26 @@ renderPageHeader($event['title'], '');
         <?php if ($userParticipant): ?>
             <?php if ($userParticipant['status'] !== 'confirmed'): ?>
                 <form method="POST" style="flex: 1;">
-                    <button type="submit" name="confirm_presence" class="btn-success" style="width: 100%;">
-                        <i data-lucide="check" style="width: 16px;"></i>
-                        Confirmar Presença
+                    <button type="submit" name="confirm_presence" class="btn-large btn-confirm" style="width: 100%;">
+                        <i data-lucide="check-circle" width="18"></i> Confirmar
                     </button>
                 </form>
             <?php endif; ?>
             
             <?php if ($userParticipant['status'] !== 'declined'): ?>
                 <form method="POST" style="flex: 1;">
-                    <button type="submit" name="decline_presence" class="btn-danger" style="width: 100%;">
-                        <i data-lucide="x" style="width: 16px;"></i>
-                        Não Poderei Ir
+                    <button type="submit" name="decline_presence" class="btn-large btn-decline" style="width: 100%;">
+                        <i data-lucide="x-circle" width="18"></i> Recusar
                     </button>
                 </form>
             <?php endif; ?>
         <?php endif; ?>
         
-        <?php if ($event['created_by'] == $_SESSION['user_id'] || $_SESSION['user_role'] === 'admin'): ?>
-            <a href="evento_editar.php?id=<?= $event['id'] ?>" class="btn-primary" style="flex: 1; text-decoration: none;">
-                <i data-lucide="edit" style="width: 16px;"></i>
-                Editar Evento
-            </a>
-        <?php endif; ?>
-        
-        <a href="agenda.php" class="btn-secondary" style="flex: 1; text-decoration: none;">
-            <i data-lucide="arrow-left" style="width: 16px;"></i>
+        <a href="agenda.php" class="btn-large btn-back" style="flex: 0;">
             Voltar
         </a>
     </div>
+
 </div>
 
 <script>

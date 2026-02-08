@@ -209,9 +209,12 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         
                         foreach($dayEvents as $evt) {
                             $typeClass = $evt['source'] === 'schedule' ? 'type-escala' : 'type-evento';
+                            $iconName = $evt['source'] === 'schedule' ? 'music' : 'calendar';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass'>";
-                            echo htmlspecialchars($evt['title']);
+                            
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass' title=\"".htmlspecialchars($evt['title'])."\">";
+                            echo "<i data-lucide='$iconName' width='12'></i>";
+                            echo "<span>".htmlspecialchars($evt['title'])."</span>";
                             echo "</div>";
                         }
                         
@@ -252,13 +255,16 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         
                         echo '<div class="calendar-day week-view-day '.($isToday?'today':'').'">';
                         echo '<div class="day-num">'.$dayNum.'</div>';
-                         foreach($dayEvents as $evt) {
+                        foreach($dayEvents as $evt) {
                             $typeClass = $evt['source'] === 'schedule' ? 'type-escala' : 'type-evento';
+                            $iconName = $evt['source'] === 'schedule' ? 'music' : 'calendar';
                             $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
+                            $startTime = date('H:i', strtotime($evt['start_datetime']));
                             
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass' style='height: auto; white-space: normal;'>";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass' title=\"".htmlspecialchars($evt['title'])."\">";
                             echo "<div class='event-time'>$startTime</div>";
-                            echo "<div style='font-weight:600'>".htmlspecialchars($evt['title'])."</div>";
+                            echo "<i data-lucide='$iconName' width='12'></i>";
+                            echo "<span>".htmlspecialchars($evt['title'])."</span>";
                             echo "</div>";
                         }
                         echo '</div>';

@@ -13,6 +13,7 @@ $userId = $_SESSION['user_id'] ?? 1;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
+            // --- DEVOCIONAIS ---
             case 'create':
                 // Extrair referências de versículos do conteúdo
                 $verseRefs = extractVerseReferences($_POST['content']);
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $authorName = $_SESSION['user_name'] ?? 'Alguém';
                 notifyNewDevotional($pdo, $devotionalId, $_POST['title'], $authorName);
                 
-                header('Location: devocionais.php?success=created');
+                header('Location: devocionais.php?tab=word&success=created');
                 exit;
 
             case 'update':
@@ -70,14 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
-                header('Location: devocionais.php?success=updated');
+                header('Location: devocionais.php?tab=word&success=updated');
                 exit;
 
             case 'delete':
                 // Apenas o autor pode deletar (ou admin)
                 $stmt = $pdo->prepare("DELETE FROM devotionals WHERE id = ? AND (user_id = ? OR ? = 'admin')");
                 $stmt->execute([$_POST['id'], $userId, $_SESSION['user_role']]);
-                header('Location: devocionais.php?success=deleted');
+                header('Location: devocionais.php?tab=word&success=deleted');
                 exit;
 
             case 'comment':
@@ -87,13 +88,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $userId,
                     $_POST['comment']
                 ]);
-                header('Location: devocionais.php?success=commented#dev-' . $_POST['devotional_id']);
+                header('Location: devocionais.php?tab=word&success=commented#dev-' . $_POST['devotional_id']);
                 exit;
                 
             case 'delete_comment':
                 $stmt = $pdo->prepare("DELETE FROM devotional_comments WHERE id = ? AND (user_id = ? OR ? = 'admin')");
                 $stmt->execute([$_POST['comment_id'], $userId, $_SESSION['user_role']]);
-                header('Location: devocionais.php?success=comment_deleted');
+                header('Location: devocionais.php?tab=word&success=comment_deleted');
+                exit;
+
+            // --- ORAÇÃO ---
+            case 'create_prayer':
+                // Verificar se tabela existe
+                try {
+                    $pdo->query("SELECT 1 FROM prayer_requests LIMIT 1");
+                    $stmt = $pdo->prepare("INSERT INTO prayer_requests (user_id, title, description, category, is_urgent, is_anonymous, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+                    $stmt->execute([
+                        $userId,
+                        $_POST['title'],
+                        $_POST['description'],
+                        $_POST['category'],
+                        isset($_POST['is_urgent']) ? 1 : 0,
+                        isset($_POST['is_anonymous']) ? 1 : 0
+                    ]);
+                    header('Location: devocionais.php?tab=prayer&success=created');
+                    exit;
+                } catch (Exception $e) {
+                    // Ignore
+                }
+                break;
+
+            case 'pray':
+                $check = $pdo->prepare("SELECT id FROM prayer_interactions WHERE prayer_id = ? AND user_id = ? AND type = 'pray'");
+                $check->execute([$_POST['prayer_id'], $userId]);
+                if (!$check->fetch()) {
+                    $stmt = $pdo->prepare("INSERT INTO prayer_interactions (prayer_id, user_id, type, created_at) VALUES (?, ?, 'pray', NOW())");
+                    $stmt->execute([$_POST['prayer_id'], $userId]);
+                    $pdo->prepare("UPDATE prayer_requests SET prayer_count = prayer_count + 1 WHERE id = ?")->execute([$_POST['prayer_id']]);
+                }
+                header('Location: devocionais.php?tab=prayer#prayer-' . $_POST['prayer_id']);
+                exit;
+
+            case 'comment_prayer':
+                $stmt = $pdo->prepare("INSERT INTO prayer_interactions (prayer_id, user_id, type, comment, created_at) VALUES (?, ?, 'comment', ?, NOW())");
+                $stmt->execute([$_POST['prayer_id'], $userId, $_POST['comment']]);
+                header('Location: devocionais.php?tab=prayer#prayer-' . $_POST['prayer_id']);
+                exit;
+
+            case 'answer_prayer':
+                $stmt = $pdo->prepare("UPDATE prayer_requests SET is_answered = 1, answered_at = NOW() WHERE id = ? AND user_id = ?");
+                $stmt->execute([$_POST['prayer_id'], $userId]);
+                header('Location: devocionais.php?tab=prayer&success=answered');
+                exit;
+                
+            case 'delete_prayer':
+                $stmt = $pdo->prepare("DELETE FROM prayer_requests WHERE id = ? AND user_id = ?");
+                $stmt->execute([$_POST['prayer_id'], $userId]);
+                header('Location: devocionais.php?tab=prayer&success=deleted');
                 exit;
         }
     }
@@ -126,6 +177,8 @@ if (!empty($filterTag)) {
     $sql .= " AND d.id IN (SELECT devotional_id FROM devotional_tags WHERE tag_id = ?)";
     $params[] = $filterTag;
 }
+
+
 
 if ($filterType !== 'all') {
     $sql .= " AND d.media_type = ?";
@@ -163,11 +216,7 @@ if (!empty($filterVerse)) {
     $params[] = "%[verso%$filterVerse%]%";
 }
 
-// Filtro: Série
-if (!empty($filterSeries)) {
-    $sql .= " AND d.series_id = ?";
-    $params[] = $filterSeries;
-}
+
 
 // Filtro: Status de leitura
 if ($filterRead === 'read') {
@@ -182,6 +231,31 @@ $sql .= " ORDER BY is_read ASC, d.created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $devotionals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// --- BUSCAR ORAÇÕES ---
+$prayers = [];
+$prayerTableExists = true;
+try {
+    $pdo->query("SELECT 1 FROM prayer_requests LIMIT 1");
+    
+    $pSql = "SELECT p.*, u.name as author_name, u.avatar as author_avatar,
+            (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'pray') as pray_count,
+            (SELECT COUNT(*) FROM prayer_interactions WHERE prayer_id = p.id AND type = 'comment') as comment_count,
+            IF(pi_user.id IS NOT NULL, 1, 0) as is_interceded
+            FROM prayer_requests p 
+            LEFT JOIN users u ON p.user_id = u.id
+            LEFT JOIN prayer_interactions pi_user ON p.id = pi_user.prayer_id 
+                                                   AND pi_user.user_id = ?
+                                                   AND pi_user.type = 'pray'
+            WHERE p.is_answered = 0
+            ORDER BY is_interceded ASC, p.is_urgent DESC, p.created_at DESC";
+    $pStmt = $pdo->prepare($pSql);
+    $pStmt->execute([$userId]);
+    $prayers = $pStmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    $prayerTableExists = false;
+}
 
 // Buscar tags existentes
 $tagsStmt = $pdo->query("SELECT * FROM tags ORDER BY name");
@@ -224,965 +298,494 @@ function getDevotionalComments($pdo, $devotionalId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-renderAppHeader('Devocionais');
+// Buscar comentários de oração
+function getPrayerComments($pdo, $prayerId) {
+    $stmt = $pdo->prepare("SELECT pi.*, u.name, u.avatar FROM prayer_interactions pi 
+                           LEFT JOIN users u ON pi.user_id = u.id 
+                           WHERE pi.prayer_id = ? AND pi.type = 'comment' 
+                           ORDER BY pi.created_at ASC");
+    $stmt->execute([$prayerId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+renderAppHeader('Espiritualidade');
 ?>
 
 <!-- Quill CSS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="../assets/css/pages/devocionais.css?v=<?= time() ?>" rel="stylesheet">
 
-<style>
-    /* Devocionais Cards */
-    .devotional-card {
-        background: var(--bg-surface);
-        border-radius: 16px;
-        border: 1px solid var(--border-color);
-        overflow: hidden;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .devotional-card:hover {
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    }
-    
-    /* Header do Card */
-    .dev-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 16px;
-        border-bottom: 1px solid var(--border-color);
-    }
-    .dev-avatar {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .dev-avatar-placeholder {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: var(--slate-600);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: var(--font-h3);
-    }
-    .dev-author-info {
-        flex: 1;
-    }
-    .dev-author-name {
-        font-weight: 700;
-        color: var(--text-main);
-        font-size: var(--font-body);
-    }
-    .dev-meta {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: var(--font-caption);
-        color: var(--text-muted);
-    }
-    .dev-type-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: var(--font-caption);
-        font-weight: 600;
-    }
-    
-    /* Content */
-    .dev-content {
-        padding: 16px;
-    }
-    .dev-title {
-        font-size: var(--font-h2);
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 8px;
-    }
-    .dev-text {
-        color: var(--text-body);
-        font-size: var(--font-body);
-        line-height: 1.6;
-    }
-    .dev-text p { margin: 0 0 8px; }
-    
-    /* Media Embed */
-    .dev-media {
-        margin: 12px 0;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    .dev-media iframe {
-        width: 100%;
-        aspect-ratio: 16/9;
-        border: none;
-    }
-    .dev-link-preview {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        background: var(--bg-body);
-        border-radius: 10px;
-        text-decoration: none;
-        color: var(--text-main);
-        transition: background 0.2s;
-    }
-    .dev-link-preview:hover {
-        background: var(--border-color);
-    }
-    
-    /* Tags */
-    .dev-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        padding: 0 16px 16px;
-    }
-    .dev-tag {
-        font-size: var(--font-caption);
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-weight: 600;
-    }
-    
-    /* Footer/Comments */
-    .dev-footer {
-        padding: 12px 16px;
-        background: var(--slate-50);
-        border-top: 1px solid var(--border-color);
-    }
-    .dev-actions {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-    .dev-action-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        font-size: var(--font-body-sm);
-        font-weight: 600;
-        cursor: pointer;
-        padding: 6px 10px;
-        border-radius: 8px;
-        transition: all 0.2s;
-    }
-    .dev-action-btn:hover {
-        background: var(--border-color);
-        color: var(--text-main);
-    }
-    
-    /* Comments Section */
-    .comments-section {
-        display: none;
-        padding: 16px;
-        background: var(--slate-50);
-        border-top: 1px solid var(--border-color);
-    }
-    .comments-section.open {
-        display: block;
-    }
-    .comment-item {
-        display: flex;
-        gap: 10px;
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border-color);
-    }
-    .comment-item:last-child {
-        border-bottom: none;
-    }
-    .comment-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-    .comment-content {
-        flex: 1;
-    }
-    .comment-author {
-        font-weight: 600;
-        font-size: var(--font-body-sm);
-        color: var(--text-main);
-    }
-    .comment-text {
-        font-size: var(--font-body);
-        color: var(--text-body);
-        margin: 2px 0;
-    }
-    .comment-time {
-        font-size: var(--font-caption);
-        color: var(--text-muted);
-    }
-    .comment-form {
-        display: flex;
-        gap: 8px;
-        margin-top: 12px;
-    }
-    .comment-input {
-        flex: 1;
-        padding: 10px 14px;
-        border: 1px solid var(--border-color);
-        border-radius: 24px;
-        font-size: var(--font-body);
-        outline: none;
-        background: white;
-    }
-    .comment-submit {
-        padding: 10px 16px;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: 24px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-    
-    /* Type Badges */
-    .type-text { background: #ecfdf5; color: #047857; }
-    .type-video { background: var(--rose-50); color: var(--rose-600); }
-    .type-audio { background: var(--slate-100); color: var(--slate-600); }
-    .type-link { background: var(--slate-50); color: var(--slate-600); }
-    
-    /* FAB */
-    .fab-create {
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: var(--slate-600);
-        color: white;
-        border: none;
-        box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .fab-create:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 25px rgba(55, 106, 200, 0.5);
-    }
-    
-    /* Filter Tabs */
-    .filter-tabs {
-        display: flex;
-        gap: 4px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
-        scrollbar-width: none;
-    }
-    .filter-tab {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: var(--font-body-sm);
-        font-weight: 600;
-        color: var(--text-muted);
-        text-decoration: none;
-        white-space: nowrap;
-        transition: all 0.2s;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-    }
-    .filter-tab:hover {
-        background: var(--border-color);
-    }
-    .filter-tab.active {
-        background: var(--slate-600);
-        color: white;
-        border-color: var(--slate-600);
-    }
-    
-    /* Reações */
-    .reaction-btn:hover {
-        border-color: var(--primary);
-        background: var(--primary)10;
-        transform: translateY(-1px);
-    }
-    
-    .reaction-btn.reacted {
-        background: var(--slate-600);
-        border-color: var(--slate-600);
-    }
-    
-    .reaction-btn.reacted span {
-        color: white !important;
-    }
-    
-    /* Cards Colapsáveis */
-    .devotional-card {
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-    
-    /* Esconder apenas conteúdo detalhado quando collapsed */
-    .devotional-card.collapsed .dev-media,
-    .devotional-card.collapsed .dev-text,
-    .devotional-card.collapsed .dev-link-preview,
-    .devotional-card.collapsed .dev-footer,
-    .devotional-card.collapsed .comments-section {
-        display: none !important;
-    }
-    
-    .devotional-card.collapsed {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-    
-    .devotional-card.collapsed:hover {
-        box-shadow: 0 4px 12px rgba(55, 106, 200, 0.15);
-        transform: translateY(-2px);
-    }
-    
-    .devotional-card.collapsed .dev-title {
-        margin-bottom: 8px;
-        font-size: var(--font-h3);
-    }
-    
-    .dev-preview {
-        font-size: var(--font-body-sm);
-        color: var(--text-muted);
-        line-height: 1.5;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        margin-top: 8px;
-    }
-    
-    /* Esconder preview quando expandido */
-    .devotional-card:not(.collapsed) .dev-preview {
-        display: none;
-    }
-    
-    .expand-indicator {
-        position: absolute;
-        bottom: 12px;
-        right: 16px;
-        background: var(--slate-600);
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: var(--font-caption);
-        font-weight: 600;
-        display: none;
-        align-items: center;
-        gap: 4px;
-    }
-    
-    .devotional-card.collapsed .expand-indicator {
-        display: flex;
-    }
-    
-    /* Cards Lidos vs Não Lidos */
-    .devotional-card.read {
-        opacity: 0.7;
-        border: 1px dashed var(--border-color);
-    }
-    
-    .devotional-card.read .dev-title {
-        color: var(--text-muted);
-    }
-    
-    .devotional-card.unread {
-        background: var(--slate-50);
-        border-left: 3px solid var(--slate-600);
-    }
-    /* Barra de Filtros Inteligente */
-    .filter-toolbar {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-        align-items: center;
-    }
-    
-    .filter-group {
-        flex: 1;
-        position: relative;
-    }
-    
-    .filter-select {
-        width: 100%;
-        padding: 10px 12px 10px 36px; /* Espaço para ícone */
-        background-color: white;
-        border: 1px solid var(--slate-200);
-        border-radius: 12px;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #4a5568;
-        appearance: none;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-    }
-    
-    .filter-select:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary)15;
-        outline: none;
-    }
-    
-    .filter-icon {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        color: #718096;
-    }
-    
-    .btn-advanced-filter {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: white;
-        border: 1px solid var(--slate-200);
-        border-radius: 12px;
-        color: #718096;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        flex-shrink: 0;
-    }
-    
-    .btn-advanced-filter.active {
-        background: var(--primary)10;
-        color: var(--primary);
-        border-color: var(--primary);
-    }
-    
-    .btn-advanced-filter:hover {
-        background: #f7fafc;
-        transform: translateY(-1px);
-    }
-</style>
-
-<?php renderPageHeader('Devocionais', 'Louvor PIB Oliveira'); ?>
+<?php renderPageHeader('Espiritualidade', 'Louvor PIB Oliveira'); ?>
 
 <div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
 
-    
-    <!-- Toolbar de Filtros Compacta -->
-    <div class="filter-toolbar">
-        <!-- Filtro Leitura -->
-        <div class="filter-group">
-            <i class="filter-icon" data-lucide="book-open" style="width: 16px; height: 16px;"></i>
-            <select onchange="window.location.href='?read_status='+this.value+'&type=<?= $filterType ?>'" class="filter-select">
-                <option value="all" <?= $filterRead === 'all' ? 'selected' : '' ?>>Todas</option>
-                <option value="unread" <?= $filterRead === 'unread' ? 'selected' : '' ?>>Não Lidas</option>
-                <option value="read" <?= $filterRead === 'read' ? 'selected' : '' ?>>Lidas</option>
-            </select>
-        </div>
-        
-        <!-- Botão Filtros Avançados -->
-        <button onclick="toggleAdvancedFilters()" class="btn-advanced-filter <?= (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)) ? 'active' : '' ?>" title="Filtros Avançados">
-            <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
-            <?php if (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)): ?>
-                <span style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: var(--primary); border-radius: 50%;"></span>
-            <?php endif; ?>
-        </button>
-        
-        <!-- Botão Limpar (aparece somente se houver filtros ativos) -->
-        <?php if (!empty($filterAuthor) || !empty($filterDateFrom) || !empty($filterDateTo) || !empty($filterVerse) || !empty($filterSeries) || !empty($search)): ?>
-        <button onclick="window.location.href='devocionais.php'" class="btn-advanced-filter" style="color: var(--rose-500); border-color: var(--rose-200); background: var(--rose-50);" title="Limpar Filtros">
-            <i data-lucide="x" style="width: 20px; height: 20px;"></i>
-        </button>
-        <?php endif; ?>
+    <!-- TABS -->
+    <div class="page-tabs">
+        <button class="tab-btn active" onclick="switchTab('word')" id="btn-tab-word">📖 Palavra</button>
+        <button class="tab-btn" onclick="switchTab('prayer')" id="btn-tab-prayer">🙏 Oração</button>
     </div>
 
-    <!-- Painel de Filtros Avançados -->
-    <div id="advanced-filters-panel" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-        <form method="GET" action="devocionais.php">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+    <!-- CONTEÚDO: PALAVRA (DEVOCIONAIS) -->
+    <div id="tab-word" class="tab-content active">
+        <!-- Busca Inteligente Unificada -->
+        <div style="margin-bottom: 20px;">
+            <!-- Campo de Busca Principal -->
+            <div style="position: relative;">
+                <i data-lucide="search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
+                <input 
+                    type="text" 
+                    id="smartSearch" 
+                    placeholder="Buscar por título ou conteúdo..." 
+                    value="<?= htmlspecialchars($search) ?>"
+                    style="width: 100%; padding: 14px 14px 14px 48px; border-radius: 14px; border: 1px solid var(--border-medium); font-size: 1rem; outline: none; transition: all 0.2s; background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-sm);"
+                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 3px var(--primary-light)'"
+                    onblur="this.style.borderColor='var(--border-medium)'; this.style.boxShadow='var(--shadow-sm)'"
+                    oninput="handleSmartSearch(this.value)"
+                >
+            </div>
+
+            <!-- Filtros Rápidos (Pills) -->
+            <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center;">
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Filtros:</span>
                 
-                <!-- Buscar por Autor -->
-                <div>
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
-                        👤 Autor
-                    </label>
-                    <select name="author" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
-                        <option value="">Todos</option>
-                        <?php foreach ($allAuthors as $author): ?>
-                            <option value="<?= $author['id'] ?>" <?= $filterAuthor == $author['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($author['name']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                
-                <!-- Data Inicial -->
-                <div>
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
-                        📅 De
-                    </label>
-                    <input type="date" name="date_from" value="<?= htmlspecialchars($filterDateFrom) ?>" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
-                </div>
-                
-                <!-- Data Final -->
-                <div>
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
-                        📅 Até
-                    </label>
-                    <input type="date" name="date_to" value="<?= htmlspecialchars($filterDateTo) ?>" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
-                </div>
-                
-                <!-- Buscar por Versículo -->
-                <div>
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
-                        📖 Versículo
-                    </label>
-                    <input type="text" name="verse" value="<?= htmlspecialchars($filterVerse) ?>" placeholder="Ex: João 3:16" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
-                </div>
-                
-                <!-- Série -->
-                <?php if (!empty($allSeries)): ?>
-                <div>
-                    <label style="display: block; font-size: var(--font-caption); font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
-                        📚 Série
-                    </label>
-                    <select name="series" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: var(--font-body-sm);">
-                        <option value="">Todas</option>
-                        <?php foreach ($allSeries as $series): ?>
-                            <option value="<?= $series['id'] ?>" <?= $filterSeries == $series['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($series['title']) ?> (<?= $series['devotional_count'] ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <!-- Status Pills -->
+                <a href="?read_status=all&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>" 
+                   class="filter-pill <?= $filterRead === 'all' ? 'active' : '' ?>">
+                    Todas
+                </a>
+                <a href="?read_status=unread&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>" 
+                   class="filter-pill <?= $filterRead === 'unread' ? 'active' : '' ?>">
+                    Não Lidas
+                </a>
+                <a href="?read_status=read&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>" 
+                   class="filter-pill <?= $filterRead === 'read' ? 'active' : '' ?>">
+                    Lidas
+                </a>
+
+                <span style="width: 1px; height: 20px; background: var(--border-medium); margin: 0 4px;"></span>
+
+                <!-- Autor Dropdown Compacto -->
+                <select onchange="window.location.href='?author='+this.value+'&read_status=<?= $filterRead ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>'" 
+                        style="padding: 6px 32px 6px 12px; border-radius: 20px; border: 1px solid var(--border-medium); font-size: 0.85rem; font-weight: 600; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748b%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center;">
+                    <option value="">👤 Todos</option>
+                    <?php foreach ($allAuthors as $author): ?>
+                        <option value="<?= $author['id'] ?>" <?= $filterAuthor == $author['id'] ? 'selected' : '' ?>><?= htmlspecialchars($author['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <!-- Tag Dropdown Compacto -->
+                <select onchange="window.location.href='?tag='+this.value+'&read_status=<?= $filterRead ?>&author=<?= $filterAuthor ?>&search=<?= urlencode($search) ?>'" 
+                        style="padding: 6px 32px 6px 12px; border-radius: 20px; border: 1px solid var(--border-medium); font-size: 0.85rem; font-weight: 600; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748b%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center;">
+                    <option value="">🏷️ Todas</option>
+                    <?php foreach ($allTags as $tag): ?>
+                        <option value="<?= $tag['id'] ?>" <?= $filterTag == $tag['id'] ? 'selected' : '' ?>>#<?= htmlspecialchars($tag['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <!-- Limpar Filtros -->
+                <?php if (!empty($search) || $filterRead !== 'all' || !empty($filterAuthor) || !empty($filterTag)): ?>
+                <a href="?" style="padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background: var(--red-50); color: var(--red-600); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                    <i data-lucide="x" style="width: 14px;"></i> Limpar
+                </a>
                 <?php endif; ?>
             </div>
-            
-            <button type="submit" style="margin-top: 12px; width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
-                Aplicar Filtros
-            </button>
-        </form>
-    </div>
-    
-    <!-- Feed de Devocionais -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-        <?php if (count($devotionals) > 0): ?>
-            <?php foreach ($devotionals as $dev): 
-                $devTags = getDevotionalTags($pdo, $dev['id']);
-                $comments = getDevotionalComments($pdo, $dev['id']);
-                
-                // Tempo relativo
-                $createdAt = new DateTime($dev['created_at']);
-                $now = new DateTime();
-                $diff = $now->diff($createdAt);
-                
-                if ($diff->y > 0) $timeAgo = $diff->y . ' ano(s)';
-                elseif ($diff->m > 0) $timeAgo = $diff->m . ' mês(es)';
-                elseif ($diff->d > 0) $timeAgo = $diff->d . ' dia(s)';
-                elseif ($diff->h > 0) $timeAgo = $diff->h . 'h';
-                elseif ($diff->i > 0) $timeAgo = $diff->i . 'min';
-                else $timeAgo = 'agora';
-                
-                // Avatar
-                $authorAvatar = !empty($dev['author_avatar']) ? $dev['author_avatar'] : null;
-                if ($authorAvatar && strpos($authorAvatar, 'http') === false) {
-                    $authorAvatar = '../assets/uploads/' . $authorAvatar;
-                }
-                
-                // Type config
-                $typeConfig = [
-                    'text' => ['icon' => '📝', 'label' => 'Texto', 'class' => 'type-text'],
-                    'video' => ['icon' => '🎬', 'label' => 'Vídeo', 'class' => 'type-video'],
-                    'audio' => ['icon' => '🎵', 'label' => 'Áudio', 'class' => 'type-audio'],
-                    'link' => ['icon' => '🔗', 'label' => 'Link', 'class' => 'type-link']
-                ];
-                $tc = $typeConfig[$dev['media_type']] ?? $typeConfig['text'];
-                $readClass = $dev['is_read'] ? 'read' : 'unread';
-            ?>
-            <div class="devotional-card animate-in collapsed <?= $readClass ?>" id="dev-<?= $dev['id'] ?>" onclick="toggleDevotionalCard(<?= $dev['id'] ?>, event)" data-is-read="<?= $dev['is_read'] ?>">
-                <!-- Header -->
-                <div class="dev-header">
-                    <?php if ($authorAvatar): ?>
-                        <img src="<?= htmlspecialchars($authorAvatar) ?>" class="dev-avatar" alt="Avatar">
-                    <?php else: ?>
-                        <div class="dev-avatar-placeholder"><?= strtoupper(substr($dev['author_name'] ?? 'U', 0, 1)) ?></div>
-                    <?php endif; ?>
-                    
-                    <div class="dev-author-info">
-                        <div class="dev-author-name"><?= htmlspecialchars($dev['author_name'] ?? 'Anônimo') ?></div>
-                        <div class="dev-meta">
-                            <span class="dev-type-badge <?= $tc['class'] ?>"><?= $tc['icon'] ?> <?= $tc['label'] ?></span>
-                            <span>• <?= $timeAgo ?></span>
-                        </div>
-                        <?php if (!empty($dev['series_title'])): ?>
-                        <a href="?series=<?= $dev['series_id'] ?>" style="
-                            display: inline-flex;
-                            align-items: center;
-                            gap: 4px;
-                            padding: 4px 10px;
-                            background: <?= $dev['series_color'] ?? '#667eea' ?>20;
-                            color: <?= $dev['series_color'] ?? '#667eea' ?>;
-                            border-radius: 12px;
-                            font-size: var(--font-caption);
-                            font-weight: 600;
-                            text-decoration: none;
-                            margin-top: 4px;
-                        ">
-                            📚 <?= htmlspecialchars($dev['series_title']) ?>
-                        </a>
+        </div>
+        
+        <!-- Feed de Devocionais -->
+        <div class="devotionals-list">
+            <?php if (count($devotionals) > 0): ?>
+                <?php foreach ($devotionals as $dev): 
+                    $tags = getDevotionalTags($pdo, $dev['id']);
+                    $comments = getDevotionalComments($pdo, $dev['id']);
+                    $authorName = $dev['author_name'] ?? 'Membro';
+                    $authorAvatar = $dev['author_avatar'] ?? null;
+                    if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
+                        $authorAvatar = '../assets/uploads/' . $authorAvatar;
+                    }
+                ?>
+                <div class="devotional-card collapsed <?= $dev['is_read'] ? 'read' : 'unread' ?>" id="dev-<?= $dev['id'] ?>" onclick="toggleDevotional(<?= $dev['id'] ?>, event)">
+                    <!-- Header -->
+                    <div class="dev-header">
+                        <?php if ($authorAvatar): ?>
+                            <img src="<?= htmlspecialchars($authorAvatar) ?>" class="dev-avatar" alt="">
+                        <?php else: ?>
+                            <div class="dev-avatar-placeholder"><?= strtoupper(substr($authorName, 0, 1)) ?></div>
                         <?php endif; ?>
-                    </div>
-                    
-                    <?php if ($dev['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
-                    <div style="position: relative;">
-                        <button onclick="toggleDevMenu('menu-<?= $dev['id'] ?>')" style="background: none; border: none; padding: 8px; cursor: pointer; color: var(--text-muted); border-radius: 50%;">
-                            <i data-lucide="more-vertical" style="width: 18px;"></i>
-                        </button>
-                        <div id="menu-<?= $dev['id'] ?>" class="dev-dropdown" style="display: none; position: absolute; right: 0; top: 100%; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-color); min-width: 140px; z-index: 50;">
-                            <a href="#" onclick="openEditModal(<?= htmlspecialchars(json_encode($dev)) ?>)" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: var(--text-main); text-decoration: none; font-size: var(--font-body);">
-                                <i data-lucide="edit-2" style="width: 16px;"></i> Editar
-                            </a>
-                            <form method="POST" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja excluir?')">
+                        
+                        <div class="dev-author-info">
+                            <div class="dev-author-name">
+                                <?= htmlspecialchars($authorName) ?>
+                                <?php if (!empty($dev['series_title'])): ?>
+                                    <span style="font-weight: 400; color: var(--text-muted); font-size: 0.85rem;">
+                                        em <strong style="color: <?= $dev['series_color'] ?: 'var(--primary)' ?>"><?= htmlspecialchars($dev['series_title']) ?></strong>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="dev-meta">
+                                <span><?= date('d/m \à\s H:i', strtotime($dev['created_at'])) ?></span>
+                                <?php if (!$dev['is_read']): ?>
+                                    <span style="color: var(--green-600); font-weight: 600;">• Novo</span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        
+                        <?php if ($dev['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
+                        <div class="dev-options" onclick="event.stopPropagation()">
+                             <form method="POST" onsubmit="return confirm('Excluir este devocional?');" style="display:inline;">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $dev['id'] ?>">
-                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: var(--rose-600); background: none; border: none; border-top: 1px solid var(--border-color); font-size: var(--font-body-sm); cursor: pointer; text-align: left;">
-                                    <i data-lucide="trash-2" style="width: 16px;"></i> Excluir
+                                <button type="submit" style="background:none; border:none; color: var(--text-muted); cursor: pointer; padding: 4px;">
+                                    <i data-lucide="trash-2" style="width: 18px;"></i>
                                 </button>
                             </form>
                         </div>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                
-                <!-- Content -->
-                <div class="dev-content">
-                    <h3 class="dev-title"><?= htmlspecialchars($dev['title']) ?></h3>
-                    
-                    <!-- Preview (visível quando collapsed) -->
-                    <div class="dev-preview">
-                        <?php 
-                        $previewText = strip_tags($dev['content']);
-                        echo htmlspecialchars(mb_substr($previewText, 0, 120)) . (mb_strlen($previewText) > 120 ? '...' : '');
-                        ?>
-                    </div>
-                    
-                    <!-- Indicador de expansão -->
-                    <div class="expand-indicator">
-                        <i data-lucide="chevron-down" style="width: 14px;"></i>
-                        Ver mais
-                    </div>
-                    
-                    <?php if ($dev['media_type'] === 'video' && !empty($dev['media_url'])): ?>
-                        <div class="dev-media">
-                            <?php
-                            $videoUrl = $dev['media_url'];
-                            // YouTube
-                            if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $videoUrl, $matches)) {
-                                $videoId = $matches[1];
-                                echo '<iframe src="https://www.youtube.com/embed/' . $videoId . '" allowfullscreen></iframe>';
-                            } else {
-                                echo '<a href="' . htmlspecialchars($videoUrl) . '" target="_blank" class="dev-link-preview">
-                                    <i data-lucide="play-circle" style="width: 24px; color: var(--rose-600);"></i>
-                                    <span>Assistir vídeo</span>
-                                </a>';
-                            }
-                            ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($dev['media_type'] === 'audio' && !empty($dev['media_url'])): ?>
-                        <div class="dev-media">
-                            <?php
-                            $audioUrl = $dev['media_url'];
-                            // Spotify
-                            if (strpos($audioUrl, 'spotify.com') !== false) {
-                                $embedUrl = str_replace('/track/', '/embed/track/', $audioUrl);
-                                echo '<iframe src="' . htmlspecialchars($embedUrl) . '" height="80" frameborder="0" allow="encrypted-media" style="border-radius: 12px; width: 100%;"></iframe>';
-                            } else {
-                                echo '<audio controls style="width: 100%;">
-                                    <source src="' . htmlspecialchars($audioUrl) . '">
-                                </audio>';
-                            }
-                            ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($dev['media_type'] === 'link' && !empty($dev['media_url'])): ?>
-                        <a href="<?= htmlspecialchars($dev['media_url']) ?>" target="_blank" class="dev-link-preview">
-                            <i data-lucide="external-link" style="width: 20px; color: var(--slate-600);"></i>
-                            <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($dev['media_url']) ?></span>
-                            <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted);"></i>
-                        </a>
-                    <?php endif; ?>
-                    
-                    <?php if (!empty($dev['content'])): ?>
-                        <div class="dev-text"><?= parseVerseShortcodes($dev['content']) ?></div>
-                    <?php endif; ?>
-                </div>
-                
-                <!-- Tags -->
-                <?php if (!empty($devTags)): ?>
-                <div class="dev-tags">
-                    <?php foreach ($devTags as $tag): ?>
-                        <a href="?tag=<?= $tag['id'] ?>" class="dev-tag" style="background: <?= $tag['color'] ?>20; color: <?= $tag['color'] ?>;">
-                            🏷️ <?= htmlspecialchars($tag['name']) ?>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?>
-                
-                <!-- Footer Actions -->
-                <div class="dev-footer" style="padding: 14px 16px;" data-devotional-id="<?= $dev['id'] ?>">
-                    <!-- Reações -->
-                    <div id="reactions-<?= $dev['id'] ?>" style="display: flex; gap: 8px; margin-bottom: 12px;">
-                        <button class="reaction-btn btn-amen" onclick="toggleReaction(<?= $dev['id'] ?>, 'amen')" style="
-                            display: flex;
-                            align-items: center;
-                            gap: 6px;
-                            padding: 8px 12px;
-                            background: var(--bg-surface);
-                            border: 1.5px solid var(--border-color);
-                            border-radius: 20px;
-                            cursor: pointer;
-                            transition: all 0.2s;
-                            font-size: var(--font-body-sm);
-                        ">
-                            <span style="font-size: 1.1rem;">🙏</span>
-                           <span class="count-amen" style="font-weight: 600; color: var(--text-muted);"></span>
-                        </button>
-                        
-                        <button class="reaction-btn btn-prayer" onclick="toggleReaction(<?= $dev['id'] ?>, 'prayer')" style="
-                            display: flex;
-                            align-items: center;
-                            gap: 6px;
-                            padding: 8px 12px;
-                            background: var(--bg-surface);
-                            border: 1.5px solid var(--border-color);
-                            border-radius: 20px;
-                            cursor: pointer;
-                            transition: all 0.2s;
-                            font-size: var(--font-body-sm);
-                        ">
-                            <span style="font-size: 1.1rem;">❤️</span>
-                            <span class="count-prayer" style="font-weight: 600; color: var(--text-muted);"></span>
-                        </button>
-                        
-                        <button class="reaction-btn btn-inspired" onclick="toggleReaction(<?= $dev['id'] ?>, 'inspired')" style="
-                            display: flex;
-                            align-items: center;
-                            gap: 6px;
-                            padding: 8px 12px;
-                            background: var(--bg-surface);
-                            border: 1.5px solid var(--border-color);
-                            border-radius: 20px;
-                            cursor: pointer;
-                            transition: all 0.2s;
-                            font-size: var(--font-body-sm);
-                        ">
-                            <span style="font-size: 1.1rem;">💡</span>
-                            <span class="count-inspired" style="font-weight: 600; color: var(--text-muted);"></span>
-                        </button>
-                    </div>
-                    
-                    <!-- Ações -->
-                    <div class="dev-actions" style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <button class="dev-action-btn" onclick="toggleComments('comments-<?= $dev['id'] ?>')">
-                            <i data-lucide="message-circle" style="width: 18px;"></i>
-                            <span><?= count($comments) ?> comentário(s)</span>
-                        </button>
-                        
-                        <button class="dev-action-btn" onclick="shareWhatsApp(<?= $dev['id'] ?>, '<?= addslashes($dev['title']) ?>')">
-                            <i data-lucide="share-2" style="width: 18px;"></i>
-                            <span>Compartilhar</span>
-                        </button>
-                        
-                        <button class="dev-action-btn" onclick="openReadingMode(<?= $dev['id'] ?>)">
-                            <i data-lucide="maximize-2" style="width: 18px;"></i>
-                            <span>Modo Leitura</span>
-                        </button>
-                        
-                        <button class="dev-action-btn btn-mark-read" data-id="<?= $dev['id'] ?>" onclick="toggleReadStatus(<?= $dev['id'] ?>, this)" style="<?= $dev['is_read'] ? 'color: var(--primary); background: var(--primary)10;' : '' ?>">
-                            <i data-lucide="<?= $dev['is_read'] ? 'check-circle' : 'circle' ?>" style="width: 18px;"></i>
-                            <span><?= $dev['is_read'] ? 'Lido' : 'Marcar como lido' ?></span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Comments Section -->
-                <div id="comments-<?= $dev['id'] ?>" class="comments-section">
-                    <?php foreach ($comments as $comment): 
-                        $commentAvatar = !empty($comment['author_avatar']) ? $comment['author_avatar'] : null;
-                        if ($commentAvatar && strpos($commentAvatar, 'http') === false) {
-                            $commentAvatar = '../assets/uploads/' . $commentAvatar;
-                        }
-                        
-                        $commentTime = new DateTime($comment['created_at']);
-                        $commentDiff = $now->diff($commentTime);
-                        if ($commentDiff->d > 0) $commentTimeAgo = $commentDiff->d . 'd';
-                        elseif ($commentDiff->h > 0) $commentTimeAgo = $commentDiff->h . 'h';
-                        else $commentTimeAgo = $commentDiff->i . 'min';
-                    ?>
-                    <div class="comment-item">
-                        <?php if ($commentAvatar): ?>
-                            <img src="<?= htmlspecialchars($commentAvatar) ?>" class="comment-avatar" alt="">
-                        <?php else: ?>
-                            <div class="comment-avatar" style="background: #a8edea; display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
-                                <?= strtoupper(substr($comment['author_name'] ?? 'U', 0, 1)) ?>
-                            </div>
                         <?php endif; ?>
-                        <div class="comment-content">
-                            <span class="comment-author"><?= htmlspecialchars($comment['author_name'] ?? 'Anônimo') ?></span>
-                            <span class="comment-time">• <?= $commentTimeAgo ?></span>
-                            <p class="comment-text"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="dev-content">
+                        <h2 class="dev-title"><?= htmlspecialchars($dev['title']) ?></h2>
+                        <div class="dev-preview"><?= strip_tags($dev['content']) ?></div>
+                        <div class="dev-text"><?= $dev['content'] ?></div>
+                        
+                        <?php if ($dev['media_type'] === 'video' && !empty($dev['media_url'])): 
+                            $embedUrl = str_replace('watch?v=', 'embed/', $dev['media_url']);
+                        ?>
+                        <div class="dev-media">
+                            <iframe src="<?= htmlspecialchars($embedUrl) ?>" allowfullscreen></iframe>
+                        </div>
+                        <?php elseif ($dev['media_type'] === 'link' && !empty($dev['media_url'])): ?>
+                        <div class="dev-media">
+                            <a href="<?= htmlspecialchars($dev['media_url']) ?>" target="_blank" class="dev-link-preview" onclick="event.stopPropagation()">
+                                <i data-lucide="external-link" style="width: 24px;"></i>
+                                <div style="flex: 1; overflow: hidden;">
+                                    <div style="font-weight: 600; truncate"><?= htmlspecialchars($dev['media_url']) ?></div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Clique para acessar o link externo</div>
+                                </div>
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <!-- Tags -->
+                    <?php if (!empty($tags)): ?>
+                    <div class="dev-tags">
+                        <?php foreach ($tags as $tag): ?>
+                            <span class="dev-tag">#<?= htmlspecialchars($tag['name']) ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <!-- Expand Indicator -->
+                    <div class="expand-indicator">Lear mais <i data-lucide="chevron-down" style="width: 14px;"></i></div>
+                    
+                    <!-- Footer -->
+                    <div class="dev-footer">
+                        <div class="dev-actions">
+                            <button class="dev-action-btn" onclick="toggleComments('comments-<?= $dev['id'] ?>', event)">
+                                <i data-lucide="message-circle" style="width: 18px;"></i>
+                                <span><?= count($comments) ?> Comments</span>
+                            </button>
+                            <button class="dev-action-btn" onclick="shareDevotional(<?= $dev['id'] ?>, '<?= addslashes($dev['title']) ?>', event)">
+                                <i data-lucide="share-2" style="width: 18px;"></i>
+                                <span>Share</span>
+                            </button>
                         </div>
                     </div>
-                    <?php endforeach; ?>
                     
-                    <!-- Comment Form -->
-                    <form method="POST" class="comment-form">
-                        <input type="hidden" name="action" value="comment">
-                        <input type="hidden" name="devotional_id" value="<?= $dev['id'] ?>">
-                        <input type="text" name="comment" class="comment-input" placeholder="Escreva um comentário..." required>
-                        <button type="submit" class="comment-submit">
-                            <i data-lucide="send" style="width: 16px;"></i>
-                        </button>
-                    </form>
+                    <!-- Comments -->
+                    <div id="comments-<?= $dev['id'] ?>" class="comments-section" onclick="event.stopPropagation()">
+                        <?php foreach ($comments as $comment): 
+                             $commentAvatar = $comment['author_avatar'];
+                             if ($commentAvatar && strpos($commentAvatar, 'http') === false) {
+                                $commentAvatar = '../assets/uploads/' . $commentAvatar;
+                            }
+                        ?>
+                        <div class="comment-item">
+                            <?php if ($commentAvatar): ?>
+                                <img src="<?= htmlspecialchars($commentAvatar) ?>" class="comment-avatar" alt="">
+                            <?php else: ?>
+                                <div class="comment-avatar" style="background: var(--slate-300); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #555;">
+                                    <?= strtoupper(substr($comment['author_name'], 0, 1)) ?>
+                                </div>
+                            <?php endif; ?>
+                            <div class="comment-content">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span class="comment-author"><?= htmlspecialchars($comment['author_name']) ?></span>
+                                    <span class="comment-time"><?= date('d/m H:i', strtotime($comment['created_at'])) ?></span>
+                                </div>
+                                <p class="comment-text"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                            </div>
+                             <?php if ($comment['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
+                            <div style="margin-left: 8px;">
+                                <form method="POST" onsubmit="return confirm('Apagar comentário?');">
+                                    <input type="hidden" name="action" value="delete_comment">
+                                    <input type="hidden" name="comment_id" value="<?= $comment['id'] ?>">
+                                    <button type="submit" style="background: none; border: none; color: var(--rose-400); cursor: pointer;">
+                                        <i data-lucide="x" style="width: 14px;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+                        
+                        <form method="POST" class="comment-form">
+                            <input type="hidden" name="action" value="comment">
+                            <input type="hidden" name="devotional_id" value="<?= $dev['id'] ?>">
+                            <input type="text" name="comment" class="comment-input" placeholder="Escreva um comentário..." required>
+                            <button type="submit" class="comment-submit">
+                                <i data-lucide="send" style="width: 18px;"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <!-- Empty State -->
-            <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: #f3e7e9; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i data-lucide="book-open" style="color: #667eea; width: 40px; height: 40px;"></i>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div style="text-align: center; padding: 60px 20px;">
+                    <div style="background: var(--green-50); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <i data-lucide="book-open" style="color: var(--green-400); width: 40px; height: 40px;"></i>
+                    </div>
+                    <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum devocional ainda</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 300px; margin: 0 auto 20px;">Seja o primeiro a compartilhar uma reflexão!</p>
                 </div>
-                <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum devocional ainda</h3>
-                <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
-                    Seja o primeiro a compartilhar uma reflexão com a comunidade!
-                </p>
-                <button onclick="openCreateModal()" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
-                    <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
-                    Criar Devocional
-                </button>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
-    
+
+    <!-- CONTEÚDO: ORAÇÃO -->
+    <div id="tab-prayer" class="tab-content">
+        <div class="prayer-list">
+            <?php if ($prayerTableExists && count($prayers) > 0): ?>
+                <?php foreach ($prayers as $prayer): 
+                    $authorAvatar = $prayer['author_avatar'];
+                     if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
+                        $authorAvatar = '../assets/uploads/' . $authorAvatar;
+                    }
+                ?>
+                <div class="prayer-card <?= ($prayer['is_answered']) ? 'answered' : '' ?> collapsed" onclick="this.classList.toggle('collapsed')">
+                    <div class="prayer-header">
+                        <div class="prayer-user-info">
+                            <?php if ($authorAvatar): ?>
+                                <img src="<?= $authorAvatar ?>" class="prayer-avatar">
+                            <?php else: ?>
+                                <div class="prayer-avatar" style="background: var(--primary-subtle); display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700;">
+                                    <?= strtoupper(substr($prayer['author_name'] ?? 'A', 0, 1)) ?>
+                                </div>
+                            <?php endif; ?>
+                            <div class="prayer-meta">
+                                <h4>
+                                    <?= $prayer['is_anonymous'] ? 'Anônimo' : htmlspecialchars($prayer['author_name'] ?? 'Anônimo') ?>
+                                    <?php if($prayer['is_urgent']): ?>
+                                        <span style="color: var(--rose-500);">🔥</span>
+                                    <?php endif; ?>
+                                </h4>
+                                <span><?= date('d/m \à\s H:i', strtotime($prayer['created_at'])) ?></span>
+                            </div>
+                        </div>
+                        
+                        <span class="cat-badge cat-<?= $prayer['category'] ?? 'other' ?>">
+                            <?php
+                                $cats = [
+                                    'health' => 'Saúde', 'family' => 'Família', 
+                                    'work' => 'Trabalho', 'spiritual' => 'Espiritual',
+                                    'gratitude' => 'Gratidão', 'other' => 'Outros'
+                                ];
+                                echo $cats[$prayer['category']] ?? 'Outros';
+                            ?>
+                        </span>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="prayer-content">
+                        <h3 class="prayer-title"><?= htmlspecialchars($prayer['title']) ?></h3>
+                        <?php if (!empty($prayer['description'])): ?>
+                            <div class="prayer-description"><?= nl2br(htmlspecialchars($prayer['description'])) ?></div>
+                        <?php endif; ?>
+                        
+                        <!-- Expand Indicator -->
+                        <div class="expand-indicator">
+                            Ler mais <i data-lucide="chevron-down" style="width: 14px;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="prayer-footer">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this); event.stopPropagation();" class="pray-action-btn <?= $prayer['is_interceded'] ? 'active' : '' ?>">
+                                <i data-lucide="heart" style="width: 16px; <?= $prayer['is_interceded'] ? 'fill: currentColor;' : '' ?>"></i>
+                                <span><?= $prayer['is_interceded'] ? 'Intercedi' : 'Interceder' ?></span> (<?= $prayer['pray_count'] ?>)
+                            </button>
+                        </div>
+                        
+                        <?php if ($prayer['user_id'] == $userId && !$prayer['is_answered']): ?>
+                        <form method="POST" style="margin: 0;" onclick="event.stopPropagation()">
+                            <input type="hidden" name="action" value="answer_prayer">
+                            <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
+                            <button type="submit" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                                ✓ Marcar respondida
+                            </button>
+                        </form>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div style="text-align: center; padding: 60px 20px;">
+                    <div style="background: var(--primary-subtle); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <i data-lucide="heart" style="color: var(--primary); width: 40px; height: 40px;"></i>
+                    </div>
+                    <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum pedido de oração</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 300px; margin: 0 auto 20px;">
+                        Compartilhe seus pedidos e deixe a igreja orar por você.
+                    </p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <div style="height: 100px;"></div>
+
 </div>
 
-<!-- FAB Button -->
-<button onclick="openCreateModal()" class="fab-create">
-    <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
-</button>
+<!-- DUAL FAB BUTTONS -->
+<div class="fab-container">
+    <button onclick="openCreatePrayerModal()" class="fab-btn fab-prayer" id="fab-prayer">
+        <i data-lucide="heart" style="width: 20px; height: 20px;"></i> Novo Pedido
+    </button>
+    <button onclick="openCreateModal()" class="fab-btn fab-devotional" id="fab-word">
+        <i data-lucide="feather" style="width: 20px; height: 20px;"></i> Novo Devocional
+    </button>
+</div>
 
-<!-- Modal Create/Edit -->
+<!-- Modal Create Devotional -->
 <div id="devotionalModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
     <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);"></div>
-    
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 550px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
-        
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 600px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 id="modalTitle" style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: var(--text-main);">✨ Nova Devocional</h2>
+            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--text-main);">📖 Novo Devocional</h2>
             <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
                 <i data-lucide="x" style="width: 20px;"></i>
             </button>
         </div>
-        
         <form method="POST" id="devotionalForm" onsubmit="return prepareSubmit()">
-            <input type="hidden" name="action" id="formAction" value="create">
-            <input type="hidden" name="id" id="devId">
+            <input type="hidden" name="action" value="create">
             <input type="hidden" name="content" id="hiddenContent">
             
-            <!-- Título -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título</label>
-                <input type="text" name="title" id="devTitle" required placeholder="Ex: A paz que excede o entendimento" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Título</label>
+                <input type="text" name="title" required placeholder="Ex: A paz que excede todo entendimento">
             </div>
             
-            <!-- Tipo de Mídia -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: var(--font-body-sm);">Tipo de Conteúdo</label>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-                    <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="media_type" value="text" checked style="display: none;">
-                        <span style="font-size: var(--font-display);">📝</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Texto</span>
-                    </label>
-                    <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="media_type" value="video" style="display: none;">
-                        <span style="font-size: var(--font-display);">🎬</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Vídeo</span>
-                    </label>
-                    <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="media_type" value="audio" style="display: none;">
-                        <span style="font-size: var(--font-display);">🎵</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Áudio</span>
-                    </label>
-                    <label class="type-option" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <input type="radio" name="media_type" value="link" style="display: none;">
-                        <span style="font-size: var(--font-display);">🔗</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Link</span>
-                    </label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Conteúdo</label>
+                <div id="editor"></div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <div>
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Tipo de Mídia</label>
+                    <select name="media_type" onchange="toggleMediaInput(this.value)">
+                        <option value="text">Apenas Texto</option>
+                        <option value="video">Vídeo (YouTube)</option>
+                        <option value="link">Link Externo</option>
+                    </select>
+                </div>
+                <!-- URL Media Group -->
+                 <div id="mediaUrlGroup" style="display: none;">
+                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">URL da Mídia</label>
+                    <input type="url" name="media_url" placeholder="https://...">
                 </div>
             </div>
-            
-            <!-- URL de Mídia (condicional) -->
-            <div id="mediaUrlField" style="margin-bottom: 16px; display: none;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">
-                    <span id="mediaUrlLabel">URL do Vídeo</span>
-                </label>
-                <input type="url" name="media_url" id="devMediaUrl" placeholder="https://youtube.com/watch?v=..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
-                <p id="mediaUrlHint" style="margin: 6px 0 0; font-size: var(--font-caption); color: var(--text-muted);">Cole o link do YouTube, Vimeo, etc.</p>
-            </div>
-            
-            <!-- Editor de Texto -->
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Conteúdo</label>
-                <div id="editor" style="height: 150px; background: white; border-radius: 12px;"></div>
-            </div>
-            
-            <!-- Tags -->
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: var(--font-body);">Tags (opcional)</label>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                    <?php foreach ($allTags as $tag): ?>
-                    <label style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; cursor: pointer; transition: all 0.2s; background: <?= $tag['color'] ?>15; border: 1px solid <?= $tag['color'] ?>40;">
-                        <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" style="display: none;" class="tag-checkbox">
-                        <span style="color: <?= $tag['color'] ?>; font-size: var(--font-body-sm); font-weight: 600;"><?= htmlspecialchars($tag['name']) ?></span>
-                    </label>
-                    <?php endforeach; ?>
+             <div style="margin-bottom: 24px; position: relative;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Tags (Assuntos)</label>
+                
+                <div class="custom-dropdown" style="position: relative;">
+                    <button type="button" onclick="toggleTagDropdown()" id="tagDropdownBtn" style="width: 100%; text-align: left; padding: 14px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Selecionar Tags...</span>
+                        <i data-lucide="chevron-down" style="width: 16px;"></i>
+                    </button>
+                    
+                    <div id="tagDropdownList" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 10; padding: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 8px;">
+                        <?php foreach ($allTags as $tag): ?>
+                        <label style="display: flex; align-items: center; padding: 10px; cursor: pointer; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                            <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" style="margin-right: 12px; width: 18px; height: 18px; accent-color: var(--primary);" onchange="updateTagButton()">
+                            <span style="color: var(--text-main); font-weight: 500; font-size: 0.95rem;"><?= htmlspecialchars($tag['name']) ?></span>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-                <?php if (empty($allTags)): ?>
-                <p style="color: var(--text-muted); font-size: var(--font-body-sm);">Nenhuma tag disponível. Crie tags no Repertório primeiro.</p>
-                <?php endif; ?>
             </div>
-            
-            <!-- Buttons -->
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
-                    Cancelar
-                </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: #667eea; color: white; font-weight: 700; cursor: pointer;">
-                    Publicar
-                </button>
+                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">Cancelar</button>
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">Publicar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Create Prayer -->
+<div id="prayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
+    <div onclick="closePrayerModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);"></div>
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--primary-subtle); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 1.5rem;">🙏</span>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Novo Pedido</h2>
+                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Compartilhe com a igreja</p>
+                </div>
+            </div>
+            <button onclick="closePrayerModal()" style="background: var(--bg-body); border: none; color: var(--text-muted); cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                <i data-lucide="x" style="width: 18px;"></i>
+            </button>
+        </div>
+        <form method="POST">
+            <input type="hidden" name="action" value="create_prayer">
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Título do Pedido</label>
+                <input type="text" name="title" required placeholder="Ex: Oração pela saúde do meu pai">
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Descrição (opcional)</label>
+                <textarea name="description" rows="4" style="width: 100%; border-radius: 12px; border: 1px solid var(--border-color); padding: 12px; resize: none;" placeholder="Detalhes do pedido..."></textarea>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 0.95rem;">Categoria</label>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                     <!-- Options (simplified for brevity) -->
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color);">
+                        <input type="radio" name="category" value="health" style="display: none;">
+                        <span style="font-size: 1.5rem;">❤️</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Saúde</span>
+                    </label>
+                     <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color);">
+                        <input type="radio" name="category" value="family" style="display: none;">
+                        <span style="font-size: 1.5rem;">👨‍👩‍👧</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Família</span>
+                    </label>
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color);">
+                        <input type="radio" name="category" value="other" checked style="display: none;">
+                        <span style="font-size: 1.5rem;">🙏</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Outros</span>
+                    </label>
+                </div>
+            </div>
+            <div style="margin-bottom: 20px; display: flex; gap: 16px; flex-wrap: wrap;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" name="is_urgent" style="width: 18px; height: 18px; accent-color: var(--rose-600);">
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" name="is_anonymous" style="width: 18px; height: 18px; accent-color: var(--slate-500);">
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
+                </label>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button type="button" onclick="closePrayerModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">Cancelar</button>
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">Enviar Pedido</button>
             </div>
         </form>
     </div>
@@ -1190,229 +793,166 @@ renderAppHeader('Devocionais');
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Quill Editor
-    var quill = new Quill('#editor', {
-        theme: 'snow',
-        placeholder: 'Escreva sua reflexão, versículo ou pensamento...',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                ['link', 'blockquote']
-            ]
+    // Quill
+    var quill;
+    document.addEventListener('DOMContentLoaded', function() {
+        quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Compartilhe sua reflexão... Use [verso Romanos 8:28] para citar Bíblia.',
+            modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean']] }
+        });
+        
+        // CHECK URL PARAMS FOR TAB
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        if (tab === 'prayer') {
+            switchTab('prayer');
         }
     });
+
+    function switchTab(tabName) {
+        // Hide all
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        // Show target
+        document.getElementById('tab-' + tabName).classList.add('active');
+        document.getElementById('btn-tab-' + tabName).classList.add('active');
+        
+        // Update URL without reload
+        const url = new URL(window.location);
+        url.searchParams.set('tab', tabName);
+        window.history.pushState({}, '', url);
+    }
+
+    // Modal Functions
+    function openCreateModal() { document.getElementById('devotionalModal').style.display = 'block'; }
+    function closeModal() { document.getElementById('devotionalModal').style.display = 'none'; }
+    function openCreatePrayerModal() { document.getElementById('prayerModal').style.display = 'block'; }
+    function closePrayerModal() { document.getElementById('prayerModal').style.display = 'none'; }
     
-    // Type Selection
-    document.querySelectorAll('.type-option input').forEach(input => {
-        input.addEventListener('change', function() {
-            // Update visual selection
-            document.querySelectorAll('.type-option').forEach(opt => {
-                opt.style.borderColor = 'var(--border-color)';
-                opt.style.background = 'transparent';
-            });
-            this.parentElement.style.borderColor = '#667eea';
-            this.parentElement.style.background = '#667eea10';
-            
-            // Show/hide media URL field
-            const mediaField = document.getElementById('mediaUrlField');
-            const labelEl = document.getElementById('mediaUrlLabel');
-            const hintEl = document.getElementById('mediaUrlHint');
-            
-            if (this.value === 'video') {
-                mediaField.style.display = 'block';
-                labelEl.textContent = 'URL do Vídeo';
-                hintEl.textContent = 'Cole o link do YouTube, Vimeo, etc.';
-            } else if (this.value === 'audio') {
-                mediaField.style.display = 'block';
-                labelEl.textContent = 'URL do Áudio';
-                hintEl.textContent = 'Cole o link do Spotify, SoundCloud, ou arquivo MP3.';
-            } else if (this.value === 'link') {
-                mediaField.style.display = 'block';
-                labelEl.textContent = 'URL do Link';
-                hintEl.textContent = 'Cole qualquer link externo.';
-            } else {
-                mediaField.style.display = 'none';
-            }
-        });
-    });
-    
-    // Initialize first selection
-    document.querySelector('.type-option input:checked').dispatchEvent(new Event('change'));
-    
-    // Tag selection visual
-    document.querySelectorAll('.tag-checkbox').forEach(cb => {
-        cb.addEventListener('change', function() {
-            if (this.checked) {
-                this.parentElement.style.boxShadow = '0 0 0 2px ' + this.parentElement.style.borderColor;
-            } else {
-                this.parentElement.style.boxShadow = 'none';
-            }
-        });
-    });
-    
+    // Form prep
     function prepareSubmit() {
-        document.getElementById('hiddenContent').value = quill.root.innerHTML;
+        var content = document.querySelector('input[name=content]');
+        content.value = quill.root.innerHTML;
         return true;
     }
-    
-    function openCreateModal() {
-        document.getElementById('modalTitle').innerText = '✨ Nova Devocional';
-        document.getElementById('formAction').value = 'create';
-        document.getElementById('devotionalForm').reset();
-        document.getElementById('devId').value = '';
-        document.getElementById('devMediaUrl').value = '';
-        quill.setContents([]);
-        
-        // Reset type selection
-        document.querySelector('.type-option input[value="text"]').checked = true;
-        document.querySelector('.type-option input[value="text"]').dispatchEvent(new Event('change'));
-        
-        // Reset tags
-        document.querySelectorAll('.tag-checkbox').forEach(cb => {
-            cb.checked = false;
-            cb.parentElement.style.boxShadow = 'none';
-        });
-        
-        document.getElementById('devotionalModal').style.display = 'block';
-    }
-    
-    function openEditModal(dev) {
-        document.getElementById('modalTitle').innerText = '✏️ Editar Devocional';
-        document.getElementById('formAction').value = 'update';
-        document.getElementById('devId').value = dev.id;
-        document.getElementById('devTitle').value = dev.title;
-        document.getElementById('devMediaUrl').value = dev.media_url || '';
-        
-        // Set type
-        const typeRadio = document.querySelector(`.type-option input[value="${dev.media_type}"]`);
-        if (typeRadio) {
-            typeRadio.checked = true;
-            typeRadio.dispatchEvent(new Event('change'));
-        }
-        
-        // Set content
-        quill.root.innerHTML = dev.content || '';
-        
-        closeAllMenus();
-        document.getElementById('devotionalModal').style.display = 'block';
-    }
-    
-    function closeModal() {
-        document.getElementById('devotionalModal').style.display = 'none';
-    }
-    
-    // Toggle card expansion/collapse
-    function toggleDevotionalCard(id, event) {
-        // Evitar toggle se clicar em botões, links ou inputs
-        if (event.target.closest('button, a, input, textarea, select, .dev-dropdown')) {
-            return;
-        }
-        
-        const card = document.getElementById('dev-' + id);
-        card.classList.toggle('collapsed');
-        
-        // Se expandiu, scroll suave até o card
-        if (!card.classList.contains('collapsed')) {
-            setTimeout(() => {
-                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
-        }
-    }
-    
-    // Marcar/Desmarcar devocional como lido (MANUAL)
-    function toggleReadStatus(id, btn) {
-        const card = document.getElementById('dev-' + id);
-        const icon = btn.querySelector('i');
-        const text = btn.querySelector('span');
-        
-        // Feedback visual imediato (optimistic UI)
-        btn.disabled = true;
-        btn.style.opacity = '0.7';
-        
-        fetch('../api/mark_devotional_read.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'devotional_id=' + id
-        })
-        .then(response => response.json())
-        .then(data => {
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            
-            if (data.success) {
-                if (data.is_read) {
-                    // Marcou como lido
-                    card.classList.remove('unread');
-                    card.classList.add('read');
-                    card.dataset.isRead = '1';
-                    
-                    // Atualizar botão
-                    btn.style.color = 'var(--primary)';
-                    btn.style.background = 'var(--primary)10';
-                    text.textContent = 'Lido';
-                    
-                    // Atualizar ícone (usando Lucide se disponível ou trocando HTML)
-                    if (window.lucide) {
-                        icon.setAttribute('data-lucide', 'check-circle');
-                        lucide.createIcons();
-                    } else {
-                        // Fallback de ícone simples se lucide não atualizar dinâmico
-                        icon.innerHTML = '<polyline points="22 11.08 22 2 15 22 2 22 2 11.08"></polyline>'; 
-                    }
-                } else {
-                    // Desmarcou (não lido)
-                    card.classList.remove('read');
-                    card.classList.add('unread');
-                    card.dataset.isRead = '0';
-                    
-                    // Atualizar botão
-                    btn.style.color = '';
-                    btn.style.background = '';
-                    text.textContent = 'Marcar como lido';
-                    
-                    if (window.lucide) {
-                        icon.setAttribute('data-lucide', 'circle');
-                        lucide.createIcons();
-                    }
-                }
-                
-                // Forçar recriação de ícones para o botão específico
-                setTimeout(() => lucide.createIcons(), 50);
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao alternar leitura:', error);
-            btn.disabled = false;
-        });
-    }
-    
-    // Comments toggle
-    function toggleComments(id) {
-        const section = document.getElementById(id);
-        section.classList.toggle('open');
-    }
-    
-    // Dropdown menus
-    function toggleDevMenu(id) {
-        closeAllMenus();
-        const menu = document.getElementById(id);
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    function closeAllMenus() {
-        document.querySelectorAll('.dev-dropdown').forEach(m => m.style.display = 'none');
-    }
-    
-    window.onclick = function(e) {
-        if (!e.target.closest('.dev-dropdown') && !e.target.closest('[onclick*="toggleDevMenu"]')) {
-            closeAllMenus();
-        }
-    }
-</script>
 
-<script src="../assets/js/devotional-enhancements.js"></script>
+    function toggleMediaInput(type) {
+        const group = document.getElementById('mediaUrlGroup');
+        group.style.display = (type === 'text') ? 'none' : 'block';
+    }
+    
+    // Interactions
+    function toggleDevotional(id, event) {
+        if (event.target.closest('button') || event.target.closest('a') || event.target.closest('input') || event.target.closest('.comments-section')) return;
+        document.getElementById('dev-' + id).classList.toggle('collapsed');
+    }
+    
+    function toggleComments(id, event) {
+        if(event) event.stopPropagation();
+        document.getElementById(id).classList.toggle('open');
+    }
+    
+    function shareDevotional(id, title, event) {
+        event.stopPropagation();
+        if (navigator.share) {
+            navigator.share({ title: title, text: 'Devocional: ' + title, url: window.location.href.split('?')[0] + '?id=' + id });
+        } else {
+            alert('Copie o link!');
+        }
+    }
+    
+    function toggleAdvancedFilters() {
+        const panel = document.getElementById('advanced-filters-panel');
+        panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
+    }
+    
+    // Prayer Interactions
+    function toggleIntercessionStatus(prayerId, btn) {
+        // Optimistic UI
+        const icon = btn.querySelector('svg');
+        const textSpan = btn.querySelector('span');
+        const isActive = btn.classList.contains('active');
+        
+        btn.classList.toggle('active');
+        if (isActive) {
+           textSpan.innerText = 'Interceder';
+           icon.style.fill = 'none';
+        } else {
+           textSpan.innerText = 'Intercedi';
+           icon.style.fill = 'currentColor';
+        }
+        
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.style.display = 'none';
+        const inputAction = document.createElement('input');
+        inputAction.name = 'action';
+        inputAction.value = 'pray';
+        const inputId = document.createElement('input');
+        inputId.name = 'prayer_id';
+        inputId.value = prayerId;
+        form.appendChild(inputAction);
+        form.appendChild(inputId);
+        document.body.appendChild(form);
+        form.submit();
+    }
+    
+    // Tag Dropdown Logic
+    function toggleTagDropdown() {
+        const list = document.getElementById('tagDropdownList');
+        const isOpen = list.style.display === 'block';
+        list.style.display = isOpen ? 'none' : 'block';
+    }
+
+    function updateTagButton() {
+        const checkboxes = document.querySelectorAll('#tagDropdownList input[name="tags[]"]:checked');
+        const btnSpan = document.querySelector('#tagDropdownBtn span');
+        
+        if (checkboxes.length === 0) {
+            btnSpan.innerText = 'Selecionar Tags...';
+            btnSpan.style.color = 'var(--text-muted)';
+        } else {
+            btnSpan.innerText = checkboxes.length + ' tag(s) selecionada(s)';
+            btnSpan.style.color = 'var(--text-main)';
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const container = document.querySelector('.custom-dropdown');
+        const list = document.getElementById('tagDropdownList');
+        
+        if (container && !container.contains(e.target) && list && list.style.display === 'block') {
+            list.style.display = 'none';
+        }
+    });
+    
+    // Smart Search com Debounce
+    let searchTimeout;
+    function handleSmartSearch(value) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const currentUrl = new URL(window.location.href);
+            const params = new URLSearchParams(currentUrl.search);
+            
+            if (value.trim()) {
+                params.set('search', value);
+            } else {
+                params.delete('search');
+            }
+            
+            window.location.href = '?' + params.toString();
+        }, 800); // Aguarda 800ms após o usuário parar de digitar
+    }
+    
+    // Atalho de teclado para busca (Ctrl+K ou Cmd+K)
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('smartSearch').focus();
+        }
+    });
+</script>
 
 <?php renderAppFooter(); ?>

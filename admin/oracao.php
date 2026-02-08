@@ -137,297 +137,10 @@ function getComments($pdo, $prayerId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-renderAppHeader('Pedidos de Oração');
 ?>
 
-<style>
-    /* Prayer Cards - Premium Design */
-    .prayer-card {
-        background: var(--bg-surface);
-        border-radius: 14px;
-        border: 1px solid var(--border-color);
-        overflow: hidden;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .prayer-card:hover {
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    }
-    .prayer-card.urgent {
-        border-left: 4px solid var(--rose-600);
-    }
-    .prayer-card.answered {
-        background: var(--sage-50);
-        border-color: var(--sage-500);
-    }
-    
-    /* Header */
-    .prayer-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 14px;
-        border-bottom: 1px solid var(--border-color);
-    }
-    .prayer-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .prayer-avatar-placeholder {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: var(--font-body);
-    }
-    
-    /* Content */
-    .prayer-content {
-        padding: 14px;
-    }
-    .prayer-title {
-        font-size: var(--font-h3);
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .prayer-description {
-        color: var(--text-body);
-        font-size: var(--font-body);
-        line-height: 1.6;
-    }
-    
-    /* Footer */
-    .prayer-footer {
-        padding: 12px 16px;
-        background: var(--slate-50);
-        border-top: 1px solid var(--border-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    /* Pray Button */
-    .pray-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: var(--font-body-sm);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        border: none;
-    }
-    .pray-btn.not-prayed {
-        background: var(--slate-600);
-        color: white;
-    }
-    .pray-btn.prayed {
-        background: var(--yellow-100);
-        color: var(--yellow-600);
-    }
-    .pray-btn:hover {
-        transform: scale(1.05);
-    }
-    
-    /* Category Badges */
-    .category-badge {
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: var(--font-caption);
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-    .cat-health { background: var(--rose-100); color: var(--rose-600); }
-    .cat-family { background: var(--slate-100); color: var(--slate-600); }
-    .cat-work { background: var(--yellow-100); color: var(--yellow-600); }
-    .cat-spiritual { background: var(--lavender-50); color: var(--lavender-600); }
-    .cat-gratitude { background: var(--sage-50); color: var(--sage-600); }
-    .cat-other { background: var(--slate-100); color: var(--slate-500); }
-    
-    /* FAB */
-    .fab-create {
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: var(--slate-600);
-        color: white;
-        border: none;
-        box-shadow: 0 4px 20px rgba(55, 106, 200, 0.4);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .fab-create:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 25px rgba(251, 191, 36, 0.5);
-    }
-    
-    /* Filter Tabs */
-    .filter-tabs {
-        display: flex;
-        gap: 4px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
-        scrollbar-width: none;
-    }
-    .filter-tab {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: var(--font-body-sm);
-        font-weight: 600;
-        color: var(--text-muted);
-        text-decoration: none;
-        white-space: nowrap;
-        transition: all 0.2s;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-    }
-    .filter-tab:hover {
-        background: var(--border-color);
-    }
-    .filter-tab.active {
-        background: var(--slate-600);
-        color: white;
-        border-color: transparent;
-    }
-    
-    /* Comments Section */
-    .comments-section {
-        display: none;
-        padding: 16px;
-        background: var(--slate-50);
-        border-top: 1px solid var(--border-color);
-    }
-    .comments-section.open {
-        display: block;
-    }
-    .comment-item {
-        display: flex;
-        gap: 10px;
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border-color);
-    }
-    .comment-item:last-child {
-        border-bottom: none;
-    }
-    
-    /* Collapsible Cards */
-    .prayer-card.collapsed {
-        cursor: pointer;
-    }
-    .prayer-card.collapsed .prayer-description {
-        display: none;
-    }
-    .prayer-card.collapsed .comments-section {
-        display: none !important;
-    }
-    .prayer-card.collapsed .prayer-footer {
-        display: none;
-    }
-    
-    /* Intercession States */
-    .prayer-card.not-interceded {
-        background: var(--bg-surface);
-        border-left: 3px solid var(--yellow-500);
-    }
-    .prayer-card.interceded {
-        opacity: 0.7;
-        border: 1px dashed var(--border-color);
-    }
-    .prayer-card.interceded .prayer-title {
-        color: var(--text-muted);
-    }
-    
-    /* Filter Toolbar */
-    .filter-toolbar {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-        align-items: center;
-    }
-    .filter-group {
-        flex: 1;
-        position: relative;
-    }
-    .filter-select {
-        width: 100%;
-        padding: 10px 12px 10px 36px;
-        background-color: white;
-        border: 1px solid var(--slate-200);
-        border-radius: 12px;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #4a5568;
-        appearance: none;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-    }
-    .filter-select:focus {
-        border-color: var(--yellow-500);
-        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-        outline: none;
-    }
-    .filter-icon {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        color: #718096;
-    }
-    .btn-advanced-filter {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: white;
-        border: 1px solid var(--slate-200);
-        border-radius: 12px;
-        color: #718096;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        flex-shrink: 0;
-        position: relative;
-    }
-    .btn-advanced-filter.active {
-        background: rgba(245, 158, 11, 0.1);
-        color: var(--yellow-500);
-        border-color: var(--yellow-500);
-    }
-    .btn-advanced-filter:hover {
-        background: #f7fafc;
-        transform: translateY(-1px);
-    }
-</style>
-
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="../assets/css/pages/oracao.css?v=<?= time() ?>" rel="stylesheet">
 <?php renderPageHeader('Mural de Oração', 'Louvor PIB Oliveira'); ?>
 
 <div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
@@ -476,8 +189,6 @@ renderAppHeader('Pedidos de Oração');
         </button>
         <?php endif; ?>
     </div>
-    
-    <!-- Painel de Filtros Avançados -->
     
     <!-- Painel de Filtros Avançados -->
     <div id="advanced-filters-panel" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
@@ -553,25 +264,25 @@ renderAppHeader('Pedidos de Oração');
                     <?php if ($authorAvatar): ?>
                         <img src="<?= htmlspecialchars($authorAvatar) ?>" class="prayer-avatar" alt="">
                     <?php else: ?>
-                        <div class="prayer-avatar-placeholder" style="background: var(--yellow-500);">
+                        <div class="prayer-avatar-placeholder" style="background: var(--primary);">
                             <?= $prayer['is_anonymous'] ? '?' : strtoupper(substr($authorName, 0, 1)) ?>
                         </div>
                     <?php endif; ?>
                     
                     <div style="flex: 1;">
-                        <div style="font-weight: 700; color: var(--text-main); font-size: var(--font-body);"><?= htmlspecialchars($authorName) ?></div>
-                        <div style="display: flex; align-items: center; gap: 8px; font-size: var(--font-caption); color: var(--text-muted);">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;"><?= htmlspecialchars($authorName) ?></div>
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-muted);">
                             <span class="category-badge <?= $cat['class'] ?>"><?= $cat['icon'] ?> <?= $cat['label'] ?></span>
                             <span>• <?= $timeAgo ?></span>
                         </div>
                     </div>
                     
                     <?php if ($prayer['is_answered']): ?>
-                        <div style="background: var(--sage-500); color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
+                        <div style="background: var(--primary); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;">
                             ✓ RESPONDIDA
                         </div>
                     <?php elseif ($prayer['is_urgent']): ?>
-                        <div style="background: var(--rose-600); color: white; padding: 4px 10px; border-radius: 12px; font-size: var(--font-caption); font-weight: 700;">
+                        <div style="background: var(--rose-600); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;">
                             🔥 URGENTE
                         </div>
                     <?php endif; ?>
@@ -581,29 +292,34 @@ renderAppHeader('Pedidos de Oração');
                 <div class="prayer-content">
                     <h3 class="prayer-title"><?= htmlspecialchars($prayer['title']) ?></h3>
                     <?php if (!empty($prayer['description'])): ?>
-                        <p class="prayer-description"><?= nl2br(htmlspecialchars($prayer['description'])) ?></p>
+                        <div class="prayer-description"><?= nl2br(htmlspecialchars($prayer['description'])) ?></div>
                     <?php endif; ?>
+                    
+                    <!-- Expand Indicator -->
+                    <div class="expand-indicator">
+                        Ler mais <i data-lucide="chevron-down" style="width: 14px;"></i>
+                    </div>
                 </div>
                 
                 <!-- Footer -->
                 <div class="prayer-footer">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this)" class="pray-btn <?= $prayer['is_interceded'] ? 'prayed' : 'not-prayed' ?>" id="intercession-btn-<?= $prayer['id'] ?>">
+                        <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this); event.stopPropagation();" class="pray-btn <?= $prayer['is_interceded'] ? 'prayed' : 'not-prayed' ?>" id="intercession-btn-<?= $prayer['id'] ?>">
                             <i data-lucide="heart" style="width: 16px;"></i>
                             <span><?= $prayer['is_interceded'] ? 'Intercedi' : 'Interceder' ?></span> (<?= $prayer['pray_count'] ?>)
                         </button>
                         
-                        <button onclick="toggleComments('comments-<?= $prayer['id'] ?>')" style="background: none; border: none; color: var(--text-muted); font-size: var(--font-body-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <button onclick="toggleComments('comments-<?= $prayer['id'] ?>'); event.stopPropagation();" style="background: none; border: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                             <i data-lucide="message-circle" style="width: 16px;"></i>
                             <?= count($comments) ?>
                         </button>
                     </div>
                     
                     <?php if ($prayer['user_id'] == $userId && !$prayer['is_answered']): ?>
-                    <form method="POST" style="margin: 0;">
+                    <form method="POST" style="margin: 0;" onclick="event.stopPropagation()">
                         <input type="hidden" name="action" value="answered">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                        <button type="submit" style="background: var(--sage-100); color: var(--sage-600); border: none; padding: 6px 12px; border-radius: 12px; font-size: var(--font-body-sm); font-weight: 600; cursor: pointer;">
+                        <button type="submit" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
                             ✓ Marcar respondida
                         </button>
                     </form>
@@ -622,13 +338,13 @@ renderAppHeader('Pedidos de Oração');
                         <?php if ($commentAvatar): ?>
                             <img src="<?= htmlspecialchars($commentAvatar) ?>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="">
                         <?php else: ?>
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--lavender-200); display: flex; align-items: center; justify-content: center; font-size: var(--font-caption); font-weight: 700; color: #666;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--slate-200); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #666;">
                                 <?= strtoupper(substr($comment['name'] ?? 'U', 0, 1)) ?>
                             </div>
                         <?php endif; ?>
                         <div style="flex: 1;">
-                            <span style="font-weight: 600; font-size: var(--font-body-sm); color: var(--text-main);"><?= htmlspecialchars($comment['name'] ?? 'Membro') ?></span>
-                            <p style="margin: 4px 0 0; font-size: var(--font-body); color: var(--text-body);"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                            <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);"><?= htmlspecialchars($comment['name'] ?? 'Membro') ?></span>
+                            <p style="margin: 4px 0 0; font-size: 0.9rem; color: var(--text-body);"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -637,8 +353,8 @@ renderAppHeader('Pedidos de Oração');
                     <form method="POST" style="display: flex; gap: 8px; margin-top: 12px;">
                         <input type="hidden" name="action" value="comment">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                        <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: var(--font-body); outline: none;">
-                        <button type="submit" style="background: var(--yellow-500); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                        <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: 0.9rem; outline: none;">
+                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                             <i data-lucide="send" style="width: 16px;"></i>
                         </button>
                     </form>
@@ -648,15 +364,15 @@ renderAppHeader('Pedidos de Oração');
         <?php else: ?>
             <!-- Empty State -->
             <div style="text-align: center; padding: 60px 20px;">
-                <div style="background: var(--slate-200); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i data-lucide="heart-handshake" style="color: var(--slate-600); width: 40px; height: 40px;"></i>
+                <div style="background: var(--green-50); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i data-lucide="heart-handshake" style="color: var(--green-400); width: 40px; height: 40px;"></i>
                 </div>
                 <h3 style="color: var(--text-main); margin-bottom: 8px;"><?= $showAnswered ? 'Nenhuma oração respondida' : 'Nenhum pedido ainda' ?></h3>
-                <p style="color: var(--text-muted); font-size: var(--font-body); max-width: 300px; margin: 0 auto 20px;">
+                <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 300px; margin: 0 auto 20px;">
                     <?= $showAnswered ? 'As orações respondidas aparecerão aqui.' : 'Seja o primeiro a compartilhar um pedido de oração!' ?>
                 </p>
                 <?php if (!$showAnswered): ?>
-                <button onclick="openCreateModal()" style="background: var(--slate-600); color: white; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                <button onclick="openCreateModal()" class="btn-new-prayer">
                     <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
                     Novo Pedido
                 </button>
@@ -680,10 +396,18 @@ renderAppHeader('Pedidos de Oração');
     
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
         
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: var(--text-main);">🙏 Novo Pedido de Oração</h2>
-            <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
-                <i data-lucide="x" style="width: 20px;"></i>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--primary-subtle); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 1.5rem;">🙏</span>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Novo Pedido</h2>
+                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Compartilhe com a igreja</p>
+                </div>
+            </div>
+            <button onclick="closeModal()" style="background: var(--bg-body); border: none; color: var(--text-muted); cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                <i data-lucide="x" style="width: 18px;"></i>
             </button>
         </div>
         
@@ -693,49 +417,49 @@ renderAppHeader('Pedidos de Oração');
             
             <!-- Título -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Título do Pedido</label>
-                <input type="text" name="title" id="prayerTitle" required placeholder="Ex: Oração pela saúde do meu pai" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: var(--font-body); outline: none; background: var(--bg-body);">
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Título do Pedido</label>
+                <input type="text" name="title" id="prayerTitle" required placeholder="Ex: Oração pela saúde do meu pai">
             </div>
             
             <!-- Editor de Descrição -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: var(--font-body);">Descrição (opcional)</label>
-               <div id="prayerEditor" style="min-height: 120px; background: white; border-radius: 12px;"></div>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Descrição (opcional)</label>
+               <div id="prayerEditor"></div>
             </div>
             
             <!-- Categoria -->
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: var(--font-body);">Categoria</label>
+                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 0.95rem;">Categoria</label>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                    <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer;">
                         <input type="radio" name="category" value="health" style="display: none;">
-                        <span style="font-size: var(--font-display);">❤️</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Saúde</span>
+                        <span style="font-size: 1.5rem;">❤️</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Saúde</span>
                     </label>
-                    <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer;">
                         <input type="radio" name="category" value="family" style="display: none;">
-                        <span style="font-size: var(--font-display);">👨‍👩‍👧</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Família</span>
+                        <span style="font-size: 1.5rem;">👨‍👩‍👧</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Família</span>
                     </label>
-                    <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer;">
                         <input type="radio" name="category" value="work" style="display: none;">
-                        <span style="font-size: var(--font-display);">💼</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Trabalho</span>
+                        <span style="font-size: 1.5rem;">💼</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Trabalho</span>
                     </label>
-                    <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer;">
                         <input type="radio" name="category" value="spiritual" style="display: none;">
-                        <span style="font-size: var(--font-display);">✨</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Espiritual</span>
+                        <span style="font-size: 1.5rem;">✨</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Espiritual</span>
                     </label>
-                    <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer;">
                         <input type="radio" name="category" value="gratitude" style="display: none;">
-                        <span style="font-size: var(--font-display);">🙌</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Gratidão</span>
+                        <span style="font-size: 1.5rem;">🙌</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Gratidão</span>
                     </label>
-                    <label style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s;" class="cat-option">
+                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer;">
                         <input type="radio" name="category" value="other" checked style="display: none;">
-                        <span style="font-size: var(--font-display);">🙏</span>
-                        <span style="font-size: var(--font-caption); font-weight: 600;">Outros</span>
+                        <span style="font-size: 1.5rem;">🙏</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">Outros</span>
                     </label>
                 </div>
             </div>
@@ -744,11 +468,11 @@ renderAppHeader('Pedidos de Oração');
             <div style="margin-bottom: 20px; display: flex; gap: 16px; flex-wrap: wrap;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" name="is_urgent" style="width: 18px; height: 18px; accent-color: var(--rose-600);">
-                    <span style="font-size: var(--font-body); font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
                 </label>
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" name="is_anonymous" style="width: 18px; height: 18px; accent-color: var(--slate-500);">
-                    <span style="font-size: var(--font-body); font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
                 </label>
             </div>
             
@@ -757,7 +481,7 @@ renderAppHeader('Pedidos de Oração');
                 <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
                     Cancelar
                 </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--yellow-500); color: white; font-weight: 700; cursor: pointer;">
+                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">
                     Enviar Pedido
                 </button>
             </div>
@@ -773,14 +497,17 @@ renderAppHeader('Pedidos de Oração');
                 opt.style.borderColor = 'var(--border-color)';
                 opt.style.background = 'transparent';
             });
-            this.parentElement.style.borderColor = '#fbbf24';
-            this.parentElement.style.background = 'var(--yellow-100)';
+            this.parentElement.style.borderColor = 'var(--primary)';
+            this.parentElement.style.background = 'var(--primary-subtle)';
         });
     });
     
     // Initialize first selection
-    document.querySelector('.cat-option input:checked').parentElement.style.borderColor = '#fbbf24';
-    document.querySelector('.cat-option input:checked').parentElement.style.background = 'var(--yellow-100)';
+    if(document.querySelector('.cat-option input:checked')) {
+        const checked = document.querySelector('.cat-option input:checked');
+        checked.parentElement.style.borderColor = 'var(--primary)';
+        checked.parentElement.style.background = 'var(--primary-subtle)';
+    }
     
     function openCreateModal() {
         document.getElementById('prayerModal').style.display = 'block';
@@ -798,116 +525,74 @@ renderAppHeader('Pedidos de Oração');
     // Toggle prayer card expansion/collapse
     function togglePrayerCard(id, event) {
         // Evitar toggle se clicar em botões, links ou inputs
-        if (event.target.closest('button, a, input, textarea, select')) {
+        if (event.target.closest('button') || event.target.closest('a') || event.target.closest('input') || event.target.closest('.comments-section')) {
             return;
         }
         
         const card = document.getElementById('prayer-' + id);
         card.classList.toggle('collapsed');
-        
-        // Se expandiu, scroll suave até o card
-        if (!card.classList.contains('collapsed')) {
-            setTimeout(() => {
-                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+    }
+    
+    // Toggle advanced filters
+    function toggleAdvancedFilters() {
+        const panel = document.getElementById('advanced-filters-panel');
+        if (panel.style.display === 'none') {
+            panel.style.display = 'block';
+            panel.style.animation = 'slideDown 0.2s ease-out';
+        } else {
+            panel.style.display = 'none';
         }
     }
     
-    // Toggle intercession status (AJAX)
+    // Intercession toggle
     function toggleIntercessionStatus(prayerId, btn) {
-        const card = document.getElementById('prayer-' + prayerId);
-        const btnSpan = btn.querySelector('span');
-        const counter = btn.textContent.match(/\((\d+)\)/)[1];
+        // Aqui deveria ter uma chamada AJAX idealmente
+        // Por enquanto, vamos apenas submeter um form oculto ou redirecionar
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.style.display = 'none';
         
-        // Feedback visual imediato
-        btn.disabled = true;
-        btn.style.opacity = '0.7';
+        const inputAction = document.createElement('input');
+        inputAction.name = 'action';
+        inputAction.value = 'pray';
         
-        fetch('../api/toggle_intercession.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'prayer_id=' + prayerId
-        })
-        .then(response => response.json())
-        .then(data => {
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            
-            if (data.success) {
-                const currentCount = parseInt(counter);
-                const newCount = data.is_interceded ? currentCount + 1 : currentCount - 1;
-                
-                if (data.is_interceded) {
-                    // Marcou como intercedido
-                    card.classList.remove('not-interceded');
-                    card.classList.add('interceded');
-                    card.dataset.isInterceded = '1';
-                    btn.classList.remove('not-prayed');
-                    btn.classList.add('prayed');
-                    btnSpan.textContent = 'Intercedi';
-                } else {
-                    // Desmarcou
-                    card.classList.remove('interceded');
-                    card.classList.add('not-interceded');
-                    card.dataset.isInterceded = '0';
-                    btn.classList.remove('prayed');
-                    btn.classList.add('not-prayed');
-                    btnSpan.textContent = 'Interceder';
-                }
-                
-                // Atualizar contador
-                btn.innerHTML = btn.innerHTML.replace(/\(\d+\)/, `(${newCount})`);
-                
-                // Recriar ícones Lucide
-                if (window.lucide) {
-                    lucide.createIcons();
-                }
-            }
-        })
-        .catch(error => {
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            console.error('Erro ao atualizar intercessão:', error);
-        });
-    }
-    
-    // Toggle advanced filters panel
-    function toggleAdvancedFilters() {
-        const panel = document.getElementById('advanced-filters-panel');
-        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        const inputId = document.createElement('input');
+        inputId.name = 'prayer_id';
+        inputId.value = prayerId;
+        
+        form.appendChild(inputAction);
+        form.appendChild(inputId);
+        document.body.appendChild(form);
+        form.submit();
     }
 </script>
 
+<style>
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<!-- Quill JS -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Inicializar Quill Editor para Oração
-    var prayerQuill = new Quill('#prayerEditor', {
+    var quill = new Quill('#prayerEditor', {
         theme: 'snow',
+        placeholder: 'Compartilhe seu pedido de oração...',
         modules: {
             toolbar: [
                 ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['link']
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }]
             ]
-        },
-        placeholder: 'Compartilhe mais detalhes se desejar...'
+        }
     });
     
-    // Preparar submit do formulário de oração
     function preparePrayerSubmit() {
-        document.getElementById('hiddenDescription').value = prayerQuill.root.innerHTML;
+        var description = document.querySelector('input[name=description]');
+        description.value = quill.getText();
         return true;
     }
-    
-    // Limpar editor ao abrir/fechar modal
-    const originalOpenModal = openCreateModal;
-    openCreateModal = function() {
-        originalOpenModal();
-        prayerQuill.setContents([]);
-        document.getElementById('prayerTitle').value = '';
-    };
 </script>
 
 <?php renderAppFooter(); ?>

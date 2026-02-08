@@ -106,7 +106,7 @@ function getAllAvailableCards() {
             'category_name' => 'Espiritual',
             'color' => '#75C9E3', // Green 500
             'bg' => '#ecfeff', // Green 50
-            'url' => 'oracao.php',
+            'url' => 'devocionais.php?tab=prayer',
             'admin_only' => false
         ],
 

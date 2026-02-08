@@ -219,30 +219,40 @@
     overflow: hidden;
     text-overflow: ellipsis;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    /* Space for icon */
+}
+
+.event-chip i {
+    flex-shrink: 0;
+    opacity: 0.7;
 }
 
 .event-chip:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Stronger shadow on hover */
     z-index: 10;
 }
 
 /* Variants - Adjusted via inline styles in PHP but defaults here */
 .event-chip.type-escala {
     border-left-color: var(--blue-500);
-    background: var(--blue-50);
-    color: var(--blue-800);
-    border: 1px solid var(--blue-100);
+    background: linear-gradient(to right, var(--blue-50), white);
+    /* Subtle gradient */
+    color: var(--blue-900);
+    border-color: var(--blue-100);
     border-left-width: 4px;
-    /* Ensure overwrite */
 }
 
 .event-chip.type-evento {
     border-left-color: var(--amber-500);
-    background: var(--amber-50);
-    color: var(--amber-800);
-    border: 1px solid var(--amber-100);
+    background: linear-gradient(to right, var(--amber-50), white);
+    color: var(--amber-900);
+    border-color: var(--amber-100);
     border-left-width: 4px;
 }
 
@@ -250,7 +260,8 @@
     font-size: 0.7rem;
     opacity: 0.8;
     margin-right: 4px;
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--text-secondary);
 }
 
 /* List View */
