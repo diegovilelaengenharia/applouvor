@@ -53,11 +53,12 @@
 
         .slide-content {
             background: white;
-            border-radius: 30px;
-            padding: 60px;
-            max-width: 1200px;
-            width: 100%;
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px 20px;
+            max-width: 100%;
+            width: calc(100% - 20px);
+            margin: 0 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.6s ease-out;
         }
 
@@ -74,44 +75,44 @@
 
         /* Slide Title */
         .slide-title {
-            font-size: 3.5rem;
+            font-size: 2rem;
             font-weight: 900;
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
             line-height: 1.2;
         }
 
         .slide-subtitle {
-            font-size: 2.2rem;
+            font-size: 1.1rem;
             color: #64748b;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
         .slide-text {
-            font-size: 1.6rem;
+            font-size: 0.95rem;
             color: #475569;
-            line-height: 1.8;
-            margin-bottom: 20px;
+            line-height: 1.6;
+            margin-bottom: 15px;
         }
 
         /* Pilares Grid */
         .pilares-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .pilar-card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-radius: 20px;
-            padding: 40px 30px;
+            border-radius: 15px;
+            padding: 20px 15px;
             text-align: center;
             transition: all 0.3s;
             border: 2px solid #e2e8f0;
@@ -124,38 +125,38 @@
         }
 
         .pilar-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
         .pilar-title {
-            font-size: 1.8rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .pilar-desc {
-            font-size: 1.1rem;
+            font-size: 0.85rem;
             color: #64748b;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         /* Features List */
         .features-list {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .feature-item {
             display: flex;
             align-items: flex-start;
-            gap: 15px;
-            padding: 20px;
+            gap: 12px;
+            padding: 15px;
             background: #f8fafc;
-            border-radius: 15px;
+            border-radius: 12px;
             transition: all 0.3s;
         }
 
@@ -165,9 +166,9 @@
         }
 
         .feature-icon {
-            font-size: 2.2rem;
+            font-size: 1.5rem;
             color: #3b82f6;
-            min-width: 50px;
+            min-width: 35px;
         }
 
         .feature-text {
@@ -175,44 +176,44 @@
         }
 
         .feature-title {
-            font-size: 1.6rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .feature-desc {
-            font-size: 1.3rem;
+            font-size: 0.85rem;
             color: #64748b;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .stat-card {
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 15px;
+            padding: 25px 20px;
             text-align: center;
             color: white;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
 
         .stat-number {
-            font-size: 4.5rem;
+            font-size: 2.5rem;
             font-weight: 900;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .stat-label {
-            font-size: 1.5rem;
+            font-size: 1rem;
             font-weight: 600;
             opacity: 0.95;
         }
@@ -220,15 +221,15 @@
         /* Tech Stack */
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .tech-item {
             background: #f8fafc;
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
             border: 2px solid #e2e8f0;
             transition: all 0.3s;
@@ -240,12 +241,12 @@
         }
 
         .tech-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 8px;
         }
 
         .tech-name {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #1e293b;
         }
@@ -253,17 +254,17 @@
         /* Navigation */
         .nav-controls {
             position: fixed;
-            bottom: 40px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: 12px;
             z-index: 100;
         }
 
         .nav-btn {
-            width: 60px;
-            height: 60px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: white;
             border: none;
@@ -271,9 +272,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.3s;
         }
 
@@ -289,12 +290,12 @@
 
         .slide-counter {
             background: white;
-            padding: 15px 30px;
-            border-radius: 30px;
+            padding: 10px 20px;
+            border-radius: 25px;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
         /* Progress Bar */
@@ -311,39 +312,40 @@
         /* Highlight Box */
         .highlight-box {
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-left: 5px solid #f59e0b;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 30px 0;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
         }
 
         .highlight-text {
-            font-size: 1.4rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #92400e;
             font-style: italic;
+            line-height: 1.5;
         }
 
         /* List Styling */
         .custom-list {
             list-style: none;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .custom-list li {
-            font-size: 1.5rem;
+            font-size: 0.9rem;
             color: #475569;
-            padding: 15px 0;
-            padding-left: 40px;
+            padding: 10px 0;
+            padding-left: 30px;
             position: relative;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .custom-list li::before {
             content: "✨";
             position: absolute;
             left: 0;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
         }
 
         /* Responsive */
@@ -377,8 +379,8 @@
         }
 
         .cover-icon {
-            font-size: 10rem;
-            margin-bottom: 30px;
+            font-size: 5rem;
+            margin-bottom: 20px;
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -386,24 +388,24 @@
         }
 
         .cover-title {
-            font-size: 6rem;
+            font-size: 3rem;
             font-weight: 900;
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .cover-subtitle {
-            font-size: 2rem;
+            font-size: 1.1rem;
             color: #64748b;
             font-weight: 600;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
         .cover-date {
-            font-size: 1.5rem;
+            font-size: 0.9rem;
             color: #94a3b8;
             font-weight: 500;
         }
