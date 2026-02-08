@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reunião de Alinhamento e Planejamento 2026</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap">
+    <title>Apresentação App Louvor - PIB Oliveira</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-dark: #0f172a;
-            --primary-light: #1e293b;
-            --accent-gold: #d97706;
-            --accent-gold-light: #fcd34d;
-            --text-white: #f8fafc;
-            --text-grey: #94a3b8;
+            /* Cores Neutras */
+            --white: #FFFFFF;
+            --gray-50: #F5F5F7;
+            --gray-100: #E8E8ED;
+            --gray-400: #86868B;
+            --gray-900: #1D1D1F;
+            --black: #000000;
+            
+            /* Acentos Vivos */
+            --blue: #0071E3;
+            --green: #30D158;
+            --orange: #FF9500;
+            --purple: #BF5AF2;
+            
+            /* Gradientes */
+            --gradient-blue: linear-gradient(135deg, #0071E3, #005BB5);
+            --gradient-green: linear-gradient(135deg, #30D158, #28A745);
+            --gradient-orange: linear-gradient(135deg, #FF9500, #E68600);
         }
 
         * {
@@ -23,36 +37,23 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #000;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            color: var(--text-white);
+            color: var(--gray-900);
+            -webkit-font-smoothing: antialiased;
         }
 
         .presentation-wrapper {
-            width: 100vh;
+            width: 100vw;
             height: 100vh;
-            background: radial-gradient(circle at center, var(--primary-light) 0%, var(--primary-dark) 100%);
+            background: var(--white);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        /* Background Decoration */
-        .bg-decoration {
-            position: absolute;
-            opacity: 0.1;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .bg-circle {
-            border-radius: 50%;
-            border: 2px solid var(--accent-gold);
         }
 
         /* Slides */
@@ -62,497 +63,411 @@
             left: 0;
             width: 100%;
             height: 100%;
-            padding: 60px;
+            padding: 80px 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transform: translateX(100px);
-            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            z-index: 5;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
         }
 
         .slide.active {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
             z-index: 10;
-        }
-
-        .slide.prev {
-            transform: translateX(-100px);
         }
 
         .slide-content {
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px;
             text-align: center;
-            z-index: 10;
         }
 
         /* Typography */
-        h1.main-title {
-            font-family: 'Playfair Display', serif;
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+        }
+
+        h2 {
             font-size: 3.5rem;
-            color: var(--accent-gold);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: var(--gray-900);
+            margin-bottom: 32px;
         }
 
-        /* Typewriter Animation */
-        .typewriter {
-            overflow: hidden;
-            border-right: 3px solid var(--accent-gold);
-            white-space: nowrap;
-            margin: 0 auto;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-            display: inline-block;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--accent-gold); }
-        }
-
-        h2.slide-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            color: var(--accent-gold);
-            margin-bottom: 30px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        h2.slide-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: var(--accent-gold);
-            margin: 15px auto 0;
-        }
-
-        p.subtitle {
-            font-size: 1.4rem;
-            color: var(--text-grey);
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        .quote-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 10px;
-            border-left: 4px solid var(--accent-gold);
-            margin: 20px 0;
-            text-align: left;
-            transition: transform 0.3s;
-        }
-
-        .quote-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.9rem;
-            font-style: italic;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .quote-ref {
-            font-size: 1.2rem;
-            color: var(--accent-gold);
-            text-align: right;
+        h3 {
+            font-size: 2rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--gray-900);
+            margin-bottom: 16px;
         }
 
-        /* Song Styling */
-        .song-slide {
-            text-align: center;
-            background-size: cover;
-            background-position: center;
+        p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            color: var(--gray-400);
+            font-weight: 500;
+            margin-bottom: 40px;
+        }
+
+        /* Accent Text */
+        .accent-blue { color: var(--blue); }
+        .accent-green { color: var(--green); }
+        .accent-orange { color: var(--orange); }
+        .accent-purple { color: var(--purple); }
+
+        /* Cover Slide */
+        .cover-slide {
+            background: var(--gray-900);
+            color: var(--white);
+        }
+
+        .cover-slide h1 {
+            color: var(--white);
+            font-size: 6rem;
+        }
+
+        .cover-slide .subtitle {
+            color: var(--gray-400);
+        }
+
+        .cover-icon {
+            font-size: 5rem;
+            margin-bottom: 40px;
+            background: var(--gradient-blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border: 2px solid var(--gray-100);
+            border-radius: 24px;
+            padding: 48px 40px;
+            text-align: left;
+            transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
 
-        .song-slide::before {
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.85);
-            z-index: -1;
-        }
-        
-        .song-verse {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.3rem;
-            line-height: 1.7;
-            font-weight: 600;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-blue);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
-        .song-verse.chorus {
-            color: var(--accent-gold-light);
-            font-size: 2.5rem;
-            font-weight: 700;
+        .card:hover::before {
+            transform: scaleX(1);
         }
 
-        .song-title-small {
-            font-size: 1rem;
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            opacity: 0.8;
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border-color: var(--blue);
         }
 
-        /* Lists and Grid */
-        .points-list {
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .card-icon.blue { color: var(--blue); }
+        .card-icon.green { color: var(--green); }
+        .card-icon.orange { color: var(--orange); }
+        .card-icon.purple { color: var(--purple); }
+
+        .card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 16px;
+        }
+
+        .card p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+        }
+
+        /* Feature List */
+        .feature-list {
             list-style: none;
             text-align: left;
-            margin: 0 auto;
-            max-width: 800px;
+            margin: 40px auto;
+            max-width: 900px;
         }
 
-        .points-list li {
+        .feature-list li {
             font-size: 1.5rem;
-            margin-bottom: 25px;
-            padding-left: 35px;
-            position: relative;
-            opacity: 0;
-            transform: translateX(-20px);
-            animation: fadeInRight 0.5s ease forwards;
-        }
-
-        .points-list li::before {
-            content: '•';
-            color: var(--accent-gold);
-            position: absolute;
-            left: 0;
-            font-size: 2rem;
-            line-height: 1;
-            top: -2px;
-        }
-
-        @keyframes fadeInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
-            z-index: 100;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 10px var(--accent-gold);
-        }
-
-        /* Slide Counter */
-        .slide-counter {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--text-grey);
-            z-index: 100;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Navigation Controls */
-        .nav-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 15px;
-            z-index: 100;
-        }
-        
-        .nav-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--gray-100);
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .nav-btn:hover {
-            background: var(--accent-gold);
-            border-color: var(--accent-gold);
-            transform: scale(1.1);
-        }
-
-        .nav-btn:hover .tooltip {
-            opacity: 1;
-            transform: translateY(-5px);
-        }
-
-        .tooltip {
-            position: absolute;
-            bottom: 55px;
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            transition: all 0.3s;
-            pointer-events: none;
-        }
-
-        /* Mini-map Navigation */
-        .mini-map {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 100;
-        }
-
-        .mini-map-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .mini-map-dot.active {
-            background: var(--accent-gold);
-            transform: scale(1.3);
-        }
-
-        .mini-map-dot:hover {
-            background: var(--accent-gold-light);
-            transform: scale(1.2);
-        }
-
-        /* Feature Cards */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-            width: 100%;
         }
 
-        .feature-card {
-            background: rgba(255,255,255,0.05);
-            padding: 30px;
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list .icon {
+            width: 48px;
+            height: 48px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: left;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent, rgba(217, 119, 6, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-gold);
-            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.3);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--accent-gold);
-            margin-bottom: 15px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Badge */
-        .badge {
-            display: inline-block;
-            background: var(--accent-gold);
-            color: var(--primary-dark);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            line-height: 35px;
-            text-align: center;
-            font-weight: 700;
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
-
-        /* Section Divider */
-        .section-divider {
-            width: 100%;
-            height: 100%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, var(--primary-dark), #000);
+            font-size: 1.5rem;
+            flex-shrink: 0;
         }
 
-        /* Agenda Grid */
-        .agenda-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .agenda-item {
-            background: rgba(255,255,255,0.05);
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 3px solid var(--accent-gold);
-            text-align: left;
-            transition: all 0.3s;
-        }
-
-        .agenda-item:hover {
-            background: rgba(255,255,255,0.08);
-            transform: translateX(5px);
-        }
-
-        .agenda-number {
-            font-size: 2rem;
-            color: var(--accent-gold);
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .agenda-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .agenda-desc {
-            font-size: 0.95rem;
-            color: var(--text-grey);
-        }
-
-        /* QR Code */
-        .qr-container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            display: inline-block;
-            margin-top: 30px;
-        }
-
-        /* Mockup */
-        .phone-mockup {
-            width: 280px;
-            height: 560px;
-            border: 12px solid #1e293b;
-            border-radius: 35px;
-            background: white;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            overflow: hidden;
-        }
-
-        .phone-notch {
-            width: 150px;
-            height: 25px;
-            background: #1e293b;
-            border-radius: 0 0 15px 15px;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1e3a8a, #0f172a);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+        .feature-list .icon.blue { background: rgba(0, 113, 227, 0.1); color: var(--blue); }
+        .feature-list .icon.green { background: rgba(48, 209, 88, 0.1); color: var(--green); }
+        .feature-list .icon.orange { background: rgba(255, 149, 0, 0.1); color: var(--orange); }
 
         /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
         .stat-box {
             text-align: center;
-            padding: 20px;
         }
 
         .stat-number {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 800;
-            color: var(--accent-gold);
             line-height: 1;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+            margin-bottom: 16px;
+            background: var(--gradient-blue);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .stat-label {
-            font-size: 1.1rem;
-            color: var(--text-grey);
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            margin-top: 40px;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+
+        .comparison-table th {
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 16px;
+            text-align: left;
+            color: var(--gray-400);
+        }
+
+        .comparison-table td {
+            font-size: 1.25rem;
+            padding: 20px 16px;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-100);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .comparison-table td:first-child {
+            border-left: 1px solid var(--gray-100);
+            border-radius: 12px 0 0 12px;
+            font-weight: 600;
+        }
+
+        .comparison-table td:last-child {
+            border-right: 1px solid var(--gray-100);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .comparison-table .highlight {
+            background: rgba(0, 113, 227, 0.05);
+            color: var(--blue);
+            font-weight: 600;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--gradient-blue);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            display: flex;
+            gap: 16px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gray-900);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--blue);
+            transform: scale(1.1);
+        }
+
+        /* Pill Badge */
+        .pill {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .pill.blue {
+            background: rgba(0, 113, 227, 0.1);
+            color: var(--blue);
+        }
+
+        .pill.green {
+            background: rgba(48, 209, 88, 0.1);
+            color: var(--green);
+        }
+
+        .pill.orange {
+            background: rgba(255, 149, 0, 0.1);
+            color: var(--orange);
+        }
+
+        /* Quote */
+        .quote-box {
+            background: var(--gray-50);
+            border-left: 4px solid var(--blue);
+            padding: 40px;
+            border-radius: 16px;
+            margin: 40px 0;
+            text-align: left;
+        }
+
+        .quote-text {
+            font-size: 1.75rem;
+            line-height: 1.6;
+            color: var(--gray-900);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .quote-ref {
+            font-size: 1.25rem;
+            color: var(--blue);
+            font-weight: 600;
+        }
+
+        /* Divider Slide */
+        .divider-slide {
+            background: var(--gradient-blue);
+            color: var(--white);
+        }
+
+        .divider-slide h1,
+        .divider-slide h2 {
+            color: var(--white);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
         }
 
         /* Utility */
-        .text-gold { color: var(--accent-gold); }
-        .text-bold { font-weight: 700; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
         .mt-4 { margin-top: 2rem; }
-        .mb-2 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 2rem; }
 
     </style>
 </head>
@@ -562,426 +477,588 @@
         <div class="progress-bar" id="progressBar"></div>
         <div class="slide-counter" id="slideCounter">1 / 25</div>
 
-        <!-- Background Elements -->
-        <div class="bg-decoration bg-circle" style="width: 600px; height: 600px; top: -200px; right: -200px;"></div>
-        <div class="bg-decoration bg-circle" style="width: 400px; height: 400px; bottom: -100px; left: -100px; border-color: rgba(255,255,255,0.1);"></div>
+        <!-- PARTE 1: ALINHAMENTO ESPIRITUAL -->
 
-        <!-- ================= PART 1: ALINHAMENTO ================= -->
-
-        <!-- Slide 1: Cover -->
-        <div class="slide active">
+        <!-- Slide 1: Capa -->
+        <div class="slide active cover-slide">
             <div class="slide-content">
-                <i class="fas fa-church" style="font-size: 4rem; color: var(--accent-gold); margin-bottom: 20px;"></i>
-                <p style="text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; opacity: 0.7;">PIB Oliveira • Ministério de Música</p>
-                <h1 class="main-title">
-                    <div class="typewriter">Reunião de Alinhamento</div>
-                </h1>
-                <div style="width: 100px; height: 4px; background: var(--accent-gold); margin: 30px auto;"></div>
-                <p class="subtitle">08 de Fevereiro de 2026</p>
+                <i class="fas fa-church cover-icon"></i>
+                <h1>Reunião de Alinhamento<br>e Planejamento 2026</h1>
+                <p class="subtitle">PIB Oliveira • Ministério de Música</p>
+                <p style="color: var(--gray-400); font-size: 1.25rem; margin-top: 60px;">08 de Fevereiro de 2026</p>
             </div>
         </div>
 
         <!-- Slide 2: Agenda -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Agenda</h2>
-                <div class="agenda-grid">
-                    <div class="agenda-item">
-                        <div class="agenda-number">01</div>
-                        <div class="agenda-title">Palavra Inicial</div>
-                        <div class="agenda-desc">Reflexão bíblica sobre o fogo no altar</div>
+                <span class="pill blue">AGENDA</span>
+                <h2>O que veremos hoje</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <i class="fas fa-bible card-icon blue"></i>
+                        <h3>Fundamentos Espirituais</h3>
+                        <p>Reflexão bíblica sobre o fogo no altar e nosso papel como habitação e holocausto</p>
                     </div>
-                    <div class="agenda-item">
-                        <div class="agenda-number">02</div>
-                        <div class="agenda-title">Fundamentos</div>
-                        <div class="agenda-desc">Habitação e Holocausto</div>
+                    <div class="card">
+                        <i class="fas fa-bullseye card-icon green"></i>
+                        <h3>Propostas 2026</h3>
+                        <p>Visão, capacitação, medidas práticas e estruturação do repertório</p>
                     </div>
-                    <div class="agenda-item">
-                        <div class="agenda-number">03</div>
-                        <div class="agenda-title">Propostas 2026</div>
-                        <div class="agenda-desc">Visão, práticas e repertório</div>
+                    <div class="card">
+                        <i class="fas fa-mobile-alt card-icon orange"></i>
+                        <h3>App Louvor</h3>
+                        <p>Nossa ferramenta completa de gestão e crescimento espiritual</p>
                     </div>
-                    <div class="agenda-item">
-                        <div class="agenda-number">04</div>
-                        <div class="agenda-title">App Louvor</div>
-                        <div class="agenda-desc">Nossa ferramenta de gestão</div>
+                    <div class="card">
+                        <i class="fas fa-rocket card-icon purple"></i>
+                        <h3>Próximos Passos</h3>
+                        <p>Como participar e agenda de eventos futuros</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 3: Palavra Inicial (Levítico) -->
+        <!-- Slide 3: Palavra Inicial -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Palavra Inicial</h2>
-                <div class="quote-card">
+                <span class="pill blue">PALAVRA INICIAL</span>
+                <h2>O Fogo no Altar</h2>
+                <div class="quote-box">
                     <p class="quote-text">
                         "Mantenha-se aceso o fogo no altar; não deve ser apagado. Toda manhã o sacerdote acrescentará lenha... Mantenha-se o fogo continuamente aceso no altar; não deve ser apagado."
                     </p>
-                    <p class="quote-ref">Levítico 6:12-13</p>
+                    <p class="quote-ref">LEVÍTICO 6:12-13</p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 4: Song "O Fogo Arderá" - 1 -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200');">
-            <div class="slide-content">
-                <p class="song-title-small">O Fogo Arderá</p>
-                <p class="song-verse">
-                    Teu fogo arde em mim<br>
-                    E muda o meu viver<br>
-                    Sou teu Templo, sou Teu altar<br>
-                    Sacrifício vivo quero oferecer
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 5: Song "O Fogo Arderá" - 2 -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200');">
-            <div class="slide-content">
-                <p class="song-title-small">O Fogo Arderá</p>
-                <p class="song-verse">
-                    Que o nosso louvor não seja um momento<br>
-                    Lágrimas vazias, sem avivamento<br>
-                    Que o nosso amor não seja fingido<br>
-                    Honrado com os lábios, nos corações esquecido
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 6: Song "O Fogo Arderá" - 3 -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200');">
-            <div class="slide-content">
-                <p class="song-title-small">O Fogo Arderá</p>
-                <p class="song-verse">
-                    Pois de que vale ter as poesias mais lindas<br>
-                    As harmonias mais brilhantes, se não há verdade em nós?<br>
-                    Pois de que vale ter tudo e não ter nada?<br>
-                    Te dar meus lábios, não minha alma?
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 7: Song "O Fogo Arderá" - 4 -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200');">
-            <div class="slide-content">
-                <p class="song-title-small">O Fogo Arderá</p>
-                <p class="song-verse">
-                    Eu quero me entregar a Ti<br>
-                    Entregar minha vida como adoração<br>
-                    Não vale a pena só me emocionar<br>
-                    E buscar as canções mais lindas pra cantar
-                </p>
-            </div>
-        </div>
-        
-        <!-- Slide 8: Song "O Fogo Arderá" - Chorus -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200');">
-            <div class="slide-content">
-                <p class="song-title-small">O Fogo Arderá</p>
-                <p class="song-verse chorus">
-                    E o fogo arderá sobre o altar<br>
-                    Continuamente sobre o altar<br>
-                    E não se apagará
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 9: Tópico 01 -->
+        <!-- Slide 4: Tópico 01 -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Tópico 01</h2>
-                <p class="subtitle" style="margin-bottom: 30px;">Somos a <strong>HABITAÇÃO</strong> de Deus</p>
-                <div class="quote-card">
+                <span class="pill green">TÓPICO 01</span>
+                <h2>Somos a <span class="accent-blue">HABITAÇÃO</span> de Deus</h2>
+                <div class="quote-box">
                     <p class="quote-text">
                         "Acaso não sabem que o corpo de vocês é santuário do Espírito Santo que habita em vocês, que lhes foi dado por Deus, e que vocês não são de vocês mesmos? Vocês foram comprados por alto preço. Portanto, glorifiquem a Deus com o seu próprio corpo"
                     </p>
-                    <p class="quote-ref">1 Coríntios 6:19-20</p>
+                    <p class="quote-ref">1 CORÍNTIOS 6:19-20</p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 10: Tópico 02 -->
+        <!-- Slide 5: Tópico 02 -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Tópico 02</h2>
-                <p class="subtitle" style="margin-bottom: 30px;">Somos o <strong>HOLOCAUSTO</strong> oferecido a Deus</p>
-                <div class="quote-card">
+                <span class="pill orange">TÓPICO 02</span>
+                <h2>Somos o <span class="accent-green">HOLOCAUSTO</span> oferecido</h2>
+                <div class="quote-box">
                     <p class="quote-text">
                         "Portanto, irmãos, rogo pelas misericórdias de Deus que se (você mesmo) ofereçam em SACRIFÍCIO VIVO, SANTO E AGRADÁVEL a Deus; este é o culto racional de vocês"
                     </p>
-                    <p class="quote-ref">Romanos 12:1</p>
+                    <p class="quote-ref">ROMANOS 12:1</p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 11: Song "Enche-me" - 1 -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200');">
+        <!-- Slide 6: Propostas 2026 -->
+        <div class="slide divider-slide">
             <div class="slide-content">
-                <p class="song-title-small">Enche-me (Gabriela Rocha - Isaías Saad)</p>
-                <p class="song-verse">
-                    Tu provês o fogo<br>
-                    E eu, o sacrifício sou<br>
-                    Tu provês o Espírito<br>
-                    E eu me abro por inteiro
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 12: Song "Enche-me" - 2 -->
-        <div class="slide song-slide" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200');">
-            <div class="slide-content">
-                <p class="song-title-small">Enche-me</p>
-                <p class="song-verse chorus">
-                    Enche-me, Deus<br>
-                    Enche-me, Deus<br>
-                    Enche-me
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 13: Propostas 2026 - Capa -->
-        <div class="slide">
-            <div class="section-divider">
-                <h1 class="main-title" style="font-size: 4rem;">Propostas<br>2026</h1>
+                <h1>Propostas 2026</h1>
                 <p class="subtitle">Fortalecimento Espiritual e Estruturação</p>
             </div>
         </div>
 
-        <!-- Slide 14: Visão e Capacitação -->
+        <!-- Slide 7: Visão e Capacitação -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Visão e Capacitação</h2>
-                <ul class="points-list">
-                    <li><span class="badge">1</span><strong>O Propósito do Ministro:</strong><br>Entender nosso papel além da música.</li>
-                    <li><span class="badge">2</span><strong>Fundamentos Bíblicos:</strong><br>Adoração, Serviço e Excelência.</li>
-                </ul>
-                <div style="margin-top: 40px; border: 1px dashed var(--text-grey); padding: 20px; border-radius: 10px;">
-                    <i class="fas fa-bullseye" style="color: var(--accent-gold); font-size: 2rem; margin-bottom: 10px;"></i>
-                    <p>Objetivo: Fortalecimento Espiritual</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 15: Medidas Práticas -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">Medidas Práticas</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <i class="fas fa-sync-alt feature-icon"></i>
-                        <h3 class="text-gold mb-2">Rotação de Duplas</h3>
-                        <p>Dinamismo e integração na equipe.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-bible feature-icon"></i>
-                        <h3 class="text-gold mb-2">Disciplinas</h3>
-                        <p>Estímulo ao Jejum e Devocionais Semanais.</p>
-                    </div>
-                </div>
-                <div class="feature-grid mt-4">
-                    <div class="feature-card">
-                        <i class="fas fa-church feature-icon"></i>
-                        <h3 class="text-gold mb-2">Assiduidade</h3>
-                        <p>Envolvimento real com a igreja local.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-users feature-icon"></i>
-                        <h3 class="text-gold mb-2">Comunhão</h3>
-                        <p>Encontrão Semestral e Tópico aberto.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 16: Estruturação do Repertório -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">Repertório</h2>
-                <p class="subtitle mb-2">(Thalyta)</p>
-                <div class="quote-card" style="border-left-color: var(--text-white);">
-                    <p class="quote-text" style="font-size: 1.4rem;">
-                        Escolhas intencionais com base em propósito e técnica. Equilíbrio entre o novo e o antigo.
-                    </p>
-                </div>
-                <ul class="points-list">
-                    <li><span class="badge">1</span>02 Canções Livres</li>
-                    <li><span class="badge">2</span>01 Canção de Ensino (Congregação)</li>
-                    <li><span class="badge">3</span>01 Canção Temática (Específica/Desafio)</li>
+                <span class="pill blue">VISÃO E CAPACITAÇÃO</span>
+                <h2>Fortalecimento Espiritual</h2>
+                <ul class="feature-list">
+                    <li>
+                        <span class="icon blue"><i class="fas fa-bullseye"></i></span>
+                        <div>
+                            <strong>O Propósito do Ministro:</strong><br>
+                            Entender nosso papel além da música
+                        </div>
+                    </li>
+                    <li>
+                        <span class="icon green"><i class="fas fa-book-bible"></i></span>
+                        <div>
+                            <strong>Fundamentos Bíblicos:</strong><br>
+                            Adoração, Serviço e Excelência
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 17: Como Participar -->
+        <!-- Slide 8: Medidas Práticas -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Como Participar?</h2>
-                <div class="feature-grid" style="grid-template-columns: 1fr;">
-                    <div class="feature-card" style="text-align: center;">
-                        <i class="fas fa-hands-praying feature-icon" style="font-size: 3rem;"></i>
-                        <h3 class="text-gold" style="font-size: 1.8rem; margin: 20px 0;">Compromisso e Dedicação</h3>
-                        <ul class="points-list" style="max-width: 600px; margin: 0 auto;">
-                            <li>Participar ativamente das reuniões e ensaios</li>
-                            <li>Manter disciplinas espirituais pessoais</li>
-                            <li>Estar presente nos cultos e eventos da igreja</li>
-                            <li>Usar o App Louvor para acompanhamento</li>
-                        </ul>
+                <span class="pill green">MEDIDAS PRÁTICAS</span>
+                <h2>Como vamos crescer</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <i class="fas fa-sync-alt card-icon blue"></i>
+                        <h3>Rotação de Duplas</h3>
+                        <p>Dinamismo e integração na equipe</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-bible card-icon green"></i>
+                        <h3>Disciplinas Espirituais</h3>
+                        <p>Estímulo ao Jejum e Devocionais Semanais</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-church card-icon orange"></i>
+                        <h3>Assiduidade</h3>
+                        <p>Envolvimento real com a igreja local</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-users card-icon purple"></i>
+                        <h3>Comunhão</h3>
+                        <p>Encontrão Semestral e Tópico aberto</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PART 2: APP LOUVOR ================= -->
-
-        <!-- Slide 18: App Louvor Cover -->
+        <!-- Slide 9: Repertório -->
         <div class="slide">
-            <div class="section-divider" style="background: linear-gradient(135deg, #1e3a8a, #000);">
-                <i class="fas fa-mobile-alt" style="font-size: 5rem; color: var(--accent-gold-light); margin-bottom: 30px;"></i>
-                <h1 class="main-title">App Louvor</h1>
+            <div class="slide-content">
+                <span class="pill orange">REPERTÓRIO</span>
+                <h2>Estruturação Intencional</h2>
+                <p class="subtitle">Escolhas baseadas em propósito e técnica</p>
+                <ul class="feature-list">
+                    <li>
+                        <span class="icon blue"><i class="fas fa-music"></i></span>
+                        <div><strong>02 Canções Livres</strong></div>
+                    </li>
+                    <li>
+                        <span class="icon green"><i class="fas fa-graduation-cap"></i></span>
+                        <div><strong>01 Canção de Ensino</strong> (Congregação)</div>
+                    </li>
+                    <li>
+                        <span class="icon orange"><i class="fas fa-star"></i></span>
+                        <div><strong>01 Canção Temática</strong> (Específica/Desafio)</div>
+                    </li>
+                </ul>
+                <p style="margin-top: 40px; color: var(--gray-400);">Reuniões Bimestrais de Alinhamento</p>
+            </div>
+        </div>
+
+        <!-- PARTE 2: APP LOUVOR -->
+
+        <!-- Slide 10: App Louvor Intro -->
+        <div class="slide divider-slide" style="background: var(--gradient-green);">
+            <div class="slide-content">
+                <i class="fas fa-mobile-alt" style="font-size: 6rem; margin-bottom: 40px;"></i>
+                <h1>App Louvor</h1>
                 <p class="subtitle">A Ferramenta do Ministério</p>
             </div>
         </div>
 
-        <!-- Slide 19: O que é -->
+        <!-- Slide 11: O que é -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">O que é?</h2>
-                <div class="quote-card">
-                    <p class="quote-text">
-                        "Uma plataforma completa que integra gestão prática, crescimento espiritual e comunicação eficiente."
-                    </p>
-                </div>
-                <div class="feature-grid">
-                     <div class="feature-card">
-                        <h3 class="text-gold">Para Quem?</h3>
-                        <p>Desenvolvido especialmente para o nosso ministério.</p>
+                <span class="pill blue">O QUE É?</span>
+                <h2>Plataforma Completa de Gestão</h2>
+                <p class="subtitle">Desenvolvida especialmente para o nosso ministério</p>
+                <div class="grid-3" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-check-circle card-icon green"></i>
+                        <h3>Progressive Web App</h3>
+                        <p>Instalável no celular sem loja de apps</p>
                     </div>
-                    <div class="feature-card">
-                        <h3 class="text-gold">Por Quê?</h3>
-                        <p>Auxílio, planejamento e encorajamento.</p>
+                    <div class="card">
+                        <i class="fas fa-palette card-icon blue"></i>
+                        <h3>Interface Moderna</h3>
+                        <p>Design profissional e intuitivo</p>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 20: Pilares -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">3 Pilares</h2>
-                <div class="feature-grid" style="grid-template-columns: 1fr; gap: 15px;">
-                    <div class="feature-card" style="display: flex; align-items: center; gap: 20px;">
-                        <i class="fas fa-tasks feature-icon" style="margin: 0;"></i>
-                        <div>
-                            <h3 class="text-gold">Gestão Prática</h3>
-                            <p>Escalas, repertório e membros.</p>
-                        </div>
-                    </div>
-                    <div class="feature-card" style="display: flex; align-items: center; gap: 20px;">
-                        <i class="fas fa-pray feature-icon" style="margin: 0;"></i>
-                        <div>
-                            <h3 class="text-gold">Vida Espiritual</h3>
-                            <p>Planos de leitura, diário e devocionais.</p>
-                        </div>
-                    </div>
-                    <div class="feature-card" style="display: flex; align-items: center; gap: 20px;">
-                        <i class="fas fa-bullhorn feature-icon" style="margin: 0;"></i>
-                        <div>
-                            <h3 class="text-gold">Comunicação</h3>
-                            <p>Avisos, agenda e notificações.</p>
-                        </div>
+                    <div class="card">
+                        <i class="fas fa-cog card-icon orange"></i>
+                        <h3>100% Personalizado</h3>
+                        <p>Feito sob medida para nós</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 21: Funcionalidades -->
+        <!-- Slide 12: 3 Pilares -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Funcionalidades</h2>
-                <ul class="points-list" style="font-size: 1.3rem;">
-                    <li><span class="badge">1</span><strong>Escalas Inteligentes:</strong> Confirmação e notificações.</li>
-                    <li><span class="badge">2</span><strong>Repertório:</strong> Letras, tons e cifras.</li>
-                    <li><span class="badge">3</span><strong>Planos de Leitura:</strong> Bíblia em 1 Ano, NT, Salmos.</li>
-                    <li><span class="badge">4</span><strong>Diário Espiritual:</strong> Reflexões com áudio.</li>
-                    <li><span class="badge">5</span><strong>Relatórios:</strong> Análise de dados do ministério.</li>
+                <span class="pill green">3 PILARES</span>
+                <h2>Fundamentos do Sistema</h2>
+                <div class="grid-3" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-tasks card-icon blue"></i>
+                        <h3>Gestão Prática</h3>
+                        <p>Escalas, repertório, membros e histórico completo</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-pray card-icon green"></i>
+                        <h3>Vida Espiritual</h3>
+                        <p>Planos de leitura, diário e devocionais semanais</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-bullhorn card-icon orange"></i>
+                        <h3>Comunicação</h3>
+                        <p>Avisos, agenda e notificações em tempo real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Funcionalidades Líder -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill blue">PARA LÍDERES</span>
+                <h2>Painel Administrativo</h2>
+                <ul class="feature-list">
+                    <li>
+                        <span class="icon blue"><i class="fas fa-calendar-alt"></i></span>
+                        <div><strong>Gestão de Escalas:</strong> Criação trimestral e controle de confirmações</div>
+                    </li>
+                    <li>
+                        <span class="icon green"><i class="fas fa-music"></i></span>
+                        <div><strong>Gestão de Repertório:</strong> Músicas com cifras, tons e links</div>
+                    </li>
+                    <li>
+                        <span class="icon orange"><i class="fas fa-users"></i></span>
+                        <div><strong>Gestão de Equipe:</strong> Membros, instrumentos e permissões</div>
+                    </li>
+                    <li>
+                        <span class="icon blue"><i class="fas fa-chart-bar"></i></span>
+                        <div><strong>Relatórios:</strong> Análise completa de participação e dados</div>
+                    </li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 22: Demonstração Visual -->
+        <!-- Slide 14: Funcionalidades Músicos -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Demonstração</h2>
-                <div style="display: flex; gap: 30px; justify-content: center; align-items: center; margin-top: 40px;">
-                    <div class="phone-mockup">
-                        <div class="phone-notch"></div>
-                        <div class="phone-screen">
-                            <i class="fas fa-calendar-check" style="font-size: 4rem; color: var(--accent-gold-light); margin-bottom: 20px;"></i>
-                            <h3 style="color: white; font-size: 1.5rem; margin-bottom: 10px;">Escalas</h3>
-                            <p style="color: var(--text-grey); font-size: 0.9rem; text-align: center;">Confirme sua presença<br>e veja o repertório</p>
-                        </div>
+                <span class="pill green">PARA MÚSICOS</span>
+                <h2>App do Participante</h2>
+                <ul class="feature-list">
+                    <li>
+                        <span class="icon blue"><i class="fas fa-calendar-check"></i></span>
+                        <div><strong>Minhas Escalas:</strong> Visualização e confirmação de presença</div>
+                    </li>
+                    <li>
+                        <span class="icon green"><i class="fas fa-guitar"></i></span>
+                        <div><strong>Repertório:</strong> Letras, cifras e links para estudo</div>
+                    </li>
+                    <li>
+                        <span class="icon orange"><i class="fas fa-lightbulb"></i></span>
+                        <div><strong>Sugestões:</strong> Propor novas músicas para o ministério</div>
+                    </li>
+                    <li>
+                        <span class="icon blue"><i class="fas fa-book-open"></i></span>
+                        <div><strong>Planos de Leitura:</strong> Bíblia em 1 ano, NT, Salmos</div>
+                    </li>
+                    <li>
+                        <span class="icon green"><i class="fas fa-pen"></i></span>
+                        <div><strong>Diário Espiritual:</strong> Reflexões com áudio e imagens</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Tecnologias -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill orange">TECNOLOGIAS</span>
+                <h2>Arquitetura Moderna</h2>
+                <div class="grid-2" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-code card-icon blue"></i>
+                        <h3>Backend Robusto</h3>
+                        <p>PHP 7.4+ com arquitetura PSR-4, MySQL com PDO, segurança avançada</p>
                     </div>
-                    <div class="phone-mockup">
-                        <div class="phone-notch"></div>
-                        <div class="phone-screen">
-                            <i class="fas fa-book-open" style="font-size: 4rem; color: var(--accent-gold-light); margin-bottom: 20px;"></i>
-                            <h3 style="color: white; font-size: 1.5rem; margin-bottom: 10px;">Leitura</h3>
-                            <p style="color: var(--text-grey); font-size: 0.9rem; text-align: center;">Acompanhe seu plano<br>de leitura bíblica</p>
-                        </div>
+                    <div class="card">
+                        <i class="fas fa-paint-brush card-icon green"></i>
+                        <h3>Frontend Premium</h3>
+                        <p>HTML5, CSS3 com Design System próprio, JavaScript moderno</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-server card-icon orange"></i>
+                        <h3>Infraestrutura</h3>
+                        <p>Hostinger, Git/GitHub, deploy automático, PWA instalável</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-shield-alt card-icon purple"></i>
+                        <h3>Segurança</h3>
+                        <p>HTTPS, criptografia, CSRF protection, conformidade LGPD</p>
                     </div>
                 </div>
             </div>
         </div>
 
-         <!-- Slide 23: Stats -->
-         <div class="slide">
+        <!-- Slide 16: Estatísticas -->
+        <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Bastidores</h2>
-                <div class="feature-grid">
+                <span class="pill blue">BASTIDORES</span>
+                <h2>Números Impressionantes</h2>
+                <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-number">50k+</div>
-                        <p class="stat-label">Linhas de Código</p>
+                        <div class="stat-label">Linhas de Código</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">600h</div>
-                        <p class="stat-label">Horas de Trabalho</p>
+                        <div class="stat-number" style="background: var(--gradient-green); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">600h</div>
+                        <div class="stat-label">Horas de Trabalho</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" style="background: var(--gradient-orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">25+</div>
+                        <div class="stat-label">Páginas Admin</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Personalização</div>
                     </div>
                 </div>
-                <p class="subtitle mt-4">Feito com excelência para Deus.</p>
-                <div class="qr-container" style="margin-top: 30px;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://vilela.eng.br/applouvor" alt="QR Code App Louvor" style="display: block;">
-                    <p style="color: var(--primary-dark); margin-top: 10px; font-weight: 600; font-size: 0.9rem;">Acesse o App</p>
+                <p style="margin-top: 60px; font-size: 1.5rem; color: var(--gray-400);">Feito com excelência para Deus</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Impacto -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill green">IMPACTO</span>
+                <h2>Resultados Alcançados</h2>
+                <div class="grid-2" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-clock card-icon blue"></i>
+                        <h3>Economia de Tempo</h3>
+                        <p style="font-size: 2rem; color: var(--blue); font-weight: 700; margin: 20px 0;">85%</p>
+                        <p>De 2-3 horas para 15 minutos na montagem de escalas</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-dollar-sign card-icon green"></i>
+                        <h3>Custo-Benefício</h3>
+                        <p style="font-size: 2rem; color: var(--green); font-weight: 700; margin: 20px 0;">90%</p>
+                        <p>Economia vs. alternativas do mercado (R$ 30 vs R$ 300+)</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-chart-line card-icon orange"></i>
+                        <h3>Engajamento</h3>
+                        <p>Confirmações mais rápidas, maior participação e feedback constante</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-heart card-icon purple"></i>
+                        <h3>Crescimento Espiritual</h3>
+                        <p>Acompanhamento de leitura bíblica e diário espiritual ativo</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 24: Próximos Passos -->
+        <!-- Slide 18: Comparação -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">Próximos Passos</h2>
-                <div class="feature-grid" style="grid-template-columns: 1fr;">
-                    <div class="feature-card">
-                        <h3 class="text-gold" style="font-size: 1.5rem; margin-bottom: 20px;"><i class="fas fa-calendar-alt" style="margin-right: 10px;"></i>Agenda</h3>
-                        <ul class="points-list">
-                            <li>Reunião Bimestral de Repertório - Março</li>
-                            <li>Encontrão Semestral - Junho</li>
-                            <li>Treinamento App Louvor - Próxima Semana</li>
-                        </ul>
+                <span class="pill orange">COMPARAÇÃO</span>
+                <h2>App Louvor vs. Alternativas</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>App Louvor</th>
+                            <th>Planning Center</th>
+                            <th>Planilhas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Custo Mensal</td>
+                            <td class="highlight">R$ 30</td>
+                            <td>R$ 350</td>
+                            <td>Grátis</td>
+                        </tr>
+                        <tr>
+                            <td>Personalização</td>
+                            <td class="highlight">100%</td>
+                            <td>20%</td>
+                            <td>50%</td>
+                        </tr>
+                        <tr>
+                            <td>Vida Espiritual</td>
+                            <td class="highlight">✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Suporte BR</td>
+                            <td class="highlight">✅</td>
+                            <td>❌</td>
+                            <td>N/A</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 19: Como Acessar -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill blue">COMO ACESSAR</span>
+                <h2>Comece Agora</h2>
+                <div class="grid-2" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-globe card-icon blue"></i>
+                        <h3>Acesso Web</h3>
+                        <p style="font-size: 1.75rem; color: var(--blue); font-weight: 600; margin: 20px 0;">vilela.eng.br/applouvor</p>
+                        <p>Acesse de qualquer navegador</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-mobile-screen card-icon green"></i>
+                        <h3>Instalação PWA</h3>
+                        <p><strong>Android:</strong> Menu → Adicionar à tela inicial</p>
+                        <p style="margin-top: 12px;"><strong>iOS:</strong> Compartilhar → Adicionar à Tela Inicial</p>
                     </div>
                 </div>
-                <div style="margin-top: 30px; padding: 20px; background: rgba(217, 119, 6, 0.1); border-radius: 10px; border: 1px solid var(--accent-gold);">
-                    <p style="font-size: 1.2rem;"><i class="fas fa-lightbulb" style="color: var(--accent-gold); margin-right: 10px;"></i><strong>Dúvidas ou Sugestões?</strong> Fale com a liderança!</p>
+                <div style="margin-top: 60px; padding: 40px; background: var(--gray-50); border-radius: 16px;">
+                    <p style="font-size: 1.25rem; color: var(--gray-900);"><i class="fas fa-qrcode" style="color: var(--blue); margin-right: 12px;"></i>Escaneie o QR Code na próxima tela para acesso rápido</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: QR Code -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Acesso Rápido</h2>
+                <div style="margin-top: 60px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://vilela.eng.br/applouvor" 
+                         alt="QR Code App Louvor" 
+                         style="border: 8px solid var(--gray-900); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);">
+                    <p style="margin-top: 40px; font-size: 1.5rem; color: var(--gray-400);">Aponte a câmera do celular para acessar</p>
+                    <p style="margin-top: 16px; font-size: 2rem; color: var(--blue); font-weight: 700;">vilela.eng.br/applouvor</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Próximos Passos -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill green">PRÓXIMOS PASSOS</span>
+                <h2>Agenda 2026</h2>
+                <ul class="feature-list">
+                    <li>
+                        <span class="icon blue"><i class="fas fa-calendar"></i></span>
+                        <div><strong>Março:</strong> Reunião Bimestral de Repertório</div>
+                    </li>
+                    <li>
+                        <span class="icon green"><i class="fas fa-users"></i></span>
+                        <div><strong>Junho:</strong> Encontrão Semestral do Ministério</div>
+                    </li>
+                    <li>
+                        <span class="icon orange"><i class="fas fa-graduation-cap"></i></span>
+                        <div><strong>Próxima Semana:</strong> Treinamento App Louvor</div>
+                    </li>
+                </ul>
+                <div style="margin-top: 60px; padding: 40px; background: rgba(0, 113, 227, 0.05); border: 2px solid var(--blue); border-radius: 16px;">
+                    <p style="font-size: 1.5rem; color: var(--gray-900);"><i class="fas fa-question-circle" style="color: var(--blue); margin-right: 12px;"></i><strong>Dúvidas ou Sugestões?</strong> Fale com a liderança!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Como Participar -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill orange">CHAMADA PARA AÇÃO</span>
+                <h2>Como Participar?</h2>
+                <div class="grid-2" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-user-check card-icon blue"></i>
+                        <h3>Para Líderes</h3>
+                        <p>✓ Acessar painel administrativo<br>
+                           ✓ Explorar funcionalidades<br>
+                           ✓ Criar primeira escala<br>
+                           ✓ Convidar membros</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-music card-icon green"></i>
+                        <h3>Para Músicos</h3>
+                        <p>✓ Fazer login no app<br>
+                           ✓ Instalar PWA no celular<br>
+                           ✓ Confirmar escalas<br>
+                           ✓ Iniciar leitura bíblica</p>
+                    </div>
+                </div>
+                <p style="margin-top: 60px; font-size: 1.75rem; color: var(--gray-900); font-weight: 600;">
+                    <span class="accent-blue">Compromisso</span> e <span class="accent-green">Dedicação</span> são essenciais
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 23: Roadmap -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill purple">FUTURO</span>
+                <h2>Roadmap 2026</h2>
+                <div class="grid-2" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-mobile-alt card-icon blue"></i>
+                        <h3>Q2 - Abr/Jun</h3>
+                        <p>App mobile nativo (Android/iOS) e sistema de partituras digitais</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-brain card-icon green"></i>
+                        <h3>Q3 - Jul/Set</h3>
+                        <p>IA para sugestões inteligentes e análise preditiva de escalas</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-gamepad card-icon orange"></i>
+                        <h3>Q3 - Jul/Set</h3>
+                        <p>Gamificação avançada e sistema de mentoria</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-share-nodes card-icon purple"></i>
+                        <h3>Q4 - Out/Dez</h3>
+                        <p>Integração com redes sociais e transmissão ao vivo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 24: Agradecimentos -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill blue">AGRADECIMENTOS</span>
+                <h2>Obrigado!</h2>
+                <div style="margin-top: 60px;">
+                    <p style="font-size: 1.75rem; color: var(--gray-900); margin-bottom: 40px;">
+                        <strong>Desenvolvedor:</strong> Diego T. N. Vilela<br>
+                        <span style="color: var(--gray-400); font-size: 1.25rem;">Engenheiro de Software</span>
+                    </p>
+                    <p style="font-size: 1.5rem; color: var(--gray-400); margin-bottom: 60px;">
+                        <i class="fab fa-whatsapp" style="color: var(--green);"></i> (35) 98452-9577
+                    </p>
+                    <div class="grid-3">
+                        <div>
+                            <i class="fas fa-users" style="font-size: 3rem; color: var(--blue); margin-bottom: 16px;"></i>
+                            <p>Liderança do Ministério</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-heart" style="font-size: 3rem; color: var(--green); margin-bottom: 16px;"></i>
+                            <p>Membros Testadores</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-church" style="font-size: 3rem; color: var(--orange); margin-bottom: 16px;"></i>
+                            <p>PIB Oliveira</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Slide 25: Final -->
-        <div class="slide">
-            <div class="section-divider">
-                <i class="fas fa-heart" style="font-size: 4rem; color: #ef4444; margin-bottom: 20px; animation: pulse 2s infinite;"></i>
-                <h1 class="main-title">Obrigado!</h1>
-                <p class="subtitle">Vamos juntos fazer um 2026 incrível!</p>
-                <p style="margin-top: 40px; color: var(--text-grey); font-size: 0.9rem;">
+        <div class="slide cover-slide">
+            <div class="slide-content">
+                <i class="fas fa-rocket" style="font-size: 6rem; margin-bottom: 40px; background: var(--gradient-green); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                <h1>Vamos Juntos!</h1>
+                <p class="subtitle">Fazer de 2026 um ano incrível para o Ministério</p>
+                <p style="margin-top: 60px; font-size: 1.5rem; color: var(--gray-400); font-style: italic;">
                     "A excelência honra a Deus e inspira as pessoas."
                 </p>
             </div>
@@ -991,18 +1068,9 @@
 
     <!-- Controls -->
     <div class="nav-controls">
-        <button class="nav-btn" onclick="prevSlide()">
-            <i class="fas fa-chevron-left"></i>
-            <span class="tooltip">Anterior (←)</span>
-        </button>
-        <button class="nav-btn" onclick="nextSlide()">
-            <i class="fas fa-chevron-right"></i>
-            <span class="tooltip">Próximo (→)</span>
-        </button>
+        <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
     </div>
-
-    <!-- Mini-map -->
-    <div class="mini-map" id="miniMap"></div>
 
     <script>
         let currentSlide = 0;
@@ -1010,49 +1078,18 @@
         const totalSlides = slides.length;
         const progressBar = document.getElementById('progressBar');
         const slideCounter = document.getElementById('slideCounter');
-        const miniMap = document.getElementById('miniMap');
-
-        // Create mini-map dots
-        for (let i = 0; i < totalSlides; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'mini-map-dot';
-            if (i === 0) dot.classList.add('active');
-            dot.onclick = () => goToSlide(i);
-            miniMap.appendChild(dot);
-        }
-
-        function triggerAnimations(slide) {
-            const listItems = slide.querySelectorAll('.points-list li');
-            listItems.forEach((item, index) => {
-                item.style.animationDelay = (index * 0.2) + 's';
-                item.classList.remove('animate');
-                void item.offsetWidth;
-                item.classList.add('animate');
-            });
-        }
 
         function updateSlide() {
             slides.forEach((slide, index) => {
-                slide.classList.remove('active', 'prev');
+                slide.classList.remove('active');
                 if (index === currentSlide) {
                     slide.classList.add('active');
-                    triggerAnimations(slide);
-                } else if (index < currentSlide) {
-                    slide.classList.add('prev');
                 }
             });
             
-            // Update progress
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             progressBar.style.width = progress + '%';
-            
-            // Update counter
             slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update mini-map
-            document.querySelectorAll('.mini-map-dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
         }
 
         function nextSlide() {
@@ -1069,11 +1106,6 @@
             }
         }
 
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlide();
-        }
-
         // Keyboard support
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
@@ -1084,21 +1116,16 @@
                 prevSlide();
             } else if (e.key === 'Home') {
                 e.preventDefault();
-                goToSlide(0);
+                currentSlide = 0;
+                updateSlide();
             } else if (e.key === 'End') {
                 e.preventDefault();
-                goToSlide(totalSlides - 1);
-            } else if (e.key >= '1' && e.key <= '9') {
-                const slideNum = parseInt(e.key) - 1;
-                if (slideNum < totalSlides) {
-                    goToSlide(slideNum);
-                }
+                currentSlide = totalSlides - 1;
+                updateSlide();
             }
         });
         
-        // Initial call
         updateSlide();
-
     </script>
 </body>
 </html>
