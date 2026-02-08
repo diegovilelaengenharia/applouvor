@@ -387,6 +387,13 @@ if (!$planStarted) {
                     }
                 });
         }
+        // This is where the new code is inserted.
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide Icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
     </script>
     <?php
     renderAppFooter(); // Ensure footer is closed properly if needed
