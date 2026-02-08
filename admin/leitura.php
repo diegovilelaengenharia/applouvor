@@ -738,6 +738,11 @@ $tab = $_GET['tab'] ?? 'reading';
         <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
         <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Estatísticas</a>
         <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">🏆 Conquistas</a>
+        
+        <!-- Botão Discreto de Configurações -->
+        <button onclick="document.getElementById('modal-config').style.display='flex'" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; color: #6b7280; display: flex; align-items: center; justify-content: center; transition: background 0.2s; margin-left: auto;" title="Configurações">
+            <i data-lucide="settings" width="20"></i>
+        </button>
     </div>
 </div>
 
@@ -3021,11 +3026,266 @@ function switchReadingTab(tabName) {
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-        console.log('Lucide icons initialized');
     }
 });
 
+// START: CONFIGURATION MODAL LOGIC
+function switchConfigTab(tabName) {
+    document.querySelectorAll('.config-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.config-content').forEach(content => content.style.display = 'none');
+    
+    document.getElementById(`conf-tab-${tabName}`).classList.add('active');
+    document.getElementById(`conf-content-${tabName}`).style.display = 'block';
+}
+
+function saveSettings() {
+    const btn = document.getElementById('btn-save-config');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Salvando...';
+    btn.disabled = true;
+    
+    const f = new FormData();
+    f.append('action', 'save_settings');
+    f.append('start_date', document.getElementById('conf-start-date').value);
+    f.append('plan_type', document.getElementById('conf-plan-type').value);
+    
+    fetch('leitura.php', { method:'POST', body:f })
+    .then(r=>r.json())
+    .then(d=>{
+        if(d.success) {
+            window.location.reload();
+        } else {
+            alert('Erro ao salvar');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+}
+
+function exportDiaryAsPDF() {
+    alert('Funcionalidade de exportação em desenvolvimento.');
+}
 </script>
+
+<!-- CONFIGURATION MODAL HTML -->
+<div id="modal-config" class="config-fullscreen">
+    <div class="config-header">
+        <div class="config-title-group">
+            <button onclick="document.getElementById('modal-config').style.display='none'" class="btn-icon-back">
+                <i data-lucide="chevron-left"></i>
+            </button>
+            <h2>Configurações</h2>
+        </div>
+        <button onclick="document.getElementById('modal-config').style.display='none'" class="btn-icon-close">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="config-tabs-scroll">
+        <div class="config-tab-btn active" onclick="switchConfigTab('plano')" id="conf-tab-plano">
+            <i data-lucide="book-open"></i> Plano
+        </div>
+        <div class="config-tab-btn" onclick="switchConfigTab('geral')" id="conf-tab-geral">
+            <i data-lucide="bar-chart-2"></i> Geral
+        </div>
+        <div class="config-tab-btn" onclick="switchConfigTab('diario')" id="conf-tab-diario">
+            <i data-lucide="file-text"></i> Meu Diário
+        </div>
+    </div>
+    
+    <!-- TAB: PLANO -->
+    <div id="conf-content-plano" class="config-content">
+        <div class="config-card">
+            <h3>Plano de Leitura</h3>
+            <div class="form-group">
+                <label>Modelo do Plano</label>
+                <select id="conf-plan-type" class="form-control">
+                    <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
+                    <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronológico (365 dias)</option>
+                    <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Data de Início</label>
+                <input type="date" id="conf-start-date" class="form-control" value="<?= $startDateStr ?>">
+            </div>
+            
+            <button onclick="saveSettings()" id="btn-save-config" class="btn-primary-config">
+                <i data-lucide="save"></i> Salvar Alterações
+            </button>
+        </div>
+        
+        <div class="config-card danger-zone">
+            <h3 class="text-danger">Zona de Perigo</h3>
+            <p>Reiniciar o plano apagará todo o seu progresso.</p>
+            <button onclick="resetPlan()" class="btn-danger-config">
+                <i data-lucide="trash-2"></i> Reiniciar Plano
+            </button>
+        </div>
+    </div>
+    
+    <!-- TAB: GERAL -->
+    <div id="conf-content-geral" class="config-content" style="display: none;">
+        <div class="config-card">
+            <h3>Progresso Geral</h3>
+            <div class="stats-grid-config">
+                <div class="stat-box">
+                    <div class="stat-value"><?= $totalDaysRead ?></div>
+                    <div class="stat-label">Dias Lidos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value"><?= $currentStreak ?></div>
+                    <div class="stat-label">Sequência</div>
+                </div>
+                 <div class="stat-box">
+                    <div class="stat-value"><?= $completionPercent ?>%</div>
+                    <div class="stat-label">Concluído</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TAB: DIARIO -->
+    <div id="conf-content-diario" class="config-content" style="display: none;">
+        <div class="config-card">
+            <h3>Seu Diário</h3>
+            <p>Em breve você poderá baixar todas as suas anotações em PDF.</p>
+            <button onclick="exportDiaryAsPDF()" class="btn-secondary-config" disabled style="opacity: 0.6; cursor: not-allowed;">
+                <i data-lucide="download"></i> Baixar PDF (Em breve)
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* CONFIG MODAL STYLES */
+.config-fullscreen {
+    position: fixed;
+    top: 0; bottom: 0; right: 0; left: 0;
+    background: #f9fafb;
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+}
+@media(min-width: 1024px) { .config-fullscreen { left: 280px; } }
+
+.config-header {
+    background: white;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.config-title-group { display: flex; align-items: center; gap: 12px; }
+.config-title-group h2 { margin: 0; font-size: 1.25rem; color: #111827; }
+.btn-icon-back, .btn-icon-close {
+    background: transparent; border: none; cursor: pointer; color: #6b7280;
+    padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.btn-icon-back:hover, .btn-icon-close:hover { background: #f3f4f6; color: #1f2937; }
+
+.config-tabs-scroll {
+    display: flex;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 20px;
+    overflow-x: auto;
+    gap: 24px;
+}
+.config-tab-btn {
+    padding: 16px 4px;
+    font-weight: 600;
+    color: #6b7280;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+.config-tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
+.config-tab-btn:hover:not(.active) { color: #374151; }
+
+.config-content { padding: 24px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+.config-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.config-card h3 { margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; color: #111827; }
+
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 500; color: #374151; margin-bottom: 8px; font-size: 0.9rem; }
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #1f2937;
+    background: #fff;
+}
+
+.btn-primary-config {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+.btn-primary-config:hover { background: #1d4ed8; }
+
+.danger-zone { border-color: #fecaca; background: #fef2f2; }
+.text-danger { color: #dc2626; }
+.btn-danger-config {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.btn-danger-config:hover { background: #fef2f2; }
+
+.stats-grid-config {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+.stat-box {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+}
+.stat-value { font-size: 1.5rem; font-weight: 700; color: #111827; }
+.stat-label { font-size: 0.8rem; color: #6b7280; font-weight: 500; margin-top: 4px; }
+</style>
 
 <?php
 renderAppFooter();
