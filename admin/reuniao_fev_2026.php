@@ -619,7 +619,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.6: Estrofe 1 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 120px;">
+                <div style="text-align: center; font-size: 7rem; line-height: 1.4; color: #000000 !important; font-weight: 600; margin-top: 80px;">
                     <p>
                         Teu fogo arde em mim<br>
                         E muda o meu viver<br>
@@ -633,7 +633,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.7: Estrofe 2 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 150px;">
+                <div style="text-align: center; font-size: 7rem; line-height: 1.4; color: #000000 !important; font-weight: 600; margin-top: 100px;">
                     <p>
                         Que o nosso louvor<br>
                         Não seja um momento<br>
@@ -647,7 +647,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.8: Estrofe 3 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 150px;">
+                <div style="text-align: center; font-size: 7rem; line-height: 1.4; color: #000000 !important; font-weight: 600; margin-top: 100px;">
                     <p>
                         Que o nosso amor<br>
                         Não seja fingido<br>
@@ -661,7 +661,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.9: Estrofe 4 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 100px;">
+                <div style="text-align: center; font-size: 7rem; line-height: 1.4; color: #000000 !important; font-weight: 600; margin-top: 60px;">
                     <p>
                         Não vale a pena só me emocionar<br>
                         E buscar as canções mais lindas pra cantar<br>
@@ -675,7 +675,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.10: Estrofe 5 (Refrão) -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5.5rem; line-height: 1.5; color: var(--gray-900); margin-top: 150px;">
+                <div style="text-align: center; font-size: 7.5rem; line-height: 1.3; color: #000000 !important; font-weight: 700; margin-top: 100px;">
                     <p>
                         O fogo arderá sobre o altar<br>
                         Continuamente sobre o altar<br>
@@ -688,7 +688,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.11: Estrofe 6 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 120px;">
+                <div style="text-align: center; font-size: 7rem; line-height: 1.4; color: #000000 !important; font-weight: 600; margin-top: 80px;">
                     <p>
                         Pois de que vale ter as poesias mais lindas<br>
                         As harmonias mais brilhantes<br>
@@ -701,7 +701,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 5.12: Estrofe 7 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 80px;">
+                <div style="text-align: center; font-size: 7rem; line-height: 1.4; color: #000000 !important; font-weight: 600; margin-top: 60px;">
                     <p>
                         Pois de que vale ter tudo e não ter nada<br>
                         Te dar meus lábios e não minha alma<br>
