@@ -684,6 +684,7 @@ document.addEventListener('DOMContentLoaded', function() {
             permissionStatus.onchange = updateNotificationStatus;
         });
     }
+});
 
 
 
