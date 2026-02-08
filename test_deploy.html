@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Deployment</title>
+</head>
+<body>
+    <h1>Deployment Test - Version 2026-02-08 00:13</h1>
+    <p>If you see this page with the correct timestamp, the server is reading the latest files.</p>
+    <p>Last commit: 42e29c3</p>
+    <p>Changes: Settings gear removed, blue button added</p>
+    
+    <script>
+        // Test if openSettingsModal exists
+        function openConfig() {
+            alert('openConfig works!');
+        }
+        
+        function openSettingsModal() {
+            openConfig();
+        }
+        
+        // Test the function
+        console.log('Testing openSettingsModal...');
+        try {
+            openSettingsModal();
+        } catch(e) {
+            console.error('Error:', e);
+        }
+    </script>
+</body>
+</html>
