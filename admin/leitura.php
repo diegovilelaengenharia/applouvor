@@ -663,7 +663,102 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 
 
+<!-- DASHBOARD PREMIUM -->
+<div class="dashboard-container">
+    <!-- Greeting Header -->
+    <div class="greeting-header">
+        <div class="greeting-text">
+            <span class="greeting-time">
+                <?php 
+                $hour = (int)date('H');
+                if ($hour < 12) echo '☀️ Bom dia';
+                elseif ($hour < 18) echo '🌤️ Boa tarde';
+                else echo '🌙 Boa noite';
+                ?>, <?= explode(' ', $userName)[0] ?>!
+            </span>
+            <span class="greeting-subtitle">Que sua leitura seja abençoada</span>
+        </div>
+    </div>
+
+    <!-- HERO: Streak Card -->
+    <div class="streak-card-hero">
+        <div class="streak-icon">
+            <span class="fire-emoji">🔥</span>
+        </div>
+        <div class="streak-content">
+            <div class="streak-label">SEQUÊNCIA ATIVA</div>
+            <div class="streak-number"><?= $currentStreak ?></div>
+            <div class="streak-text">dias consecutivos</div>
+            
+            <?php 
+            $nextMilestone = 30;
+            if ($currentStreak >= 30) $nextMilestone = 100;
+            if ($currentStreak >= 100) $nextMilestone = 365;
+            $progressToNext = min(100, ($currentStreak / $nextMilestone) * 100);
+            ?>
+            
+            <div class="streak-progress-bar">
+                <div class="streak-progress-fill" style="width: <?= $progressToNext ?>%"></div>
+            </div>
+            <div class="streak-next-goal">
+                <?php if ($currentStreak < $nextMilestone): ?>
+                    Próxima meta: 🏆 <?= $nextMilestone ?> dias
+                <?php else: ?>
+                    🎉 Meta alcançada! Continue assim!
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini Stats Grid (2x2) -->
+    <div class="stats-grid">
+        <!-- Capítulos Lidos -->
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value"><?= $totalChaptersRead ?></div>
+            <div class="stat-label">capítulos</div>
+        </div>
+
+        <!-- Tempo Médio -->
+        <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value"><?= $avgChapters ?>min</div>
+            <div class="stat-label">média</div>
+        </div>
+
+        <!-- Progresso Anual -->
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value"><?= $completionPercent ?>%</div>
+            <div class="stat-label">do ano</div>
+        </div>
+
+        <!-- Nível -->
+        <div class="stat-card">
+            <div class="stat-icon">🏅</div>
+            <?php 
+            $level = min(20, floor($totalDaysRead / 15) + 1);
+            $levelProgress = ($totalDaysRead % 15) / 15 * 100;
+            ?>
+            <div class="stat-value">Nv.<?= $level ?></div>
+            <div class="stat-progress">
+                <div class="stat-progress-fill" style="width: <?= $levelProgress ?>%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivational Message -->
+    <div class="motivational-card">
+        <div class="motivational-icon">💡</div>
+        <div class="motivational-text">
+            <div class="motivational-quote">"A tua palavra é lâmpada para os meus pés e luz para o meu caminho."</div>
+            <div class="motivational-ref">- Salmos 119:105</div>
+        </div>
+    </div>
+</div>
+
 <!-- CALENDAR STRIP -->
+
 <div style="position: relative; background: white; border-bottom: 1px solid #e5e7eb;">
     <button onclick="scrollCalendar('left')" style="position: absolute; left: 0; top: 0; bottom: 0; width: 32px; z-index: 10; background: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-left" width="16"></i></button>
     <div class="cal-strip" id="calendar-strip"></div>
