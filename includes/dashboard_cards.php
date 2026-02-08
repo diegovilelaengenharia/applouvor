@@ -129,8 +129,8 @@ function getAllAvailableCards() {
             'icon' => 'cake',
             'category' => 'comunica',
             'category_name' => 'Comunicação',
-            'color' => '#e11d48', // Rose 600
-            'bg' => '#ffe4e6', 
+            'color' => '#d97706', // Amber 600 - mesma cor de Avisos
+            'bg' => '#fffbeb', 
             'url' => 'aniversarios.php',
             'admin_only' => false
         ],
