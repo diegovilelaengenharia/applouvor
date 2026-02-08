@@ -1236,45 +1236,6 @@ body.dark-mode .stat-card-achievement {
         <?php } ?>
     </div>
 
-    <!-- HeatMap de Atividade -->
-    <h2 class="section-title">
-        <i data-lucide="calendar"></i>
-        Atividade dos Últimos 30 Dias
-    </h2>
-    
-    <div class="heatmap-container">
-        <div class="heatmap-grid">
-            <?php
-            // Generate last 30 days heatmap
-            for ($i = 29; $i >= 0; $i--) {
-                $date = date('Y-m-d', strtotime("-$i days"));
-                // Simulate activity level (0-4)
-                $level = rand(0, 4);
-                echo "<div class='heatmap-day level-$level' title='$date'></div>";
-            }
-            ?>
-        </div>
-        <div class="heatmap-legend">
-            <span>Menos</span>
-            <div class="legend-item">
-                <div class="legend-box level-0"></div>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box level-1"></div>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box level-2"></div>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box level-3"></div>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box level-4"></div>
-            </div>
-            <span>Mais</span>
-        </div>
-    </div>
-
     <!-- Estatísticas Adicionais -->
     <h2 class="section-title">
         <i data-lucide="bar-chart-3"></i>
