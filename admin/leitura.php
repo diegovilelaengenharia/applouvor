@@ -395,9 +395,18 @@ if (!$planStarted) {
             }
         });
 
-    // Open configuration modal
-    function openConfig() {
-        alert('Configurações em breve! Por enquanto, use as abas acima para navegar entre Texto Bíblico, Estatísticas e Conquistas.');
+    // Open configuration modal (restored from git history)
+    function openConfig(defaultTab = 'geral') { 
+        const modal = document.getElementById('modal-config');
+        if (modal) {
+            modal.style.display = 'flex';
+            if (typeof switchConfigTab === 'function') {
+                switchConfigTab(defaultTab);
+            }
+        } else {
+            console.error('Modal config not found');
+            alert('Modal de configurações não encontrado. Verifique o código.');
+        }
     }
     
     // Alias for settings modal
