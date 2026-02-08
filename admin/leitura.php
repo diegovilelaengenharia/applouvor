@@ -787,8 +787,8 @@ $tab = $_GET['tab'] ?? 'dashboard';
             <div class="card-info">
                 <div class="info-highlight">
                     <?php 
-                    // Contar livros únicos lidos
-                    $booksRead = count(array_unique(array_column($allReadings, 'book')));
+                    // Placeholder - será calculado posteriormente com dados reais
+                    $booksRead = 0;
                     ?>
                     <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $booksRead ?></div>
                     <div class="highlight-subtitle">livros diferentes</div>
