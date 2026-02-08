@@ -650,6 +650,31 @@ document.addEventListener('DOMContentLoaded', function() {
             permissionStatus.onchange = updateNotificationStatus;
         });
     }
+
+    // Função para solicitar permissão
+    window.requestNotificationPermission = function() {
+        if (!('Notification' in window)) {
+            alert('Seu navegador não suporta notificações.');
+            return;
+        }
+
+        Notification.requestPermission().then(function(permission) {
+            if (permission === 'granted') {
+                updateNotificationStatus();
+                
+                // Feedback visual
+                const btn = document.getElementById('btnActivatePush');
+                if(btn) {
+                    btn.innerText = 'Ativado!';
+                    btn.style.background = 'var(--sage-500)';
+                    setTimeout(() => btn.remove(), 2000);
+                }
+            } else {
+                updateNotificationStatus();
+                alert('Permissão negada. Você precisa habilitar manualmente nas configurações do navegador.');
+            }
+        });
+    };
 });
 
 // Função para apagar todas as notificações
