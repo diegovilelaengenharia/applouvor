@@ -469,6 +469,41 @@
         .mt-4 { margin-top: 2rem; }
         .mb-4 { margin-bottom: 2rem; }
 
+        /* Print Styles for PDF */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .slide {
+                page-break-after: always;
+                page-break-inside: avoid;
+                position: relative;
+                opacity: 1 !important;
+                transform: none !important;
+                display: flex !important;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 80px 120px;
+            }
+            
+            .slide.active {
+                page-break-before: avoid;
+            }
+            
+            .progress-bar,
+            .slide-counter,
+            .nav-controls {
+                display: none !important;
+            }
+            
+            @page {
+                size: landscape;
+                margin: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -482,7 +517,7 @@
         <!-- Slide 1: Capa -->
         <div class="slide active cover-slide">
             <div class="slide-content">
-                <i class="fas fa-church cover-icon"></i>
+                <img src="../assets/img/logo_pib_white.png" alt="PIB Oliveira" style="width: 120px; margin-bottom: 40px; opacity: 0.9;">
                 <h1>Reunião de Alinhamento<br>e Planejamento 2026</h1>
                 <p class="subtitle">PIB Oliveira • Ministério de Música</p>
                 <p style="color: var(--gray-400); font-size: 1.25rem; margin-top: 60px;">08 de Fevereiro de 2026</p>
@@ -501,9 +536,9 @@
                     gap: 12px;
                     transition: all 0.3s ease;
                     box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 113, 227, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 113, 227, 0.3)'">
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 113, 227, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 113, 227, 0.3)'" class="no-print">
                     <i class="fas fa-download"></i>
-                    Baixar PDF
+                    Baixar Apresentação em PDF
                 </button>
             </div>
         </div>
@@ -545,7 +580,7 @@
                 <h2>O Fogo no Altar</h2>
                 <div class="quote-box">
                     <p class="quote-text">
-                        "Mantenha-se aceso o fogo no altar; não deve ser apagado. Toda manhã o sacerdote acrescentará lenha... Mantenha-se o fogo continuamente aceso no altar; não deve ser apagado."
+                        "Mantenha-se aceso o fogo no altar; não deve ser apagado. <span style="color: #DC2626; font-weight: 700;">Toda manhã</span> o sacerdote acrescentará lenha... Mantenha-se o fogo <span style="color: #DC2626; font-weight: 700;">continuamente</span> aceso no altar; não deve ser apagado."
                     </p>
                     <p class="quote-ref">LEVÍTICO 6:12-13</p>
                 </div>
@@ -678,22 +713,18 @@
             <div class="slide-content">
                 <span class="pill blue">VISÃO E CAPACITAÇÃO</span>
                 <h2>Fortalecimento Espiritual</h2>
-                <ul class="feature-list">
-                    <li>
-                        <span class="icon blue"><i class="fas fa-bullseye"></i></span>
-                        <div>
-                            <strong>O Propósito do Ministro:</strong><br>
-                            Entender nosso papel além da música. Temos responsabilidade naquilo que estamos falando. A escolha das canções e as propostas que levamos à igreja influenciam as pessoas. É uma forma de ensino.
-                        </div>
-                    </li>
-                    <li>
-                        <span class="icon green"><i class="fas fa-book-bible"></i></span>
-                        <div>
-                            <strong>Fundamentos Bíblicos:</strong><br>
-                            Adoração, Serviço e Excelência
-                        </div>
-                    </li>
-                </ul>
+                <div class="grid-2" style="margin-top: 60px;">
+                    <div class="card">
+                        <i class="fas fa-bullseye card-icon blue"></i>
+                        <h3 style="font-size: 2rem; margin-bottom: 24px;">O Propósito do Ministro</h3>
+                        <p style="font-size: 1.5rem; line-height: 1.8;">Entender nosso papel além da música. Temos responsabilidade naquilo que estamos falando.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-book-bible card-icon green"></i>
+                        <h3 style="font-size: 2rem; margin-bottom: 24px;">Fundamentos Bíblicos</h3>
+                        <p style="font-size: 1.5rem; line-height: 1.8;">Adoração, Serviço, Excelência<br>Escolha consciente de músicas<br>Tradição e novidades</p>
+                    </div>
+                </div>
             </div>
         </div>
 
