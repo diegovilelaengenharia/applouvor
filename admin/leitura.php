@@ -21,6 +21,12 @@ try {
     if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN audio_path VARCHAR(500) DEFAULT NULL");
 } catch(Exception $e) { /* Ignore */ }
 
+// AUTOLOAD: Campo de Imagem
+try {
+    $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'image_path'");
+    if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN image_path VARCHAR(500) DEFAULT NULL");
+} catch(Exception $e) { /* Ignore */ }
+
 // BACKEND: Logic
 $userId = $_SESSION['user_id'];
 $now = new DateTime();
