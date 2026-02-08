@@ -1248,7 +1248,14 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Líder Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                <a href="lider.php" class="admin-crown-btn ripple" title="Painel do Líder">
+                <?php
+                    // Recalculate if not in same scope (though header is included, vars scope might vary if inside function)
+                    // renderPageHeader is a function, so we need to define logic inside it
+                    $inAdminHead = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
+                    $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
+                    $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
+                ?>
+                <a href="<?= $liderLinkHead ?>" class="admin-crown-btn ripple" title="Painel do Líder">
                     <i data-lucide="crown" style="width: 20px;"></i>
                 </a>
             <?php endif; ?>
@@ -1485,7 +1492,16 @@ function renderAppHeader($title, $backUrl = null)
                                     <span style="font-weight: 500;">Quem somos nós?</span>
                                 </a>
 
-                                <a href="perfil.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                <?php
+                                // Logic for dynamic links based on context (admin vs app vs root)
+                                $inAdmin = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
+                                $inApp   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
+                                
+                                $perfilLink = $inAdmin ? 'perfil.php' : ($inApp ? '../admin/perfil.php' : 'admin/perfil.php');
+                                $liderLink  = $inAdmin ? 'lider.php'  : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
+                                ?>
+
+                                <a href="<?= $perfilLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                                     <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -1507,7 +1523,7 @@ function renderAppHeader($title, $backUrl = null)
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                                    <a href="lider.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                                    <a href="<?= $liderLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
                                         <div style="background: #fff7ed; padding: 6px; border-radius: 6px; display: flex; color: #d97706;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
