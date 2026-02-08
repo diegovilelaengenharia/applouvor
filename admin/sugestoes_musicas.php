@@ -3,7 +3,6 @@
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
-require_once 'init_db_suggestions.php';
 
 // Apenas admin
 if (($_SESSION['user_role'] ?? 'user') !== 'admin') {
@@ -11,232 +10,179 @@ if (($_SESSION['user_role'] ?? 'user') !== 'admin') {
     exit;
 }
 
+// Filtros
+$tab = $_GET['tab'] ?? 'pending'; // pending, approved, rejected
+
+// Processar Ações (Aprovar/Rejeitar) via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    $id = $_POST['id'] ?? 0;
+    
+    if ($id && in_array($action, ['approve', 'reject'])) {
+        try {
+            $pdo->beginTransaction();
+            
+            if ($action === 'approve') {
+                // 1. Get Suggestion
+                $stmt = $pdo->prepare("SELECT * FROM song_suggestions WHERE id = ?");
+                $stmt->execute([$id]);
+                $sug = $stmt->fetch();
+                
+                if ($sug) {
+                    // 2. Insert Song
+                    $stmtIns = $pdo->prepare("INSERT INTO songs (title, artist, tone) VALUES (?, ?, ?)");
+                    $stmtIns->execute([$sug['title'], $sug['artist'], $sug['tone']]);
+                    
+                    // 3. Update Suggestion
+                    $stmtUpd = $pdo->prepare("UPDATE song_suggestions SET status = 'approved', reviewed_at = NOW() WHERE id = ?");
+                    $stmtUpd->execute([$id]);
+                }
+            } else {
+                // Reject
+                $stmtUpd = $pdo->prepare("UPDATE song_suggestions SET status = 'rejected', reviewed_at = NOW() WHERE id = ?");
+                $stmtUpd->execute([$id]);
+            }
+            
+            $pdo->commit();
+            header("Location: sugestoes_musicas.php?tab=$tab&success=1");
+            exit;
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            $error = "Erro ao processar: " . $e->getMessage();
+        }
+    }
+}
+
+// Buscar Dados
+$sql = "SELECT s.*, u.name as user_name, u.photo as user_photo 
+        FROM song_suggestions s
+        JOIN users u ON s.user_id = u.id
+        WHERE s.status = :status
+        ORDER BY s.created_at DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['status' => $tab]);
+$suggestions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 renderAppHeader('Gestão de Sugestões');
 renderPageHeader('Gestão de Sugestões', 'Aprove ou rejeite músicas sugeridas');
 ?>
 
-<div style="max-width: 800px; margin: 0 auto; padding: 16px;">
+<!-- Estilos Compartilhados com Repertório (Compact Cards) -->
+<style>
+    .timeline-card.compact .card-content-wrapper { padding: 8px 12px; gap: 10px; }
+    .compact-card {
+        display: flex; align-items: center; gap: 12px;
+        background: var(--bg-surface); border: 1px solid var(--border-color);
+        padding: 12px; border-radius: 12px; text-decoration: none; color: inherit;
+        transition: all 0.2s; position: relative; margin-bottom: 8px;
+    }
+    .compact-card:hover { transform: translateX(2px); border-color: var(--primary); }
+    .compact-card-icon {
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        flex-direction: column; flex-shrink: 0;
+    }
+    .compact-card-content { flex: 1; min-width: 0; }
+    .compact-card-title { font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .compact-card-subtitle { font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
     
-    <!-- Filtros (Abas simples) -->
-    <div style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;">
-        <button onclick="loadSuggestions('pending')" class="filter-btn active" id="btn-pending">Pendentes</button>
-        <button onclick="loadSuggestions('approved')" class="filter-btn" id="btn-approved">Aprovadas</button>
-        <button onclick="loadSuggestions('rejected')" class="filter-btn" id="btn-rejected">Rejeitadas</button>
-    </div>
+    /* Sugestões Específico */
+    .user-avatar-mini { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+    .btn-action-group { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-xs { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 4px; }
+    .btn-approve { background: #dcfce7; color: #166534; }
+    .btn-reject { background: #fee2e2; color: #991b1b; }
+</style>
 
-    <div id="suggestionsList" class="suggestions-grid">
-        <!-- JS fill -->
-        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-            Carregando...
+<div style="max-width: 800px; margin: 0 auto; padding: 16px;">
+
+    <!-- Tabs Navegação (Igual Repertório) -->
+    <div class="repertorio-controls" style="margin-bottom: 24px;">
+        <div class="tabs-container">
+            <a href="?tab=pending" class="tab-link <?= $tab == 'pending' ? 'active' : '' ?>">Pendentes</a>
+            <a href="?tab=approved" class="tab-link <?= $tab == 'approved' ? 'active' : '' ?>">Aprovadas</a>
+            <a href="?tab=rejected" class="tab-link <?= $tab == 'rejected' ? 'active' : '' ?>">Rejeitadas</a>
         </div>
     </div>
 
+    <!-- Lista de Sugestões -->
+    <div class="results-list">
+        <?php if (empty($suggestions)): ?>
+            <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">
+                <i data-lucide="<?= $tab == 'pending' ? 'inbox' : ($tab == 'approved' ? 'check-circle' : 'x-circle') ?>" 
+                   style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.2;"></i>
+                <p>Nenhuma sugestão <?= $tab == 'pending' ? 'pendente' : ($tab == 'approved' ? 'aprovada' : 'rejeitada') ?>.</p>
+            </div>
+        <?php else: ?>
+            <?php foreach ($suggestions as $sug): 
+                $userPhoto = $sug['user_photo'] ?: 'https://ui-avatars.com/api/?name='.urlencode($sug['user_name']).'&background=random';
+            ?>
+                <div class="compact-card" style="display: block;"> <!-- Block to allow multiline content -->
+                    <div style="display: flex; align-items: start; gap: 12px;">
+                        
+                        <!-- Ícone / Avatar -->
+                        <div class="compact-card-icon" style="background: var(--bg-surface-active);">
+                            <?php if ($sug['youtube_link']): ?>
+                                <i data-lucide="youtube" style="width: 20px; color: #ef4444;"></i>
+                            <?php else: ?>
+                                <i data-lucide="music" style="width: 20px; color: var(--text-tertiary);"></i>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="compact-card-content">
+                            <div class="compact-card-title"><?= htmlspecialchars($sug['title']) ?></div>
+                            <div class="compact-card-subtitle">
+                                <span><?= htmlspecialchars($sug['artist']) ?></span>
+                                <?php if($sug['tone']): ?>
+                                    <span style="background: var(--bg-surface-active); padding: 1px 6px; border-radius: 4px; font-weight: 700; font-size: 0.7rem;"><?= htmlspecialchars($sug['tone']) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-tertiary); display: flex; limit-items: center; gap: 6px;">
+                                <img src="<?= $userPhoto ?>" class="user-avatar-mini">
+                                <?= htmlspecialchars($sug['user_name']) ?> • <?= date('d/m/Y', strtotime($sug['created_at'])) ?>
+                            </div>
+
+                            <!-- User Reason -->
+                            <?php if ($sug['reason']): ?>
+                                <div style="margin-top: 6px; font-style: italic; font-size: 0.8rem; color: var(--text-secondary); background: var(--bg-main); padding: 6px 10px; border-radius: 6px;">
+                                    "<?= htmlspecialchars($sug['reason']) ?>"
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Botões de Ação (Apenas Pendentes) -->
+                            <?php if ($tab == 'pending'): ?>
+                                <div class="btn-action-group">
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?= $sug['id'] ?>">
+                                        <input type="hidden" name="action" value="approve">
+                                        <button type="submit" class="btn-xs btn-approve">
+                                            <i data-lucide="check" width="14"></i> Aprovar
+                                        </button>
+                                    </form>
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?= $sug['id'] ?>">
+                                        <input type="hidden" name="action" value="reject">
+                                        <button type="submit" class="btn-xs btn-reject">
+                                            <i data-lucide="x" width="14"></i> Rejeitar
+                                        </button>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Links Externos -->
+                         <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <?php if($sug['youtube_link']): ?>
+                                <a href="<?= $sug['youtube_link'] ?>" target="_blank" style="color: var(--text-tertiary);"><i data-lucide="external-link" width="16"></i></a>
+                            <?php endif; ?>
+                         </div>
+
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 </div>
 
-<style>
-    .filter-btn {
-        padding: 8px 16px;
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        color: var(--text-muted);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        white-space: nowrap;
-    }
-    .filter-btn.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-    
-    .suggestion-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 16px;
-        transition: transform 0.2s;
-    }
-    .suggestion-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-sm);
-    }
-    
-    .sug-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 12px;
-    }
-    
-    .sug-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
-    .sug-artist { font-size: 0.9rem; color: var(--text-muted); }
-    
-    .sug-meta {
-        background: var(--slate-50);
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        margin-bottom: 12px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-    }
-    
-    .sug-user {
-        display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--text-main);
-    }
-    
-    .sug-reason {
-        font-style: italic;
-        color: var(--text-muted);
-        margin-bottom: 16px;
-        font-size: 0.9rem;
-        padding-left: 12px;
-        border-left: 2px solid var(--border-color);
-    }
-    
-    .sug-actions {
-        display: flex;
-        gap: 8px;
-        border-top: 1px solid var(--border-color);
-        padding-top: 12px;
-    }
-    
-    .sug-link {
-        display: inline-flex; align-items: center; gap: 4px;
-        color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.8rem;
-    }
-</style>
-
-<script>
-let currentFilter = 'pending';
-
-async function loadSuggestions(filter) {
-    currentFilter = filter;
-    
-    // Update tabs
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('btn-' + filter).classList.add('active');
-    
-    const container = document.getElementById('suggestionsList');
-    container.innerHTML = '<div style="text-align:center; padding:40px;">Carregando...</div>';
-    
-    try {
-        const response = await fetch(`sugestoes_api.php?action=list&filter=${filter}`);
-        const result = await response.json();
-        
-        if (result.success) {
-            renderSuggestions(result.suggestions);
-        } else {
-            container.innerHTML = '<div style="color:red; text-align:center;">Erro ao carregar.</div>';
-        }
-    } catch (e) {
-        console.error(e);
-        container.innerHTML = '<div style="color:red; text-align:center;">Erro de conexão.</div>';
-    }
-}
-
-function renderSuggestions(list) {
-    const container = document.getElementById('suggestionsList');
-    if (list.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                <i data-lucide="inbox" style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5;"></i>
-                <p>Nenhuma sugestão encontrada nesta categoria.</p>
-            </div>
-        `;
-        lucide.createIcons();
-        return;
-    }
-    
-    container.innerHTML = list.map(item => {
-        const isPending = item.status === 'pending';
-        const userPhoto = item.user_photo || 'https://ui-avatars.com/api/?name='+item.user_name+'&background=random';
-        
-        let actionsHtml = '';
-        if (isPending) {
-            actionsHtml = `
-                <button onclick="decideSuggestion(${item.id}, 'approve')" class="btn btn-sm btn-success" style="flex:1;">
-                    <i data-lucide="check"></i> Aprovar
-                </button>
-                <button onclick="decideSuggestion(${item.id}, 'reject')" class="btn btn-sm btn-danger" style="flex:1;">
-                    <i data-lucide="x"></i> Rejeitar
-                </button>
-            `;
-        } else {
-            const statusLabel = item.status === 'approved' 
-                ? '<span style="color:var(--sage-600); font-weight:700;">Aprovada</span>' 
-                : '<span style="color:var(--rose-600); font-weight:700;">Rejeitada</span>';
-            actionsHtml = `<div style="flex:1; text-align:right; font-size:0.9rem;">${statusLabel}</div>`;
-        }
-        
-        return `
-            <div class="suggestion-card">
-                <div class="sug-header">
-                    <div>
-                        <div class="sug-title">${escapeHtml(item.title)}</div>
-                        <div class="sug-artist">${escapeHtml(item.artist)} ${item.tone ? '• Tom: '+escapeHtml(item.tone) : ''}</div>
-                    </div>
-                    <div style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap;">
-                        ${new Date(item.created_at).toLocaleDateString()}
-                    </div>
-                </div>
-                
-                <div class="sug-meta">
-                    <div class="sug-user">
-                        <img src="${userPhoto}" style="width:20px; height:20px; border-radius:50%;">
-                        ${escapeHtml(item.user_name)}
-                    </div>
-                    ${item.youtube_link ? `<a href="${item.youtube_link}" target="_blank" class="sug-link"><i data-lucide="youtube" width="14"></i> YouTube</a>` : ''}
-                    ${item.spotify_link ? `<a href="${item.spotify_link}" target="_blank" class="sug-link"><i data-lucide="music" width="14"></i> Spotify</a>` : ''}
-                </div>
-                
-                ${item.reason ? `<div class="sug-reason">"${escapeHtml(item.reason)}"</div>` : ''}
-                
-                <div class="sug-actions">
-                    ${actionsHtml}
-                </div>
-            </div>
-        `;
-    }).join('');
-    
-    lucide.createIcons();
-}
-
-async function decideSuggestion(id, decision) {
-    if (!confirm(decision === 'approve' ? 'Confirma aprovação e adição ao repertório?' : 'Confirma rejeição?')) return;
-    
-    try {
-        const response = await fetch(`sugestoes_api.php?action=${decision}`, {
-            method: 'POST',
-            body: JSON.stringify({ id: id }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const result = await response.json();
-        
-        if (result.success) {
-            alert(result.message);
-            loadSuggestions(currentFilter);
-        } else {
-            alert('Erro: ' + result.message);
-        }
-    } catch (e) {
-        console.error(e);
-        alert('Erro ao processar.');
-    }
-}
-
-function escapeHtml(text) {
-    if (!text) return '';
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
-
-// Init
-loadSuggestions('pending');
-</script>
 <?php renderAppFooter(); ?>

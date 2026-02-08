@@ -628,7 +628,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (Notification.permission === 'granted') {
-            if(cardGranted) cardGranted.style.display = 'block';
+            // Se já está permitido, não mostra nada (limpo)
+            // Se precisar mostrar, o usuário pode ir em Preferências
+            if(cardGranted) cardGranted.style.display = 'none';
+
             if (typeof ensurePushSubscription === 'function') {
                 ensurePushSubscription();
             }
