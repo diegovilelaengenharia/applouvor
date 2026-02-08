@@ -157,6 +157,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'save_diary_note') {
+        $planDay = (int)($_POST['plan_day'] ?? 0);
+        $noteTitle = trim($_POST['note_title'] ?? '');
+        $comment = trim($_POST['comment'] ?? '');
+        
+        try {
+            // Se ambos estão vazios, deletar registro
+            if (empty($noteTitle) && empty($comment)) {
+                $pdo->prepare("UPDATE reading_progress SET note_title = NULL, comment = NULL WHERE user_id = ? AND month_num = ? AND day_num = ?")
+                    ->execute([$userId, 1, $planDay]);
+                echo json_encode(['success' => true, 'deleted' => true]);
+                exit;
+            }
+            
+            // Buscar progresso existente
+            $stmt = $pdo->prepare("SELECT id FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+            $stmt->execute([$userId, 1, $planDay]);
+            $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($existing) {
+                // Atualizar registro existente
+                $sql = "UPDATE reading_progress SET note_title = ?, comment = ?, completed_at = NOW() WHERE user_id = ? AND month_num = ? AND day_num = ?";
+                $pdo->prepare($sql)->execute([$noteTitle, $comment, $userId, 1, $planDay]);
+            } else {
+                // Criar novo registro
+                $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, note_title, comment, verses_read, completed_at) 
+                        VALUES (?, ?, ?, ?, ?, '[]', NOW())";
+                $pdo->prepare($sql)->execute([$userId, 1, $planDay, $noteTitle, $comment]);
+            }
+            
+            echo json_encode(['success' => true]);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            echo json_encode(['success' => false, 'error' => 'Database error']);
+        }
+        exit;
+    }
+
 
     if ($action === 'reset_plan') { 
         try {
@@ -1238,6 +1276,123 @@ body.dark-mode .stat-card-compact {
     border-color: var(--slate-300);
 }
 
+/* Diary Section */
+.diary-section {
+    margin-top: 1.5rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.diary-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.diary-header {
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.diary-save-status {
+    font-size: 0.875rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.diary-content {
+    padding: 1.5rem;
+}
+
+.diary-field {
+    margin-bottom: 1.25rem;
+}
+
+.diary-field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.5rem;
+}
+
+.diary-input,
+.diary-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    color: #1e293b;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.diary-input:focus,
+.diary-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.diary-textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.diary-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.diary-btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+}
+
+.diary-btn.primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.diary-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.diary-btn.secondary {
+    background: white;
+    color: #64748b;
+    border: 1px solid #e5e7eb;
+}
+
+.diary-btn.secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 640px) {
     .reading-container {
@@ -1372,7 +1527,7 @@ body.dark-mode .action-btn {
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-        <button class="action-btn" onclick="window.location.href='?tab=reading&day=<?= $planDayIndex ?>#diary'">
+        <button class="action-btn" onclick="toggleDiarySection()">
             <i data-lucide="book-text" width="18"></i>
             Meu Diário
         </button>
@@ -1380,6 +1535,54 @@ body.dark-mode .action-btn {
             <i data-lucide="check-circle" width="18"></i>
             Marcar Tudo Lido
         </button>
+    </div>
+
+    <!-- Diary Section -->
+    <div id="diary-section" class="diary-section" style="display: none;">
+        <div class="diary-card">
+            <div class="diary-header">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="pen-line" width="20" style="color: #3b82f6;"></i>
+                    <h3 style="margin: 0; font-size: 1.125rem; color: #1e293b;">Minhas Anotações</h3>
+                </div>
+                <span id="diary-save-status" class="diary-save-status"></span>
+            </div>
+            
+            <div class="diary-content">
+                <div class="diary-field">
+                    <label for="diary-title">Título da Reflexão</label>
+                    <input 
+                        type="text" 
+                        id="diary-title" 
+                        class="diary-input" 
+                        placeholder="Ex: Aprendizado sobre fé..."
+                        value="<?= htmlspecialchars($progressData['note_title'] ?? '') ?>"
+                        oninput="debounceSaveDiary()"
+                    >
+                </div>
+                
+                <div class="diary-field">
+                    <label for="diary-comment">Suas Reflexões</label>
+                    <textarea 
+                        id="diary-comment" 
+                        class="diary-textarea" 
+                        placeholder="Escreva aqui suas reflexões, insights e aprendizados sobre a leitura de hoje..."
+                        oninput="debounceSaveDiary()"
+                    ><?= htmlspecialchars($progressData['comment'] ?? '') ?></textarea>
+                </div>
+                
+                <div class="diary-actions">
+                    <button class="diary-btn primary" onclick="saveDiaryNote()">
+                        <i data-lucide="save" width="16"></i>
+                        Salvar Anotação
+                    </button>
+                    <button class="diary-btn secondary" onclick="clearDiary()">
+                        <i data-lucide="x" width="16"></i>
+                        Limpar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -1469,6 +1672,94 @@ function markAllAsRead(day) {
         .catch(error => {
             console.error('Erro ao marcar todas:', error);
         });
+}
+
+// Funções do Diário
+let diaryDebounceTimer;
+const currentDay = <?= $planDayIndex ?>;
+
+function toggleDiarySection() {
+    const section = document.getElementById('diary-section');
+    if (section.style.display === 'none') {
+        section.style.display = 'block';
+        // Reinicializar ícones Lucide
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    } else {
+        section.style.display = 'none';
+    }
+}
+
+function debounceSaveDiary() {
+    clearTimeout(diaryDebounceTimer);
+    updateSaveStatus('Digitando...');
+    
+    diaryDebounceTimer = setTimeout(() => {
+        saveDiaryNote(true);
+    }, 2000);
+}
+
+function saveDiaryNote(isAutoSave = false) {
+    const title = document.getElementById('diary-title').value.trim();
+    const comment = document.getElementById('diary-comment').value.trim();
+    
+    if (!isAutoSave) {
+        updateSaveStatus('Salvando...');
+    }
+    
+    const formData = new FormData();
+    formData.append('action', 'save_diary_note');
+    formData.append('plan_day', currentDay);
+    formData.append('note_title', title);
+    formData.append('comment', comment);
+    
+    fetch('', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateSaveStatus('✓ Salvo', true);
+            setTimeout(() => {
+                if (!isAutoSave) {
+                    updateSaveStatus('');
+                }
+            }, 3000);
+        } else {
+            updateSaveStatus('Erro ao salvar', false);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        updateSaveStatus('Erro ao salvar', false);
+    });
+}
+
+function updateSaveStatus(message, success = null) {
+    const status = document.getElementById('diary-save-status');
+    status.textContent = message;
+    
+    if (success === true) {
+        status.style.color = '#10b981';
+    } else if (success === false) {
+        status.style.color = '#ef4444';
+    } else {
+        status.style.color = '#64748b';
+    }
+}
+
+function clearDiary() {
+    if (confirm('Tem certeza que deseja limpar suas anotações?')) {
+        document.getElementById('diary-title').value = '';
+        document.getElementById('diary-comment').value = '';
+        saveDiaryNote();
+    }
+}
+
+function exportDiary(format) {
+    window.open(`export_diary.php?format=${format}`, '_blank');
 }
 
 // Inicializar ícones Lucide
@@ -3544,10 +3835,15 @@ function appSettingsPDF() {
                 <!-- TAB DIARY -->
                 <div id="app-tab-content-diary" class="app-settings-content" style="display:none">
                     <h4>Exportar Di&aacute;rio</h4>
-                    <p>Baixe suas anota&ccedil;&otilde;es em formato PDF.</p>
-                    <button class="app-btn secondary" onclick="appSettingsPDF()">
-                        <i data-lucide="download"></i> Baixar PDF
-                    </button>
+                    <p>Baixe suas anota&ccedil;&otilde;es em formato PDF ou Word.</p>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <button class="app-btn secondary" onclick="exportDiary('pdf')">
+                            <i data-lucide="file-text"></i> Baixar PDF
+                        </button>
+                        <button class="app-btn secondary" onclick="exportDiary('word')">
+                            <i data-lucide="file-type"></i> Baixar Word
+                        </button>
+                    </div>
                 </div>
                 
             </div>
