@@ -293,9 +293,17 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
         position: relative;
     }
     
+    /* READ Items (Lidas) - Gray Background */
+    .notification-item:not(.unread) {
+        background: var(--slate-50);
+        border-color: var(--slate-200);
+    }
+    
+    /* UNREAD Items (Não Lidas) - Light Green Background */
     .notification-item.unread {
-        border-left: 4px solid var(--primary);
-        background: var(--primary-subtle);
+        border-left: 4px solid var(--primary); /* Keep primary accent */
+        background: #ecfdf5; /* emerald-50 */
+        border-color: #d1fae5; /* emerald-100 */
     }
     
     .notification-icon {
