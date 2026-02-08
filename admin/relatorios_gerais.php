@@ -1018,6 +1018,7 @@ if ($isPrintMode) {
 
 // --- STANDARD VIEW ---
 renderAppHeader('Indicadores Avançados');
+renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
 ?>
 
 <style>
@@ -1036,6 +1037,19 @@ renderAppHeader('Indicadores Avançados');
         border: 1px solid var(--border-color);
         box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         margin-bottom: 24px;
+    }
+    
+    /* Mobile Responsive Adjustments */
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .content-card {
+            padding: 16px;
+            margin-bottom: 16px;
+        }
     }
 
     .kpi-card {
@@ -1159,6 +1173,7 @@ renderAppHeader('Indicadores Avançados');
     .heat-bar:hover { background: var(--primary); }
     .heat-bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-surface); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; z-index: 10; white-space: nowrap; }
     
+    
     .btn-print {
         background: var(--text-primary);
         color: var(--bg-surface);
@@ -1173,6 +1188,185 @@ renderAppHeader('Indicadores Avançados');
         gap: 8px;
     }
     .btn-print:hover { opacity: 0.9; }
+    
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+        /* Filter Bar Mobile */
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 12px;
+            padding: 16px;
+        }
+        
+        .filter-bar > div:first-child h2 {
+            font-size: 1.1rem !important;
+        }
+        
+        .filter-bar > div:first-child p {
+            font-size: 0.8rem !important;
+        }
+        
+        .filter-bar form {
+            flex-direction: column !important;
+            width: 100%;
+        }
+        
+        .form-select {
+            width: 100% !important;
+            font-size: 0.85rem;
+        }
+        
+        .btn-print {
+            width: 100%;
+            justify-content: center;
+            padding: 12px 16px;
+        }
+        
+        /* KPI Cards Mobile */
+        .kpi-card {
+            padding: 16px !important;
+            gap: 12px;
+        }
+        
+        .kpi-icon {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 1.2rem !important;
+        }
+        
+        /* Tables Mobile - Horizontal Scroll */
+        .user-table {
+            font-size: 0.75rem !important;
+        }
+        
+        .user-table th,
+        .user-table td {
+            padding: 10px 8px !important;
+            font-size: 0.75rem !important;
+        }
+        
+        /* List Items Mobile */
+        .list-item {
+            padding: 10px 12px !important;
+            font-size: 0.85rem;
+        }
+        
+        /* Stat Title Mobile */
+        .stat-title {
+            font-size: 0.95rem !important;
+            padding-bottom: 10px;
+        }
+        
+        /* Charts Mobile */
+        canvas {
+            max-height: 180px !important;
+        }
+        
+        /* Heatmap Mobile */
+        .heatmap {
+            height: 80px !important;
+            gap: 2px;
+        }
+        
+        /* MVP Podium Mobile */
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] {
+            gap: 8px !important;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div {
+            min-width: 70px !important;
+        }
+        
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:first-child {
+            width: 70px !important;
+        }
+        
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:first-child > div:first-child {
+            font-size: 1.2rem !important;
+        }
+        
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:first-child > div:nth-child(2) {
+            font-size: 1rem !important;
+        }
+        
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:nth-child(2) {
+            font-size: 0.75rem !important;
+        }
+        
+        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:nth-child(3) {
+            font-size: 0.7rem !important;
+        }
+        
+        /* Metric Adjustments Mobile */
+        .metric-big {
+            font-size: 16px !important;
+        }
+        
+        .metric-sub {
+            font-size: 10px !important;
+        }
+        
+        /* Container Padding Mobile */
+        [style*="max-width: 1200px"] {
+            padding: 0 12px !important;
+        }
+        
+        /* Grid Layouts Mobile */
+        [style*="grid-template-columns: repeat(auto-fit"] {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+        
+        /* Tone/Tag Pills Mobile */
+        [style*="display: flex"][style*="gap: 6px"][style*="flex-wrap: wrap"] > div,
+        [style*="display: flex"][style*="gap: 8px"][style*="flex-wrap: wrap"] > span {
+            font-size: 0.75rem !important;
+            padding: 4px 8px !important;
+        }
+        
+        /* Completeness Cards Mobile */
+        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
+        }
+        
+        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] > div {
+            padding: 12px !important;
+        }
+        
+        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] > div > div:nth-child(2) {
+            font-size: 1.25rem !important;
+        }
+    }
+    
+    /* Extra Small Mobile (< 480px) */
+    @media (max-width: 480px) {
+        .content-card {
+            padding: 12px !important;
+            border-radius: 12px;
+        }
+        
+        .filter-bar {
+            padding: 12px;
+        }
+        
+        .stat-title {
+            font-size: 0.9rem !important;
+        }
+        
+        h5 {
+            font-size: 0.8rem !important;
+        }
+        
+        /* Force single column for completeness cards on very small screens */
+        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
 </style>
 
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
