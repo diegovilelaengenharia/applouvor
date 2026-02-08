@@ -394,6 +394,11 @@ if (!$planStarted) {
                 lucide.createIcons();
             }
         });
+
+    // Alias for settings modal
+    function openSettingsModal() {
+        openConfig();
+    }
     </script>
     <?php
     renderAppFooter(); // Ensure footer is closed properly if needed
