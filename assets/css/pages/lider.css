@@ -126,22 +126,57 @@
     background: var(--bg-surface);
     flex-direction: row;
     padding: 16px;
+    height: auto;
+    /* Allow auto height for mini */
 }
 
 .kpi-card.mini:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    border-color: var(--primary);
 }
 
 .kpi-icon-mini {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     background: var(--bg-surface-active);
+    flex-shrink: 0;
+}
+
+/* Mini Card Color Variants */
+.kpi-card.mini .text-blue {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.kpi-card.mini .text-purple {
+    color: #7e22ce;
+    background: #f3e8ff;
+}
+
+.kpi-card.mini .text-orange {
+    color: #ea580c;
+    background: #ffedd5;
+}
+
+.kpi-card.mini .text-pink {
+    color: #db2777;
+    background: #fdf2f8;
+}
+
+.kpi-card.mini .text-green {
+    color: #16a34a;
+    background: #dcfce7;
+}
+
+.kpi-card.mini .text-yellow {
+    color: #ca8a04;
+    background: #fef9c3;
 }
 
 .text-blue {
