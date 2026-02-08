@@ -173,11 +173,16 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <!-- Botão Especial: Reunião 08/02 -->
-        <a href="<?= $baseAdmin ?>apresentacao_reuniao.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'apresentacao_reuniao.php' ? 'active' : '' ?>" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin: 8px 0; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color: white;">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-            </svg>
-            <span class="sidebar-text" style="font-weight: 700;">📊 Reunião 08/02</span>
+        <a href="<?= $baseAdmin ?>apresentacao_reuniao.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'apresentacao_reuniao.php' ? 'active' : '' ?>">
+            <div style="position: relative; display: flex; align-items: center; gap: 12px; width: 100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                <span class="sidebar-text" style="flex: 1;">Reunião 08/02</span>
+                <span class="meeting-badge sidebar-text" style="background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">NOVO</span>
+            </div>
         </a>
 
 
@@ -533,18 +538,64 @@ if (!empty($currentUser['avatar'])) {
     }
 
     /* Botão Especial Reunião */
+    .nav-item.nav-meeting {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin: 8px 0;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-item.nav-meeting::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .nav-item.nav-meeting:hover::before {
+        left: 100%;
+    }
+
     .nav-item.nav-meeting:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        border-color: rgba(255, 255, 255, 0.3);
     }
 
     .nav-item.nav-meeting.active {
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5) !important;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         transform: scale(1.02);
+        border-color: rgba(255, 255, 255, 0.4);
     }
 
     .nav-item.nav-meeting svg {
-        color: white !important;
+        color: white;
+        stroke-width: 2.5px;
+    }
+
+    .meeting-badge {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    /* Sidebar collapsed - esconder badge */
+    .sidebar.collapsed .meeting-badge {
+        display: none;
     }
 </style>
 
