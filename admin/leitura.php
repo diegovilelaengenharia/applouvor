@@ -104,9 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'reset_plan') { 
-        $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ?")->execute([$userId]); 
-        $pdo->prepare("DELETE FROM user_settings WHERE user_id = ?")->execute([$userId]); 
-        echo json_encode(['success'=>true]); 
+        try {
+            $pdo->beginTransaction();
+            
+            // Deletar progresso de leitura
+            $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ?")->execute([$userId]); 
+            
+            // Deletar apenas configurações do plano de leitura
+            $pdo->prepare("DELETE FROM user_settings WHERE user_id = ? AND setting_key IN ('reading_plan_type', 'reading_plan_start_date')")->execute([$userId]);
+            
+            $pdo->commit();
+            echo json_encode(['success' => true]); 
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        }
         exit; 
     }
 }
