@@ -1238,35 +1238,26 @@ body.dark-mode .action-btn {
         $daysSinceStart = $daysPassed; // Dias desde o início do plano
         
         // Dia esperado = quantos dias deveriam ter sido lidos desde o início
+        // Se começou hoje (daysSinceStart = 0), esperado é 1 (o dia de hoje)
         $expectedDay = max(1, $daysSinceStart + 1);
         
         // Calcular atraso: diferença entre o que deveria ter lido e o que realmente leu
-        $daysDelay = max(0, $expectedDay - $daysRead);
-        $isOnTrack = $daysRead >= $expectedDay;
+        // Só mostra atraso se passou do primeiro dia
+        $daysDelay = ($daysSinceStart > 0) ? max(0, $expectedDay - $daysRead) : 0;
+        $isOnTrack = ($daysDelay == 0);
         ?>
         
+        <?php if (!$isOnTrack): ?>
         <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
-            <?php if ($isOnTrack): ?>
-            <!-- Em dia -->
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(76,175,80,0.3); padding: 0.5rem 0.875rem; border-radius: 8px; color: #2e7d32; font-size: 0.875rem; white-space: nowrap;">
-                <i data-lucide="check-circle" width="16"></i>
-                <span><strong>Em dia!</strong></span>
-            </div>
-            <?php else: ?>
             <!-- Atrasado -->
             <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,152,0,0.3); padding: 0.5rem 0.875rem; border-radius: 8px; color: #e65100; font-size: 0.875rem; white-space: nowrap;">
                 <i data-lucide="alert-circle" width="16"></i>
                 <span><strong><?= $daysDelay ?> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</strong></span>
             </div>
-            <?php endif; ?>
-            
-            <!-- Informação adicional -->
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.2); padding: 0.375rem 0.75rem; border-radius: 8px; font-size: 0.8125rem; white-space: nowrap;">
-                <i data-lucide="book-open" width="14"></i>
-                <span><?= $daysRead ?> de <?= $expectedDay ?> dias lidos</span>
-            </div>
         </div>
+        <?php endif; ?>
     </div>
+
 
 
 
