@@ -172,6 +172,14 @@ if (!empty($currentUser['avatar'])) {
             <span class="sidebar-text">Avisos</span>
         </a>
 
+        <!-- Botão Especial: Reunião 08/02 -->
+        <a href="<?= $baseAdmin ?>apresentacao_reuniao.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'apresentacao_reuniao.php' ? 'active' : '' ?>" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin: 8px 0; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color: white;">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            <span class="sidebar-text" style="font-weight: 700;">📊 Reunião 08/02</span>
+        </a>
+
 
 
     </nav>
@@ -522,6 +530,21 @@ if (!empty($currentUser['avatar'])) {
     .sidebar-overlay.active {
         opacity: 1;
         visibility: visible;
+    }
+
+    /* Botão Especial Reunião */
+    .nav-item.nav-meeting:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+    }
+
+    .nav-item.nav-meeting.active {
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5) !important;
+        transform: scale(1.02);
+    }
+
+    .nav-item.nav-meeting svg {
+        color: white !important;
     }
 </style>
 
