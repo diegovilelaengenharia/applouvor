@@ -12,21 +12,21 @@ $dotenv = new App\DotEnv(__DIR__ . '/..');
 $dotenv->load();
 
 // ======================================
-// DETECÇÃO DE AMBIENTE (PRODUÇÃO vs LOCAL)
+// DETECÇÃO DE AMBIENTE
 // ======================================
-$isProduction = false;
-if (isset($_SERVER['HTTP_HOST']) && (
-    strpos($_SERVER['HTTP_HOST'], 'vilela.eng.br') !== false || 
-    strpos($_SERVER['HTTP_HOST'], 'applouvor.diegovilelaengenharia.com.br') !== false
-)) {
-    $isProduction = true;
-}
+// Se o arquivo .env NÃO existir, assumimos que é PRODUÇÃO
+// (pois no local sempre temos o .env, e no servidor é ignorado pelo git)
+$envPath = __DIR__ . '/../.env';
+$isProduction = !file_exists($envPath);
+
+// Debug (opcional, remova se necessário)
+// echo "Env Exists: " . (file_exists($envPath) ? 'Yes' : 'No') . "<br>";
 
 // ======================================
 // CREDENCIAIS DO BANCO DE DADOS
 // ======================================
 if ($isProduction) {
-    // FORÇA CREDENCIAIS DE PRODUÇÃO (Ignora .env local se existir no servidor)
+    // FORÇA CREDENCIAIS DE PRODUÇÃO
     define('DB_HOST', 'srv1074.hstgr.io');
     define('DB_NAME', 'u884436813_applouvor');
     define('DB_USER', 'u884436813_admin');
