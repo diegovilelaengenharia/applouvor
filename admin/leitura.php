@@ -15,6 +15,12 @@ try {
     if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN note_title VARCHAR(255) DEFAULT NULL");
 } catch(Exception $e) { /* Ignore */ }
 
+// AUTOLOAD: Campo de Áudio
+try {
+    $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'audio_path'");
+    if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN audio_path VARCHAR(500) DEFAULT NULL");
+} catch(Exception $e) { /* Ignore */ }
+
 // BACKEND: Logic
 $userId = $_SESSION['user_id'];
 $now = new DateTime();
@@ -1289,6 +1295,19 @@ body.dark-mode .stat-card-compact {
     box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
 }
 
+.action-btn.read-all-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border-color: #3b82f6;
+}
+
+.action-btn.read-all-btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
 /* Diary Modal */
 .diary-modal {
     position: fixed;
@@ -1491,6 +1510,93 @@ body.dark-mode .stat-card-compact {
     border-top: none !important;
 }
 
+/* Audio Recording Section */
+.audio-recording-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.audio-btn {
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+}
+
+.audio-btn.record-btn {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.audio-btn.record-btn:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.audio-btn.record-btn.recording {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.audio-btn.delete-btn {
+    background: #f1f5f9;
+    color: #ef4444;
+    border: 1px solid #e5e7eb;
+}
+
+.audio-btn.delete-btn:hover {
+    background: #fee2e2;
+    border-color: #fecaca;
+}
+
+.audio-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #fef3c7;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #92400e;
+}
+
+.recording-indicator {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+#audio-player-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#audio-player {
+    max-width: 300px;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 640px) {
     .reading-container {
@@ -1629,7 +1735,7 @@ body.dark-mode .action-btn {
             <i data-lucide="sticky-note" width="18"></i>
             Minhas Anotações
         </button>
-        <button class="action-btn" onclick="markAllAsRead(<?= $planDayIndex ?>)">
+        <button class="action-btn read-all-btn" onclick="markAllAsRead(<?= $planDayIndex ?>)">
             <i data-lucide="check-circle" width="18"></i>
             Marcar Tudo Lido
         </button>
@@ -1694,6 +1800,27 @@ body.dark-mode .action-btn {
                         placeholder="Escreva aqui suas reflexões, insights e aprendizados sobre a leitura de hoje..."
                         oninput="debounceSaveDiary()"
                     ><?= htmlspecialchars($progressData['comment'] ?? '') ?></textarea>
+                </div>
+                
+                <!-- Audio Recording Section -->
+                <div class="diary-field">
+                    <label>Gravação de Áudio (opcional)</label>
+                    <div class="audio-recording-section">
+                        <button type="button" id="record-audio-btn" class="audio-btn record-btn" onclick="toggleAudioRecording()">
+                            <i data-lucide="mic" width="16"></i>
+                            <span id="record-btn-text">Gravar Áudio</span>
+                        </button>
+                        <div id="audio-timer" class="audio-timer" style="display: none;">
+                            <span class="recording-indicator"></span>
+                            <span id="timer-text">00:00</span>
+                        </div>
+                        <div id="audio-player-container" style="display: none;">
+                            <audio id="audio-player" controls></audio>
+                            <button type="button" class="audio-btn delete-btn" onclick="deleteAudio()" title="Excluir áudio">
+                                <i data-lucide="trash-2" width="16"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="diary-actions">
