@@ -561,56 +561,86 @@
             </div>
         </div>
 
-        <!-- Slide 5.5: Música - O Fogo Arderá -->
+        <!-- Slide 5.5: Música - O Fogo Arderá (Parte 1) -->
         <div class="slide">
             <div class="slide-content">
                 <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 60px;">O Fogo Arderá</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; text-align: left; font-size: 1.25rem; line-height: 1.8;">
-                    <div>
-                        <p style="margin-bottom: 24px;">
-                            Teu fogo arde em mim<br>
-                            E muda o meu viver<br>
-                            Sou Teu templo, sou Teu altar<br>
-                            Sacrifício vivo eu quero oferecer
-                        </p>
-                        <p style="margin-bottom: 24px;">
-                            Que o nosso louvor<br>
-                            Não seja um momento<br>
-                            Lágrimas vazias<br>
-                            Sem avivamento
-                        </p>
-                        <p style="margin-bottom: 24px;">
-                            Que o nosso amor<br>
-                            Não seja fingido<br>
-                            Honrado com os lábios<br>
-                            Nos corações esquecido
-                        </p>
-                        <p style="margin-bottom: 24px;">
-                            Não vale a pena só me emocionar<br>
-                            E buscar as canções mais lindas pra cantar<br>
-                            Se eu não for uma canção que alegra a Ti<br>
-                            Se o meu coração não queimar por Ti
-                        </p>
-                    </div>
-                    <div>
-                        <p style="margin-bottom: 24px; font-size: 1.5rem; font-weight: 700; color: var(--orange);">
-                            O fogo arderá sobre o altar<br>
-                            Continuamente sobre o altar<br>
-                            Não se apagará
-                        </p>
-                        <p style="margin-bottom: 24px;">
-                            Pois de que vale ter as poesias mais lindas<br>
-                            As harmonias mais brilhantes<br>
-                            Se não há verdade em nós?
-                        </p>
-                        <p style="margin-bottom: 24px;">
-                            Pois de que vale ter tudo e não ter nada<br>
-                            Te dar meus lábios e não minha alma<br>
-                            Eu quero me entregar a Ti<br>
-                            Entregar minha vida como adoração
-                        </p>
-                    </div>
+                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
+                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 60px;">Alexsander Lucio • 2024</p>
+                <div style="text-align: center; font-size: 2rem; line-height: 2; color: var(--gray-900);">
+                    <p style="margin-bottom: 48px;">
+                        Teu fogo arde em mim<br>
+                        E muda o meu viver<br>
+                        Sou Teu templo, sou Teu altar<br>
+                        Sacrifício vivo eu quero oferecer
+                    </p>
+                    <p style="margin-bottom: 48px;">
+                        Que o nosso louvor<br>
+                        Não seja um momento<br>
+                        Lágrimas vazias<br>
+                        Sem avivamento
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5.6: Música - O Fogo Arderá (Parte 2) -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill orange">MÚSICA</span>
+                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
+                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 60px;">Alexsander Lucio • 2024</p>
+                <div style="text-align: center; font-size: 2rem; line-height: 2; color: var(--gray-900);">
+                    <p style="margin-bottom: 48px;">
+                        Que o nosso amor<br>
+                        Não seja fingido<br>
+                        Honrado com os lábios<br>
+                        Nos corações esquecido
+                    </p>
+                    <p style="margin-bottom: 48px;">
+                        Não vale a pena só me emocionar<br>
+                        E buscar as canções mais lindas pra cantar<br>
+                        Se eu não for uma canção que alegra a Ti<br>
+                        Se o meu coração não queimar por Ti
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5.7: Música - O Fogo Arderá (Refrão) -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill orange">MÚSICA</span>
+                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
+                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
+                <div style="text-align: center; font-size: 2.5rem; line-height: 2; color: var(--orange); font-weight: 700;">
+                    <p>
+                        O fogo arderá sobre o altar<br>
+                        Continuamente sobre o altar<br>
+                        Não se apagará
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5.8: Música - O Fogo Arderá (Parte 3) -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill orange">MÚSICA</span>
+                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
+                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 60px;">Alexsander Lucio • 2024</p>
+                <div style="text-align: center; font-size: 2rem; line-height: 2; color: var(--gray-900);">
+                    <p style="margin-bottom: 48px;">
+                        Pois de que vale ter as poesias mais lindas<br>
+                        As harmonias mais brilhantes<br>
+                        Se não há verdade em nós?
+                    </p>
+                    <p style="margin-bottom: 48px;">
+                        Pois de que vale ter tudo e não ter nada<br>
+                        Te dar meus lábios e não minha alma<br>
+                        Eu quero me entregar a Ti<br>
+                        Entregar minha vida como adoração
+                    </p>
                 </div>
             </div>
         </div>
