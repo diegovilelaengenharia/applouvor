@@ -1,0 +1,180 @@
+/* Leitura Bíblica - Green Theme */
+:root {
+    --reading-primary: #16a34a;
+    --reading-primary-light: #22c55e;
+    --reading-primary-dark: #15803d;
+    --reading-success: #10b981;
+    --reading-bg: #f0fdf4;
+}
+
+/* Calendar Items - Green States */
+.cal-item.active {
+    background: white !important;
+    border-color: var(--reading-primary) !important;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15) !important;
+}
+
+.cal-item.active .cal-num,
+.cal-item.active .cal-month {
+    color: var(--reading-primary-dark) !important;
+}
+
+.cal-item.done {
+    background: #dcfce7 !important;
+    border-color: var(--reading-success) !important;
+}
+
+.cal-item.done .cal-num {
+    color: var(--reading-success) !important;
+}
+
+.cal-item.done .cal-month {
+    color: var(--reading-primary-dark) !important;
+}
+
+.cal-item.done .cal-progress {
+    color: var(--reading-success) !important;
+}
+
+/* Verse Cards - Green Theme */
+.verse-card.read {
+    background: #dcfce7 !important;
+    border-color: var(--reading-success) !important;
+}
+
+.verse-card.read .check-icon {
+    background: var(--reading-success) !important;
+    border-color: var(--reading-success) !important;
+    color: white !important;
+}
+
+.verse-card.read .verse-text {
+    color: #15803d !important;
+}
+
+/* Read Link Button */
+.btn-read-link {
+    background: var(--reading-primary) !important;
+    color: white !important;
+}
+
+.btn-read-link:hover {
+    background: var(--reading-primary-dark) !important;
+}
+
+/* Status Badge */
+.status-badge-done {
+    background: #dcfce7 !important;
+    color: var(--reading-primary-dark) !important;
+    border: 1px solid var(--reading-success) !important;
+}
+
+/* Progress Indicators */
+.progress-bar-fill {
+    background: linear-gradient(90deg, var(--reading-primary-light), var(--reading-primary)) !important;
+}
+
+/* Day Title when completed */
+.day-title-completed {
+    color: var(--reading-success) !important;
+}
+
+/* Stats Cards */
+.stat-card-reading {
+    border-left: 4px solid var(--reading-primary) !important;
+}
+
+.stat-value-reading {
+    color: var(--reading-primary) !important;
+}
+
+/* Buttons */
+.btn-save-reading {
+    background: var(--reading-primary) !important;
+    color: white !important;
+}
+
+.btn-save-reading:hover {
+    background: var(--reading-primary-dark) !important;
+}
+
+/* Checkboxes */
+input[type="checkbox"]:checked {
+    background-color: var(--reading-success) !important;
+    border-color: var(--reading-success) !important;
+}
+
+/* Today's Reading Card */
+.today-reading-card {
+    border-top: 4px solid var(--reading-primary) !important;
+}
+
+/* Month Headers in Calendar */
+.month-header-reading {
+    background: linear-gradient(135deg, var(--reading-primary-light), var(--reading-primary)) !important;
+    color: white !important;
+}
+
+/* Completed Days Counter */
+.completed-counter {
+    background: #dcfce7 !important;
+    color: var(--reading-primary-dark) !important;
+}
+
+/* Streak Badge */
+.streak-badge {
+    background: var(--reading-primary) !important;
+    color: white !important;
+}
+
+/* Notes Section */
+.note-card-reading {
+    border-left: 3px solid var(--reading-primary) !important;
+}
+
+/* Hover Effects */
+.cal-item:hover {
+    border-color: var(--reading-primary-light) !important;
+}
+
+.verse-card:hover {
+    border-color: var(--reading-primary-light) !important;
+}
+
+/* Loading States */
+.skeleton-reading {
+    background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%) !important;
+}
+
+/* Modal Headers */
+.modal-header-reading {
+    background: var(--reading-bg) !important;
+    border-bottom: 1px solid var(--reading-primary-light) !important;
+}
+
+.modal-header-reading h3 {
+    color: var(--reading-primary-dark) !important;
+}
+
+/* Save Toast */
+#save-toast {
+    background: var(--reading-primary-dark) !important;
+}
+
+/* Bottom Bar Buttons */
+.btn-orange-light {
+    background: #fff7ed !important;
+    color: #ea580c !important;
+    border: 1px solid #fed7aa !important;
+}
+
+.btn-blue-light {
+    background: #f0fdf4 !important;
+    color: var(--reading-primary-dark) !important;
+    border: 1px solid var(--reading-primary-light) !important;
+}
+
+.btn-blue-light:hover {
+    background: #dcfce7 !important;
+    border-color: var(--reading-primary) !important;
+}

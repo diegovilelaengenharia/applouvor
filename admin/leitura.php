@@ -6,6 +6,10 @@ require_once '../includes/layout.php';
 
 checkLogin(); 
 
+// Load Reading Page CSS
+echo '<link rel="stylesheet" href="../assets/css/pages/leitura.css?v=' . time() . '">';
+
+
 // AUTOLOAD: T├¡tulo na Tabela
 try {
     $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'note_title'");
