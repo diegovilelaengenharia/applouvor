@@ -475,7 +475,7 @@
 
     <div class="presentation-wrapper">
         <div class="progress-bar" id="progressBar"></div>
-        <div class="slide-counter" id="slideCounter">1 / 25</div>
+        <div class="slide-counter" id="slideCounter">1 / 26</div>
 
         <!-- PARTE 1: ALINHAMENTO ESPIRITUAL -->
 
@@ -557,6 +557,60 @@
                         "Portanto, irmãos, rogo pelas misericórdias de Deus que se (você mesmo) ofereçam em SACRIFÍCIO VIVO, SANTO E AGRADÁVEL a Deus; este é o culto racional de vocês"
                     </p>
                     <p class="quote-ref">ROMANOS 12:1</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5.5: Música - O Fogo Arderá -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="pill orange">MÚSICA</span>
+                <h2 style="margin-bottom: 60px;">O Fogo Arderá</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; text-align: left; font-size: 1.25rem; line-height: 1.8;">
+                    <div>
+                        <p style="margin-bottom: 24px;">
+                            Teu fogo arde em mim<br>
+                            E muda o meu viver<br>
+                            Sou Teu templo, sou Teu altar<br>
+                            Sacrifício vivo eu quero oferecer
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            Que o nosso louvor<br>
+                            Não seja um momento<br>
+                            Lágrimas vazias<br>
+                            Sem avivamento
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            Que o nosso amor<br>
+                            Não seja fingido<br>
+                            Honrado com os lábios<br>
+                            Nos corações esquecido
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            Não vale a pena só me emocionar<br>
+                            E buscar as canções mais lindas pra cantar<br>
+                            Se eu não for uma canção que alegra a Ti<br>
+                            Se o meu coração não queimar por Ti
+                        </p>
+                    </div>
+                    <div>
+                        <p style="margin-bottom: 24px; font-size: 1.5rem; font-weight: 700; color: var(--orange);">
+                            O fogo arderá sobre o altar<br>
+                            Continuamente sobre o altar<br>
+                            Não se apagará
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            Pois de que vale ter as poesias mais lindas<br>
+                            As harmonias mais brilhantes<br>
+                            Se não há verdade em nós?
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            Pois de que vale ter tudo e não ter nada<br>
+                            Te dar meus lábios e não minha alma<br>
+                            Eu quero me entregar a Ti<br>
+                            Entregar minha vida como adoração
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
