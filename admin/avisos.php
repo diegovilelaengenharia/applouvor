@@ -847,6 +847,29 @@ renderAppHeader('Avisos');
         </div>
     </div>
     
+    <!-- Botão Reunião 08/02 -->
+    <a href="apresentacao_reuniao.php" style="display: block; margin-bottom: 20px; text-decoration: none;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3); transition: all 0.3s; cursor: pointer;" 
+             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(102, 126, 234, 0.4)';" 
+             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(102, 126, 234, 0.3)';">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+                    🎵
+                </div>
+                <div style="flex: 1;">
+                    <div style="color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: 4px;">
+                        📊 Apresentação - Reunião 08/02
+                    </div>
+                    <div style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">
+                        Clique para ver a apresentação completa do App Louvor
+                    </div>
+                </div>
+                <div style="color: white; font-size: 1.5rem;">
+                    <i data-lucide="arrow-right"></i>
+                </div>
+            </div>
+        </div>
+    </a>
     
     <!-- Search and Filter Row -->
     <div style="display: flex; gap: 12px; margin-bottom: 20px;">
