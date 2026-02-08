@@ -1169,6 +1169,11 @@ body.dark-mode .stat-card-achievement {
 
 <div class="achievements-container">
     
+    <?php 
+    // Calculate level for achievements tab
+    $level = min(20, floor($totalDaysRead / 15) + 1);
+    ?>
+    
     <!-- Level Progress Card -->
     <div class="level-card">
         <div class="level-header">
