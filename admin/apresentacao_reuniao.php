@@ -596,13 +596,19 @@
             </div>
         </div>
 
-        <!-- Slide 5.5: Música - Estrofe 1 -->
+        <!-- Slide 5.5: Música - Título -->
         <div class="slide">
             <div class="slide-content">
                 <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <h1 style="font-size: 7rem; margin-top: 100px; margin-bottom: 40px;">O Fogo Arderá</h1>
+                <p style="font-size: 2.5rem; color: var(--gray-400);">Alexsander Lucio • 2024</p>
+            </div>
+        </div>
+
+        <!-- Slide 5.6: Música - Estrofe 1 -->
+        <div class="slide">
+            <div class="slide-content">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 100px;">
                     <p>
                         Teu fogo arde em mim<br>
                         E muda o meu viver<br>
@@ -613,43 +619,34 @@
             </div>
         </div>
 
-        <!-- Slide 5.6: Música - Estrofe 2 -->
+        <!-- Slide 5.7: Música - Estrofe 2 -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 150px;">
                     <p>
-                        Que o nosso louvor <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px;">não seja um momento</span><br>
+                        Que o nosso louvor <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">não seja um momento</span><br>
                         Lágrimas vazias, <span style="font-weight: 700;">sem avivamento</span>
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.7: Música - Estrofe 3 -->
+        <!-- Slide 5.8: Música - Estrofe 3 -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 150px;">
                     <p>
-                        Que o nosso amor <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px;">não seja fingido</span><br>
+                        Que o nosso amor <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">não seja fingido</span><br>
                         <span style="font-weight: 700;">Honrado com os lábios, nos corações esquecido</span>
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.8: Música - Estrofe 4 -->
+        <!-- Slide 5.9: Música - Estrofe 4 -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 100px;">
                     <p>
                         <span style="font-style: italic; font-weight: 700;">Pois de que vale ter as poesias mais lindas</span><br>
                         <span style="font-style: italic; font-weight: 700;">As harmonias mais brilhantes, se não há verdade em nós?</span>
@@ -658,13 +655,10 @@
             </div>
         </div>
 
-        <!-- Slide 5.9: Música - Estrofe 5 -->
+        <!-- Slide 5.10: Música - Estrofe 5 -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 80px;">
                     <p>
                         Pois de que vale ter tudo e não ter nada?<br>
                         Te dar meus lábios, não minha alma?<br>
@@ -675,16 +669,13 @@
             </div>
         </div>
 
-        <!-- Slide 5.10: Música - Estrofe 6 -->
+        <!-- Slide 5.11: Música - Estrofe 6 -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 60px;">
                     <p>
                         Pois de que vale ter as poesias mais lindas<br>
-                        <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px;">As harmonias mais brilhantes, se não há verdade em nós?</span><br>
+                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">As harmonias mais brilhantes, se não há verdade em nós?</span><br>
                         <span style="color: #DC2626; font-weight: 700;">Pois de que vale ter tudo e não ter nada?</span><br>
                         <span style="color: #DC2626; font-weight: 700;">Te dar meus lábios, não minha alma?</span>
                     </p>
@@ -692,34 +683,28 @@
             </div>
         </div>
 
-        <!-- Slide 5.11: Música - Estrofe 7 -->
+        <!-- Slide 5.12: Música - Estrofe 7 -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 3.5rem; line-height: 1.8; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 60px;">
                     <p>
                         <span style="font-weight: 700; text-decoration: underline;">Não vale a pena só me emocionar</span><br>
-                        E buscar as <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px;">canções mais lindas pra cantar</span><br>
-                        <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px;">Se eu não for uma canção que alegra a Ti</span><br>
-                        <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px;">Se o meu coração não queimar por Ti</span>
+                        E buscar as <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">canções mais lindas pra cantar</span><br>
+                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">Se eu não for uma canção que alegra a Ti</span><br>
+                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">Se o meu coração não queimar por Ti</span>
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.12: Música - Refrão -->
+        <!-- Slide 5.13: Música - Refrão -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill orange">MÚSICA</span>
-                <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
-                <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 4rem; line-height: 1.8; color: var(--orange); font-weight: 700;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.6; color: var(--orange); font-weight: 700; margin-top: 150px;">
                     <p>
                         E o fogo arderá <span style="color: #DC2626;">sobre</span> o altar<br>
                         <span style="color: #DC2626;">Continuamente</span> sobre o altar<br>
-                        <span style="background: #FDE047; padding: 2px 8px; border-radius: 4px; color: var(--gray-900);">E não se apagará</span>
+                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px; color: var(--gray-900);">E não se apagará</span>
                     </p>
                 </div>
             </div>
