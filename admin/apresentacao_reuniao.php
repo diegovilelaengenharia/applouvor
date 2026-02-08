@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             /* Cores Neutras */
@@ -518,29 +517,10 @@
         <!-- Slide 1: Capa -->
         <div class="slide active cover-slide">
             <div class="slide-content">
-                <img src="../assets/img/logo_pib_apresentacao.png" alt="PIB Oliveira" style="width: 180px; margin-bottom: 40px; filter: brightness(0) invert(1);">
+                <i class="fas fa-church cover-icon"></i>
                 <h1>Reunião de Alinhamento<br>e Planejamento 2026</h1>
                 <p class="subtitle">PIB Oliveira • Ministério de Música</p>
                 <p style="color: var(--gray-400); font-size: 1.25rem; margin-top: 60px;">08 de Fevereiro de 2026</p>
-                <button onclick="downloadPDF()" id="downloadBtn" style="
-                    margin-top: 60px;
-                    padding: 16px 40px;
-                    background: var(--gradient-blue);
-                    color: white;
-                    border: none;
-                    border-radius: 12px;
-                    font-size: 1.125rem;
-                    font-weight: 600;
-                    cursor: pointer;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 12px;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 113, 227, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 113, 227, 0.3)'" class="no-print">
-                    <i class="fas fa-download"></i>
-                    <span id="btnText">Baixar Apresentação em PDF</span>
-                </button>
             </div>
         </div>
 
@@ -1234,84 +1214,6 @@
         });
         
         updateSlide();
-        
-        // Função para download PDF
-        async function downloadPDF() {
-            const btn = document.getElementById('downloadBtn');
-            const btnText = document.getElementById('btnText');
-            const originalText = btnText.textContent;
-            
-            // Feedback visual
-            btn.disabled = true;
-            btnText.textContent = 'Gerando PDF...';
-            btn.style.opacity = '0.7';
-            btn.style.cursor = 'wait';
-            
-            try {
-                // Configurações do PDF
-                const opt = {
-                    margin: 0,
-                    filename: 'Apresentacao_PIB_Oliveira_2026.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { 
-                        scale: 2,
-                        useCORS: true,
-                        logging: false,
-                        windowWidth: 1920,
-                        windowHeight: 1080
-                    },
-                    jsPDF: { 
-                        unit: 'px', 
-                        format: [1920, 1080], 
-                        orientation: 'landscape',
-                        compress: true
-                    },
-                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                };
-                
-                // Preparar slides para PDF
-                const slides = document.querySelectorAll('.slide');
-                const wrapper = document.querySelector('.presentation-wrapper');
-                
-                // Mostrar todos os slides temporariamente
-                slides.forEach(slide => {
-                    slide.style.opacity = '1';
-                    slide.style.transform = 'none';
-                    slide.style.position = 'relative';
-                });
-                
-                // Gerar PDF
-                await html2pdf().set(opt).from(wrapper).save();
-                
-                // Restaurar estado original
-                slides.forEach((slide, index) => {
-                    if (index !== currentSlide) {
-                        slide.style.opacity = '0';
-                        slide.style.transform = 'translateY(30px)';
-                        slide.style.position = 'absolute';
-                    }
-                });
-                
-                // Feedback de sucesso
-                btnText.textContent = 'PDF Baixado!';
-                setTimeout(() => {
-                    btnText.textContent = originalText;
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                    btn.style.cursor = 'pointer';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Erro ao gerar PDF:', error);
-                btnText.textContent = 'Erro ao gerar PDF';
-                setTimeout(() => {
-                    btnText.textContent = originalText;
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                    btn.style.cursor = 'pointer';
-                }, 2000);
-            }
-        }
     </script>
 </body>
 </html>
