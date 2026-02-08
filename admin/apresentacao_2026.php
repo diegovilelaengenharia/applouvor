@@ -1,8 +1,9 @@
 <?php
-// Forçar desativação de cache
-header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
-header("Pragma: no-cache"); // HTTP 1.0.
-header("Expires: 0"); // Proxies.
+// Forçar desativação de cache (Versão Agressiva - 08/02/2026 14:40)
+$timestamp = time();
+header("Cache-Control: no-cache, no-store, must-revalidate, max-age=0"); 
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -610,7 +611,7 @@ header("Expires: 0"); // Proxies.
             <div class="slide-content">
                 <span class="pill orange">MÚSICA</span>
                 <h1 style="font-size: 7rem; margin-top: 100px; margin-bottom: 40px;">O Fogo Arderá</h1>
-                <p style="font-size: 2.5rem; color: var(--gray-400);">Alexsander Lucio • 2024</p>
+                <p style="font-size: 2.5rem; color: var(--gray-400);">Alexsander Lucio • 2024 <!-- v2 --></p>
             </div>
         </div>
 
