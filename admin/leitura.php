@@ -395,14 +395,30 @@ if (!$planStarted) {
             }
         });
 
+    // Tab Switching for Config Modal (restored from git history)
+    function switchConfigTab(tabName) {
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.config-content').forEach(content => content.style.display = 'none');
+        
+        // Add active class to clicked tab
+        const tabBtn = document.getElementById(`tab-${tabName}`);
+        const tabContent = document.getElementById(`content-${tabName}`);
+        
+        if (tabBtn) tabBtn.classList.add('active');
+        if (tabContent) tabContent.style.display = 'block';
+        
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
     // Open configuration modal (restored from git history)
     function openConfig(defaultTab = 'geral') { 
         const modal = document.getElementById('modal-config');
         if (modal) {
             modal.style.display = 'flex';
-            if (typeof switchConfigTab === 'function') {
-                switchConfigTab(defaultTab);
-            }
+            switchConfigTab(defaultTab);
         } else {
             console.error('Modal config not found');
             alert('Modal de configurações não encontrado. Verifique o código.');
