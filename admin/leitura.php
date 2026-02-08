@@ -106,6 +106,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'save_reading_passage') {
+        $planDay = (int)($_POST['plan_day'] ?? 0);
+        $passageIndex = (int)($_POST['passage_index'] ?? 0);
+        $completed = filter_var($_POST['completed'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $planType = $_POST['plan_type'] ?? 'navigators';
+        
+        try {
+            // Buscar progresso existente
+            $stmt = $pdo->prepare("SELECT verses_read FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+            $stmt->execute([$userId, 1, $planDay]); // Usando month_num=1 para planos lineares
+            $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $versesRead = [];
+            if ($existing && !empty($existing['verses_read'])) {
+                $versesRead = json_decode($existing['verses_read'], true) ?: [];
+            }
+            
+            // Atualizar array de passagens
+            if ($completed) {
+                // Adicionar passagem se não existir
+                if (!in_array($passageIndex, $versesRead)) {
+                    $versesRead[] = $passageIndex;
+                }
+            } else {
+                // Remover passagem
+                $versesRead = array_values(array_filter($versesRead, function($v) use ($passageIndex) {
+                    return $v != $passageIndex;
+                }));
+            }
+            
+            // Salvar no banco
+            if (empty($versesRead)) {
+                // Se não há passagens marcadas, deletar registro
+                $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?")
+                    ->execute([$userId, 1, $planDay]);
+            } else {
+                // Salvar/atualizar registro
+                $sql = "INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, completed_at) 
+                        VALUES (?, ?, ?, ?, NOW()) 
+                        ON DUPLICATE KEY UPDATE verses_read = VALUES(verses_read), completed_at = NOW()";
+                $pdo->prepare($sql)->execute([$userId, 1, $planDay, json_encode($versesRead)]);
+            }
+            
+            echo json_encode(['success' => true, 'verses_read' => $versesRead]);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            echo json_encode(['success' => false, 'error' => 'Database error']);
+        }
+        exit;
+    }
+
+
     if ($action === 'reset_plan') { 
         try {
             $pdo->beginTransaction();
@@ -686,6 +738,23 @@ if (empty($todayReadings)) {
         ]
     ];
 }
+
+// Buscar progresso salvo para este dia
+$stmtProgress = $pdo->prepare("SELECT verses_read FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+$stmtProgress->execute([$userId, 1, $planDayIndex]);
+$progressData = $stmtProgress->fetch(PDO::FETCH_ASSOC);
+
+$completedPassages = [];
+if ($progressData && !empty($progressData['verses_read'])) {
+    $completedPassages = json_decode($progressData['verses_read'], true) ?: [];
+}
+
+// Marcar passagens como completadas
+foreach ($todayReadings as $index => &$reading) {
+    $reading['completed'] = in_array($index, $completedPassages);
+}
+unset($reading); // Limpar referência
+
 
 
 // --- RENDER PAGE ---
@@ -1284,14 +1353,13 @@ body.dark-mode .action-btn {
     <!-- Passages List -->
     <div class="passages-list">
         <?php foreach ($todayReadings as $index => $reading): 
-            // Verificar se foi lido (simplificado por enquanto)
-            $isComplete = false;
+            $isComplete = $reading['completed'] ?? false;
             $status = $isComplete ? 'complete' : 'unread';
         ?>
-        <div class="passage-card status-<?= $status ?>">
+        <div class="passage-card status-<?= $status ?>" data-passage-index="<?= $index ?>">
             <div class="passage-header">
                 <input type="checkbox" class="passage-checkbox" <?= $isComplete ? 'checked' : '' ?> 
-                       onchange="togglePassage(<?= $planDayIndex ?>, <?= $index ?>)">
+                       onchange="togglePassage(<?= $planDayIndex ?>, <?= $index ?>, this.checked)">
                 <div class="passage-title"><?= htmlspecialchars($reading['reference']) ?></div>
                 <a href="<?= htmlspecialchars($reading['link']) ?>" target="_blank" class="btn-passage btn-passage-primary">
                     <i data-lucide="book-open" width="16"></i>
@@ -1318,20 +1386,89 @@ body.dark-mode .action-btn {
 
 <script>
 // Função para marcar/desmarcar passagem
-function togglePassage(day, index) {
-    console.log('Toggling passage', day, index);
-    // TODO: Implementar salvamento via AJAX
+function togglePassage(day, index, checked) {
+    const card = document.querySelector(`.passage-card[data-passage-index="${index}"]`);
+    
+    // Atualizar UI imediatamente
+    if (checked) {
+        card.classList.add('status-complete');
+        card.classList.remove('status-unread');
+    } else {
+        card.classList.add('status-unread');
+        card.classList.remove('status-complete');
+    }
+    
+    // Salvar no backend
+    const formData = new FormData();
+    formData.append('action', 'save_reading_passage');
+    formData.append('plan_day', day);
+    formData.append('passage_index', index);
+    formData.append('completed', checked ? '1' : '0');
+    formData.append('plan_type', '<?= $planType ?>');
+    
+    fetch('', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Erro ao salvar progresso:', data.error);
+            // Reverter UI em caso de erro
+            if (checked) {
+                card.classList.remove('status-complete');
+                card.classList.add('status-unread');
+            } else {
+                card.classList.remove('status-unread');
+                card.classList.add('status-complete');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Erro na requisição:', error);
+    });
 }
 
 // Função para marcar todas como lidas
 function markAllAsRead(day) {
     const checkboxes = document.querySelectorAll('.passage-checkbox');
-    checkboxes.forEach(cb => {
-        cb.checked = true;
-        cb.parentElement.parentElement.classList.add('status-complete');
-        cb.parentElement.parentElement.classList.remove('status-unread');
+    const promises = [];
+    
+    checkboxes.forEach((cb, index) => {
+        if (!cb.checked) {
+            cb.checked = true;
+            const card = cb.closest('.passage-card');
+            card.classList.add('status-complete');
+            card.classList.remove('status-unread');
+            
+            // Salvar cada passagem
+            const passageIndex = parseInt(card.dataset.passageIndex);
+            const formData = new FormData();
+            formData.append('action', 'save_reading_passage');
+            formData.append('plan_day', day);
+            formData.append('passage_index', passageIndex);
+            formData.append('completed', '1');
+            formData.append('plan_type', '<?= $planType ?>');
+            
+            promises.push(
+                fetch('', {
+                    method: 'POST',
+                    body: formData
+                }).then(r => r.json())
+            );
+        }
     });
-    // TODO: Salvar no backend
+    
+    Promise.all(promises)
+        .then(results => {
+            const allSuccess = results.every(r => r.success);
+            if (!allSuccess) {
+                console.error('Alguns salvamentos falharam');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao marcar todas:', error);
+        });
 }
 
 // Inicializar ícones Lucide
@@ -1339,6 +1476,7 @@ if (typeof lucide !== 'undefined') {
     lucide.createIcons();
 }
 </script>
+
 
 
 <?php endif; ?>
