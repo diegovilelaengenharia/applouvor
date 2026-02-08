@@ -927,48 +927,48 @@ body.dark-mode .stat-card-compact {
 <!-- TAB CONTENT: ACHIEVEMENTS/GAMIFICATION -->
 
 <style>
-/* Achievements Page Styles */
+/* Achievements Page Styles - Mobile Optimized */
 .achievements-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .section-title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--slate-800);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-/* Level Progress Card */
+/* Level Progress Card - Compact */
 .level-card {
     background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-bottom: 2rem;
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
     color: white;
-    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
 }
 
 .level-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .level-number {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 900;
     line-height: 1;
 }
 
 .level-label {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     opacity: 0.9;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -979,18 +979,18 @@ body.dark-mode .stat-card-compact {
 }
 
 .xp-current {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
 }
 
 .xp-total {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     opacity: 0.9;
 }
 
 .level-progress-bar {
     background: rgba(255,255,255,0.3);
-    height: 12px;
+    height: 8px;
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 0.5rem;
@@ -1004,30 +1004,30 @@ body.dark-mode .stat-card-compact {
 }
 
 .next-level-text {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     opacity: 0.9;
 }
 
-/* Badges Grid */
+/* Badges Grid - Compact */
 .badges-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
 }
 
 .badge-card {
     background: white;
     border: 2px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 1.25rem;
+    border-radius: 12px;
+    padding: 0.875rem;
     text-align: center;
     transition: all 0.2s ease;
 }
 
 .badge-card.unlocked {
     border-color: #fbbf24;
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+    box-shadow: 0 3px 10px rgba(251, 191, 36, 0.2);
 }
 
 .badge-card.locked {
@@ -1036,33 +1036,79 @@ body.dark-mode .stat-card-compact {
 }
 
 .badge-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
 
 .badge-icon {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.375rem;
 }
 
 .badge-name {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--slate-800);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.125rem;
+    line-height: 1.2;
 }
 
 .badge-desc {
-    font-size: 0.75rem;
+    font-size: 0.625rem;
     color: var(--slate-500);
+    line-height: 1.3;
 }
 
 .badge-progress {
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
+    margin-top: 0.375rem;
+    font-size: 0.625rem;
     color: var(--amber-600);
     font-weight: 600;
 }
+
+body.dark-mode .badge-card {
+    background: var(--bg-surface);
+    border-color: var(--border-subtle);
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 640px) {
+    .achievements-container {
+        padding: 0.75rem;
+    }
+    
+    .level-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .level-number {
+        font-size: 2rem;
+    }
+    
+    .xp-current {
+        font-size: 1.125rem;
+    }
+    
+    .badges-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .badge-card {
+        padding: 0.625rem;
+    }
+    
+    .badge-icon {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+}
+</style>
 
 /* HeatMap */
 .heatmap-container {
