@@ -687,9 +687,9 @@ $tab = $_GET['tab'] ?? 'dashboard';
 <style>
 /* Reduzir tamanho dos cards em 30% */
 .quick-access-grid .access-card {
-    transform: scale(0.85);
+    transform: scale(0.7);
     transform-origin: top center;
-    margin-bottom: -20px;
+    margin-bottom: -30px;
 }
 .quick-access-grid {
     gap: 0.5rem !important;
