@@ -548,8 +548,8 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
             </div>
             
             <div style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; gap: 12px; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="closeNotificationSettings()">Cancelar</button>
-                <button class="btn btn-primary" onclick="document.getElementById('notificationPrefsForm').submit()">Salvar Alterações</button>
+                <button class="btn btn-secondary" onclick="closeNotificationSettings()" style="background: var(--slate-100); color: var(--slate-700); border: 1px solid var(--slate-200);">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('notificationPrefsForm').submit()" style="background: var(--green-600); color: white; border: none; font-weight: 600;">Salvar Alterações</button>
             </div>
             
         </div>
