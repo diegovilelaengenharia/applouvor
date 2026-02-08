@@ -602,7 +602,7 @@
                 <span class="pill orange">MÚSICA</span>
                 <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
                 <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 60px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 2rem; line-height: 2; color: var(--gray-900);">
+                <div style="text-align: center; font-size: 2.5rem; line-height: 2; color: var(--gray-900);">
                     <p style="margin-bottom: 48px;">
                         Teu fogo arde em mim<br>
                         E muda o meu viver<br>
@@ -648,7 +648,7 @@
                 <span class="pill orange">MÚSICA</span>
                 <h2 style="margin-bottom: 20px;">O Fogo Arderá</h2>
                 <p style="font-size: 1.25rem; color: var(--gray-400); margin-bottom: 80px;">Alexsander Lucio • 2024</p>
-                <div style="text-align: center; font-size: 2.5rem; line-height: 2; color: var(--orange); font-weight: 700;">
+                <div style="text-align: center; font-size: 3rem; line-height: 2; color: var(--orange); font-weight: 700;">
                     <p>
                         O fogo arderá sobre o altar<br>
                         Continuamente sobre o altar<br>
