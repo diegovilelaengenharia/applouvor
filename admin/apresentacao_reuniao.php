@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Louvor - Apresentação</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap">
+    <title>Reunião de Alinhamento e Planejamento 2026</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-dark: #0f172a;
+            --primary-light: #1e293b;
+            --accent-gold: #d97706;
+            --accent-gold-light: #fcd34d;
+            --text-white: #f8fafc;
+            --text-grey: #94a3b8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,16 +23,36 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000;
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text-white);
         }
 
-        .presentation-container {
-            width: 100%;
+        .presentation-wrapper {
+            width: 100vh; /* Enforces Square Aspect Ratio based on height */
             height: 100vh;
+            background: radial-gradient(circle at center, var(--primary-light) 0%, var(--primary-dark) 100%);
             position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* Decoration Elements */
+        .bg-decoration {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bg-circle {
+            border-radius: 50%;
+            border: 2px solid var(--accent-gold);
         }
 
         .slide {
@@ -32,762 +61,651 @@
             left: 0;
             width: 100%;
             height: 100%;
+            padding: 60px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 60px;
+            transform: scale(1.1);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 5;
         }
 
         .slide.active {
             opacity: 1;
-            transform: translateX(0);
+            transform: scale(1);
             z-index: 10;
         }
 
-        .slide.prev {
-            transform: translateX(-100%);
-        }
-
         .slide-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 20px;
-            max-width: 100%;
-            width: calc(100% - 20px);
-            margin: 0 10px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.6s ease-out;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            z-index: 10;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
+        /* Typography */
+        h1.main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        h2.slide-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2.slide-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-gold);
+            margin: 15px auto 0;
+        }
+
+        p.subtitle {
+            font-size: 1.4rem;
+            color: var(--text-grey);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .quote-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-gold);
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .quote-ref {
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            text-align: right;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Song Styling */
+        .song-slide {
+            text-align: center;
+        }
+        
+        .song-verse {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            line-height: 1.6;
+            font-weight: 600;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .song-title-small {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        /* Lists and Grid */
+        .points-list {
+            list-style: none;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .points-list li {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeInRight 0.5s ease forwards;
+        }
+
+        .points-list li::before {
+            content: '•';
+            color: var(--accent-gold);
+            position: absolute;
+            left: 0;
+            font-size: 2rem;
+            line-height: 1;
+            top: -2px;
+        }
+
+        /* Topic Transitions */
+        @keyframes fadeInRight {
             to {
                 opacity: 1;
-                transform: scale(1);
+                transform: translateX(0);
             }
         }
 
-        /* Slide Title */
-        .slide-title {
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            text-align: center;
-            line-height: 1.2;
+        /* Nav & Progress */
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent-gold);
+            z-index: 100;
+            transition: width 0.3s;
         }
 
-        .slide-subtitle {
-            font-size: 1.1rem;
-            color: #64748b;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .slide-text {
-            font-size: 0.95rem;
-            color: #475569;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        /* Pilares Grid */
-        .pilares-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .pilar-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-radius: 15px;
-            padding: 20px 15px;
-            text-align: center;
-            transition: all 0.3s;
-            border: 2px solid #e2e8f0;
-        }
-
-        .pilar-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
-            border-color: #3b82f6;
-        }
-
-        .pilar-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .pilar-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
-        }
-
-        .pilar-desc {
-            font-size: 0.85rem;
-            color: #64748b;
-            line-height: 1.5;
-        }
-
-        /* Features List */
-        .features-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-
-        .feature-item:hover {
-            background: #f1f5f9;
-            transform: translateX(10px);
-        }
-
-        .feature-icon {
-            font-size: 1.5rem;
-            color: #3b82f6;
-            min-width: 35px;
-        }
-
-        .feature-text {
-            flex: 1;
-        }
-
-        .feature-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 3px;
-        }
-
-        .feature-desc {
-            font-size: 0.85rem;
-            color: #64748b;
-            line-height: 1.4;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            border-radius: 15px;
-            padding: 25px 20px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 900;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            font-weight: 600;
-            opacity: 0.95;
-        }
-
-        /* Tech Stack */
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .tech-item {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-
-        .tech-item:hover {
-            border-color: #3b82f6;
-            transform: scale(1.05);
-        }
-
-        .tech-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .tech-name {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        /* Navigation */
         .nav-controls {
-            position: fixed;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
             display: flex;
-            gap: 12px;
+            gap: 15px;
             z-index: 100;
         }
-
+        
         .nav-btn {
-            width: 45px;
-            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: white;
-            border: none;
             cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
-            color: #3b82f6;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
         }
-
+        
         .nav-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
         }
 
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
+        /* Feature Cards for Part 2 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
         }
 
-        .slide-counter {
-            background: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: #3b82f6;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
-            transition: width 0.3s;
-            z-index: 1000;
-        }
-
-        /* Highlight Box */
-        .highlight-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
             border-radius: 12px;
-            margin: 15px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
         }
 
-        .highlight-text {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #92400e;
-            font-style: italic;
-            line-height: 1.5;
-        }
-
-        /* List Styling */
-        .custom-list {
-            list-style: none;
-            margin-top: 15px;
-        }
-
-        .custom-list li {
-            font-size: 0.9rem;
-            color: #475569;
-            padding: 10px 0;
-            padding-left: 30px;
-            position: relative;
-            line-height: 1.5;
-        }
-
-        .custom-list li::before {
-            content: "✨";
-            position: absolute;
-            left: 0;
-            font-size: 1.1rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .slide-content {
-                padding: 40px;
-            }
-
-            .slide-title {
-                font-size: 2.5rem;
-            }
-
-            .pilares-grid,
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .features-list {
-                grid-template-columns: 1fr;
-            }
-
-            .tech-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Cover Slide Special */
-        .cover-slide .slide-content {
-            text-align: center;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.98) 100%);
-        }
-
-        .cover-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .cover-title {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--accent-gold);
             margin-bottom: 15px;
         }
 
-        .cover-subtitle {
-            font-size: 1.1rem;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 20px;
+        .section-divider {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--primary-dark), #000);
         }
 
-        .cover-date {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            font-weight: 500;
-        }
+        /* Utility */
+        .text-gold { color: var(--accent-gold); }
+        .text-bold { font-weight: 700; }
+        .mt-4 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 1rem; }
+
     </style>
 </head>
 <body>
-    <div class="progress-bar" id="progressBar"></div>
-    
-    <div class="presentation-container">
+
+    <div class="presentation-wrapper">
+        <div class="progress-bar" id="progressBar"></div>
+
+        <!-- Background Elements -->
+        <div class="bg-decoration bg-circle" style="width: 600px; height: 600px; top: -200px; right: -200px;"></div>
+        <div class="bg-decoration bg-circle" style="width: 400px; height: 400px; bottom: -100px; left: -100px; border-color: rgba(255,255,255,0.1);"></div>
+
+        <!-- ================= PART 1 ================= -->
+
         <!-- Slide 1: Cover -->
         <div class="slide active">
-            <div class="slide-content cover-slide">
-                <div class="cover-icon">
-                    <i class="fas fa-music"></i>
-                </div>
-                <h1 class="cover-title">APP LOUVOR</h1>
-                <p class="cover-subtitle">Sua Ferramenta Completa para o Ministério de Louvor</p>
-                <p class="cover-date">Reunião - 08 de Fevereiro de 2026</p>
+            <div class="slide-content">
+                <i class="fas fa-church" style="font-size: 4rem; color: var(--accent-gold); margin-bottom: 20px;"></i>
+                <p style="text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; opacity: 0.7;">PIB Oliveira • Ministério de Música</p>
+                <h1 class="main-title">Reunião de<br>Alinhamento e<br>Planejamento</h1>
+                <div style="width: 100px; height: 4px; background: var(--accent-gold); margin: 30px auto;"></div>
+                <p class="subtitle">08 de Fevereiro de 2026</p>
             </div>
         </div>
 
-        <!-- Slide 2: O que é -->
+        <!-- Slide 2: Palavra Inicial (Levítico) -->
         <div class="slide">
             <div class="slide-content">
-                <h2 class="slide-title">📖 O que é o App Louvor?</h2>
-                <div class="highlight-box">
-                    <p class="highlight-text">
-                        "Uma plataforma completa que integra gestão prática, crescimento espiritual e comunicação eficiente em um único lugar."
+                <h2 class="slide-title">Palavra Inicial</h2>
+                <div class="quote-card">
+                    <p class="quote-text">
+                        "Mantenha-se aceso o fogo no altar; não deve ser apagado. Toda manhã o sacerdote acrescentará lenha... Mantenha-se o fogo continuamente aceso no altar; não deve ser apagado."
                     </p>
-                </div>
-                <p class="slide-text">
-                    Mais do que um sistema de escalas, é uma <strong>ferramenta de auxílio, planejamento e encorajamento</strong> para todos que servem no louvor.
-                </p>
-                <ul class="custom-list">
-                    <li>Desenvolvido especialmente para ministérios de louvor</li>
-                    <li>Pensado nas necessidades reais da nossa equipe</li>
-                    <li>Gratuito e personalizado para a PIB Oliveira</li>
-                    <li>Sempre evoluindo com melhorias constantes</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 3: Três Pilares -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">🎯 Três Pilares Fundamentais</h2>
-                <div class="pilares-grid">
-                    <div class="pilar-card">
-                        <div class="pilar-icon">🎼</div>
-                        <h3 class="pilar-title">Gestão Prática</h3>
-                        <p class="pilar-desc">Escalas, repertório, membros e relatórios completos</p>
-                    </div>
-                    <div class="pilar-card">
-                        <div class="pilar-icon">🙏</div>
-                        <h3 class="pilar-title">Vida Espiritual</h3>
-                        <p class="pilar-desc">Planos de leitura, diário e devocionais diários</p>
-                    </div>
-                    <div class="pilar-card">
-                        <div class="pilar-icon">📢</div>
-                        <h3 class="pilar-title">Comunicação</h3>
-                        <p class="pilar-desc">Avisos, notificações e agenda integrada</p>
-                    </div>
+                    <p class="quote-ref">Levítico 6:12-13</p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 4: Gestão Prática -->
+        <!-- Slide 3: Song "O Fogo Arderá" - 1 -->
         <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">🎼 Gestão Prática</h2>
-                <p class="slide-subtitle">Organize seu ministério com eficiência profissional</p>
-                <div class="features-list">
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Escalas Inteligentes</div>
-                            <div class="feature-desc">Criação, confirmação automática e notificações push</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-music"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Repertório Completo</div>
-                            <div class="feature-desc">Biblioteca com letras, tons, tags e playlists</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-users"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Gestão de Membros</div>
-                            <div class="feature-desc">Perfis, funções, disponibilidade e estatísticas</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Relatórios</div>
-                            <div class="feature-desc">Boletins estatísticos e indicadores de desempenho</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5: Vida Espiritual -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">🙏 Vida Espiritual</h2>
-                <p class="slide-subtitle">Cresça em intimidade com Deus enquanto serve</p>
-                <div class="features-list">
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-book-open"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Planos de Leitura Bíblica</div>
-                            <div class="feature-desc">3 planos: Bíblia em 1 Ano, Novo Testamento, Salmos & Provérbios</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-pen-fancy"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Diário Espiritual</div>
-                            <div class="feature-desc">Reflexões pessoais com áudio e imagens</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-dove"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Devocionais</div>
-                            <div class="feature-desc">Conteúdo inspiracional diário sobre louvor</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon"><i class="fas fa-praying-hands"></i></div>
-                        <div class="feature-text">
-                            <div class="feature-title">Pedidos de Oração</div>
-                            <div class="feature-desc">Compartilhamento e comunhão através da intercessão</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Números do Desenvolvimento -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">💻 Números do Desenvolvimento</h2>
-                <p class="slide-subtitle">Estatísticas impressionantes</p>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">50.757</div>
-                        <div class="stat-label">Linhas de Código</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">~600h</div>
-                        <div class="stat-label">Horas de Trabalho</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">40+</div>
-                        <div class="stat-label">Funcionalidades</div>
-                    </div>
-                </div>
-                <div class="highlight-box" style="margin-top: 40px;">
-                    <p class="highlight-text">
-                        Equivalente a 3-4 meses de trabalho em tempo integral ou 6-8 meses em tempo parcial
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 7: Tecnologias -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">🔧 Tecnologias Utilizadas</h2>
-                <div class="tech-grid">
-                    <div class="tech-item">
-                        <div class="tech-icon" style="color: #777bb4;">
-                            <i class="fab fa-php"></i>
-                        </div>
-                        <div class="tech-name">PHP 7.4+</div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon" style="color: #00758f;">
-                            <i class="fas fa-database"></i>
-                        </div>
-                        <div class="tech-name">MySQL</div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon" style="color: #f7df1e;">
-                            <i class="fab fa-js"></i>
-                        </div>
-                        <div class="tech-name">JavaScript</div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon" style="color: #264de4;">
-                            <i class="fab fa-css3-alt"></i>
-                        </div>
-                        <div class="tech-name">CSS3</div>
-                    </div>
-                </div>
-                <ul class="custom-list" style="margin-top: 40px;">
-                    <li><strong>PWA:</strong> Instalável como app nativo</li>
-                    <li><strong>Web Push:</strong> Notificações mesmo com app fechado</li>
-                    <li><strong>Gravação de Áudio:</strong> API nativa do navegador</li>
-                    <li><strong>Exportação Word:</strong> Geração de documentos</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 8: Diferenciais -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">🚀 Diferenciais do App Louvor</h2>
-                <p class="slide-subtitle">O que torna este app único</p>
-                <ul class="custom-list">
-                    <li><strong>Integração Total:</strong> Gestão + Espiritualidade + Comunicação em um só lugar</li>
-                    <li><strong>Foco no Crescimento:</strong> Não apenas organiza, mas edifica espiritualmente</li>
-                    <li><strong>Desenvolvido por quem entende:</strong> Criado pensando nas necessidades reais</li>
-                    <li><strong>Gratuito e Personalizado:</strong> Feito com amor para nossa igreja</li>
-                    <li><strong>Sempre Evoluindo:</strong> Melhorias constantes baseadas no uso real</li>
-                    <li><strong>Dados Seguros:</strong> Hospedado de forma segura e confiável</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 9: Visão e Propósito -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2 class="slide-title">🎯 Visão e Propósito</h2>
-                <div class="highlight-box">
-                    <p class="highlight-text">
-                        "Criar uma ferramenta que não apenas organize o ministério, mas que também encoraje cada membro a crescer espiritualmente enquanto serve."
-                    </p>
-                </div>
-                <div class="features-list" style="margin-top: 40px;">
-                    <div class="feature-item">
-                        <div class="feature-icon">✨</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Facilitar</div>
-                            <div class="feature-desc">A gestão do ministério de louvor</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🙏</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Encorajar</div>
-                            <div class="feature-desc">A vida devocional de cada membro</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🤝</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Fortalecer</div>
-                            <div class="feature-desc">A comunicação e união da equipe</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📈</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Promover</div>
-                            <div class="feature-desc">Excelência no serviço ao Senhor</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: Encerramento -->
-        <div class="slide">
-            <div class="slide-content cover-slide">
-                <div class="cover-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <h2 class="slide-title" style="font-size: 3.5rem;">Obrigado!</h2>
-                <div class="highlight-box" style="margin-top: 40px;">
-                    <p class="highlight-text">
-                        Que este app seja uma bênção para nosso ministério e glorifique o nome de Jesus!
-                    </p>
-                </div>
-                <p class="slide-text" style="text-align: center; margin-top: 40px; font-size: 1.5rem;">
-                    <strong>🎵 APP LOUVOR 🎵</strong><br>
-                    <span style="color: #94a3b8;">Organizando o ministério, edificando vidas</span>
+            <div class="slide-content song-slide">
+                <p class="song-title-small">O Fogo Arderá</p>
+                <p class="song-verse">
+                    Teu fogo arde em mim<br>
+                    E muda o meu viver<br>
+                    Sou teu Templo, sou Teu altar<br>
+                    Sacrifício vivo quero oferecer
                 </p>
             </div>
         </div>
+
+        <!-- Slide 4: Song "O Fogo Arderá" - 2 -->
+        <div class="slide">
+            <div class="slide-content song-slide">
+                <p class="song-title-small">O Fogo Arderá</p>
+                <p class="song-verse">
+                    Que o nosso louvor não seja um momento<br>
+                    Lágrimas vazias, sem avivamento<br>
+                    Que o nosso amor não seja fingido<br>
+                    Honrado com os lábios, nos corações esquecido
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Song "O Fogo Arderá" - 3 -->
+        <div class="slide">
+            <div class="slide-content song-slide">
+                <p class="song-title-small">O Fogo Arderá</p>
+                <p class="song-verse">
+                    Pois de que vale ter as poesias mais lindas<br>
+                    As harmonias mais brilhantes, se não há verdade em nós?<br>
+                    Pois de que vale ter tudo e não ter nada?<br>
+                    Te dar meus lábios, não minha alma?
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Song "O Fogo Arderá" - 4 -->
+        <div class="slide">
+            <div class="slide-content song-slide">
+                <p class="song-title-small">O Fogo Arderá</p>
+                <p class="song-verse">
+                    Eu quero me entregar a Ti<br>
+                    Entregar minha vida como adoração<br>
+                    Não vale a pena só me emocionar<br>
+                    E buscar as canções mais lindas pra cantar
+                </p>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Song "O Fogo Arderá" - 5 -->
+        <div class="slide">
+            <div class="slide-content song-slide">
+                <p class="song-title-small">O Fogo Arderá</p>
+                <p class="song-verse">
+                    Se eu não for uma canção que alegra a Ti<br>
+                    Se o meu coração não queimar por Ti<br>
+                    E o fogo arderá sobre o altar<br>
+                    Continuamente sobre o altar<br>
+                    E não se apagará
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Tópico 01 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Tópico 01</h2>
+                <p class="subtitle" style="margin-bottom: 30px;">Somos a <strong>HABITAÇÃO</strong> de Deus</p>
+                <div class="quote-card">
+                    <p class="quote-text">
+                        "Acaso não sabem que o corpo de vocês é santuário do Espírito Santo que habita em vocês, que lhes foi dado por Deus, e que vocês não são de vocês mesmos? Vocês foram comprados por alto preço. Portanto, glorifiquem a Deus com o seu próprio corpo"
+                    </p>
+                    <p class="quote-ref">1 Coríntios 6:19-20</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Tópico 02 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Tópico 02</h2>
+                <p class="subtitle" style="margin-bottom: 30px;">Somos o <strong>HOLOCAUSTO</strong> oferecido a Deus</p>
+                <div class="quote-card">
+                    <p class="quote-text">
+                        "Portanto, irmãos, rogo pelas misericórdias de Deus que se (você mesmo) ofereçam em SACRIFÍCIO VIVO, SANTO E AGRADÁVEL a Deus; este é o culto racional de vocês"
+                    </p>
+                    <p class="quote-ref">Romanos 12:1</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Song "Enche-me" - 1 -->
+        <div class="slide">
+            <div class="slide-content song-slide">
+                <p class="song-title-small">Enche-me (Gabriela Rocha - Isaías Saad)</p>
+                <p class="song-verse">
+                    Tu provês o fogo<br>
+                    E eu, o sacrifício sou<br>
+                    Tu provês o Espírito<br>
+                    E eu me abro por inteiro
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Song "Enche-me" - 2 -->
+        <div class="slide">
+            <div class="slide-content song-slide">
+                <p class="song-title-small">Enche-me</p>
+                <p class="song-verse">
+                    Enche-me, Deus<br>
+                    Enche-me, Deus<br>
+                    Enche-me
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Propostas 2026 - Capa -->
+        <div class="slide">
+            <div class="section-divider">
+                <h1 class="main-title" style="font-size: 4rem;">Propostas<br>2026</h1>
+                <p class="subtitle">Fortalecimento Espiritual e Estruturação</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Visão e Capacitação -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Visão e Capacitação</h2>
+                <ul class="points-list">
+                    <li><strong>O Propósito do Ministro:</strong><br>Entender nosso papel além da música.</li>
+                    <li><strong>Fundamentos Bíblicos:</strong><br>Adoração, Serviço e Excelência.</li>
+                </ul>
+                <div style="margin-top: 40px; border: 1px dashed var(--text-grey); padding: 20px; border-radius: 10px;">
+                    <i class="fas fa-bullseye" style="color: var(--accent-gold); font-size: 2rem; margin-bottom: 10px;"></i>
+                    <p>Objetivo: Fortalecimento Espiritual</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Medidas Práticas -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Medidas Práticas</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-sync-alt feature-icon"></i>
+                        <h3 class="text-gold mb-2">Rotação de Duplas</h3>
+                        <p>Dinamismo e integração na equipe.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-bible feature-icon"></i>
+                        <h3 class="text-gold mb-2">Disciplinas</h3>
+                        <p>Estímulo ao Jejum e Devocionais Semanais.</p>
+                    </div>
+                </div>
+                <div class="feature-grid mt-4">
+                    <div class="feature-card">
+                        <i class="fas fa-church feature-icon"></i>
+                        <h3 class="text-gold mb-2">Assiduidade</h3>
+                        <p>Envolvimento real com a igreja local.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h3 class="text-gold mb-2">Comunhão</h3>
+                        <p>Encontrão Semestral e Tópico aberto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Estruturação do Repertório -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Repertório</h2>
+                <p class="subtitle mb-2">(Thalyta)</p>
+                <div class="quote-card" style="border-left-color: var(--text-white);">
+                    <p class="quote-text" style="font-size: 1.4rem;">
+                        Escolhas intencionais com base em propósito e técnica. Equilíbrio entre o novo e o antigo.
+                    </p>
+                </div>
+                <ul class="points-list">
+                    <li>02 Canções Livres</li>
+                    <li>01 Canção de Ensino (Congregação)</li>
+                    <li>01 Canção Temática (Específica/Desafio)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= PART 2: APP LOUVOR ================= -->
+
+        <!-- Slide 16: App Louvor Cover -->
+        <div class="slide">
+            <div class="section-divider" style="background: linear-gradient(135deg, #1e3a8a, #000);">
+                <i class="fas fa-mobile-alt" style="font-size: 5rem; color: var(--accent-gold-light); margin-bottom: 30px;"></i>
+                <h1 class="main-title">App Louvor</h1>
+                <p class="subtitle">A Ferramenta do Ministério</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: O que é -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">O que é?</h2>
+                <div class="quote-card">
+                    <p class="quote-text">
+                        "Uma plataforma completa que integra gestão prática, crescimento espiritual e comunicação eficiente."
+                    </p>
+                </div>
+                <div class="feature-grid">
+                     <div class="feature-card">
+                        <h3 class="text-gold">Para Quem?</h3>
+                        <p>Desenvolvido especialmente para o nosso ministério.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="text-gold">Por Quê?</h3>
+                        <p>Auxílio, planejamento e encorajamento.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Pilares -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">3 Pilares</h2>
+                <div class="feature-grid" style="grid-template-columns: 1fr; gap: 15px;">
+                    <div class="feature-card" style="display: flex; align-items: center; gap: 20px;">
+                        <i class="fas fa-tasks feature-icon" style="margin: 0;"></i>
+                        <div>
+                            <h3 class="text-gold">Gestão Prática</h3>
+                            <p>Escalas, repertório e membros.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card" style="display: flex; align-items: center; gap: 20px;">
+                        <i class="fas fa-pray feature-icon" style="margin: 0;"></i>
+                        <div>
+                            <h3 class="text-gold">Vida Espiritual</h3>
+                            <p>Planos de leitura, diário e devocionais.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card" style="display: flex; align-items: center; gap: 20px;">
+                        <i class="fas fa-bullhorn feature-icon" style="margin: 0;"></i>
+                        <div>
+                            <h3 class="text-gold">Comunicação</h3>
+                            <p>Avisos, agenda e notificações.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Funcionalidades -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Funcionalidades</h2>
+                <ul class="points-list" style="font-size: 1.2rem;">
+                    <li><strong>Escalas Inteligentes:</strong> Confirmação e notificações.</li>
+                    <li><strong>Repertório:</strong> Letras, tons e cifras.</li>
+                    <li><strong>Planos de Leitura:</strong> Bíblia em 1 Ano, NT, Salmos.</li>
+                    <li><strong>Diário Espiritual:</strong> Reflexões com áudio.</li>
+                    <li><strong>Relatórios:</strong> Análise de dados do ministério.</li>
+                </ul>
+            </div>
+        </div>
+
+         <!-- Slide 20: Stats -->
+         <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">Bastidores</h2>
+                <div class="feature-grid">
+                    <div class="feature-card" style="text-align: center;">
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--accent-gold);">50k+</div>
+                        <p>Linhas de Código</p>
+                    </div>
+                    <div class="feature-card" style="text-align: center;">
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--accent-gold);">600h</div>
+                        <p>Horas de Trabalho</p>
+                    </div>
+                </div>
+                <p class="subtitle mt-4">Feito com excelência para Deus.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Final -->
+        <div class="slide">
+            <div class="section-divider">
+                <i class="fas fa-heart" style="font-size: 4rem; color: #ef4444; margin-bottom: 20px; animation: pulse 2s infinite;"></i>
+                <h1 class="main-title">Obrigado!</h1>
+                <p class="subtitle">Vamos juntos fazer um 2026 incrível!</p>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Controls -->
     <div class="nav-controls">
-        <button class="nav-btn" id="prevBtn" onclick="prevSlide()">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
-        </div>
-        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
     </div>
 
     <script>
-        let currentSlideIndex = 0;
+        let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
         const progressBar = document.getElementById('progressBar');
-        const currentSlideEl = document.getElementById('currentSlide');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+
+        // Animation triggers
+        function triggerAnimations(slide) {
+            const listItems = slide.querySelectorAll('.points-list li');
+            listItems.forEach((item, index) => {
+                item.style.animationDelay = (index * 0.2) + 's';
+                // Reset animation
+                item.classList.remove('animate');
+                void item.offsetWidth; // trigger reflow
+                item.classList.add('animate');
+            });
+        }
 
         function updateSlide() {
             slides.forEach((slide, index) => {
-                slide.classList.remove('active', 'prev');
-                if (index === currentSlideIndex) {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
                     slide.classList.add('active');
-                } else if (index < currentSlideIndex) {
-                    slide.classList.add('prev');
+                    triggerAnimations(slide);
                 }
             });
-
-            currentSlideEl.textContent = currentSlideIndex + 1;
-            progressBar.style.width = ((currentSlideIndex + 1) / totalSlides * 100) + '%';
-
-            prevBtn.disabled = currentSlideIndex === 0;
-            nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+            
+            // Update progress
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
         }
 
         function nextSlide() {
-            if (currentSlideIndex < totalSlides - 1) {
-                currentSlideIndex++;
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
                 updateSlide();
             }
         }
 
         function prevSlide() {
-            if (currentSlideIndex > 0) {
-                currentSlideIndex--;
+            if (currentSlide > 0) {
+                currentSlide--;
                 updateSlide();
             }
         }
 
-        // Keyboard navigation
+        // Keyboard support
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
-                e.preventDefault();
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
                 prevSlide();
-            } else if (e.key === 'Home') {
-                e.preventDefault();
-                currentSlideIndex = 0;
-                updateSlide();
-            } else if (e.key === 'End') {
-                e.preventDefault();
-                currentSlideIndex = totalSlides - 1;
-                updateSlide();
             }
         });
 
-        // Touch/Swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
+        // Click to advance
+        /* document.querySelector('.presentation-wrapper').addEventListener('click', (e) => {
+            // Check if clicked exactly on nav buttons to avoid double action
+            if (!e.target.closest('.nav-btn')) {
                 nextSlide();
             }
-            if (touchEndX > touchStartX + 50) {
-                prevSlide();
-            }
-        }
-
-        // Initialize
-        document.getElementById('totalSlides').textContent = totalSlides;
+        }); */
+        
+        // Initial call
         updateSlide();
+
+        // Pulse animation
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
     </script>
 </body>
 </html>
