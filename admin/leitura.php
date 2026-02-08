@@ -1446,6 +1446,51 @@ body.dark-mode .stat-card-compact {
     border-color: #cbd5e1;
 }
 
+/* Formatting Toolbar */
+.formatting-toolbar {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px 8px 0 0;
+    border-bottom: none;
+}
+
+.format-btn {
+    padding: 0.5rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.format-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+
+.format-btn:active {
+    background: #e2e8f0;
+}
+
+.toolbar-divider {
+    width: 1px;
+    background: #e5e7eb;
+    margin: 0 0.25rem;
+}
+
+.diary-textarea {
+    border-radius: 0 0 10px 10px !important;
+    border-top: none !important;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 640px) {
     .reading-container {
@@ -1622,6 +1667,27 @@ body.dark-mode .action-btn {
                 
                 <div class="diary-field">
                     <label for="diary-comment">Suas Reflexões</label>
+                    
+                    <!-- Formatting Toolbar -->
+                    <div class="formatting-toolbar">
+                        <button type="button" class="format-btn" onclick="formatText('bold')" title="Negrito">
+                            <i data-lucide="bold" width="16"></i>
+                        </button>
+                        <button type="button" class="format-btn" onclick="formatText('italic')" title="Itálico">
+                            <i data-lucide="italic" width="16"></i>
+                        </button>
+                        <button type="button" class="format-btn" onclick="formatText('underline')" title="Sublinhado">
+                            <i data-lucide="underline" width="16"></i>
+                        </button>
+                        <div class="toolbar-divider"></div>
+                        <button type="button" class="format-btn" onclick="formatText('ul')" title="Lista com marcadores">
+                            <i data-lucide="list" width="16"></i>
+                        </button>
+                        <button type="button" class="format-btn" onclick="formatText('ol')" title="Lista numerada">
+                            <i data-lucide="list-ordered" width="16"></i>
+                        </button>
+                    </div>
+                    
                     <textarea 
                         id="diary-comment" 
                         class="diary-textarea" 
@@ -1824,6 +1890,56 @@ function clearDiary() {
 
 function exportDiary(format) {
     window.open(`export_diary.php?format=${format}`, '_blank');
+}
+
+// Função para formatar texto
+function formatText(command) {
+    const textarea = document.getElementById('diary-comment');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    const beforeText = textarea.value.substring(0, start);
+    const afterText = textarea.value.substring(end);
+    
+    let formattedText = '';
+    
+    switch(command) {
+        case 'bold':
+            formattedText = `**${selectedText || 'texto em negrito'}**`;
+            break;
+        case 'italic':
+            formattedText = `*${selectedText || 'texto em itálico'}*`;
+            break;
+        case 'underline':
+            formattedText = `__${selectedText || 'texto sublinhado'}__`;
+            break;
+        case 'ul':
+            if (selectedText) {
+                const lines = selectedText.split('\n');
+                formattedText = lines.map(line => `• ${line}`).join('\n');
+            } else {
+                formattedText = '• Item da lista\n• Item da lista\n• Item da lista';
+            }
+            break;
+        case 'ol':
+            if (selectedText) {
+                const lines = selectedText.split('\n');
+                formattedText = lines.map((line, i) => `${i + 1}. ${line}`).join('\n');
+            } else {
+                formattedText = '1. Primeiro item\n2. Segundo item\n3. Terceiro item';
+            }
+            break;
+    }
+    
+    textarea.value = beforeText + formattedText + afterText;
+    
+    // Reposicionar cursor
+    const newCursorPos = start + formattedText.length;
+    textarea.setSelectionRange(newCursorPos, newCursorPos);
+    textarea.focus();
+    
+    // Trigger auto-save
+    debounceSaveDiary();
 }
 
 // Inicializar ícones Lucide
