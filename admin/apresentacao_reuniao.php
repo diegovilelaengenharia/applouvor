@@ -423,10 +423,10 @@
         }
 
         .quote-text {
-            font-size: 1.75rem;
+            font-size: 2.25rem;
             line-height: 1.6;
             color: var(--gray-900);
-            font-style: italic;
+            font-style: normal;
             margin-bottom: 20px;
         }
 
