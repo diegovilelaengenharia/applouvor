@@ -1484,72 +1484,76 @@ renderAppHeader('Indicadores Avançados');
 
         <!-- SEÇÃO 4: ANÁLISE DE AUSÊNCIAS (NOVA) -->
         <?php if($totalAbsences > 0): ?>
-        <div class="stat-card" style="grid-column: 1 / -1;">
-            <div class="stat-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('absences')">
+        <div class="content-card" style="grid-column: 1 / -1;">
+            <div class="stat-title" onclick="toggleSection('absences')">
                 <span>⚠️ ANÁLISE DE AUSÊNCIAS</span>
                 <i data-lucide="chevron-down" id="icon-absences" style="width: 20px;"></i>
             </div>
             <div id="section-absences">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 20px;">
                     
                     <!-- KPIs de Ausências -->
-                    <div style="padding: 20px; background: var(--yellow-500); border-radius: 12px; text-align: center; color: white;">
-                        <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $totalAbsences ?></div>
-                        <div style="font-size: 13px; opacity: 0.9;">Total de Ausências</div>
+                    <div class="kpi-card" style="background: var(--yellow-50); border-color: var(--yellow-100); justify-content: center; flex-direction: column; text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--yellow-600); line-height: 1;"><?= $totalAbsences ?></div>
+                        <div style="font-size: 0.85rem; color: var(--yellow-700); font-weight: 600;">Total de Ausências</div>
                     </div>
 
-                    <div style="padding: 20px; background: var(--sage-500); border-radius: 12px; text-align: center; color: white;">
-                        <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $substitutionRate ?>%</div>
-                        <div style="font-size: 13px; opacity: 0.9;">Com Substituto</div>
+                    <div class="kpi-card" style="background: var(--sage-50); border-color: var(--sage-100); justify-content: center; flex-direction: column; text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--sage-600); line-height: 1;"><?= $substitutionRate ?>%</div>
+                        <div style="font-size: 0.85rem; color: var(--sage-700); font-weight: 600;">Com Substituto</div>
                     </div>
 
-                    <div style="padding: 20px; background: var(--slate-500); border-radius: 12px; text-align: center; color: white;">
-                        <div style="font-size: 48px; font-weight: 800; margin-bottom: 8px;"><?= $audioRate ?>%</div>
-                        <div style="font-size: 13px; opacity: 0.9;">Com Áudio Explicativo</div>
+                    <div class="kpi-card" style="background: var(--slate-100); border-color: var(--slate-200); justify-content: center; flex-direction: column; text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--slate-600); line-height: 1;"><?= $audioRate ?>%</div>
+                        <div style="font-size: 0.85rem; color: var(--slate-700); font-weight: 600;">Com Áudio Explicativo</div>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 24px;">
                     
                     <!-- Membros com Mais Ausências -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Membros com Mais Ausências</h5>
-                        <?php foreach($topAbsentMembers as $m): ?>
-                        <div class="list-item">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $m['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px;">
-                                    <?= strtoupper(substr($m['name'], 0, 2)) ?>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Membros com Mais Ausências</h5>
+                        <div style="background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
+                            <?php foreach($topAbsentMembers as $m): ?>
+                            <div class="list-item" style="padding: 10px 14px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $m['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem;">
+                                        <?= strtoupper(substr($m['name'], 0, 2)) ?>
+                                    </div>
+                                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= $m['name'] ?></span>
                                 </div>
-                                <span style="font-weight: 600; font-size: 13px;"><?= $m['name'] ?></span>
+                                <div style="font-weight: 700; color: var(--yellow-600); font-size: 0.9rem;"><?= $m['qtd'] ?>x</div>
                             </div>
-                            <div style="font-weight: 700; color: var(--yellow-500);"><?= $m['qtd'] ?>x</div>
+                            <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
                     </div>
 
                     <!-- Motivos Mais Comuns -->
                     <?php if(!empty($topAbsenceReasons)): ?>
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Motivos Mais Comuns</h5>
-                        <canvas id="chartAbsenceReasons" style="max-height: 200px;"></canvas>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Motivos Mais Comuns</h5>
+                        <canvas id="chartAbsenceReasons" style="max-height: 200px; width: 100%;"></canvas>
                     </div>
                     <?php endif; ?>
 
                     <!-- Membros que Mais Substituem -->
                     <?php if(!empty($topSubstitutes)): ?>
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">🦸 Membros que Mais Substituem</h5>
-                        <?php foreach($topSubstitutes as $s): ?>
-                        <div class="list-item">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $s['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px;">
-                                    <?= strtoupper(substr($s['name'], 0, 2)) ?>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">🦸 Membros que Mais Substituem</h5>
+                        <div style="background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
+                            <?php foreach($topSubstitutes as $s): ?>
+                            <div class="list-item" style="padding: 10px 14px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $s['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem;">
+                                        <?= strtoupper(substr($s['name'], 0, 2)) ?>
+                                    </div>
+                                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= $s['name'] ?></span>
                                 </div>
-                                <span style="font-weight: 600; font-size: 13px;"><?= $s['name'] ?></span>
+                                <div style="font-weight: 700; color: var(--sage-600); font-size: 0.9rem;"><?= $s['vezes'] ?>x</div>
                             </div>
-                            <div style="font-weight: 700; color: var(--sage-500);"><?= $s['vezes'] ?>x</div>
+                            <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -1558,29 +1562,29 @@ renderAppHeader('Indicadores Avançados');
         <?php endif; ?>
 
         <!-- SEÇÃO 5: ANÁLISES CRUZADAS & MVPs (NOVA) -->
-        <div class="stat-card" style="grid-column: 1 / -1;">
-            <div class="stat-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('mvp')">
+        <div class="content-card" style="grid-column: 1 / -1;">
+            <div class="stat-title" onclick="toggleSection('mvp')">
                 <span>🏆 ANÁLISES CRUZADAS & MEMBROS MVP</span>
                 <i data-lucide="chevron-down" id="icon-mvp" style="width: 20px;"></i>
             </div>
             <div id="section-mvp">
                 <!-- Pódio MVP -->
                 <div style="margin-top: 20px;">
-                    <h5 style="font-size: 13px; margin: 0 0 20px 0; color: var(--slate-500); text-align: center;">🥇 Top 5 Membros MVP (Maior Engajamento)</h5>
-                    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 12px; margin-bottom: 30px;">
+                    <h5 style="font-size: 0.9rem; margin: 0 0 24px 0; color: var(--text-primary); text-align: center; font-weight: 700;">🥇 Top 5 Membros MVP (Maior Engajamento)</h5>
+                    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 12px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 10px;">
                         <?php foreach($mvpMembers as $idx => $mvp): 
                             $heights = [180, 220, 160, 140, 120];
-                            $colors = ['#fbbf24', 'var(--yellow-500)', 'var(--yellow-600)', '#b45309', '#92400e'];
+                            $colors = ['#fbbf24', 'var(--yellow-500)', '#d97706', '#b45309', '#92400e'];
                             $medals = ['🥇', '🥈', '🥉', '4º', '5º'];
                         ?>
-                        <div style="text-align: center;">
-                            <div style="width: 100px; height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px; color: white; position: relative;">
-                                <div style="font-size: 28px; margin-bottom: 4px;"><?= $medals[$idx] ?></div>
-                                <div style="font-size: 24px; font-weight: 800; margin-bottom: 4px;"><?= $mvp['engagement_score'] ?></div>
-                                <div style="font-size: 10px; opacity: 0.9;">pontos</div>
+                        <div style="text-align: center; min-width: 80px;">
+                            <div style="width: 100%; height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px; color: white; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <div style="font-size: 1.5rem; margin-bottom: 4px;"><?= $medals[$idx] ?></div>
+                                <div style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;"><?= $mvp['engagement_score'] ?></div>
+                                <div style="font-size: 0.7rem; opacity: 0.9; text-transform: uppercase;">pontos</div>
                             </div>
-                            <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: var(--slate-900);"><?= $mvp['name'] ?></div>
-                            <div style="font-size: 10px; color: var(--slate-500);"><?= $mvp['instrument'] ?></div>
+                            <div style="margin-top: 8px; font-weight: 700; font-size: 0.85rem; color: var(--text-primary);"><?= $mvp['name'] ?></div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);"><?= $mvp['instrument'] ?></div>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -1588,39 +1592,39 @@ renderAppHeader('Indicadores Avançados');
 
                 <!-- Tabela de Engajamento Completa -->
                 <div style="margin-top: 30px;">
-                    <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Score de Engajamento (Todos os Membros)</h5>
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Score de Engajamento (Todos os Membros)</h5>
+                    <div style="overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px;">
+                        <table class="user-table">
                             <thead>
-                                <tr style="background: var(--slate-50); border-bottom: 2px solid var(--slate-200);">
-                                    <th style="padding: 10px; text-align: left; font-weight: 700; color: var(--slate-500);">Membro</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Escalas</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Capítulos</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Ausências</th>
-                                    <th style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);">Score</th>
+                                <tr>
+                                    <th>Membro</th>
+                                    <th style="text-align: center;">Escalas</th>
+                                    <th style="text-align: center;">Capítulos</th>
+                                    <th style="text-align: center;">Ausências</th>
+                                    <th style="text-align: center;">Score</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach($engagementData as $member): ?>
-                                <tr style="border-bottom: 1px solid var(--slate-100);">
-                                    <td style="padding: 10px;">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: <?= $member['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 11px;">
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; border-radius: 50%; background: <?= $member['avatar_color'] ?>; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                                 <?= strtoupper(substr($member['name'], 0, 2)) ?>
                                             </div>
                                             <div>
-                                                <div style="font-weight: 600;"><?= $member['name'] ?></div>
-                                                <div style="font-size: 10px; color: var(--slate-400);"><?= $member['instrument'] ?></div>
+                                                <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;"><?= $member['name'] ?></div>
+                                                <div style="font-size: 0.75rem; color: var(--text-secondary);"><?= $member['instrument'] ?></div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: var(--slate-500);"><?= $member['escalas_confirmadas'] ?></td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: var(--lavender-600);"><?= $member['capitulos_lidos'] ?></td>
-                                    <td style="padding: 10px; text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? 'var(--yellow-500)' : 'var(--sage-500)' ?>;"><?= $member['ausencias'] ?></td>
-                                    <td style="padding: 10px; text-align: center;">
-                                        <div style="font-size: 18px; font-weight: 800; color: <?= $member['engagement_score'] >= 70 ? 'var(--sage-500)' : ($member['engagement_score'] >= 40 ? 'var(--yellow-500)' : 'var(--rose-500)') ?>;">
+                                    <td style="text-align: center; font-weight: 700; color: var(--text-secondary);"><?= $member['escalas_confirmadas'] ?></td>
+                                    <td style="text-align: center; font-weight: 700; color: var(--primary);"><?= $member['capitulos_lidos'] ?></td>
+                                    <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? 'var(--yellow-600)' : 'var(--sage-600)' ?>;"><?= $member['ausencias'] ?></td>
+                                    <td style="text-align: center;">
+                                        <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; color: white; background: <?= $member['engagement_score'] >= 70 ? 'var(--sage-500)' : ($member['engagement_score'] >= 40 ? 'var(--yellow-500)' : 'var(--rose-500)') ?>;">
                                             <?= $member['engagement_score'] ?>
-                                        </div>
+                                        </span>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
