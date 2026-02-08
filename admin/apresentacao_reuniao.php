@@ -634,7 +634,7 @@
                         <span class="icon blue"><i class="fas fa-bullseye"></i></span>
                         <div>
                             <strong>O Propósito do Ministro:</strong><br>
-                            Entender nosso papel além da música
+                            Entender nosso papel além da música. Temos responsabilidade naquilo que estamos falando. A escolha das canções e as propostas que levamos à igreja influenciam as pessoas. É uma forma de ensino.
                         </div>
                     </li>
                     <li>
