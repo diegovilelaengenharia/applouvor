@@ -147,12 +147,21 @@ renderAppHeader('Quem Somos');
 
 <!-- Hero Section -->
 <div class="hero-section">
-    <h1 class="hero-title">Primeira Igreja Batista</h1>
-    <h2 class="hero-subtitle">em Oliveira-MG</h2>
-    <p class="hero-tagline">"Uma igreja viva, edificando vidas"</p>
-    <div class="hero-location">
-        <i data-lucide="map-pin" style="width: 16px;"></i>
-        <span>R. José Eduardo Abdo, 105</span>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 8px;">
+        <img src="../assets/img/logo_pib_white.png" alt="Logo PIB" style="height: 48px; width: auto; opacity: 0.9;">
+        <div style="text-align: left;">
+            <h1 class="hero-title" style="margin: 0; font-size: 1.1rem; line-height: 1.1;">Primeira Igreja Batista</h1>
+            <h2 class="hero-subtitle" style="margin: 0; font-size: 0.85rem; font-weight: 500; opacity: 0.9;">em Oliveira-MG</h2>
+        </div>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+        <p class="hero-tagline" style="margin: 0; font-size: 0.75rem;">"Uma igreja viva, edificando vidas"</p>
+        
+        <div class="hero-location" style="padding: 4px 10px; font-size: 0.75rem;">
+            <i data-lucide="map-pin" style="width: 12px;"></i>
+            <span>R. José Eduardo Abdo, 105</span>
+        </div>
     </div>
 </div>
 
