@@ -675,7 +675,6 @@ $tab = $_GET['tab'] ?? 'dashboard';
 </div>
 
 <?php if ($tab == 'dashboard'): ?>
-<?php if ($tab == 'dashboard'): ?>
 <!-- TAB CONTENT: DASHBOARD -->
 
 <div class="quick-access-grid" style="max-width: 1200px; margin: 0 auto; padding: 1.5rem;">
