@@ -2335,4 +2335,19 @@ function switchReadingTab(tabName) {
     document.getElementById('tab-' + tabName).classList.add('active');
     document.getElementById('btn-tab-' + tabName).classList.add('active');
 }
+
+// Initialize Lucide Icons (Final call to ensure all icons are rendered)
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+        console.log('Lucide icons initialized');
+    }
+});
+
+// Also initialize after a short delay to catch any dynamically added content
+setTimeout(function() {
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}, 500);
 </script>
