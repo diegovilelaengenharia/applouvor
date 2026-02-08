@@ -28,59 +28,7 @@ $total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NU
 <div class="dashboard-wrapper">
 
     <!-- KPI HERO SECTION -->
-    <div class="kpi-hero">
-        <!-- Next Event Card (Featured) -->
-        <div class="kpi-card featured">
-            <div class="kpi-icon-box">
-                <i data-lucide="calendar-clock"></i>
-            </div>
-            <div class="kpi-content">
-                <div class="kpi-label">Próxima Escala</div>
-                <?php if ($next_scale): 
-                    $date = new DateTime($next_scale['event_date']);
-                ?>
-                    <div class="kpi-value"><?= $date->format('d/m') ?></div>
-                    <div class="kpi-sub"><?= htmlspecialchars($next_scale['event_type']) ?> • <?= substr($next_scale['event_time'], 0, 5) ?></div>
-                <?php else: ?>
-                    <div class="kpi-value text-muted">--</div>
-                    <div class="kpi-sub">Nenhuma agendada</div>
-                <?php endif; ?>
-            </div>
-        </div>
 
-        <!-- Mini Stats -->
-        <div class="kpi-mini-grid">
-            <div class="kpi-card mini">
-                <div class="kpi-icon-mini text-blue">
-                    <i data-lucide="music"></i>
-                </div>
-                <div>
-                    <div class="kpi-value-mini"><?= $total_songs ?></div>
-                    <div class="kpi-label-mini">Músicas</div>
-                </div>
-            </div>
-            
-            <div class="kpi-card mini">
-                <div class="kpi-icon-mini text-purple">
-                    <i data-lucide="users"></i>
-                </div>
-                <div>
-                    <div class="kpi-value-mini"><?= $total_members ?></div>
-                    <div class="kpi-label-mini">Membros</div>
-                </div>
-            </div>
-
-            <div class="kpi-card mini">
-                <div class="kpi-icon-mini text-orange">
-                    <i data-lucide="bell"></i>
-                </div>
-                <div>
-                    <div class="kpi-value-mini"><?= $total_avisos ?></div>
-                    <div class="kpi-label-mini">Avisos</div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- SEÇÃO 1: GESTÃO -->
     <div class="dashboard-section">
