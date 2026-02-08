@@ -3023,127 +3023,13 @@ function switchReadingTab(tabName) {
 // Initialize Lucide Icons (Final call to ensure all icons are rendered)
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof lucide !== 'undefined') {
-    // Also initialize after a short delay to catch any dynamically added content
-    setTimeout(function() {
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    }, 500);
+        lucide.createIcons();
+        console.log('Lucide icons initialized');
+    }
+});
+
 </script>
 
-<!-- CONFIG MODAL WITH TABS -->
-<div id="modal-config" class="config-fullscreen">
-    <div class="config-header" style="background: white; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background: #f3f4f6; color: #374151; width: 32px; height: 32px; border-radius: 8px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
-                <i data-lucide="chevron-left" width="20"></i>
-            </button>
-            <h2 style="margin:0; font-size: var(--font-h1); font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
-                Configurações
-            </h2>
-        </div>
-        <button onclick="document.getElementById('modal-config').style.display='none'" style="border:none; background:none; cursor:pointer; color: #6b7280; padding: 4px;">
-            <i data-lucide="x" width="24"></i>
-        </button>
-    </div>
-    
-    <!-- Tabs -->
-    <div class="config-tabs" style="display: flex; background: white; border-bottom: 1px solid #e5e7eb; padding: 0 20px; overflow-x: auto;">
-        <div class="tab-btn active" onclick="switchConfigTab('plano')" id="tab-plano" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Plano
-        </div>
-        <div class="tab-btn" onclick="switchConfigTab('geral')" id="tab-geral" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="bar-chart-2" width="16" style="display: inline; margin-right: 6px;"></i> Geral
-        </div>
-        <div class="tab-btn" onclick="switchConfigTab('diario')" id="tab-diario" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="file-text" width="16" style="display: inline; margin-right: 6px;"></i> Meu Diário
-        </div>
-    </div>
-    
-    <!-- TAB: PLANO -->
-    <div id="content-plano" class="config-content" style="padding: 20px; max-width: 600px; margin: 0 auto; width: 100%;">
-        <div style="background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <h3 style="margin-top: 0;">Escolher Plano de Leitura</h3>
-            <select id="change-plan-select" style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; margin-bottom: 16px;">
-                <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
-                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronológico (365 dias)</option>
-                <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
-            </select>
-            
-            <h3>Data de Início</h3>
-            <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; margin-bottom: 16px;">
-            
-            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
-                <i data-lucide="save" width="16" style="display: inline; margin-right: 6px;"></i> Salvar Alterações
-            </button>
-        </div>
-        
-        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 20px;">
-            <h3 style="margin-top: 0; color: #dc2626;">Reiniciar Plano</h3>
-            <p style="color: #991b1b; margin-bottom: 16px;">Isso apagará todo o seu progresso atual. Esta ação não pode ser desfeita.</p>
-            <button onclick="resetPlan()" style="width: 100%; padding: 12px; background: #dc2626; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
-                <i data-lucide="trash-2" width="16" style="display: inline; margin-right: 6px;"></i> Reiniciar Plano
-            </button>
-        </div>
-    </div>
-    
-    <!-- TAB: GERAL -->
-    <div id="content-geral" class="config-content" style="padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; display: none;">
-        <div style="background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px;">
-            <h3 style="margin-top: 0;">Estatísticas Gerais</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-                <div style="text-align: center; padding: 16px; background: var(--slate-50); border-radius: 8px;">
-                    <div style="font-size: 2rem; font-weight: 800; color: #111827;"><?= $totalDaysRead ?></div>
-                    <div style="font-size: 0.85rem; color: #6b7280; font-weight: 600;">Dias Lidos</div>
-                </div>
-                <div style="text-align: center; padding: 16px; background: var(--slate-50); border-radius: 8px;">
-                    <div style="font-size: 2rem; font-weight: 800; color: #111827;"><?= $currentStreak ?></div>
-                    <div style="font-size: 0.85rem; color: #6b7280; font-weight: 600;">Sequência Atual</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- TAB: MEU DIÁRIO -->
-    <div id="content-diario" class="config-content" style="padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; display: none;">
-        <div style="background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px;">
-            <h3 style="margin-top: 0;">Exportar Diário</h3>
-            <p style="color: #6b7280; margin-bottom: 16px;">Baixe todas as suas anotações de leitura em formato PDF.</p>
-            <button onclick="exportDiaryAsPDF()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
-                <i data-lucide="download" width="16" style="display: inline; margin-right: 6px;"></i> Baixar PDF
-            </button>
-        </div>
-    </div>
-</div>
-
-<style>
-.config-fullscreen {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background: var(--slate-50);
-    z-index: 100;
-    display: none;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-@media(min-width: 1024px) {
-    .config-fullscreen {
-        left: 280px;
-    }
-}
-
-.tab-btn.active {
-    color: #6366f1 !important;
-    border-bottom-color: #6366f1 !important;
-}
-
-.tab-btn:hover {
-    color: #374151;
-}
-</style>
-
-</content>
+<?php
+renderAppFooter();
+?>
