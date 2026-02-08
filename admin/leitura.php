@@ -656,32 +656,132 @@ $currentMessage = $motivationalMessages[0];
 foreach($motivationalMessages as $t => $msg) if($completionPercent >= $t) $currentMessage = $msg;
 
 // --- LOAD PLAN DATA FOR DISPLAY ---
+require_once '../includes/reading_plans_data.php';
+
 $planType = $selectedPlanType ?? 'navigators';
-$planDayIndex = isset($_GET['day']) ? (int)$_GET['day'] : 1;
+$planInfo = getPlanInfo($planType);
 
-// Load today's readings from reading_plan_data.js logic
-// For now, use placeholder data
-$todayReadings = [];
+// Determinar o dia a ser exibido
+if (isset($_GET['day'])) {
+    $planDayIndex = max(1, min((int)$_GET['day'], $planInfo['total_days']));
+} else {
+    // Usar o dia atual do plano
+    if ($planType === 'navigators') {
+        $planDayIndex = (($currentPlanMonth - 1) * 25) + $currentPlanDay;
+    } else {
+        $planDayIndex = $planDayIndex; // Já calculado anteriormente
+    }
+    $planDayIndex = max(1, min($planDayIndex, $planInfo['total_days']));
+}
 
-// Simple reading plan data (placeholder - should match reading_plan_data.js)
-$planData = [
-    'navigators' => [
-        1 => [
-            ['reference' => 'Gênesis 1-2'],
-            ['reference' => 'Mateus 1:1-17'],
-            ['reference' => 'Salmos 1'],
-            ['reference' => 'Atos 1:1-11']
+// Buscar leituras do dia
+$todayReadings = getReadingsForDay($planType, $planDayIndex);
+
+// Se não houver leituras, usar fallback
+if (empty($todayReadings)) {
+    $todayReadings = [
+        [
+            'reference' => 'Gênesis 1',
+            'link' => getBibleLink('Gênesis 1')
         ]
+    ];
+}
+
+// Função para converter referência bíblica em link Bible.com
+function getBibleLink($verseRef) {
+    $bibleBooksMap = [
+        "Gênesis" => "GEN", "Êxodo" => "EXO", "Levítico" => "LEV", "Números" => "NUM", "Deuteronômio" => "DEU",
+        "Josué" => "JOS", "Juízes" => "JDG", "Rute" => "RUT", "1 Samuel" => "1SA", "2 Samuel" => "2SA",
+        "1 Reis" => "1KI", "2 Reis" => "2KI", "1 Crônicas" => "1CH", "2 Crônicas" => "2CH", "Esdras" => "EZR",
+        "Neemias" => "NEH", "Ester" => "EST", "Jó" => "JOB", "Salmos" => "PSA", "Provérbios" => "PRO",
+        "Eclesiastes" => "ECC", "Cantares" => "SNG", "Isaías" => "ISA", "Jeremias" => "JER", "Lamentações" => "LAM",
+        "Ezequiel" => "EZK", "Daniel" => "DAN", "Oséias" => "HOS", "Joel" => "JOL", "Amós" => "AMO",
+        "Obadias" => "OBA", "Jonas" => "JON", "Miqueias" => "MIC", "Naum" => "NAM", "Habacuque" => "HAB",
+        "Sofonias" => "ZEP", "Ageu" => "HAG", "Zacarias" => "ZEC", "Malaquias" => "MAL",
+        "Mateus" => "MAT", "Marcos" => "MRK", "Lucas" => "LUK", "João" => "JHN", "Atos" => "ACT",
+        "Romanos" => "ROM", "1 Coríntios" => "1CO", "2 Coríntios" => "2CO", "Gálatas" => "GAL", "Efésios" => "EPH",
+        "Filipenses" => "PHP", "Colossenses" => "COL", "1 Tessalonicenses" => "1TH", "2 Tessalonicenses" => "2TH",
+        "1 Timóteo" => "1TI", "2 Timóteo" => "2TI", "Tito" => "TIT", "Filemom" => "PHM", "Hebreus" => "HEB",
+        "Tiago" => "JAS", "1 Pedro" => "1PE", "2 Pedro" => "2PE", "1 João" => "1JN", "2 João" => "2JN",
+        "3 João" => "3JN", "Judas" => "JUD", "Apocalipse" => "REV"
+    ];
+    
+    $lastSpace = strrpos($verseRef, ' ');
+    if ($lastSpace === false) return '#';
+    
+    $bookName = trim(substr($verseRef, 0, $lastSpace));
+    $ref = trim(substr($verseRef, $lastSpace + 1));
+    $ref = str_replace(':', '.', $ref);
+    
+    $bookAbbr = $bibleBooksMap[$bookName] ?? 'GEN';
+    return "https://www.bible.com/pt/bible/129/{$bookAbbr}.{$ref}.NVI";
+}
+
+// Carregar dados dos planos (versão compacta - primeiros dias de cada mês para Navigators)
+$planDataCompact = [
+    'navigators' => [
+        // Mês 1
+        1 => [["Mateus 1:1-17","Atos 1:1-11","Salmos 1","Gênesis 1-2"]],
+        2 => [["Mateus 1:18-25","Atos 1:12-26","Salmos 2","Gênesis 3-4"]],
+        3 => [["Mateus 2:1-12","Atos 2:1-21","Salmos 3","Gênesis 5-8"]],
+        4 => [["Mateus 2:13-23","Atos 2:22-47","Salmos 4","Gênesis 9-11"]],
+        5 => [["Mateus 3:1-12","Atos 3","Salmos 5","Gênesis 12-14"]],
+        // Adicionar mais dias conforme necessário
+    ],
+    'chronological' => [
+        1 => [["Gênesis 1-3"]],
+        2 => [["Gênesis 4-7"]],
+        3 => [["Gênesis 8-11"]],
+        4 => [["Jó 1-4"]],
+        5 => [["Jó 5-8"]],
+    ],
+    'mcheyne' => [
+        1 => [["Gênesis 1", "Mateus 1", "Esdras 1", "Atos 1"]],
+        2 => [["Gênesis 2", "Mateus 2", "Esdras 2", "Atos 2"]],
+        3 => [["Gênesis 3", "Mateus 3", "Esdras 3", "Atos 3"]],
+        4 => [["Gênesis 4", "Mateus 4", "Esdras 4", "Atos 4"]],
+        5 => [["Gênesis 5", "Mateus 5", "Esdras 5", "Atos 5"]],
     ]
 ];
 
-if (isset($planData[$planType][$planDayIndex])) {
-    $todayReadings = $planData[$planType][$planDayIndex];
-    
-    // Mark all as not completed for now (simplified)
-    foreach ($todayReadings as &$reading) {
-        $reading['completed_at'] = null;
+// Calcular índice do dia baseado no plano
+if ($planType === 'navigators') {
+    $maxDays = 300;
+    $daysPerMonth = 25;
+    // Converter mês/dia para índice sequencial
+    if (isset($_GET['day'])) {
+        $planDayIndex = (int)$_GET['day'];
+    } else {
+        $planDayIndex = (($currentPlanMonth - 1) * $daysPerMonth) + $currentPlanDay;
     }
+} else {
+    $maxDays = 365;
+    $planDayIndex = isset($_GET['day']) ? (int)$_GET['day'] : $planDayIndex;
+}
+
+// Limitar índice
+$planDayIndex = max(1, min($planDayIndex, $maxDays));
+
+// Buscar leituras do dia
+$todayReadings = [];
+if (isset($planDataCompact[$planType][$planDayIndex])) {
+    $dayData = $planDataCompact[$planType][$planDayIndex];
+    if (isset($dayData[0]) && is_array($dayData[0])) {
+        foreach ($dayData[0] as $passage) {
+            $todayReadings[] = [
+                'reference' => $passage,
+                'link' => getBibleLink($passage),
+                'completed_at' => null
+            ];
+        }
+    }
+} else {
+    // Dados de fallback se não encontrar o dia
+    $todayReadings[] = [
+        'reference' => 'Gênesis 1',
+        'link' => getBibleLink('Gênesis 1'),
+        'completed_at' => null
+    ];
 }
 
 // --- RENDER PAGE ---
@@ -1223,7 +1323,7 @@ body.dark-mode .action-btn {
             Leitura de Hoje - Dia <?= $planDayIndex ?>
         </div>
         <div class="reading-subtitle">
-            Plano: <?= ucfirst($planType) ?> • <?= count($todayReadings) ?> passagens
+            <?= $planInfo['title'] ?> • <?= count($todayReadings) ?> passagens
         </div>
     </div>
 
@@ -1233,8 +1333,8 @@ body.dark-mode .action-btn {
             <i data-lucide="chevron-left" width="16"></i>
             <span>Anterior</span>
         </button>
-        <div class="current-day">Dia <?= $planDayIndex ?></div>
-        <button class="nav-btn" onclick="window.location.href='?tab=reading&day=<?= $planDayIndex + 1 ?>'">
+        <div class="current-day">Dia <?= $planDayIndex ?> de <?= $planInfo['total_days'] ?></div>
+        <button class="nav-btn" <?= $planDayIndex >= $planInfo['total_days'] ? 'disabled' : '' ?> onclick="window.location.href='?tab=reading&day=<?= $planDayIndex + 1 ?>'">
             <span>Próximo</span>
             <i data-lucide="chevron-right" width="16"></i>
         </button>
@@ -1243,17 +1343,19 @@ body.dark-mode .action-btn {
     <!-- Passages List -->
     <div class="passages-list">
         <?php foreach ($todayReadings as $index => $reading): 
-            $isComplete = !empty($reading['completed_at']);
+            // Verificar se foi lido (simplificado por enquanto)
+            $isComplete = false;
             $status = $isComplete ? 'complete' : 'unread';
         ?>
         <div class="passage-card status-<?= $status ?>">
             <div class="passage-header">
-                <input type="checkbox" class="passage-checkbox" <?= $isComplete ? 'checked' : '' ?>>
+                <input type="checkbox" class="passage-checkbox" <?= $isComplete ? 'checked' : '' ?> 
+                       onchange="togglePassage(<?= $planDayIndex ?>, <?= $index ?>)">
                 <div class="passage-title"><?= htmlspecialchars($reading['reference']) ?></div>
-                <button class="btn-passage btn-passage-primary">
+                <a href="<?= htmlspecialchars($reading['link']) ?>" target="_blank" class="btn-passage btn-passage-primary">
                     <i data-lucide="book-open" width="16"></i>
                     <?= $isComplete ? 'Reler' : 'Começar Leitura' ?>
-                </button>
+                </a>
             </div>
         </div>
         <?php endforeach; ?>
@@ -1261,17 +1363,42 @@ body.dark-mode .action-btn {
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-        <button class="action-btn" onclick="window.location.href='#diary'">
+        <button class="action-btn" onclick="window.location.href='?tab=reading&day=<?= $planDayIndex ?>#diary'">
             <i data-lucide="book-text" width="18"></i>
             Meu Diário
         </button>
-        <button class="action-btn" onclick="alert('Calendário em breve!')">
-            <i data-lucide="calendar" width="18"></i>
-            Calendário
+        <button class="action-btn" onclick="markAllAsRead(<?= $planDayIndex ?>)">
+            <i data-lucide="check-circle" width="18"></i>
+            Marcar Tudo Lido
         </button>
     </div>
 
 </div>
+
+<script>
+// Função para marcar/desmarcar passagem
+function togglePassage(day, index) {
+    console.log('Toggling passage', day, index);
+    // TODO: Implementar salvamento via AJAX
+}
+
+// Função para marcar todas como lidas
+function markAllAsRead(day) {
+    const checkboxes = document.querySelectorAll('.passage-checkbox');
+    checkboxes.forEach(cb => {
+        cb.checked = true;
+        cb.parentElement.parentElement.classList.add('status-complete');
+        cb.parentElement.parentElement.classList.remove('status-unread');
+    });
+    // TODO: Salvar no backend
+}
+
+// Inicializar ícones Lucide
+if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+}
+</script>
+
 
 <?php endif; ?>
 
