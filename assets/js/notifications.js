@@ -29,7 +29,12 @@ const API_ENDPOINT = (typeof NOTIFICATIONS_API_BASE !== 'undefined')
 async function loadUnreadCount() {
     try {
         const response = await fetch(`${API_ENDPOINT}?action=count_unread`);
-        const data = await response.json();
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const text = await response.text();
+        if (!text) return; // Empty response
+
+        const data = JSON.parse(text);
 
         if (data.success) {
             unreadCount = data.count;
@@ -44,7 +49,12 @@ async function loadUnreadCount() {
 async function loadNotifications(containerId = null) {
     try {
         const response = await fetch(`${API_ENDPOINT}?action=list&limit=3&unread_only=true`);
-        const data = await response.json();
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const text = await response.text();
+        if (!text) return;
+
+        const data = JSON.parse(text);
 
         if (data.success) {
             notificationsData = data.notifications;

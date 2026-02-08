@@ -645,6 +645,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Função global para solicitar permissão - Definida antes de qualquer uso
+    window.requestNotificationPermission = function() {
+        console.log('requestNotificationPermission chamada');
+        if (!('Notification' in window)) {
+            alert('Seu navegador não suporta notificações.');
+            return;
+        }
+
+        Notification.requestPermission().then(function(permission) {
+            console.log('Permissão:', permission);
+            if (permission === 'granted') {
+                // Atualizar UI se a função existir
+                if (typeof updateNotificationStatus === 'function') {
+                    updateNotificationStatus();
+                } else {
+                    location.reload();
+                }
+                
+                // Feedback visual
+                const btn = document.getElementById('btnActivatePush');
+                if(btn) {
+                    btn.innerText = 'Ativado!';
+                    btn.style.background = 'var(--sage-500)';
+                    setTimeout(() => btn.remove(), 2000);
+                }
+            } else {
+                if (typeof updateNotificationStatus === 'function') {
+                    updateNotificationStatus();
+                }
+                alert('Permissão negada. Você precisa habilitar manualmente nas configurações do navegador.');
+            }
+        });
+    };
+
     if (navigator.permissions && navigator.permissions.query) {
         navigator.permissions.query({name: 'notifications'}).then(function(permissionStatus) {
             permissionStatus.onchange = updateNotificationStatus;
