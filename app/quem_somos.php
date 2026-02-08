@@ -9,49 +9,7 @@ renderAppHeader('Quem Somos');
 ?>
 
 <style>
-    .hero-section {
-        background: #047857;
-        color: white;
-        padding: 32px 20px 28px 20px;
-        text-align: center;
-        margin: -24px -24px 24px -24px;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-    
-    .hero-title {
-        font-size: 1.4rem;
-        font-weight: 800;
-        margin-bottom: 6px;
-        letter-spacing: -0.5px;
-        text-transform: uppercase;
-        line-height: 1.2;
-    }
-    
-    .hero-subtitle {
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin-bottom: 8px;
-        opacity: 0.95;
-    }
-    
-    .hero-tagline {
-        font-style: italic;
-        font-size: 0.9rem;
-        margin-bottom: 12px;
-        opacity: 0.9;
-    }
-    
-    .hero-location {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255,255,255,0.15);
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        backdrop-filter: blur(10px);
-    }
+
     
     .info-grid {
         display: grid;
@@ -145,25 +103,7 @@ renderAppHeader('Quem Somos');
     }
 </style>
 
-<!-- Hero Section -->
-<div class="hero-section">
-    <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 8px;">
-        <img src="../assets/img/logo_pib_white.png" alt="Logo PIB" style="height: 48px; width: auto; opacity: 0.9;">
-        <div style="text-align: left;">
-            <h1 class="hero-title" style="margin: 0; font-size: 1.1rem; line-height: 1.1;">Primeira Igreja Batista</h1>
-            <h2 class="hero-subtitle" style="margin: 0; font-size: 0.85rem; font-weight: 500; opacity: 0.9;">em Oliveira-MG</h2>
-        </div>
-    </div>
-    
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-        <p class="hero-tagline" style="margin: 0; font-size: 0.75rem;">"Uma igreja viva, edificando vidas"</p>
-        
-        <div class="hero-location" style="padding: 4px 10px; font-size: 0.75rem;">
-            <i data-lucide="map-pin" style="width: 12px;"></i>
-            <span>R. José Eduardo Abdo, 105</span>
-        </div>
-    </div>
-</div>
+<?php renderPageHeader('Quem Somos', 'Primeira Igreja Batista em Oliveira-MG'); ?>
 
 <div class="info-grid">
     <!-- Sobre -->
