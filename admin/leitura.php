@@ -1236,46 +1236,6 @@ body.dark-mode .stat-card-achievement {
         <?php } ?>
     </div>
 
-    <!-- Estatísticas Adicionais -->
-    <h2 class="section-title">
-        <i data-lucide="bar-chart-3"></i>
-        Estatísticas Detalhadas
-    </h2>
-    
-    <div class="stats-row">
-        <div class="stat-card-achievement">
-            <div class="stat-icon-large" style="background: #fef3c7; color: #f59e0b;">
-                <i data-lucide="zap" width="24"></i>
-            </div>
-            <div class="stat-value-large"><?= $currentStreak ?></div>
-            <div class="stat-label-large">Sequência Atual</div>
-        </div>
-        
-        <div class="stat-card-achievement">
-            <div class="stat-icon-large" style="background: #fce7f3; color: #ec4899;">
-                <i data-lucide="trophy" width="24"></i>
-            </div>
-            <div class="stat-value-large"><?= $bestStreak ?></div>
-            <div class="stat-label-large">Melhor Sequência</div>
-        </div>
-        
-        <div class="stat-card-achievement">
-            <div class="stat-icon-large" style="background: #dbeafe; color: #3b82f6;">
-                <i data-lucide="book-open" width="24"></i>
-            </div>
-            <div class="stat-value-large"><?= $totalChaptersRead ?></div>
-            <div class="stat-label-large">Capítulos Lidos</div>
-        </div>
-        
-        <div class="stat-card-achievement">
-            <div class="stat-icon-large" style="background: #dcfce7; color: #22c55e;">
-                <i data-lucide="calendar-check" width="24"></i>
-            </div>
-            <div class="stat-value-large"><?= $totalDaysRead ?></div>
-            <div class="stat-label-large">Total de Dias</div>
-        </div>
-    </div>
-
 </div>
 
 <?php endif; ?>
