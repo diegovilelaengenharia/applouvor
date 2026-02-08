@@ -670,14 +670,14 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <?php
 // Tab parameter
-$tab = $_GET['tab'] ?? 'dashboard';
+$tab = $_GET['tab'] ?? 'reading';
 ?>
 
 <!-- Tabs Navegação (Padrão Repertório) -->
 <div class="repertorio-controls">
     <div class="tabs-container">
-        <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
         <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
+        <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Estatísticas</a>
         <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">🏆 Conquistas</a>
     </div>
 </div>
