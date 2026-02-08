@@ -605,106 +605,97 @@
             </div>
         </div>
 
-        <!-- Slide 5.6: Música - Estrofe 1 -->
+        <!-- Slide 5.6: Estrofe 1 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 100px;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 120px;">
                     <p>
                         Teu fogo arde em mim<br>
                         E muda o meu viver<br>
-                        Sou <span style="color: #DC2626; font-weight: 700;">Teu templo</span>, sou <span style="color: #DC2626; font-weight: 700;">Teu altar</span><br>
-                        <span style="font-style: italic; font-weight: 700;">Sacrifício vivo quero oferecer</span>
+                        Sou Teu templo, sou Teu altar<br>
+                        Sacrifício vivo eu quero oferecer
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.7: Música - Estrofe 2 -->
+        <!-- Slide 5.7: Estrofe 2 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 150px;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 150px;">
                     <p>
-                        Que o nosso louvor <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">não seja um momento</span><br>
-                        Lágrimas vazias, <span style="font-weight: 700;">sem avivamento</span>
+                        Que o nosso louvor<br>
+                        Não seja um momento<br>
+                        Lágrimas vazias<br>
+                        Sem avivamento
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.8: Música - Estrofe 3 -->
+        <!-- Slide 5.8: Estrofe 3 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 150px;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 150px;">
                     <p>
-                        Que o nosso amor <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">não seja fingido</span><br>
-                        <span style="font-weight: 700;">Honrado com os lábios, nos corações esquecido</span>
+                        Que o nosso amor<br>
+                        Não seja fingido<br>
+                        Honrado com os lábios<br>
+                        Nos corações esquecido
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.9: Música - Estrofe 4 -->
+        <!-- Slide 5.9: Estrofe 4 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 100px;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 100px;">
                     <p>
-                        <span style="font-style: italic; font-weight: 700;">Pois de que vale ter as poesias mais lindas</span><br>
-                        <span style="font-style: italic; font-weight: 700;">As harmonias mais brilhantes, se não há verdade em nós?</span>
+                        Não vale a pena só me emocionar<br>
+                        E buscar as canções mais lindas pra cantar<br>
+                        Se eu não for uma canção que alegra a Ti<br>
+                        Se o meu coração não queimar por Ti
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.10: Música - Estrofe 5 -->
+        <!-- Slide 5.10: Estrofe 5 (Refrão) -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 80px;">
+                <div style="text-align: center; font-size: 5.5rem; line-height: 1.5; color: var(--gray-900); margin-top: 150px;">
                     <p>
-                        Pois de que vale ter tudo e não ter nada?<br>
-                        Te dar meus lábios, não minha alma?<br>
-                        Eu quero me entregar a Ti<br>
-                        <span style="font-weight: 700;">Entregar minha vida como adoração</span>
+                        O fogo arderá sobre o altar<br>
+                        Continuamente sobre o altar<br>
+                        Não se apagará
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.11: Música - Estrofe 6 -->
+        <!-- Slide 5.11: Estrofe 6 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 60px;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 120px;">
                     <p>
                         Pois de que vale ter as poesias mais lindas<br>
-                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">As harmonias mais brilhantes, se não há verdade em nós?</span><br>
-                        <span style="color: #DC2626; font-weight: 700;">Pois de que vale ter tudo e não ter nada?</span><br>
-                        <span style="color: #DC2626; font-weight: 700;">Te dar meus lábios, não minha alma?</span>
+                        As harmonias mais brilhantes<br>
+                        Se não há verdade em nós?
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5.12: Música - Estrofe 7 -->
+        <!-- Slide 5.12: Estrofe 7 -->
         <div class="slide">
             <div class="slide-content">
-                <div style="text-align: center; font-size: 4.5rem; line-height: 1.6; color: var(--gray-900); margin-top: 60px;">
+                <div style="text-align: center; font-size: 5rem; line-height: 1.5; color: var(--gray-900); margin-top: 80px;">
                     <p>
-                        <span style="font-weight: 700; text-decoration: underline;">Não vale a pena só me emocionar</span><br>
-                        E buscar as <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">canções mais lindas pra cantar</span><br>
-                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">Se eu não for uma canção que alegra a Ti</span><br>
-                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px;">Se o meu coração não queimar por Ti</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5.13: Música - Refrão -->
-        <div class="slide">
-            <div class="slide-content">
-                <div style="text-align: center; font-size: 5rem; line-height: 1.6; color: var(--orange); font-weight: 700; margin-top: 150px;">
-                    <p>
-                        E o fogo arderá <span style="color: #DC2626;">sobre</span> o altar<br>
-                        <span style="color: #DC2626;">Continuamente</span> sobre o altar<br>
-                        <span style="background: #FDE047; padding: 4px 12px; border-radius: 6px; color: var(--gray-900);">E não se apagará</span>
+                        Pois de que vale ter tudo e não ter nada<br>
+                        Te dar meus lábios e não minha alma<br>
+                        Eu quero me entregar a Ti<br>
+                        Entregar minha vida como adoração
                     </p>
                 </div>
             </div>
