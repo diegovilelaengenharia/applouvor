@@ -688,11 +688,11 @@ $tab = $_GET['tab'] ?? 'dashboard';
 /* Cards compactos e eficientes */
 .reading-stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 1.5rem;
 }
 
 .stat-card-compact {
