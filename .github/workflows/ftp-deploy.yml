@@ -14,9 +14,13 @@ jobs:
       uses: actions/checkout@v4
 
     - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ftp.vilela.eng.br
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: /public_html/applouvor/  # Ajuste este caminho conforme necessário
+        server-dir: ./public_html/applouvor/
+        protocol: ftp
+        port: 21
+        unsafe: true # Tenta ignorar erros de certificado SSL se houver
+
