@@ -1237,13 +1237,12 @@ body.dark-mode .action-btn {
         $daysRead = $totalDaysRead; // Total de dias que o usuário já leu
         $daysSinceStart = $daysPassed; // Dias desde o início do plano
         
-        // Dia esperado = quantos dias deveriam ter sido lidos desde o início
-        // Se começou hoje (daysSinceStart = 0), esperado é 1 (o dia de hoje)
-        $expectedDay = max(1, $daysSinceStart + 1);
+        // Dia esperado = quantos dias deveriam ter sido lidos até ONTEM
+        // O dia de hoje ainda pode ser lido, então não conta como atraso
+        $expectedDay = max(0, $daysSinceStart); // Dias que já passaram (excluindo hoje)
         
-        // Calcular atraso: diferença entre o que deveria ter lido e o que realmente leu
-        // Só mostra atraso se passou do primeiro dia
-        $daysDelay = ($daysSinceStart > 0) ? max(0, $expectedDay - $daysRead) : 0;
+        // Calcular atraso: diferença entre o que deveria ter lido (até ontem) e o que realmente leu
+        $daysDelay = max(0, $expectedDay - $daysRead);
         $isOnTrack = ($daysDelay == 0);
         ?>
         
@@ -1263,6 +1262,7 @@ body.dark-mode .action-btn {
             <?php endif; ?>
         </div>
     </div>
+
 
 
 
