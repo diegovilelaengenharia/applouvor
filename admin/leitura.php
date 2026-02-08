@@ -699,10 +699,13 @@ $tab = $_GET['tab'] ?? 'reading';
 
 <!-- Tabs Navegação (Padrão Repertório) -->
 <div class="repertorio-controls">
-    <div class="tabs-container">
+    <div class="tabs-container" style="display: flex; align-items: center; gap: 0.5rem;">
         <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
         <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Estatísticas</a>
         <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">🏆 Conquistas</a>
+        <button onclick="alert('Configurações em breve!')" style="margin-left: auto; background: var(--slate-50); border: 1px solid var(--slate-200); padding: 0.5rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--slate-600);" title="Configurações">
+            ⚙️
+        </button>
     </div>
 </div>
 
