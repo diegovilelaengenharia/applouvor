@@ -1452,15 +1452,15 @@ body.dark-mode .stat-card-compact {
 }
 
 .diary-btn {
-    padding: 0.875rem 1.5rem;
-    border-radius: 10px;
-    font-size: 0.9375rem;
-    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.5rem;
     border: none;
     letter-spacing: -0.01em;
 }
@@ -1547,9 +1547,9 @@ body.dark-mode .stat-card-compact {
 
 .media-btn,
 .upload-label {
-    padding: 0.75rem 1.125rem;
-    border-radius: 10px;
-    font-size: 0.875rem;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1559,6 +1559,8 @@ body.dark-mode .stat-card-compact {
     border: 1.5px solid #e5e7eb;
     background: white;
     color: #64748b;
+    min-width: 130px;
+    justify-content: center;
 }
 
 .media-btn:hover,
