@@ -1451,9 +1451,9 @@ body.dark-mode .stat-card-compact {
 }
 
 .diary-btn {
-    padding: 0.75rem 1.25rem;
+    padding: 0.625rem 1rem;
     border-radius: 8px;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1461,7 +1461,8 @@ body.dark-mode .stat-card-compact {
     align-items: center;
     gap: 0.5rem;
     border: none;
-    letter-spacing: -0.01em;
+    flex: 1;
+    justify-content: center;
 }
 
 .diary-btn.primary {
@@ -1546,7 +1547,7 @@ body.dark-mode .stat-card-compact {
 
 .media-btn,
 .upload-label {
-    padding: 0.625rem 0.875rem;
+    padding: 0.625rem 1rem;
     border-radius: 8px;
     font-size: 0.8125rem;
     font-weight: 600;
