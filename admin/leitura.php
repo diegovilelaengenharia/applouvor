@@ -685,157 +685,197 @@ $tab = $_GET['tab'] ?? 'dashboard';
 <!-- TAB CONTENT: DASHBOARD -->
 
 <style>
-/* Reduzir tamanho dos cards em 30% */
-.quick-access-grid .access-card {
-    transform: scale(0.7);
-    transform-origin: top center;
-    margin-bottom: -30px;
+/* Cards compactos e eficientes */
+.reading-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
 }
-.quick-access-grid {
-    gap: 0.5rem !important;
+
+.stat-card-compact {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-card-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-icon-compact {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icon-compact i {
+    width: 18px;
+    height: 18px;
+}
+
+.stat-title-compact {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--slate-600);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.stat-value-compact {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+    margin: 0.25rem 0;
+}
+
+.stat-label-compact {
+    font-size: 0.75rem;
+    color: var(--slate-500);
+    font-weight: 500;
+}
+
+/* Cores por tema */
+.stat-green { background: #f0fdf4; }
+.stat-green .stat-icon-compact { background: white; color: #16a34a; }
+.stat-green .stat-value-compact { color: #166534; }
+
+.stat-cyan { background: #ecfeff; }
+.stat-cyan .stat-icon-compact { background: white; color: #0891b2; }
+.stat-cyan .stat-value-compact { color: #155e75; }
+
+.stat-blue { background: #eff6ff; }
+.stat-blue .stat-icon-compact { background: white; color: #2563eb; }
+.stat-blue .stat-value-compact { color: #1e40af; }
+
+.stat-amber { background: #fffbeb; }
+.stat-amber .stat-icon-compact { background: white; color: #d97706; }
+.stat-amber .stat-value-compact { color: #92400e; }
+
+.stat-violet { background: #f5f3ff; }
+.stat-violet .stat-icon-compact { background: white; color: #7c3aed; }
+.stat-violet .stat-value-compact { color: #5b21b6; }
+
+.stat-emerald { background: #ecfdf5; }
+.stat-emerald .stat-icon-compact { background: white; color: #059669; }
+.stat-emerald .stat-value-compact { color: #065f46; }
+
+.stat-slate { background: #f1f5f9; }
+.stat-slate .stat-icon-compact { background: white; color: #475569; }
+.stat-slate .stat-value-compact { color: #1e293b; }
+
+body.dark-mode .stat-card-compact {
+    background: var(--bg-surface);
+    border-color: var(--border-subtle);
 }
 </style>
 
-<div class="quick-access-grid" style="max-width: 1200px; margin: 0 auto; padding: 1.5rem;">
+<div class="reading-stats-grid">
     
     <!-- Card: Sequência -->
-    <a href="#" class="access-card card-green">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="flame" width="22"></i>
+    <a href="#" class="stat-card-compact stat-green">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="flame"></i>
             </div>
-            <h3 class="card-title">Sequência</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $currentStreak ?></div>
-                    <div class="highlight-subtitle">dias consecutivos</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Sequência</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Continue lendo!</span>
-        </div>
+        <div class="stat-value-compact"><?= $currentStreak ?></div>
+        <div class="stat-label-compact">dias consecutivos</div>
     </a>
 
-    <!-- Card: Capítulos Lidos -->
-    <a href="#" class="access-card card-cyan">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="book-open" width="22"></i>
+    <!-- Card: Capítulos -->
+    <a href="#" class="stat-card-compact stat-cyan">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="book-open"></i>
             </div>
-            <h3 class="card-title">Capítulos</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $totalChaptersRead ?></div>
-                    <div class="highlight-subtitle">lidos este ano</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Capítulos</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Progresso anual</span>
-        </div>
+        <div class="stat-value-compact"><?= $totalChaptersRead ?></div>
+        <div class="stat-label-compact">lidos este ano</div>
     </a>
 
     <!-- Card: Progresso -->
-    <a href="#" class="access-card card-blue">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="target" width="22"></i>
+    <a href="#" class="stat-card-compact stat-blue">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="target"></i>
             </div>
-            <h3 class="card-title">Progresso</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $completionPercent ?>%</div>
-                    <div class="highlight-subtitle">do plano completo</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Progresso</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Meta anual</span>
-        </div>
+        <div class="stat-value-compact"><?= $completionPercent ?>%</div>
+        <div class="stat-label-compact">do plano completo</div>
     </a>
 
     <!-- Card: Nível -->
-    <a href="#" class="access-card card-amber">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="award" width="22"></i>
+    <a href="#" class="stat-card-compact stat-amber">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="award"></i>
             </div>
-            <h3 class="card-title">Nível</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <?php 
-                    $level = min(20, floor($totalDaysRead / 15) + 1);
-                    ?>
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;">Nv.<?= $level ?></div>
-                    <div class="highlight-subtitle"><?= $totalDaysRead ?> dias lidos</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Nível</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Continue crescendo</span>
-        </div>
+        <?php $level = min(20, floor($totalDaysRead / 15) + 1); ?>
+        <div class="stat-value-compact">Nv.<?= $level ?></div>
+        <div class="stat-label-compact"><?= $totalDaysRead ?> dias lidos</div>
     </a>
 
-    <!-- Card: Melhor Sequência -->
-    <a href="#" class="access-card card-violet">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="trophy" width="22"></i>
+    <!-- Card: Recorde -->
+    <a href="#" class="stat-card-compact stat-violet">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="trophy"></i>
             </div>
-            <h3 class="card-title">Recorde</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $bestStreak ?></div>
-                    <div class="highlight-subtitle">melhor sequência</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Recorde</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Seu melhor</span>
-        </div>
+        <div class="stat-value-compact"><?= $bestStreak ?></div>
+        <div class="stat-label-compact">melhor sequência</div>
     </a>
 
-    <!-- Card: Livros Lidos -->
-    <a href="#" class="access-card card-emerald">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="library" width="22"></i>
+    <!-- Card: Livros -->
+    <a href="#" class="stat-card-compact stat-emerald">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="library"></i>
             </div>
-            <h3 class="card-title">Livros</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <?php 
-                    // Placeholder - será calculado posteriormente com dados reais
-                    $booksRead = 0;
-                    ?>
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $booksRead ?></div>
-                    <div class="highlight-subtitle">livros diferentes</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Livros</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Variedade</span>
-        </div>
+        <?php $booksRead = 0; ?>
+        <div class="stat-value-compact"><?= $booksRead ?></div>
+        <div class="stat-label-compact">livros diferentes</div>
     </a>
 
-    <!-- Card: Total de Dias -->
-    <a href="#" class="access-card card-slate">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="calendar-check" width="22"></i>
+    <!-- Card: Total Dias -->
+    <a href="#" class="stat-card-compact stat-slate">
+        <div class="stat-header">
+            <div class="stat-icon-compact">
+                <i data-lucide="calendar-check"></i>
             </div>
-            <h3 class="card-title">Dias Lidos</h3>
-            <div class="card-info">
-                <div class="info-highlight">
-                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $totalDaysRead ?></div>
-                    <div class="highlight-subtitle">dias com leitura</div>
-                </div>
-            </div>
+            <span class="stat-title-compact">Dias Lidos</span>
         </div>
-        <div class="card-footer-row">
-            <span class="footer-text">Total geral</span>
-        </div>
+        <div class="stat-value-compact"><?= $totalDaysRead ?></div>
+        <div class="stat-label-compact">total de dias</div>
     </a>
 
 </div>
