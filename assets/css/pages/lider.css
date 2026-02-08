@@ -34,32 +34,47 @@
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: 20px;
-    padding: 20px;
+    padding: 24px;
     box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
     gap: 16px;
     transition: all 0.2s;
+    height: 100%;
+    /* Ensure full height */
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
 }
 
 .kpi-card.featured {
-    background: linear-gradient(135deg, var(--blue-600), var(--blue-800));
-    color: white;
-    border: none;
-    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
-    position: relative;
-    overflow: hidden;
+    background: white;
+    /* Reset gradient */
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+}
+
+.kpi-card.featured:hover {
+    border-color: var(--blue-600);
 }
 
 .kpi-card.featured::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1));
-    pointer-events: none;
+    display: none;
+    /* Remove overlay */
+}
+
+/* Fix icon box for featured to match simple style */
+.kpi-card.featured .kpi-icon-box {
+    background: #eff6ff;
+    /* blue-50 */
+    color: #2563eb;
+    /* blue-600 */
+    border-radius: 14px;
+    backdrop-filter: none;
 }
 
 .kpi-icon-box {
@@ -80,9 +95,11 @@
 
 .kpi-label {
     font-size: 0.85rem;
-    opacity: 0.9;
-    font-weight: 500;
-    margin-bottom: 2px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .kpi-value {
@@ -90,11 +107,13 @@
     font-weight: 800;
     line-height: 1;
     margin-bottom: 4px;
+    color: var(--text-primary);
 }
 
 .kpi-sub {
-    font-size: 0.8rem;
-    opacity: 0.8;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
 }
 
 .kpi-mini-grid {
