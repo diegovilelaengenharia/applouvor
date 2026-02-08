@@ -1,5 +1,8 @@
 ﻿<?php
 // admin/leitura.php
+// Iniciar output buffering para evitar que qualquer output acidental corrompa JSON
+ob_start();
+
 require_once '../includes/auth.php';
 require_once '../includes/layout.php';
 
@@ -18,6 +21,9 @@ $now = new DateTime();
 
 // --- ACTION HANDLER ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Limpar qualquer output que possa ter sido gerado
+    ob_clean();
+    
     header('Content-Type: application/json');
     $action = $_POST['action'] ?? '';
 
