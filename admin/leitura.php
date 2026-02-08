@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // admin/leitura.php
 header('Content-Type: text/html; charset=UTF-8');
 require_once '../includes/auth.php';
@@ -6,7 +6,7 @@ require_once '../includes/layout.php';
 
 checkLogin(); 
 
-// AUTOLOAD: Título na Tabela
+// AUTOLOAD: T├¡tulo na Tabela
 try {
     $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'note_title'");
     if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN note_title VARCHAR(255) DEFAULT NULL");
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              $pdo->beginTransaction();
              // Salvar tipo de plano
              $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_type', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")->execute([$userId, $planType]);
-             // Salvar data de início
+             // Salvar data de in├¡cio
              $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_start_date', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")->execute([$userId, $startDate]);
              $pdo->commit();
              echo json_encode(['success' => true]);
@@ -120,7 +120,7 @@ $planStarted = !empty($startDateStr) && !empty($selectedPlanType);
 if (!$planStarted) {
     // 1. Render Headers
     renderAppHeader('Novo Plano');
-    renderPageHeader('Escolha seu Plano', 'Jornada Bíblica 2026');
+    renderPageHeader('Escolha seu Plano', 'Jornada B├¡blica 2026');
     ?>
     <style>
         /* Compact Design System for Selection */
@@ -268,8 +268,8 @@ if (!$planStarted) {
     <div class="selection-container animate-in">
         
         <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">
-            Selecione um roteiro para guiar sua leitura bíblica este ano. 
-            Você pode alterar o ritmo a qualquer momento nas configurações.
+            Selecione um roteiro para guiar sua leitura b├¡blica este ano. 
+            Voc├¬ pode alterar o ritmo a qualquer momento nas configura├º├Áes.
         </p>
         
         <div class="plan-grid">
@@ -280,21 +280,21 @@ if (!$planStarted) {
                 </div>
                 <div class="plan-content">
                     <div class="plan-title">Navigators</div>
-                    <div class="plan-desc">25 dias/mês. Flexibilidade máxima para dias corridos.</div>
+                    <div class="plan-desc">25 dias/m├¬s. Flexibilidade m├íxima para dias corridos.</div>
                 </div>
                 <div class="plan-badge">Equilibrado</div>
             </div>
             
-            <!-- Cronológico -->
+            <!-- Cronol├│gico -->
             <div class="plan-card" onclick="selectPlan('chronological', this)">
                 <div class="plan-icon" style="background: var(--sage-100); color: var(--sage-700);">
                     <i data-lucide="clock"></i>
                 </div>
                 <div class="plan-content">
-                    <div class="plan-title">Cronológico</div>
-                    <div class="plan-desc">Leia os fatos na ordem histórica em que ocorreram.</div>
+                    <div class="plan-title">Cronol├│gico</div>
+                    <div class="plan-desc">Leia os fatos na ordem hist├│rica em que ocorreram.</div>
                 </div>
-                <div class="plan-badge">Histórico</div>
+                <div class="plan-badge">Hist├│rico</div>
             </div>
             
             <!-- M'Cheyne -->
@@ -312,7 +312,7 @@ if (!$planStarted) {
 
         <div class="action-bar">
             <div class="date-group">
-                <label style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">Início:</label>
+                <label style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">In├¡cio:</label>
                 <input type="date" id="start-date" class="date-input" value="<?= date('Y-m-d') ?>">
             </div>
             
@@ -327,13 +327,13 @@ if (!$planStarted) {
             <div style="display: flex; gap: 10px; align-items: start; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px;">
                 <i data-lucide="smartphone" style="width: 18px; color: var(--text-muted); margin-top: 2px;"></i>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    <strong>App PWA</strong><br>Adicione à tela inicial para acesso rápido diário.
+                    <strong>App PWA</strong><br>Adicione ├á tela inicial para acesso r├ípido di├írio.
                 </div>
             </div>
              <div style="display: flex; gap: 10px; align-items: start; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px;">
                 <i data-lucide="bell" style="width: 18px; color: var(--text-muted); margin-top: 2px;"></i>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    <strong>Lembretes</strong><br>Você receberá notificações para manter o ritmo.
+                    <strong>Lembretes</strong><br>Voc├¬ receber├í notifica├º├Áes para manter o ritmo.
                 </div>
             </div>
         </div>
@@ -452,7 +452,7 @@ foreach($rows as $r) {
 $stmtUser = $pdo->prepare("SELECT name, birth_date FROM users WHERE id = ?");
 $stmtUser->execute([$userId]);
 $userDataDB = $stmtUser->fetch(PDO::FETCH_ASSOC);
-$userName = $userDataDB['name'] ?? 'Usuário';
+$userName = $userDataDB['name'] ?? 'Usu├írio';
 $userBirthDate = $userDataDB['birth_date'] ?? null;
 
 // Calculate Favorite Time & Distributions
@@ -462,7 +462,7 @@ $timeSlots = [
     '12h - 15h' => 0, '15h - 18h' => 0, '18h - 21h' => 0, '21h - 00h' => 0
 ];
 $weekdayStats = [0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0]; // 0=Dom, 6=Sab
-$mapWeekdays = [0=>'Dom', 1=>'Seg', 2=>'Ter', 3=>'Qua', 4=>'Qui', 5=>'Sex', 6=>'Sáb'];
+$mapWeekdays = [0=>'Dom', 1=>'Seg', 2=>'Ter', 3=>'Qua', 4=>'Qui', 5=>'Sex', 6=>'S├íb'];
 $hoursLog = [];
 
 foreach($rows as $r) {
@@ -563,25 +563,25 @@ if ($pace > 0 && $daysRemaining > 0) {
     $estDate->modify("+" . round($realDaysNeeded) . " days");
     $estimatedFinishDate = $estDate->format('d/m/Y');
 } elseif ($daysRemaining <= 0) {
-    $estimatedFinishDate = "Concluído!";
+    $estimatedFinishDate = "Conclu├¡do!";
 }
 
 
 // Messages
 $motivationalMessages = [
-    0 => "🌱 Você começou! Cada jornada começa com um passo.",
-    10 => "💪 Incrível! A persistência está valendo a pena!",
-    25 => "🌟 Você está no caminho certo! Continue firme!",
-    50 => "✨ Mais da metade concluída! Sua dedicação é inspiradora!",
-    75 => "🎯 Quase lá! Você está tão perto de completar esta jornada!",
-    90 => "🏆 Reta final! Você é um exemplo de disciplina!"
+    0 => "­ƒî▒ Voc├¬ come├ºou! Cada jornada come├ºa com um passo.",
+    10 => "­ƒÆ¬ Incr├¡vel! A persist├¬ncia est├í valendo a pena!",
+    25 => "­ƒîƒ Voc├¬ est├í no caminho certo! Continue firme!",
+    50 => "Ô£¿ Mais da metade conclu├¡da! Sua dedica├º├úo ├® inspiradora!",
+    75 => "­ƒÄ» Quase l├í! Voc├¬ est├í t├úo perto de completar esta jornada!",
+    90 => "­ƒÅå Reta final! Voc├¬ ├® um exemplo de disciplina!"
 ];
 $currentMessage = $motivationalMessages[0];
 foreach($motivationalMessages as $t => $msg) if($completionPercent >= $t) $currentMessage = $msg;
 
 // Render View
 // Render View
-renderAppHeader('Leitura Bíblica'); 
+renderAppHeader('Leitura B├¡blica'); 
 
 
 
@@ -690,7 +690,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <i data-lucide="pen-line" width="18"></i> Anotar
     </button>
     <button class="action-btn btn-blue-light" onclick="openConfig('diario')">
-        <i data-lucide="book" width="18"></i> Meu Diário
+        <i data-lucide="book" width="18"></i> Meu Di├írio
     </button>
 </div>
 <div id="save-toast" style="position:fixed; top:90px; left:50%; transform:translateX(-50%); background:var(--slate-800); color:white; padding:8px 16px; border-radius:20px; opacity:0; pointer-events:none; z-index:2000; transition:opacity 0.3s; display:flex; align-items:center; gap:8px;"><i data-lucide="check" width="14"></i> Salvo auto</div>
@@ -702,7 +702,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     <div style="background: white; width: 95%; max-width: 700px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;">
         <div style="padding: 16px 24px; background: #fff7ed; border-bottom: 1px solid #fed7aa; display: flex; justify-content: space-between; align-items: center;">
             <h3 style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: #c2410c; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="pen-line" width="20"></i> Anotação
+                <i data-lucide="pen-line" width="20"></i> Anota├º├úo
             </h3>
             <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; cursor: pointer; color: #9ca3af; padding: 4px;">
                 <i data-lucide="x" width="20"></i>
@@ -710,7 +710,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
         <div style="padding: 20px 24px; overflow-y: auto; flex: 1;">
             <!-- Title Input -->
-            <input type="text" id="note-title-input" placeholder="Título da anotação..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
+            <input type="text" id="note-title-input" placeholder="T├¡tulo da anota├º├úo..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
             
             <!-- Rich Text Editor -->
             <div style="border: 1px solid var(--slate-300); border-radius: 10px; overflow: hidden; background: white;">
@@ -720,7 +720,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     <button type="button" onclick="formatText('bold')" class="editor-btn" title="Negrito">
                         <i data-lucide="bold" width="16"></i>
                     </button>
-                    <button type="button" onclick="formatText('italic')" class="editor-btn" title="Itálico">
+                    <button type="button" onclick="formatText('italic')" class="editor-btn" title="It├ílico">
                         <i data-lucide="italic" width="16"></i>
                     </button>
                     <button type="button" onclick="formatText('underline')" class="editor-btn" title="Sublinhado">
@@ -755,41 +755,41 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                         <div id="emoji-picker" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border: 1px solid var(--slate-200); border-radius: 8px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-width: 280px;">
                             <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;">
                                 <!-- Spiritual -->
-                                <button type="button" onclick="insertEmoji('🙏')" class="emoji-btn">🙏</button>
-                                <button type="button" onclick="insertEmoji('✝️')" class="emoji-btn">✝️</button>
-                                <button type="button" onclick="insertEmoji('⛪')" class="emoji-btn">⛪</button>
-                                <button type="button" onclick="insertEmoji('📖')" class="emoji-btn">📖</button>
-                                <button type="button" onclick="insertEmoji('📿')" class="emoji-btn">📿</button>
-                                <button type="button" onclick="insertEmoji('🕊️')" class="emoji-btn">🕊️</button>
-                                <button type="button" onclick="insertEmoji('🌈')" class="emoji-btn">🌈</button>
-                                <button type="button" onclick="insertEmoji('☀️')" class="emoji-btn">☀️</button>
-                                <button type="button" onclick="insertEmoji('🌙')" class="emoji-btn">🌙</button>
+                                <button type="button" onclick="insertEmoji('­ƒÖÅ')" class="emoji-btn">­ƒÖÅ</button>
+                                <button type="button" onclick="insertEmoji('Ô£Ø´©Å')" class="emoji-btn">Ô£Ø´©Å</button>
+                                <button type="button" onclick="insertEmoji('Ôø¬')" class="emoji-btn">Ôø¬</button>
+                                <button type="button" onclick="insertEmoji('­ƒôû')" class="emoji-btn">­ƒôû</button>
+                                <button type="button" onclick="insertEmoji('­ƒô┐')" class="emoji-btn">­ƒô┐</button>
+                                <button type="button" onclick="insertEmoji('­ƒòè´©Å')" class="emoji-btn">­ƒòè´©Å</button>
+                                <button type="button" onclick="insertEmoji('­ƒîê')" class="emoji-btn">­ƒîê</button>
+                                <button type="button" onclick="insertEmoji('ÔÿÇ´©Å')" class="emoji-btn">ÔÿÇ´©Å</button>
+                                <button type="button" onclick="insertEmoji('­ƒîÖ')" class="emoji-btn">­ƒîÖ</button>
                                 <!-- Music & Worship -->
-                                <button type="button" onclick="insertEmoji('🎵')" class="emoji-btn">🎵</button>
-                                <button type="button" onclick="insertEmoji('🎶')" class="emoji-btn">🎶</button>
-                                <button type="button" onclick="insertEmoji('🎤')" class="emoji-btn">🎤</button>
-                                <button type="button" onclick="insertEmoji('🎸')" class="emoji-btn">🎸</button>
-                                <button type="button" onclick="insertEmoji('🎹')" class="emoji-btn">🎹</button>
-                                <button type="button" onclick="insertEmoji('🥁')" class="emoji-btn">🥁</button>
-                                <button type="button" onclick="insertEmoji('🎺')" class="emoji-btn">🎺</button>
+                                <button type="button" onclick="insertEmoji('­ƒÄÁ')" class="emoji-btn">­ƒÄÁ</button>
+                                <button type="button" onclick="insertEmoji('­ƒÄÂ')" class="emoji-btn">­ƒÄÂ</button>
+                                <button type="button" onclick="insertEmoji('­ƒÄñ')" class="emoji-btn">­ƒÄñ</button>
+                                <button type="button" onclick="insertEmoji('­ƒÄ©')" class="emoji-btn">­ƒÄ©</button>
+                                <button type="button" onclick="insertEmoji('­ƒÄ╣')" class="emoji-btn">­ƒÄ╣</button>
+                                <button type="button" onclick="insertEmoji('­ƒÑü')" class="emoji-btn">­ƒÑü</button>
+                                <button type="button" onclick="insertEmoji('­ƒÄ║')" class="emoji-btn">­ƒÄ║</button>
                                 <!-- Nature -->
-                                <button type="button" onclick="insertEmoji('🌺')" class="emoji-btn">🌺</button>
-                                <button type="button" onclick="insertEmoji('🌸')" class="emoji-btn">🌸</button>
-                                <button type="button" onclick="insertEmoji('🌼')" class="emoji-btn">🌼</button>
-                                <button type="button" onclick="insertEmoji('🌻')" class="emoji-btn">🌻</button>
-                                <button type="button" onclick="insertEmoji('🌹')" class="emoji-btn">🌹</button>
-                                <button type="button" onclick="insertEmoji('🌿')" class="emoji-btn">🌿</button>
-                                <button type="button" onclick="insertEmoji('🍃')" class="emoji-btn">🍃</button>
-                                <button type="button" onclick="insertEmoji('🌱')" class="emoji-btn">🌱</button>
+                                <button type="button" onclick="insertEmoji('­ƒî║')" class="emoji-btn">­ƒî║</button>
+                                <button type="button" onclick="insertEmoji('­ƒî©')" class="emoji-btn">­ƒî©</button>
+                                <button type="button" onclick="insertEmoji('­ƒî╝')" class="emoji-btn">­ƒî╝</button>
+                                <button type="button" onclick="insertEmoji('­ƒî╗')" class="emoji-btn">­ƒî╗</button>
+                                <button type="button" onclick="insertEmoji('­ƒî╣')" class="emoji-btn">­ƒî╣</button>
+                                <button type="button" onclick="insertEmoji('­ƒî┐')" class="emoji-btn">­ƒî┐</button>
+                                <button type="button" onclick="insertEmoji('­ƒìâ')" class="emoji-btn">­ƒìâ</button>
+                                <button type="button" onclick="insertEmoji('­ƒî▒')" class="emoji-btn">­ƒî▒</button>
                                 <!-- Hearts & Emotions -->
-                                <button type="button" onclick="insertEmoji('❤️')" class="emoji-btn">❤️</button>
-                                <button type="button" onclick="insertEmoji('💛')" class="emoji-btn">💛</button>
-                                <button type="button" onclick="insertEmoji('💚')" class="emoji-btn">💚</button>
-                                <button type="button" onclick="insertEmoji('💙')" class="emoji-btn">💙</button>
-                                <button type="button" onclick="insertEmoji('💜')" class="emoji-btn">💜</button>
-                                <button type="button" onclick="insertEmoji('🤍')" class="emoji-btn">🤍</button>
-                                <button type="button" onclick="insertEmoji('😊')" class="emoji-btn">😊</button>
-                                <button type="button" onclick="insertEmoji('😇')" class="emoji-btn">😇</button>
+                                <button type="button" onclick="insertEmoji('ÔØñ´©Å')" class="emoji-btn">ÔØñ´©Å</button>
+                                <button type="button" onclick="insertEmoji('­ƒÆø')" class="emoji-btn">­ƒÆø</button>
+                                <button type="button" onclick="insertEmoji('­ƒÆÜ')" class="emoji-btn">­ƒÆÜ</button>
+                                <button type="button" onclick="insertEmoji('­ƒÆÖ')" class="emoji-btn">­ƒÆÖ</button>
+                                <button type="button" onclick="insertEmoji('­ƒÆ£')" class="emoji-btn">­ƒÆ£</button>
+                                <button type="button" onclick="insertEmoji('­ƒñì')" class="emoji-btn">­ƒñì</button>
+                                <button type="button" onclick="insertEmoji('­ƒÿè')" class="emoji-btn">­ƒÿè</button>
+                                <button type="button" onclick="insertEmoji('­ƒÿç')" class="emoji-btn">­ƒÿç</button>
                             </div>
                         </div>
                     </div>
@@ -797,7 +797,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     <div style="width:1px; height:20px; background:var(--slate-200); margin:0 4px;"></div>
                     
                     <!-- Clear Formatting -->
-                    <button type="button" onclick="formatText('removeFormat')" class="editor-btn" title="Limpar formatação">
+                    <button type="button" onclick="formatText('removeFormat')" class="editor-btn" title="Limpar formata├º├úo">
                         <i data-lucide="eraser" width="16"></i>
                     </button>
                 </div>
@@ -872,7 +872,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
         <div style="padding: 16px 24px; background: var(--bg-surface); border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px;">
             <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-muted); border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
-            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: var(--accent-orange); color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anotação</button>
+            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: var(--accent-orange); color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anota├º├úo</button>
         </div>
     </div>
 </div>
@@ -889,7 +889,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 <i data-lucide="chevron-left" width="20"></i>
             </button>
             <h2 style="margin:0; font-size: var(--font-h1); font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
-                Configurações
+                Configura├º├Áes
             </h2>
         </div>
         <div style="display: flex; gap: 8px;">
@@ -908,10 +908,10 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <i data-lucide="sliders" width="16" style="display: inline; margin-right: 6px;"></i> Geral
         </div>
         <div class="tab-btn" onclick="switchConfigTab('estatisticas')" id="tab-estatisticas" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="bar-chart-2" width="16" style="display: inline; margin-right: 6px;"></i> Estatísticas
+            <i data-lucide="bar-chart-2" width="16" style="display: inline; margin-right: 6px;"></i> Estat├¡sticas
         </div>
         <div class="tab-btn" onclick="switchConfigTab('diario')" id="tab-diario" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Meu Diário
+            <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Meu Di├írio
         </div>
     </div>
     
@@ -922,20 +922,20 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <h3 style="margin-top: 0;">Plano Atual</h3>
             <div style="margin-bottom: 16px; padding: 12px; background: var(--slate-100); border-radius: 8px; font-weight: 600; color: var(--slate-700); display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="book" width="18"></i>
-                <span style="text-transform: capitalize;"><?= $selectedPlanType == 'chronological' ? 'Cronológico' : ($selectedPlanType == 'mcheyne' ? 'M\'Cheyne' : 'Navigators') ?></span>
+                <span style="text-transform: capitalize;"><?= $selectedPlanType == 'chronological' ? 'Cronol├│gico' : ($selectedPlanType == 'mcheyne' ? 'M\'Cheyne' : 'Navigators') ?></span>
             </div>
             
             <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Trocar Plano (CUIDADO!)</label>
             <select id="change-plan-select" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--slate-300); margin-bottom: 12px;">
                 <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
-                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronológico (365 dias)</option>
+                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronol├│gico (365 dias)</option>
                 <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
             </select>
             
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Data de Início</label>
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Data de In├¡cio</label>
             <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="width: 100%; padding: 12px; border: 1px solid var(--slate-300); border-radius: 8px; margin-bottom: 16px;">
             
-            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar Alterações</button>
+            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar Altera├º├Áes</button>
         </div>
 
         <button onclick="resetPlan()" style="width: 100%; padding: 12px; background: var(--rose-500); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
@@ -943,12 +943,12 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </button>
     </div>
 
-    <!-- TAB: ESTATÍSTICAS -->
+    <!-- TAB: ESTAT├ìSTICAS -->
     <div id="content-estatisticas" class="config-content" style="display:none; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
         <!-- Reports Section -->
         <div style="margin-bottom: 24px; display: flex; justify-content: flex-end;">
             <button onclick="exportDiary('pdf')" style="padding: 10px 16px; background: white; color: #374151; border: 1px solid #d1d5db; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                <i data-lucide="file-text" width="16"></i> Baixar Relatório Completo
+                <i data-lucide="file-text" width="16"></i> Baixar Relat├│rio Completo
             </button>
         </div>
 
@@ -972,7 +972,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     </svg>
                     <div style="position: absolute; font-weight: 800; font-size: 1.2rem; color: #1f2937;"><?= $completionPercent ?>%</div>
                 </div>
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Concluído</div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Conclu├¡do</div>
             </div>
 
             <!-- Streak Card -->
@@ -991,7 +991,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                     <i data-lucide="book-open" width="24"></i>
                 </div>
                 <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary); line-height: 1;"><?= $avgChapters ?></div>
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (Média)</div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (M├®dia)</div>
             </div>
         </div>
 
@@ -1000,7 +1000,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <!-- Weekday Distribution -->
             <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px;">
                 <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="calendar-check" width="16"></i> Frequência Semanal
+                    <i data-lucide="calendar-check" width="16"></i> Frequ├¬ncia Semanal
                 </h4>
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100px; gap: 6px;">
                     <?php foreach($jsWeekDist as $wd): 
@@ -1022,7 +1022,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <!-- Time Distribution -->
              <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px;">
                 <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="clock" width="16"></i> Horários Preferidos
+                    <i data-lucide="clock" width="16"></i> Hor├írios Preferidos
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <?php foreach($jsTimeDist as $td): 
@@ -1047,7 +1047,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <!-- Activity Chart (Last 7 Days) -->
         <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
             <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="bar-chart-2" width="16"></i> Atividade (Últimos 7 Dias)
+                <i data-lucide="bar-chart-2" width="16"></i> Atividade (├Ültimos 7 Dias)
             </h4>
             <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 120px; gap: 8px;">
                 <?php 
@@ -1077,25 +1077,25 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
                     <span style="color: #6b7280; font-size: 0.9rem;">Total Lido</span>
-                    <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> capítulos</span>
+                    <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> cap├¡tulos</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 14px 0;">
-                    <span style="color: #6b7280; font-size: 0.9rem;">Previsão de Término</span>
+                    <span style="color: #6b7280; font-size: 0.9rem;">Previs├úo de T├®rmino</span>
                     <span style="font-weight: 700; color: #6366f1;"><?= $estimatedFinishDate ? $estimatedFinishDate : '---' ?></span>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- TAB: MEU DIÁRIO -->
+    <!-- TAB: MEU DI├üRIO -->
     <div id="content-diario" class="config-content" style="display:none; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
         <!-- Export Button with Dropdown -->
         <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Minhas Anotações</h3>
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Minhas Anota├º├Áes</h3>
             <?php if(!empty($reportData)): ?>
             <div style="position: relative;">
                 <button onclick="toggleExportMenu()" id="export-btn" class="ripple" style="padding: 10px 16px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <i data-lucide="download" width="16"></i> Exportar Diário <i data-lucide="chevron-down" width="14"></i>
+                    <i data-lucide="download" width="16"></i> Exportar Di├írio <i data-lucide="chevron-down" width="14"></i>
                 </button>
                 
                 <!-- Dropdown Menu -->
@@ -1117,7 +1117,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <?php if(!empty($reportData)): ?>
         <div style="margin-bottom: 20px; position: relative;">
             <i data-lucide="search" width="18" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
-            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anotações (título, conteúdo, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anota├º├Áes (t├¡tulo, conte├║do, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
         </div>
         <?php endif; ?>
         
@@ -1208,8 +1208,8 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <div style="background: #f3f4f6; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #9ca3af;">
                 <i data-lucide="book-open" width="40"></i>
             </div>
-            <h3 style="margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Nenhuma anotação ainda</h3>
-            <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">Comece a registrar suas reflexões sobre as leituras bíblicas!</p>
+            <h3 style="margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Nenhuma anota├º├úo ainda</h3>
+            <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">Comece a registrar suas reflex├Áes sobre as leituras b├¡blicas!</p>
         </div>
         <?php else: ?>
         <!-- Diary Entries Timeline -->
@@ -1217,7 +1217,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         <?php 
             $currentMonthLabel = '';
             $currentWeekLabel = '';
-            $monthsPT = [1=>'Janeiro', 2=>'Fevereiro', 3=>'Março', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro'];
+            $monthsPT = [1=>'Janeiro', 2=>'Fevereiro', 3=>'Mar├ºo', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro'];
             
             foreach($reportData as $rep): 
                 $d = new DateTime($rep['date']);
@@ -1253,7 +1253,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
             <div class="diary-card" data-search-content="<?= strtolower(htmlspecialchars($rep['title'] ?? '') . ' ' . strip_tags($rep['comment'] ?? '') . ' ' . date('d/m/Y', strtotime($rep['date']))) ?>">
                 <div style="display:flex; justify-content:space-between; align-items:start;">
                     <div class="diary-date">
-                        <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \à\s H:i') ?>
+                        <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \├á\s H:i') ?>
                          <span style="width: 4px; height: 4px; background: var(--slate-300); border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
                          Dia <?= $rep['d'] ?>
                     </div>
@@ -1431,7 +1431,7 @@ function loadDay(m, d) {
         const absoluteDay = ((m-1)*25) + d;
         displayTitle = `Dia ${absoluteDay}`;
     } else {
-        // For 365 days, we can try to find the absolute day or just "Dia d do Mês m"
+        // For 365 days, we can try to find the absolute day or just "Dia d do M├¬s m"
         // User requested generic. "Dia X" is best.
         let absoluteDay = 0;
         for(let i=1; i<m; i++) absoluteDay += monthDaysRef[i];
@@ -1454,7 +1454,7 @@ function loadDay(m, d) {
     const isComplete = verses.length > 0 && savedVerses.length >= verses.length;
     
     badge.innerHTML = isComplete 
-        ? '<span class="status-badge success" style="background:var(--primary-subtle); color:var(--primary); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Concluído</span>'
+        ? '<span class="status-badge success" style="background:var(--primary-subtle); color:var(--primary); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Conclu├¡do</span>'
         : '<span class="status-badge pending" style="background:var(--yellow-100); color:var(--yellow-600); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="clock" width="14"></i> Pendente</span>';
     
     if (verses.length === 0) {
@@ -1543,7 +1543,7 @@ function scrollCalendar(dir) {
 }
 
 function getMonthName(m) {
-    const n = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const n = ["", "Janeiro", "Fevereiro", "Mar├ºo", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     return n[m];
 }
 
@@ -1686,7 +1686,7 @@ function saveNote() {
     
     // Show toast instead of alert
     const toast = document.getElementById('save-toast');
-    toast.innerHTML = '<i data-lucide="check" width="14"></i> Anotação salva!';
+    toast.innerHTML = '<i data-lucide="check" width="14"></i> Anota├º├úo salva!';
     toast.style.opacity = 1;
     setTimeout(() => {
         toast.style.opacity = 0;
@@ -1777,14 +1777,14 @@ function filterDiary() {
 async function shareEntry(title, dateStr, content) {
     const tempDiv = document.createElement("div"); tempDiv.innerHTML = content;
     const cleanContent = tempDiv.innerText;
-    const shareText = `📅 *Diário de Leitura*\n🗓️ ${dateStr}\n\n📖 *${title}*\n"${cleanContent}"\n\n_Compartilhado via App Louvor PIB_`;
+    const shareText = `­ƒôà *Di├írio de Leitura*\n­ƒùô´©Å ${dateStr}\n\n­ƒôû *${title}*\n"${cleanContent}"\n\n_Compartilhado via App Louvor PIB_`;
 
     if (navigator.share) {
-        try { await navigator.share({ title: 'Diário de Leitura', text: shareText }); } catch (err) { console.log('Error sharing:', err); }
+        try { await navigator.share({ title: 'Di├írio de Leitura', text: shareText }); } catch (err) { console.log('Error sharing:', err); }
     } else {
         navigator.clipboard.writeText(shareText).then(() => {
             const toast = document.getElementById('save-toast');
-            toast.innerHTML = '<i data-lucide="copy" width="14"></i> Copiado para área de transferência!';
+            toast.innerHTML = '<i data-lucide="copy" width="14"></i> Copiado para ├írea de transfer├¬ncia!';
             toast.style.opacity = 1;
             setTimeout(() => toast.style.opacity = 0, 3000);
         });
@@ -1799,7 +1799,7 @@ function exportDiary(format) {
     // Get all diary entries
     const entries = document.querySelectorAll('.diary-card');
     if (entries.length === 0) {
-        alert('Nenhuma anotação para exportar.');
+        alert('Nenhuma anota├º├úo para exportar.');
         return;
     }
     
@@ -1816,7 +1816,7 @@ function exportDiary(format) {
 function exportAsWord(entries, dateStr) {
     // Build HTML content with statistics header
     let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
-    html += '<head><meta charset="utf-8"><title>Diário de Leitura Bíblica</title>';
+    html += '<head><meta charset="utf-8"><title>Di├írio de Leitura B├¡blica</title>';
     html += '<style>';
     html += 'body{font-family:Arial,sans-serif;line-height:1.6;padding:20px;}';
     html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
@@ -1836,22 +1836,22 @@ function exportAsWord(entries, dateStr) {
     html += '</style></head><body>';
     
     // Header
-    html += '<h1>📖 DIÁRIO DE LEITURA BÍBLICA</h1>';
+    html += '<h1>­ƒôû DI├üRIO DE LEITURA B├ìBLICA</h1>';
     html += '<p style="color:#6b7280;margin-bottom:10px;">Louvor PIB Oliveira</p>';
     
     // Statistics Box
     html += '<div class="stats-box">';
-    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;">📊 Estatísticas do Plano</div>';
+    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;">­ƒôè Estat├¡sticas do Plano</div>';
     html += '<div class="stats-grid">';
     html += `<div class="stat-item"><div class="stat-value"><?= $totalDaysRead ?></div><div class="stat-label">Dias Lidos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Capítulos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequência</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Concluído</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Cap├¡tulos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequ├¬ncia</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Conclu├¡do</div></div>`;
     html += '</div>';
     html += `<div style="margin-top:15px;font-size:13px;color:#6b7280;">`;
     html += `<strong>Plano:</strong> <?= ucfirst($selectedPlanType) ?> | `;
-    html += `<strong>Início:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
-    html += `<strong>Total de Anotações:</strong> ${entries.length}`;
+    html += `<strong>In├¡cio:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
+    html += `<strong>Total de Anota├º├Áes:</strong> ${entries.length}`;
     html += `</div></div>`;
     
     // Entries
@@ -1891,7 +1891,7 @@ function exportAsWord(entries, dateStr) {
 // Export as PDF
 function exportAsPDF(entries, dateStr) {
     let printWindow = window.open('', '_blank');
-    let html = '<html><head><meta charset="utf-8"><title>Diário de Leitura Bíblica</title>';
+    let html = '<html><head><meta charset="utf-8"><title>Di├írio de Leitura B├¡blica</title>';
     html += '<style>';
     html += '@media print{@page{margin:20mm;}}';
     html += 'body{font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:800px;margin:0 auto;padding:20px;}';
@@ -1912,22 +1912,22 @@ function exportAsPDF(entries, dateStr) {
     html += '</style></head><body>';
     
     // Header
-    html += '<h1>📖 DIÁRIO DE LEITURA BÍBLICA</h1>';
+    html += '<h1>­ƒôû DI├üRIO DE LEITURA B├ìBLICA</h1>';
     html += '<p style="color:#6b7280;margin-bottom:10px;font-size:14px;">Louvor PIB Oliveira</p>';
     
     // Statistics Box
     html += '<div class="stats-box">';
-    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;font-size:14px;">📊 Estatísticas do Plano</div>';
+    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;font-size:14px;">­ƒôè Estat├¡sticas do Plano</div>';
     html += '<div class="stats-grid">';
     html += `<div class="stat-item"><div class="stat-value"><?= $totalDaysRead ?></div><div class="stat-label">Dias Lidos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Capítulos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequência</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Concluído</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Cap├¡tulos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequ├¬ncia</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Conclu├¡do</div></div>`;
     html += '</div>';
     html += `<div style="margin-top:15px;font-size:12px;color:#6b7280;">`;
     html += `<strong>Plano:</strong> <?= ucfirst($selectedPlanType) ?> | `;
-    html += `<strong>Início:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
-    html += `<strong>Total de Anotações:</strong> ${entries.length}`;
+    html += `<strong>In├¡cio:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
+    html += `<strong>Total de Anota├º├Áes:</strong> ${entries.length}`;
     html += `</div></div>`;
     
     // Entries
@@ -1960,7 +1960,7 @@ function exportAsPDF(entries, dateStr) {
 // Show Export Success Toast
 function showExportSuccess(format) {
     const toast = document.getElementById('save-toast');
-    toast.innerHTML = `<i data-lucide="check" width="14"></i> Diário exportado como ${format} com sucesso!`;
+    toast.innerHTML = `<i data-lucide="check" width="14"></i> Di├írio exportado como ${format} com sucesso!`;
     toast.style.opacity = 1;
     setTimeout(() => {
         toast.style.opacity = 0;
@@ -1994,9 +1994,9 @@ function getExportStyles() {
 
 function exportAsWordNew(entries, dateStr) {
     let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
-    html += '<head><meta charset="utf-8"><title>Diário de Leitura Bíblica</title>' + getExportStyles() + '</head><body>';
+    html += '<head><meta charset="utf-8"><title>Di├írio de Leitura B├¡blica</title>' + getExportStyles() + '</head><body>';
     
-    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Diário de Leitura Bíblica</h1></div>';
+    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Di├írio de Leitura B├¡blica</h1></div>';
     
     const age = userData.birthDate ? new Date().getFullYear() - new Date(userData.birthDate).getFullYear() : '---';
     const birthFormatted = userData.birthDate ? new Date(userData.birthDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '---';
@@ -2009,15 +2009,15 @@ function exportAsWordNew(entries, dateStr) {
     
     html += `<div class="stats-grid">
         <div class="stat-item"><div class="stat-val"><?= $totalDaysRead ?></div><div class="stat-lbl">Dias</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Capítulos</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Sequência</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Concluído</div></div>
-        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Horário Fav.</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Cap├¡tulos</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Sequ├¬ncia</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Conclu├¡do</div></div>
+        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Hor├írio Fav.</div></div>
     </div>`;
     
     entries.forEach(entry => {
         const dateTxt = entry.querySelector('.diary-date').textContent.trim(); 
-        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem título';
+        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem t├¡tulo';
         const content = entry.querySelector('.diary-content') ? entry.querySelector('.diary-content').innerHTML : '';
         html += `<div class="entry"><div class="entry-meta">${dateTxt}</div><div class="entry-title">${title}</div><div class="entry-content">${content}</div></div>`;
     });
@@ -2032,9 +2032,9 @@ function exportAsWordNew(entries, dateStr) {
 
 function exportAsPDFNew(entries, dateStr) {
     let w = window.open('', '_blank');
-    let html = '<html><head><meta charset="utf-8"><title>Diário PDF</title>' + getExportStyles() + '</head><body>';
+    let html = '<html><head><meta charset="utf-8"><title>Di├írio PDF</title>' + getExportStyles() + '</head><body>';
     
-    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Diário de Leitura Bíblica</h1></div>';
+    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Di├írio de Leitura B├¡blica</h1></div>';
     
     const age = userData.birthDate ? new Date().getFullYear() - new Date(userData.birthDate).getFullYear() : '---';
     const birthFormatted = userData.birthDate ? new Date(userData.birthDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '---';
@@ -2047,19 +2047,19 @@ function exportAsPDFNew(entries, dateStr) {
     
     html += `<div class="stats-grid">
         <div class="stat-item"><div class="stat-val"><?= $totalDaysRead ?></div><div class="stat-lbl">Dias</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Capítulos</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Cap├¡tulos</div></div>
         <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Streak</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Concluído</div></div>
-        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Horário Fav.</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Conclu├¡do</div></div>
+        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Hor├írio Fav.</div></div>
     </div>`;
 
     // Add Advanced Stats Block
     html += `<div style="margin-bottom: 20px; border: 1px solid #eee; background: #fdfdfd; padding: 10px; border-radius: 5px;">
-        <h3 style="font-size: 12pt; margin: 0 0 10px 0; color: #555;">Análise de Hábitos</h3>
+        <h3 style="font-size: 12pt; margin: 0 0 10px 0; color: #555;">An├ílise de H├íbitos</h3>
         <div style="display: flex; gap: 20px;">
              <!-- Time Dist -->
              <div style="flex: 1;">
-                <div style="font-size: 8pt; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Por Período</div>
+                <div style="font-size: 8pt; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Por Per├¡odo</div>
                 ${statsData.time.map(t => `<div style="display: flex; justify-content: space-between; font-size: 8pt; margin-bottom: 2px;"><span>${t.label}</span><span>${t.count}</span></div>`).join('')}
              </div>
              <!-- Week Dist -->
@@ -2072,19 +2072,19 @@ function exportAsPDFNew(entries, dateStr) {
     
     entries.forEach(entry => {
         const dateTxt = entry.querySelector('.diary-date').textContent.trim();
-        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem título';
+        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem t├¡tulo';
         const content = entry.querySelector('.diary-content') ? entry.querySelector('.diary-content').innerHTML : '';
         html += `<div class="entry"><div class="entry-meta">${dateTxt}</div><div class="entry-title">${title}</div><div class="entry-content">${content}</div></div>`;
     });
     
-    html += `<div class="footer">Gerado em ${new Date().toLocaleString('pt-BR')} • App Louvor PIB Oliveira</div></body></html>`;
+    html += `<div class="footer">Gerado em ${new Date().toLocaleString('pt-BR')} ÔÇó App Louvor PIB Oliveira</div></body></html>`;
     
     w.document.write(html); w.document.close();
     w.onload = function() { w.print(); setTimeout(()=>w.close(), 1000); };
 }
 
 function resetPlan() {
-    if(confirm('Tem certeza? Isso apagará TODO o progresso e não pode ser desfeito.')) {
+    if(confirm('Tem certeza? Isso apagar├í TODO o progresso e n├úo pode ser desfeito.')) {
         const f = new FormData(); f.append('action', 'reset_plan');
         fetch('leitura.php', { method:'POST', body:f }).then(()=>window.location.reload());
     }
