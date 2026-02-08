@@ -3029,25 +3029,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// START: CONFIGURATION MODAL LOGIC
+// START: CONFIGURATION MODAL LOGIC (Isolada)
 function switchConfigTab(tabName) {
-    document.querySelectorAll('.config-tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.config-content').forEach(content => content.style.display = 'none');
+    // Remove active class from all tabs
+    document.querySelectorAll('.cfg-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.cfg-content').forEach(content => content.style.display = 'none');
     
-    document.getElementById(`conf-tab-${tabName}`).classList.add('active');
-    document.getElementById(`conf-content-${tabName}`).style.display = 'block';
+    // Activate selected
+    const activeBtn = document.getElementById('cfg-tab-' + tabName);
+    const activeContent = document.getElementById('cfg-content-' + tabName);
+    
+    if(activeBtn) activeBtn.classList.add('active');
+    if(activeContent) activeContent.style.display = 'block';
 }
 
 function saveSettings() {
-    const btn = document.getElementById('btn-save-config');
+    const btn = document.getElementById('cfg-btn-save');
     const originalText = btn.innerHTML;
     btn.innerHTML = 'Salvando...';
     btn.disabled = true;
     
     const f = new FormData();
     f.append('action', 'save_settings');
-    f.append('start_date', document.getElementById('conf-start-date').value);
-    f.append('plan_type', document.getElementById('conf-plan-type').value);
+    f.append('start_date', document.getElementById('cfg-start-date').value);
+    f.append('plan_type', document.getElementById('cfg-plan-type').value);
     
     fetch('leitura.php', { method:'POST', body:f })
     .then(r=>r.json())
@@ -3063,228 +3068,243 @@ function saveSettings() {
 }
 
 function exportDiaryAsPDF() {
-    alert('Funcionalidade de exportação em desenvolvimento.');
+    const diaryContent = document.getElementById('diary-entries-container');
+    if(!diaryContent) {
+        alert('Nenhuma anota&ccedil;&atilde;o para exportar.');
+        return;
+    }
+    
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    const doc = iframe.contentWindow.document;
+    const style = `
+        body { font-family: sans-serif; padding: 40px; color: #1f2937; }
+        h1 { text-align: center; color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 20px; margin-bottom: 30px; }
+        .entry { margin-bottom: 30px; page-break-inside: avoid; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; background: #f9fafb; }
+        .date { font-size: 0.9rem; color: #6b7280; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        .title { font-size: 1.25rem; font-weight: bold; margin-bottom: 15px; color: #111827; }
+        .content { font-size: 1rem; line-height: 1.6; color: #374151; white-space: pre-wrap; }
+    `;
+    
+    let html = `<html><head><title>Meu Di&aacute;rio</title><style>${style}</style></head><body>`;
+    html += `<h1>Meu Di&aacute;rio de Leitura</h1>`;
+    
+    const cards = document.querySelectorAll('.diary-card');
+    if(cards.length === 0) {
+       html += '<p style="text-align:center; color:#6b7280;">Nenhuma anota&ccedil;&atilde;o encontrada.</p>';
+    } else {
+        cards.forEach(card => {
+            const date = card.querySelector('.diary-date').innerText;
+            const title = card.querySelector('.diary-title') ? card.querySelector('.diary-title').innerText : 'Sem T&iacute;tulo';
+            const content = card.querySelector('.diary-content').innerText;
+            
+            html += `<div class="entry">
+                <div class="date">${date}</div>
+                <div class="title">${title}</div>
+                <div class="content">${content}</div>
+            </div>`;
+        });
+    }
+    html += `</body></html>`;
+    
+    doc.open();
+    doc.write(html);
+    doc.close();
+    
+    setTimeout(() => {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        setTimeout(() => document.body.removeChild(iframe), 1000);
+    }, 500);
 }
+
+// Initialize logic
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+});
 </script>
 
-<!-- CONFIGURATION MODAL HTML -->
-<div id="modal-config" class="config-fullscreen">
-    <div class="config-header">
-        <div class="config-title-group">
-            <button onclick="document.getElementById('modal-config').style.display='none'" class="btn-icon-back">
+<!-- CONFIGURATION MODAL HTML REBUILT -->
+<div id="modal-config" class="cfg-fullscreen">
+    <div class="cfg-header">
+        <div class="cfg-header-left">
+            <button onclick="document.getElementById('modal-config').style.display='none'" class="cfg-icon-btn">
                 <i data-lucide="chevron-left"></i>
             </button>
-            <h2>Configurações</h2>
+            <h2>Configura&ccedil;&otilde;es</h2>
         </div>
-        <button onclick="document.getElementById('modal-config').style.display='none'" class="btn-icon-close">
+        <button onclick="document.getElementById('modal-config').style.display='none'" class="cfg-icon-btn">
             <i data-lucide="x"></i>
         </button>
     </div>
     
-    <!-- Tabs -->
-    <div class="config-tabs-scroll">
-        <div class="config-tab-btn active" onclick="switchConfigTab('plano')" id="conf-tab-plano">
-            <i data-lucide="book-open"></i> Plano
-        </div>
-        <div class="config-tab-btn" onclick="switchConfigTab('geral')" id="conf-tab-geral">
-            <i data-lucide="bar-chart-2"></i> Geral
-        </div>
-        <div class="config-tab-btn" onclick="switchConfigTab('diario')" id="conf-tab-diario">
-            <i data-lucide="file-text"></i> Meu Diário
-        </div>
-    </div>
-    
-    <!-- TAB: PLANO -->
-    <div id="conf-content-plano" class="config-content">
-        <div class="config-card">
-            <h3>Plano de Leitura</h3>
-            <div class="form-group">
-                <label>Modelo do Plano</label>
-                <select id="conf-plan-type" class="form-control">
-                    <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
-                    <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronológico (365 dias)</option>
-                    <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
-                </select>
+    <div class="cfg-body">
+        <!-- Sidebar/Tabs for Desktop, Topbar for Mobile -->
+        <div class="cfg-tabs">
+            <div class="cfg-tab-btn active" onclick="switchConfigTab('plano')" id="cfg-tab-plano">
+                <i data-lucide="book-open" width="18"></i>
+                <span>Plano de Leitura</span>
             </div>
-            
-            <div class="form-group">
-                <label>Data de Início</label>
-                <input type="date" id="conf-start-date" class="form-control" value="<?= $startDateStr ?>">
+            <div class="cfg-tab-btn" onclick="switchConfigTab('geral')" id="cfg-tab-geral">
+                <i data-lucide="bar-chart-2" width="18"></i>
+                <span>Estat&iacute;sticas</span>
             </div>
-            
-            <button onclick="saveSettings()" id="btn-save-config" class="btn-primary-config">
-                <i data-lucide="save"></i> Salvar Alterações
-            </button>
+            <div class="cfg-tab-btn" onclick="switchConfigTab('diario')" id="cfg-tab-diario">
+                <i data-lucide="file-text" width="18"></i>
+                <span>Meu Di&aacute;rio</span>
+            </div>
         </div>
         
-        <div class="config-card danger-zone">
-            <h3 class="text-danger">Zona de Perigo</h3>
-            <p>Reiniciar o plano apagará todo o seu progresso.</p>
-            <button onclick="resetPlan()" class="btn-danger-config">
-                <i data-lucide="trash-2"></i> Reiniciar Plano
-            </button>
-        </div>
-    </div>
-    
-    <!-- TAB: GERAL -->
-    <div id="conf-content-geral" class="config-content" style="display: none;">
-        <div class="config-card">
-            <h3>Progresso Geral</h3>
-            <div class="stats-grid-config">
-                <div class="stat-box">
-                    <div class="stat-value"><?= $totalDaysRead ?></div>
-                    <div class="stat-label">Dias Lidos</div>
+        <!-- Content Area -->
+        <div class="cfg-content-area">
+            
+            <!-- PLANO TAB -->
+            <div id="cfg-content-plano" class="cfg-content">
+                <div class="cfg-section">
+                    <h3 class="cfg-section-title">Ajustes do Plano</h3>
+                    
+                    <div class="cfg-form-group">
+                        <label>Modelo de Leitura</label>
+                        <div class="cfg-select-wrapper">
+                            <select id="cfg-plan-type" class="cfg-input">
+                                <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
+                                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronol&oacute;gico (365 dias)</option>
+                                <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="cfg-select-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="cfg-form-group">
+                        <label>Data de In&iacute;cio</label>
+                        <input type="date" id="cfg-start-date" class="cfg-input" value="<?= $startDateStr ?>">
+                    </div>
+                    
+                    <button onclick="saveSettings()" id="cfg-btn-save" class="cfg-btn cfg-btn-primary">
+                        <i data-lucide="save" width="18"></i> Salvar Altera&ccedil;&otilde;es
+                    </button>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-value"><?= $currentStreak ?></div>
-                    <div class="stat-label">Sequência</div>
-                </div>
-                 <div class="stat-box">
-                    <div class="stat-value"><?= $completionPercent ?>%</div>
-                    <div class="stat-label">Concluído</div>
+                
+                <div class="cfg-section cfg-danger-zone">
+                    <h3 class="cfg-section-title text-danger">Zona de Perigo</h3>
+                    <p>Deseja recome&ccedil;ar do zero? Isso apagar&aacute; todo o seu progresso atual.</p>
+                    <button onclick="resetPlan()" class="cfg-btn cfg-btn-danger">
+                        <i data-lucide="trash-2" width="18"></i> Reiniciar Plano
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- TAB: DIARIO -->
-    <div id="conf-content-diario" class="config-content" style="display: none;">
-        <div class="config-card">
-            <h3>Seu Diário</h3>
-            <p>Em breve você poderá baixar todas as suas anotações em PDF.</p>
-            <button onclick="exportDiaryAsPDF()" class="btn-secondary-config" disabled style="opacity: 0.6; cursor: not-allowed;">
-                <i data-lucide="download"></i> Baixar PDF (Em breve)
-            </button>
+            
+            <!-- GERAL TAB -->
+            <div id="cfg-content-geral" class="cfg-content" style="display: none;">
+                <h3 class="cfg-section-title">Resumo do Progresso</h3>
+                <div class="cfg-stats-grid">
+                    <div class="cfg-stat-card">
+                        <div class="cfg-stat-val"><?= $totalDaysRead ?></div>
+                        <div class="cfg-stat-lbl">Dias Lidos</div>
+                    </div>
+                    <div class="cfg-stat-card">
+                        <div class="cfg-stat-val"><?= $currentStreak ?></div>
+                        <div class="cfg-stat-lbl">Sequ&ecirc;ncia Atual</div>
+                    </div>
+                    <div class="cfg-stat-card">
+                        <div class="cfg-stat-val"><?= $completionPercent ?>%</div>
+                        <div class="cfg-stat-lbl">Conclus&atilde;o</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DIARIO TAB -->
+            <div id="cfg-content-diario" class="cfg-content" style="display: none;">
+                <h3 class="cfg-section-title">Gerenciar Di&aacute;rio</h3>
+                <p style="margin-bottom: 20px; color: #6b7280;">Exporte suas reflex&otilde;es para PDF para guardar ou imprimir.</p>
+                <button onclick="exportDiaryAsPDF()" class="cfg-btn cfg-btn-secondary">
+                    <i data-lucide="download" width="18"></i> Baixar Di&aacute;rio em PDF
+                </button>
+            </div>
+            
         </div>
     </div>
 </div>
 
 <style>
-/* CONFIG MODAL STYLES */
-.config-fullscreen {
-    position: fixed;
-    top: 0; bottom: 0; right: 0; left: 0;
-    background: #f9fafb;
-    z-index: 9999;
-    display: none;
-    flex-direction: column;
-    overflow-y: auto;
+/* PREVENÇÃO DE CONFLITOS: Classes com prefixo cfg- */
+.cfg-fullscreen {
+    position: fixed; inset: 0; background: #f3f4f6; z-index: 9999;
+    display: none; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
-@media(min-width: 1024px) { .config-fullscreen { left: 280px; } }
+@media(min-width: 1024px) { .cfg-fullscreen { left: 280px; } }
 
-.config-header {
-    background: white;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+.cfg-header {
+    background: white; padding: 15px 20px; border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
 }
-.config-title-group { display: flex; align-items: center; gap: 12px; }
-.config-title-group h2 { margin: 0; font-size: 1.25rem; color: #111827; }
-.btn-icon-back, .btn-icon-close {
-    background: transparent; border: none; cursor: pointer; color: #6b7280;
-    padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+.cfg-header-left { display: flex; align-items: center; gap: 15px; }
+.cfg-header h2 { margin: 0; font-size: 1.1rem; color: #111827; font-weight: 700; }
+.cfg-icon-btn {
+    background: transparent; border: none; cursor: pointer; color: #6b7280; padding: 8px; border-radius: 50%; display: flex;
 }
-.btn-icon-back:hover, .btn-icon-close:hover { background: #f3f4f6; color: #1f2937; }
+.cfg-icon-btn:hover { background: #f9fafb; color: #1f2937; }
 
-.config-tabs-scroll {
-    display: flex;
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 0 20px;
-    overflow-x: auto;
-    gap: 24px;
+.cfg-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+@media(min-width: 768px) { .cfg-body { flex-direction: row; } }
+
+/* TABS */
+.cfg-tabs {
+    background: white; border-bottom: 1px solid #e5e7eb; display: flex; overflow-x: auto;
+    flex-shrink: 0;
 }
-.config-tab-btn {
-    padding: 16px 4px;
-    font-weight: 600;
-    color: #6b7280;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+@media(min-width: 768px) {
+    .cfg-tabs { flex-direction: column; width: 240px; border-bottom: none; border-right: 1px solid #e5e7eb; padding-top: 20px; }
+}
+
+.cfg-tab-btn {
+    padding: 15px 20px; color: #6b7280; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+    display: flex; align-items: center; gap: 10px; border-bottom: 2px solid transparent; transition: all 0.2s;
     white-space: nowrap;
-    transition: all 0.2s;
 }
-.config-tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
-.config-tab-btn:hover:not(.active) { color: #374151; }
+@media(min-width: 768px) { .cfg-tab-btn { border-bottom: none; border-left: 3px solid transparent; } }
 
-.config-content { padding: 24px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
-.config-card {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-.config-card h3 { margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; color: #111827; }
+.cfg-tab-btn:hover { color: #374151; background: #f9fafb; }
+.cfg-tab-btn.active { color: #2563eb; background: #eff6ff; }
+@media(max-width: 767px) { .cfg-tab-btn.active { border-bottom-color: #2563eb; } }
+@media(min-width: 768px) { .cfg-tab-btn.active { border-left-color: #2563eb; } }
 
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; font-weight: 500; color: #374151; margin-bottom: 8px; font-size: 0.9rem; }
-.form-control {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: #1f2937;
-    background: #fff;
-}
+/* CONTENT */
+.cfg-content-area { flex: 1; overflow-y: auto; padding: 20px; }
+.cfg-content { max-width: 600px; margin: 0 auto; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-.btn-primary-config {
-    width: 100%;
-    padding: 12px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background 0.2s;
-}
-.btn-primary-config:hover { background: #1d4ed8; }
+.cfg-section { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e5e7eb; }
+.cfg-section-title { margin: 0 0 20px 0; font-size: 1rem; color: #111827; font-weight: 700; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; }
 
-.danger-zone { border-color: #fecaca; background: #fef2f2; }
-.text-danger { color: #dc2626; }
-.btn-danger-config {
-    width: 100%;
-    padding: 12px;
-    background: white;
-    color: #dc2626;
-    border: 1px solid #dc2626;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-.btn-danger-config:hover { background: #fef2f2; }
+.cfg-form-group { margin-bottom: 20px; }
+.cfg-form-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; }
+.cfg-input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; color: #1f2937; outline: none; transition: border 0.2s; background: white; }
+.cfg-input:focus { border-color: #2563eb; ring: 2px solid #bfdbfe; }
 
-.stats-grid-config {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-.stat-box {
-    background: #f9fafb;
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-}
-.stat-value { font-size: 1.5rem; font-weight: 700; color: #111827; }
-.stat-label { font-size: 0.8rem; color: #6b7280; font-weight: 500; margin-top: 4px; }
+.cfg-select-wrapper { position: relative; }
+.cfg-select-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none; width: 16px; }
+select.cfg-input { appearance: none; padding-right: 30px; }
+
+.cfg-btn { width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; border: none; font-size: 0.9rem; }
+.cfg-btn:active { transform: scale(0.98); }
+.cfg-btn-primary { background: #2563eb; color: white; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2); }
+.cfg-btn-primary:hover { background: #1d4ed8; }
+.cfg-btn-secondary { background: white; border: 1px solid #d1d5db; color: #374151; }
+.cfg-btn-secondary:hover { background: #f9fafb; border-color: #9ca3af; }
+.cfg-btn-danger { background: #fee2e2; color: #b91c1c; }
+.cfg-btn-danger:hover { background: #fecaca; }
+
+.cfg-danger-zone { border: 1px solid #fecaca; background: #fff1f2; }
+.text-danger { color: #ef4444; }
+
+.cfg-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.cfg-stat-card { background: white; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #e5e7eb; }
+.cfg-stat-val { font-size: 1.5rem; font-weight: 800; color: #2563eb; }
+.cfg-stat-lbl { font-size: 0.75rem; color: #6b7280; font-weight: 600; text-transform: uppercase; margin-top: 5px; }
 </style>
 
 <?php
