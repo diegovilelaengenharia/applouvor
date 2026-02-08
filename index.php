@@ -174,10 +174,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button.btn-primary {
             width: 100%;
             padding: 16px;
-            background: var(--text-main);
-            /* Black in light, White in dark */
-            color: var(--bg);
-            /* White in light, Black in dark */
+            background: #000000;
+            /* Black */
+            color: #ffffff;
+            /* White */
             border: none;
             border-radius: 16px;
             font-size: 1rem;
