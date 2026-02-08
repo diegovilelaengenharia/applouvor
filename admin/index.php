@@ -286,7 +286,7 @@ try {
     
     // Se não houver configurações, usar padrão
     if (empty($userDashboardSettings)) {
-        $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversariantes', 'devocional', 'oracao'];
+        $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversarios', 'devocional', 'oracao'];
         foreach ($defaultCards as $index => $cardId) {
             $userDashboardSettings[] = [
                 'card_id' => $cardId,
@@ -297,7 +297,7 @@ try {
     }
 } catch (Exception $e) {
     // Fallback para cards padrão em caso de erro
-    $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversariantes', 'devocional', 'oracao'];
+    $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversarios', 'devocional', 'oracao'];
     foreach ($defaultCards as $index => $cardId) {
         $userDashboardSettings[] = [
             'card_id' => $cardId,
