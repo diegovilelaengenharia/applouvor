@@ -1510,15 +1510,21 @@ body.dark-mode .stat-card-compact {
     border-top: none !important;
 }
 
-/* Audio Recording Section */
-.audio-recording-section {
+/* Media Attachment Section */
+.media-attachment-section {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 1rem;
+}
+
+.attachment-options {
+    display: flex;
+    gap: 0.75rem;
     flex-wrap: wrap;
 }
 
-.audio-btn {
+.media-btn,
+.upload-label {
     padding: 0.625rem 1rem;
     border-radius: 8px;
     font-size: 0.875rem;
@@ -1528,22 +1534,33 @@ body.dark-mode .stat-card-compact {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border: none;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #64748b;
 }
 
-.audio-btn.record-btn {
+.media-btn:hover,
+.upload-label:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+    transform: translateY(-1px);
+}
+
+.media-btn#record-audio-btn {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
+    border-color: #ef4444;
 }
 
-.audio-btn.record-btn:hover {
+.media-btn#record-audio-btn:hover {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    border-color: #dc2626;
 }
 
-.audio-btn.record-btn.recording {
+.media-btn#record-audio-btn.recording {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border-color: #f59e0b;
     animation: pulse 1.5s infinite;
 }
 
@@ -1552,22 +1569,11 @@ body.dark-mode .stat-card-compact {
     50% { opacity: 0.7; }
 }
 
-.audio-btn.delete-btn {
-    background: #f1f5f9;
-    color: #ef4444;
-    border: 1px solid #e5e7eb;
-}
-
-.audio-btn.delete-btn:hover {
-    background: #fee2e2;
-    border-color: #fecaca;
-}
-
 .audio-timer {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
     background: #fef3c7;
     border-radius: 8px;
     font-weight: 600;
@@ -1587,14 +1593,69 @@ body.dark-mode .stat-card-compact {
     50% { opacity: 0.3; }
 }
 
-#audio-player-container {
+.stop-recording-btn {
+    padding: 0.375rem 0.75rem;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     align-items: center;
+    gap: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.stop-recording-btn:hover {
+    background: #b91c1c;
+}
+
+.attachments-preview {
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
 }
 
-#audio-player {
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.attachment-item audio {
+    flex: 1;
     max-width: 300px;
+}
+
+.attachment-item img {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.attachment-item .delete-attachment-btn {
+    padding: 0.5rem;
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-item .delete-attachment-btn:hover {
+    background: #fecaca;
+    border-color: #fca5a5;
 }
 
 /* Mobile Adjustments */
@@ -1802,24 +1863,40 @@ body.dark-mode .action-btn {
                     ><?= htmlspecialchars($progressData['comment'] ?? '') ?></textarea>
                 </div>
                 
-                <!-- Audio Recording Section -->
+                <!-- Media Attachment Section -->
                 <div class="diary-field">
-                    <label>Gravação de Áudio (opcional)</label>
-                    <div class="audio-recording-section">
-                        <button type="button" id="record-audio-btn" class="audio-btn record-btn" onclick="toggleAudioRecording()">
-                            <i data-lucide="mic" width="16"></i>
-                            <span id="record-btn-text">Gravar Áudio</span>
-                        </button>
+                    <label>Anexos (opcional)</label>
+                    <div class="media-attachment-section">
+                        <!-- Attachment Options -->
+                        <div class="attachment-options">
+                            <button type="button" id="record-audio-btn" class="media-btn" onclick="toggleAudioRecording()">
+                                <i data-lucide="mic" width="16"></i>
+                                <span id="record-btn-text">Gravar Áudio</span>
+                            </button>
+                            <label for="audio-upload" class="media-btn upload-label">
+                                <i data-lucide="music" width="16"></i>
+                                <span>Anexar Áudio</span>
+                                <input type="file" id="audio-upload" accept="audio/*" style="display: none;" onchange="handleAudioUpload(this)">
+                            </label>
+                            <label for="image-upload" class="media-btn upload-label">
+                                <i data-lucide="image" width="16"></i>
+                                <span>Anexar Imagem</span>
+                                <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
+                            </label>
+                        </div>
+                        
+                        <!-- Recording Timer -->
                         <div id="audio-timer" class="audio-timer" style="display: none;">
                             <span class="recording-indicator"></span>
                             <span id="timer-text">00:00</span>
-                        </div>
-                        <div id="audio-player-container" style="display: none;">
-                            <audio id="audio-player" controls></audio>
-                            <button type="button" class="audio-btn delete-btn" onclick="deleteAudio()" title="Excluir áudio">
-                                <i data-lucide="trash-2" width="16"></i>
+                            <button type="button" class="stop-recording-btn" onclick="stopRecording()">
+                                <i data-lucide="square" width="14"></i>
+                                Parar
                             </button>
                         </div>
+                        
+                        <!-- Attachments Preview -->
+                        <div id="attachments-preview" class="attachments-preview"></div>
                     </div>
                 </div>
                 
