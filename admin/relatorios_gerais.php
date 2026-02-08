@@ -1021,52 +1021,193 @@ renderAppHeader('Indicadores Avançados');
 ?>
 
 <style>
-    .stat-card { background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px; }
-    .stat-title { font-size: 14px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; margin-bottom: 16px; border-bottom: 1px solid var(--slate-100); padding-bottom: 8px; }
-    .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--slate-100); }
-    .list-item:last-child { border: none; }
-    .metric-big { font-size: 18px; font-weight: 800; color: var(--slate-900); }
-    .metric-sub { font-size: 12px; color: var(--slate-500); }
+    /* Standardized Dashboard Styles */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
     
-    .heatmap { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 20px; border-bottom: 1px solid var(--slate-300); }
-    .heat-bar { flex: 1; background: var(--slate-500); border-radius: 4px 4px 0 0; position: relative; transition: all 0.2s; }
-    .heat-bar:hover { background: var(--slate-600); }
-    .heat-bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: var(--slate-800); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; }
+    .content-card {
+        background: var(--bg-surface);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        margin-bottom: 24px;
+    }
+
+    .kpi-card {
+        background: var(--bg-surface);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: transform 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); }
+
+    .kpi-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .user-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 0;
+    }
+
+    .user-table th {
+        text-align: left;
+        padding: 16px 20px;
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 0.85rem;
+        background: var(--bg-surface-active);
+        border-bottom: 1px solid var(--border-color);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .user-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+        vertical-align: middle;
+        background: var(--bg-surface);
+        transition: background 0.15s;
+    }
+
+    .user-table tr:hover td {
+        background: var(--bg-surface-active);
+    }
+    
+    .user-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .stat-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .stat-title:hover { color: var(--primary); }
+
+    /* Filters Style */
+    .filter-bar {
+        background: var(--bg-surface);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    
+    .form-select {
+        padding: 10px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+    .form-select:hover { border-color: var(--primary); }
+
+    /* List Items */
+    .list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px dashed var(--border-color);
+        transition: background 0.1s;
+    }
+    .list-item:hover { background: var(--bg-surface-active); }
+    .list-item:last-child { border: none; }
+    
+    .metric-big { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+    .metric-sub { font-size: 12px; color: var(--text-secondary); background: var(--bg-body); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); margin-left: 6px; }
+
+    .heatmap { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 20px; border-bottom: 1px solid var(--border-color); }
+    .heat-bar { flex: 1; background: var(--slate-300); border-radius: 4px 4px 0 0; position: relative; transition: all 0.2s; }
+    .heat-bar:hover { background: var(--primary); }
+    .heat-bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-surface); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; z-index: 10; white-space: nowrap; }
+    
+    .btn-print {
+        background: var(--text-primary);
+        color: var(--bg-surface);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-print:hover { opacity: 0.9; }
 </style>
 
-<div class="container-fluid" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
 
      <!-- HEADER & FILTERS -->
-    <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid var(--slate-200); display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+    <div class="filter-bar">
         <div>
-            <h2 style="margin: 0; font-size: 20px; color: var(--slate-900);">Painel de Indicadores</h2>
-            <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--slate-500);">Análise Profunda: <strong><?= $titlePeriod ?></strong></p>
+            <h2 style="margin: 0; font-size: 1.25rem; color: var(--text-primary); font-weight: 700;">Painel de Indicadores</h2>
+            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">Análise Profunda: <strong><?= $titlePeriod ?></strong></p>
         </div>
         
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
             <form method="GET" style="display: flex; gap: 10px;">
-                <select name="period" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--slate-300);">
+                <select name="period" onchange="this.form.submit()" class="form-select">
                     <option value="month" <?= $period=='month'?'selected':'' ?>>Mensal</option>
                     <option value="year" <?= $period=='year'?'selected':'' ?>>Anual</option>
                 </select>
-                <select name="year" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--slate-300);">
+                <select name="year" onchange="this.form.submit()" class="form-select">
                     <?php for($y=2024; $y<=date('Y')+1; $y++): ?>
                     <option value="<?= $y ?>" <?= $year==$y?'selected':'' ?>><?= $y ?></option>
                     <?php endfor; ?>
                 </select>
                 <?php if($period=='month'): ?>
-                <select name="month" onchange="this.form.submit()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--slate-300);">
+                <select name="month" onchange="this.form.submit()" class="form-select">
                     <?php for($m=1; $m<=12; $m++): ?>
                     <option value="<?= $m ?>" <?= $month==$m?'selected':'' ?>><?= date('F', mktime(0,0,0,$m,1)) ?></option>
                     <?php endfor; ?>
                 </select>
                 <?php endif; ?>
             </form>
-             <button onclick="window.open('relatorios_gerais.php?print=true&period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>', '_blank')" style="background: var(--slate-900); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                <i data-lucide="printer" style="width: 16px; display:inline-block; vertical-align:middle; margin-right:5px"></i> Imprimir
+             <button onclick="window.open('relatorios_gerais.php?print=true&period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>', '_blank')" class="btn-print ripple">
+                <i data-lucide="printer" style="width: 16px;"></i> Imprimir
             </button>
+        </div>
     </div>
-</div>
 
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
@@ -1115,27 +1256,27 @@ renderAppHeader('Indicadores Avançados');
         </div>
 
         <!-- SEÇÃO 2: ANÁLISE DE REPERTÓRIO (EXPANDIDA) -->
-        <div class="stat-card" style="grid-column: 1 / -1;">
-            <div class="stat-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleSection('repertoire')">
+        <div class="content-card" style="grid-column: 1 / -1;">
+            <div class="stat-title" onclick="toggleSection('repertoire')">
                 <span>🎵 ANÁLISE DE REPERTÓRIO</span>
                 <i data-lucide="chevron-down" id="icon-repertoire" style="width: 20px;"></i>
             </div>
             <div id="section-repertoire">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 20px;">
                     
                     <!-- Top Músicas -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Top 10 Músicas</h5>
-                        <table style="width: 100%; font-size: 12px;">
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Top 10 Músicas</h5>
+                        <table class="user-table" style="font-size: 0.85rem;">
                             <tbody>
                             <?php foreach($topSongs as $idx => $s): ?>
-                                <tr style="border-bottom: 1px solid var(--slate-100);">
-                                    <td style="padding: 6px 0; color: var(--slate-400); font-weight: 700;">#<?= $idx+1 ?></td>
-                                    <td style="padding: 6px 0;">
-                                        <div style="font-weight: 600;"><?= $s['title'] ?></div>
-                                        <div style="font-size: 10px; color: var(--slate-400);"><?= $s['artist'] ?></div>
+                                <tr>
+                                    <td style="padding: 10px 0; color: var(--text-tertiary); font-weight: 700; width: 30px;">#<?= $idx+1 ?></td>
+                                    <td style="padding: 10px 0;">
+                                        <div style="font-weight: 600; color: var(--text-primary);"><?= $s['title'] ?></div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);"><?= $s['artist'] ?></div>
                                     </td>
-                                    <td style="text-align: right; padding: 6px 0; font-weight: 700;"><?= $s['qtd'] ?>x</td>
+                                    <td style="text-align: right; padding: 10px 0; font-weight: 700; color: var(--primary);"><?= $s['qtd'] ?>x</td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -1144,30 +1285,37 @@ renderAppHeader('Indicadores Avançados');
 
                     <!-- Rotação & BPM -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Rotação de Músicas</h5>
-                        <canvas id="chartSongRotation" style="max-height: 200px;"></canvas>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Rotação de Músicas</h5>
+                        <canvas id="chartSongRotation" style="max-height: 200px; width: 100%;"></canvas>
                         
                         <?php if($bpmStats && $bpmStats['bpm_medio']): ?>
-                        <div style="margin-top: 20px; padding: 12px; background: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd;">
-                            <div style="font-size: 11px; color: #0369a1; font-weight: 600; margin-bottom: 4px;">BPM Médio</div>
-                            <div style="font-size: 24px; font-weight: 800; color: #0c4a6e;"><?= round($bpmStats['bpm_medio']) ?></div>
-                            <div style="font-size: 10px; color: #0369a1;">Min: <?= $bpmStats['bpm_min'] ?> | Max: <?= $bpmStats['bpm_max'] ?></div>
+                        <div style="margin-top: 20px; padding: 16px; background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">BPM Médio</div>
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);"><?= round($bpmStats['bpm_medio']) ?></div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.75rem; color: var(--text-tertiary);">Min: <b><?= $bpmStats['bpm_min'] ?></b></div>
+                                <div style="font-size: 0.75rem; color: var(--text-tertiary);">Max: <b><?= $bpmStats['bpm_max'] ?></b></div>
+                            </div>
                         </div>
                         <?php endif; ?>
                     </div>
 
                     <!-- Artistas, Tons & Tags -->
                     <div>
-                        <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Top Artistas</h5>
-                        <?php foreach(array_slice($topArtists, 0, 5) as $a): ?>
-                        <div class="list-item">
-                            <span style="font-weight: 600; font-size: 13px;"><?= $a['artist'] ?></span>
-                            <span style="font-weight: 700;"><?= $a['qtd'] ?>x</span>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Top Artistas</h5>
+                        <div style="background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 24px;">
+                            <?php foreach(array_slice($topArtists, 0, 5) as $a): ?>
+                            <div class="list-item" style="padding: 10px 14px;">
+                                <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= $a['artist'] ?></span>
+                                <span style="font-weight: 700; color: var(--text-secondary);"><?= $a['qtd'] ?>x</span>
+                            </div>
+                            <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
 
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Tons Preferidos</h5>
-                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Tons Preferidos</h5>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px;">
                             <?php 
                             $toneMap = [
                                 'C' => 'C (Dó)', 'C#' => 'C# (Dó Sust.)', 'Db' => 'Db (Ré Bemol)',
@@ -1188,17 +1336,17 @@ renderAppHeader('Indicadores Avançados');
                             foreach($topTones as $t): 
                                 $displayTone = $toneMap[$t['tone']] ?? $t['tone'];
                             ?>
-                            <div style="background: var(--slate-100); border-radius: 6px; padding: 8px 12px; text-align: center;">
-                                <div style="font-weight: 800; color: var(--slate-700); font-size: 11px; white-space: nowrap;"><?= $displayTone ?></div>
-                                <div style="font-size: 10px; color: var(--slate-400);"><?= $t['qtd'] ?>x</div>
+                            <div style="background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                                <div style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; white-space: nowrap;"><?= $displayTone ?></div>
+                                <div style="font-size: 0.75rem; color: var(--text-tertiary);"><?= $t['qtd'] ?>x</div>
                             </div>
                             <?php endforeach; ?>
                         </div>
 
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Tags Mais Usadas</h5>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Tags Mais Usadas</h5>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <?php foreach($topTags as $t): ?>
-                            <span style="background: <?= $t['color'] ?>20; color: <?= $t['color'] ?>; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;">
+                            <span style="background: <?= $t['color'] ?>20; color: <?= $t['color'] ?>; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
                                 <?= $t['name'] ?> (<?= $t['qtd'] ?>)
                             </span>
                             <?php endforeach; ?>
