@@ -1227,31 +1227,40 @@ body.dark-mode .action-btn {
             Leitura de Hoje - Dia <?= $planDayIndex ?>
         </div>
         <div class="reading-subtitle">
-            <?= $planInfo['title'] ?> • <?= count($todayReadings) ?> passagens
+            <?= $planInfo['title'] ?>
         </div>
         <?php
-        // Calcular dias lidos e atraso
-        $daysRead = $totalDaysRead; // Já calculado anteriormente
-        $daysSinceStart = $daysPassed; // Já calculado anteriormente
-        $expectedDay = $planDayIndex; // Dia esperado baseado na data de início
-        $daysDelay = max(0, $expectedDay - $daysRead - 1);
+        // Calcular status do plano baseado na data de início
+        $daysRead = $totalDaysRead; // Total de dias que o usuário já leu
+        $daysSinceStart = $daysPassed; // Dias desde o início do plano
+        
+        // Dia esperado = quantos dias deveriam ter sido lidos desde o início
+        $expectedDay = max(1, $daysSinceStart + 1);
+        
+        // Calcular atraso: diferença entre o que deveria ter lido e o que realmente leu
+        $daysDelay = max(0, $expectedDay - $daysRead);
+        $isOnTrack = $daysRead >= $expectedDay;
         ?>
-        <div style="display: flex; gap: 1rem; margin-top: 0.75rem; font-size: 0.875rem;">
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.2); padding: 0.375rem 0.75rem; border-radius: 8px;">
-                <i data-lucide="check-circle" width="16"></i>
-                <span><strong><?= $daysRead ?></strong> dias lidos</span>
-            </div>
-            <?php if ($daysDelay > 0): ?>
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,193,7,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #f57c00;">
-                <i data-lucide="alert-circle" width="16"></i>
-                <span><strong><?= $daysDelay ?></strong> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</span>
-            </div>
-            <?php elseif ($daysRead >= $expectedDay): ?>
+        <div style="display: flex; gap: 1rem; margin-top: 0.75rem; font-size: 0.875rem; flex-wrap: wrap;">
+            <?php if ($isOnTrack): ?>
+            <!-- Em dia -->
             <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(76,175,80,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #2e7d32;">
-                <i data-lucide="trending-up" width="16"></i>
-                <span>Em dia!</span>
+                <i data-lucide="check-circle" width="16"></i>
+                <span><strong>Em dia!</strong> Você está acompanhando o plano</span>
+            </div>
+            <?php else: ?>
+            <!-- Atrasado -->
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,152,0,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #e65100;">
+                <i data-lucide="alert-circle" width="16"></i>
+                <span><strong><?= $daysDelay ?> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</strong></span>
             </div>
             <?php endif; ?>
+            
+            <!-- Informação adicional -->
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.2); padding: 0.375rem 0.75rem; border-radius: 8px;">
+                <i data-lucide="book-open" width="16"></i>
+                <span><?= $daysRead ?> de <?= $expectedDay ?> dias lidos</span>
+            </div>
         </div>
     </div>
 
