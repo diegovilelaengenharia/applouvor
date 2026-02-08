@@ -1276,6 +1276,19 @@ body.dark-mode .stat-card-compact {
     border-color: var(--slate-300);
 }
 
+.action-btn.notes-btn {
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+    color: white;
+    border-color: #D97706;
+}
+
+.action-btn.notes-btn:hover {
+    background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+    border-color: #B45309;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
 /* Diary Modal */
 .diary-modal {
     position: fixed;
@@ -1567,7 +1580,7 @@ body.dark-mode .action-btn {
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-        <button class="action-btn" onclick="openDiaryModal()">
+        <button class="action-btn notes-btn" onclick="openDiaryModal()">
             <i data-lucide="sticky-note" width="18"></i>
             Minhas Anotações
         </button>
