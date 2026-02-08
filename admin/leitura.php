@@ -631,7 +631,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 
 <!-- FRONTEND -->
 <script src="../assets/js/reading_plan_data.js?v=<?= time() ?>"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/lucide@latest?v=<?= time() ?>"></script>
 
 <style>
     /* ... (CSS preserved from original, added adjustments for 31 days columns if needed) ... */
