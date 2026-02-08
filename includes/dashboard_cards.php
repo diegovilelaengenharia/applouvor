@@ -12,7 +12,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#2563eb', // Blue 600
+            'color' => '#3b82f6', // Blue 500 (mais suave)
             'bg' => '#eff6ff', 
             'url' => 'escalas.php',
             'admin_only' => false
@@ -23,7 +23,7 @@ function getAllAvailableCards() {
             'icon' => 'music',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#7c3aed', // Purple 600
+            'color' => '#8b5cf6', // Purple 500 (mais suave)
             'bg' => '#f5f3ff', 
             'url' => 'repertorio.php',
             'admin_only' => false
@@ -34,7 +34,7 @@ function getAllAvailableCards() {
             'icon' => 'users',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#4f46e5', // Indigo 600
+            'color' => '#6366f1', // Indigo 500 (mais suave)
             'bg' => '#eef2ff', 
             'url' => 'membros.php',
             'admin_only' => false
@@ -46,7 +46,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar-days',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#059669', // Emerald 600
+            'color' => '#10b981', // Emerald 500 (mais suave)
             'bg' => '#ecfdf5', 
             'url' => 'agenda.php',
             'admin_only' => false
@@ -57,7 +57,7 @@ function getAllAvailableCards() {
             'icon' => 'calendar-x',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#dc2626', // Red 600
+            'color' => '#ef4444', // Red 500 (mais suave)
             'bg' => '#fef2f2', 
             'url' => 'indisponibilidade.php',
             'admin_only' => false
@@ -69,7 +69,7 @@ function getAllAvailableCards() {
             'icon' => 'history',
             'category' => 'gestao',
             'category_name' => 'Gestão',
-            'color' => '#475569', // Slate 600
+            'color' => '#64748b', // Slate 500 (mais suave)
             'bg' => '#f1f5f9', 
             'url' => 'historico.php',
             'admin_only' => false
@@ -82,7 +82,7 @@ function getAllAvailableCards() {
             'icon' => 'book-open',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#0d9488', // Teal 600
+            'color' => '#14b8a6', // Teal 500 (mais suave)
             'bg' => '#f0fdfa', 
             'url' => 'leitura.php',
             'admin_only' => false
@@ -93,7 +93,7 @@ function getAllAvailableCards() {
             'icon' => 'sunrise',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#ea580c', // Orange 600
+            'color' => '#f97316', // Orange 500 (mais suave)
             'bg' => '#ffedd5', 
             'url' => 'devocionais.php',
             'admin_only' => false
@@ -104,7 +104,7 @@ function getAllAvailableCards() {
             'icon' => 'heart',
             'category' => 'espirito',
             'category_name' => 'Espiritual',
-            'color' => '#db2777', // Pink 600
+            'color' => '#ec4899', // Pink 500 (mais suave)
             'bg' => '#fdf2f8', 
             'url' => 'devocionais.php?tab=prayer',
             'admin_only' => false
@@ -118,7 +118,7 @@ function getAllAvailableCards() {
             'icon' => 'bell',
             'category' => 'comunica',
             'category_name' => 'Comunicação',
-            'color' => '#d97706', // Amber 600
+            'color' => '#f59e0b', // Amber 500 (mais suave)
             'bg' => '#fffbeb', 
             'url' => 'avisos.php',
             'admin_only' => false
@@ -129,7 +129,7 @@ function getAllAvailableCards() {
             'icon' => 'cake',
             'category' => 'comunica',
             'category_name' => 'Comunicação',
-            'color' => '#d97706', // Amber 600 - mesma cor de Avisos
+            'color' => '#f59e0b', // Amber 500 (mais suave) - mesma cor de Avisos
             'bg' => '#fffbeb', 
             'url' => 'aniversarios.php',
             'admin_only' => false
