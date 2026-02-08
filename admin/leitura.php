@@ -684,6 +684,18 @@ $tab = $_GET['tab'] ?? 'dashboard';
 <?php if ($tab == 'dashboard'): ?>
 <!-- TAB CONTENT: DASHBOARD -->
 
+<style>
+/* Reduzir tamanho dos cards em 30% */
+.quick-access-grid .access-card {
+    transform: scale(0.85);
+    transform-origin: top center;
+    margin-bottom: -20px;
+}
+.quick-access-grid {
+    gap: 0.5rem !important;
+}
+</style>
+
 <div class="quick-access-grid" style="max-width: 1200px; margin: 0 auto; padding: 1.5rem;">
     
     <!-- Card: Sequência -->
