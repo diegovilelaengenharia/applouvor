@@ -12,21 +12,43 @@ $dotenv = new App\DotEnv(__DIR__ . '/..');
 $dotenv->load();
 
 // ======================================
-// CREDENCIAIS DO BANCO DE DADOS
+// DETECÇÃO DE AMBIENTE (PRODUÇÃO vs LOCAL)
 // ======================================
-// Agora usando variáveis de ambiente (.env)
-// Fallback para valores antigos se .env não existir
-define('DB_HOST', App\DotEnv::get('DB_HOST', 'srv1074.hstgr.io'));
-define('DB_NAME', App\DotEnv::get('DB_NAME', 'u884436813_applouvor'));
-define('DB_USER', App\DotEnv::get('DB_USER', 'u884436813_admin'));
-define('DB_PASS', App\DotEnv::get('DB_PASS', 'Diego@159753'));
+$isProduction = false;
+if (isset($_SERVER['HTTP_HOST']) && (
+    strpos($_SERVER['HTTP_HOST'], 'vilela.eng.br') !== false || 
+    strpos($_SERVER['HTTP_HOST'], 'applouvor.diegovilelaengenharia.com.br') !== false
+)) {
+    $isProduction = true;
+}
 
 // ======================================
-// CONFIGURAÇÕES DA APLICAÇÃO
+// CREDENCIAIS DO BANCO DE DADOS
 // ======================================
-define('APP_ENV', App\DotEnv::get('APP_ENV', 'production'));
-define('APP_DEBUG', App\DotEnv::get('APP_DEBUG', 'false') === 'true');
-define('APP_URL', App\DotEnv::get('APP_URL', 'https://applouvor.diegovilelaengenharia.com.br'));
+if ($isProduction) {
+    // FORÇA CREDENCIAIS DE PRODUÇÃO (Ignora .env local se existir no servidor)
+    define('DB_HOST', 'srv1074.hstgr.io');
+    define('DB_NAME', 'u884436813_applouvor');
+    define('DB_USER', 'u884436813_admin');
+    define('DB_PASS', 'Diego@159753');
+    
+    // Configurações de App
+    define('APP_ENV', 'production');
+    define('APP_DEBUG', false);
+    define('APP_URL', 'https://vilela.eng.br/applouvor');
+
+} else {
+    // AMBIENTE LOCAL (Usa .env ou defaults)
+    define('DB_HOST', App\DotEnv::get('DB_HOST', 'localhost'));
+    define('DB_NAME', App\DotEnv::get('DB_NAME', 'louvor_pib'));
+    define('DB_USER', App\DotEnv::get('DB_USER', 'root'));
+    define('DB_PASS', App\DotEnv::get('DB_PASS', ''));
+
+    // Configurações de App
+    define('APP_ENV', App\DotEnv::get('APP_ENV', 'local'));
+    define('APP_DEBUG', App\DotEnv::get('APP_DEBUG', 'true') === 'true');
+    define('APP_URL', App\DotEnv::get('APP_URL', 'http://localhost:8000'));
+}
 
 // ======================================
 // INFORMAÇÕES DA IGREJA
