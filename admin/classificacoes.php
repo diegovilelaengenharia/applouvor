@@ -226,8 +226,8 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
     }
 
     .btn-action-save {
-        background: var(--primary);
-        color: white;
+        background: var(--primary, #10b981) !important;
+        color: white !important;
         border: none;
         padding: 12px 20px;
         border-radius: 10px;
