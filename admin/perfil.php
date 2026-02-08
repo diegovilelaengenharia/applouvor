@@ -378,26 +378,27 @@ renderPageHeader($page_title, $page_subtitle);
 .section-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
     border-bottom: 2px solid #f3f4f6;
-
     text-align: left;
     justify-content: flex-start;
 }
 
 .section-icon {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     color: var(--primary);
 }
 
 .section-title {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     color: #111827;
     text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .form-field {
