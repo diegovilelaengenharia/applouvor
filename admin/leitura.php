@@ -590,13 +590,39 @@ $motivationalMessages = [
 $currentMessage = $motivationalMessages[0];
 foreach($motivationalMessages as $t => $msg) if($completionPercent >= $t) $currentMessage = $msg;
 
-// Render View
-// Render View
-renderAppHeader('Leitura B├¡blica'); 
+// --- LOAD PLAN DATA FOR DISPLAY ---
+$planType = $selectedPlanType ?? 'navigators';
+$planDayIndex = isset($_GET['day']) ? (int)$_GET['day'] : 1;
 
+// Load today's readings from reading_plan_data.js logic
+// For now, use placeholder data
+$todayReadings = [];
 
+// Simple reading plan data (placeholder - should match reading_plan_data.js)
+$planData = [
+    'navigators' => [
+        1 => [
+            ['reference' => 'Gênesis 1-2'],
+            ['reference' => 'Mateus 1:1-17'],
+            ['reference' => 'Salmos 1'],
+            ['reference' => 'Atos 1:1-11']
+        ]
+    ]
+];
 
+if (isset($planData[$planType][$planDayIndex])) {
+    $todayReadings = $planData[$planType][$planDayIndex];
+    
+    // Check completion status
+    foreach ($todayReadings as &$reading) {
+        $stmt = $pdo->prepare("SELECT completed_at FROM reading_progress WHERE user_id = ? AND reference = ? AND DATE(completed_at) = CURDATE()");
+        $stmt->execute([$userId, $reading['reference']]);
+        $reading['completed_at'] = $stmt->fetchColumn();
+    }
+}
 
+// --- RENDER PAGE ---
+renderAppHeader('Plano de Leitura');
 renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 ?>
 
