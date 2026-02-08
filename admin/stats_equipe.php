@@ -37,6 +37,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+<style>
     .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -209,6 +210,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
             text-align: left;
         }
     }
+</style>
 
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
 
