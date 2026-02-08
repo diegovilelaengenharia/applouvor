@@ -23,13 +23,8 @@ class DotEnv
         $envFile = $this->path . '/.env';
         
         if (!file_exists($envFile)) {
-            // Se não existe .env, tenta usar .env.example como fallback
-            $envFile = $this->path . '/.env.example';
-            
-            if (!file_exists($envFile)) {
-                // Nenhum arquivo encontrado, continua sem carregar
-                return;
-            }
+            // Se não existe .env, não faz nada (usa fallback do config.php)
+            return;
         }
         
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
