@@ -527,12 +527,7 @@ function renderAppHeader($title, $backUrl = null)
                             <i data-lucide="crown"></i>
                         </a>
                     <?php endif; ?>
-                    <!-- Leitura Config Button (Leitura Only) -->
-                    <?php if (strpos($_SERVER['PHP_SELF'], 'leitura.php') !== false): ?>
-                        <button onclick="openConfig()" class="config-btn">
-                            <i data-lucide="settings" style="width: 20px;"></i>
-                        </button>
-                    <?php endif; ?>
+                    
 
                     <!-- Mobile Profile Avatar -->
                     <div style="position: relative;">
