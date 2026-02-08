@@ -1,57 +1,42 @@
 // Reading Tab Interactive Functionality
 // admin/leitura.php - Button interactions
 
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
+
     // 1. Checkbox functionality - Mark passage as read
     document.querySelectorAll('.passage-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+        checkbox.addEventListener('change', function () {
             const card = this.closest('.passage-card');
-            const progressBar = card.querySelector('.progress-bar-fill');
-            const progressText = card.querySelector('.progress-text');
             const primaryBtn = card.querySelector('.btn-passage-primary');
-            
+
             if (this.checked) {
                 // Mark as complete
                 card.classList.remove('status-unread');
                 card.classList.add('status-complete');
-                progressBar.style.width = '100%';
-                progressText.textContent = '100% lido';
                 primaryBtn.innerHTML = '<i data-lucide="book-open" width="16"></i> Reler';
-                
+
                 // Show success toast
                 showToast('✅ Passagem marcada como lida!');
             } else {
                 // Mark as unread
                 card.classList.remove('status-complete');
                 card.classList.add('status-unread');
-                progressBar.style.width = '0%';
-                progressText.textContent = '0% lido';
                 primaryBtn.innerHTML = '<i data-lucide="book-open" width="16"></i> Começar Leitura';
             }
-            
+
             // Reinitialize Lucide icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
         });
     });
-    
+
     // 2. Primary button - Open reading modal
     document.querySelectorAll('.btn-passage-primary').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const card = this.closest('.passage-card');
             const reference = card.querySelector('.passage-title').textContent;
             openReadingModal(reference);
-        });
-    });
-    
-    // 3. Secondary button - Open note modal
-    document.querySelectorAll('.btn-passage-secondary').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const card = this.closest('.passage-card');
-            const reference = card.querySelector('.passage-title').textContent;
-            openNoteModal(reference);
         });
     });
 });
@@ -88,14 +73,14 @@ function openReadingModal(reference) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     // Initialize icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
-    
+
     // Add styles if not exists
     if (!document.getElementById('reading-modal-styles')) {
         const styles = document.createElement('style');
@@ -216,9 +201,9 @@ function openNoteModal(reference) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
-    
+
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
@@ -235,7 +220,7 @@ function markAsRead(reference) {
             checkbox.dispatchEvent(new Event('change'));
         }
     });
-    
+
     // Close modal
     document.querySelector('.reading-modal-overlay').remove();
 }
@@ -243,15 +228,15 @@ function markAsRead(reference) {
 function saveNote(reference, btn) {
     const textarea = btn.closest('.reading-modal').querySelector('textarea');
     const note = textarea.value.trim();
-    
+
     if (!note) {
         alert('Por favor, escreva uma anotação antes de salvar.');
         return;
     }
-    
+
     // TODO: Save to database
     console.log('Saving note for', reference, ':', note);
-    
+
     showToast('💾 Anotação salva com sucesso!');
     btn.closest('.reading-modal-overlay').remove();
 }
@@ -275,9 +260,9 @@ function showToast(message) {
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         animation: slideDown 0.3s ease;
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.style.animation = 'slideUp 0.3s ease';
         setTimeout(() => toast.remove(), 300);

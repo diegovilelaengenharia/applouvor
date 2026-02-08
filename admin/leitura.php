@@ -1021,9 +1021,8 @@ body.dark-mode .stat-card-compact {
 
 .passage-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.75rem;
-    margin-bottom: 0.75rem;
 }
 
 .passage-checkbox {
@@ -1033,59 +1032,18 @@ body.dark-mode .stat-card-compact {
     border: 2px solid #d1d5db;
     cursor: pointer;
     flex-shrink: 0;
-    margin-top: 2px;
     accent-color: #16a34a;
 }
 
-.passage-info {
-    flex: 1;
-}
-
 .passage-title {
+    flex: 1;
     font-size: 1rem;
     font-weight: 700;
     color: var(--slate-800);
-    margin-bottom: 0.25rem;
-}
-
-.passage-description {
-    font-size: 0.875rem;
-    color: var(--slate-600);
-}
-
-.passage-progress {
-    margin-bottom: 0.75rem;
-}
-
-.progress-bar-container {
-    background: #e5e7eb;
-    height: 6px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 0.375rem;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
-    border-radius: 10px;
-    transition: width 0.3s ease;
-}
-
-.progress-text {
-    font-size: 0.75rem;
-    color: var(--slate-500);
-    font-weight: 600;
-}
-
-.passage-actions {
-    display: flex;
-    gap: 0.5rem;
 }
 
 .btn-passage {
-    flex: 1;
-    padding: 0.625rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     font-size: 0.875rem;
     font-weight: 600;
@@ -1094,8 +1052,9 @@ body.dark-mode .stat-card-compact {
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.375rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn-passage-primary {
@@ -1105,16 +1064,6 @@ body.dark-mode .stat-card-compact {
 
 .btn-passage-primary:hover {
     background: #15803d;
-}
-
-.btn-passage-secondary {
-    background: var(--slate-100);
-    color: var(--slate-700);
-    border: 1px solid var(--slate-200);
-}
-
-.btn-passage-secondary:hover {
-    background: var(--slate-200);
 }
 
 /* Quick Actions */
@@ -1174,12 +1123,16 @@ body.dark-mode .stat-card-compact {
     }
     
     .passage-card {
-        padding: 0.875rem;
+        padding: 0.75rem;
     }
     
     .btn-passage {
         font-size: 0.8125rem;
         padding: 0.5rem 0.75rem;
+    }
+    
+    .btn-passage span {
+        display: none;
     }
 }
 
@@ -1222,45 +1175,14 @@ body.dark-mode .action-btn {
         <?php foreach ($todayReadings as $index => $reading): 
             $isComplete = !empty($reading['completed_at']);
             $status = $isComplete ? 'complete' : 'unread';
-            $progress = $isComplete ? 100 : 0;
         ?>
         <div class="passage-card status-<?= $status ?>">
             <div class="passage-header">
                 <input type="checkbox" class="passage-checkbox" <?= $isComplete ? 'checked' : '' ?>>
-                <div class="passage-info">
-                    <div class="passage-title"><?= htmlspecialchars($reading['reference']) ?></div>
-                    <div class="passage-description">
-                        <?php
-                        // Simple description based on book
-                        $book = explode(' ', $reading['reference'])[0];
-                        $descriptions = [
-                            'Gênesis' => 'O livro dos começos',
-                            'Mateus' => 'O Evangelho do Reino',
-                            'Salmos' => 'Louvor e adoração',
-                            'Provérbios' => 'Sabedoria prática',
-                            'Atos' => 'A igreja primitiva'
-                        ];
-                        echo $descriptions[$book] ?? 'Leitura bíblica';
-                        ?>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="passage-progress">
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: <?= $progress ?>%"></div>
-                </div>
-                <div class="progress-text"><?= $progress ?>% lido</div>
-            </div>
-            
-            <div class="passage-actions">
+                <div class="passage-title"><?= htmlspecialchars($reading['reference']) ?></div>
                 <button class="btn-passage btn-passage-primary">
                     <i data-lucide="book-open" width="16"></i>
                     <?= $isComplete ? 'Reler' : 'Começar Leitura' ?>
-                </button>
-                <button class="btn-passage btn-passage-secondary">
-                    <i data-lucide="pencil" width="16"></i>
-                    Anotar
                 </button>
             </div>
         </div>
