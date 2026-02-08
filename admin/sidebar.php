@@ -539,11 +539,11 @@ if (!empty($currentUser['avatar'])) {
 
     /* Botão Especial Reunião */
     .nav-item.nav-meeting {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         color: white;
         margin: 8px 0;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         position: relative;
         overflow: hidden;
     }
@@ -555,7 +555,7 @@ if (!empty($currentUser['avatar'])) {
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
         transition: left 0.5s;
     }
 
@@ -565,14 +565,14 @@ if (!empty($currentUser['avatar'])) {
 
     .nav-item.nav-meeting:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        border-color: rgba(255, 255, 255, 0.5);
     }
 
     .nav-item.nav-meeting.active {
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 6px 24px rgba(245, 158, 11, 0.7);
         transform: scale(1.02);
-        border-color: rgba(255, 255, 255, 0.4);
+        border-color: rgba(255, 255, 255, 0.6);
     }
 
     .nav-item.nav-meeting svg {
@@ -582,14 +582,18 @@ if (!empty($currentUser['avatar'])) {
 
     .meeting-badge {
         animation: pulse 2s ease-in-out infinite;
+        background: rgba(255,255,255,0.3) !important;
+        font-weight: 800 !important;
     }
 
     @keyframes pulse {
         0%, 100% {
             opacity: 1;
+            transform: scale(1);
         }
         50% {
-            opacity: 0.7;
+            opacity: 0.8;
+            transform: scale(1.05);
         }
     }
 

@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             overflow: hidden;
             height: 100vh;
         }
@@ -76,7 +76,7 @@
         .slide-title {
             font-size: 3.5rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -86,7 +86,7 @@
         }
 
         .slide-subtitle {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             color: #64748b;
             text-align: center;
             margin-bottom: 40px;
@@ -94,7 +94,7 @@
         }
 
         .slide-text {
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             color: #475569;
             line-height: 1.8;
             margin-bottom: 20px;
@@ -119,8 +119,8 @@
 
         .pilar-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
-            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
         }
 
         .pilar-icon {
@@ -165,9 +165,9 @@
         }
 
         .feature-icon {
-            font-size: 1.8rem;
-            color: #667eea;
-            min-width: 40px;
+            font-size: 2.2rem;
+            color: #3b82f6;
+            min-width: 50px;
         }
 
         .feature-text {
@@ -175,14 +175,14 @@
         }
 
         .feature-title {
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 5px;
         }
 
         .feature-desc {
-            font-size: 1rem;
+            font-size: 1.3rem;
             color: #64748b;
             line-height: 1.5;
         }
@@ -196,23 +196,23 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             border-radius: 20px;
             padding: 40px;
             text-align: center;
             color: white;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
         }
 
         .stat-number {
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             font-weight: 900;
             margin-bottom: 10px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .stat-label {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: 600;
             opacity: 0.95;
         }
@@ -235,7 +235,7 @@
         }
 
         .tech-item:hover {
-            border-color: #667eea;
+            border-color: #3b82f6;
             transform: scale(1.05);
         }
 
@@ -272,7 +272,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            color: #667eea;
+            color: #3b82f6;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: all 0.3s;
         }
@@ -292,7 +292,8 @@
             padding: 15px 30px;
             border-radius: 30px;
             font-weight: 700;
-            color: #667eea;
+            font-size: 1.2rem;
+            color: #3b82f6;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
@@ -301,8 +302,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 6px;
+            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
             transition: width 0.3s;
             z-index: 1000;
         }
@@ -330,7 +331,7 @@
         }
 
         .custom-list li {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: #475569;
             padding: 15px 0;
             padding-left: 40px;
@@ -376,18 +377,18 @@
         }
 
         .cover-icon {
-            font-size: 8rem;
+            font-size: 10rem;
             margin-bottom: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .cover-title {
-            font-size: 5rem;
+            font-size: 6rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
