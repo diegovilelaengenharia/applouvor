@@ -1229,7 +1229,32 @@ body.dark-mode .action-btn {
         <div class="reading-subtitle">
             <?= $planInfo['title'] ?> • <?= count($todayReadings) ?> passagens
         </div>
+        <?php
+        // Calcular dias lidos e atraso
+        $daysRead = $totalDaysRead; // Já calculado anteriormente
+        $daysSinceStart = $daysPassed; // Já calculado anteriormente
+        $expectedDay = $planDayIndex; // Dia esperado baseado na data de início
+        $daysDelay = max(0, $expectedDay - $daysRead - 1);
+        ?>
+        <div style="display: flex; gap: 1rem; margin-top: 0.75rem; font-size: 0.875rem;">
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,255,255,0.2); padding: 0.375rem 0.75rem; border-radius: 8px;">
+                <i data-lucide="check-circle" width="16"></i>
+                <span><strong><?= $daysRead ?></strong> dias lidos</span>
+            </div>
+            <?php if ($daysDelay > 0): ?>
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,193,7,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #f57c00;">
+                <i data-lucide="alert-circle" width="16"></i>
+                <span><strong><?= $daysDelay ?></strong> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</span>
+            </div>
+            <?php elseif ($daysRead >= $expectedDay): ?>
+            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(76,175,80,0.3); padding: 0.375rem 0.75rem; border-radius: 8px; color: #2e7d32;">
+                <i data-lucide="trending-up" width="16"></i>
+                <span>Em dia!</span>
+            </div>
+            <?php endif; ?>
+        </div>
     </div>
+
 
     <!-- Day Navigator -->
     <div class="day-navigator">
