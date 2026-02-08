@@ -661,9 +661,20 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     .btn-blue-light:hover { background: var(--slate-100); border-color: #93c5fd; }
 </style>
 
+<!-- TAB NAVIGATION -->
+<div class="tab-navigation">
+    <button class="tab-btn active" onclick="switchReadingTab('dashboard')" id="btn-tab-dashboard">
+        📊 Dashboard
+    </button>
+    <button class="tab-btn" onclick="switchReadingTab('reading')" id="btn-tab-reading">
+        📖 Leitura
+    </button>
+</div>
 
-
+<!-- TAB CONTENT: DASHBOARD -->
+<div id="tab-dashboard" class="tab-content-reading active">
 <!-- DASHBOARD PREMIUM -->
+
 <div class="dashboard-container">
     <!-- Greeting Header -->
     <div class="greeting-header">
@@ -756,6 +767,10 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
         </div>
     </div>
 </div>
+</div> <!-- End dashboard tab -->
+
+<!-- TAB CONTENT: READING -->
+<div id="tab-reading" class="tab-content-reading">
 
 <!-- CALENDAR STRIP -->
 
@@ -781,8 +796,10 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     
     <div id="verses-list"></div>
 </div>
+</div> <!-- End reading tab -->
 
 <!-- BOTTOM BAR -->
+
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
     <button class="action-btn btn-orange-light" onclick="openNoteModal()">
@@ -2187,5 +2204,22 @@ function resetPlan() {
         const f = new FormData(); f.append('action', 'reset_plan');
         fetch('leitura.php', { method:'POST', body:f }).then(()=>window.location.reload());
     }
+}
+
+// Tab Switching for Reading Page
+function switchReadingTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content-reading').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Remove active from all buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    document.getElementById('tab-' + tabName).classList.add('active');
+    document.getElementById('btn-tab-' + tabName).classList.add('active');
 }
 </script>
