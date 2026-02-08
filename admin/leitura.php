@@ -1247,16 +1247,23 @@ body.dark-mode .action-btn {
         $isOnTrack = ($daysDelay == 0);
         ?>
         
-        <?php if (!$isOnTrack): ?>
         <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
-            <!-- Atrasado -->
-            <div style="display: flex; align-items: center; gap: 0.375rem; background: rgba(255,152,0,0.3); padding: 0.5rem 0.875rem; border-radius: 8px; color: #e65100; font-size: 0.875rem; white-space: nowrap;">
-                <i data-lucide="alert-circle" width="16"></i>
-                <span><strong><?= $daysDelay ?> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</strong></span>
+            <?php if ($isOnTrack): ?>
+            <!-- Em dia - Verde -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 0.625rem 1rem; border-radius: 10px; color: white; font-size: 0.875rem; font-weight: 600; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); white-space: nowrap;">
+                <i data-lucide="check-circle-2" width="18"></i>
+                <span>Em dia com o plano!</span>
             </div>
+            <?php else: ?>
+            <!-- Atrasado - Laranja -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 0.625rem 1rem; border-radius: 10px; color: white; font-size: 0.875rem; font-weight: 600; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3); white-space: nowrap;">
+                <i data-lucide="alert-circle" width="18"></i>
+                <span><?= $daysDelay ?> dia<?= $daysDelay > 1 ? 's' : '' ?> de atraso</span>
+            </div>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
     </div>
+
 
 
 
