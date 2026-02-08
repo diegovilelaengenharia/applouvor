@@ -475,7 +475,7 @@
 
     <div class="presentation-wrapper">
         <div class="progress-bar" id="progressBar"></div>
-        <div class="slide-counter" id="slideCounter">1 / 26</div>
+        <div class="slide-counter" id="slideCounter">1 / 25</div>
 
         <!-- PARTE 1: ALINHAMENTO ESPIRITUAL -->
 
@@ -561,22 +561,6 @@
             </div>
         </div>
 
-        <!-- Slide 5.5: Os 3 Pilares do Altar (IMAGEM) -->
-        <div class="slide">
-            <div class="slide-content">
-                <span class="pill orange">FUNDAMENTOS</span>
-                <h2>Os 3 Pilares do Altar</h2>
-                <p class="subtitle">Fundamentos para o Ministério de Louvor</p>
-                <div style="margin-top: 60px; display: flex; justify-content: center; align-items: center;">
-                    <img src="https://i.postimg.cc/nrYLJnYL/image.png" 
-                         alt="Os 3 Pilares do Altar" 
-                         style="max-width: 90%; max-height: 600px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
-                </div>
-                <p style="margin-top: 40px; font-size: 1.25rem; color: var(--gray-400); font-style: italic;">
-                    A Chama Contínua • Reflexão Musical • Teologia da Adoração
-                </p>
-            </div>
-        </div>
 
         <!-- Slide 6: Propostas 2026 -->
         <div class="slide divider-slide">
