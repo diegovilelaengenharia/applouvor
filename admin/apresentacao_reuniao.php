@@ -937,14 +937,10 @@ header("Expires: 0"); // Proxies.
             <div class="slide-content">
                 <span class="pill blue">BASTIDORES</span>
                 <h2>Números Impressionantes</h2>
-                <div class="stats-grid">
+                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
                     <div class="stat-box">
                         <div class="stat-number">50k+</div>
                         <div class="stat-label">Linhas de Código</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number" style="background: var(--gradient-green); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">600h</div>
-                        <div class="stat-label">Horas de Trabalho</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-number" style="background: var(--gradient-orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">25+</div>
@@ -965,18 +961,6 @@ header("Expires: 0"); // Proxies.
                 <span class="pill green">IMPACTO</span>
                 <h2>Resultados Alcançados</h2>
                 <div class="grid-2" style="margin-top: 60px;">
-                    <div class="card">
-                        <i class="fas fa-clock card-icon blue"></i>
-                        <h3>Economia de Tempo</h3>
-                        <p style="font-size: 2rem; color: var(--blue); font-weight: 700; margin: 20px 0;">85%</p>
-                        <p>De 2-3 horas para 15 minutos na montagem de escalas</p>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-dollar-sign card-icon green"></i>
-                        <h3>Custo-Benefício</h3>
-                        <p style="font-size: 2rem; color: var(--green); font-weight: 700; margin: 20px 0;">90%</p>
-                        <p>Economia vs. alternativas do mercado (R$ 30 vs R$ 300+)</p>
-                    </div>
                     <div class="card">
                         <i class="fas fa-chart-line card-icon orange"></i>
                         <h3>Engajamento</h3>
