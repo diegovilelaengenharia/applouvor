@@ -1362,8 +1362,8 @@ body.dark-mode .stat-card-compact {
 
 .diary-modal-header {
     padding: 1.75rem 2rem;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-bottom: 2px solid #f59e0b;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-bottom: 1px solid #e5e7eb;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1829,9 +1829,11 @@ body.dark-mode .action-btn {
     <div class="diary-modal-overlay" onclick="closeDiaryModal()"></div>
     <div class="diary-modal-content">
         <div class="diary-modal-header">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <i data-lucide="sticky-note" width="24" style="color: #3b82f6;"></i>
-                <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b;">Minhas Anotações</h2>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #D97706 0%, #B45309 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="sticky-note" width="20" style="color: white;"></i>
+                </div>
+                <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b; font-weight: 700;">Minhas Anotações</h2>
             </div>
             <button class="diary-close-btn" onclick="closeDiaryModal()">
                 <i data-lucide="x" width="24"></i>
