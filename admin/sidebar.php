@@ -173,7 +173,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <!-- Botão Especial: Reunião 08/02 -->
-        <a href="<?= $baseAdmin ?>apresentacao_2026.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'apresentacao_2026.php' ? 'active' : '' ?>">
+        <a href="<?= $baseAdmin ?>reuniao_fev_2026.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'reuniao_fev_2026.php' ? 'active' : '' ?>">
             <div style="position: relative; display: flex; align-items: center; gap: 12px; width: 100%;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
