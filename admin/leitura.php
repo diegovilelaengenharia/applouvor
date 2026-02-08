@@ -1355,9 +1355,9 @@ body.dark-mode .stat-card-compact {
 }
 
 .diary-modal-header {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border-bottom: 1px solid #e5e7eb;
+    padding: 1.75rem 2rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-bottom: 2px solid #f59e0b;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1382,21 +1382,34 @@ body.dark-mode .stat-card-compact {
 }
 
 .diary-modal-body {
-    padding: 1.5rem;
-    max-height: calc(85vh - 100px);
+    padding: 2rem;
+    max-height: calc(85vh - 120px);
     overflow-y: auto;
 }
 
+.diary-save-status {
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
 .diary-field {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.diary-field:last-of-type {
+    margin-bottom: 0;
 }
 
 .diary-field label {
     display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #475569;
-    margin-bottom: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.625rem;
+    letter-spacing: -0.01em;
 }
 
 .diary-input,
@@ -1427,20 +1440,23 @@ body.dark-mode .stat-card-compact {
 .diary-actions {
     display: flex;
     gap: 0.75rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
 }
 
 .diary-btn {
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.5rem;
     border-radius: 10px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.9375rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
     border: none;
+    letter-spacing: -0.01em;
 }
 
 .diary-btn.primary {
