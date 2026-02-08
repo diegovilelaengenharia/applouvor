@@ -1276,26 +1276,54 @@ body.dark-mode .stat-card-compact {
     border-color: var(--slate-300);
 }
 
-/* Diary Section */
-.diary-section {
-    margin-top: 1.5rem;
-    animation: slideDown 0.3s ease;
+/* Diary Modal */
+.diary-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
 }
 
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.diary-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.diary-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.diary-card {
-    background: white;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
-}
-
-.diary-header {
-    padding: 1.25rem;
+.diary-modal-header {
+    padding: 1.5rem;
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     border-bottom: 1px solid #e5e7eb;
     display: flex;
@@ -1303,16 +1331,28 @@ body.dark-mode .stat-card-compact {
     align-items: center;
 }
 
-.diary-save-status {
-    font-size: 0.875rem;
+.diary-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
     color: #64748b;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 0.375rem;
+    justify-content: center;
 }
 
-.diary-content {
+.diary-close-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+
+.diary-modal-body {
     padding: 1.5rem;
+    max-height: calc(85vh - 100px);
+    overflow-y: auto;
 }
 
 .diary-field {
@@ -1527,9 +1567,9 @@ body.dark-mode .action-btn {
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-        <button class="action-btn" onclick="toggleDiarySection()">
-            <i data-lucide="book-text" width="18"></i>
-            Meu Diário
+        <button class="action-btn" onclick="openDiaryModal()">
+            <i data-lucide="sticky-note" width="18"></i>
+            Minhas Anotações
         </button>
         <button class="action-btn" onclick="markAllAsRead(<?= $planDayIndex ?>)">
             <i data-lucide="check-circle" width="18"></i>
@@ -1537,18 +1577,24 @@ body.dark-mode .action-btn {
         </button>
     </div>
 
-    <!-- Diary Section -->
-    <div id="diary-section" class="diary-section" style="display: none;">
-        <div class="diary-card">
-            <div class="diary-header">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-lucide="pen-line" width="20" style="color: #3b82f6;"></i>
-                    <h3 style="margin: 0; font-size: 1.125rem; color: #1e293b;">Minhas Anotações</h3>
-                </div>
+<!-- Diary Modal -->
+<div id="diary-modal" class="diary-modal" style="display: none;">
+    <div class="diary-modal-overlay" onclick="closeDiaryModal()"></div>
+    <div class="diary-modal-content">
+        <div class="diary-modal-header">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="sticky-note" width="24" style="color: #3b82f6;"></i>
+                <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b;">Minhas Anotações</h2>
+            </div>
+            <button class="diary-close-btn" onclick="closeDiaryModal()">
+                <i data-lucide="x" width="24"></i>
+            </button>
+        </div>
+        
+        <div class="diary-modal-body">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <span id="diary-save-status" class="diary-save-status"></span>
             </div>
-            
-            <div class="diary-content">
                 <div class="diary-field">
                     <label for="diary-title">Título da Reflexão</label>
                     <input 
@@ -1584,6 +1630,7 @@ body.dark-mode .action-btn {
             </div>
         </div>
     </div>
+</div>
 
 </div>
 
@@ -1678,17 +1725,21 @@ function markAllAsRead(day) {
 let diaryDebounceTimer;
 const currentDay = <?= $planDayIndex ?>;
 
-function toggleDiarySection() {
-    const section = document.getElementById('diary-section');
-    if (section.style.display === 'none') {
-        section.style.display = 'block';
-        // Reinicializar ícones Lucide
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    } else {
-        section.style.display = 'none';
+function openDiaryModal() {
+    const modal = document.getElementById('diary-modal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevenir scroll do body
+    
+    // Reinicializar ícones Lucide
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
+}
+
+function closeDiaryModal() {
+    const modal = document.getElementById('diary-modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = ''; // Restaurar scroll
 }
 
 function debounceSaveDiary() {
