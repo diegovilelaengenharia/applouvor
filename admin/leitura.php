@@ -661,116 +661,110 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     .btn-blue-light:hover { background: var(--slate-100); border-color: #93c5fd; }
 </style>
 
-<!-- TAB NAVIGATION -->
-<div class="tab-navigation">
-    <button class="tab-btn active" onclick="switchReadingTab('dashboard')" id="btn-tab-dashboard">
-        📊 Dashboard
-    </button>
-    <button class="tab-btn" onclick="switchReadingTab('reading')" id="btn-tab-reading">
-        📖 Texto Bíblico
-    </button>
+<?php
+// Tab parameter
+$tab = $_GET['tab'] ?? 'dashboard';
+?>
+
+<!-- Tabs Navegação (Padrão Repertório) -->
+<div class="repertorio-controls">
+    <div class="tabs-container">
+        <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
+        <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
+    </div>
 </div>
 
+<?php if ($tab == 'dashboard'): ?>
+<?php if ($tab == 'dashboard'): ?>
 <!-- TAB CONTENT: DASHBOARD -->
-<div id="tab-dashboard" class="tab-content-reading active">
-<!-- DASHBOARD PREMIUM -->
 
-<div class="dashboard-container">
-    <!-- Greeting Header -->
-    <div class="greeting-header">
-        <div class="greeting-text">
-            <span class="greeting-time">
-                <?php 
-                $hour = (int)date('H');
-                if ($hour < 12) echo '☀️ Bom dia';
-                elseif ($hour < 18) echo '🌤️ Boa tarde';
-                else echo '🌙 Boa noite';
-                ?>, <?= explode(' ', $userName)[0] ?>!
-            </span>
-            <span class="greeting-subtitle">Que sua leitura seja abençoada</span>
-        </div>
-    </div>
-
-    <!-- HERO: Streak Card -->
-    <div class="streak-card-hero">
-        <div class="streak-icon">
-            <span class="fire-emoji">🔥</span>
-        </div>
-        <div class="streak-content">
-            <div class="streak-label">SEQUÊNCIA ATIVA</div>
-            <div class="streak-number"><?= $currentStreak ?></div>
-            <div class="streak-text">dias consecutivos</div>
-            
-            <?php 
-            $nextMilestone = 30;
-            if ($currentStreak >= 30) $nextMilestone = 100;
-            if ($currentStreak >= 100) $nextMilestone = 365;
-            $progressToNext = min(100, ($currentStreak / $nextMilestone) * 100);
-            ?>
-            
-            <div class="streak-progress-bar">
-                <div class="streak-progress-fill" style="width: <?= $progressToNext ?>%"></div>
+<div class="quick-access-grid" style="max-width: 1200px; margin: 0 auto; padding: 1.5rem;">
+    
+    <!-- Card: Sequência -->
+    <a href="#" class="access-card card-green">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="flame" width="22"></i>
             </div>
-            <div class="streak-next-goal">
-                <?php if ($currentStreak < $nextMilestone): ?>
-                    Próxima meta: 🏆 <?= $nextMilestone ?> dias
-                <?php else: ?>
-                    🎉 Meta alcançada! Continue assim!
-                <?php endif; ?>
+            <h3 class="card-title">Sequência</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $currentStreak ?></div>
+                    <div class="highlight-subtitle">dias consecutivos</div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Mini Stats Grid (2x2) -->
-    <div class="stats-grid">
-        <!-- Capítulos Lidos -->
-        <div class="stat-card">
-            <div class="stat-icon">📚</div>
-            <div class="stat-value"><?= $totalChaptersRead ?></div>
-            <div class="stat-label">capítulos</div>
+        <div class="card-footer-row">
+            <span class="footer-text">Continue lendo!</span>
         </div>
+    </a>
 
-        <!-- Tempo Médio -->
-        <div class="stat-card">
-            <div class="stat-icon">⏱️</div>
-            <div class="stat-value"><?= $avgChapters ?>min</div>
-            <div class="stat-label">média</div>
-        </div>
-
-        <!-- Progresso Anual -->
-        <div class="stat-card">
-            <div class="stat-icon">🎯</div>
-            <div class="stat-value"><?= $completionPercent ?>%</div>
-            <div class="stat-label">do ano</div>
-        </div>
-
-        <!-- Nível -->
-        <div class="stat-card">
-            <div class="stat-icon">🏅</div>
-            <?php 
-            $level = min(20, floor($totalDaysRead / 15) + 1);
-            $levelProgress = ($totalDaysRead % 15) / 15 * 100;
-            ?>
-            <div class="stat-value">Nv.<?= $level ?></div>
-            <div class="stat-progress">
-                <div class="stat-progress-fill" style="width: <?= $levelProgress ?>%"></div>
+    <!-- Card: Capítulos Lidos -->
+    <a href="#" class="access-card card-cyan">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="book-open" width="22"></i>
+            </div>
+            <h3 class="card-title">Capítulos</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $totalChaptersRead ?></div>
+                    <div class="highlight-subtitle">lidos este ano</div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Motivational Message -->
-    <div class="motivational-card">
-        <div class="motivational-icon">💡</div>
-        <div class="motivational-text">
-            <div class="motivational-quote">"A tua palavra é lâmpada para os meus pés e luz para o meu caminho."</div>
-            <div class="motivational-ref">- Salmos 119:105</div>
+        <div class="card-footer-row">
+            <span class="footer-text">Progresso anual</span>
         </div>
-    </div>
+    </a>
+
+    <!-- Card: Progresso -->
+    <a href="#" class="access-card card-blue">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="target" width="22"></i>
+            </div>
+            <h3 class="card-title">Progresso</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;"><?= $completionPercent ?>%</div>
+                    <div class="highlight-subtitle">do plano completo</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer-row">
+            <span class="footer-text">Meta anual</span>
+        </div>
+    </a>
+
+    <!-- Card: Nível -->
+    <a href="#" class="access-card card-amber">
+        <div class="card-content">
+            <div class="card-icon">
+                <i data-lucide="award" width="22"></i>
+            </div>
+            <h3 class="card-title">Nível</h3>
+            <div class="card-info">
+                <div class="info-highlight">
+                    <?php 
+                    $level = min(20, floor($totalDaysRead / 15) + 1);
+                    ?>
+                    <div class="highlight-title" style="font-size: 2rem; margin-bottom: 0;">Nv.<?= $level ?></div>
+                    <div class="highlight-subtitle"><?= $totalDaysRead ?> dias lidos</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer-row">
+            <span class="footer-text">Continue crescendo</span>
+        </div>
+    </a>
+
 </div>
-</div> <!-- End dashboard tab -->
 
+<?php endif; ?>
+
+<?php if ($tab == 'reading'): ?>
 <!-- TAB CONTENT: READING -->
-<div id="tab-reading" class="tab-content-reading">
 
 <!-- CALENDAR STRIP -->
 
@@ -807,7 +801,7 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
     </button>
 </div>
 
-</div> <!-- End reading tab -->
+<?php endif; ?>
 
 <div id="save-toast" style="position:fixed; top:90px; left:50%; transform:translateX(-50%); background:var(--slate-800); color:white; padding:8px 16px; border-radius:20px; opacity:0; pointer-events:none; z-index:2000; transition:opacity 0.3s; display:flex; align-items:center; gap:8px;"><i data-lucide="check" width="14"></i> Salvo auto</div>
 
