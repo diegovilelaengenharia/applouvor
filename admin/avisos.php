@@ -165,6 +165,7 @@ foreach ($avisos as &$aviso) {
 }
 
 renderAppHeader('Avisos');
+renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
 ?>
 
 <!-- Quill CSS -->
@@ -815,40 +816,84 @@ renderAppHeader('Avisos');
 
     /* Responsive */
     @media (max-width: 768px) {
-        .hero-title {
-            font-size: 1.15rem;
+        .container {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
         }
-
-        .hero-subtitle {
-            font-size: 0.8rem;
+        
+        .search-filter-row {
+            flex-direction: column !important;
+            gap: 12px !important;
         }
-
+        
+        .search-wrapper, .filter-container {
+            width: 100% !important;
+        }
+        
+        .aviso-card {
+            margin-bottom: 12px !important;
+        }
+        
+        .aviso-header {
+            padding: 12px !important;
+        }
+        
+        .aviso-body {
+            padding: 12px !important;
+        }
+        
+        .aviso-actions {
+            padding: 12px !important;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            justify-content: center;
+        }
+        
         .fab {
             bottom: 80px;
             right: 20px;
+            display: flex !important; /* Show FAB on mobile if needed */
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--purple-primary);
+            color: white;
+            position: fixed;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 90;
+        }
+        
+        .modal-content {
+            border-radius: 16px 16px 0 0;
+            max-height: 85vh;
+            position: fixed;
+            bottom: 0;
+            top: auto;
+            margin: 0;
+            width: 100%;
+            max-width: none;
+        }
+        
+        .modal-header {
+            padding: 20px;
+        }
+        
+        .modal-body {
+            padding: 20px;
         }
     }
 </style>
 
-<?php renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira'); ?>
-
-<div class="container" style="padding-top: 0; max-width: 800px; margin: 0 auto;">
-    
-    <!-- Hero Section -->
-    <div class="hero-avisos">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <i data-lucide="megaphone"></i>
-            </div>
-            <div class="hero-text">
-                <h1 class="hero-title">Central de Comunicação</h1>
-                <p class="hero-subtitle">Avisos importantes, eventos e novidades do ministério</p>
-            </div>
-        </div>
-    </div>
+<div class="container" style="max-width: 800px; margin: 0 auto; padding-top: 20px;">
     
     <!-- Search and Filter Row -->
-    <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+    <div class="search-filter-row" style="display: flex; gap: 12px; margin-bottom: 20px;">
         <!-- Search Bar -->
         <div style="flex: 1;">
             <form method="GET">
