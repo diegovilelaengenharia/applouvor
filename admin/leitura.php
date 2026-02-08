@@ -733,17 +733,17 @@ $tab = $_GET['tab'] ?? 'reading';
 ?>
 
 <!-- Tabs Navegação (Padrão Repertório) -->
-<div class="repertorio-controls">
-    <div class="tabs-container" style="display: flex; align-items: center; gap: 0.5rem;">
+<div class="repertorio-controls" style="position: relative; padding-right: 50px;">
+    <div class="tabs-container" style="display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; padding-bottom: 5px;">
         <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">📖 Texto Bíblico</a>
         <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">📊 Estatísticas</a>
         <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">🏆 Conquistas</a>
-        
-        <!-- Botão Discreto de Configurações -->
-        <button onclick="document.getElementById('modal-config').style.display='flex'" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; color: #6b7280; display: flex; align-items: center; justify-content: center; transition: background 0.2s; margin-left: auto;" title="Configurações">
-            <i data-lucide="settings" width="20"></i>
-        </button>
     </div>
+    
+    <!-- Botão Discreto de Configurações RECRIADO (Posição Absoluta + SVG Inline) -->
+    <button onclick="appSettingsOpen()" style="position: absolute; right: 0; top: 0; bottom: 0; background: white; border: 1px solid #e5e7eb; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; color: #6b7280; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" title="Configura&ccedil;&otilde;es" onmouseover="this.style.color='#2563eb'; this.style.borderColor='#bfdbfe'" onmouseout="this.style.color='#6b7280'; this.style.borderColor='#e5e7eb'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
 </div>
 
 <?php if ($tab == 'dashboard'): ?>
@@ -3022,291 +3022,285 @@ function switchReadingTab(tabName) {
     document.getElementById('btn-tab-' + tabName).classList.add('active');
 }
 
-// Initialize Lucide Icons (Final call to ensure all icons are rendered)
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-});
 
-// START: CONFIGURATION MODAL LOGIC (Isolada)
-function switchConfigTab(tabName) {
-    // Remove active class from all tabs
-    document.querySelectorAll('.cfg-tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.cfg-content').forEach(content => content.style.display = 'none');
-    
-    // Activate selected
-    const activeBtn = document.getElementById('cfg-tab-' + tabName);
-    const activeContent = document.getElementById('cfg-content-' + tabName);
-    
-    if(activeBtn) activeBtn.classList.add('active');
-    if(activeContent) activeContent.style.display = 'block';
+
+<!-- APP SETTINGS MODAL & SCRIPTS -->
+<script>
+// --- LOGIC ---
+function appSettingsOpen() {
+    const m = document.getElementById('app-settings-modal');
+    if(m) {
+        m.style.display = 'flex';
+        // Force redraw
+        m.offsetHeight; 
+        m.classList.add('visible');
+    }
 }
 
-function saveSettings() {
-    const btn = document.getElementById('cfg-btn-save');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = 'Salvando...';
+function appSettingsClose() {
+    const m = document.getElementById('app-settings-modal');
+    if(m) {
+        m.classList.remove('visible');
+        setTimeout(() => { m.style.display = 'none'; }, 200);
+    }
+}
+
+function appSettingsTab(tabId) {
+    // Buttons
+    document.querySelectorAll('.app-settings-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('app-tab-btn-' + tabId).classList.add('active');
+    
+    // Content
+    document.querySelectorAll('.app-settings-content').forEach(c => c.style.display = 'none');
+    document.getElementById('app-tab-content-' + tabId).style.display = 'block';
+}
+
+function appSettingsSave() {
+    const btn = document.getElementById('app-btn-save');
+    const oldHtml = btn.innerHTML;
+    
+    // Validate
+    const plan = document.getElementById('app-input-plan').value;
+    const date = document.getElementById('app-input-date').value;
+    
     btn.disabled = true;
+    btn.innerHTML = 'Salvando...';
     
-    const f = new FormData();
-    f.append('action', 'save_settings');
-    f.append('start_date', document.getElementById('cfg-start-date').value);
-    f.append('plan_type', document.getElementById('cfg-plan-type').value);
+    const fd = new FormData();
+    fd.append('action', 'save_settings');
+    fd.append('plan_type', plan);
+    fd.append('start_date', date);
     
-    fetch('leitura.php', { method:'POST', body:f })
-    .then(r=>r.json())
-    .then(d=>{
-        if(d.success) {
+    fetch('leitura.php', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(res => {
+        if(res.success) {
             window.location.reload();
         } else {
-            alert('Erro ao salvar');
-            btn.innerHTML = originalText;
+            alert('Erro ao salvar. Tente novamente.');
+            btn.innerHTML = oldHtml;
             btn.disabled = false;
         }
+    })
+    .catch(err => {
+        alert('Erro de conex&atilde;o.');
+        btn.innerHTML = oldHtml;
+        btn.disabled = false;
     });
 }
 
-function exportDiaryAsPDF() {
-    const diaryContent = document.getElementById('diary-entries-container');
-    if(!diaryContent) {
-        alert('Nenhuma anota&ccedil;&atilde;o para exportar.');
+function appSettingsPDF() {
+    const container = document.getElementById('diary-entries-container');
+    if(!container || container.children.length === 0) {
+        alert('Voc&ecirc; n&atilde;o possui anota&ccedil;&otilde;es para exportar.');
         return;
     }
     
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    // Print logic using iframe
+    const f = document.createElement('iframe');
+    f.style.display = 'none';
+    document.body.appendChild(f);
     
-    const doc = iframe.contentWindow.document;
-    const style = `
-        body { font-family: sans-serif; padding: 40px; color: #1f2937; }
-        h1 { text-align: center; color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 20px; margin-bottom: 30px; }
-        .entry { margin-bottom: 30px; page-break-inside: avoid; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; background: #f9fafb; }
-        .date { font-size: 0.9rem; color: #6b7280; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-        .title { font-size: 1.25rem; font-weight: bold; margin-bottom: 15px; color: #111827; }
-        .content { font-size: 1rem; line-height: 1.6; color: #374151; white-space: pre-wrap; }
+    const d = f.contentWindow.document;
+    const items = document.querySelectorAll('.diary-card');
+    
+    let rows = '';
+    items.forEach(i => {
+        const dt = i.querySelector('.diary-date').innerText;
+        const tt = i.querySelector('.diary-title') ? i.querySelector('.diary-title').innerText : 'Sem T&iacute;tulo';
+        const txt = i.querySelector('.diary-content').innerText;
+        
+        rows += `
+            <div class="pdf-entry">
+                <div class="pdf-meta">${dt}</div>
+                <div class="pdf-title">${tt}</div>
+                <div class="pdf-text">${txt}</div>
+            </div>
+        `;
+    });
+    
+    const css = `
+        <style>
+            body { font-family: sans-serif; padding: 40px; color: #333; }
+            h1 { color: #2563eb; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 30px; }
+            .pdf-entry { margin-bottom: 30px; page-break-inside: avoid; border: 1px solid #eee; padding: 20px; border-radius: 5px; background: #fafafa; }
+            .pdf-meta { color: #666; font-size: 0.85em; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+            .pdf-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; color: #111; }
+            .pdf-text { line-height: 1.5; white-space: pre-wrap; font-size: 0.95em; }
+        </style>
     `;
     
-    let html = `<html><head><title>Meu Di&aacute;rio</title><style>${style}</style></head><body>`;
-    html += `<h1>Meu Di&aacute;rio de Leitura</h1>`;
-    
-    const cards = document.querySelectorAll('.diary-card');
-    if(cards.length === 0) {
-       html += '<p style="text-align:center; color:#6b7280;">Nenhuma anota&ccedil;&atilde;o encontrada.</p>';
-    } else {
-        cards.forEach(card => {
-            const date = card.querySelector('.diary-date').innerText;
-            const title = card.querySelector('.diary-title') ? card.querySelector('.diary-title').innerText : 'Sem T&iacute;tulo';
-            const content = card.querySelector('.diary-content').innerText;
-            
-            html += `<div class="entry">
-                <div class="date">${date}</div>
-                <div class="title">${title}</div>
-                <div class="content">${content}</div>
-            </div>`;
-        });
-    }
-    html += `</body></html>`;
-    
-    doc.open();
-    doc.write(html);
-    doc.close();
+    d.open();
+    d.write('<html><head><title>Di&aacute;rio de Leitura</title>' + css + '</head><body><h1>Di&aacute;rio de Leitura</h1>' + rows + '</body></html>');
+    d.close();
     
     setTimeout(() => {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-        setTimeout(() => document.body.removeChild(iframe), 1000);
+        f.contentWindow.focus();
+        f.contentWindow.print();
+        setTimeout(() => document.body.removeChild(f), 2000);
     }, 500);
 }
-
-// Initialize logic
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-});
 </script>
 
-<!-- CONFIGURATION MODAL HTML REBUILT -->
-<div id="modal-config" class="cfg-fullscreen">
-    <div class="cfg-header">
-        <div class="cfg-header-left">
-            <button onclick="document.getElementById('modal-config').style.display='none'" class="cfg-icon-btn">
-                <i data-lucide="chevron-left"></i>
-            </button>
-            <h2>Configura&ccedil;&otilde;es</h2>
-        </div>
-        <button onclick="document.getElementById('modal-config').style.display='none'" class="cfg-icon-btn">
-            <i data-lucide="x"></i>
-        </button>
-    </div>
-    
-    <div class="cfg-body">
-        <!-- Sidebar/Tabs for Desktop, Topbar for Mobile -->
-        <div class="cfg-tabs">
-            <div class="cfg-tab-btn active" onclick="switchConfigTab('plano')" id="cfg-tab-plano">
-                <i data-lucide="book-open" width="18"></i>
-                <span>Plano de Leitura</span>
-            </div>
-            <div class="cfg-tab-btn" onclick="switchConfigTab('geral')" id="cfg-tab-geral">
-                <i data-lucide="bar-chart-2" width="18"></i>
-                <span>Estat&iacute;sticas</span>
-            </div>
-            <div class="cfg-tab-btn" onclick="switchConfigTab('diario')" id="cfg-tab-diario">
-                <i data-lucide="file-text" width="18"></i>
-                <span>Meu Di&aacute;rio</span>
-            </div>
+<div id="app-settings-modal">
+    <div class="app-settings-container">
+        <!-- HEADER -->
+        <div class="app-settings-header">
+            <h3>Configura&ccedil;&otilde;es</h3>
+            <button onclick="appSettingsClose()" class="app-settings-close"><i data-lucide="x"></i></button>
         </div>
         
-        <!-- Content Area -->
-        <div class="cfg-content-area">
+        <!-- BODY -->
+        <div class="app-settings-body">
+            <!-- SIDEBAR -->
+            <div class="app-settings-sidebar">
+                <div id="app-tab-btn-plano" class="app-settings-tab active" onclick="appSettingsTab('plano')">
+                    <i data-lucide="book-open"></i> Plano
+                </div>
+                <div id="app-tab-btn-stats" class="app-settings-tab" onclick="appSettingsTab('stats')">
+                    <i data-lucide="bar-chart-2"></i> Estat&iacute;sticas
+                </div>
+                <div id="app-tab-btn-diary" class="app-settings-tab" onclick="appSettingsTab('diary')">
+                    <i data-lucide="file-text"></i> Di&aacute;rio
+                </div>
+            </div>
             
-            <!-- PLANO TAB -->
-            <div id="cfg-content-plano" class="cfg-content">
-                <div class="cfg-section">
-                    <h3 class="cfg-section-title">Ajustes do Plano</h3>
-                    
-                    <div class="cfg-form-group">
-                        <label>Modelo de Leitura</label>
-                        <div class="cfg-select-wrapper">
-                            <select id="cfg-plan-type" class="cfg-input">
-                                <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
-                                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronol&oacute;gico (365 dias)</option>
-                                <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
+            <!-- CONTENT AREA -->
+            <div class="app-settings-main">
+                
+                <!-- TAB PLANO -->
+                <div id="app-tab-content-plano" class="app-settings-content">
+                    <div class="app-card">
+                        <h4>Plano de Leitura</h4>
+                        <div class="app-input-group">
+                            <label>Modelo</label>
+                            <select id="app-input-plan" class="app-input">
+                                <option value="navigators" <?= $selectedPlanType === 'navigators'?'selected':'' ?>>Navigators (300 dias)</option>
+                                <option value="chronological" <?= $selectedPlanType === 'chronological'?'selected':'' ?>>Cronol&oacute;gico (365 dias)</option>
+                                <option value="mcheyne" <?= $selectedPlanType === 'mcheyne'?'selected':'' ?>>M'Cheyne (365 dias)</option>
                             </select>
-                            <i data-lucide="chevron-down" class="cfg-select-icon"></i>
+                        </div>
+                        <div class="app-input-group">
+                            <label>In&iacute;cio</label>
+                            <input type="date" id="app-input-date" class="app-input" value="<?= $startDateStr ?>">
+                        </div>
+                        <button id="app-btn-save" class="app-btn primary" onclick="appSettingsSave()">
+                            <i data-lucide="save"></i> Salvar Altera&ccedil;&otilde;es
+                        </button>
+                    </div>
+                    
+                    <div class="app-card danger">
+                        <h4>Zona de Perigo</h4>
+                        <p>Reiniciar o plano apaga todo o progresso.</p>
+                        <button class="app-btn danger" onclick="if(confirm('Tem certeza? Isso n&atilde;o pode ser desfeito.')) resetPlan()">
+                            <i data-lucide="trash-2"></i> Reiniciar Progresso
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- TAB STATS -->
+                <div id="app-tab-content-stats" class="app-settings-content" style="display:none">
+                    <h4>Seu Progresso</h4>
+                    <div class="app-stats-row">
+                        <div class="app-stat-box">
+                            <strong><?= $totalDaysRead ?></strong>
+                            <span>Dias</span>
+                        </div>
+                        <div class="app-stat-box">
+                            <strong><?= $currentStreak ?></strong>
+                            <span>Sequ&ecirc;ncia</span>
+                        </div>
+                        <div class="app-stat-box">
+                            <strong><?= $completionPercent ?>%</strong>
+                            <span>Conclus&atilde;o</span>
                         </div>
                     </div>
-                    
-                    <div class="cfg-form-group">
-                        <label>Data de In&iacute;cio</label>
-                        <input type="date" id="cfg-start-date" class="cfg-input" value="<?= $startDateStr ?>">
-                    </div>
-                    
-                    <button onclick="saveSettings()" id="cfg-btn-save" class="cfg-btn cfg-btn-primary">
-                        <i data-lucide="save" width="18"></i> Salvar Altera&ccedil;&otilde;es
+                </div>
+                
+                <!-- TAB DIARY -->
+                <div id="app-tab-content-diary" class="app-settings-content" style="display:none">
+                    <h4>Exportar Di&aacute;rio</h4>
+                    <p>Baixe suas anota&ccedil;&otilde;es em formato PDF.</p>
+                    <button class="app-btn secondary" onclick="appSettingsPDF()">
+                        <i data-lucide="download"></i> Baixar PDF
                     </button>
                 </div>
                 
-                <div class="cfg-section cfg-danger-zone">
-                    <h3 class="cfg-section-title text-danger">Zona de Perigo</h3>
-                    <p>Deseja recome&ccedil;ar do zero? Isso apagar&aacute; todo o seu progresso atual.</p>
-                    <button onclick="resetPlan()" class="cfg-btn cfg-btn-danger">
-                        <i data-lucide="trash-2" width="18"></i> Reiniciar Plano
-                    </button>
-                </div>
             </div>
-            
-            <!-- GERAL TAB -->
-            <div id="cfg-content-geral" class="cfg-content" style="display: none;">
-                <h3 class="cfg-section-title">Resumo do Progresso</h3>
-                <div class="cfg-stats-grid">
-                    <div class="cfg-stat-card">
-                        <div class="cfg-stat-val"><?= $totalDaysRead ?></div>
-                        <div class="cfg-stat-lbl">Dias Lidos</div>
-                    </div>
-                    <div class="cfg-stat-card">
-                        <div class="cfg-stat-val"><?= $currentStreak ?></div>
-                        <div class="cfg-stat-lbl">Sequ&ecirc;ncia Atual</div>
-                    </div>
-                    <div class="cfg-stat-card">
-                        <div class="cfg-stat-val"><?= $completionPercent ?>%</div>
-                        <div class="cfg-stat-lbl">Conclus&atilde;o</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- DIARIO TAB -->
-            <div id="cfg-content-diario" class="cfg-content" style="display: none;">
-                <h3 class="cfg-section-title">Gerenciar Di&aacute;rio</h3>
-                <p style="margin-bottom: 20px; color: #6b7280;">Exporte suas reflex&otilde;es para PDF para guardar ou imprimir.</p>
-                <button onclick="exportDiaryAsPDF()" class="cfg-btn cfg-btn-secondary">
-                    <i data-lucide="download" width="18"></i> Baixar Di&aacute;rio em PDF
-                </button>
-            </div>
-            
         </div>
     </div>
 </div>
 
 <style>
-/* PREVENÇÃO DE CONFLITOS: Classes com prefixo cfg- */
-.cfg-fullscreen {
-    position: fixed; inset: 0; background: #f3f4f6; z-index: 9999;
-    display: none; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+/* MODAL STYLES ISOLATED */
+#app-settings-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 10000;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.2s ease;
 }
-@media(min-width: 1024px) { .cfg-fullscreen { left: 280px; } }
+#app-settings-modal.visible { opacity: 1; }
 
-.cfg-header {
-    background: white; padding: 15px 20px; border-bottom: 1px solid #e5e7eb;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-shrink: 0;
-}
-.cfg-header-left { display: flex; align-items: center; gap: 15px; }
-.cfg-header h2 { margin: 0; font-size: 1.1rem; color: #111827; font-weight: 700; }
-.cfg-icon-btn {
-    background: transparent; border: none; cursor: pointer; color: #6b7280; padding: 8px; border-radius: 50%; display: flex;
-}
-.cfg-icon-btn:hover { background: #f9fafb; color: #1f2937; }
-
-.cfg-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-@media(min-width: 768px) { .cfg-body { flex-direction: row; } }
-
-/* TABS */
-.cfg-tabs {
-    background: white; border-bottom: 1px solid #e5e7eb; display: flex; overflow-x: auto;
-    flex-shrink: 0;
-}
-@media(min-width: 768px) {
-    .cfg-tabs { flex-direction: column; width: 240px; border-bottom: none; border-right: 1px solid #e5e7eb; padding-top: 20px; }
+.app-settings-container {
+    background: #fff; width: 90%; max-width: 700px; height: 80vh; max-height: 600px;
+    border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    display: flex; flex-direction: column; overflow: hidden; font-family: sans-serif;
 }
 
-.cfg-tab-btn {
-    padding: 15px 20px; color: #6b7280; cursor: pointer; font-size: 0.9rem; font-weight: 500;
-    display: flex; align-items: center; gap: 10px; border-bottom: 2px solid transparent; transition: all 0.2s;
-    white-space: nowrap;
+.app-settings-header {
+    padding: 15px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fff;
 }
-@media(min-width: 768px) { .cfg-tab-btn { border-bottom: none; border-left: 3px solid transparent; } }
+.app-settings-header h3 { margin: 0; font-size: 1.1rem; color: #111; font-weight: 600; }
+.app-settings-close { background: none; border: none; cursor: pointer; color: #666; padding: 5px; border-radius: 5px; }
+.app-settings-close:hover { background: #f3f4f6; color: #000; }
 
-.cfg-tab-btn:hover { color: #374151; background: #f9fafb; }
-.cfg-tab-btn.active { color: #2563eb; background: #eff6ff; }
-@media(max-width: 767px) { .cfg-tab-btn.active { border-bottom-color: #2563eb; } }
-@media(min-width: 768px) { .cfg-tab-btn.active { border-left-color: #2563eb; } }
+.app-settings-body { display: flex; flex: 1; overflow: hidden; }
 
-/* CONTENT */
-.cfg-content-area { flex: 1; overflow-y: auto; padding: 20px; }
-.cfg-content { max-width: 600px; margin: 0 auto; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+/* Sidebar */
+.app-settings-sidebar {
+    width: 200px; background: #f9fafb; border-right: 1px solid #e5e7eb; padding: 15px;
+    display: flex; flex-direction: column; gap: 5px;
+}
+.app-settings-tab {
+    padding: 10px 12px; border-radius: 6px; cursor: pointer; color: #4b5563; font-size: 0.9rem; font-weight: 500;
+    display: flex; align-items: center; gap: 8px; transition: background 0.1s;
+}
+.app-settings-tab:hover { background: #e5e7eb; }
+.app-settings-tab.active { background: #eff6ff; color: #2563eb; }
 
-.cfg-section { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e5e7eb; }
-.cfg-section-title { margin: 0 0 20px 0; font-size: 1rem; color: #111827; font-weight: 700; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; }
+/* Main */
+.app-settings-main { flex: 1; padding: 25px; overflow-y: auto; }
 
-.cfg-form-group { margin-bottom: 20px; }
-.cfg-form-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; }
-.cfg-input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; color: #1f2937; outline: none; transition: border 0.2s; background: white; }
-.cfg-input:focus { border-color: #2563eb; ring: 2px solid #bfdbfe; }
+.app-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+.app-card.danger { border-color: #fecaca; background: #fef2f2; }
+.app-card h4 { margin: 0 0 15px 0; font-size: 1rem; color: #111; }
 
-.cfg-select-wrapper { position: relative; }
-.cfg-select-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none; width: 16px; }
-select.cfg-input { appearance: none; padding-right: 30px; }
+.app-input-group { margin-bottom: 15px; }
+.app-input-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.85rem; color: #374151; }
+.app-input { width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.95rem; }
 
-.cfg-btn { width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; border: none; font-size: 0.9rem; }
-.cfg-btn:active { transform: scale(0.98); }
-.cfg-btn-primary { background: #2563eb; color: white; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2); }
-.cfg-btn-primary:hover { background: #1d4ed8; }
-.cfg-btn-secondary { background: white; border: 1px solid #d1d5db; color: #374151; }
-.cfg-btn-secondary:hover { background: #f9fafb; border-color: #9ca3af; }
-.cfg-btn-danger { background: #fee2e2; color: #b91c1c; }
-.cfg-btn-danger:hover { background: #fecaca; }
+.app-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 15px; border-radius: 6px; font-weight: 500; cursor: pointer; border: none; font-size: 0.9rem; width: 100%;
+}
+.app-btn.primary { background: #2563eb; color: #fff; }
+.app-btn.primary:hover { background: #1d4ed8; }
+.app-btn.secondary { background: #fff; border: 1px solid #d1d5db; color: #374151; }
+.app-btn.secondary:hover { background: #f9fafb; }
+.app-btn.danger { background: #fff; border: 1px solid #ef4444; color: #ef4444; }
+.app-btn.danger:hover { background: #fee2e2; }
 
-.cfg-danger-zone { border: 1px solid #fecaca; background: #fff1f2; }
-.text-danger { color: #ef4444; }
+/* Stats */
+.app-stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.app-stat-box { background: #f3f4f6; padding: 15px; border-radius: 8px; text-align: center; }
+.app-stat-box strong { display: block; font-size: 1.25rem; color: #2563eb; }
+.app-stat-box span { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; }
 
-.cfg-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-.cfg-stat-card { background: white; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #e5e7eb; }
-.cfg-stat-val { font-size: 1.5rem; font-weight: 800; color: #2563eb; }
-.cfg-stat-lbl { font-size: 0.75rem; color: #6b7280; font-weight: 600; text-transform: uppercase; margin-top: 5px; }
+/* Mobile */
+@media(max-width: 640px) {
+    .app-settings-body { flex-direction: column; }
+    .app-settings-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 10px; border-bottom: 1px solid #e5e7eb; border-right: none; }
+    .app-settings-tab { white-space: nowrap; }
+}
 </style>
 
-<?php
-renderAppFooter();
-?>
