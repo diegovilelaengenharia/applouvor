@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   web-deploy:
@@ -19,8 +20,12 @@ jobs:
         server: ftp.vilela.eng.br
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ./public_html/applouvor/
+        server-dir: public_html/applouvor/
         protocol: ftp
         port: 21
         unsafe: true # Tenta ignorar erros de certificado SSL se houver
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
 
