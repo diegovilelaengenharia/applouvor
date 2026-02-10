@@ -551,10 +551,10 @@ if (!empty($currentUser['avatar'])) {
 
     /* Botão Especial Reunião */
     .nav-item.nav-meeting {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
         margin: 8px 0;
-        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         border: 2px solid rgba(255, 255, 255, 0.3);
         position: relative;
         overflow: hidden;
@@ -577,12 +577,12 @@ if (!empty($currentUser['avatar'])) {
 
     .nav-item.nav-meeting:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
         border-color: rgba(255, 255, 255, 0.5);
     }
 
     .nav-item.nav-meeting.active {
-        box-shadow: 0 6px 24px rgba(245, 158, 11, 0.7);
+        box-shadow: 0 6px 24px rgba(16, 185, 129, 0.7);
         transform: scale(1.02);
         border-color: rgba(255, 255, 255, 0.6);
     }
