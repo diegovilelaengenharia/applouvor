@@ -3,7 +3,7 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Processar exclusão em massa
+// Processar exclusÃ£o em massa
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedules'])) {
     if (!empty($_POST['schedule_ids'])) {
         $placeholders = str_repeat('?,', count($_POST['schedule_ids']) - 1) . '?';
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedules'])) 
     exit;
 }
 
-// Filtros e Visualização
+// Filtros e VisualizaÃ§Ã£o
 $viewMode = $_GET['view'] ?? 'timeline'; // timeline, list, calendar
 $infoMsg = '';
 
@@ -31,14 +31,14 @@ if (isset($_GET['filter_my']) && $_GET['filter_my'] == '1') {
     $params[] = $_SESSION['user_id'];
 }
 
-// Filtro: Membro específico
+// Filtro: Membro especÃ­fico
 if (!empty($_GET['filter_member'])) {
     $joins[] = "JOIN schedule_users su_mem ON s.id = su_mem.schedule_id";
     $wheres[] = "su_mem.user_id = ?";
     $params[] = $_GET['filter_member'];
 }
 
-// Filtro: Música específica
+// Filtro: MÃºsica especÃ­fica
 if (!empty($_GET['filter_song'])) {
     $joins[] = "JOIN schedule_songs ss_song ON s.id = ss_song.schedule_id";
     $wheres[] = "ss_song.song_id = ?";
@@ -51,7 +51,7 @@ if (!empty($_GET['filter_team'])) {
     $params[] = "%" . $_GET['filter_team'] . "%";
 }
 
-// Abas (apenas se não estiver em modo calendário)
+// Abas (apenas se nÃ£o estiver em modo calendÃ¡rio)
 $tab = $_GET['tab'] ?? 'next';
 if ($viewMode !== 'calendar') {
     if ($tab === 'history') {
@@ -62,7 +62,7 @@ if ($viewMode !== 'calendar') {
         $orderBy = "s.event_date ASC";
     }
 } else {
-    // No calendário, pegamos o mês selecionado
+    // No calendÃ¡rio, pegamos o mÃªs selecionado
     $month = $_GET['month'] ?? date('m');
     $year = $_GET['year'] ?? date('Y');
     $wheres[] = "MONTH(s.event_date) = ? AND YEAR(s.event_date) = ?";
@@ -141,7 +141,7 @@ renderAppHeader('Escalas');
     <div class="floating-tabs-wrapper">
         <div class="floating-tabs">
             <a href="?tab=next" class="tab-link <?= $tab == 'next' ? 'active' : '' ?>">
-                Próximas
+                PrÃ³ximas
             </a>
             <a href="?tab=history" class="tab-link <?= $tab == 'history' ? 'active' : '' ?>">
                 Anteriores
@@ -172,7 +172,7 @@ renderAppHeader('Escalas');
                 $date = new DateTime($schedule['event_date']);
                 $monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
                 $dayNumber = $date->format('d');
-                $weekDay = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'][$date->format('w')];
+                $weekDay = ['DOMINGO', 'SEGUNDA', 'TERÃ‡A', 'QUARTA', 'QUINTA', 'SEXTA', 'SÃBADO'][$date->format('w')];
             ?>
                 <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="compact-card ripple">
                     <!-- Left Strip handled by CSS or border -->
@@ -188,7 +188,7 @@ renderAppHeader('Escalas');
 
                     <!-- Content -->
                     <div class="compact-info-col">
-                        <div class="compact-meta"><?= $weekDay ?> • 19:00</div>
+                        <div class="compact-meta"><?= $weekDay ?> â€¢ 19:00</div>
                         <div class="compact-title"><?= htmlspecialchars($schedule['event_type']) ?></div>
                         <div class="compact-sub">
                             <i data-lucide="users"></i> Escala
@@ -214,14 +214,14 @@ renderAppHeader('Escalas');
                 $ptMonths = [1 => 'JAN', 2 => 'FEV', 3 => 'MAR', 4 => 'ABR', 5 => 'MAI', 6 => 'JUN', 7 => 'JUL', 8 => 'AGO', 9 => 'SET', 10 => 'OUT', 11 => 'NOV', 12 => 'DEZ'];
                 $monthLabel = $ptMonths[$date->format('n')];
 
-                $weekDay = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')];
+                $weekDay = ['Domingo', 'Segunda', 'TerÃ§a', 'Quarta', 'Quinta', 'Sexta', 'SÃ¡bado'][$date->format('w')];
 
                 // Calculate time relative today
                 $today = new DateTime('today');
                 $interval = $today->diff($date);
                 $timeAgo = $interval->format('%a') . ' dias';
                 if ($date < $today) {
-                    $timeLabel = $interval->days . ' dias atrás';
+                    $timeLabel = $interval->days . ' dias atrÃ¡s';
                 } elseif ($date == $today) {
                     $timeLabel = 'Hoje';
                 } else {
@@ -252,7 +252,7 @@ renderAppHeader('Escalas');
                             </div>
                             <div class="info-item">
                                 <i data-lucide="calendar" class="icon-sm text-blue"></i>
-                                <span><?= $weekDay ?> • 19:00</span>
+                                <span><?= $weekDay ?> â€¢ 19:00</span>
                             </div>
                         </div>
 
@@ -272,7 +272,7 @@ renderAppHeader('Escalas');
                             </div>
 
                             <div class="footer-right">
-                                <div class="stat-pill" title="Músicas">
+                                <div class="stat-pill" title="MÃºsicas">
                                     <i data-lucide="music" class="icon-xs"></i> 5
                                 </div>
                                 <div class="stat-pill" title="Confirmados">
@@ -326,9 +326,9 @@ renderAppHeader('Escalas');
                     </select>
                 </div>
 
-                <!-- Select Música -->
+                <!-- Select MÃºsica -->
                 <div>
-                    <label>Música</label>
+                    <label>MÃºsica</label>
                     <select name="filter_song" class="form-input">
                         <option value="">Todas</option>
                         <?php
@@ -385,7 +385,7 @@ renderAppHeader('Escalas');
     }
 </script>
 
-<!-- Barra de Exclusão Flutuante -->
+<!-- Barra de ExclusÃ£o Flutuante -->
 <div id="deleteBar" class="delete-bar">
     <span id="selectedCount">0 selecionadas</span>
     <button type="button" onclick="confirmDelete()">
