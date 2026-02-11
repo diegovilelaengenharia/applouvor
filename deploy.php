@@ -16,7 +16,7 @@ if (!isset($_GET['secret']) || $_GET['secret'] !== $secret) {
 header('Content-Type: text/plain');
 header('X-Accel-Buffering: no'); // Para Nginx não fazer buffer
 
-echo "🚀 Iniciando Deploy Automático...\n";
+echo "🚀 Iniciando Deploy Automático (v1.0.1)...\n";
 echo "---------------------------------\n";
 
 // 4. Verificar se exec() está habilitado
