@@ -272,9 +272,9 @@
     color: var(--green-700);
 }
 
-.tag-purple {
-    background: var(--purple-100);
-    color: var(--purple-700);
+.tag-teal {
+    background: var(--teal-100);
+    color: var(--teal-700);
 }
 
 /* Event Footer */

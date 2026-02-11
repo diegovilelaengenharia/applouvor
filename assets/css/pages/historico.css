@@ -219,8 +219,8 @@
 }
 
 .ranking-pos-star {
-    background: var(--purple-100);
-    color: var(--purple-700);
+    background: var(--teal-100);
+    color: var(--teal-700);
 }
 
 .ranking-info {

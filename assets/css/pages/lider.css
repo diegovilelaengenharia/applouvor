@@ -154,7 +154,7 @@
     background: #eff6ff;
 }
 
-.kpi-card.mini .text-purple {
+.kpi-card.mini .text-teal {
     color: #7e22ce;
     background: #f3e8ff;
 }
@@ -183,8 +183,8 @@
     color: var(--blue-600);
 }
 
-.text-purple {
-    color: var(--purple-600);
+.text-teal {
+    color: var(--teal-600);
 }
 
 .text-orange {
@@ -309,7 +309,7 @@
     background: linear-gradient(135deg, #6366f1, #4f46e5);
 }
 
-.color-purple-gradient {
+.color-teal-gradient {
     background: linear-gradient(135deg, #a855f7, #9333ea);
 }
 
@@ -398,7 +398,7 @@
     color: #4f46e5;
 }
 
-.action-card.simple.purple .card-icon-glass {
+.action-card.simple.teal .card-icon-glass {
     background: #f3e8ff;
     color: #7e22ce;
 }

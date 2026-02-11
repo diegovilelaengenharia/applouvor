@@ -245,9 +245,9 @@
 }
 
 .badge-spiritual {
-    background: #7c3aed;
+    background: #14b8a6;
     color: white;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
 }
 
 /* PREMIUM: Badge bounce animation on update */
@@ -587,8 +587,8 @@
 .card-violet .card-icon,
 .card-indigo .card-icon {
     background: white;
-    color: #7c3aed;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+    color: #14b8a6;
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15);
 }
 
 .card-violet .card-title,
@@ -602,14 +602,14 @@
     background: white;
     border-radius: 16px;
     padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.03);
+    box-shadow: 0 2px 4px rgba(20, 184, 166, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .card-violet .link-text,
 .card-indigo .link-text {
-    background: #7c3aed;
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+    background: #14b8a6;
+    box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
 }
 
 .card-violet .link-text:hover,

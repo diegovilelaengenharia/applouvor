@@ -15,13 +15,9 @@
 @import url('components/icons.css');
 @import url('components/sidebar.css');
 @import url('components/page-headers.css');
-@import url('components/cards.css');
 @import url('components/modals.css');
-@import url('components/sidebar.css');
-@import url('pages/dashboard.css');
 @import url('components/timeline-cards.css');
 @import url('components/animations.css');
-@import url('components/modals.css');
 
 /* 3. Recursos Específicos (Nucelos semânticos) */
 @import url('roles.css');
@@ -29,7 +25,7 @@
 @import url('membros.css');
 
 /* 4. Páginas Específicas (Carregadas globalmente por enquanto) */
-@import url('dashboard.css');
+@import url('pages/dashboard.css');
 @import url('pages/escalas.css');
 @import url('pages/agenda.css');
 @import url('pages/evento-detalhe.css');

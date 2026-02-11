@@ -133,30 +133,28 @@
     /* Mapeando cores "exóticas" para tons próximos na paleta Slate/Primary/Semantic para manter sobriedade */
     --orange-500: #f97316;
     /* Manter laranja para destaque se necessário */
-    --purple-500: #8b5cf6;
-    /* Manter roxo suave */
+    --teal-500: #14b8a6;
+    /* Teal - Alternativa moderna ao purple */
     --rose-500: var(--danger-500);
     /* Mapear Rose para Danger/Red */
-    --cyan-500: var(--info-500);
-    /* Mapear Cyan para Info/Sky */
-    --violet-500: var(--purple-500);
+    --cyan-500: #06b6d4;
+    /* Cyan - Cor permitida */
     --indigo-500: var(--primary-500);
     /* Indigo vira Primary Blue */
-    --fuchsia-500: var(--purple-500);
+    --emerald-500: #10b981;
+    /* Emerald - Verde moderno */
     --pink-500: var(--danger-500);
     --lime-500: var(--success-500);
     --sky-500: var(--info-500);
-    --emerald-500: var(--success-500);
-    --teal-500: #14b8a6;
-    /* Manter Teal como opção secundária de verde */
 
     /* Variáveis de fundo legado para compatibilidade */
     --green-50: var(--success-50);
     --red-50: var(--danger-50);
     --amber-50: var(--warning-50);
     --blue-50: var(--primary-50);
-    --violet-50: #f5f3ff;
-    --purple-50: #faf5ff;
+    --teal-50: #f0fdfa;
+    --cyan-50: #ecfeff;
+    --emerald-50: #ecfdf5;
     --sky-50: #f0f9ff;
     --sky-100: #e0f2fe;
     --sky-200: #bae6fd;

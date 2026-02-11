@@ -1158,9 +1158,9 @@ body.dark-mode .text-highlight {
     letter-spacing: 0.5px;
 }
 
-.tag-purple {
-    background: #F5F3FF;
-    color: #7C3AED;
+.tag-teal {
+    background: #F0FDFA;
+    color: #14b8a6;
 }
 
 .tag-green {
@@ -1571,9 +1571,9 @@ body.dark-mode .list-title-simple {
     background: #2563EB;
 }
 
-/* Culto Domingo Noite - Roxo */
+/* Culto Domingo Noite - Teal */
 .list-card-simple.event-night::before {
-    background: #7C3AED;
+    background: #14b8a6;
 }
 
 /* Ensaio - Laranja */

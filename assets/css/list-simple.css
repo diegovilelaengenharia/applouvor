@@ -124,7 +124,7 @@ body.dark-mode .list-title-simple {
 
 /* Culto Domingo Noite - Roxo */
 .list-card-simple.event-night::before {
-    background: #7C3AED;
+    background: #14b8a6;
 }
 
 /* Ensaio - Laranja */
