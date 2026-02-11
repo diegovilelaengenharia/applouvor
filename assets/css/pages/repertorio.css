@@ -221,6 +221,78 @@
     }
 }
 
-/* --- TAGS LIST & ARTISTS (Layout Específico) --- */
-/* (Reutiliza classes existentes ou define novas se necessário,
-    mas tentando usar o padrão global timeline-card onde possível) */
+/* (compact-card moved to components/cards.css) */
+
+/* Tone Colors Map (Classes) */
+.tone-C {
+    --tone-color: #ef4444;
+}
+
+.tone-Cs {
+    --tone-color: #dc2626;
+}
+
+/* C# */
+.tone-Db {
+    --tone-color: #dc2626;
+}
+
+.tone-D {
+    --tone-color: #f97316;
+}
+
+.tone-Ds {
+    --tone-color: #ea580c;
+}
+
+/* D# */
+.tone-Eb {
+    --tone-color: #ea580c;
+}
+
+.tone-E {
+    --tone-color: #eab308;
+}
+
+.tone-F {
+    --tone-color: #22c55e;
+}
+
+.tone-Fs {
+    --tone-color: #16a34a;
+}
+
+/* F# */
+.tone-Gb {
+    --tone-color: #16a34a;
+}
+
+.tone-G {
+    --tone-color: #3b82f6;
+}
+
+.tone-Gs {
+    --tone-color: #2563eb;
+}
+
+/* G# */
+.tone-Ab {
+    --tone-color: #2563eb;
+}
+
+.tone-A {
+    --tone-color: #8b5cf6;
+}
+
+.tone-As {
+    --tone-color: #7c3aed;
+}
+
+/* A# */
+.tone-Bb {
+    --tone-color: #7c3aed;
+}
+
+.tone-B {
+    --tone-color: #ec4899;
+}

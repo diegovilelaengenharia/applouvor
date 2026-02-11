@@ -10,32 +10,7 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório', 'index.php');
 ?>
-<style>
-    /* FORÇANDO ESTILOS COMPACTOS (Dedup de Cache) */
-    .timeline-card.compact .card-content-wrapper {
-        padding: 8px 12px !important;
-        gap: 10px !important;
-    }
-    .timeline-card.compact .date-box {
-        min-width: 36px !important;
-        height: 36px !important;
-        border-radius: 8px !important;
-    }
-    .timeline-card.compact .date-box i {
-        width: 18px !important;
-        height: 18px !important;
-    }
-    .timeline-card.compact .event-title {
-        font-size: 0.9rem !important;
-        margin-bottom: 0 !important;
-    }
-    .timeline-card.compact .meta-row {
-        font-size: 0.7rem !important;
-    }
-    .timeline-card.compact .card-arrow {
-        transform: scale(0.9);
-    }
-</style>
+
 <?php
 renderPageHeader('Repertório', 'Gestão de Músicas');
 ?>
@@ -372,45 +347,19 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 
     <!-- Conteúdo: Tons -->
     <?php if ($tab === 'tons'):
-        // Sistema Completo de Cores para Tons Musicais
-        $toneColors = [
-            // Naturais
-            'C' => '#ef4444',      // Vermelho vibrante (Dó)
-            'D' => '#f97316',      // Laranja (Ré)
-            'E' => '#eab308',      // Amarelo (Mi)
-            'F' => '#22c55e',      // Verde (Fá)
-            'G' => '#3b82f6',      // Azul (Sol)
-            'A' => '#8b5cf6',      // Roxo (Lá)
-            'B' => '#ec4899',      // Rosa (Si)
-            
-            // Sustenidos (#)
-            'C#' => '#dc2626',     // Vermelho escuro
-            'D#' => '#ea580c',     // Laranja escuro
-            'E#' => '#ca8a04',     // Amarelo escuro (raro, = F)
-            'F#' => '#16a34a',     // Verde escuro
-            'G#' => '#2563eb',     // Azul escuro
-            'A#' => '#7c3aed',     // Roxo escuro
-            'B#' => '#db2777',     // Rosa escuro (raro, = C)
-            
-            // Bemóis (b)
-            'Cb' => '#f87171',     // Vermelho claro (raro, = B)
-            'Db' => '#fb923c',     // Laranja claro
-            'Eb' => '#fbbf24',     // Amarelo claro
-            'Fb' => '#4ade80',     // Verde claro (raro, = E)
-            'Gb' => '#60a5fa',     // Azul claro
-            'Ab' => '#a78bfa',     // Roxo claro
-            'Bb' => '#f472b6',     // Rosa claro
-            
-            // Menores (m) - mesma cor base, levemente ajustada
-            'Cm' => '#ef4444', 'C#m' => '#dc2626', 'Dbm' => '#fb923c',
-            'Dm' => '#f97316', 'D#m' => '#ea580c', 'Ebm' => '#fbbf24',
-            'Em' => '#eab308', 'E#m' => '#ca8a04', 'Fbm' => '#4ade80',
-            'Fm' => '#22c55e', 'F#m' => '#16a34a', 'Gbm' => '#60a5fa',
-            'Gm' => '#3b82f6', 'G#m' => '#2563eb', 'Abm' => '#a78bfa',
-            'Am' => '#8b5cf6', 'A#m' => '#7c3aed', 'Bbm' => '#f472b6',
-            'Bm' => '#ec4899', 'B#m' => '#db2777', 'Cbm' => '#f87171',
-        ];
-        
+        // Helper para mapear classe CSS
+        function getToneClass($tone) {
+            $toneMap = [
+                'C'=>'tone-C', 'C#'=>'tone-Cs', 'Db'=>'tone-Db',
+                'D'=>'tone-D', 'D#'=>'tone-Ds', 'Eb'=>'tone-Eb',
+                'E'=>'tone-E', 'F'=>'tone-F', 'F#'=>'tone-Fs', 'Gb'=>'tone-Gb',
+                'G'=>'tone-G', 'G#'=>'tone-Gs', 'Ab'=>'tone-Ab',
+                'A'=>'tone-A', 'A#'=>'tone-As', 'Bb'=>'tone-Bb',
+                'B'=>'tone-B'
+            ];
+            return $toneMap[$tone] ?? 'tone-C'; // Default
+        }
+
         try {
             $sql = "SELECT tone as name, COUNT(*) as count FROM songs WHERE tone IS NOT NULL AND tone != '' GROUP BY tone ORDER BY tone ASC";
             $stmt = $pdo->query($sql);
@@ -419,12 +368,12 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-grid-2col">
             <?php foreach ($tones as $toneItem):
-                $bgHex = $toneColors[$toneItem['name']] ?? 'var(--slate-500)';
+                $toneClass = getToneClass($toneItem['name']);
             ?>
-                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>; background: <?= $bgHex ?>08;">
+                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card <?= $toneClass ?>" style="border-left-color: var(--tone-color);">
                     
                     <!-- Ícone Musical -->
-                    <div class="compact-card-icon" style="background: <?= $bgHex ?>20; color: <?= $bgHex ?>;">
+                    <div class="compact-card-icon" style="background: color-mix(in srgb, var(--tone-color) 15%, transparent); color: var(--tone-color);">
                         <i data-lucide="music" width="20"></i>
                     </div>
 

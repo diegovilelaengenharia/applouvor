@@ -1,0 +1,294 @@
+/* ============================================
+   LOGIN - Page Specific Styles
+   ============================================ */
+
+:root {
+    /* Light Theme Mapping */
+    --bg: var(--gray-50);
+    --text-main: var(--gray-900);
+    --text-muted: var(--gray-500);
+    --input-bg: var(--gray-100);
+    --border: var(--gray-200);
+    --error-bg: var(--red-50);
+    --error-text: var(--red-600);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark Theme Mapping */
+        --bg: #09090b;
+        /* Zinc 950 */
+        --text-main: #f4f4f5;
+        /* Zinc 100 */
+        --text-muted: #a1a1aa;
+        /* Zinc 400 */
+        --input-bg: #18181b;
+        /* Zinc 900 */
+        --border: #27272a;
+        /* Zinc 800 */
+        --error-bg: #450a0a;
+        --error-text: #fca5a5;
+    }
+}
+
+body.dark-mode {
+    --bg: #09090b;
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --input-bg: #18181b;
+    --border: #27272a;
+    --error-bg: #450a0a;
+    --error-text: #fca5a5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text-main);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 32px;
+}
+
+body.dark-mode .logo {
+    filter: invert(1) brightness(2);
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.025em;
+}
+
+p.subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+input {
+    width: 100%;
+    padding: 16px;
+    background: var(--input-bg);
+    border: 1px solid transparent;
+    border-radius: 16px;
+    font-size: 1rem;
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.2s;
+}
+
+input:focus {
+    background: var(--bg);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+button.btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: var(--green-600);
+    color: #ffffff;
+    border: none;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+button.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Install Button - Premium Style */
+.install-wrapper {
+    width: 100%;
+    margin-top: 12px;
+}
+
+button.btn-install {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+}
+
+button.btn-install::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: left 0.5s;
+}
+
+button.btn-install:hover::before {
+    left: 100%;
+}
+
+button.btn-install:hover {
+    background: var(--primary);
+    color: var(--bg);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(4, 120, 87, 0.25);
+}
+
+button.btn-install:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(4, 120, 87, 0.2);
+}
+
+/* Pulse animation for install button */
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+    }
+
+    50% {
+        box-shadow: 0 4px 20px rgba(4, 120, 87, 0.3);
+    }
+}
+
+button.btn-install:not(.installed) {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Installed state */
+button.btn-install.installed {
+    background: var(--input-bg);
+    color: var(--text-muted);
+    border-color: var(--border);
+    cursor: default;
+    box-shadow: none;
+    animation: none;
+}
+
+button.btn-install.installed:hover {
+    background: var(--input-bg);
+    color: var(--text-muted);
+    transform: none;
+    box-shadow: none;
+}
+
+.error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.credits {
+    margin-top: 48px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.credits a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* iOS Help Modal */
+#ios-modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    padding: 24px;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    border-top: 1px solid var(--border);
+}
+
+#ios-modal.show {
+    transform: translateY(0);
+}

@@ -24,6 +24,7 @@
 /* 3. Recursos Específicos (Nucelos semânticos) */
 @import url('roles.css');
 @import url('modern-enhancements.css');
+@import url('membros.css');
 
 /* 4. Páginas Específicas (Carregadas globalmente por enquanto) */
 @import url('dashboard.css');

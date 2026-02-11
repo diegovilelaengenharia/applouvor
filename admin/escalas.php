@@ -144,29 +144,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $date = new DateTime($schedule['event_date']);
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
 
-                    // Definir Tema de Cor (Moderate Palette)
+                    // Definir Classes de Tipo
                     $type = mb_strtolower($schedule['event_type']);
-                    // Valores para style inline apenas onde variável não alcança ou classes específicas
-                    if (strpos($type, 'domingo') !== false) {
-                        $themeColor = 'var(--slate-600)'; 
-                        $themeLight = 'var(--slate-100)'; 
-                    } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = 'var(--amber-500)'; 
-                        $themeLight = 'var(--amber-50)'; 
+                    $typeClass = 'event-type-culto'; // default
+                    
+                    if (strpos($type, 'ensaio') !== false) {
+                        $typeClass = 'event-type-ensaio';
                     } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#8b5cf6'; // Violet 500
-                        $themeLight = '#f5f3ff'; // Violet 50
+                        $typeClass = 'event-type-jovem';
                     } elseif (strpos($type, 'especial') !== false) {
-                        $themeColor = 'var(--red-500)'; 
-                        $themeLight = 'var(--red-50)'; 
-                    } else {
-                        $themeColor = 'var(--slate-600)';
-                        $themeLight = 'var(--slate-100)';
+                        $typeClass = 'event-type-especial';
                     }
 
                     if ($isToday) {
-                        $themeColor = 'var(--green-600)'; // Verde para hoje
-                        $themeLight = 'var(--green-100)';
+                        $typeClass .= ' event-type-hoje';
                     }
 
                     // Buscar participantes (Top 5)
@@ -180,7 +171,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $stmtUsers->execute([$schedule['id']]);
                     $participants = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
 
-                    // Verifica se o usuário logado está na escala (para destaque azul)
+                    // Verifica se o usuário logado está na escala
                     $isMine = false;
                     foreach ($participants as $p) {
                         if (isset($p['id']) && $p['id'] == $loggedUserId) {
@@ -188,7 +179,6 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             break;
                         }
                     }
-                    // Se não achou nos 5 primeiros, faz query rápida pra garantir
                     if (!$isMine) {
                         $stmtCheck = $pdo->prepare("SELECT 1 FROM schedule_users WHERE schedule_id = ? AND user_id = ?");
                         $stmtCheck->execute([$schedule['id'], $loggedUserId]);
@@ -197,85 +187,40 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         }
                     }
 
+                    if ($isMine && !$isToday) {
+                        $typeClass .= ' event-type-mine';
+                    }
+
                     // Contar total participantes
                     $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
                     $stmtCount->execute([$schedule['id']]);
                     $totalParticipants = $stmtCount->fetchColumn();
                     $extraCount = max(0, $totalParticipants - 5);
-
-                    // Buscar ausências
-                    $stmtAbsences = $pdo->prepare("
-                        SELECT 1
-                        FROM user_unavailability ua
-                        WHERE :event_date BETWEEN ua.start_date AND ua.end_date
-                    ");
-                    $stmtAbsences->execute(['event_date' => $schedule['event_date']]);
-                    $hasAbsences = $stmtAbsences->rowCount() > 0;
                     
                     // Calcular dias até o evento
                     $today = new DateTime('today');
                     $daysUntil = $today->diff($date)->days;
-                    
-                    // Lógica de Cores de Fundo (Pedido do Usuário)
-                    // 1. Hoje -> Verde Claro
-                    // 2. Minha Escala -> Azul Claro
-                    // 3. Outros (Culto/Ensaio) -> Cinza Claro
-                    
-                    if ($isToday) {
-                        $cardBg = 'var(--green-50)';
-                        $borderColor = 'var(--green-300)';
-                    } elseif ($isMine) {
-                        $cardBg = 'var(--blue-50)';
-                        $borderColor = 'var(--blue-200)';
-                    } else {
-                        $cardBg = 'var(--slate-50)'; // Cinza leve para futuras
-                        $borderColor = 'var(--border-subtle)';
-                    }
                 ?>
 
                     <!-- ESCALA CARD -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" style="
-                        display: flex;
-                        align-items: center;
-                        gap: 14px;
-                        padding: 14px 16px;
-                        background: <?= $cardBg ?>;
-                        border: 1px solid <?= $borderColor ?>;
-                        border-left: 4px solid <?= $themeColor ?>;
-                        border-radius: 12px;
-                        text-decoration: none;
-                        color: inherit;
-                        transition: all 0.2s;
-                        margin-bottom: 10px;
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card <?= $typeClass ?>">
                         
                         <!-- Data -->
-                        <div style="
-                            min-width: 56px;
-                            height: 56px;
-                            background: <?= $themeLight ?>;
-                            border: 1px solid <?= $themeColor ?>30;
-                            border-radius: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
-                            flex-shrink: 0;
-                        ">
-                            <div style="font-size: 1.4rem; font-weight: 800; line-height: 1; color: <?= $themeColor ?>;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: <?= $themeColor ?>; opacity: 0.9; margin-top: 3px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                        <div class="date-box">
+                            <div class="day"><?= $date->format('d') ?></div>
+                            <div class="month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                         </div>
 
                         <!-- Conteúdo Central -->
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <div style="flex: 1; min-width: 0; padding: 14px 0;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                                 <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     <?= htmlspecialchars($schedule['event_type']) ?>
                                 </h3>
                                 <?php if ($isToday): ?>
-                                    <span style="background: var(--red-100); color: var(--red-700); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">HOJE</span>
+                                    <span class="badge badge-error">HOJE</span>
                                 <?php else: ?>
-                                    <span style="background: var(--blue-100); color: var(--blue-700); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
+                                    <span class="badge badge-info">
                                         <?= $daysUntil == 1 ? 'Amanhã' : 'em ' . $daysUntil . ' dias' ?>
                                     </span>
                                 <?php endif; ?>
@@ -287,28 +232,28 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 $songsCount = $stmtSongs->fetchColumn();
                             ?>
 
-                            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-secondary); flex-wrap: wrap;">
                                 <span style="display: flex; align-items: center; gap: 4px;">
-                                    <i data-lucide="clock" width="13"></i>
+                                    <i data-lucide="clock" width="14"></i>
                                     <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                 </span>
                                 <?php if ($totalParticipants > 0): ?>
                                     <span style="display: flex; align-items: center; gap: 4px;">
-                                        <i data-lucide="users" width="13"></i>
+                                        <i data-lucide="users" width="14"></i>
                                         <?= $totalParticipants ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($songsCount > 0): ?>
-                                    <span style="display: flex; align-items: center; gap: 4px; color: var(--blue-600);">
-                                        <i data-lucide="music" width="13"></i>
-                                        <?= $songsCount ?>
+                                    <span style="display: flex; align-items: center; gap: 4px; color: var(--blue-600); font-weight: 600;">
+                                        <i data-lucide="music" width="14"></i>
+                                        <?= $songsCount ?> músicas
                                     </span>
                                 <?php endif; ?>
                             </div>
                         </div>
 
                         <!-- Avatares -->
-                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-right: 14px;">
                             <?php if (!empty($participants)): ?>
                                 <div style="display: flex; align-items: center;">
                                     <?php foreach (array_slice($participants, 0, 3) as $i => $p):
@@ -318,7 +263,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                             width: 28px;
                                             height: 28px;
                                             border-radius: 50%;
-                                            background: <?= $p['avatar_color'] ?: $themeColor ?>;
+                                            background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;
                                             border: 2px solid var(--bg-surface);
                                             display: flex;
                                             align-items: center;
@@ -328,9 +273,10 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                             color: white;
                                             margin-left: <?= $i > 0 ? '-10px' : '0' ?>;
                                             z-index: <?= 10 - $i ?>;
+                                            overflow: hidden;
                                         ">
                                             <?php if ($photoUrl): ?>
-                                                <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                                <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover;">
                                             <?php else: ?>
                                                 <?= strtoupper(substr($p['name'], 0, 1)) ?>
                                             <?php endif; ?>
@@ -341,7 +287,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
-                            <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary); opacity: 0.5;"></i>
+                            <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary);"></i>
                         </div>
                     </a>
                 <?php endforeach; ?>

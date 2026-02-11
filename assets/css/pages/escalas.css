@@ -131,41 +131,99 @@
 .timeline-card {
     display: flex;
     background: var(--bg-surface);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
     border: 1px solid var(--border-subtle);
-    border-left-width: 6px;
-    /* Left border for color code */
+    border-left-width: 4px;
     box-shadow: var(--shadow-sm);
     position: relative;
-    min-height: 100px;
+    min-height: 90px;
+    margin-bottom: 12px;
 }
 
 .timeline-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    border-color: var(--border-medium);
 }
 
 .timeline-card-past {
     display: flex;
     background: var(--bg-app);
-    /* Slightly darker/different for past */
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     text-decoration: none;
     color: var(--text-tertiary);
     border: 1px solid var(--border-subtle);
     opacity: 0.8;
     transition: all 0.2s;
+    margin-bottom: 12px;
+    filter: grayscale(0.5);
 }
 
 .timeline-card-past:hover {
     opacity: 1;
+    filter: grayscale(0);
     background: var(--bg-surface);
     box-shadow: var(--shadow-sm);
+}
+
+/* Event Types Config */
+.event-type-culto {
+    --event-color: var(--slate-600);
+    --event-bg: var(--slate-100);
+}
+
+.event-type-ensaio {
+    --event-color: var(--amber-500);
+    --event-bg: var(--amber-50);
+}
+
+.event-type-jovem {
+    --event-color: var(--violet-500);
+    --event-bg: var(--violet-50);
+}
+
+.event-type-especial {
+    --event-color: var(--red-500);
+    --event-bg: var(--red-50);
+}
+
+.event-type-hoje {
+    --event-color: var(--green-600);
+    --event-bg: var(--green-100);
+    --card-bg: var(--green-50);
+    --card-border: var(--green-200);
+}
+
+.event-type-mine {
+    --card-bg: var(--blue-50);
+    --card-border: var(--blue-200);
+}
+
+/* Apply variables */
+.timeline-card {
+    background-color: var(--card-bg, var(--bg-surface));
+    border-color: var(--card-border, var(--border-subtle));
+    border-left-color: var(--event-color, var(--slate-500));
+}
+
+.date-box {
+    background: var(--event-bg, var(--slate-100));
+    color: var(--event-color, var(--slate-600));
+    border: 1px solid transparent;
+}
+
+.date-box .day {
+    color: inherit;
+}
+
+.date-box .month {
+    color: inherit;
+    opacity: 0.9;
 }
 
 .card-content-wrapper {
