@@ -66,33 +66,8 @@ if (!empty($filterType)) $activeFilters++;
 
 renderAppHeader('Escalas', 'index.php');
 ?>
-<style>
-    /* FORÇANDO ESTILOS SMART FLEX (Dedup de Cache) */
-    .card-content-wrapper.smart-flex {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        align-items: center !important;
-        gap: 16px !important;
-    }
-    @media (max-width: 600px) {
-        .card-content-wrapper.smart-flex {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 10px !important;
-        }
-        .card-content-wrapper.smart-flex .card-people-col {
-            width: 100% !important;
-            justify-content: flex-end !important;
-            margin-top: 4px !important;
-        }
-    }
-    .smart-flex .card-people-col {
-        display: flex !important;
-        align-items: center !important;
-        gap: 12px !important;
-        margin-left: auto !important;
-    }
-</style>
+<link rel="stylesheet" href="../assets/css/pages/escalas.css">
+
 <?php
 renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 ?>
@@ -212,9 +187,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         </div>
 
                         <!-- Conteúdo Central -->
-                        <div style="flex: 1; min-width: 0; padding: 14px 0;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">
                                     <?= htmlspecialchars($schedule['event_type']) ?>
                                 </h3>
                                 <?php if ($isToday): ?>
@@ -232,19 +207,19 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 $songsCount = $stmtSongs->fetchColumn();
                             ?>
 
-                            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-secondary); flex-wrap: wrap;">
-                                <span style="display: flex; align-items: center; gap: 4px;">
+                            <div class="timeline-meta">
+                                <span class="timeline-meta-item">
                                     <i data-lucide="clock" width="14"></i>
                                     <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                 </span>
                                 <?php if ($totalParticipants > 0): ?>
-                                    <span style="display: flex; align-items: center; gap: 4px;">
+                                    <span class="timeline-meta-item">
                                         <i data-lucide="users" width="14"></i>
                                         <?= $totalParticipants ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($songsCount > 0): ?>
-                                    <span style="display: flex; align-items: center; gap: 4px; color: var(--blue-600); font-weight: 600;">
+                                    <span class="timeline-meta-item timeline-meta-music">
                                         <i data-lucide="music" width="14"></i>
                                         <?= $songsCount ?> músicas
                                     </span>
@@ -253,27 +228,16 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         </div>
 
                         <!-- Avatares -->
-                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-right: 14px;">
+                        <div class="timeline-avatars-col">
                             <?php if (!empty($participants)): ?>
-                                <div style="display: flex; align-items: center;">
+                                <div class="avatar-group">
                                     <?php foreach (array_slice($participants, 0, 3) as $i => $p):
                                         $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
                                     ?>
-                                        <div style="
-                                            width: 28px;
-                                            height: 28px;
-                                            border-radius: 50%;
+                                        <div class="avatar-circle" style="
                                             background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;
-                                            border: 2px solid var(--bg-surface);
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            font-size: 0.7rem;
-                                            font-weight: 700;
-                                            color: white;
                                             margin-left: <?= $i > 0 ? '-10px' : '0' ?>;
                                             z-index: <?= 10 - $i ?>;
-                                            overflow: hidden;
                                         ">
                                             <?php if ($photoUrl): ?>
                                                 <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover;">
@@ -283,7 +247,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         </div>
                                     <?php endforeach; ?>
                                     <?php if ($extraCount > 0): ?>
-                                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-tertiary); margin-left: 4px;">+<?= $extraCount ?></span>
+                                        <span class="avatar-extra-count">+<?= $extraCount ?></span>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -381,44 +345,18 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     }
                 ?>
                     <!-- ESCALA CARD (PASSADA) -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" style="
-                        display: flex;
-                        align-items: center;
-                        gap: 14px;
-                        padding: 14px 16px;
-                        background: <?= $cardBg ?>;
-                        border: 1px solid <?= $borderColor ?>;
-                        border-left: 4px solid <?= $themeColor ?>;
-                        border-radius: 12px;
-                        text-decoration: none;
-                        color: inherit;
-                        transition: all 0.2s;
-                        margin-bottom: 10px;
-                        opacity: 0.7;
-                        filter: saturate(0.6);
-                    " onmouseover="this.style.opacity='1'; this.style.filter='saturate(1)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.opacity='0.7'; this.style.filter='saturate(0.6)'; this.style.transform=''; this.style.boxShadow=''">
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card-past" style="background: <?= $cardBg ?>; border: 1px solid <?= $borderColor ?>; border-left: 4px solid <?= $themeColor ?>;">
                         
                         <!-- Data -->
-                        <div style="
-                            min-width: 56px;
-                            height: 56px;
-                            background: <?= $themeLight ?>;
-                            border: 1px solid <?= $themeColor ?>30;
-                            border-radius: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
-                            flex-shrink: 0;
-                        ">
-                            <div style="font-size: 1.4rem; font-weight: 800; line-height: 1; color: <?= $themeColor ?>;"><?= $date->format('d') ?></div>
-                            <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: <?= $themeColor ?>; opacity: 0.9; margin-top: 3px;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                        <div class="date-box-past" style="background: <?= $themeLight ?>; border: 1px solid <?= $themeColor ?>30;">
+                            <div class="date-day-past" style="color: <?= $themeColor ?>;"><?= $date->format('d') ?></div>
+                            <div class="date-month-past" style="color: <?= $themeColor ?>;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
                         </div>
 
                         <!-- Conteúdo Central -->
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div class="timeline-content">
+                            <div class="timeline-header" style="margin-bottom: 4px;">
+                                <h3 class="timeline-title">
                                     <?= htmlspecialchars($schedule['event_type']) ?>
                                 </h3>
                                 <span style="background: var(--slate-100); color: var(--slate-600); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
@@ -432,19 +370,19 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 $songsCountPast = $stmtSongsPast->fetchColumn();
                             ?>
 
-                            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap;">
-                                <span style="display: flex; align-items: center; gap: 4px;">
+                            <div class="timeline-meta" style="font-size: 0.8rem; gap: 10px;">
+                                <span class="timeline-meta-item">
                                     <i data-lucide="clock" width="13"></i>
                                     <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                 </span>
                                 <?php if ($totalParticipants > 0): ?>
-                                    <span style="display: flex; align-items: center; gap: 4px;">
+                                    <span class="timeline-meta-item">
                                         <i data-lucide="users" width="13"></i>
                                         <?= $totalParticipants ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($songsCountPast > 0): ?>
-                                    <span style="display: flex; align-items: center; gap: 4px; color: var(--blue-600);">
+                                    <span class="timeline-meta-item" style="color: var(--blue-600);">
                                         <i data-lucide="music" width="13"></i>
                                         <?= $songsCountPast ?>
                                     </span>
@@ -453,24 +391,14 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         </div>
 
                         <!-- Avatares -->
-                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                        <div class="timeline-avatars-col">
                             <?php if (!empty($participants)): ?>
-                                <div style="display: flex; align-items: center;">
+                                <div class="avatar-group">
                                     <?php foreach (array_slice($participants, 0, 3) as $i => $p):
                                         $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
                                     ?>
-                                        <div style="
-                                            width: 28px;
-                                            height: 28px;
-                                            border-radius: 50%;
+                                        <div class="avatar-circle" style="
                                             background: <?= $p['avatar_color'] ?: $themeColor ?>;
-                                            border: 2px solid var(--bg-surface);
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            font-size: 0.7rem;
-                                            font-weight: 700;
-                                            color: white;
                                             margin-left: <?= $i > 0 ? '-10px' : '0' ?>;
                                             z-index: <?= 10 - $i ?>;
                                         ">
@@ -482,7 +410,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         </div>
                                     <?php endforeach; ?>
                                     <?php if ($extraCount > 0): ?>
-                                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-tertiary); margin-left: 4px;">+<?= $extraCount ?></span>
+                                        <span class="avatar-extra-count">+<?= $extraCount ?></span>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -497,7 +425,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 </div>
 
 <!-- FILTER SHEET -->
-<div id="filterSheet" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000;">
+<div id="filterSheet" class="filter-sheet-container">
     <div class="filter-sheet-overlay" onclick="closeSheet('filterSheet')"></div>
     <div class="filter-sheet-modal">
         <div class="sheet-header-row">
@@ -511,7 +439,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             <!-- Toggle Minhas Escalas -->
             <label class="filter-toggle-row">
                 <span style="font-weight: 600; color: var(--text-secondary);">Apenas em que participo</span>
-                <input type="checkbox" name="mine" value="1" <?= $filterMine ? 'checked' : '' ?> style="transform: scale(1.3); accent-color: var(--slate-800);">
+                <input type="checkbox" name="mine" value="1" <?= $filterMine ? 'checked' : '' ?> class="filter-toggle-checkbox">
             </label>
 
             <!-- Tipo de Evento -->
