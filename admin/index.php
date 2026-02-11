@@ -14,6 +14,8 @@ $allCardsDefinitions = getAllAvailableCards();
 renderAppHeader('Visão Geral');
 ?>
 
+<link rel="stylesheet" href="../assets/css/pages/dashboard.css">
+
 <!-- MODAL URGENTE AUTOMÁTICO -->
 <?php if ($popupAviso): ?>
 <div id="urgentModal" class="urgent-modal-overlay">

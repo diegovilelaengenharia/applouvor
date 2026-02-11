@@ -87,6 +87,8 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
 renderAppHeader('Escalas');
 ?>
 
+<link rel="stylesheet" href="../assets/css/pages/escala.css">
+
 
 
 <!-- Hero Header -->
