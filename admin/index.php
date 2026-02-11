@@ -48,7 +48,11 @@ renderAppHeader('Visão Geral');
 </script>
 <?php endif; ?>
 
-<?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
+<?php 
+// REMOVIDO: renderPageHeader estava causando deformação visual
+// O header sticky desktop (renderAppHeader) já é suficiente
+// renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); 
+?>
 
 <!-- DASHBOARD CONTAINER (Removido max-width inline) -->
 <div class="dashboard-container">
