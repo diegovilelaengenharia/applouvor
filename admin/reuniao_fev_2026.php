@@ -61,7 +61,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
                         <p>Nossa ferramenta completa de gestão e crescimento espiritual</p>
                     </div>
                     <div class="card">
-                        <i class="fas fa-rocket card-icon purple"></i>
+                        <i class="fas fa-rocket card-icon teal"></i>
                         <h3>Próximos Passos</h3>
                         <p>Como participar e agenda de eventos futuros</p>
                     </div>
@@ -267,7 +267,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
                         <p>Envolvimento real com a igreja local</p>
                     </div>
                     <div class="card">
-                        <i class="fas fa-users card-icon purple"></i>
+                        <i class="fas fa-users card-icon teal"></i>
                         <h3>Comunhão</h3>
                         <p>Encontrão Semestral e Tópico aberto</p>
                     </div>
@@ -473,7 +473,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
                         <p>Confirmações mais rápidas, maior participação e feedback constante</p>
                     </div>
                     <div class="card">
-                        <i class="fas fa-heart card-icon purple"></i>
+                        <i class="fas fa-heart card-icon teal"></i>
                         <h3>Crescimento Espiritual</h3>
                         <p>Acompanhamento de leitura bíblica e diário espiritual ativo</p>
                     </div>
@@ -621,7 +621,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         <!-- Slide 23: Roadmap -->
         <div class="slide">
             <div class="slide-content">
-                <span class="pill purple">FUTURO</span>
+                <span class="pill teal">FUTURO</span>
                 <h2>Roadmap 2026</h2>
                 <div class="grid-2" style="margin-top: 60px;">
                     <div class="card">
@@ -640,7 +640,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
                         <p>Gamificação avançada e sistema de mentoria</p>
                     </div>
                     <div class="card">
-                        <i class="fas fa-share-nodes card-icon purple"></i>
+                        <i class="fas fa-share-nodes card-icon teal"></i>
                         <h3>Q4 - Out/Dez</h3>
                         <p>Integração com redes sociais e transmissão ao vivo</p>
                     </div>

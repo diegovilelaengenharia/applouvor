@@ -326,7 +326,7 @@ renderAppHeader('Escalas');
                         <!-- 3. Tags -->
                         <div class="event-tags">
                             <span class="tag tag-green">Culto</span>
-                            <span class="tag tag-purple">Louvor</span>
+                            <span class="tag tag-teal">Louvor</span>
                         </div>
 
                         <!-- 4. Footer: Avatars & Stats -->

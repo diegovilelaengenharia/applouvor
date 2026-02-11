@@ -167,7 +167,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
             <i data-lucide="database" style="width: 16px;"></i>
             Limpar Banco
         </button>
-        <button onclick="openViewsModal()" class="btn" style="background: #7c3aed; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+        <button onclick="openViewsModal()" class="btn" style="background: #14b8a6; color: white; border: none; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
             <i data-lucide="users" style="width: 16px;"></i>
             Visualizações
         </button>

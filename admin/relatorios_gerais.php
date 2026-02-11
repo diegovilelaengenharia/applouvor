@@ -1176,8 +1176,8 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
                             <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Tags Mais Usadas</h5>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <?php 
-                                $tagColors = ['var(--yellow-100)', 'var(--purple-100)', 'var(--sage-100)', 'var(--rose-100)', 'var(--blue-100)'];
-                                $tagTextColors = ['var(--yellow-700)', 'var(--purple-700)', 'var(--sage-700)', 'var(--rose-700)', 'var(--blue-700)'];
+                                $tagColors = ['var(--yellow-100)', 'var(--teal-100)', 'var(--sage-100)', 'var(--rose-100)', 'var(--blue-100)'];
+                                $tagTextColors = ['var(--yellow-700)', 'var(--teal-700)', 'var(--sage-700)', 'var(--rose-700)', 'var(--blue-700)'];
                                 foreach(array_slice($topTags ?? [], 0, 8) as $idx => $t): 
                                     $colorIdx = $idx % count($tagColors);
                                 ?>

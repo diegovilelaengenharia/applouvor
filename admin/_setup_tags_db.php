@@ -28,7 +28,7 @@ try {
     // Popular com alguns dados iniciais baseados na imagem
     $initialTags = [
         ['Louvor', 'São cânticos cujas letras expressam elogio e agradecimento por aquilo que Deus fez.', 'var(--yellow-500)'], // Amarelo (mantido)
-        ['Adoração', 'São cânticos cujas letras expressam reconhecimento a Deus por aquilo que Ele é.', 'var(--lavender-500)'], // Purple 500 - Vibrante
+        ['Adoração', 'São cânticos cujas letras expressam reconhecimento a Deus por aquilo que Ele é.', 'var(--lavender-500)'], // Teal 500 - Vibrante
         ['Contemplação', 'São cânticos que se concentram em meditar na Pessoa de Deus.', 'var(--slate-500)'], // Blue 500 (mantido)
         ['Consagração', 'Tratam da dedicação de nossas vidas a Deus.', 'var(--sage-500)'], // Green 500 - Vibrante
         ['Alegria', 'Expressam alegria pelo Senhor e seus feitos.', '#EC4899'], // Pink (mantido)
