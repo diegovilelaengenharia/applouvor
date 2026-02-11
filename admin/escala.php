@@ -92,104 +92,46 @@ renderAppHeader('Escalas');
 
 
 <!-- Hero Header -->
-<div style="
-    background: #047857; 
-    margin: -24px -16px 32px -16px; 
-    padding: 32px 24px 64px 24px; 
-    border-radius: 0 0 32px 32px; 
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: visible;
-">
+<div class="hero-header">
     <!-- Navigation Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <a href="index.php" class="ripple" style="
-            padding: 10px 20px;
-            border-radius: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            color: #047857; 
-            background: white; 
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        ">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
+    <div class="hero-nav-row">
+        <a href="index.php" class="ripple">
+            <i data-lucide="arrow-left"></i> Voltar
         </a>
 
-        <div style="display: flex; align-items: center;">
+        <div>
             <?php renderGlobalNavButtons(); ?>
         </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="hero-title-row">
         <div>
-            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Escalas</h1>
-            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
+            <h1>Escalas</h1>
+            <p>Louvor PIB Oliveira</p>
         </div>
-        <div style="display: flex; gap: 8px;">
+        <div>
             <!-- Add Button -->
-            <a href="escala_adicionar.php" class="ripple" style="
-                background: var(--yellow-600); 
-                border: none; 
-                width: 44px; 
-                height: 44px; 
-                border-radius: 12px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                color: white;
-                backdrop-filter: blur(4px);
-                cursor: pointer;
-                box-shadow: 0 1px 3px rgba(217, 119, 6, 0.15);
-            ">
-                <i data-lucide="plus" style="width: 20px;"></i>
+            <a href="escala_adicionar.php" class="ripple">
+                <i data-lucide="plus"></i>
             </a>
             <!-- Filter Button -->
-            <button onclick="openFilters()" class="ripple" style="
-                background: rgba(255,255,255,0.2); 
-                border: none; 
-                width: 44px; 
-                height: 44px; 
-                border-radius: 12px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                color: white;
-                backdrop-filter: blur(4px);
-                cursor: pointer;
-            ">
-                <i data-lucide="filter" style="width: 20px;"></i>
+            <button onclick="openFilters()" class="ripple">
+                <i data-lucide="filter"></i>
             </button>
             <!-- View Button -->
             <!-- View Button Wrapper -->
-            <div style="position: relative;">
-                <button id="btnViewToggle" onclick="toggleViewMenu()" class="ripple" style="
-                    background: rgba(255,255,255,0.2); 
-                    border: none; 
-                    width: 44px; 
-                    height: 44px; 
-                    border-radius: 12px; 
-                    display: flex; 
-                    align-items: center; 
-                    justify-content: center;
-                    color: white;
-                    backdrop-filter: blur(4px);
-                    cursor: pointer;
-                ">
-                    <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>" style="width: 20px;"></i>
+            <div>
+                <button id="btnViewToggle" onclick="toggleViewMenu()" class="ripple">
+                    <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div id="viewMenu" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-lg); width: 200px; z-index: 600; margin-top: 8px; overflow: hidden;">
-                    <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
-                        <i data-lucide="align-left" style="width: 18px; color: var(--text-secondary);"></i> Linha do Tempo
+                <div id="viewMenu">
+                    <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple">
+                        <i data-lucide="align-left"></i> Linha do Tempo
                     </a>
-                    <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
-                        <i data-lucide="list" style="width: 18px; color: var(--text-secondary);"></i> Lista Compacta
+                    <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple">
+                        <i data-lucide="list"></i> Lista Compacta
                     </a>
                 </div>
             </div>
@@ -197,20 +139,12 @@ renderAppHeader('Escalas');
     </div>
 
     <!-- Floating Tabs -->
-    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
-        <div style="
-            background: var(--bg-secondary); 
-            border-radius: 16px; 
-            padding: 6px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-            display: flex; 
-            align-items: center;
-            border: 1px solid rgba(0,0,0,0.05);
-        ">
-            <a href="?tab=next" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $tab === 'next' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+    <div>
+        <div>
+            <a href="?tab=next" class="ripple">
                 Próximas
             </a>
-            <a href="?tab=history" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $tab === 'history' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+            <a href="?tab=history" class="ripple">
                 Anteriores
             </a>
         </div>
@@ -219,14 +153,14 @@ renderAppHeader('Escalas');
 
 <?php if (empty($schedules)): ?>
     <!-- Empty State -->
-    <div style="text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center;">
-        <div style="background: var(--bg-tertiary); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <i data-lucide="calendar-off" style="color: var(--text-muted); width: 40px; height: 40px;"></i>
+    <div>
+        <div>
+            <i data-lucide="calendar-off"></i>
         </div>
-        <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
+        <h3>
             Nenhuma escala encontrada
         </h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 250px; margin-bottom: 24px;">
+        <p>
             Tente ajustar os filtros ou adicione uma nova escala.
         </p>
     </div>
@@ -234,14 +168,14 @@ renderAppHeader('Escalas');
 
     <!-- VIEW: LIST (COMPACT) -->
     <?php if ($viewMode === 'list'): ?>
-        <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
             <?php foreach ($schedules as $schedule):
                 $date = new DateTime($schedule['event_date']);
                 $monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
                 $dayNumber = $date->format('d');
                 $weekDay = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'][$date->format('w')];
             ?>
-                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="compact-card ripple" style="text-decoration: none;">
+                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="compact-card ripple">
                     <!-- Left Strip handled by CSS or border -->
 
                     <!-- Date Column -->
@@ -258,7 +192,7 @@ renderAppHeader('Escalas');
                         <div class="compact-meta"><?= $weekDay ?> • 19:00</div>
                         <div class="compact-title"><?= htmlspecialchars($schedule['event_type']) ?></div>
                         <div class="compact-sub">
-                            <i data-lucide="users" style="width: 14px; height: 14px;"></i> Escala
+                            <i data-lucide="users"></i> Escala
                         </div>
                     </div>
 
@@ -304,7 +238,7 @@ renderAppHeader('Escalas');
 
                     <!-- Card -->
                     <!-- Card -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="event-card ripple" style="text-decoration: none;">
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="event-card ripple">
 
                         <!-- 1. Header: Title -->
                         <div class="event-header">
@@ -333,9 +267,9 @@ renderAppHeader('Escalas');
                         <div class="event-footer">
                             <div class="avatar-stack">
                                 <!-- Placeholder Avatars for "Team Preview" -->
-                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=A&background=2563EB&color=fff');"></div>
-                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=B&background=059669&color=fff');"></div>
-                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=C&background=db2777&color=fff');"></div>
+                                <div class="avatar-small"></div>
+                                <div class="avatar-small"></div>
+                                <div class="avatar-small"></div>
                             </div>
 
                             <div class="footer-right">
@@ -364,14 +298,14 @@ renderAppHeader('Escalas');
             <input type="hidden" name="view" value="<?= $viewMode ?>">
             <input type="hidden" name="tab" value="<?= $tab ?>">
 
-            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+            <div>
                 <!-- Toggle: Apenas que eu participo -->
                 <?php
                 $isMyFilterActive = isset($_GET['filter_my']) && $_GET['filter_my'] == '1';
                 $rowStyle = $isMyFilterActive ? 'background: var(--yellow-100); border: 1px solid var(--yellow-500); color: #92400E;' : 'background: var(--bg-tertiary); border: 1px solid transparent;';
                 ?>
-                <div id="filterMyRow" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 12px; transition: all 0.2s; <?= $rowStyle ?>">
-                    <span style="font-weight: 600;">Apenas que eu participo</span>
+                <div id="filterMyRow">
+                    <span>Apenas que eu participo</span>
                     <label class="switch">
                         <input type="checkbox" name="filter_my" value="1" <?= $isMyFilterActive ? 'checked' : '' ?> onchange="toggleMyRowStyle(this)">
                         <span class="slider round"></span>
@@ -380,8 +314,8 @@ renderAppHeader('Escalas');
 
                 <!-- Select Membro -->
                 <div>
-                    <label style="font-size: 0.9rem; margin-bottom: 4px; display: block; color: var(--text-secondary);">Membro</label>
-                    <select name="filter_member" class="form-input" style="width: 100%;">
+                    <label>Membro</label>
+                    <select name="filter_member" class="form-input">
                         <option value="">Todos</option>
                         <?php
                         $users = $pdo->query("SELECT id, name FROM users ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -395,8 +329,8 @@ renderAppHeader('Escalas');
 
                 <!-- Select Música -->
                 <div>
-                    <label style="font-size: 0.9rem; margin-bottom: 4px; display: block; color: var(--text-secondary);">Música</label>
-                    <select name="filter_song" class="form-input" style="width: 100%;">
+                    <label>Música</label>
+                    <select name="filter_song" class="form-input">
                         <option value="">Todas</option>
                         <?php
                         $allSongs = $pdo->query("SELECT id, title FROM songs ORDER BY title ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -409,7 +343,7 @@ renderAppHeader('Escalas');
                 </div>
             </div>
 
-            <button type="submit" class="btn-action-save ripple" style="width: 100%; justify-content: center;">Aplicar Filtros</button>
+            <button type="submit" class="btn-action-save ripple">Aplicar Filtros</button>
         </form>
     </div>
 </div>
@@ -455,10 +389,10 @@ renderAppHeader('Escalas');
 <!-- Barra de Exclusão Flutuante -->
 <div id="deleteBar" class="delete-bar">
     <span id="selectedCount">0 selecionadas</span>
-    <button type="button" onclick="confirmDelete()" style="background: white; color: var(--status-error); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer;">
+    <button type="button" onclick="confirmDelete()">
         Excluir
     </button>
-    <button type="button" onclick="cancelSelection()" style="background: transparent; color: white; border: 1px solid white; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer;">
+    <button type="button" onclick="cancelSelection()">
         Cancelar
     </button>
 </div>
