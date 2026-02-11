@@ -33,13 +33,15 @@
 @import url('pages/lider.css');
 @import url('pages/escala-detalhe.css');
 
-/* 5. Legacy Styles (O "antigo" style.css - Limpo de resets globais) 
-   Carregado por último para manter compatibilidade, mas cuidado com overrides. */
+/* 5. Legacy (Mantido para compatibilidade, mas deve ser refatorado) */
 @import url('legacy-style.css');
 
-/* 6. Correções Finais (Overrides cirúrgicos) */
+/* 6. Overrides Finais */
 /* @import url('final_fix.css'); -> Conteúdo movido para os componentes ou legacy se necessário */
 @import url('final_fix.css');
 
-/* 7. Dark Mode (Overrides finais de tema) */
+/* 7. Dark Mode (Carregado por último para sobrescrever) */
 @import url('dark-mode.css');
+
+/* 8. HEADER FIX - SOLUÇÃO DEFINITIVA (DEVE SER O ÚLTIMO!) */
+@import url('header-fix.css');
