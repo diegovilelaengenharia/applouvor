@@ -143,9 +143,7 @@ $isEditable = isset($_GET['edit']) && $_GET['edit'] == '1' && $_SESSION['user_ro
 
 renderAppHeader('Detalhes da Escala', 'escalas.php');
 ?>
-<style>
-    /* Removed conflicting CSS - using pure JS control */
-</style>
+
 <link rel="stylesheet" href="../assets/css/pages/escala-detalhe.css?v=<?= time() ?>">
 
 <?php renderPageHeader('Detalhes da Escala', $schedule['event_type']); ?>

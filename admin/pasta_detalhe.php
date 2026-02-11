@@ -34,45 +34,7 @@ $songs = $stmtSongs->fetchAll(PDO::FETCH_ASSOC);
 renderAppHeader($tag['name']);
 ?>
 
-<style>
-    .song-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        padding: 10px 12px;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        transition: transform 0.2s;
-    }
 
-    .song-card:active {
-        background: var(--bg-hover);
-        transform: scale(0.98);
-    }
-
-    .song-icon {
-        width: 40px;
-        height: 40px;
-        background: var(--bg-surface);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-secondary);
-    }
-
-    .empty-state {
-        background: var(--bg-card);
-        border-radius: 16px;
-        padding: 32px 16px;
-        text-align: center;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--border-subtle);
-    }
-</style>
 
 <!-- Hero da Pasta Compacto -->
 <div style="

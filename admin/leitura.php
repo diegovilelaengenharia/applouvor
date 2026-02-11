@@ -1,4 +1,4 @@
-Ôªø<?php
+<?php
 // admin/leitura.php
 // Iniciar output buffering para evitar que qualquer output acidental corrompa JSON
 ob_start();
@@ -9,13 +9,13 @@ require_once '../includes/layout.php';
 
 checkLogin(); 
 
-// AUTOLOAD: T√≠tulo na Tabela
+// AUTOLOAD: TÌtulo na Tabela
 try {
     $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'note_title'");
     if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN note_title VARCHAR(255) DEFAULT NULL");
 } catch(Exception $e) { /* Ignore */ }
 
-// AUTOLOAD: Campo de √Åudio
+// AUTOLOAD: Campo de ¡udio
 try {
     $check = $pdo->query("SHOW COLUMNS FROM reading_progress LIKE 'audio_path'");
     if ($check->rowCount() == 0) $pdo->exec("ALTER TABLE reading_progress ADD COLUMN audio_path VARCHAR(500) DEFAULT NULL");
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              $pdo->beginTransaction();
              // Salvar tipo de plano
              $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_type', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")->execute([$userId, $planType]);
-             // Salvar data de in√≠cio
+             // Salvar data de inÌcio
              $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) VALUES (?, 'reading_plan_start_date', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")->execute([$userId, $startDate]);
              $pdo->commit();
              echo json_encode(['success' => true]);
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Atualizar array de passagens
             if ($completed) {
-                // Adicionar passagem se n√£o existir
+                // Adicionar passagem se n„o existir
                 if (!in_array($passageIndex, $versesRead)) {
                     $versesRead[] = $passageIndex;
                 }
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Salvar no banco
             if (empty($versesRead)) {
-                // Se n√£o h√° passagens marcadas, deletar registro
+                // Se n„o h· passagens marcadas, deletar registro
                 $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?")
                     ->execute([$userId, 1, $planDay]);
             } else {
@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $comment = trim($_POST['comment'] ?? '');
         
         try {
-            // Se ambos est√£o vazios, deletar registro
+            // Se ambos est„o vazios, deletar registro
             if (empty($noteTitle) && empty($comment)) {
                 $pdo->prepare("UPDATE reading_progress SET note_title = NULL, comment = NULL WHERE user_id = ? AND month_num = ? AND day_num = ?")
                     ->execute([$userId, 1, $planDay]);
@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Deletar progresso de leitura
             $pdo->prepare("DELETE FROM reading_progress WHERE user_id = ?")->execute([$userId]); 
             
-            // Deletar apenas configura√ß√µes do plano de leitura
+            // Deletar apenas configuraÁıes do plano de leitura
             $pdo->prepare("DELETE FROM user_settings WHERE user_id = ? AND setting_key IN ('reading_plan_type', 'reading_plan_start_date')")->execute([$userId]);
             
             $pdo->commit();
@@ -244,157 +244,15 @@ $planStarted = !empty($startDateStr) && !empty($selectedPlanType);
 if (!$planStarted) {
     // 1. Render Headers
     renderAppHeader('Novo Plano');
-    renderPageHeader('Escolha seu Plano', 'Jornada B√≠blica 2026');
+    renderPageHeader('Escolha seu Plano', 'Jornada BÌblica 2026');
     ?>
-    <style>
-        /* Compact Design System for Selection */
-        .selection-container {
-            max-width: 800px; /* Wider for Grid */
-            margin: 0 auto;
-            padding: 12px; /* Mobile first padding */
-        }
-        
-        .plan-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        
-        @media (min-width: 768px) {
-            .plan-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        .plan-card {
-            background: var(--bg-surface, white);
-            border: 1px solid var(--border-color, var(--slate-200));
-            border-radius: 12px;
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: 100%;
-        }
-
-        .plan-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--slate-600);
-            box-shadow: 0 4px 12px rgba(55, 106, 200, 0.15);
-        }
-
-        .plan-card.selected {
-            border: 2px solid var(--sage-600);
-            background: var(--sage-50);
-            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
-        }
-        
-        .plan-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .plan-content { flex: 1; }
-
-        .plan-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-main, var(--slate-800));
-            margin-bottom: 4px;
-        }
-
-        .plan-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted, var(--slate-500));
-            line-height: 1.4;
-        }
-
-        .plan-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: var(--slate-100);
-            color: var(--slate-600);
-            align-self: flex-start;
-            margin-top: auto; /* Push to bottom if needed */
-        }
-
-        /* Action Bar (Sticky Bottom style on mobile, inline on desktop) */
-        .action-bar {
-            background: var(--bg-surface, white);
-            border: 1px solid var(--border-color, var(--slate-200));
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-
-        @media(min-width: 640px) {
-            .action-bar { flex-direction: row; align-items: center; justify-content: space-between; }
-        }
-
-        .date-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .date-input {
-            border: 1px solid var(--border-color, var(--slate-200));
-            border-radius: 8px;
-            padding: 10px;
-            font-family: inherit;
-            color: var(--text-main);
-            background: var(--bg-body);
-            font-size: 0.9rem;
-            outline: none;
-            width: 100%;
-        }
-        @media(min-width: 640px) { .date-input { width: auto; } }
-
-        .btn-start {
-            background: var(--slate-600);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            opacity: 0.5;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-        }
-        @media(min-width: 640px) { .btn-start { width: auto; } }
-        
-        .btn-start.active { opacity: 1; pointer-events: auto; }
-        .btn-start:active { transform: scale(0.98); }
-
-    </style>
+    
 
     <div class="selection-container animate-in">
         
         <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">
-            Selecione um roteiro para guiar sua leitura b√≠blica este ano. 
-            Voc√™ pode alterar o ritmo a qualquer momento nas configura√ß√µes.
+            Selecione um roteiro para guiar sua leitura bÌblica este ano. 
+            VocÍ pode alterar o ritmo a qualquer momento nas configuraÁıes.
         </p>
         
         <div class="plan-grid">
@@ -405,21 +263,21 @@ if (!$planStarted) {
                 </div>
                 <div class="plan-content">
                     <div class="plan-title">Navigators</div>
-                    <div class="plan-desc">25 dias/m√™s. Flexibilidade m√°xima para dias corridos.</div>
+                    <div class="plan-desc">25 dias/mÍs. Flexibilidade m·xima para dias corridos.</div>
                 </div>
                 <div class="plan-badge">Equilibrado</div>
             </div>
             
-            <!-- Cronol√≥gico -->
+            <!-- CronolÛgico -->
             <div class="plan-card" onclick="selectPlan('chronological', this)">
                 <div class="plan-icon" style="background: var(--sage-100); color: var(--sage-700);">
                     <i data-lucide="clock"></i>
                 </div>
                 <div class="plan-content">
-                    <div class="plan-title">Cronol√≥gico</div>
-                    <div class="plan-desc">Leia os fatos na ordem hist√≥rica em que ocorreram.</div>
+                    <div class="plan-title">CronolÛgico</div>
+                    <div class="plan-desc">Leia os fatos na ordem histÛrica em que ocorreram.</div>
                 </div>
-                <div class="plan-badge">Hist√≥rico</div>
+                <div class="plan-badge">HistÛrico</div>
             </div>
             
             <!-- M'Cheyne -->
@@ -437,7 +295,7 @@ if (!$planStarted) {
 
         <div class="action-bar">
             <div class="date-group">
-                <label style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">In√≠cio:</label>
+                <label style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">InÌcio:</label>
                 <input type="date" id="start-date" class="date-input" value="<?= date('Y-m-d') ?>">
             </div>
             
@@ -452,13 +310,13 @@ if (!$planStarted) {
             <div style="display: flex; gap: 10px; align-items: start; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px;">
                 <i data-lucide="smartphone" style="width: 18px; color: var(--text-muted); margin-top: 2px;"></i>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    <strong>App PWA</strong><br>Adicione √† tela inicial para acesso r√°pido di√°rio.
+                    <strong>App PWA</strong><br>Adicione ‡ tela inicial para acesso r·pido di·rio.
                 </div>
             </div>
              <div style="display: flex; gap: 10px; align-items: start; padding: 12px; background: rgba(255,255,255,0.5); border-radius: 8px;">
                 <i data-lucide="bell" style="width: 18px; color: var(--text-muted); margin-top: 2px;"></i>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    <strong>Lembretes</strong><br>Voc√™ receber√° notifica√ß√µes para manter o ritmo.
+                    <strong>Lembretes</strong><br>VocÍ receber· notificaÁıes para manter o ritmo.
                 </div>
             </div>
         </div>
@@ -553,7 +411,7 @@ if (!$planStarted) {
             switchConfigTab(defaultTab);
         } else {
             console.error('Modal config not found');
-            alert('Modal de configura√ß√µes n√£o encontrado. Verifique o c√≥digo.');
+            alert('Modal de configuraÁıes n„o encontrado. Verifique o cÛdigo.');
         }
     }
     
@@ -630,7 +488,7 @@ foreach($rows as $r) {
 $stmtUser = $pdo->prepare("SELECT name, birth_date FROM users WHERE id = ?");
 $stmtUser->execute([$userId]);
 $userDataDB = $stmtUser->fetch(PDO::FETCH_ASSOC);
-$userName = $userDataDB['name'] ?? 'Usu‚îú√≠rio';
+$userName = $userDataDB['name'] ?? 'Usu+Ìrio';
 $userBirthDate = $userDataDB['birth_date'] ?? null;
 
 // Calculate Favorite Time & Distributions
@@ -640,7 +498,7 @@ $timeSlots = [
     '12h - 15h' => 0, '15h - 18h' => 0, '18h - 21h' => 0, '21h - 00h' => 0
 ];
 $weekdayStats = [0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0]; // 0=Dom, 6=Sab
-$mapWeekdays = [0=>'Dom', 1=>'Seg', 2=>'Ter', 3=>'Qua', 4=>'Qui', 5=>'Sex', 6=>'S‚îú√≠b'];
+$mapWeekdays = [0=>'Dom', 1=>'Seg', 2=>'Ter', 3=>'Qua', 4=>'Qui', 5=>'Sex', 6=>'S+Ìb'];
 $hoursLog = [];
 
 foreach($rows as $r) {
@@ -741,18 +599,18 @@ if ($pace > 0 && $daysRemaining > 0) {
     $estDate->modify("+" . round($realDaysNeeded) . " days");
     $estimatedFinishDate = $estDate->format('d/m/Y');
 } elseif ($daysRemaining <= 0) {
-    $estimatedFinishDate = "Conclu‚îú¬°do!";
+    $estimatedFinishDate = "Conclu+°do!";
 }
 
 
 // Messages
 $motivationalMessages = [
-    0 => "¬≠∆í√Æ‚ñí Voc‚îú¬¨ come‚îú¬∫ou! Cada jornada come‚îú¬∫a com um passo.",
-    10 => "¬≠∆í√Ü¬¨ Incr‚îú¬°vel! A persist‚îú¬¨ncia est‚îú√≠ valendo a pena!",
-    25 => "¬≠∆í√Æ∆í Voc‚îú¬¨ est‚îú√≠ no caminho certo! Continue firme!",
-    50 => "√î¬£¬ø Mais da metade conclu‚îú¬°da! Sua dedica‚îú¬∫‚îú√∫o ‚îú¬Æ inspiradora!",
-    75 => "¬≠∆í√Ñ¬ª Quase l‚îú√≠! Voc‚îú¬¨ est‚îú√≠ t‚îú√∫o perto de completar esta jornada!",
-    90 => "¬≠∆í√Ö√• Reta final! Voc‚îú¬¨ ‚îú¬Æ um exemplo de disciplina!"
+    0 => "≠ÉÓ¶ Voc+¨ come+∫ou! Cada jornada come+∫a com um passo.",
+    10 => "≠É∆¨ Incr+°vel! A persist+¨ncia est+Ì valendo a pena!",
+    25 => "≠ÉÓÉ Voc+¨ est+Ì no caminho certo! Continue firme!",
+    50 => "‘£ø Mais da metade conclu+°da! Sua dedica+∫+˙o +Æ inspiradora!",
+    75 => "≠Éƒª Quase l+Ì! Voc+¨ est+Ì t+˙o perto de completar esta jornada!",
+    90 => "≠É≈Â Reta final! Voc+¨ +Æ um exemplo de disciplina!"
 ];
 $currentMessage = $motivationalMessages[0];
 foreach($motivationalMessages as $t => $msg) if($completionPercent >= $t) $currentMessage = $msg;
@@ -771,7 +629,7 @@ if (isset($_GET['day'])) {
     if ($planType === 'navigators') {
         $planDayIndex = (($currentPlanMonth - 1) * 25) + $currentPlanDay;
     } else {
-        $planDayIndex = $planDayIndex; // J√° calculado anteriormente
+        $planDayIndex = $planDayIndex; // J· calculado anteriormente
     }
     $planDayIndex = max(1, min($planDayIndex, $planInfo['total_days']));
 }
@@ -779,12 +637,12 @@ if (isset($_GET['day'])) {
 // Buscar leituras do dia
 $todayReadings = getReadingsForDay($planType, $planDayIndex);
 
-// Se n√£o houver leituras, usar fallback
+// Se n„o houver leituras, usar fallback
 if (empty($todayReadings)) {
     $todayReadings = [
         [
-            'reference' => 'G√™nesis 1',
-            'link' => getBibleLink('G√™nesis 1')
+            'reference' => 'GÍnesis 1',
+            'link' => getBibleLink('GÍnesis 1')
         ]
     ];
 }
@@ -803,7 +661,7 @@ if ($progressData && !empty($progressData['verses_read'])) {
 foreach ($todayReadings as $index => &$reading) {
     $reading['completed'] = in_array($index, $completedPassages);
 }
-unset($reading); // Limpar refer√™ncia
+unset($reading); // Limpar referÍncia
 
 
 
@@ -816,84 +674,22 @@ renderPageHeader('Plano de Leitura', 'Louvor PIB Oliveira');
 <script src="../assets/js/reading_plan_data.js?v=<?= time() ?>"></script>
 <script src="https://unpkg.com/lucide@latest?v=<?= time() ?>"></script>
 
-<style>
-    /* ... (CSS preserved from original, added adjustments for 31 days columns if needed) ... */
-    :root { --primary: var(--slate-500); --primary-soft: var(--slate-50); --success: var(--sage-500); }
-    /* body { background-color: var(--slate-50); color: var(--slate-800); padding-bottom: 70px; font-family: -apple-system, sans-serif; } */
-    
-    /* Calendar Strip & Items */
-    .cal-strip { display: flex !important; gap: 8px; overflow-x: auto; padding: 10px 12px; background: white; border-bottom: 1px solid var(--slate-200); scrollbar-width: none; }
-    .cal-strip::-webkit-scrollbar { display: none; }
-    .cal-item { min-width: 56px; height: 68px; border-radius: 12px; background: #f3f4f6; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s; }
-    .cal-month { font-size: var(--font-caption); font-weight: 700; text-transform: uppercase; color: #6b7280; }
-    .cal-num { font-size: var(--font-h1); font-weight: 800; color: #1f2937; }
-    .cal-item.active { background: white; border-color: var(--sage-600); box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15); }
-    .cal-item.active .cal-num, .cal-item.active .cal-month { color: var(--sage-700); }
-    .cal-item.done { background: var(--sage-100); }
-    .cal-item.done .cal-num { color: var(--sage-600); }
-    .cal-item.partial { background: var(--yellow-100); }
-    .cal-progress { font-size: var(--font-caption); color: var(--slate-500); font-weight: 600; margin-top: 4px; line-height: 1; }
-    .cal-item.done .cal-progress { color: var(--sage-600); }
-    
-    /* Verse Cards */
-    .verse-card { background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-    .verse-card.read { background: var(--sage-100); border-color: var(--sage-100); }
-    .check-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
-    .verse-card.read .check-icon { background: var(--sage-500); border-color: var(--sage-500); color: white; }
-    .btn-read-link { background: var(--sage-600); color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: var(--font-caption); display: flex; align-items: center; gap: 4px; }
 
-    /* Modals & Utils */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    
-    /* MODAL CONFIG: Embedded Style */
-    .config-fullscreen { 
-        position: fixed; 
-        top: 0; bottom: 0; right: 0; left: 0; 
-        background: var(--slate-50); 
-        z-index: 100; /* Lower than sidebar (usually > 100) check if needed, but sidebar takes space */
-        display: none; 
-        flex-direction: column; 
-    }
-    @media(min-width: 1024px) {
-        .config-fullscreen { left: 280px; } /* Respect Sidebar */
-    }
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-top: 1px solid #e5e7eb; padding: 10px; z-index: 200; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 800px; margin: 0 auto; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
-    @media(min-width: 1024px) { .bottom-bar { left: 280px; } }
-    
-    .action-btn {
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: var(--font-body);
-        cursor: pointer; transition: all 0.2s; width: 100%; text-decoration: none;
-    }
-    .action-btn:active { transform: scale(0.98); }
-    
-    .btn-orange-light {
-        background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;
-        box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.1), 0 2px 4px -1px rgba(234, 88, 12, 0.06);
-    }
-    .btn-orange-light:hover { background: #ffedd5; border-color: #fdba74; }
-
-    .btn-blue-light {
-        background: var(--slate-50); color: var(--slate-600); border: 1px solid #bfdbfe;
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
-    }
-    .btn-blue-light:hover { background: var(--slate-100); border-color: #93c5fd; }
-</style>
 
 <?php
 // Tab parameter
 $tab = $_GET['tab'] ?? 'reading';
 ?>
 
-<!-- Tabs Navega√ß√£o (Padr√£o Repert√≥rio) -->
+<!-- Tabs NavegaÁ„o (Padr„o RepertÛrio) -->
 <div class="repertorio-controls" style="position: relative; padding-right: 50px;">
     <div class="tabs-container" style="display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; padding-bottom: 5px;">
-        <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">üìñ Texto B√≠blico</a>
-        <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">üìä Estat√≠sticas</a>
-        <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">üèÜ Conquistas</a>
+        <a href="?tab=reading" class="tab-link <?= $tab == 'reading' ? 'active' : '' ?>">?? Texto BÌblico</a>
+        <a href="?tab=dashboard" class="tab-link <?= $tab == 'dashboard' ? 'active' : '' ?>">?? EstatÌsticas</a>
+        <a href="?tab=achievements" class="tab-link <?= $tab == 'achievements' ? 'active' : '' ?>">?? Conquistas</a>
     </div>
     
-    <!-- Bot√£o Discreto de Configura√ß√µes RECRIADO (Posi√ß√£o Absoluta + SVG Inline) -->
+    <!-- Bot„o Discreto de ConfiguraÁıes RECRIADO (PosiÁ„o Absoluta + SVG Inline) -->
     <button onclick="appSettingsOpen()" style="position: absolute; right: 0; top: 0; bottom: 0; background: white; border: 1px solid #e5e7eb; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; color: #6b7280; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" title="Configura&ccedil;&otilde;es" onmouseover="this.style.color='#2563eb'; this.style.borderColor='#bfdbfe'" onmouseout="this.style.color='#6b7280'; this.style.borderColor='#e5e7eb'">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
     </button>
@@ -902,133 +698,29 @@ $tab = $_GET['tab'] ?? 'reading';
 <?php if ($tab == 'dashboard'): ?>
 <!-- TAB CONTENT: DASHBOARD -->
 
-<style>
-/* Cards compactos e eficientes */
-.reading-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1.5rem;
-}
 
-.stat-card-compact {
-    background: white;
-    border-radius: 16px;
-    padding: 1rem;
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: all 0.2s ease;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.stat-card-compact:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.stat-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.stat-icon-compact {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.stat-icon-compact i {
-    width: 18px;
-    height: 18px;
-}
-
-.stat-title-compact {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--slate-600);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.stat-value-compact {
-    font-size: 1.75rem;
-    font-weight: 800;
-    line-height: 1;
-    margin: 0.25rem 0;
-}
-
-.stat-label-compact {
-    font-size: 0.75rem;
-    color: var(--slate-500);
-    font-weight: 500;
-}
-
-/* Cores por tema */
-.stat-green { background: #f0fdf4; }
-.stat-green .stat-icon-compact { background: white; color: #16a34a; }
-.stat-green .stat-value-compact { color: #166534; }
-
-.stat-cyan { background: #ecfeff; }
-.stat-cyan .stat-icon-compact { background: white; color: #0891b2; }
-.stat-cyan .stat-value-compact { color: #155e75; }
-
-.stat-blue { background: #eff6ff; }
-.stat-blue .stat-icon-compact { background: white; color: #2563eb; }
-.stat-blue .stat-value-compact { color: #1e40af; }
-
-.stat-amber { background: #fffbeb; }
-.stat-amber .stat-icon-compact { background: white; color: #d97706; }
-.stat-amber .stat-value-compact { color: #92400e; }
-
-.stat-violet { background: #f5f3ff; }
-.stat-violet .stat-icon-compact { background: white; color: #7c3aed; }
-.stat-violet .stat-value-compact { color: #5b21b6; }
-
-.stat-emerald { background: #ecfdf5; }
-.stat-emerald .stat-icon-compact { background: white; color: #059669; }
-.stat-emerald .stat-value-compact { color: #065f46; }
-
-.stat-slate { background: #f1f5f9; }
-.stat-slate .stat-icon-compact { background: white; color: #475569; }
-.stat-slate .stat-value-compact { color: #1e293b; }
-
-body.dark-mode .stat-card-compact {
-    background: var(--bg-surface);
-    border-color: var(--border-subtle);
-}
-</style>
 
 <div class="reading-stats-grid">
     
-    <!-- Card: Sequ√™ncia -->
+    <!-- Card: SequÍncia -->
     <a href="#" class="stat-card-compact stat-green">
         <div class="stat-header">
             <div class="stat-icon-compact">
                 <i data-lucide="flame"></i>
             </div>
-            <span class="stat-title-compact">Sequ√™ncia</span>
+            <span class="stat-title-compact">SequÍncia</span>
         </div>
         <div class="stat-value-compact"><?= $currentStreak ?></div>
         <div class="stat-label-compact">dias consecutivos</div>
     </a>
 
-    <!-- Card: Cap√≠tulos -->
+    <!-- Card: CapÌtulos -->
     <a href="#" class="stat-card-compact stat-cyan">
         <div class="stat-header">
             <div class="stat-icon-compact">
                 <i data-lucide="book-open"></i>
             </div>
-            <span class="stat-title-compact">Cap√≠tulos</span>
+            <span class="stat-title-compact">CapÌtulos</span>
         </div>
         <div class="stat-value-compact"><?= $totalChaptersRead ?></div>
         <div class="stat-label-compact">lidos este ano</div>
@@ -1046,13 +738,13 @@ body.dark-mode .stat-card-compact {
         <div class="stat-label-compact">do plano completo</div>
     </a>
 
-    <!-- Card: N√≠vel -->
+    <!-- Card: NÌvel -->
     <a href="#" class="stat-card-compact stat-amber">
         <div class="stat-header">
             <div class="stat-icon-compact">
                 <i data-lucide="award"></i>
             </div>
-            <span class="stat-title-compact">N√≠vel</span>
+            <span class="stat-title-compact">NÌvel</span>
         </div>
         <?php $level = min(20, floor($totalDaysRead / 15) + 1); ?>
         <div class="stat-value-compact">Nv.<?= $level ?></div>
@@ -1068,7 +760,7 @@ body.dark-mode .stat-card-compact {
             <span class="stat-title-compact">Recorde</span>
         </div>
         <div class="stat-value-compact"><?= $bestStreak ?></div>
-        <div class="stat-label-compact">melhor sequ√™ncia</div>
+        <div class="stat-label-compact">melhor sequÍncia</div>
     </a>
 
     <!-- Card: Livros -->
@@ -1103,659 +795,7 @@ body.dark-mode .stat-card-compact {
 <?php if ($tab == 'reading'): ?>
 <!-- TAB CONTENT: READING - REDESIGNED -->
 
-<style>
-/* Reading Tab - Modern Redesign */
-.reading-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1rem;
-}
 
-/* Header Compacto */
-.reading-header {
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-    border-radius: 16px;
-    padding: 1.25rem;
-    color: white;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
-}
-
-.reading-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.reading-subtitle {
-    font-size: 0.875rem;
-    opacity: 0.9;
-}
-
-/* Day Navigator */
-.day-navigator {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    background: white;
-    border-radius: 12px;
-    padding: 0.75rem;
-    border: 1px solid #e5e7eb;
-}
-
-.nav-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 0.875rem;
-    background: var(--slate-50);
-    border: 1px solid var(--slate-200);
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--slate-700);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.nav-btn:hover:not(:disabled) {
-    background: var(--slate-100);
-    border-color: var(--slate-300);
-}
-
-.nav-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.current-day {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--slate-800);
-    text-align: center;
-    flex: 1;
-}
-
-/* Passage Cards */
-.passages-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.passage-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1rem;
-    border: 2px solid #e5e7eb;
-    transition: all 0.2s ease;
-}
-
-.passage-card.status-unread {
-    background: #f9fafb;
-    border-color: #e5e7eb;
-}
-
-.passage-card.status-reading {
-    background: #eff6ff;
-    border-color: #bfdbfe;
-}
-
-.passage-card.status-complete {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
-}
-
-.passage-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.passage-checkbox {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    border: 2px solid #d1d5db;
-    cursor: pointer;
-    flex-shrink: 0;
-    accent-color: #16a34a;
-}
-
-.passage-title {
-    flex: 1;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--slate-800);
-}
-
-.btn-passage {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.btn-passage-primary {
-    background: #16a34a;
-    color: white;
-}
-
-.btn-passage-primary:hover {
-    background: #15803d;
-}
-
-/* Quick Actions */
-.quick-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 0.875rem;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--slate-700);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.action-btn:hover {
-    background: var(--slate-50);
-    border-color: var(--slate-300);
-}
-
-.action-btn.notes-btn {
-    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
-    color: white;
-    border-color: #D97706;
-}
-
-.action-btn.notes-btn:hover {
-    background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
-    border-color: #B45309;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
-}
-
-.action-btn.read-all-btn {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    border-color: #3b82f6;
-}
-
-.action-btn.read-all-btn:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    border-color: #2563eb;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-/* Diary Modal */
-.diary-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.diary-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-}
-
-.diary-modal-content {
-    position: relative;
-    background: white;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 85vh;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.diary-modal-header {
-    padding: 1.75rem 2rem;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.diary-close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 8px;
-    color: #64748b;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.diary-close-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #1e293b;
-}
-
-.diary-modal-body {
-    padding: 1.75rem 2rem;
-    max-height: calc(85vh - 120px);
-    overflow-y: auto;
-}
-
-.diary-save-status {
-    font-size: 0.875rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-}
-
-.diary-field {
-    margin-bottom: 1.25rem;
-}
-
-.diary-field:last-of-type {
-    margin-bottom: 0;
-}
-
-.diary-field label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #475569;
-    margin-bottom: 0.5rem;
-}
-
-.diary-input,
-.diary-textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 0.9375rem;
-    color: #1e293b;
-    font-family: inherit;
-    transition: all 0.2s ease;
-}
-
-.diary-input:focus,
-.diary-textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.diary-textarea {
-    min-height: 150px;
-    resize: vertical;
-    line-height: 1.6;
-}
-
-.diary-actions {
-    display: flex;
-    gap: 0.625rem;
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid #e5e7eb;
-}
-
-.diary-btn {
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border: none;
-    flex: 1;
-    justify-content: center;
-}
-
-.diary-btn.primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-}
-
-.diary-btn.primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-.diary-btn.secondary {
-    background: white;
-    color: #64748b;
-    border: 1px solid #e5e7eb;
-}
-
-.diary-btn.secondary:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-}
-
-/* Formatting Toolbar */
-.formatting-toolbar {
-    display: flex;
-    gap: 0.25rem;
-    padding: 0.5rem;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px 8px 0 0;
-    border-bottom: none;
-}
-
-.format-btn {
-    padding: 0.5rem;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #64748b;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.format-btn:hover {
-    background: #f1f5f9;
-    color: #1e293b;
-    border-color: #cbd5e1;
-}
-
-.format-btn:active {
-    background: #e2e8f0;
-}
-
-.toolbar-divider {
-    width: 1px;
-    background: #e5e7eb;
-    margin: 0 0.25rem;
-}
-
-.diary-textarea {
-    border-radius: 0 0 10px 10px !important;
-    border-top: none !important;
-}
-
-/* Media Attachment Section */
-.media-attachment-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.attachment-options {
-    display: flex;
-    gap: 0.625rem;
-    flex-wrap: wrap;
-}
-
-.media-btn,
-.upload-label {
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border: 1.5px solid #e5e7eb;
-    background: white;
-    color: #64748b;
-    flex: 1;
-    justify-content: center;
-}
-
-.media-btn:hover,
-.upload-label:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    color: #1e293b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.media-btn#record-audio-btn {
-    background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
-    color: white;
-    border-color: #fca5a5;
-}
-
-.media-btn#record-audio-btn:hover {
-    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-    border-color: #f87171;
-    box-shadow: 0 4px 12px rgba(252, 165, 165, 0.3);
-}
-
-.media-btn#record-audio-btn.recording {
-    background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
-    border-color: #fcd34d;
-    animation: pulse 1.5s infinite;
-}
-
-.media-btn#attach-audio-btn {
-    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
-    color: white;
-    border-color: #c4b5fd;
-}
-
-.media-btn#attach-audio-btn:hover {
-    background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-    border-color: #a78bfa;
-    box-shadow: 0 4px 12px rgba(196, 181, 253, 0.3);
-}
-
-.media-btn#attach-image-btn {
-    background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
-    color: white;
-    border-color: #6ee7b7;
-}
-
-.media-btn#attach-image-btn:hover {
-    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-    border-color: #34d399;
-    box-shadow: 0 4px 12px rgba(110, 231, 183, 0.3);
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-.audio-timer {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    background: #fef3c7;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #92400e;
-}
-
-.recording-indicator {
-    width: 8px;
-    height: 8px;
-    background: #ef4444;
-    border-radius: 50%;
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-
-.stop-recording-btn {
-    padding: 0.375rem 0.75rem;
-    background: #dc2626;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    transition: all 0.2s ease;
-}
-
-.stop-recording-btn:hover {
-    background: #b91c1c;
-}
-
-.attachments-preview {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.attachment-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-}
-
-.attachment-item audio {
-    flex: 1;
-    max-width: 300px;
-}
-
-.attachment-item img {
-    max-width: 200px;
-    max-height: 150px;
-    border-radius: 6px;
-    object-fit: cover;
-}
-
-.attachment-item .delete-attachment-btn {
-    padding: 0.5rem;
-    background: #fee2e2;
-    color: #ef4444;
-    border: 1px solid #fecaca;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.attachment-item .delete-attachment-btn:hover {
-    background: #fecaca;
-    border-color: #fca5a5;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 640px) {
-    .reading-container {
-        padding: 0.75rem;
-    }
-    
-    .reading-header {
-        padding: 1rem;
-    }
-    
-    .reading-title {
-        font-size: 1.125rem;
-    }
-    
-    .day-navigator {
-        padding: 0.5rem;
-    }
-    
-    .nav-btn {
-        padding: 0.5rem;
-        font-size: 0.75rem;
-    }
-    
-    .nav-btn span {
-        display: none;
-    }
-    
-    .passage-card {
-        padding: 0.75rem;
-    }
-    
-    .btn-passage {
-        font-size: 0.8125rem;
-        padding: 0.5rem 0.75rem;
-    }
-    
-    .btn-passage span {
-        display: none;
-    }
-}
-
-body.dark-mode .passage-card,
-body.dark-mode .day-navigator,
-body.dark-mode .action-btn {
-    background: var(--bg-surface);
-    border-color: var(--border-subtle);
-}
-</style>
 
 <div class="reading-container">
     
@@ -1772,15 +812,15 @@ body.dark-mode .action-btn {
         </div>
         
         <?php
-        // Calcular status do plano baseado na data de in√≠cio
-        $daysRead = $totalDaysRead; // Total de dias que o usu√°rio j√° leu
-        $daysSinceStart = $daysPassed; // Dias desde o in√≠cio do plano
+        // Calcular status do plano baseado na data de inÌcio
+        $daysRead = $totalDaysRead; // Total de dias que o usu·rio j· leu
+        $daysSinceStart = $daysPassed; // Dias desde o inÌcio do plano
         
-        // Dia esperado = quantos dias deveriam ter sido lidos at√© ONTEM
-        // O dia de hoje ainda pode ser lido, ent√£o n√£o conta como atraso
-        $expectedDay = max(0, $daysSinceStart); // Dias que j√° passaram (excluindo hoje)
+        // Dia esperado = quantos dias deveriam ter sido lidos atÈ ONTEM
+        // O dia de hoje ainda pode ser lido, ent„o n„o conta como atraso
+        $expectedDay = max(0, $daysSinceStart); // Dias que j· passaram (excluindo hoje)
         
-        // Calcular atraso: diferen√ßa entre o que deveria ter lido (at√© ontem) e o que realmente leu
+        // Calcular atraso: diferenÁa entre o que deveria ter lido (atÈ ontem) e o que realmente leu
         $daysDelay = max(0, $expectedDay - $daysRead);
         $isOnTrack = ($daysDelay == 0);
         ?>
@@ -1815,7 +855,7 @@ body.dark-mode .action-btn {
         </button>
         <div class="current-day">Dia <?= $planDayIndex ?> de <?= $planInfo['total_days'] ?></div>
         <button class="nav-btn" <?= $planDayIndex >= $planInfo['total_days'] ? 'disabled' : '' ?> onclick="window.location.href='?tab=reading&day=<?= $planDayIndex + 1 ?>'">
-            <span>Pr√≥ximo</span>
+            <span>PrÛximo</span>
             <i data-lucide="chevron-right" width="16"></i>
         </button>
     </div>
@@ -1833,7 +873,7 @@ body.dark-mode .action-btn {
                 <div class="passage-title"><?= htmlspecialchars($reading['reference']) ?></div>
                 <a href="<?= htmlspecialchars($reading['link']) ?>" target="_blank" class="btn-passage btn-passage-primary">
                     <i data-lucide="book-open" width="16"></i>
-                    <?= $isComplete ? 'Reler' : 'Come√ßar Leitura' ?>
+                    <?= $isComplete ? 'Reler' : 'ComeÁar Leitura' ?>
                 </a>
             </div>
         </div>
@@ -1844,7 +884,7 @@ body.dark-mode .action-btn {
     <div class="quick-actions">
         <button class="action-btn notes-btn" onclick="openDiaryModal()">
             <i data-lucide="sticky-note" width="18"></i>
-            Minhas Anota√ß√µes
+            Minhas AnotaÁıes
         </button>
         <button class="action-btn read-all-btn" onclick="markAllAsRead(<?= $planDayIndex ?>)">
             <i data-lucide="check-circle" width="18"></i>
@@ -1861,7 +901,7 @@ body.dark-mode .action-btn {
                 <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #D97706 0%, #B45309 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="sticky-note" width="20" style="color: white;"></i>
                 </div>
-                <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b; font-weight: 700;">Minhas Anota√ß√µes</h2>
+                <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b; font-weight: 700;">Minhas AnotaÁıes</h2>
             </div>
             <button class="diary-close-btn" onclick="closeDiaryModal()">
                 <i data-lucide="x" width="24"></i>
@@ -1873,26 +913,26 @@ body.dark-mode .action-btn {
                 <span id="diary-save-status" class="diary-save-status"></span>
             </div>
                 <div class="diary-field">
-                    <label for="diary-title">T√≠tulo da Reflex√£o</label>
+                    <label for="diary-title">TÌtulo da Reflex„o</label>
                     <input 
                         type="text" 
                         id="diary-title" 
                         class="diary-input" 
-                        placeholder="Ex: Aprendizado sobre f√©..."
+                        placeholder="Ex: Aprendizado sobre fÈ..."
                         value="<?= htmlspecialchars($progressData['note_title'] ?? '') ?>"
                         oninput="debounceSaveDiary()"
                     >
                 </div>
                 
                 <div class="diary-field">
-                    <label for="diary-comment">Suas Reflex√µes</label>
+                    <label for="diary-comment">Suas Reflexıes</label>
                     
                     <!-- Formatting Toolbar -->
                     <div class="formatting-toolbar">
                         <button type="button" class="format-btn" onclick="formatText('bold')" title="Negrito">
                             <i data-lucide="bold" width="16"></i>
                         </button>
-                        <button type="button" class="format-btn" onclick="formatText('italic')" title="It√°lico">
+                        <button type="button" class="format-btn" onclick="formatText('italic')" title="It·lico">
                             <i data-lucide="italic" width="16"></i>
                         </button>
                         <button type="button" class="format-btn" onclick="formatText('underline')" title="Sublinhado">
@@ -1910,7 +950,7 @@ body.dark-mode .action-btn {
                     <textarea 
                         id="diary-comment" 
                         class="diary-textarea" 
-                        placeholder="Escreva aqui suas reflex√µes, insights e aprendizados sobre a leitura de hoje..."
+                        placeholder="Escreva aqui suas reflexıes, insights e aprendizados sobre a leitura de hoje..."
                         oninput="debounceSaveDiary()"
                     ><?= htmlspecialchars($progressData['comment'] ?? '') ?></textarea>
                 </div>
@@ -1923,11 +963,11 @@ body.dark-mode .action-btn {
                         <div class="attachment-options">
                             <button type="button" id="record-audio-btn" class="media-btn" onclick="toggleAudioRecording()">
                                 <i data-lucide="mic" width="16"></i>
-                                <span id="record-btn-text">Gravar √Åudio</span>
+                                <span id="record-btn-text">Gravar ¡udio</span>
                             </button>
                             <label for="audio-upload" id="attach-audio-btn" class="media-btn upload-label">
                                 <i data-lucide="music" width="16"></i>
-                                <span>Anexar √Åudio</span>
+                                <span>Anexar ¡udio</span>
                                 <input type="file" id="audio-upload" accept="audio/*" style="display: none;" onchange="handleAudioUpload(this)">
                             </label>
                             <label for="image-upload" id="attach-image-btn" class="media-btn upload-label">
@@ -1963,7 +1003,7 @@ body.dark-mode .action-btn {
                     </button>
                     <button class="diary-btn primary" onclick="saveDiaryNote()">
                         <i data-lucide="save" width="16"></i>
-                        Salvar Anota√ß√£o
+                        Salvar AnotaÁ„o
                     </button>
                 </div>
             </div>
@@ -1974,7 +1014,7 @@ body.dark-mode .action-btn {
 </div>
 
 <script>
-// Fun√ß√£o para marcar/desmarcar passagem
+// FunÁ„o para marcar/desmarcar passagem
 function togglePassage(day, index, checked) {
     const card = document.querySelector(`.passage-card[data-passage-index="${index}"]`);
     
@@ -2014,11 +1054,11 @@ function togglePassage(day, index, checked) {
         }
     })
     .catch(error => {
-        console.error('Erro na requisi√ß√£o:', error);
+        console.error('Erro na requisiÁ„o:', error);
     });
 }
 
-// Fun√ß√£o para marcar todas como lidas
+// FunÁ„o para marcar todas como lidas
 function markAllAsRead(day) {
     const checkboxes = document.querySelectorAll('.passage-checkbox');
     const promises = [];
@@ -2060,7 +1100,7 @@ function markAllAsRead(day) {
         });
 }
 
-// Fun√ß√µes do Di√°rio
+// FunÁıes do Di·rio
 let diaryDebounceTimer;
 const currentDay = <?= $planDayIndex ?>;
 
@@ -2069,7 +1109,7 @@ function openDiaryModal() {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; // Prevenir scroll do body
     
-    // Reinicializar √≠cones Lucide
+    // Reinicializar Ìcones Lucide
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
@@ -2111,7 +1151,7 @@ function saveDiaryNote(isAutoSave = false) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            updateSaveStatus('‚úì Salvo', true);
+            updateSaveStatus('? Salvo', true);
             setTimeout(() => {
                 if (!isAutoSave) {
                     updateSaveStatus('');
@@ -2141,7 +1181,7 @@ function updateSaveStatus(message, success = null) {
 }
 
 function clearDiary() {
-    if (confirm('Tem certeza que deseja limpar suas anota√ß√µes?')) {
+    if (confirm('Tem certeza que deseja limpar suas anotaÁıes?')) {
         document.getElementById('diary-title').value = '';
         document.getElementById('diary-comment').value = '';
         saveDiaryNote();
@@ -2152,7 +1192,7 @@ function exportDiary(format) {
     window.open(`export_diary.php?format=${format}`, '_blank');
 }
 
-// Fun√ß√£o para formatar texto
+// FunÁ„o para formatar texto
 function formatText(command) {
     const textarea = document.getElementById('diary-comment');
     const start = textarea.selectionStart;
@@ -2168,7 +1208,7 @@ function formatText(command) {
             formattedText = `**${selectedText || 'texto em negrito'}**`;
             break;
         case 'italic':
-            formattedText = `*${selectedText || 'texto em it√°lico'}*`;
+            formattedText = `*${selectedText || 'texto em it·lico'}*`;
             break;
         case 'underline':
             formattedText = `__${selectedText || 'texto sublinhado'}__`;
@@ -2176,9 +1216,9 @@ function formatText(command) {
         case 'ul':
             if (selectedText) {
                 const lines = selectedText.split('\n');
-                formattedText = lines.map(line => `‚Ä¢ ${line}`).join('\n');
+                formattedText = lines.map(line => `ï ${line}`).join('\n');
             } else {
-                formattedText = '‚Ä¢ Item da lista\n‚Ä¢ Item da lista\n‚Ä¢ Item da lista';
+                formattedText = 'ï Item da lista\nï Item da lista\nï Item da lista';
             }
             break;
         case 'ol':
@@ -2202,7 +1242,7 @@ function formatText(command) {
     debounceSaveDiary();
 }
 
-// Inicializar √≠cones Lucide
+// Inicializar Ìcones Lucide
 if (typeof lucide !== 'undefined') {
     lucide.createIcons();
 }
@@ -2215,189 +1255,7 @@ if (typeof lucide !== 'undefined') {
 <?php if ($tab == 'achievements'): ?>
 <!-- TAB CONTENT: ACHIEVEMENTS/GAMIFICATION -->
 
-<style>
-/* Achievements Page Styles - Mobile Optimized */
-.achievements-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-}
 
-.section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--slate-800);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* Level Progress Card - Compact */
-.level-card {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    border-radius: 16px;
-    padding: 1.25rem;
-    margin-bottom: 1.5rem;
-    color: white;
-    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
-}
-
-.level-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.level-number {
-    font-size: 2.5rem;
-    font-weight: 900;
-    line-height: 1;
-}
-
-.level-label {
-    font-size: 0.75rem;
-    opacity: 0.9;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.xp-info {
-    text-align: right;
-}
-
-.xp-current {
-    font-size: 1.25rem;
-    font-weight: 700;
-}
-
-.xp-total {
-    font-size: 0.75rem;
-    opacity: 0.9;
-}
-
-.level-progress-bar {
-    background: rgba(255,255,255,0.3);
-    height: 8px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.level-progress-fill {
-    background: white;
-    height: 100%;
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
-
-.next-level-text {
-    font-size: 0.75rem;
-    opacity: 0.9;
-}
-
-/* Badges Grid - Compact */
-.badges-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-.badge-card {
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 0.875rem;
-    text-align: center;
-    transition: all 0.2s ease;
-}
-
-.badge-card.unlocked {
-    border-color: #fbbf24;
-    box-shadow: 0 3px 10px rgba(251, 191, 36, 0.2);
-}
-
-.badge-card.locked {
-    opacity: 0.5;
-    filter: grayscale(1);
-}
-
-.badge-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-}
-
-.badge-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.375rem;
-}
-
-.badge-name {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--slate-800);
-    margin-bottom: 0.125rem;
-    line-height: 1.2;
-}
-
-.badge-desc {
-    font-size: 0.625rem;
-    color: var(--slate-500);
-    line-height: 1.3;
-}
-
-.badge-progress {
-    margin-top: 0.375rem;
-    font-size: 0.625rem;
-    color: var(--amber-600);
-    font-weight: 600;
-}
-
-body.dark-mode .badge-card {
-    background: var(--bg-surface);
-    border-color: var(--border-subtle);
-}
-
-/* Mobile specific adjustments */
-@media (max-width: 640px) {
-    .achievements-container {
-        padding: 0.75rem;
-    }
-    
-    .level-card {
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-    
-    .level-number {
-        font-size: 2rem;
-    }
-    
-    .xp-current {
-        font-size: 1.125rem;
-    }
-    
-    .badges-grid {
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-        gap: 0.5rem;
-    }
-    
-    .badge-card {
-        padding: 0.625rem;
-    }
-    
-    .badge-icon {
-        font-size: 2rem;
-    }
-    
-    .section-title {
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
-    }
-}
-</style>
 
 /* HeatMap */
 .heatmap-container {
@@ -2513,7 +1371,7 @@ body.dark-mode .stat-card-achievement {
     <div class="level-card">
         <div class="level-header">
             <div>
-                <div class="level-label">N√≠vel Atual</div>
+                <div class="level-label">NÌvel Atual</div>
                 <div class="level-number"><?= $level ?></div>
             </div>
             <div class="xp-info">
@@ -2528,7 +1386,7 @@ body.dark-mode .stat-card-achievement {
             <div class="level-progress-fill" style="width: <?= $xpProgress ?>%"></div>
         </div>
         <div class="next-level-text">
-            <?= max(0, ($level * 150) - ($totalDaysRead * 10)) ?> XP para o pr√≥ximo n√≠vel
+            <?= max(0, ($level * 150) - ($totalDaysRead * 10)) ?> XP para o prÛximo nÌvel
         </div>
     </div>
 
@@ -2542,18 +1400,18 @@ body.dark-mode .stat-card-achievement {
         <?php
         // Define achievements
         $achievements = [
-            ['icon' => 'üî•', 'name' => 'Primeira Chama', 'desc' => '1 dia de leitura', 'req' => 1],
-            ['icon' => 'üìö', 'name' => 'Leitor Iniciante', 'desc' => '7 dias de leitura', 'req' => 7],
-            ['icon' => '‚≠ê', 'name' => 'Sequ√™ncia de Ferro', 'desc' => '7 dias consecutivos', 'req' => 7],
-            ['icon' => 'üèÜ', 'name' => 'Dedicado', 'desc' => '30 dias de leitura', 'req' => 30],
-            ['icon' => 'üíé', 'name' => 'Sequ√™ncia de Ouro', 'desc' => '30 dias consecutivos', 'req' => 30],
-            ['icon' => 'üëë', 'name' => 'Mestre', 'desc' => '100 dias de leitura', 'req' => 100],
-            ['icon' => 'üéØ', 'name' => 'Focado', 'desc' => '50 dias consecutivos', 'req' => 50],
-            ['icon' => 'üåü', 'name' => 'Estrela', 'desc' => '365 dias de leitura', 'req' => 365],
+            ['icon' => '??', 'name' => 'Primeira Chama', 'desc' => '1 dia de leitura', 'req' => 1],
+            ['icon' => '??', 'name' => 'Leitor Iniciante', 'desc' => '7 dias de leitura', 'req' => 7],
+            ['icon' => '?', 'name' => 'SequÍncia de Ferro', 'desc' => '7 dias consecutivos', 'req' => 7],
+            ['icon' => '??', 'name' => 'Dedicado', 'desc' => '30 dias de leitura', 'req' => 30],
+            ['icon' => '??', 'name' => 'SequÍncia de Ouro', 'desc' => '30 dias consecutivos', 'req' => 30],
+            ['icon' => '??', 'name' => 'Mestre', 'desc' => '100 dias de leitura', 'req' => 100],
+            ['icon' => '??', 'name' => 'Focado', 'desc' => '50 dias consecutivos', 'req' => 50],
+            ['icon' => '??', 'name' => 'Estrela', 'desc' => '365 dias de leitura', 'req' => 365],
         ];
         
         foreach ($achievements as $achievement) {
-            $unlocked = ($achievement['name'] == 'Primeira Chama' || $achievement['name'] == 'Sequ√™ncia de Ferro') 
+            $unlocked = ($achievement['name'] == 'Primeira Chama' || $achievement['name'] == 'SequÍncia de Ferro') 
                 ? ($totalDaysRead >= $achievement['req']) 
                 : ($currentStreak >= $achievement['req']);
             $class = $unlocked ? 'unlocked' : 'locked';
@@ -2563,9 +1421,9 @@ body.dark-mode .stat-card-achievement {
                 <div class="badge-name"><?= $achievement['name'] ?></div>
                 <div class="badge-desc"><?= $achievement['desc'] ?></div>
                 <?php if (!$unlocked): ?>
-                    <div class="badge-progress">üîí Bloqueado</div>
+                    <div class="badge-progress">?? Bloqueado</div>
                 <?php else: ?>
-                    <div class="badge-progress">‚úÖ Desbloqueado</div>
+                    <div class="badge-progress">? Desbloqueado</div>
                 <?php endif; ?>
             </div>
         <?php } ?>
@@ -2584,7 +1442,7 @@ body.dark-mode .stat-card-achievement {
     <div style="background: white; width: 95%; max-width: 700px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;">
         <div style="padding: 16px 24px; background: #fff7ed; border-bottom: 1px solid #fed7aa; display: flex; justify-content: space-between; align-items: center;">
             <h3 style="margin: 0; font-size: var(--font-h2); font-weight: 800; color: #c2410c; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="pen-line" width="20"></i> Anota‚îú¬∫‚îú√∫o
+                <i data-lucide="pen-line" width="20"></i> Anota+∫+˙o
             </h3>
             <button onclick="document.getElementById('modal-note').style.display='none'" style="border: none; background: none; cursor: pointer; color: #9ca3af; padding: 4px;">
                 <i data-lucide="x" width="20"></i>
@@ -2592,7 +1450,7 @@ body.dark-mode .stat-card-achievement {
         </div>
         <div style="padding: 20px 24px; overflow-y: auto; flex: 1;">
             <!-- Title Input -->
-            <input type="text" id="note-title-input" placeholder="T‚îú¬°tulo da anota‚îú¬∫‚îú√∫o..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
+            <input type="text" id="note-title-input" placeholder="T+°tulo da anota+∫+˙o..." style="width: 100%; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font-size: var(--font-body); font-weight: 600; outline: none; margin-bottom: 16px; transition: all 0.2s;">
             
             <!-- Rich Text Editor -->
             <div style="border: 1px solid var(--slate-300); border-radius: 10px; overflow: hidden; background: white;">
@@ -2602,7 +1460,7 @@ body.dark-mode .stat-card-achievement {
                     <button type="button" onclick="formatText('bold')" class="editor-btn" title="Negrito">
                         <i data-lucide="bold" width="16"></i>
                     </button>
-                    <button type="button" onclick="formatText('italic')" class="editor-btn" title="It‚îú√≠lico">
+                    <button type="button" onclick="formatText('italic')" class="editor-btn" title="It+Ìlico">
                         <i data-lucide="italic" width="16"></i>
                     </button>
                     <button type="button" onclick="formatText('underline')" class="editor-btn" title="Sublinhado">
@@ -2637,41 +1495,41 @@ body.dark-mode .stat-card-achievement {
                         <div id="emoji-picker" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border: 1px solid var(--slate-200); border-radius: 8px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-width: 280px;">
                             <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;">
                                 <!-- Spiritual -->
-                                <button type="button" onclick="insertEmoji('¬≠∆í√ñ√Ö')" class="emoji-btn">¬≠∆í√ñ√Ö</button>
-                                <button type="button" onclick="insertEmoji('√î¬£√ò¬¥¬©√Ö')" class="emoji-btn">√î¬£√ò¬¥¬©√Ö</button>
-                                <button type="button" onclick="insertEmoji('√î√∏¬¨')" class="emoji-btn">√î√∏¬¨</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√¥√ª')" class="emoji-btn">¬≠∆í√¥√ª</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√¥‚îê')" class="emoji-btn">¬≠∆í√¥‚îê</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√≤√®¬¥¬©√Ö')" class="emoji-btn">¬≠∆í√≤√®¬¥¬©√Ö</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ√™')" class="emoji-btn">¬≠∆í√Æ√™</button>
-                                <button type="button" onclick="insertEmoji('√î√ø√á¬¥¬©√Ö')" class="emoji-btn">√î√ø√á¬¥¬©√Ö</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ√ñ')" class="emoji-btn">¬≠∆í√Æ√ñ</button>
+                                <button type="button" onclick="insertEmoji('≠É÷≈')" class="emoji-btn">≠É÷≈</button>
+                                <button type="button" onclick="insertEmoji('‘£ÿ¥©≈')" class="emoji-btn">‘£ÿ¥©≈</button>
+                                <button type="button" onclick="insertEmoji('‘¯¨')" class="emoji-btn">‘¯¨</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÙ˚')" class="emoji-btn">≠ÉÙ˚</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÙ+')" class="emoji-btn">≠ÉÙ+</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÚË¥©≈')" class="emoji-btn">≠ÉÚË¥©≈</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓÍ')" class="emoji-btn">≠ÉÓÍ</button>
+                                <button type="button" onclick="insertEmoji('‘ˇ«¥©≈')" class="emoji-btn">‘ˇ«¥©≈</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ÷')" class="emoji-btn">≠ÉÓ÷</button>
                                 <!-- Music & Worship -->
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ñ√Å')" class="emoji-btn">¬≠∆í√Ñ√Å</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ñ√Ç')" class="emoji-btn">¬≠∆í√Ñ√Ç</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ñ√±')" class="emoji-btn">¬≠∆í√Ñ√±</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ñ¬©')" class="emoji-btn">¬≠∆í√Ñ¬©</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ñ‚ï£')" class="emoji-btn">¬≠∆í√Ñ‚ï£</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√ë√º')" class="emoji-btn">¬≠∆í√ë√º</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ñ‚ïë')" class="emoji-btn">¬≠∆í√Ñ‚ïë</button>
+                                <button type="button" onclick="insertEmoji('≠Éƒ¡')" class="emoji-btn">≠Éƒ¡</button>
+                                <button type="button" onclick="insertEmoji('≠Éƒ¬')" class="emoji-btn">≠Éƒ¬</button>
+                                <button type="button" onclick="insertEmoji('≠ÉƒÒ')" class="emoji-btn">≠ÉƒÒ</button>
+                                <button type="button" onclick="insertEmoji('≠Éƒ©')" class="emoji-btn">≠Éƒ©</button>
+                                <button type="button" onclick="insertEmoji('≠Éƒ¶')" class="emoji-btn">≠Éƒ¶</button>
+                                <button type="button" onclick="insertEmoji('≠É—¸')" class="emoji-btn">≠É—¸</button>
+                                <button type="button" onclick="insertEmoji('≠Éƒ¶')" class="emoji-btn">≠Éƒ¶</button>
                                 <!-- Nature -->
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ‚ïë')" class="emoji-btn">¬≠∆í√Æ‚ïë</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ¬©')" class="emoji-btn">¬≠∆í√Æ¬©</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ‚ïù')" class="emoji-btn">¬≠∆í√Æ‚ïù</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ‚ïó')" class="emoji-btn">¬≠∆í√Æ‚ïó</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ‚ï£')" class="emoji-btn">¬≠∆í√Æ‚ï£</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ‚îê')" class="emoji-btn">¬≠∆í√Æ‚îê</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√¨√¢')" class="emoji-btn">¬≠∆í√¨√¢</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Æ‚ñí')" class="emoji-btn">¬≠∆í√Æ‚ñí</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ¶')" class="emoji-btn">≠ÉÓ¶</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ©')" class="emoji-btn">≠ÉÓ©</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ+')" class="emoji-btn">≠ÉÓ+</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ+')" class="emoji-btn">≠ÉÓ+</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ¶')" class="emoji-btn">≠ÉÓ¶</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ+')" class="emoji-btn">≠ÉÓ+</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÏ‚')" class="emoji-btn">≠ÉÏ‚</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÓ¶')" class="emoji-btn">≠ÉÓ¶</button>
                                 <!-- Hearts & Emotions -->
-                                <button type="button" onclick="insertEmoji('√î√ò√±¬¥¬©√Ö')" class="emoji-btn">√î√ò√±¬¥¬©√Ö</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ü√∏')" class="emoji-btn">¬≠∆í√Ü√∏</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ü√ú')" class="emoji-btn">¬≠∆í√Ü√ú</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ü√ñ')" class="emoji-btn">¬≠∆í√Ü√ñ</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√Ü¬£')" class="emoji-btn">¬≠∆í√Ü¬£</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√±√¨')" class="emoji-btn">¬≠∆í√±√¨</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√ø√®')" class="emoji-btn">¬≠∆í√ø√®</button>
-                                <button type="button" onclick="insertEmoji('¬≠∆í√ø√ß')" class="emoji-btn">¬≠∆í√ø√ß</button>
+                                <button type="button" onclick="insertEmoji('‘ÿÒ¥©≈')" class="emoji-btn">‘ÿÒ¥©≈</button>
+                                <button type="button" onclick="insertEmoji('≠É∆¯')" class="emoji-btn">≠É∆¯</button>
+                                <button type="button" onclick="insertEmoji('≠É∆‹')" class="emoji-btn">≠É∆‹</button>
+                                <button type="button" onclick="insertEmoji('≠É∆÷')" class="emoji-btn">≠É∆÷</button>
+                                <button type="button" onclick="insertEmoji('≠É∆£')" class="emoji-btn">≠É∆£</button>
+                                <button type="button" onclick="insertEmoji('≠ÉÒÏ')" class="emoji-btn">≠ÉÒÏ</button>
+                                <button type="button" onclick="insertEmoji('≠ÉˇË')" class="emoji-btn">≠ÉˇË</button>
+                                <button type="button" onclick="insertEmoji('≠ÉˇÁ')" class="emoji-btn">≠ÉˇÁ</button>
                             </div>
                         </div>
                     </div>
@@ -2679,7 +1537,7 @@ body.dark-mode .stat-card-achievement {
                     <div style="width:1px; height:20px; background:var(--slate-200); margin:0 4px;"></div>
                     
                     <!-- Clear Formatting -->
-                    <button type="button" onclick="formatText('removeFormat')" class="editor-btn" title="Limpar formata‚îú¬∫‚îú√∫o">
+                    <button type="button" onclick="formatText('removeFormat')" class="editor-btn" title="Limpar formata+∫+˙o">
                         <i data-lucide="eraser" width="16"></i>
                     </button>
                 </div>
@@ -2693,68 +1551,11 @@ body.dark-mode .stat-card-achievement {
                 ></div>
             </div>
             
-            <style>
-                .editor-btn {
-                    background: white;
-                    border: 1px solid var(--slate-200);
-                    border-radius: 6px;
-                    padding: 6px 8px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.2s;
-                    color: var(--slate-500);
-                }
-                .editor-btn:hover {
-                    background: var(--slate-50);
-                    border-color: var(--slate-300);
-                    color: var(--slate-700);
-                }
-                .editor-btn:active {
-                    transform: scale(0.95);
-                    background: var(--slate-100);
-                }
-                
-                .emoji-btn {
-                    background: white;
-                    border: 1px solid transparent;
-                    border-radius: 4px;
-                    padding: 6px;
-                    cursor: pointer;
-                    font-size: var(--font-h2);
-                    transition: all 0.2s;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .emoji-btn:hover {
-                    background: var(--slate-50);
-                    border-color: var(--slate-200);
-                    transform: scale(1.1);
-                }
-                
-                /* Placeholder for contenteditable */
-                #note-desc-input:empty:before {
-                    content: attr(data-placeholder);
-                    color: var(--slate-400);
-                    font-style: italic;
-                }
-                
-                /* Styling for formatted content */
-                #note-desc-input b, #note-desc-input strong { font-weight: 700; }
-                #note-desc-input i, #note-desc-input em { font-style: italic; }
-                #note-desc-input u { text-decoration: underline; }
-                #note-desc-input strike { text-decoration: line-through; }
-                #note-desc-input ul, #note-desc-input ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
-                #note-desc-input li { margin-bottom: 4px; }
-                #note-desc-input a { color: #047857; text-decoration: underline; cursor: pointer; }
-                #note-desc-input a:hover { color: #065f46; }
-            </style>
+            
         </div>
         <div style="padding: 16px 24px; background: var(--bg-surface); border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px;">
             <button onclick="document.getElementById('modal-note').style.display='none'" style="padding: 12px 20px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-muted); border-radius: 10px; font-weight: 600; cursor: pointer;">Cancelar</button>
-            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: var(--accent-orange); color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anota‚îú¬∫‚îú√∫o</button>
+            <button onclick="saveNote()" style="padding: 12px 24px; border: none; background: var(--accent-orange); color: white; border-radius: 10px; font-weight: 700; cursor: pointer;">Salvar Anota+∫+˙o</button>
         </div>
     </div>
 </div>
@@ -2771,7 +1572,7 @@ body.dark-mode .stat-card-achievement {
                 <i data-lucide="chevron-left" width="20"></i>
             </button>
             <h2 style="margin:0; font-size: var(--font-h1); font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
-                Configura‚îú¬∫‚îú√Åes
+                Configura+∫+¡es
             </h2>
         </div>
         <div style="display: flex; gap: 8px;">
@@ -2790,10 +1591,10 @@ body.dark-mode .stat-card-achievement {
             <i data-lucide="sliders" width="16" style="display: inline; margin-right: 6px;"></i> Geral
         </div>
         <div class="tab-btn" onclick="switchConfigTab('estatisticas')" id="tab-estatisticas" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="bar-chart-2" width="16" style="display: inline; margin-right: 6px;"></i> Estat‚îú¬°sticas
+            <i data-lucide="bar-chart-2" width="16" style="display: inline; margin-right: 6px;"></i> Estat+°sticas
         </div>
         <div class="tab-btn" onclick="switchConfigTab('diario')" id="tab-diario" style="padding: 16px 20px; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Meu Di‚îú√≠rio
+            <i data-lucide="book-open" width="16" style="display: inline; margin-right: 6px;"></i> Meu Di+Ìrio
         </div>
     </div>
     
@@ -2804,20 +1605,20 @@ body.dark-mode .stat-card-achievement {
             <h3 style="margin-top: 0;">Plano Atual</h3>
             <div style="margin-bottom: 16px; padding: 12px; background: var(--slate-100); border-radius: 8px; font-weight: 600; color: var(--slate-700); display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="book" width="18"></i>
-                <span style="text-transform: capitalize;"><?= $selectedPlanType == 'chronological' ? 'Cronol‚îú‚îÇgico' : ($selectedPlanType == 'mcheyne' ? 'M\'Cheyne' : 'Navigators') ?></span>
+                <span style="text-transform: capitalize;"><?= $selectedPlanType == 'chronological' ? 'Cronol+¶gico' : ($selectedPlanType == 'mcheyne' ? 'M\'Cheyne' : 'Navigators') ?></span>
             </div>
             
             <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Trocar Plano (CUIDADO!)</label>
             <select id="change-plan-select" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--slate-300); margin-bottom: 12px;">
                 <option value="navigators" <?= $selectedPlanType === 'navigators' ? 'selected' : '' ?>>Navigators (300 dias)</option>
-                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronol‚îú‚îÇgico (365 dias)</option>
+                <option value="chronological" <?= $selectedPlanType === 'chronological' ? 'selected' : '' ?>>Cronol+¶gico (365 dias)</option>
                 <option value="mcheyne" <?= $selectedPlanType === 'mcheyne' ? 'selected' : '' ?>>M'Cheyne (365 dias)</option>
             </select>
             
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Data de In‚îú¬°cio</label>
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 8px;">Data de In+°cio</label>
             <input type="date" id="start-date-input" value="<?= $startDateStr ?>" style="width: 100%; padding: 12px; border: 1px solid var(--slate-300); border-radius: 8px; margin-bottom: 16px;">
             
-            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar Altera‚îú¬∫‚îú√Åes</button>
+            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar Altera+∫+¡es</button>
         </div>
 
         <button onclick="resetPlan()" style="width: 100%; padding: 12px; background: var(--rose-500); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
@@ -2825,12 +1626,12 @@ body.dark-mode .stat-card-achievement {
         </button>
     </div>
 
-    <!-- TAB: ESTAT‚îú√¨STICAS -->
+    <!-- TAB: ESTAT+ÏSTICAS -->
     <div id="content-estatisticas" class="config-content" style="display:none; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
         <!-- Reports Section -->
         <div style="margin-bottom: 24px; display: flex; justify-content: flex-end;">
             <button onclick="exportDiary('pdf')" style="padding: 10px 16px; background: white; color: #374151; border: 1px solid #d1d5db; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                <i data-lucide="file-text" width="16"></i> Baixar Relat‚îú‚îÇrio Completo
+                <i data-lucide="file-text" width="16"></i> Baixar Relat+¶rio Completo
             </button>
         </div>
 
@@ -2854,7 +1655,7 @@ body.dark-mode .stat-card-achievement {
                     </svg>
                     <div style="position: absolute; font-weight: 800; font-size: 1.2rem; color: #1f2937;"><?= $completionPercent ?>%</div>
                 </div>
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Conclu‚îú¬°do</div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Conclu+°do</div>
             </div>
 
             <!-- Streak Card -->
@@ -2873,7 +1674,7 @@ body.dark-mode .stat-card-achievement {
                     <i data-lucide="book-open" width="24"></i>
                 </div>
                 <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary); line-height: 1;"><?= $avgChapters ?></div>
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (M‚îú¬Ædia)</div>
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280;">Caps/Dia (M+Ædia)</div>
             </div>
         </div>
 
@@ -2882,7 +1683,7 @@ body.dark-mode .stat-card-achievement {
             <!-- Weekday Distribution -->
             <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px;">
                 <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="calendar-check" width="16"></i> Frequ‚îú¬¨ncia Semanal
+                    <i data-lucide="calendar-check" width="16"></i> Frequ+¨ncia Semanal
                 </h4>
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100px; gap: 6px;">
                     <?php foreach($jsWeekDist as $wd): 
@@ -2904,7 +1705,7 @@ body.dark-mode .stat-card-achievement {
             <!-- Time Distribution -->
              <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px;">
                 <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="clock" width="16"></i> Hor‚îú√≠rios Preferidos
+                    <i data-lucide="clock" width="16"></i> Hor+Ìrios Preferidos
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <?php foreach($jsTimeDist as $td): 
@@ -2929,7 +1730,7 @@ body.dark-mode .stat-card-achievement {
         <!-- Activity Chart (Last 7 Days) -->
         <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
             <h4 style="margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 700; color: #374151; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="bar-chart-2" width="16"></i> Atividade (‚îú√últimos 7 Dias)
+                <i data-lucide="bar-chart-2" width="16"></i> Atividade (+‹ltimos 7 Dias)
             </h4>
             <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 120px; gap: 8px;">
                 <?php 
@@ -2959,25 +1760,25 @@ body.dark-mode .stat-card-achievement {
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6;">
                     <span style="color: #6b7280; font-size: 0.9rem;">Total Lido</span>
-                    <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> cap‚îú¬°tulos</span>
+                    <span style="font-weight: 600; color: #111827;"><?= $totalChaptersRead ?> cap+°tulos</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 14px 0;">
-                    <span style="color: #6b7280; font-size: 0.9rem;">Previs‚îú√∫o de T‚îú¬Ærmino</span>
+                    <span style="color: #6b7280; font-size: 0.9rem;">Previs+˙o de T+Ærmino</span>
                     <span style="font-weight: 700; color: #6366f1;"><?= $estimatedFinishDate ? $estimatedFinishDate : '---' ?></span>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- TAB: MEU DI‚îú√ºRIO -->
+    <!-- TAB: MEU DI+¸RIO -->
     <div id="content-diario" class="config-content" style="display:none; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
         <!-- Export Button with Dropdown -->
         <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Minhas Anota‚îú¬∫‚îú√Åes</h3>
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Minhas Anota+∫+¡es</h3>
             <?php if(!empty($reportData)): ?>
             <div style="position: relative;">
                 <button onclick="toggleExportMenu()" id="export-btn" class="ripple" style="padding: 10px 16px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <i data-lucide="download" width="16"></i> Exportar Di‚îú√≠rio <i data-lucide="chevron-down" width="14"></i>
+                    <i data-lucide="download" width="16"></i> Exportar Di+Ìrio <i data-lucide="chevron-down" width="14"></i>
                 </button>
                 
                 <!-- Dropdown Menu -->
@@ -2999,90 +1800,11 @@ body.dark-mode .stat-card-achievement {
         <?php if(!empty($reportData)): ?>
         <div style="margin-bottom: 20px; position: relative;">
             <i data-lucide="search" width="18" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
-            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anota‚îú¬∫‚îú√Åes (t‚îú¬°tulo, conte‚îú‚ïëdo, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
+            <input type="text" id="diary-search" onkeyup="filterDiary()" placeholder="Buscar anota+∫+¡es (t+°tulo, conte+¶do, data)..." style="width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s;">
         </div>
         <?php endif; ?>
         
-        <style>
-            #export-menu button:hover { background: #f9fafb; }
-            .tab-btn.active { color: #6366f1 !important; border-bottom-color: #6366f1 !important; }
-            .tab-btn:hover { color: #374151; }
-            
-            /* Modern Timeline & Cards */
-            .timeline-container { position: relative; padding-left: 20px; }
-            .timeline-container::before {
-                content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--slate-200); border-radius: 2px;
-            }
-            
-            .group-header { 
-                position: relative; padding: 20px 0 10px 0; background: var(--slate-50); z-index: 1; cursor: pointer; user-select: none;
-                transition: opacity 0.2s;
-            }
-            .group-header:hover { opacity: 0.8; }
-            .group-header .toggle-icon { transition: transform 0.3s; }
-            .group-header.collapsed .toggle-icon { transform: rotate(-90deg); }
-            
-            .month-label { 
-                font-size: 1.2rem; font-weight: 800; color: var(--slate-800); text-transform: capitalize; 
-                display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;
-            }
-            .week-label {
-                font-size: 0.85rem; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: 1px;
-                padding-left: 4px; margin-bottom: 12px;
-            }
-            
-            .diary-card {
-                background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px;
-                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-                border: 1px solid white;
-                transition: transform 0.2s, box-shadow 0.2s;
-                position: relative;
-            }
-            .diary-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08); }
-            
-            .diary-card::before {
-                content: ''; position: absolute; left: -26px; top: 24px; width: 14px; height: 14px;
-                background: #6366f1; border: 3px solid var(--slate-50); border-radius: 50%; box-shadow: 0 2px 4px rgba(99,102,241,0.3);
-            }
-            
-            .diary-date { font-size: 0.8rem; color: var(--slate-500); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-            
-            .diary-title { font-size: 1.15rem; font-weight: 700; color: var(--slate-800); margin: 0 0 10px 0; line-height: 1.4; }
-            .diary-content { color: var(--slate-700); line-height: 1.6; font-size: 0.95rem; }
-            
-            .diary-content b, .diary-content strong { font-weight: 700; }
-            .diary-content i, .diary-content em { font-style: italic; }
-            .diary-content u { text-decoration: underline; }
-            .diary-content ul, .diary-content ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
-            .diary-content li { margin-bottom: 4px; }
-            .diary-content a { color: #6366f1; text-decoration: underline; }
-            
-            /* Truncation Logic */
-            .diary-content.truncated {
-                max-height: 120px;
-                overflow: hidden;
-                mask-image: none;
-            }
-            .read-more-btn {
-                width: 100%;
-                background: var(--slate-50);
-                border: 1px solid var(--slate-200);
-                border-top: none;
-                padding: 8px;
-                color: #6366f1;
-                font-weight: 600;
-                font-size: 0.85rem;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                border-radius: 0 0 12px 12px;
-                margin-top: 0;
-                transition: background 0.2s;
-            }
-            .read-more-btn:hover { background: var(--slate-100); }
-        </style>
+        
         
         <?php if(empty($reportData)): ?>
         <!-- Empty State -->
@@ -3090,8 +1812,8 @@ body.dark-mode .stat-card-achievement {
             <div style="background: #f3f4f6; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #9ca3af;">
                 <i data-lucide="book-open" width="40"></i>
             </div>
-            <h3 style="margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Nenhuma anota‚îú¬∫‚îú√∫o ainda</h3>
-            <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">Comece a registrar suas reflex‚îú√Åes sobre as leituras b‚îú¬°blicas!</p>
+            <h3 style="margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 700; color: #111827;">Nenhuma anota+∫+˙o ainda</h3>
+            <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">Comece a registrar suas reflex+¡es sobre as leituras b+°blicas!</p>
         </div>
         <?php else: ?>
         <!-- Diary Entries Timeline -->
@@ -3099,7 +1821,7 @@ body.dark-mode .stat-card-achievement {
         <?php 
             $currentMonthLabel = '';
             $currentWeekLabel = '';
-            $monthsPT = [1=>'Janeiro', 2=>'Fevereiro', 3=>'Mar‚îú¬∫o', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro'];
+            $monthsPT = [1=>'Janeiro', 2=>'Fevereiro', 3=>'Mar+∫o', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro'];
             
             foreach($reportData as $rep): 
                 $d = new DateTime($rep['date']);
@@ -3135,7 +1857,7 @@ body.dark-mode .stat-card-achievement {
             <div class="diary-card" data-search-content="<?= strtolower(htmlspecialchars($rep['title'] ?? '') . ' ' . strip_tags($rep['comment'] ?? '') . ' ' . date('d/m/Y', strtotime($rep['date']))) ?>">
                 <div style="display:flex; justify-content:space-between; align-items:start;">
                     <div class="diary-date">
-                        <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \‚îú√°\s H:i') ?>
+                        <i data-lucide="clock" width="14"></i> <?= $d->format('d \d\e F \+·\s H:i') ?>
                          <span style="width: 4px; height: 4px; background: var(--slate-300); border-radius: 50%; display: inline-block; margin: 0 8px;"></span>
                          Dia <?= $rep['d'] ?>
                     </div>
@@ -3313,7 +2035,7 @@ function loadDay(m, d) {
         const absoluteDay = ((m-1)*25) + d;
         displayTitle = `Dia ${absoluteDay}`;
     } else {
-        // For 365 days, we can try to find the absolute day or just "Dia d do M‚îú¬¨s m"
+        // For 365 days, we can try to find the absolute day or just "Dia d do M+¨s m"
         // User requested generic. "Dia X" is best.
         let absoluteDay = 0;
         for(let i=1; i<m; i++) absoluteDay += monthDaysRef[i];
@@ -3336,7 +2058,7 @@ function loadDay(m, d) {
     const isComplete = verses.length > 0 && savedVerses.length >= verses.length;
     
     badge.innerHTML = isComplete 
-        ? '<span class="status-badge success" style="background:var(--primary-subtle); color:var(--primary); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Conclu‚îú¬°do</span>'
+        ? '<span class="status-badge success" style="background:var(--primary-subtle); color:var(--primary); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="check-circle" width="14"></i> Conclu+°do</span>'
         : '<span class="status-badge pending" style="background:var(--yellow-100); color:var(--yellow-600); padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.7rem; display:flex; align-items:center; gap:4px;"><i data-lucide="clock" width="14"></i> Pendente</span>';
     
     if (verses.length === 0) {
@@ -3425,7 +2147,7 @@ function scrollCalendar(dir) {
 }
 
 function getMonthName(m) {
-    const n = ["", "Janeiro", "Fevereiro", "Mar‚îú¬∫o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const n = ["", "Janeiro", "Fevereiro", "Mar+∫o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     return n[m];
 }
 
@@ -3568,7 +2290,7 @@ function saveNote() {
     
     // Show toast instead of alert
     const toast = document.getElementById('save-toast');
-    toast.innerHTML = '<i data-lucide="check" width="14"></i> Anota‚îú¬∫‚îú√∫o salva!';
+    toast.innerHTML = '<i data-lucide="check" width="14"></i> Anota+∫+˙o salva!';
     toast.style.opacity = 1;
     setTimeout(() => {
         toast.style.opacity = 0;
@@ -3659,14 +2381,14 @@ function filterDiary() {
 async function shareEntry(title, dateStr, content) {
     const tempDiv = document.createElement("div"); tempDiv.innerHTML = content;
     const cleanContent = tempDiv.innerText;
-    const shareText = `¬≠∆í√¥√† *Di‚îú√≠rio de Leitura*\n¬≠∆í√π√¥¬¥¬©√Ö ${dateStr}\n\n¬≠∆í√¥√ª *${title}*\n"${cleanContent}"\n\n_Compartilhado via App Louvor PIB_`;
+    const shareText = `≠ÉÙ‡ *Di+Ìrio de Leitura*\n≠É˘Ù¥©≈ ${dateStr}\n\n≠ÉÙ˚ *${title}*\n"${cleanContent}"\n\n_Compartilhado via App Louvor PIB_`;
 
     if (navigator.share) {
-        try { await navigator.share({ title: 'Di‚îú√≠rio de Leitura', text: shareText }); } catch (err) { console.log('Error sharing:', err); }
+        try { await navigator.share({ title: 'Di+Ìrio de Leitura', text: shareText }); } catch (err) { console.log('Error sharing:', err); }
     } else {
         navigator.clipboard.writeText(shareText).then(() => {
             const toast = document.getElementById('save-toast');
-            toast.innerHTML = '<i data-lucide="copy" width="14"></i> Copiado para ‚îú√≠rea de transfer‚îú¬¨ncia!';
+            toast.innerHTML = '<i data-lucide="copy" width="14"></i> Copiado para +Ìrea de transfer+¨ncia!';
             toast.style.opacity = 1;
             setTimeout(() => toast.style.opacity = 0, 3000);
         });
@@ -3681,7 +2403,7 @@ function exportDiary(format) {
     // Get all diary entries
     const entries = document.querySelectorAll('.diary-card');
     if (entries.length === 0) {
-        alert('Nenhuma anota‚îú¬∫‚îú√∫o para exportar.');
+        alert('Nenhuma anota+∫+˙o para exportar.');
         return;
     }
     
@@ -3698,42 +2420,26 @@ function exportDiary(format) {
 function exportAsWord(entries, dateStr) {
     // Build HTML content with statistics header
     let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
-    html += '<head><meta charset="utf-8"><title>Di‚îú√≠rio de Leitura B‚îú¬°blica</title>';
-    html += '<style>';
-    html += 'body{font-family:Arial,sans-serif;line-height:1.6;padding:20px;}';
-    html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
-    html += '.stats-box{background:var(--slate-50);border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;}';
-    html += '.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px;}';
-    html += '.stat-item{text-align:center;padding:10px;background:white;border-radius:6px;}';
-    html += '.stat-value{font-size:24px;font-weight:bold;color:#111827;}';
-    html += '.stat-label{font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600;margin-top:4px;}';
-    html += '.entry{margin-bottom:30px;padding:20px;border:1px solid #e5e7eb;border-radius:8px;page-break-inside:avoid;}';
-    html += '.date{color:#6b7280;font-size:11px;text-transform:uppercase;font-weight:bold;letter-spacing:0.5px;}';
-    html += '.day-badge{background:#e0e7ff;color:#4338ca;padding:4px 8px;border-radius:4px;font-size:11px;display:inline-block;margin:5px 0;font-weight:600;}';
-    html += '.title{font-weight:bold;font-size:16px;margin:10px 0;color:#111827;}';
-    html += '.content{color:#374151;margin-top:10px;line-height:1.7;}';
-    html += 'a{color:#6366f1;text-decoration:underline;}';
-    html += 'b,strong{font-weight:700;}i,em{font-style:italic;}u{text-decoration:underline;}strike{text-decoration:line-through;}';
-    html += 'ul,ol{margin-left:20px;}li{margin-bottom:4px;}';
-    html += '</style></head><body>';
+    html += '<head><meta charset="utf-8"><title>Di+Ìrio de Leitura B+°blica</title>';
+    html += '</head><body>';
     
     // Header
-    html += '<h1>¬≠∆í√¥√ª DI‚îú√ºRIO DE LEITURA B‚îú√¨BLICA</h1>';
+    html += '<h1>≠ÉÙ˚ DI+¸RIO DE LEITURA B+ÏBLICA</h1>';
     html += '<p style="color:#6b7280;margin-bottom:10px;">Louvor PIB Oliveira</p>';
     
     // Statistics Box
     html += '<div class="stats-box">';
-    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;">¬≠∆í√¥√® Estat‚îú¬°sticas do Plano</div>';
+    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;">≠ÉÙË Estat+°sticas do Plano</div>';
     html += '<div class="stats-grid">';
     html += `<div class="stat-item"><div class="stat-value"><?= $totalDaysRead ?></div><div class="stat-label">Dias Lidos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Cap‚îú¬°tulos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequ‚îú¬¨ncia</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Conclu‚îú¬°do</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Cap+°tulos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequ+¨ncia</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Conclu+°do</div></div>`;
     html += '</div>';
     html += `<div style="margin-top:15px;font-size:13px;color:#6b7280;">`;
     html += `<strong>Plano:</strong> <?= ucfirst($selectedPlanType) ?> | `;
-    html += `<strong>In‚îú¬°cio:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
-    html += `<strong>Total de Anota‚îú¬∫‚îú√Åes:</strong> ${entries.length}`;
+    html += `<strong>In+°cio:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
+    html += `<strong>Total de Anota+∫+¡es:</strong> ${entries.length}`;
     html += `</div></div>`;
     
     // Entries
@@ -3773,43 +2479,26 @@ function exportAsWord(entries, dateStr) {
 // Export as PDF
 function exportAsPDF(entries, dateStr) {
     let printWindow = window.open('', '_blank');
-    let html = '<html><head><meta charset="utf-8"><title>Di‚îú√≠rio de Leitura B‚îú¬°blica</title>';
-    html += '<style>';
-    html += '@media print{@page{margin:20mm;}}';
-    html += 'body{font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:800px;margin:0 auto;padding:20px;}';
-    html += 'h1{color:#6366f1;border-bottom:3px solid #6366f1;padding-bottom:10px;margin-bottom:20px;}';
-    html += '.stats-box{background:var(--slate-50);border:1px solid #e5e7eb;border-radius:8px;padding:15px;margin:20px 0;page-break-inside:avoid;}';
-    html += '.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px;}';
-    html += '.stat-item{text-align:center;padding:10px;background:white;border-radius:6px;border:1px solid #e5e7eb;}';
-    html += '.stat-value{font-size:20px;font-weight:bold;color:#111827;}';
-    html += '.stat-label{font-size:10px;color:#6b7280;text-transform:uppercase;font-weight:600;margin-top:4px;}';
-    html += '.entry{margin-bottom:25px;padding:15px;border:1px solid #e5e7eb;border-radius:8px;page-break-inside:avoid;}';
-    html += '.date{color:#6b7280;font-size:11px;text-transform:uppercase;font-weight:bold;letter-spacing:0.5px;}';
-    html += '.day-badge{background:#e0e7ff;color:#4338ca;padding:4px 8px;border-radius:4px;font-size:11px;display:inline-block;margin:5px 0;font-weight:600;}';
-    html += '.title{font-weight:bold;font-size:15px;margin:10px 0;color:#111827;}';
-    html += '.content{color:#374151;margin-top:10px;font-size:14px;line-height:1.7;}';
-    html += 'a{color:#6366f1;text-decoration:underline;}';
-    html += 'strong,b{font-weight:700;}em,i{font-style:italic;}u{text-decoration:underline;}strike{text-decoration:line-through;}';
-    html += 'ul,ol{margin-left:20px;}li{margin-bottom:4px;}';
-    html += '</style></head><body>';
+    let html = '<html><head><meta charset="utf-8"><title>Di+Ìrio de Leitura B+°blica</title>';
+    html += '</head><body>';
     
     // Header
-    html += '<h1>¬≠∆í√¥√ª DI‚îú√ºRIO DE LEITURA B‚îú√¨BLICA</h1>';
+    html += '<h1>≠ÉÙ˚ DI+¸RIO DE LEITURA B+ÏBLICA</h1>';
     html += '<p style="color:#6b7280;margin-bottom:10px;font-size:14px;">Louvor PIB Oliveira</p>';
     
     // Statistics Box
     html += '<div class="stats-box">';
-    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;font-size:14px;">¬≠∆í√¥√® Estat‚îú¬°sticas do Plano</div>';
+    html += '<div style="font-weight:700;color:#111827;margin-bottom:10px;font-size:14px;">≠ÉÙË Estat+°sticas do Plano</div>';
     html += '<div class="stats-grid">';
     html += `<div class="stat-item"><div class="stat-value"><?= $totalDaysRead ?></div><div class="stat-label">Dias Lidos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Cap‚îú¬°tulos</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequ‚îú¬¨ncia</div></div>`;
-    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Conclu‚îú¬°do</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $totalChaptersRead ?></div><div class="stat-label">Cap+°tulos</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $currentStreak ?></div><div class="stat-label">Sequ+¨ncia</div></div>`;
+    html += `<div class="stat-item"><div class="stat-value"><?= $completionPercent ?>%</div><div class="stat-label">Conclu+°do</div></div>`;
     html += '</div>';
     html += `<div style="margin-top:15px;font-size:12px;color:#6b7280;">`;
     html += `<strong>Plano:</strong> <?= ucfirst($selectedPlanType) ?> | `;
-    html += `<strong>In‚îú¬°cio:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
-    html += `<strong>Total de Anota‚îú¬∫‚îú√Åes:</strong> ${entries.length}`;
+    html += `<strong>In+°cio:</strong> <?= date('d/m/Y', strtotime($startDateStr)) ?> | `;
+    html += `<strong>Total de Anota+∫+¡es:</strong> ${entries.length}`;
     html += `</div></div>`;
     
     // Entries
@@ -3842,7 +2531,7 @@ function exportAsPDF(entries, dateStr) {
 // Show Export Success Toast
 function showExportSuccess(format) {
     const toast = document.getElementById('save-toast');
-    toast.innerHTML = `<i data-lucide="check" width="14"></i> Di‚îú√≠rio exportado como ${format} com sucesso!`;
+    toast.innerHTML = `<i data-lucide="check" width="14"></i> Di+Ìrio exportado como ${format} com sucesso!`;
     toast.style.opacity = 1;
     setTimeout(() => {
         toast.style.opacity = 0;
@@ -3854,31 +2543,14 @@ function showExportSuccess(format) {
 
 function getExportStyles() {
     return `
-    <style>
-        @page { size: A4; margin: 25mm 20mm; }
-        body { font-family: 'Times New Roman', Times, serif; color: #111; line-height: 1.5; font-size: 11pt; }
-        .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 30px; }
-        .church-name { font-size: 10pt; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 5px; }
-        .doc-title { font-size: 24pt; font-weight: bold; color: #000; margin: 0; }
-        .user-info { margin-bottom: 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
-        .user-detail { font-size: 12pt; }
-        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #eee; }
-        .stat-item { text-align: center; }
-        .stat-val { font-size: 18pt; font-weight: bold; color: #333; }
-        .stat-lbl { font-size: 8pt; text-transform: uppercase; color: #666; letter-spacing: 0.5px; margin-top: 5px; }
-        .entry { margin-bottom: 25px; page-break-inside: avoid; border-left: 3px solid #eee; padding-left: 15px; }
-        .entry-meta { font-size: 10pt; color: #666; margin-bottom: 5px; font-style: italic; display: flex; justify-content: space-between; }
-        .entry-title { font-size: 14pt; font-weight: bold; color: #000; margin-bottom: 8px; }
-        .entry-content { text-align: justify; white-space: pre-wrap; }
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 8pt; text-align: center; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
-    </style>`;
+    `;
 }
 
 function exportAsWordNew(entries, dateStr) {
     let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
-    html += '<head><meta charset="utf-8"><title>Di‚îú√≠rio de Leitura B‚îú¬°blica</title>' + getExportStyles() + '</head><body>';
+    html += '<head><meta charset="utf-8"><title>Di+Ìrio de Leitura B+°blica</title>' + getExportStyles() + '</head><body>';
     
-    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Di‚îú√≠rio de Leitura B‚îú¬°blica</h1></div>';
+    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Di+Ìrio de Leitura B+°blica</h1></div>';
     
     const age = userData.birthDate ? new Date().getFullYear() - new Date(userData.birthDate).getFullYear() : '---';
     const birthFormatted = userData.birthDate ? new Date(userData.birthDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '---';
@@ -3891,15 +2563,15 @@ function exportAsWordNew(entries, dateStr) {
     
     html += `<div class="stats-grid">
         <div class="stat-item"><div class="stat-val"><?= $totalDaysRead ?></div><div class="stat-lbl">Dias</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Cap‚îú¬°tulos</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Sequ‚îú¬¨ncia</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Conclu‚îú¬°do</div></div>
-        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Hor‚îú√≠rio Fav.</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Cap+°tulos</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Sequ+¨ncia</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Conclu+°do</div></div>
+        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Hor+Ìrio Fav.</div></div>
     </div>`;
     
     entries.forEach(entry => {
         const dateTxt = entry.querySelector('.diary-date').textContent.trim(); 
-        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem t‚îú¬°tulo';
+        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem t+°tulo';
         const content = entry.querySelector('.diary-content') ? entry.querySelector('.diary-content').innerHTML : '';
         html += `<div class="entry"><div class="entry-meta">${dateTxt}</div><div class="entry-title">${title}</div><div class="entry-content">${content}</div></div>`;
     });
@@ -3914,9 +2586,9 @@ function exportAsWordNew(entries, dateStr) {
 
 function exportAsPDFNew(entries, dateStr) {
     let w = window.open('', '_blank');
-    let html = '<html><head><meta charset="utf-8"><title>Di‚îú√≠rio PDF</title>' + getExportStyles() + '</head><body>';
+    let html = '<html><head><meta charset="utf-8"><title>Di+Ìrio PDF</title>' + getExportStyles() + '</head><body>';
     
-    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Di‚îú√≠rio de Leitura B‚îú¬°blica</h1></div>';
+    html += '<div class="header"><div class="church-name">Louvor PIB Oliveira</div><h1 class="doc-title">Di+Ìrio de Leitura B+°blica</h1></div>';
     
     const age = userData.birthDate ? new Date().getFullYear() - new Date(userData.birthDate).getFullYear() : '---';
     const birthFormatted = userData.birthDate ? new Date(userData.birthDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '---';
@@ -3929,19 +2601,19 @@ function exportAsPDFNew(entries, dateStr) {
     
     html += `<div class="stats-grid">
         <div class="stat-item"><div class="stat-val"><?= $totalDaysRead ?></div><div class="stat-lbl">Dias</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Cap‚îú¬°tulos</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $totalChaptersRead ?></div><div class="stat-lbl">Cap+°tulos</div></div>
         <div class="stat-item"><div class="stat-val"><?= $currentStreak ?></div><div class="stat-lbl">Streak</div></div>
-        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Conclu‚îú¬°do</div></div>
-        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Hor‚îú√≠rio Fav.</div></div>
+        <div class="stat-item"><div class="stat-val"><?= $completionPercent ?>%</div><div class="stat-lbl">Conclu+°do</div></div>
+        <div class="stat-item"><div class="stat-val" style="font-size:12pt; line-height:2.2;">${userData.favoriteTime}</div><div class="stat-lbl">Hor+Ìrio Fav.</div></div>
     </div>`;
 
     // Add Advanced Stats Block
     html += `<div style="margin-bottom: 20px; border: 1px solid #eee; background: #fdfdfd; padding: 10px; border-radius: 5px;">
-        <h3 style="font-size: 12pt; margin: 0 0 10px 0; color: #555;">An‚îú√≠lise de H‚îú√≠bitos</h3>
+        <h3 style="font-size: 12pt; margin: 0 0 10px 0; color: #555;">An+Ìlise de H+Ìbitos</h3>
         <div style="display: flex; gap: 20px;">
              <!-- Time Dist -->
              <div style="flex: 1;">
-                <div style="font-size: 8pt; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Por Per‚îú¬°odo</div>
+                <div style="font-size: 8pt; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Por Per+°odo</div>
                 ${statsData.time.map(t => `<div style="display: flex; justify-content: space-between; font-size: 8pt; margin-bottom: 2px;"><span>${t.label}</span><span>${t.count}</span></div>`).join('')}
              </div>
              <!-- Week Dist -->
@@ -3954,19 +2626,19 @@ function exportAsPDFNew(entries, dateStr) {
     
     entries.forEach(entry => {
         const dateTxt = entry.querySelector('.diary-date').textContent.trim();
-        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem t‚îú¬°tulo';
+        const title = entry.querySelector('.diary-title') ? entry.querySelector('.diary-title').textContent : 'Sem t+°tulo';
         const content = entry.querySelector('.diary-content') ? entry.querySelector('.diary-content').innerHTML : '';
         html += `<div class="entry"><div class="entry-meta">${dateTxt}</div><div class="entry-title">${title}</div><div class="entry-content">${content}</div></div>`;
     });
     
-    html += `<div class="footer">Gerado em ${new Date().toLocaleString('pt-BR')} √î√á√≥ App Louvor PIB Oliveira</div></body></html>`;
+    html += `<div class="footer">Gerado em ${new Date().toLocaleString('pt-BR')} ‘«Û App Louvor PIB Oliveira</div></body></html>`;
     
     w.document.write(html); w.document.close();
     w.onload = function() { w.print(); setTimeout(()=>w.close(), 1000); };
 }
 
 function resetPlan() {
-    // Criar modal de confirma√ß√£o personalizado
+    // Criar modal de confirmaÁ„o personalizado
     const modalHtml = `
         <div id="reset-confirm-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
             <div style="background: white; border-radius: 16px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);">
@@ -3976,11 +2648,11 @@ function resetPlan() {
                     </div>
                     <div>
                         <h3 style="margin: 0; font-size: 1.1rem; color: #111; font-weight: 600;">Reiniciar Plano</h3>
-                        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #6b7280;">Esta a√ß√£o n√£o pode ser desfeita</p>
+                        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #6b7280;">Esta aÁ„o n„o pode ser desfeita</p>
                     </div>
                 </div>
                 <p style="margin: 0 0 20px 0; color: #374151; font-size: 0.95rem; line-height: 1.5;">
-                    <strong>ATEN√á√ÉO:</strong> Deseja realmente reiniciar todo o plano de leitura? Todo o seu progresso ser√° <strong>perdido permanentemente</strong>.
+                    <strong>ATEN«√O:</strong> Deseja realmente reiniciar todo o plano de leitura? Todo o seu progresso ser· <strong>perdido permanentemente</strong>.
                 </p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <button onclick="document.getElementById('reset-confirm-modal').remove()" style="padding: 10px; border-radius: 8px; border: 1px solid #d1d5db; background: white; color: #374151; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
@@ -4012,7 +2684,7 @@ function confirmResetPlan() {
         .then(r => r.json())
         .then(d => {
             if (d.success) {
-                // Redirecionar para a p√°gina sem par√¢metros para mostrar sele√ß√£o de plano
+                // Redirecionar para a p·gina sem par‚metros para mostrar seleÁ„o de plano
                 window.location.href = 'leitura.php';
             } else {
                 alert('Erro ao reiniciar plano. Tente novamente.');
@@ -4054,7 +2726,7 @@ renderAppFooter();
 <script>
 // --- LOGIC ---
 function appSettingsOpen() {
-    console.log('Tentando abrir configura√ß√µes...');
+    console.log('Tentando abrir configuraÁıes...');
     const m = document.getElementById('app-settings-modal');
     if(m) {
         m.style.display = 'flex';
@@ -4062,12 +2734,12 @@ function appSettingsOpen() {
         m.offsetHeight; 
         m.classList.add('visible');
         
-        // Garante que os √≠cones do modal renderizem
+        // Garante que os Ìcones do modal renderizem
         if(typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
     } else {
-        alert('Erro: Modal de configura√ß√µes n√£o encontrado.');
+        alert('Erro: Modal de configuraÁıes n„o encontrado.');
         console.error('Modal #app-settings-modal not found in DOM');
     }
 }
@@ -4140,13 +2812,13 @@ function resetPlan() {
     const fd = new FormData();
     fd.append('action', 'reset_plan'); // Certifique-se que o PHP trata essa action
     
-    // Como n√£o sei se o PHP tem essa action espec√≠fica, vou assumir que sim baseada no codigo anterior.
-    // Se n√£o tiver, teria que ver o backend. Mas vou mandar.
+    // Como n„o sei se o PHP tem essa action especÌfica, vou assumir que sim baseada no codigo anterior.
+    // Se n„o tiver, teria que ver o backend. Mas vou mandar.
     
     fetch('leitura.php', { method: 'POST', body: fd })
     .then(r => r.json())
     .then(res => {
-         // O backend antigo parecia apenas recarregar, vamos assumir sucesso se retornar json v√°lido
+         // O backend antigo parecia apenas recarregar, vamos assumir sucesso se retornar json v·lido
          // ou se tiver success: true
          if(res.success || res.status === 'success') {
              window.location.reload();
@@ -4193,14 +2865,7 @@ function appSettingsPDF() {
     });
     
     const css = `
-        <style>
-            body { font-family: sans-serif; padding: 40px; color: #333; }
-            h1 { color: #2563eb; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 30px; }
-            .pdf-entry { margin-bottom: 30px; page-break-inside: avoid; border: 1px solid #eee; padding: 20px; border-radius: 5px; background: #fafafa; }
-            .pdf-meta { color: #666; font-size: 0.85em; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
-            .pdf-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; color: #111; }
-            .pdf-text { line-height: 1.5; white-space: pre-wrap; font-size: 0.95em; }
-        </style>
+        
     `;
     
     d.open();
@@ -4291,76 +2956,5 @@ function appSettingsPDF() {
     </div>
 </div>
 
-<style>
-/* MODAL STYLES ISOLATED */
-#app-settings-modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); z-index: 10000;
-    display: none; align-items: center; justify-content: center;
-    backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.2s ease;
-}
-#app-settings-modal.visible { opacity: 1; }
 
-.app-settings-container {
-    background: #fff; width: 90%; max-width: 700px; height: 80vh; max-height: 600px;
-    border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    display: flex; flex-direction: column; overflow: hidden; font-family: sans-serif;
-}
-
-.app-settings-header {
-    padding: 15px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #fff;
-}
-.app-settings-header h3 { margin: 0; font-size: 1.1rem; color: #111; font-weight: 600; }
-.app-settings-close { background: none; border: none; cursor: pointer; color: #666; padding: 5px; border-radius: 5px; }
-.app-settings-close:hover { background: #f3f4f6; color: #000; }
-
-.app-settings-body { display: flex; flex: 1; overflow: hidden; }
-
-/* Sidebar */
-.app-settings-sidebar {
-    width: 200px; background: #f9fafb; border-right: 1px solid #e5e7eb; padding: 15px;
-    display: flex; flex-direction: column; gap: 5px;
-}
-.app-settings-tab {
-    padding: 10px 12px; border-radius: 6px; cursor: pointer; color: #4b5563; font-size: 0.9rem; font-weight: 500;
-    display: flex; align-items: center; gap: 8px; transition: background 0.1s;
-}
-.app-settings-tab:hover { background: #e5e7eb; }
-.app-settings-tab.active { background: #eff6ff; color: #2563eb; }
-
-/* Main */
-.app-settings-main { flex: 1; padding: 25px; overflow-y: auto; }
-
-.app-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-.app-card.danger { border-color: #fecaca; background: #fef2f2; }
-.app-card h4 { margin: 0 0 15px 0; font-size: 1rem; color: #111; }
-
-.app-input-group { margin-bottom: 15px; }
-.app-input-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.85rem; color: #374151; }
-.app-input { width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.95rem; }
-
-.app-btn {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 10px 15px; border-radius: 6px; font-weight: 500; cursor: pointer; border: none; font-size: 0.9rem; width: 100%;
-}
-.app-btn.primary { background: #2563eb; color: #fff; }
-.app-btn.primary:hover { background: #1d4ed8; }
-.app-btn.secondary { background: #fff; border: 1px solid #d1d5db; color: #374151; }
-.app-btn.secondary:hover { background: #f9fafb; }
-.app-btn.danger { background: #fff; border: 1px solid #ef4444; color: #ef4444; }
-.app-btn.danger:hover { background: #fee2e2; }
-
-/* Stats */
-.app-stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-.app-stat-box { background: #f3f4f6; padding: 15px; border-radius: 8px; text-align: center; }
-.app-stat-box strong { display: block; font-size: 1.25rem; color: #2563eb; }
-.app-stat-box span { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; }
-
-/* Mobile */
-@media(max-width: 640px) {
-    .app-settings-body { flex-direction: column; }
-    .app-settings-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 10px; border-bottom: 1px solid #e5e7eb; border-right: none; }
-    .app-settings-tab { white-space: nowrap; }
-}
-</style>
 
