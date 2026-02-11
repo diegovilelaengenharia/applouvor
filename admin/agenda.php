@@ -151,22 +151,22 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                 foreach ($allItems as $item): 
                     $color = $item['color'] ?? '#047857';
             ?>
-                <a href="<?= $item['source'] === 'schedule' ? 'escala_detalhe.php?id='.$item['id'] : 'evento_detalhe.php?id='.$item['id'] ?>" class="list-item" style="text-decoration: none; color: inherit;">
+                <a href="<?= $item['source'] === 'schedule' ? 'escala_detalhe.php?id='.$item['id'] : 'evento_detalhe.php?id='.$item['id'] ?>" class="list-item">
                     <div class="date-badge">
                         <div class="day"><?= date('d', strtotime($item['start_datetime'])) ?></div>
                         <div class="month"><?= date('M', strtotime($item['start_datetime'])) ?></div>
                     </div>
                     <div>
-                        <div style="font-weight: 700; font-size: 1rem; margin-bottom: 4px;"><?= htmlspecialchars($item['title']) ?></div>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
-                            <span><i data-lucide="clock" width="14" style="vertical-align: middle;"></i> <?= date('H:i', strtotime($item['start_datetime'])) ?></span>
+                        <div class="list-item-title"><?= htmlspecialchars($item['title']) ?></div>
+                        <div class="list-item-meta">
+                            <span><i data-lucide="clock" width="14" class="align-middle"></i> <?= date('H:i', strtotime($item['start_datetime'])) ?></span>
                             <?php if(!empty($item['participant_count'])): ?>
-                                <span><i data-lucide="users" width="14" style="vertical-align: middle;"></i> <?= $item['participant_count'] ?></span>
+                                <span><i data-lucide="users" width="14" class="align-middle"></i> <?= $item['participant_count'] ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div style="margin-left: auto;">
-                        <span style="background: <?= $color ?>20; color: <?= $color ?>; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
+                    <div class="ml-auto">
+                        <span class="source-badge" style="background: <?= $color ?>20; color: <?= $color ?>;">
                             <?= $item['source'] === 'schedule' ? 'Escala' : 'Evento' ?>
                         </span>
                     </div>

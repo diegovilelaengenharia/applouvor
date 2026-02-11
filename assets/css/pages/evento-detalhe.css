@@ -597,3 +597,20 @@
         padding-bottom: 200px;
     }
 }
+
+/* Utilities */
+.align-middle {
+    vertical-align: middle;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-none {
+    flex: none;
+}
+
+.w-full {
+    width: 100%;
+}

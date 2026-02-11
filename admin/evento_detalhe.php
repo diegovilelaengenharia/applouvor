@@ -183,7 +183,7 @@ renderPageHeader($event['title'], '');
 
         <?php if($event['description']): ?>
         <div class="event-notes">
-            <strong><i data-lucide="align-left" width="14" style="vertical-align:middle"></i> Descrição:</strong><br>
+            <strong><i data-lucide="align-left" width="14" class="align-middle"></i> Descrição:</strong><br>
             <?= nl2br(htmlspecialchars($event['description'])) ?>
         </div>
         <?php endif; ?>
@@ -202,7 +202,7 @@ renderPageHeader($event['title'], '');
                 Participantes <span class="section-count"><?= count($participants) ?></span>
                 <?php if($confirmedCount > 0): ?>
                     <span class="count-confirmed">
-                        <i data-lucide="check" width="12" style="vertical-align: middle"></i> <?= $confirmedCount ?> confirmados
+                        <i data-lucide="check" width="12" class="align-middle"></i> <?= $confirmedCount ?> confirmados
                     </span>
                 <?php endif; ?>
             </div>
@@ -256,7 +256,7 @@ renderPageHeader($event['title'], '');
     <div class="action-buttons">
         <?php if ($userParticipant): ?>
             <?php if ($userParticipant['status'] !== 'confirmed'): ?>
-                <form method="POST" style="flex: 1;">
+                <form method="POST" class="flex-1">
                     <button type="submit" name="confirm_presence" class="btn-large btn-confirm w-full">
                         <i data-lucide="check-circle" width="18"></i> Confirmar
                     </button>
@@ -264,7 +264,7 @@ renderPageHeader($event['title'], '');
             <?php endif; ?>
             
             <?php if ($userParticipant['status'] !== 'declined'): ?>
-                <form method="POST" style="flex: 1;">
+                <form method="POST" class="flex-1">
                     <button type="submit" name="decline_presence" class="btn-large btn-decline w-full">
                         <i data-lucide="x-circle" width="18"></i> Recusar
                     </button>
@@ -272,7 +272,7 @@ renderPageHeader($event['title'], '');
             <?php endif; ?>
         <?php endif; ?>
         
-        <a href="agenda.php" class="btn-large btn-back" style="flex: 0;">
+        <a href="agenda.php" class="btn-large btn-back flex-none">
             Voltar
         </a>
     </div>

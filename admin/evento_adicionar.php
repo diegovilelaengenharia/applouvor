@@ -87,16 +87,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
 <!-- Import CSS -->
 <link rel="stylesheet" href="../assets/css/pages/evento-form.css?v=<?= time() ?>">
 
-<!-- Wizard Specific Styles for Add Event -->
-<style>
-    .wizard-mode .form-card {
-        display: none;
-        animation: fadeIn 0.3s ease;
-    }
-    .wizard-mode .form-card.active {
-        display: block;
-    }
-</style>
+<!-- Wizard Specific Styles moved to evento-form.css -->
 
 <div class="event-container wizard-mode">
     <?php if (isset($error)): ?>
@@ -204,7 +195,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                 </label>
             </div>
             
-            <div class="form-group" style="margin-top: 20px;">
+            <div class="form-group mt-4">
                 <label class="form-label">Cor do Evento</label>
                 <div class="color-options">
                     <label class="color-option">

@@ -365,3 +365,38 @@ textarea.form-input {
     background: var(--red-100);
     border-color: var(--red-500);
 }
+
+/* Wizard Specific Styles (extracted from evento_adicionar.php) */
+.wizard-mode .form-card {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.wizard-mode .form-card.active {
+    display: block;
+}
+
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-2 {
+    flex: 2;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}

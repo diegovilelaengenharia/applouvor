@@ -157,7 +157,7 @@ renderPageHeader('Editar Evento', $event['title']);
                 </label>
             </div>
             
-            <div id="time-fields" style="<?= $event['all_day'] ? 'display: none;' : '' ?>">
+            <div id="time-fields" class="<?= $event['all_day'] ? 'hidden' : '' ?>">
                 <div class="time-grid">
                     <div class="form-group">
                         <label class="form-label">Hora Início</label>
@@ -265,7 +265,13 @@ renderPageHeader('Editar Evento', $event['title']);
 <script>
 function toggleAllDay() {
     const allDay = document.getElementById('all_day').checked;
-    document.getElementById('time-fields').style.display = allDay ? 'none' : 'block';
+    const timeFields = document.getElementById('time-fields');
+    
+    if (allDay) {
+        timeFields.classList.add('hidden');
+    } else {
+        timeFields.classList.remove('hidden');
+    }
 }
 
 document.querySelectorAll('.member-item input').forEach(input => {

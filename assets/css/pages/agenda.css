@@ -515,4 +515,40 @@
         width: 6px;
         margin: 2px 1px;
     }
+
+    .event-chip {
+        height: 6px;
+        width: 6px;
+        margin: 2px 1px;
+    }
+}
+
+/* Utilities / New Classes */
+.list-item-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.list-item-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.source-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
 }
