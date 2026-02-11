@@ -118,174 +118,12 @@ renderAppHeader('Editar Evento');
 renderPageHeader('Editar Evento', $event['title']);
 ?>
 
-<style>
-    body { background: var(--bg-body); }
-    
-    .event-container {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 16px 12px 140px;
-    }
-    
-    .form-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: var(--shadow-sm);
-        margin-bottom: 16px;
-    }
-    
-    .card-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .form-group {
-        margin-bottom: 16px;
-    }
-    
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--text-secondary);
-    }
-    
-    .form-input {
-        width: 100%;
-        padding: 12px 14px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-body);
-        color: var(--text-main);
-        font-size: 0.9375rem;
-        outline: none;
-        transition: all 0.2s;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    .form-input:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
-    }
-    
-    textarea.form-input {
-        resize: vertical;
-        min-height: 80px;
-    }
-    
-    .type-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .type-option input { display: none; }
-    
-    .type-box {
-        padding: 12px;
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        background: var(--bg-body);
-        font-weight: 600;
-        font-size: 0.8125rem;
-    }
-    
-    .type-option input:checked + .type-box {
-        background: var(--primary-subtle);
-        border-color: var(--primary);
-        color: var(--primary);
-    }
-    
-    .color-options {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-    
-    .color-option input { display: none; }
-    
-    .color-swatch {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        cursor: pointer;
-        border: 3px solid transparent;
-        transition: all 0.2s;
-    }
-    
-    .color-option input:checked + .color-swatch {
-        border-color: var(--text-main);
-        transform: scale(1.1);
-    }
-    
-    .member-list {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    
-    .member-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px;
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        margin-bottom: 8px;
-        cursor: pointer;
-        background: var(--bg-body);
-    }
-    
-    .member-item.selected {
-        background: var(--primary-subtle);
-        border-color: var(--primary);
-    }
-    
-    .checkbox-group {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px;
-        background: var(--bg-body);
-        border-radius: 10px;
-        cursor: pointer;
-    }
-    
-    .action-buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 24px;
-    }
-    
-    @media (max-width: 768px) {
-        .action-buttons {
-            position: fixed;
-            bottom: 80px;
-            left: 0;
-            right: 0;
-            background: var(--bg-surface);
-            border-top: 1px solid var(--border-color);
-            padding: 12px 16px;
-            margin: 0;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            z-index: 50;
-        }
-    }
-</style>
+<!-- Import CSS -->
+<link rel="stylesheet" href="../assets/css/pages/evento-form.css?v=<?= time() ?>">
 
 <div class="event-container">
     <?php if (isset($error)): ?>
-        <div style="background: var(--rose-100); border: 1px solid var(--rose-500); color: var(--rose-700); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+        <div class="feedback-message feedback-error">
             <?= htmlspecialchars($error) ?>
         </div>
     <?php endif; ?>
@@ -293,7 +131,7 @@ renderPageHeader('Editar Evento', $event['title']);
     <form method="POST">
         <div class="form-card">
             <div class="card-title">
-                <i data-lucide="info" style="width: 18px;"></i>
+                <i data-lucide="info" width="18"></i>
                 Informações Básicas
             </div>
             
@@ -315,12 +153,12 @@ renderPageHeader('Editar Evento', $event['title']);
             <div class="form-group">
                 <label class="checkbox-group">
                     <input type="checkbox" name="all_day" id="all_day" <?= $event['all_day'] ? 'checked' : '' ?> onchange="toggleAllDay()">
-                    <span style="font-weight: 600;">Evento de dia inteiro</span>
+                    <span class="checkbox-label">Evento de dia inteiro</span>
                 </label>
             </div>
             
             <div id="time-fields" style="<?= $event['all_day'] ? 'display: none;' : '' ?>">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="time-grid">
                     <div class="form-group">
                         <label class="form-label">Hora Início</label>
                         <input type="time" name="start_time" class="form-input" value="<?= $startTime ?>">
@@ -340,7 +178,7 @@ renderPageHeader('Editar Evento', $event['title']);
         
         <div class="form-card">
             <div class="card-title">
-                <i data-lucide="tag" style="width: 18px;"></i>
+                <i data-lucide="tag" width="18"></i>
                 Tipo de Evento
             </div>
             
@@ -371,7 +209,7 @@ renderPageHeader('Editar Evento', $event['title']);
                 </label>
             </div>
             
-            <div class="form-group" style="margin-top: 16px;">
+            <div class="form-group color-options-group">
                 <label class="form-label">Cor do Evento</label>
                 <div class="color-options">
                     <?php
@@ -389,7 +227,7 @@ renderPageHeader('Editar Evento', $event['title']);
         
         <div class="form-card">
             <div class="card-title">
-                <i data-lucide="users" style="width: 18px;"></i>
+                <i data-lucide="users" width="18"></i>
                 Participantes
             </div>
             
@@ -399,25 +237,25 @@ renderPageHeader('Editar Evento', $event['title']);
                 ?>
                     <label class="member-item <?= $isSelected ? 'selected' : '' ?>">
                         <input type="checkbox" name="participants[]" value="<?= $user['id'] ?>" <?= $isSelected ? 'checked' : '' ?>>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 0.875rem;"><?= htmlspecialchars($user['name']) ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Membro') ?></div>
+                        <div class="member-info">
+                            <div class="member-name"><?= htmlspecialchars($user['name']) ?></div>
+                            <div class="member-instrument"><?= htmlspecialchars($user['instrument'] ?: 'Membro') ?></div>
                         </div>
                     </label>
                 <?php endforeach; ?>
             </div>
         </div>
         
-        <div class="action-buttons">
-            <button type="submit" class="btn-success" style="flex: 2;">
-                <i data-lucide="save" style="width: 16px;"></i>
+        <div class="actions-bar">
+            <button type="submit" class="btn-success flex-2">
+                <i data-lucide="save" width="16"></i>
                 Salvar Alterações
             </button>
-            <button type="submit" name="delete" class="btn-danger" style="flex: 1;" onclick="return confirm('Tem certeza que deseja excluir este evento?')">
-                <i data-lucide="trash-2" style="width: 16px;"></i>
+            <button type="submit" name="delete" class="btn-danger flex-1" onclick="return confirm('Tem certeza que deseja excluir este evento?')">
+                <i data-lucide="trash-2" width="16"></i>
                 Excluir
             </button>
-            <a href="evento_detalhe.php?id=<?= $eventId ?>" class="btn-secondary" style="flex: 1; text-decoration: none;">
+            <a href="evento_detalhe.php?id=<?= $eventId ?>" class="btn-secondary flex-1">
                 Cancelar
             </a>
         </div>

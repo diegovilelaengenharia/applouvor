@@ -223,10 +223,14 @@ $page_title = $is_creating_new ? 'Novo Membro' : ($editing_user_id == $_SESSION[
 $page_subtitle = $is_creating_new ? 'Cadastre um novo membro da equipe' : 'Gerencie as informações pessoais';
 
 renderAppHeader($page_title);
-renderPageHeader($page_title, $page_subtitle);
 ?>
 
+<!-- Import CSS -->
+<link rel="stylesheet" href="../assets/css/pages/membros.css?v=<?= time() ?>">
 
+<?php
+renderPageHeader($page_title, $page_subtitle);
+?>
 
 <div class="profile-container">
     <!-- Mensagens de Feedback -->

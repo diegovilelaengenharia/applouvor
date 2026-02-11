@@ -42,49 +42,22 @@ if (!empty($currentUser['avatar'])) {
 }
 ?>
 
+<!-- Import Sidebar CSS -->
+<link rel="stylesheet" href="../assets/css/components/sidebar.css?v=<?= time() ?>">
+
 <div id="app-sidebar" class="sidebar">
     <!-- Cabeçalho Sidebar com Logo (Clicável para Recolher) -->
-    <div onclick="toggleSidebarDesktop()" style="padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s;" title="Expandir/Recolher Menu" class="sidebar-header-hover">
-        <div class="logo-area" style="font-weight: 800; color: var(--slate-900); font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
+    <div onclick="toggleSidebarDesktop()" title="Expandir/Recolher Menu" class="sidebar-header-hover">
+        <div class="logo-area">
             <!-- Logo Imagem -->
-            <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" class="sidebar-logo" style="height: 40px; width: auto; object-fit: contain; transition: all 0.3s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+            <img src="../assets/img/logo_pib_black.png" alt="PIB Oliveira" class="sidebar-logo">
 
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-                <span class="sidebar-text sidebar-church-name" style="
-                    color: var(--slate-700);
-                    font-size: 0.95rem; 
-                    font-weight: 700;
-                    transition: all 0.3s;
-                ">PIB Oliveira</span>
-                <span class="sidebar-text sidebar-app-name" style="
-                    color: var(--slate-500);
-                    font-size: 0.7rem; 
-                    font-weight: 600;
-                    transition: all 0.3s;
-                ">App Louvor</span>
+                <span class="sidebar-text sidebar-church-name">PIB Oliveira</span>
+                <span class="sidebar-text sidebar-app-name">App Louvor</span>
             </div>
         </div>
     </div>
-
-    <style>
-        /* Efeito hover no header da sidebar */
-        .sidebar-header-hover:hover {
-            background: linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.05) 100%);
-        }
-
-        .sidebar-header-hover:hover .sidebar-logo {
-            transform: scale(1.05) rotate(-2deg);
-            filter: drop-shadow(0 4px 8px rgba(147, 51, 234, 0.3));
-        }
-
-        .sidebar-header-hover:hover .sidebar-church-name {
-            color: var(--purple-600);
-        }
-
-        .sidebar-header-hover:hover .sidebar-app-name {
-            color: var(--green-600);
-        }
-    </style>
 
     <!-- 2. Menu -->
     <nav class="sidebar-nav">
@@ -101,7 +74,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <div class="nav-divider"></div>
-        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Ensaios</div>
+        <div class="nav-section-title">Gestão de Ensaios</div>
 
         <a href="<?= $baseAdmin ?>escalas.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -125,7 +98,7 @@ if (!empty($currentUser['avatar'])) {
 
         <a href="<?= $baseAdmin ?>membros.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
             </svg>
             <span class="sidebar-text">Membros</span>
         </a>
@@ -146,7 +119,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <div class="nav-divider"></div>
-        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Espiritual</div>
+        <div class="nav-section-title">Espiritual</div>
 
         <a href="<?= $baseAdmin ?>devocionais.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -162,7 +135,7 @@ if (!empty($currentUser['avatar'])) {
         </a>
 
         <div class="nav-divider"></div>
-        <div class="sidebar-text" style="padding: 0 12px 4px 12px; font-size: 0.75rem; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Comunicação</div>
+        <div class="nav-section-title">Comunicação</div>
 
         <a href="<?= $baseAdmin ?>avisos.php" class="nav-item nav-yellow <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -174,444 +147,37 @@ if (!empty($currentUser['avatar'])) {
 
         <!-- Botão Especial: Reunião 08/02 -->
         <a href="<?= $baseAdmin ?>reuniao_fev_2026.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'reuniao_fev_2026.php' ? 'active' : '' ?>">
-            <div style="position: relative; display: flex; align-items: center; gap: 12px; width: 100%;">
+            <div class="nav-content-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
                     <line x1="8" y1="21" x2="16" y2="21"/>
                     <line x1="12" y1="17" x2="12" y2="21"/>
                 </svg>
                 <span class="sidebar-text" style="flex: 1;">Reunião 08/02</span>
-                <span class="meeting-badge sidebar-text" style="background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">NOVO</span>
+                <span class="meeting-badge sidebar-text">NOVO</span>
             </div>
         </a>
         
         <!-- Botão Backup Offline -->
         <a href="<?= $baseAdmin ?>apresentacao_offline.html" target="_blank" class="nav-item nav-meeting" style="background: var(--slate-700); border-color: var(--slate-600); margin-top: 4px;">
-            <div style="position: relative; display: flex; align-items: center; gap: 12px; width: 100%;">
+            <div class="nav-content-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
                 </svg>
-                <span class="sidebar-text" style="flex: 1;">Backup Offline</span>
+                <span class="sidebar-text" style="flex: 1; color: #fff;">Backup Offline</span>
             </div>
         </a>
 
-
-
     </nav>
 
-    <!-- 3. Rodapé Integrado -->
-    <!-- 3. Rodapé Integrado (REMOVIDO REQUISIÇÃO USUARIO) -->
-    <!-- Perfil movido para o Header Superior -->
-
-
     <!-- Créditos do Desenvolvedor -->
-    <div class="sidebar-credits" style="margin-top: auto; padding: 20px; text-align: center; font-size: 0.65rem; color: var(--slate-400); border-top: 1px solid var(--slate-100);">
+    <div class="sidebar-credits">
         <span class="sidebar-text" style="display: block; margin-bottom: 2px;">Desenvolvido por</span>
-        <span class="sidebar-text" style="font-weight: 600; color: var(--slate-500); font-size: 0.7rem;">Diego T. N. Vilela</span>
+        <span class="sidebar-text" style="font-weight: 600; color: var(--text-tertiary); font-size: 0.7rem;">Diego T. N. Vilela</span>
     </div>
 </div>
-
-<style>
-    /* VARIÁVEIS LOCAIS (Mapeadas para Design System Global) */
-    :root {
-        --sidebar-width: 240px;
-        --sidebar-collapsed-width: 80px;
-        --sidebar-bg: var(--bg-surface);
-        --sidebar-text: var(--text-secondary);
-        --sidebar-border: var(--border-subtle);
-    }
-
-    /* Sidebar Layout */
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--sidebar-width);
-        background: var(--sidebar-bg);
-        border-right: 1px solid var(--sidebar-border);
-        display: flex;
-        flex-direction: column;
-        z-index: 1000;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    /* Invisible Scrollbar */
-    .sidebar::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-        background: transparent;
-        border-radius: 3px;
-    }
-
-    .sidebar:hover::-webkit-scrollbar-thumb {
-        background: var(--border-medium);
-    }
-
-    /* Firefox */
-    .sidebar {
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
-    }
-
-    .sidebar:hover {
-        scrollbar-color: var(--border-medium) transparent;
-    }
-
-    /* Navegação Item */
-    .nav-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 12px;
-        /* Touch target melhor */
-        border-radius: 8px;
-        color: var(--sidebar-text);
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.9375rem;
-        /* 15px */
-        transition: all 0.2s;
-        margin-bottom: 2px;
-    }
-
-    /* Colors Classes restored */
-    .nav-item.nav-primary:hover,
-    .nav-item.nav-primary.active {
-        background-color: var(--slate-100);
-        color: var(--slate-700);
-    }
-
-    .nav-item.nav-primary.active svg {
-        color: var(--slate-600);
-    }
-
-    /* GESTÃO → NEUTRO COM ACENTO AZUL */
-    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: var(--text-tertiary); }
-    .nav-item.nav-emerald:hover, .nav-item.nav-emerald.active,
-    .nav-item.nav-blue:hover, .nav-item.nav-blue.active,
-    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: var(--bg-surface-active); color: var(--text-primary); }
-    
-    .nav-item.nav-emerald.active svg,
-    .nav-item.nav-blue.active svg,
-    .nav-item.nav-violet.active svg { color: var(--text-secondary); }
-
-    /* ESPIRITUAL → NEUTRO COM ACENTO VERDE */
-    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: var(--text-tertiary); }
-    .nav-item.nav-indigo:hover, .nav-item.nav-indigo.active,
-    .nav-item.nav-rose:hover, .nav-item.nav-rose.active,
-    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: var(--green-50); color: var(--green-700); }
-    
-    .nav-item.nav-indigo.active svg,
-    .nav-item.nav-rose.active svg,
-    .nav-item.nav-cyan.active svg { color: var(--green-600); }
-
-    /* COMUNICAÇÃO → NEUTRO COM ACENTO ROXO */
-    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: var(--text-tertiary); }
-    .nav-item.nav-amber:hover, .nav-item.nav-amber.active,
-    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: var(--violet-50); color: var(--violet-700); }
-    
-    .nav-item.nav-amber.active svg,
-    .nav-item.nav-pink.active svg { color: var(--violet-600); }
-
-    /* Indicadores (Blue) */
-    .nav-item.nav-indicators svg {
-        color: var(--text-tertiary);
-    }
-
-    .nav-item.nav-indicators:hover,
-    .nav-item.nav-indicators.active {
-        background-color: var(--bg-surface-active);
-        color: var(--text-primary);
-    }
-
-    .nav-item.nav-indicators:hover svg,
-    .nav-item.nav-indicators.active svg {
-        color: var(--text-primary);
-    }
-
-
-    .nav-item.active {
-        font-weight: 700;
-        box-shadow: var(--shadow-sm);
-    }
-
-    .nav-item svg {
-        width: 22px;
-        height: 22px;
-        transition: all 0.2s;
-        /* Default fallback */
-        color: var(--text-tertiary);
-    }
-
-
-    .nav-divider {
-        height: 1px;
-        background: var(--border-subtle);
-        margin: 8px 16px;
-    }
-
-    /* CSS Extra para o Footer Integrado */
-    .sidebar-footer {
-        padding: 16px;
-        border-top: 1px solid var(--border-subtle);
-        background: var(--bg-surface-hover);
-        /* Slate 50 */
-    }
-
-    .user-profile-integrated {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-    }
-
-    .profile-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        flex: 1;
-        min-width: 0;
-        padding: 8px;
-        border-radius: 8px;
-        transition: background 0.2s;
-    }
-
-    .profile-link:hover {
-        background: var(--bg-surface-active);
-    }
-
-    .user-avatar-compact {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        object-fit: cover;
-        border: 2px solid var(--bg-surface);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .status-indicator {
-        position: absolute;
-        bottom: -2px;
-        right: -2px;
-        width: 12px;
-        height: 12px;
-        background: var(--sage-500);
-        border: 2px solid var(--bg-surface);
-        border-radius: 50%;
-    }
-
-    .user-info-row {
-        flex: 1;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .u-name {
-        font-size: 0.9375rem;
-        /* 15px */
-        font-weight: 600;
-        color: var(--text-primary);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .u-role {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-    }
-
-    .actions-row {
-        display: flex;
-        align-items: center;
-    }
-
-    .action-icon-subtle {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        color: var(--text-tertiary);
-        transition: all 0.2s;
-    }
-
-    .action-icon-subtle:hover {
-        background: var(--bg-surface);
-        color: var(--text-primary);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .action-icon-subtle.danger:hover {
-        color: var(--red-500);
-        background: var(--bg-surface);
-    }
-
-    /* MODO RECOLHIDO (Desktop) */
-    .sidebar.collapsed {
-        width: var(--sidebar-collapsed-width);
-    }
-
-    .sidebar.collapsed .sidebar-text,
-    .sidebar.collapsed .u-name,
-    .sidebar.collapsed .u-role,
-    .sidebar.collapsed .user-info-row {
-        display: none;
-    }
-
-    .sidebar.collapsed .nav-item {
-        justify-content: center;
-        padding: 12px;
-    }
-
-    .sidebar.collapsed .nav-item i {
-        margin: 0;
-    }
-
-    .sidebar.collapsed .logo-area {
-        justify-content: center;
-    }
-
-    .sidebar.collapsed .logo-area img {
-        height: 32px;
-    }
-
-    .sidebar.collapsed .profile-link {
-        justify-content: center;
-        padding: 0;
-    }
-
-    .sidebar.collapsed .user-profile-integrated {
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .sidebar.collapsed .actions-row {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    /* MOBILE OVERRIDES */
-    @media (max-width: 1024px) {
-        .sidebar {
-            transform: translateX(-100%);
-            width: 200px;
-            /* Largura Ultra Compacta via USER FEEDBACK */
-            max-width: 80%;
-        }
-
-        .sidebar.open {
-            transform: translateX(0);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .sidebar-collapser,
-        .btn-toggle-desktop {
-            display: none;
-        }
-    }
-
-    /* Overlay */
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: var(--bg-overlay);
-        /* Slate 900 com opacidade */
-        backdrop-filter: blur(2px);
-        z-index: 999;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s;
-    }
-
-    .sidebar-overlay.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    /* Botão Especial Reunião */
-    .nav-item.nav-meeting {
-        background: linear-gradient(135deg, var(--green-500) 0%, var(--green-600) 100%);
-        color: white;
-        margin: 8px 0;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .nav-item.nav-meeting::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.5s;
-    }
-
-    .nav-item.nav-meeting:hover::before {
-        left: 100%;
-    }
-
-    .nav-item.nav-meeting:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
-        border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .nav-item.nav-meeting.active {
-        box-shadow: 0 6px 24px rgba(16, 185, 129, 0.7);
-        transform: scale(1.02);
-        border-color: rgba(255, 255, 255, 0.6);
-    }
-
-    .nav-item.nav-meeting svg {
-        color: white;
-        stroke-width: 2.5px;
-    }
-
-    .meeting-badge {
-        animation: pulse 2s ease-in-out infinite;
-        background: rgba(255,255,255,0.3) !important;
-        font-weight: 800 !important;
-    }
-
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
-    }
-
-    /* Sidebar collapsed - esconder badge */
-    .sidebar.collapsed .meeting-badge {
-        display: none;
-    }
-</style>
 
 <!-- Overlay para Fechar no Mobile -->
 <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebarMobile()"></div>
@@ -629,13 +195,14 @@ if (!empty($currentUser['avatar'])) {
         if (!isDesktop()) return;
         sidebar.classList.toggle('collapsed');
         const isCollapsed = sidebar.classList.contains('collapsed');
-        if (content) content.style.marginLeft = isCollapsed ? '88px' : '190px';
+        if (content) content.style.marginLeft = isCollapsed ? '88px' : '250px';
         localStorage.setItem('sidebarCollapsed', isCollapsed);
     }
 
     function toggleSidebarMobile() {
         sidebar.classList.toggle('open');
-        document.getElementById('sidebar-overlay').classList.toggle('active');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (overlay) overlay.classList.toggle('active');
     }
 
     // --- Init ---
@@ -647,7 +214,7 @@ if (!empty($currentUser['avatar'])) {
                 if (content) content.style.marginLeft = '88px';
             } else {
                 sidebar.classList.remove('collapsed');
-                if (content) content.style.marginLeft = '190px';
+                if (content) content.style.marginLeft = '250px';
             }
         }
 

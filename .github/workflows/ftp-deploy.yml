@@ -14,18 +14,17 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
 
-    - name: 📂 Sync files
+    - name: 📂 Sync files (Faster)
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: 147.93.64.217
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: public_html/applouvor/
-        protocol: ftp
+        protocol: ftps # Use secure FTP (Implicit SSL) if available - often on port 21
         port: 21
-        unsafe: true # Tenta ignorar erros de certificado SSL se houver
+        unsafe: true # Allow self-signed certs
         exclude: |
           **/.git*
           **/.git*/**
           **/node_modules/**
-

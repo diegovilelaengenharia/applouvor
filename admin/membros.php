@@ -68,9 +68,10 @@ renderAppHeader('Membros');
 renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 ?>
 
+<!-- Import CSS -->
+<link rel="stylesheet" href="../assets/css/pages/membros.css?v=<?= time() ?>">
 
-
-<div class="members-container" style="max-width: 800px; margin: 0 auto;">
+<div class="members-container">
     <!-- Search Bar -->
     <div class="search-box">
         <i data-lucide="search" class="search-icon" width="20"></i>
@@ -87,7 +88,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                  style="border-left-color: var(--primary);">
                 
                 <!-- Avatar/Icon -->
-                <div class="compact-card-icon rounded" style="background: rgba(55, 106, 200, 0.1); color: var(--primary); width: 40px; height: 40px;">
+                <div class="compact-card-icon rounded">
                     <?php 
                     $initial = strtoupper(substr($user['name'], 0, 1));
                     if (!empty($user['avatar'])) {
@@ -108,13 +109,13 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
                 <!-- Content -->
                 <div class="compact-card-content">
-                    <div class="compact-card-title" style="display: flex; align-items: center; gap: 6px;">
+                    <div class="compact-card-title">
                         <?= htmlspecialchars($user['name']) ?>
                         <?php if ($user['role'] === 'admin'): ?>
-                            <span style="background: var(--yellow-500); color: white; padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;">ADM</span>
+                            <span style="background: var(--yellow-500); color: white; padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-left: 6px;">ADM</span>
                         <?php endif; ?>
                     </div>
-                    <div class="compact-card-subtitle" style="margin-top: 2px;">
+                    <div class="compact-card-subtitle">
                         <?php 
                         if (!empty($user['roles'])): 
                             $uniqueRoles = [];
@@ -149,11 +150,6 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                     </div>
                 </div>
 
-                <!-- Users Stats / Meta (Optional - e.g. Phone) -->
-                <!-- <div style="font-size: 0.8rem; color: var(--text-tertiary); display:none; @media(min-width:768px){display:block;}">
-                   <?= htmlspecialchars($user['instrument']) ?>
-                </div> -->
-
                 <!-- Actions -->
                 <div class="member-actions-wrapper">
                     <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="btn-action-icon btn-action-whatsapp" title="WhatsApp">
@@ -186,7 +182,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 <!-- FAB (Admin Only) -->
 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-    <a href="perfil.php?new=1" class="fab" style="position: fixed; bottom: 84px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 90; transition: transform 0.2s; text-decoration: none;">
+    <a href="perfil.php?new=1" class="fab">
         <i data-lucide="plus" width="28"></i>
     </a>
 <?php endif; ?>

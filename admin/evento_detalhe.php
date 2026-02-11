@@ -159,14 +159,14 @@ renderPageHeader($event['title'], '');
                 <div class="event-meta">
                     <i data-lucide="<?= $typeIcons[$event['event_type']] ?? 'calendar' ?>" width="14"></i> <?= $typeLabels[$event['event_type']] ?? 'Evento' ?>
                 </div>
-                <div class="event-meta" style="margin-top: 4px;">
+                <div class="event-meta mt-1">
                     <i data-lucide="calendar" width="14"></i> <?= formDataPtBr($event['start_datetime']) ?>
                 </div>
-                <div class="event-meta" style="margin-top: 4px;">
+                <div class="event-meta mt-1">
                     <i data-lucide="clock" width="14"></i> <?= date('H:i', strtotime($event['start_datetime'])) ?> - <?= date('H:i', strtotime($event['end_datetime'])) ?>
                 </div>
                 <?php if ($event['location']): ?>
-                <div class="event-meta" style="margin-top: 4px;">
+                <div class="event-meta mt-1">
                     <i data-lucide="map-pin" width="14"></i> <?= htmlspecialchars($event['location']) ?>
                 </div>
                 <?php endif; ?>
@@ -174,7 +174,7 @@ renderPageHeader($event['title'], '');
             
             <?php if ($event['created_by'] == $_SESSION['user_id'] || $_SESSION['user_role'] === 'admin'): ?>
             <div>
-                <a href="evento_editar.php?id=<?= $event['id'] ?>" class="btn-icon btn-edit" title="Editar" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <a href="evento_editar.php?id=<?= $event['id'] ?>" class="btn-icon btn-edit" title="Editar">
                     <i data-lucide="edit-2" width="16"></i>
                 </a>
             </div>
@@ -201,7 +201,7 @@ renderPageHeader($event['title'], '');
             <div class="section-title">
                 Participantes <span class="section-count"><?= count($participants) ?></span>
                 <?php if($confirmedCount > 0): ?>
-                    <span style="font-size: 0.85rem; color: var(--green-600); font-weight: 600; margin-left: 8px;">
+                    <span class="count-confirmed">
                         <i data-lucide="check" width="12" style="vertical-align: middle"></i> <?= $confirmedCount ?> confirmados
                     </span>
                 <?php endif; ?>
@@ -209,7 +209,7 @@ renderPageHeader($event['title'], '');
         </div>
         
         <?php if (empty($participants)): ?>
-            <p style="color: var(--text-muted); text-align: center; padding: 20px;">
+            <p class="empty-state">
                 Nenhum participante convidado
             </p>
         <?php else: ?>
@@ -225,7 +225,7 @@ renderPageHeader($event['title'], '');
                 <div class="member-card status-<?= $p['status'] ?>">
                     <div class="member-avatar" style="background: <?= $p['avatar_color'] ?? '#ccc' ?>;">
                         <?php if($photo): ?>
-                            <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($p['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($p['name']) ?>">
                         <?php else: ?>
                             <?= $initials ?>
                         <?php endif; ?>
@@ -257,7 +257,7 @@ renderPageHeader($event['title'], '');
         <?php if ($userParticipant): ?>
             <?php if ($userParticipant['status'] !== 'confirmed'): ?>
                 <form method="POST" style="flex: 1;">
-                    <button type="submit" name="confirm_presence" class="btn-large btn-confirm" style="width: 100%;">
+                    <button type="submit" name="confirm_presence" class="btn-large btn-confirm w-full">
                         <i data-lucide="check-circle" width="18"></i> Confirmar
                     </button>
                 </form>
@@ -265,7 +265,7 @@ renderPageHeader($event['title'], '');
             
             <?php if ($userParticipant['status'] !== 'declined'): ?>
                 <form method="POST" style="flex: 1;">
-                    <button type="submit" name="decline_presence" class="btn-large btn-decline" style="width: 100%;">
+                    <button type="submit" name="decline_presence" class="btn-large btn-decline w-full">
                         <i data-lucide="x-circle" width="18"></i> Recusar
                     </button>
                 </form>

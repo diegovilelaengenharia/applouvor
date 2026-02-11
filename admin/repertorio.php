@@ -10,6 +10,8 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório', 'index.php');
 ?>
+<!-- Import CSS -->
+<link rel="stylesheet" href="../assets/css/pages/repertorio.css?v=<?= time() ?>">
 
 <?php
 renderPageHeader('Repertório', 'Gestão de Músicas');
@@ -68,6 +70,8 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             btn.classList.remove('active');
         }
     });
+
+    // Helper for PHP generated HTML usage is now mainly CSS based.
 </script>
 
 <!-- Busca -->
@@ -86,7 +90,23 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 <!-- Conteúdos -->
 <div class="results-layout">
 
-    <?php if ($tab === 'musicas'):
+    <?php 
+    // Helper function for tone classes available globally in this scope
+    if (!function_exists('getToneClass')) {
+        function getToneClass($tone) {
+            $toneMap = [
+                'C'=>'tone-C', 'C#'=>'tone-Cs', 'Db'=>'tone-Db',
+                'D'=>'tone-D', 'D#'=>'tone-Ds', 'Eb'=>'tone-Eb',
+                'E'=>'tone-E', 'F'=>'tone-F', 'F#'=>'tone-Fs', 'Gb'=>'tone-Gb',
+                'G'=>'tone-G', 'G#'=>'tone-Gs', 'Ab'=>'tone-Ab',
+                'A'=>'tone-A', 'A#'=>'tone-As', 'Bb'=>'tone-Bb',
+                'B'=>'tone-B'
+            ];
+            return $toneMap[$tone] ?? 'tone-C';
+        }
+    }
+
+    if ($tab === 'musicas'):
         $tagId = $_GET['tag_id'] ?? null;
         $tone = $_GET['tone'] ?? null;
         try {
@@ -133,7 +153,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             $currentTag = $stmtTag->fetch(PDO::FETCH_ASSOC);
         ?>
             <?php if ($currentTag): ?>
-                <div class="active-filter-badge" style="background: <?= $currentTag['color'] ?>15; border-color: <?= $currentTag['color'] ?>30;">
+                <div class="active-filter-badge" style="border-color: <?= $currentTag['color'] ?>30; background: <?= $currentTag['color'] ?>15;">
                     <div class="filter-label" style="color: <?= $currentTag['color'] ?>;">
                         <i data-lucide="folder-open" width="18"></i>
                         Pasta: <?= htmlspecialchars($currentTag['name']) ?>
@@ -147,22 +167,14 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 
         <!-- Filter Badge for Tone -->
         <?php if ($tone):
-            $toneColors = [
-                'C' => 'var(--rose-500)', 'C#' => '#f97316', 'Db' => '#f97316',
-                'D' => 'var(--yellow-500)', 'D#' => '#84cc16', 'Eb' => '#84cc16',
-                'E' => 'var(--sage-500)', 'F' => '#14b8a6', 'F#' => '#06b6d4', 'Gb' => '#06b6d4',
-                'G' => 'var(--slate-500)', 'G#' => '#6366f1', 'Ab' => '#6366f1',
-                'A' => 'var(--lavender-600)', 'A#' => 'var(--lavender-500)', 'Bb' => 'var(--lavender-500)',
-                'B' => '#ec4899'
-            ];
-            $toneColor = $toneColors[$tone] ?? 'var(--sage-500)';
+            $toneClass = getToneClass($tone);
         ?>
-            <div class="active-filter-badge" style="background: <?= $toneColor ?>15; border-color: <?= $toneColor ?>30;">
-                <div class="filter-label" style="color: <?= $toneColor ?>;">
+            <div class="active-filter-badge <?= $toneClass ?>" style="border-color: var(--tone-color); background: color-mix(in srgb, var(--tone-color) 10%, transparent); opacity: 1;">
+                 <div class="filter-label" style="color: var(--tone-color);">
                     <i data-lucide="music" width="18"></i>
                     Tom: <?= htmlspecialchars($tone) ?>
                 </div>
-                <a href="repertorio.php?tab=musicas" class="btn-clear-filter" style="color: <?= $toneColor ?>;">
+                <a href="repertorio.php?tab=musicas" class="btn-clear-filter" style="color: var(--tone-color);">
                     <i data-lucide="x" width="16"></i> Limpar
                 </a>
             </div>
@@ -174,25 +186,19 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 $stmtSongTags = $pdo->prepare("SELECT t.id, t.name, t.color FROM tags t JOIN song_tags st ON t.id = st.tag_id WHERE st.song_id = ? ORDER BY t.name");
                 $stmtSongTags->execute([$song['id']]);
                 $songTags = $stmtSongTags->fetchAll(PDO::FETCH_ASSOC);
-
-                // Define visual tone color
-                $tColor = 'var(--text-tertiary)';
-                $tBg = 'var(--bg-surface-active)';
-                if ($song['tone']) {
-                    // Reuse tone array or default
-                   $tBg = 'var(--bg-surface-active)'; 
-                }
+                
+                $songToneClass = $song['tone'] ? getToneClass($song['tone']) : '';
             ?>
                 <!-- COMPACT MUSIC CARD -->
-                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="compact-card">
+                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="compact-card <?= $songToneClass ?>">
                     
                     <!-- Tom Badge -->
-                    <div class="compact-card-icon">
+                    <div class="compact-card-icon" style="<?= $song['tone'] ? 'color: var(--tone-color); background: color-mix(in srgb, var(--tone-color) 15%, transparent);' : '' ?>">
                         <?php if ($song['tone']): ?>
-                            <div style="font-size: 1rem; font-weight: 800; line-height: 1; color: var(--text-primary);"><?= $song['tone'] ?></div>
+                            <div style="font-size: 1rem; font-weight: 800; line-height: 1;"><?= $song['tone'] ?></div>
                             <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; margin-top: 2px;">TOM</div>
                         <?php else: ?>
-                            <i data-lucide="music" width="20" style="opacity:0.3"></i>
+                            <i data-lucide="music" width="20" style="opacity:0.3; color: var(--text-tertiary);"></i>
                         <?php endif; ?>
                     </div>
 
@@ -236,7 +242,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($tags as $tag): $bgHex = $tag['color'] ?? 'var(--sage-500)'; ?>
-                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card" style="border-left-color: <?= $bgHex ?>; background: <?= $bgHex ?>08;">
+                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card" style="border-left: 3px solid <?= $bgHex ?>; background: linear-gradient(to right, <?= $bgHex ?>08, transparent);">
                     
                     <!-- Ícone -->
                     <div class="compact-card-icon" style="background: <?= $bgHex ?>20; color: <?= $bgHex ?>;">
@@ -347,19 +353,6 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 
     <!-- Conteúdo: Tons -->
     <?php if ($tab === 'tons'):
-        // Helper para mapear classe CSS
-        function getToneClass($tone) {
-            $toneMap = [
-                'C'=>'tone-C', 'C#'=>'tone-Cs', 'Db'=>'tone-Db',
-                'D'=>'tone-D', 'D#'=>'tone-Ds', 'Eb'=>'tone-Eb',
-                'E'=>'tone-E', 'F'=>'tone-F', 'F#'=>'tone-Fs', 'Gb'=>'tone-Gb',
-                'G'=>'tone-G', 'G#'=>'tone-Gs', 'Ab'=>'tone-Ab',
-                'A'=>'tone-A', 'A#'=>'tone-As', 'Bb'=>'tone-Bb',
-                'B'=>'tone-B'
-            ];
-            return $toneMap[$tone] ?? 'tone-C'; // Default
-        }
-
         try {
             $sql = "SELECT tone as name, COUNT(*) as count FROM songs WHERE tone IS NOT NULL AND tone != '' GROUP BY tone ORDER BY tone ASC";
             $stmt = $pdo->query($sql);
@@ -370,7 +363,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <?php foreach ($tones as $toneItem):
                 $toneClass = getToneClass($toneItem['name']);
             ?>
-                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card <?= $toneClass ?>" style="border-left-color: var(--tone-color);">
+                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card <?= $toneClass ?>" style="border-left: 3px solid var(--tone-color);">
                     
                     <!-- Ícone Musical -->
                     <div class="compact-card-icon" style="background: color-mix(in srgb, var(--tone-color) 15%, transparent); color: var(--tone-color);">

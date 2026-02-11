@@ -1,296 +1,276 @@
-/* ========================================
-   SIDEBAR - DESIGN NEUTRO MODERNO (Refactored)
-   ======================================== */
+/* assets/css/components/sidebar.css */
 
-.material-symbols-outlined {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-    display: inline-flex;
-    align-items: center;
+/* --- SIDEBAR CONTAINER --- */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Collapsed State (Desktop) */
+.sidebar.collapsed {
+    width: 88px;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .nav-section-title,
+.sidebar.collapsed .logo-area,
+.sidebar.collapsed .sidebar-credits {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.sidebar.collapsed .nav-item {
     justify-content: center;
+    padding: 12px;
 }
 
-.nav-item .material-symbols-outlined {
-    font-size: 22px;
-    transition: all 0.2s ease;
+.sidebar.collapsed .sidebar-header-hover {
+    justify-content: center;
+    padding: 18px 0;
 }
 
-/* ========================================
-   NAVEGAÇÃO
-   ======================================== */
+.sidebar.collapsed .sidebar-logo {
+    margin: 0;
+    height: 32px;
+    /* Smaller logo when collapsed */
+}
+
+/* Mobile State */
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        /* Slightly wider on mobile */
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* --- HEADER --- */
+.sidebar-header-hover {
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 1px solid transparent;
+}
+
+.sidebar-header-hover:hover {
+    background: linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.05) 100%);
+}
+
+.sidebar-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.sidebar-header-hover:hover .sidebar-logo {
+    transform: scale(1.05) rotate(-2deg);
+    filter: drop-shadow(0 4px 8px rgba(147, 51, 234, 0.3));
+}
+
+.logo-area {
+    font-weight: 800;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-church-name {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.3s;
+    display: block;
+}
+
+.sidebar-app-name {
+    color: var(--text-tertiary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: block;
+}
+
+.sidebar-header-hover:hover .sidebar-church-name {
+    color: var(--purple-600);
+}
+
+.sidebar-header-hover:hover .sidebar-app-name {
+    color: var(--green-600);
+}
+
+/* --- NAVIGATION --- */
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    /* var(--space-3) approx */
-    padding: 10px 16px;
-    margin: 2px 12px;
-    border-radius: var(--radius-md);
-    text-decoration: none;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
     color: var(--text-secondary);
+    text-decoration: none;
     font-weight: 500;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    border: 1px solid transparent;
     position: relative;
-    background: transparent;
-    border-left: 3px solid transparent;
+    overflow: hidden;
 }
 
-/* Ícones - Cinza neutro */
-.nav-item svg,
-.nav-item .material-symbols-outlined {
-    color: var(--text-tertiary);
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-/* Hover Global Neutro */
 .nav-item:hover {
     background: var(--bg-surface-hover);
     color: var(--text-primary);
+    transform: translateX(4px);
 }
 
-.nav-item:hover svg,
-.nav-item:hover .material-symbols-outlined {
-    color: var(--text-secondary);
-}
-
-/* Active Global */
 .nav-item.active {
     background: var(--bg-surface-active);
-    color: var(--text-primary);
-    font-weight: 600;
+    color: var(--primary);
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-subtle);
 }
 
-/* ========================================
-   CORES SEMÂNTICAS (Overrides sutis)
-   ======================================== */
-
-/* Azul - Gestão */
-.nav-item.nav-blue:hover,
-.nav-item.nav-emerald:hover,
-.nav-item.nav-violet:hover {
-    background: var(--blue-50);
-    border-left-color: var(--blue-500);
+.nav-item svg,
+.nav-item i {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    transition: all 0.2s;
 }
 
-/* Dark Mode overrides for hover backgrounds need generic handling or specific media queries if opacity not used */
-body.dark-mode .nav-item.nav-blue:hover,
-body.dark-mode .nav-item.nav-emerald:hover,
-body.dark-mode .nav-item.nav-violet:hover {
-    background: rgba(59, 130, 246, 0.1);
-    /* Blue with opacity */
+.nav-item.active svg {
+    transform: scale(1.1);
 }
 
-.nav-item.nav-blue.active,
-.nav-item.nav-emerald.active,
-.nav-item.nav-violet.active {
-    background: var(--blue-50);
-    border-left-color: var(--blue-500);
+/* Special Nav Item Colors (Active/Hover) */
+.nav-item.nav-blue.active {
     color: var(--blue-600);
+    background: var(--blue-50);
+    border-color: var(--blue-100);
 }
 
-body.dark-mode .nav-item.nav-blue.active,
-body.dark-mode .nav-item.nav-emerald.active,
-body.dark-mode .nav-item.nav-violet.active {
-    background: rgba(59, 130, 246, 0.15);
-    color: var(--blue-500);
-}
-
-.nav-item.nav-blue.active svg,
-.nav-item.nav-blue.active .material-symbols-outlined,
-.nav-item.nav-emerald.active svg,
-.nav-item.nav-violet.active svg {
-    color: var(--blue-600);
-}
-
-body.dark-mode .nav-item.nav-blue.active svg,
-body.dark-mode .nav-item.nav-blue.active .material-symbols-outlined,
-body.dark-mode .nav-item.nav-emerald.active svg,
-body.dark-mode .nav-item.nav-violet.active svg {
-    color: var(--blue-500);
-}
-
-/* Verde - Espiritual */
-.nav-item.nav-green:hover,
-.nav-item.nav-indigo:hover,
-.nav-item.nav-rose:hover,
-.nav-item.nav-cyan:hover {
-    background: var(--green-50);
-    border-left-color: var(--green-500);
-}
-
-body.dark-mode .nav-item.nav-green:hover,
-body.dark-mode .nav-item.nav-indigo:hover,
-body.dark-mode .nav-item.nav-rose:hover,
-body.dark-mode .nav-item.nav-cyan:hover {
-    background: rgba(34, 197, 94, 0.1);
-}
-
-.nav-item.nav-green.active,
-.nav-item.nav-indigo.active,
-.nav-item.nav-rose.active,
-.nav-item.nav-cyan.active {
-    background: var(--green-50);
-    border-left-color: var(--green-500);
+.nav-item.nav-green.active {
     color: var(--green-600);
+    background: var(--green-50);
+    border-color: var(--green-100);
 }
 
-body.dark-mode .nav-item.nav-green.active,
-body.dark-mode .nav-item.nav-indigo.active,
-body.dark-mode .nav-item.nav-rose.active,
-body.dark-mode .nav-item.nav-cyan.active {
-    background: rgba(34, 197, 94, 0.15);
-    color: var(--green-500);
-}
-
-.nav-item.nav-green.active svg,
-.nav-item.nav-green.active .material-symbols-outlined,
-.nav-item.nav-indigo.active svg,
-.nav-item.nav-rose.active svg,
-.nav-item.nav-cyan.active svg {
-    color: var(--green-600);
-}
-
-body.dark-mode .nav-item.nav-green.active svg,
-body.dark-mode .nav-item.nav-green.active .material-symbols-outlined,
-body.dark-mode .nav-item.nav-indigo.active svg,
-body.dark-mode .nav-item.nav-rose.active svg,
-body.dark-mode .nav-item.nav-cyan.active svg {
-    color: var(--green-500);
-}
-
-/* Âmbar - Comunicação */
-.nav-item.nav-yellow:hover,
-.nav-item.nav-amber:hover,
-.nav-item.nav-pink:hover {
-    background: var(--amber-50);
-    border-left-color: var(--amber-500);
-}
-
-body.dark-mode .nav-item.nav-yellow:hover,
-body.dark-mode .nav-item.nav-amber:hover,
-body.dark-mode .nav-item.nav-pink:hover {
-    background: rgba(245, 158, 11, 0.1);
-}
-
-.nav-item.nav-yellow.active,
-.nav-item.nav-amber.active,
-.nav-item.nav-pink.active {
-    background: var(--amber-50);
-    border-left-color: var(--amber-500);
-    color: var(--amber-600);
-}
-
-body.dark-mode .nav-item.nav-yellow.active,
-body.dark-mode .nav-item.nav-amber.active,
-body.dark-mode .nav-item.nav-pink.active {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--amber-500);
-}
-
-.nav-item.nav-yellow.active svg,
-.nav-item.nav-yellow.active .material-symbols-outlined,
-.nav-item.nav-amber.active svg,
-.nav-item.nav-pink.active svg {
-    color: var(--amber-600);
-}
-
-body.dark-mode .nav-item.nav-yellow.active svg,
-body.dark-mode .nav-item.nav-yellow.active .material-symbols-outlined,
-body.dark-mode .nav-item.nav-amber.active svg,
-body.dark-mode .nav-item.nav-pink.active svg {
-    color: var(--amber-500);
-}
-
-/* Vermelho - Crítico */
-.nav-item.nav-red:hover {
-    background: var(--red-50);
-    border-left-color: var(--red-500);
-}
-
-body.dark-mode .nav-item.nav-red:hover {
-    background: rgba(239, 68, 68, 0.1);
+.nav-item.nav-yellow.active {
+    color: var(--yellow-600);
+    background: var(--yellow-50);
+    border-color: var(--yellow-100);
 }
 
 .nav-item.nav-red.active {
+    color: var(--red-600);
     background: var(--red-50);
-    border-left-color: var(--red-500);
-    color: var(--red-500);
+    border-color: var(--red-100);
 }
 
-body.dark-mode .nav-item.nav-red.active {
-    background: rgba(239, 68, 68, 0.15);
+/* Multicolor Icon Special Handling */
+.nav-multicolor.active {
+    background: var(--bg-surface-active);
+    border-color: var(--border-subtle);
 }
 
-/* Multicolor - Visão Geral */
-.nav-item.nav-multicolor:hover {
-    background: var(--bg-surface-hover);
-}
-
-.nav-item.nav-multicolor.active {
-    background: var(--blue-50);
-    border-left-color: var(--blue-500);
-}
-
-body.dark-mode .nav-item.nav-multicolor.active {
-    background: rgba(59, 130, 246, 0.1);
-}
-
-/* ========================================
-   DIVIDERS E LABELS
-   ======================================== */
-
+/* Dividers & Sections */
 .nav-divider {
     height: 1px;
     background: var(--border-subtle);
-    margin: 1rem 1rem;
+    margin: 8px 12px;
 }
 
-/* ========================================
-   SIDEBAR HEADER
-   ======================================== */
-
-.sidebar-header-hover {
-    transition: all 0.2s ease;
-    border-radius: var(--radius-md);
-    margin: 0.5rem;
+.nav-section-title {
+    padding: 0 12px 4px 12px;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 8px;
 }
 
-.sidebar-header-hover:hover {
-    background: var(--bg-surface-hover);
+/* Meeting Button Special */
+.nav-meeting {
+    background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-hover) 100%);
+    border: 1px solid var(--border-medium);
 }
 
-.sidebar-logo {
-    transition: all 0.2s ease;
+.nav-meeting:hover {
+    border-color: var(--primary);
 }
 
-.sidebar-header-hover:hover .sidebar-logo {
-    transform: scale(1.05);
+.nav-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
 }
 
-.sidebar-church-name,
-.sidebar-app-name {
-    transition: all 0.2s ease;
+.meeting-badge {
+    background: var(--orange-500);
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 800;
 }
 
-.sidebar-header-hover:hover .sidebar-church-name {
-    color: var(--text-primary);
+/* --- FOOTER / CREDITS --- */
+.sidebar-credits {
+    padding: 16px;
+    text-align: center;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-body);
 }
 
-.sidebar-header-hover:hover .sidebar-app-name {
-    color: var(--text-secondary);
+/* --- OVERLAY --- */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(2px);
 }
 
-/* ========================================
-   RESPONSIVIDADE
-   ======================================== */
-
-@media (max-width: 768px) {
-    .nav-item {
-        padding: 12px 14px;
-        margin: 3px 10px;
-    }
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }

@@ -75,23 +75,11 @@ body {
     font-family: var(--font-body);
     color: var(--text-main);
     margin: 0;
-    padding-bottom: 80px;
-}
+    /* ============================================
+   ESCALA DETALHE - Page Specific Styles
+   ============================================ */
 
-.scale-detail-wrapper {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
+    .scale-detail-wrapper {
         opacity: 1;
         transform: translateY(0);
     }

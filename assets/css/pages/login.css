@@ -2,44 +2,23 @@
    LOGIN - Page Specific Styles
    ============================================ */
 
+/*
+   Note: This page uses the global design-system.css variables.
+   We map specific semantic roles here but rely on the global palette.
+*/
+
 :root {
-    /* Light Theme Mapping */
-    --bg: var(--gray-50);
-    --text-main: var(--gray-900);
-    --text-muted: var(--gray-500);
-    --input-bg: var(--gray-100);
-    --border: var(--gray-200);
-    --error-bg: var(--red-50);
-    --error-text: var(--red-600);
+    /* Mapeamento Semântico Local */
+    --login-bg: var(--bg-body);
+    --login-card-bg: var(--bg-surface);
+    --login-text: var(--text-primary);
+    --login-text-muted: var(--text-tertiary);
+    --login-input-bg: var(--bg-surface-active);
+    --login-border: var(--border-medium);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Dark Theme Mapping */
-        --bg: #09090b;
-        /* Zinc 950 */
-        --text-main: #f4f4f5;
-        /* Zinc 100 */
-        --text-muted: #a1a1aa;
-        /* Zinc 400 */
-        --input-bg: #18181b;
-        /* Zinc 900 */
-        --border: #27272a;
-        /* Zinc 800 */
-        --error-bg: #450a0a;
-        --error-text: #fca5a5;
-    }
-}
-
-body.dark-mode {
-    --bg: #09090b;
-    --text-main: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --input-bg: #18181b;
-    --border: #27272a;
-    --error-bg: #450a0a;
-    --error-text: #fca5a5;
-}
+/* O modo dark é tratado automaticamente pelas variáveis globais do design-system.css
+   quando a classe .dark-mode é aplicada ao body */
 
 * {
     margin: 0;
@@ -50,8 +29,8 @@ body.dark-mode {
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
-    color: var(--text-main);
+    background-color: var(--login-bg);
+    color: var(--login-text);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -85,11 +64,12 @@ h1 {
     font-weight: 700;
     margin-bottom: 8px;
     letter-spacing: -0.025em;
+    color: var(--text-primary);
 }
 
 p.subtitle {
     font-size: 0.95rem;
-    color: var(--text-muted);
+    color: var(--login-text-muted);
     margin-bottom: 40px;
 }
 
@@ -103,30 +83,34 @@ form {
 input {
     width: 100%;
     padding: 16px;
-    background: var(--input-bg);
+    background: var(--login-input-bg);
     border: 1px solid transparent;
     border-radius: 16px;
     font-size: 1rem;
-    color: var(--text-main);
+    color: var(--login-text);
     outline: none;
     transition: all 0.2s;
 }
 
 input:focus {
-    background: var(--bg);
+    background: var(--bg-surface);
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px var(--primary-light);
+    box-shadow: 0 0 0 4px var(--blue-100);
+}
+
+body.dark-mode input:focus {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
 }
 
 input::placeholder {
-    color: var(--text-muted);
+    color: var(--login-text-muted);
     opacity: 0.7;
 }
 
 button.btn-primary {
     width: 100%;
     padding: 16px;
-    background: var(--green-600);
+    background: var(--primary);
     color: #ffffff;
     border: none;
     border-radius: 16px;
@@ -138,11 +122,18 @@ button.btn-primary {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: transform 0.1s, opacity 0.2s;
+    transition: transform 0.1s, opacity 0.2s, background 0.2s;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 button.btn-primary:active {
     transform: scale(0.98);
+}
+
+button.btn-primary:hover {
+    background: var(--blue-600);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 
 /* Install Button - Premium Style */
@@ -154,9 +145,9 @@ button.btn-primary:active {
 button.btn-install {
     width: 100%;
     padding: 16px;
-    background: var(--primary-light);
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border: 2px solid var(--border-medium);
     border-radius: 16px;
     font-size: 1rem;
     font-weight: 600;
@@ -169,73 +160,47 @@ button.btn-install {
     opacity: 1;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
-}
-
-button.btn-install::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.3);
-    transition: left 0.5s;
-}
-
-button.btn-install:hover::before {
-    left: 100%;
 }
 
 button.btn-install:hover {
-    background: var(--primary);
-    color: var(--bg);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(4, 120, 87, 0.25);
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--blue-50);
 }
 
 button.btn-install:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(4, 120, 87, 0.2);
+    transform: scale(0.98);
 }
 
-/* Pulse animation for install button */
+/* Animation */
 @keyframes pulse {
 
     0%,
     100% {
-        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
     }
 
     50% {
-        box-shadow: 0 4px 20px rgba(4, 120, 87, 0.3);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
     }
 }
 
 button.btn-install:not(.installed) {
-    animation: pulse 2s ease-in-out infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 /* Installed state */
 button.btn-install.installed {
-    background: var(--input-bg);
-    color: var(--text-muted);
-    border-color: var(--border);
+    background: var(--bg-surface-active);
+    color: var(--text-tertiary);
+    border-color: transparent;
     cursor: default;
-    box-shadow: none;
-    animation: none;
-}
-
-button.btn-install.installed:hover {
-    background: var(--input-bg);
-    color: var(--text-muted);
-    transform: none;
     box-shadow: none;
 }
 
 .error {
-    background: var(--error-bg);
-    color: var(--error-text);
+    background: var(--red-50);
+    color: var(--red-600);
     padding: 12px;
     border-radius: 12px;
     font-size: 0.9rem;
@@ -244,19 +209,26 @@ button.btn-install.installed:hover {
     display: flex;
     align-items: center;
     gap: 8px;
+    border: 1px solid var(--red-200);
+}
+
+body.dark-mode .error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
 }
 
 .credits {
     margin-top: 48px;
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--login-text-muted);
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
 .credits a {
-    color: var(--text-main);
+    color: var(--login-text);
     text-decoration: none;
     font-weight: 500;
 }
@@ -279,14 +251,15 @@ button.btn-install.installed:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--bg);
+    background: var(--bg-surface);
     padding: 24px;
     border-radius: 24px 24px 0 0;
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 100;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-primary);
 }
 
 #ios-modal.show {
