@@ -66,17 +66,7 @@ header("Content-Disposition: attachment;Filename=Relatorio_Escalas_{$period}_{$y
 <html>
 <head>
 <meta charset="utf-8">
-<style>
-    body { font-family: Arial, sans-serif; font-size: 12pt; line-height: 1.5; }
-    h1 { font-size: 18pt; color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-    h2 { font-size: 14pt; color: #555; margin-top: 30px; margin-bottom: 10px; background-color: #f0f0f0; padding: 5px; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th { background-color: #4CAF50; color: white; padding: 8px; text-align: left; border: 1px solid #ddd; }
-    td { border: 1px solid #ddd; padding: 8px; }
-    .kpi-box { border: 1px solid #ccc; padding: 10px; margin-right: 10px; display: inline-block; width: 30%; text-align: center; }
-    .kpi-val { font-size: 20pt; font-weight: bold; color: #333; }
-    .footer { font-size: 9pt; color: #888; text-align: center; margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px; }
-</style>
+
 </head>
 <body>
 

@@ -174,67 +174,7 @@ renderAppHeader('Visão Geral');
 <?php endif; ?>
 
 <!-- Estilos da Nova Home (Vertical Feed) -->
-<style>
-    .section-title {
-        font-size: var(--font-h3);
-        font-weight: 700;
-        color: var(--text-main);
-        margin: 20px 0 10px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
 
-    .section-action {
-        font-size: var(--font-body-sm);
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .feed-card {
-        background: var(--bg-surface);
-        border-radius: 12px;
-        padding: 16px;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        color: inherit;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .feed-card:active {
-        transform: scale(0.98);
-    }
-
-    .feed-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: var(--font-h2);
-        font-weight: 700;
-    }
-
-    /* Empty State */
-    .empty-state {
-        background: #f8fafc;
-        border-radius: 10px;
-        padding: 12px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--text-muted);
-        border: 1px dashed var(--border-color);
-    }
-</style>
 
 <div style="max-width: 600px; margin: 0 auto;">
 

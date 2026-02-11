@@ -175,40 +175,7 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-    /* Mobile Optimization */
-    @media (max-width: 768px) {
-        .container, div[style*="max-width: 1100px"] {
-            padding: 0 10px !important;
-        }
-        .filter-bar {
-            padding: 12px !important;
-            flex-direction: column;
-            align-items: stretch !important;
-            gap: 12px !important;
-        }
-        .filter-bar form {
-            width: 100%;
-            justify-content: space-between;
-        }
-        .filter-bar select {
-            flex: 1;
-        }
-        .buttons-container {
-            width: 100%;
-            justify-content: flex-end;
-            margin-top: 10px;
-        }
-        .kpi-card, div[style*="background: white"] {
-            padding: 12px !important;
-        }
-        h2 { font-size: 1.2rem !important; }
-        h3 { font-size: 1rem !important; }
-        .view-section {
-            padding-bottom: 60px; /* Space for bottom nav if exists */
-        }
-    }
-</style>
+
 
 <div style="max-width: 1100px; margin: 0 auto; padding: 0 16px;">
     

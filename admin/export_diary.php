@@ -36,14 +36,7 @@ if ($format === 'pdf') {
     $html = generateDiaryHTML($notes, $userName);
     
     // Se não tiver biblioteca, usar HTML to PDF via navegador
-    echo "<html><head><meta charset='UTF-8'><style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-        .note { margin: 20px 0; padding: 15px; border-left: 4px solid #3498db; background: #f8f9fa; }
-        .note-title { font-weight: bold; font-size: 1.1em; color: #2c3e50; }
-        .note-day { color: #7f8c8d; font-size: 0.9em; }
-        .note-content { margin-top: 10px; line-height: 1.6; }
-    </style></head><body>";
+    echo "<html><head><meta charset='UTF-8'></head><body>";
     echo "<h1>Meu Diário Bíblico - {$userName}</h1>";
     echo "<p><em>Gerado em: " . date('d/m/Y H:i') . "</em></p>";
     

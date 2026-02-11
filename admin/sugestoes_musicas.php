@@ -68,31 +68,7 @@ renderPageHeader('Gestão de Sugestões', 'Aprove ou rejeite músicas sugeridas'
 ?>
 
 <!-- Estilos Compartilhados com Repertório (Compact Cards) -->
-<style>
-    .timeline-card.compact .card-content-wrapper { padding: 8px 12px; gap: 10px; }
-    .compact-card {
-        display: flex; align-items: center; gap: 12px;
-        background: var(--bg-surface); border: 1px solid var(--border-color);
-        padding: 12px; border-radius: 12px; text-decoration: none; color: inherit;
-        transition: all 0.2s; position: relative; margin-bottom: 8px;
-    }
-    .compact-card:hover { transform: translateX(2px); border-color: var(--primary); }
-    .compact-card-icon {
-        width: 40px; height: 40px; border-radius: 10px;
-        display: flex; align-items: center; justify-content: center;
-        flex-direction: column; flex-shrink: 0;
-    }
-    .compact-card-content { flex: 1; min-width: 0; }
-    .compact-card-title { font-weight: 700; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .compact-card-subtitle { font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-    
-    /* Sugestões Específico */
-    .user-avatar-mini { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
-    .btn-action-group { display: flex; gap: 8px; margin-top: 8px; }
-    .btn-xs { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 4px; }
-    .btn-approve { background: #dcfce7; color: #166534; }
-    .btn-reject { background: #fee2e2; color: #991b1b; }
-</style>
+
 
 <div style="max-width: 800px; margin: 0 auto; padding: 16px;">
 

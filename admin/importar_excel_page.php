@@ -8,28 +8,7 @@ require_once '../includes/layout.php';
 renderAppHeader('Importar Músicas');
 ?>
 
-<style>
-    .step-box {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 16px;
-    }
 
-    .step-number {
-        width: 32px;
-        height: 32px;
-        background: var(--accent-interactive);
-        color: white;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        margin-right: 12px;
-    }
-</style>
 
 <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">

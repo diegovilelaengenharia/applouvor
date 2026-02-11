@@ -19,44 +19,7 @@ echo "\xEF\xBB\xBF";
 
 <head>
     <meta charset="UTF-8">
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th,
-        td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-        }
-
-        .header-title {
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-            font-size: 14pt;
-            text-align: center;
-        }
-
-        .header-subtitle {
-            text-align: center;
-            font-size: 10pt;
-            color: #666;
-        }
-
-        .total-row {
-            font-weight: bold;
-            background-color: #f0f0f0;
-        }
-    </style>
+    
 </head>
 
 <body>

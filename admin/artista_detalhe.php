@@ -29,34 +29,7 @@ $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 renderAppHeader('Artista');
 ?>
 
-<style>
-    .section-title {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 12px;
-        margin-left: 4px;
-    }
 
-    .song-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        padding: 10px 12px;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        transition: background 0.2s;
-    }
-
-    .song-card:active {
-        background: var(--bg-hover);
-    }
-</style>
 
 <!-- Hero Header Compacto -->
 <div style="

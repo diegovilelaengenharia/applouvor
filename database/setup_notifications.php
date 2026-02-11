@@ -14,15 +14,7 @@ echo "<!DOCTYPE html>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Setup - Sistema de Notificações</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
-        .success { color: #10b981; background: #ecfdf5; padding: 12px; border-radius: 8px; margin: 10px 0; }
-        .error { color: #ef4444; background: #fef2f2; padding: 12px; border-radius: 8px; margin: 10px 0; }
-        .info { color: #3b82f6; background: #eff6ff; padding: 12px; border-radius: 8px; margin: 10px 0; }
-        h1 { color: #1f2937; }
-        h2 { color: #4b5563; margin-top: 30px; }
-        code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
-    </style>
+    
 </head>
 <body>
     <h1>🔔 Setup do Sistema de Notificações</h1>";

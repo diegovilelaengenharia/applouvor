@@ -9,16 +9,7 @@ echo "<!DOCTYPE html>
 <head>
     <meta charset='UTF-8'>
     <title>Importação Manual de Músicas</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; background: #0a0a0a; color: #fff; }
-        .success { color: #4ade80; padding: 12px; background: rgba(74, 222, 128, 0.1); border-radius: 8px; margin: 10px 0; border-left: 3px solid #4ade80; }
-        .error { color: #f87171; padding: 12px; background: rgba(248, 113, 113, 0.1); border-radius: 8px; margin: 10px 0; border-left: 3px solid #f87171; }
-        .warning { color: #fbbf24; padding: 12px; background: rgba(251, 191, 36, 0.1); border-radius: 8px; margin: 10px 0; border-left: 3px solid #fbbf24; }
-        .progress { background: rgba(255,255,255,0.05); padding: 15px; margin: 15px 0; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        h2 { color: #2D7A4F; }
-        .btn { padding: 12px 24px; background: #2D7A4F; color: white; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 20px; }
-        .btn:hover { background: #246239; }
-    </style>
+    
 </head>
 <body>";
 

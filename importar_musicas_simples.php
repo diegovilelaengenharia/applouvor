@@ -9,13 +9,7 @@ echo "<!DOCTYPE html>
 <head>
     <meta charset='UTF-8'>
     <title>Importação de Músicas</title>
-    <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
-        .success { color: green; }
-        .error { color: red; }
-        .warning { color: orange; }
-        .progress { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
-    </style>
+    
 </head>
 <body>";
 

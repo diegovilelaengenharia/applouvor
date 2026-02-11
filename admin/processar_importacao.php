@@ -7,34 +7,7 @@ require_once '../includes/layout.php';
 
 renderAppHeader('Importando Músicas');
 
-echo "<style>
-    .import-log {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-    }
-    .log-item {
-        padding: 12px;
-        margin-bottom: 8px;
-        border-radius: 8px;
-        border-left: 4px solid;
-    }
-    .log-success {
-        background: rgba(74, 222, 128, 0.1);
-        border-color: #4ade80;
-        color: #4ade80;
-    }
-    .log-error {
-        background: rgba(248, 113, 113, 0.1);
-        border-color: #f87171;
-        color: #f87171;
-    }
-    .log-warning {
-        background: rgba(251, 191, 36, 0.1);
-        border-color: #fbbf24;
-        color: #fbbf24;
-    }
-</style>";
+echo "";
 
 echo "<div class='import-log'>";
 echo "<h2 style='text-align: center; margin-bottom: 24px;'>🎵 Importando Músicas</h2>";

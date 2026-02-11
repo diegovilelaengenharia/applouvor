@@ -11,7 +11,7 @@ require_once 'includes/config.php';
 require_once 'includes/db.php';
 
 echo "<h1>Exemplos de Uso - App Louvor v4.1</h1>";
-echo "<style>body { font-family: sans-serif; max-width: 800px; margin: 40px auto; } code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; } pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }</style>";
+echo "";
 
 // ============================================
 // 1. VALIDAÇÃO DE FORMULÁRIOS

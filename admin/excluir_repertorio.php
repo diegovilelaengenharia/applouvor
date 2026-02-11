@@ -17,21 +17,7 @@ require_once '../includes/layout.php';
 renderAppHeader('Excluir Repertório');
 ?>
 
-<style>
-    .warning-box {
-        background: rgba(239, 68, 68, 0.1);
-        border: 2px solid var(--status-error);
-        border-radius: 12px;
-        padding: 24px;
-        margin: 24px 0;
-        text-align: center;
-    }
 
-    .warning-icon {
-        font-size: 4rem;
-        margin-bottom: 16px;
-    }
-</style>
 
 <div style="max-width: 500px; margin: 0 auto; padding: 20px;">
     <div class="warning-box">

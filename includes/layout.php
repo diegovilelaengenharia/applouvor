@@ -1,9 +1,9 @@
-ï»¿<?php
+<?php
 // includes/layout.php
 
-// Inicia sessâ”œÃºo se nâ”œÃºo estiver iniciada
+// Inicia sess+úo se n+úo estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    // Configurar sessâ”œÃºo para 30 dias (backup, idealmente auth.php deve ser chamado antes)
+    // Configurar sess+úo para 30 dias (backup, idealmente auth.php deve ser chamado antes)
     ini_set('session.gc_maxlifetime', 2592000);
     session_set_cookie_params([
         'lifetime' => 2592000,
@@ -21,14 +21,14 @@ function renderAppHeader($title, $backUrl = null)
 {
     global $pdo;
 
-    // --- Lâ”œâ”‚gica de Usuâ”œÃ­rio Global (Movida do Sidebar) ---
+    // --- L+¦gica de Usu+írio Global (Movida do Sidebar) ---
     $userId = $_SESSION['user_id'] ?? 1;
     $currentUser = null;
     $userPhoto = null;
 
     if ($userId) {
         try {
-            // Tenta buscar foto tambâ”œÂ®m
+            // Tenta buscar foto tamb+®m
             $stmtUser = $pdo->prepare("SELECT name, phone, avatar FROM users WHERE id = ?");
             $stmtUser->execute([$userId]);
             $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ function renderAppHeader($title, $backUrl = null)
         }
 
         if (!$currentUser) {
-            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usuâ”œÃ­rio', 'phone' => '', 'avatar' => null];
+            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usu+írio', 'phone' => '', 'avatar' => null];
         }
 
         // Avatar Logic
@@ -51,7 +51,7 @@ function renderAppHeader($title, $backUrl = null)
         }
     }
     // Compartilhar com globais ou session para acesso no header
-    // Uma forma suja mas eficaz para templates â”œÂ® usar global ou re-passar. 
+    // Uma forma suja mas eficaz para templates +® usar global ou re-passar. 
     // Vamos usar global $_layoutUser para acesso em renderPageHeader
     global $_layoutUser;
     $_layoutUser = [
@@ -76,8 +76,8 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Open Graph / WhatsApp Sharing -->
         <meta property="og:type" content="website">
         <meta property="og:title" content="App Louvor PIB Oliveira">
-        <meta property="og:description" content="Gestâ”œÃºo de escalas, repertâ”œâ”‚rio e ministâ”œÂ®rio de louvor da PIB Oliveira.">
-        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando possâ”œÂ¡vel -->
+        <meta property="og:description" content="Gest+úo de escalas, repert+¦rio e minist+®rio de louvor da PIB Oliveira.">
+        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss+¡vel -->
         <meta property="og:url" content="https://app.piboliveira.com.br/">
         
         <!-- PWA Meta Tags -->
@@ -96,7 +96,7 @@ function renderAppHeader($title, $backUrl = null)
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-        <!-- â”œÃ¬cones Lucide -->
+        <!-- +ìcones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Semantic Design System & App Main CSS -->
@@ -105,361 +105,7 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 
-        <style>
-            /* View Transition Fixes */
-            ::view-transition-old(root),
-            ::view-transition-new(root) {
-                animation-duration: 0.3s;
-            }
-
-            /* Main Content Ajustado */
-            #app-content {
-                padding: 12px;
-                /* Padding reduzido mobile */
-                min-height: 100vh;
-                margin-left: 0;
-                transition: margin-left 0.3s ease;
-            }
-
-            @media (min-width: 1025px) {
-                #app-content {
-                    margin-left: 250px;
-                    padding: 32px; /* Mais espaÃ§o no desktop */
-                    max-width: 1600px; /* Limite para telas ultra-wide */
-                    margin-right: auto;
-                }
-            }
-
-            /* Header Mobile */
-            .mobile-header {
-                display: none;
-                align-items: center;
-                gap: 12px;
-                padding: 10px 14px;
-                background: var(--bg-surface);
-                position: sticky;
-                top: 0;
-                z-index: 90;
-                border-bottom: 1px solid var(--border-subtle);
-                box-shadow: var(--shadow-sm);
-                margin: -12px -12px 24px -12px; /* Reset margem negativa do padding mobile */
-            }
-
-            .btn-menu-trigger {
-                width: 44px;
-                height: 44px;
-                /* Touch Target Grande */
-                background: transparent;
-                border: none;
-                padding: 0;
-                margin-left: -12px;
-                cursor: pointer;
-                color: var(--text-primary);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                transition: background 0.2s;
-            }
-
-            .btn-menu-trigger:active {
-                background: var(--bg-surface-active);
-            }
-
-            .page-title {
-                font-size: 1.125rem;
-                /* 18px */
-                font-weight: 700;
-                color: var(--text-primary);
-                flex: 1;
-            }
-
-            @media (max-width: 1024px) {
-                .mobile-header {
-                    display: flex;
-                }
-
-                #app-content {
-                    margin-left: 0 !important;
-                }
-            }
-            
-            /* Notification Dropdown (Specific to Layout) */
-            .notification-dropdown {
-                display: none;
-                position: absolute;
-                top: 50px;
-                right: 0;
-                width: 320px;
-                max-width: calc(100vw - 24px);
-                background: var(--bg-surface);
-                border: 1px solid var(--border-subtle);
-                border-radius: 14px;
-                box-shadow: var(--shadow-lg);
-                z-index: 1000;
-                overflow: hidden;
-            }
-            
-            .notification-dropdown.active {
-                display: block;
-                animation: fadeInDown 0.2s ease-out;
-            }
-            
-            @keyframes fadeInDown {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            /* Notification Dropdown (Specific to Layout) */
-            .notification-header {
-                padding: 12px 14px;
-                border-bottom: 1px solid var(--border-color);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .notification-header h3 {
-                font-size: var(--font-body);
-                font-weight: 700;
-                color: var(--text-main);
-                margin: 0;
-            }
-            
-            .notification-mark-all {
-                font-size: var(--font-caption);
-                color: var(--primary);
-                cursor: pointer;
-                font-weight: 600;
-            }
-            
-            .notification-mark-all:hover {
-                text-decoration: underline;
-            }
-            
-            .notification-list {
-                max-height: 320px;
-                overflow-y: auto;
-            }
-            
-            .notification-item {
-                padding: 10px 12px;
-                border-bottom: 1px solid var(--border-color);
-                cursor: pointer;
-                transition: background 0.2s;
-                display: flex;
-                gap: 10px;
-            }
-            
-            .notification-item:hover {
-                background: var(--bg-body);
-            }
-            
-            .notification-item.unread {
-                background: #eff6ff;
-            }
-            
-            .notification-icon {
-                width: 32px;
-                height: 32px;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-            }
-            
-            .notification-content {
-                flex: 1;
-                min-width: 0;
-            }
-            
-            .notification-title {
-                font-size: var(--font-body-sm);
-                font-weight: 600;
-                color: var(--text-main);
-                margin-bottom: 2px;
-            }
-            
-            .notification-message {
-                font-size: var(--font-caption);
-                color: var(--text-muted);
-                line-height: 1.4;
-            }
-            
-            .notification-time {
-                font-size: 11px;
-                color: var(--text-muted);
-                margin-top: 4px;
-            }
-            
-            .notification-footer {
-                padding: 10px 14px;
-                border-top: 1px solid var(--border-color);
-                text-align: center;
-            }
-            
-            .notification-view-all {
-                color: var(--primary);
-                font-size: var(--font-body-sm);
-                font-weight: 600;
-                text-decoration: none;
-            }
-            
-            .notification-view-all:hover {
-                text-decoration: underline;
-            }
-            
-            .notification-empty {
-                padding: 40px 20px;
-                text-align: center;
-                color: var(--text-muted);
-            }
-            
-            /* Mobile: Convert dropdown to fullscreen modal */
-            @media (max-width: 768px) {
-                .notification-dropdown {
-                    position: fixed !important;
-                    top: 50% !important;
-                    left: 50% !important;
-                    transform: translate(-50%, -50%) !important;
-                    right: auto !important;
-                    width: 90vw !important;
-                    max-width: 400px !important;
-                    max-height: 80vh !important;
-                    border-radius: 16px !important;
-                    z-index: 9999 !important;
-                }
-                
-                /* Quando visÃ­vel, force flex display */
-                .notification-dropdown[style*="display: block"],
-                .notification-dropdown[style*="display:block"] {
-                    display: flex !important;
-                    flex-direction: column !important;
-                    visibility: visible !important;
-                    opacity: 1 !important;
-                }
-                
-                .notification-list {
-                    max-height: calc(80vh - 140px) !important;
-                }
-            }
-            
-            /* Overlay para mobile */
-            .notification-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 9998;
-                backdrop-filter: blur(4px);
-            }
-            
-            .notification-overlay.active {
-                display: block;
-            }
-            
-            /* DESKTOP: Dropdown positioned near button */
-            .notification-dropdown {
-                display: none;
-                position: absolute;
-                top: 50px;
-                right: 0;
-                width: 360px;
-                max-width: calc(100vw - 32px);
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 14px;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-                z-index: 1000;
-                overflow: hidden;
-            }
-            
-            /* MOBILE: Modal centered */
-            .notification-modal {
-                padding: 0;
-                border: none;
-                border-radius: 20px;
-                width: 92vw;
-                max-width: 420px;
-                max-height: 85vh;
-                background: var(--bg-surface);
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            }
-            
-            .notification-modal::backdrop {
-                background: rgba(0, 0, 0, 0.6);
-                backdrop-filter: blur(8px);
-            }
-            
-            .modal-header {
-                padding: 20px;
-                border-bottom: 1px solid var(--border-color);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .modal-header h3 {
-                font-size: 18px;
-                font-weight: 700;
-                margin: 0;
-                color: var(--text-main);
-            }
-            
-            .modal-close {
-                background: var(--bg-body);
-                border: none;
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                cursor: pointer;
-                font-size: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: var(--text-muted);
-                transition: all 0.2s;
-            }
-            
-            .modal-close:hover {
-                background: var(--border-color);
-                color: var(--text-main);
-            }
-            
-            .modal-footer {
-                padding: 16px 20px;
-                border-top: 1px solid var(--border-color);
-                text-align: center;
-            }
-            
-            .modal-footer a {
-                color: var(--primary);
-                font-weight: 600;
-                text-decoration: none;
-                font-size: 14px;
-            }
-
-            /* FIX: Avatar Profile Button Size */
-            .profile-avatar-btn {
-                width: 38px;
-                height: 38px;
-                border-radius: 50%;
-                cursor: pointer;
-                overflow: hidden;
-                border: 1px solid var(--border-subtle);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: var(--bg-tertiary);
-                color: var(--text-secondary);
-                padding: 0;
-                flex-shrink: 0;
-            }
         
-        </style>
     </head>
 
     <body>
@@ -477,7 +123,7 @@ function renderAppHeader($title, $backUrl = null)
         ?>
 
         <div id="app-content">
-            <!-- Header Mobile (Sâ”œâ”‚ visâ”œÂ¡vel em telas menores) -->
+            <!-- Header Mobile (S+¦ vis+¡vel em telas menores) -->
             <header class="mobile-header">
                 <?php
                 // Logic to determine if it's the home page
@@ -499,14 +145,14 @@ function renderAppHeader($title, $backUrl = null)
                                 <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
                             </button>
                         <?php endif; ?>
-                        <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="InÃ­cio">
+                        <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="Início">
                             <i data-lucide="home" style="width: 24px; height: 24px;"></i>
                         </a>
                     </div>
                 <?php endif; ?>
                 <div class="page-title"><?= htmlspecialchars($title) ?></div>
 
-                <!-- Right Side: Stats + Lâ”œÂ¡der + Avatar -->
+                <!-- Right Side: Stats + L+¡der + Avatar -->
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <!-- Stats Button (Repertorio only) -->
 
@@ -516,7 +162,7 @@ function renderAppHeader($title, $backUrl = null)
 
 
 
-                    <!-- Lâ”œÂ¡der Button (Admin only) -->
+                    <!-- L+¡der Button (Admin only) -->
                     <!-- Notification Button -->
                     <div style="position: relative;">
                         <button class="notification-btn ripple" onclick="toggleNotifications('notificationDropdown')" id="notificationBtn">
@@ -573,7 +219,7 @@ function renderAppHeader($title, $backUrl = null)
                                     <div class="icon-wrapper">
                                         <i data-lucide="circle-help" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span>Quem somos nÃ³s?</span>
+                                    <span>Quem somos nós?</span>
                                 </a>
 
                                 <a href="perfil.php" class="profile-menu-item">
@@ -587,7 +233,7 @@ function renderAppHeader($title, $backUrl = null)
                                     <div class="icon-wrapper">
                                         <i data-lucide="layout" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span>Acesso RÃ¡pido</span>
+                                    <span>Acesso Rápido</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -595,7 +241,7 @@ function renderAppHeader($title, $backUrl = null)
                                         <div class="icon-wrapper">
                                             <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
                                         </div>
-                                        <span>Painel do LÃ­der</span>
+                                        <span>Painel do Líder</span>
                                     </a>
                                 <?php endif; ?>
 
@@ -637,215 +283,23 @@ function renderAppHeader($title, $backUrl = null)
         ?>
         </div> <!-- Fim #app-content -->
 
-        <style>
-            /* OCULTAR BARRA DE NAVEGAÃ‡ÃƒO INFERIOR */
-            .bottom-nav-container {
-                display: none !important;
-            }
-        </style>
+        
 
         <!-- Bottom Navigation & Submenus (Mobile Only) -->
-        <style>
-            .bottom-nav-container {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                display: flex;
-                flex-direction: column;
-                z-index: 1000;
-                pointer-events: none;
-                /* Permite clicar no conteâ”œâ•‘do atrâ”œÃ­s quando menus estâ”œÃºo fechados */
-            }
-
-            /* Main Bar */
-            .bottom-nav-bar {
-                background: rgba(255, 255, 255, 0.9);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border-top: 1px solid var(--border-color);
-                padding: 6px 12px;
-                /* Reduced bottom padding even more (-15%) */
-                /* Reduced bottom padding */
-                padding-bottom: max(12px, env(safe-area-inset-bottom));
-                /* Respect notch but default to tight */
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                pointer-events: auto;
-                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-            }
-
-            /* Nav Items */
-            .b-nav-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 2px; /* Reduzido de 6px */
-                background: none;
-                border: none;
-                color: var(--text-muted);
-                font-size: 0.75rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: transform 0.2s, color 0.2s;
-                padding: 8px 20px; /* Aumentado de 4px 12px para Ã¡rea de clique maior */
-                border-radius: 12px;
-            }
-
-            .b-nav-item.active {
-                color: var(--primary);
-            }
-
-            .b-nav-item:active {
-                transform: scale(0.95);
-            }
-
-            .b-nav-icon-wrapper {
-                position: relative;
-                width: 28px;
-                height: 28px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 10px;
-                transition: background 0.3s;
-            }
-
-            .b-nav-item.active .b-nav-icon-wrapper {
-                background: var(--primary-light);
-            }
-
-            .b-nav-item svg {
-                width: 22px;
-                height: 22px;
-                stroke-width: 2px;
-            }
-
-            /* Bottom Sheet / Submenu */
-            .bottom-sheet {
-                position: fixed;
-                bottom: 0;
-                /* Fixa no fundo */
-                left: 0;
-                right: 0;
-                background: var(--bg-surface);
-                border-radius: 24px 24px 0 0;
-                padding: 24px 20px 100px 20px;
-                /* Padding bottom extra para nâ”œÃºo ficar escondido atrâ”œÃ­s da barra */
-                box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
-                transform: translateY(110%);
-                transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-                pointer-events: auto;
-                z-index: 999;
-                /* Fica atrâ”œÃ­s da barra de navegaâ”œÂºâ”œÃºo (1000) mas na frente do conteâ”œâ•‘do */
-                max-height: 80vh;
-                overflow-y: auto;
-            }
-
-            .bottom-sheet.open {
-                transform: translateY(0);
-            }
-
-            /* Sheet Header */
-            .sheet-header {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                margin-bottom: 20px;
-                padding-bottom: 16px;
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .sheet-title {
-                font-size: 1.1rem;
-                font-weight: 700;
-                color: var(--text-main);
-            }
-
-            /* Sheet Grid */
-            .sheet-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .sheet-btn {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                background: var(--bg-body);
-                border: 1px solid var(--border-color);
-                border-radius: 16px;
-                padding: 16px;
-                text-decoration: none;
-                color: var(--text-main);
-                font-weight: 600;
-                font-size: 0.9rem;
-                transition: all 0.2s;
-            }
-
-            .sheet-btn:active {
-                transform: scale(0.98);
-                background: var(--border-color);
-            }
-
-            .sheet-btn-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 4px;
-            }
-
-            /* Overlay */
-            .bs-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.4);
-                backdrop-filter: blur(4px);
-                z-index: 998;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s;
-                pointer-events: auto;
-            }
-
-            .bs-overlay.active {
-                opacity: 1;
-                visibility: visible;
-            }
-
-            @media (min-width: 1025px) {
-                .bottom-nav-container {
-                    display: none;
-                }
-
-                .bs-overlay {
-                    display: none;
-                }
-            }
-        </style>
+        
 
         <!-- Overlay de Fundo -->
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
 
-        <!-- 1. Sheet GESTâ”œÃ¢O -->
+        <!-- 1. Sheet GEST+âO -->
         <div id="sheet-gestao" class="bottom-sheet">
             <div class="sheet-header">
                 <div style="background: #ecfdf5; padding: 10px; border-radius: 12px; color: #047857;">
                     <i data-lucide="layout-grid"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">GestÃ£o</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">AdministraÃ§Ã£o do MinistÃ©rio</div>
+                    <div class="sheet-title">Gestão</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administração do Ministério</div>
                 </div>
             </div>
             <div class="sheet-grid">
@@ -859,7 +313,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="music"></i>
                     </div>
-                    RepertÃ³rio
+                    Repertório
                 </a>
                 <a href="indisponibilidade.php" class="sheet-btn">
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
@@ -876,25 +330,25 @@ function renderAppHeader($title, $backUrl = null)
             </div>
         </div>
 
-        <!-- 2. Sheet ESPâ”œÃ¬RITO -->
+        <!-- 2. Sheet ESP+ìRITO -->
         <div id="sheet-espirito" class="bottom-sheet">
             <div class="sheet-header">
                 <div style="background: #eef2ff; padding: 10px; border-radius: 12px; color: #4338ca;">
                     <i data-lucide="flame"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">EspÃ­rito</div>
+                    <div class="sheet-title">Espírito</div>
                     <div style="font-size: 0.85rem; color: var(--text-muted);">Vida Devocional</div>
                 </div>
             </div>
-            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista â”œâ•‘nica para destaque -->
+            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista +¦nica para destaque -->
                 <a href="devocionais.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
                     <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
                         <i data-lucide="book-open"></i>
                     </div>
                     <div>
                         <div>Devocional</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexÃ£o diÃ¡ria</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexão diária</div>
                     </div>
                 </a>
                 <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -902,8 +356,8 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="heart-handshake"></i>
                     </div>
                     <div>
-                        <div>OraÃ§Ã£o</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">IntercessÃ£o e gratidÃ£o</div>
+                        <div>Oração</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercessão e gratidão</div>
                     </div>
                 </a>
                 <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -911,7 +365,7 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="scroll"></i>
                     </div>
                     <div>
-                        <div>Leitura BÃ­blica</div>
+                        <div>Leitura Bíblica</div>
                         <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Plano anual</div>
                     </div>
                 </a>
@@ -921,42 +375,21 @@ function renderAppHeader($title, $backUrl = null)
 
 
 
-        <!-- Barra de Navegaâ”œÂºâ”œÃºo Fixa -->
+        <!-- Barra de Navega+º+úo Fixa -->
         <div class="bottom-nav-container">
             <nav class="bottom-nav-bar">
 
-                <style>
-                    @keyframes pulse-blue-3d {
-                        0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
-                        70% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
-                        100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-                    }
-                    .b-nav-item.home-3d .b-nav-icon-wrapper {
-                        background: #0D6EFD !important;
-                        color: white !important;
-                        border: 1px solid rgba(255,255,255,0.3);
-                        animation: pulse-blue-3d 2s infinite;
-                        /* Mantendo o tamanho padrÃ£o dos outros Ã­cones */
-                        width: 28px;
-                        height: 28px;
-                    }
-                    .b-nav-item.home-3d span {
-                        font-weight: 700 !important;
-                        color: var(--primary);
-                        /* Tamanho de fonte padrÃ£o */
-                        font-size: 0.75rem !important;
-                    }
-                </style>
+                
 
-                <!-- BotÃ£o HOME (Primeiro) com Efeito 3D Pulsante -->
+                <!-- Botão HOME (Primeiro) com Efeito 3D Pulsante -->
                 <a href="index.php" class="b-nav-item home-3d" onclick="closeAllSheets()">
                     <div class="b-nav-icon-wrapper">
                         <i data-lucide="home"></i>
                     </div>
-                    <span>InÃ­cio</span>
+                    <span>Início</span>
                 </a>
 
-                <!-- BotÃ£o GERAL (GestÃ£o â†’ AZUL) -->
+                <!-- Botão GERAL (Gestão ? AZUL) -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #2563eb;">
                     <div class="b-nav-icon-wrapper" style="background: #eff6ff;">
                         <i data-lucide="layout-grid"></i>
@@ -964,15 +397,15 @@ function renderAppHeader($title, $backUrl = null)
                     <span>Geral</span>
                 </button>
 
-                <!-- BotÃ£o ESPÃRITO (Espiritual â†’ VERDE) -->
+                <!-- Botão ESPÍRITO (Espiritual ? VERDE) -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #059669;">
                     <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
                         <i data-lucide="flame"></i>
                     </div>
-                    <span>EspÃ­rito</span>
+                    <span>Espírito</span>
                 </button>
 
-                <!-- BotÃ£o AVISOS (ComunicaÃ§Ã£o â†’ ROXO) -->
+                <!-- Botão AVISOS (Comunicação ? ROXO) -->
                 <a href="avisos.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #7c3aed;">
                     <div class="b-nav-icon-wrapper" style="background: #f5f3ff;">
                         <i data-lucide="bell"></i>
@@ -994,7 +427,7 @@ function renderAppHeader($title, $backUrl = null)
                 // 1. Fechar todos primeiro
                 closeAllSheets();
 
-                // 2. Se nâ”œÃºo estava aberto, abrir o clicado
+                // 2. Se n+úo estava aberto, abrir o clicado
                 if (!isOpen) {
                     sheet.classList.add('open');
                     overlay.classList.add('active');
@@ -1015,7 +448,7 @@ function renderAppHeader($title, $backUrl = null)
         </script>
 
 
-        <!-- Inicializar â”œÃ¬cones -->
+        <!-- Inicializar +ìcones -->
         <script>
             lucide.createIcons();
 
@@ -1028,7 +461,7 @@ function renderAppHeader($title, $backUrl = null)
                 });
             }
 
-            // ... (Restante do script mantido, apenas adicionando verificaâ”œÂºâ”œÃºo para evitar duplicidade de listeners se necessâ”œÃ­rio)
+            // ... (Restante do script mantido, apenas adicionando verifica+º+úo para evitar duplicidade de listeners se necess+írio)
 
             // Adicionar classe animate-in aos cards principais automaticamente
             document.addEventListener('DOMContentLoaded', () => {
@@ -1040,12 +473,12 @@ function renderAppHeader($title, $backUrl = null)
                 // Sidebar Swipe Logic (Vibe Coding)
                 const sidebar = document.getElementById('app-sidebar');
                 const appContent = document.getElementById('app-content');
-                if (!sidebar) return; // Seguranâ”œÂºa
+                if (!sidebar) return; // Seguran+ºa
 
                 let touchStartX = 0;
                 let touchEndX = 0;
 
-                // ... (Mantendo a lâ”œâ”‚gica de swipe anterior) ...
+                // ... (Mantendo a l+¦gica de swipe anterior) ...
 
                 document.addEventListener('touchstart', e => {
                     touchStartX = e.changedTouches[0].screenX;
@@ -1067,7 +500,7 @@ function renderAppHeader($title, $backUrl = null)
                     const isChatPage = window.location.pathname.includes('chat.php');
 
                     // Swipe Right (Esquerda -> Direita): Abrir Sidebar
-                    // Apenas se comeÃ§ar perto da borda esquerda (< 50px) e sidebar fechada
+                    // Apenas se começar perto da borda esquerda (< 50px) e sidebar fechada
                     if (diff > swipeThreshold && touchStartX < 50 && !isSidebarOpen) {
                         toggleSidebar();
                     }
@@ -1167,16 +600,16 @@ function renderAppHeader($title, $backUrl = null)
                 const userAgent = navigator.userAgent.toLowerCase();
                  // iOS
                 if (/iphone|ipad|ipod/.test(userAgent)) {
-                     alert('ðŸ“± Para instalar no iPhone:\n\n1. Toque no botÃ£o Compartilhar (quadrado com seta)\n2. Role para baixo e toque em "Adicionar Ã  Tela de InÃ­cio"');
+                     alert('?? Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com seta)\n2. Role para baixo e toque em "Adicionar à Tela de Início"');
                 } else {
                     // Android / Other fallback
-                    alert('ðŸ“± Para instalar:\n\nToque no menu do navegador (3 pontinhos) e selecione "Instalar aplicativo" ou "Adicionar Ã  tela inicial".');
+                    alert('?? Para instalar:\n\nToque no menu do navegador (3 pontinhos) e selecione "Instalar aplicativo" ou "Adicionar à tela inicial".');
                 }
             }
         };
     </script>
     <script>
-        // ConfiguraÃ§Ã£o Global de Caminhos
+        // Configuração Global de Caminhos
         const NOTIFICATIONS_API_BASE = '<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? '' : 'admin/') ?>';
     </script>
     
@@ -1184,8 +617,8 @@ function renderAppHeader($title, $backUrl = null)
     <div class="notification-dropdown" id="notificationDropdown">
         <div class="notification-header">
             <div class="notification-title">
-                NotificaÃ§Ãµes
-                <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar NotificaÃ§Ãµes Push">
+                Notificações
+                <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
                     <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
                 </button>
             </div>
@@ -1194,11 +627,11 @@ function renderAppHeader($title, $backUrl = null)
         <div class="notification-list" id="notificationList">
             <div class="empty-state">
                 <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                <p>Nenhuma notificaÃ§Ã£o nova</p>
+                <p>Nenhuma notificação nova</p>
             </div>
         </div>
         <div class="notification-footer">
-            <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificaÃ§Ãµes</a>
+            <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificações</a>
         </div>
     </div>
 </body>
@@ -1206,20 +639,14 @@ function renderAppHeader($title, $backUrl = null)
 <?php
     }
 
-    // Nova funâ”œÂºâ”œÃºo para cabeâ”œÂºalhos padronizados (Clean Header)
+    // Nova fun+º+úo para cabe+ºalhos padronizados (Clean Header)
     function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
     {
         global $_layoutUser;
         $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
     <header class="desktop-only-header app-page-header">
-        <style>
-            @media (max-width: 1024px) {
-                .desktop-only-header {
-                    display: none !important;
-                }
-            }
-        </style>
+        
 
         <div style="display: flex; align-items: center; gap: 4px;">
             <?php if (!$isHome): ?>
@@ -1230,7 +657,7 @@ function renderAppHeader($title, $backUrl = null)
                     <i data-lucide="arrow-left" style="width: 22px;"></i>
                 </button>
 
-                <a href="index.php" class="ripple" title="Navegaâ”œÂºâ”œÃºo Principal" style="
+                <a href="index.php" class="ripple" title="Navega+º+úo Principal" style="
                 width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
                 display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
             ">
@@ -1246,10 +673,10 @@ function renderAppHeader($title, $backUrl = null)
             <?php endif; ?>
         </div>
 
-        <!-- Direita: AÃ§Ãµes + LÃ­der + Perfil -->
+        <!-- Direita: Ações + Líder + Perfil -->
         <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
 
-            <!-- LÃ­der Button (Admin only) - Desktop -->
+            <!-- Líder Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                 <?php
                     // Recalculate if not in same scope (though header is included, vars scope might vary if inside function)
@@ -1258,19 +685,19 @@ function renderAppHeader($title, $backUrl = null)
                     $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
                     $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
                 ?>
-                <a href="<?= $liderLinkHead ?>" class="admin-crown-btn ripple" title="Painel do LÃ­der">
+                <a href="<?= $liderLinkHead ?>" class="admin-crown-btn ripple" title="Painel do Líder">
                     <i data-lucide="crown" style="width: 20px;"></i>
                 </a>
             <?php endif; ?>
 
-            <!-- AÃ§Ã£o da PÃ¡gina (se houver) -->
+            <!-- Ação da Página (se houver) -->
             <?php if (isset($rightAction) && $rightAction): ?>
                 <?= $rightAction ?>
             <?php endif; ?>
 
             <!-- Notification Button (Bell) -->
             <div style="position: relative;">
-                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="NotificaÃ§Ãµes">
+                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="Notificações">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
                         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
@@ -1284,8 +711,8 @@ function renderAppHeader($title, $backUrl = null)
                 <div class="notification-dropdown" id="notificationDropdownDesktop">
                     <div class="notification-header">
                         <div class="notification-title">
-                            NotificaÃ§Ãµes
-                            <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar NotificaÃ§Ãµes Push" id="btnEnableNotifications">
+                            Notificações
+                            <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar Notificações Push" id="btnEnableNotifications">
                                 <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
                             </button>
                         </div>
@@ -1307,141 +734,7 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
             </div>
 
-            <style>
-            /* NOTIFICATION SYSTEM CSS - PROFESSIONAL */
-            /* UNIFIED HEADER ACTION BUTTONS */
-            .header-action-btn {
-                width: 44px; height: 44px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                display: flex; align-items: center; justify-content: center;
-                cursor: pointer;
-                color: var(--text-muted);
-                position: relative;
-                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                /* Remove overflow hidden to allow badge */
-            }
-            .header-action-btn:hover {
-                background: var(--bg-body);
-                color: var(--primary);
-                border-color: var(--primary-light);
-                transform: translateY(-1px);
-                box-shadow: var(--shadow-sm);
-            }
-
-            .notification-badge {
-                position: absolute;
-                top: -6px; right: -6px;
-                background: #ef4444; 
-                color: white;
-                font-size: 11px; 
-                font-weight: 700;
-                min-width: 20px; 
-                height: 20px;
-                padding: 0 4px;
-                border-radius: 10px;
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                border: 2px solid var(--bg-surface); /* Match bg instead of white */
-                box-shadow: 0 2px 5px rgba(239, 68, 68, 0.3);
-                transform-origin: center;
-                animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                z-index: 10;
-                pointer-events: none;
-            }
-            @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
             
-            .notification-dropdown {
-                display: none;
-                position: absolute;
-                right: 0;
-                top: 54px;
-                width: 380px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                border-radius: 16px;
-                box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
-                z-index: 1000;
-                overflow: hidden;
-                transform-origin: top right;
-                animation: dropdownIn 0.2s ease-out;
-            }
-            @keyframes dropdownIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-            @media(max-width: 640px) {
-                .notification-dropdown {
-                    position: fixed;
-                    top: 60px; left: 16px; right: 16px; width: auto;
-                }
-            }
-            .notification-header {
-                padding: 16px;
-                border-bottom: 1px solid var(--border-color);
-                display: flex; justify-content: space-between; align-items: center;
-                background: #f8fafc;
-            }
-            .notification-title { 
-                font-weight: 700; color: var(--text-main); font-size: 0.95rem; 
-                display: flex; align-items: center; gap: 10px; 
-            }
-            .notification-enable-btn {
-                background: var(--primary); color: white; border: none; padding: 6px 12px; 
-                border-radius: 6px; font-size: 0.75rem; cursor: pointer; display: none; 
-                font-weight: 600; align-items: center; gap: 6px;
-                transition: background 0.2s;
-            }
-            .notification-enable-btn:hover { background: var(--primary-hover); }
-
-            .mark-all-read { 
-                background: none; border: none; color: var(--primary); 
-                font-size: 0.8rem; font-weight: 600; cursor: pointer; padding: 6px 10px;
-                border-radius: 6px; transition: background 0.1s;
-            }
-            .mark-all-read:hover { background: var(--primary-light); }
-
-            .notification-list { max-height: 400px; overflow-y: auto; }
-            .notification-item {
-                padding: 16px;
-                border-bottom: 1px solid var(--border-color);
-                display: flex; gap: 16px;
-                cursor: pointer; transition: background 0.1s;
-                text-decoration: none; color: inherit;
-                position: relative;
-            }
-            .notification-item:hover { background: #f8fafc; }
-            .notification-item.unread { background: #f0fdf4; }
-            .notification-item.unread:before {
-                content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary);
-            }
-            .notification-item:last-child { border-bottom: none; }
-            
-            .notification-icon {
-                width: 40px; height: 40px; border-radius: 12px;
-                display: flex; align-items: center; justify-content: center;
-                flex-shrink: 0;
-            }
-            .notification-content { flex: 1; min-width: 0; }
-            .notification-title-text { 
-                font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 4px;
-                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-            }
-            .notification-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 6px; }
-            .notification-time { font-size: 0.75rem; color: #94a3b8; display: flex; align-items: center; gap: 4px; }
-            
-            .notification-footer {
-                padding: 12px; text-align: center; border-top: 1px solid var(--border-color);
-                background: #f8fafc;
-            }
-            .notification-footer a {
-                color: var(--primary); font-weight: 600; font-size: 0.85rem; text-decoration: none;
-                display: inline-flex; align-items: center; gap: 6px;
-            }
-            .notification-footer a:hover { text-decoration: underline; }
-            
-            .empty-state { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 0.95rem; }
-            </style>
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
@@ -1492,7 +785,7 @@ function renderAppHeader($title, $backUrl = null)
                                             <path d="M12 17h.01"></path>
                                         </svg>
                                     </div>
-                                    <span style="font-weight: 500;">Quem somos nÃ³s?</span>
+                                    <span style="font-weight: 500;">Quem somos nós?</span>
                                 </a>
 
                                 <?php
@@ -1522,7 +815,7 @@ function renderAppHeader($title, $backUrl = null)
                                             <line x1="9" y1="21" x2="9" y2="9"></line>
                                         </svg>
                                     </div>
-                                    <span style="font-weight: 500;">Acesso RÃ¡pido</span>
+                                    <span style="font-weight: 500;">Acesso Rápido</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -1533,7 +826,7 @@ function renderAppHeader($title, $backUrl = null)
                                                 <path d="M5 16v4h14v-4" />
                                             </svg>
                                         </div>
-                                        <span style="font-weight: 500;">Painel do LÃ­der</span>
+                                        <span style="font-weight: 500;">Painel do Líder</span>
                                     </a>
                                 <?php endif; ?>
 
@@ -1605,7 +898,7 @@ function renderAppHeader($title, $backUrl = null)
     <div id="dashboardCustomizationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
         <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.25rem;">Personalizar Acesso RÃ¡pido</h3>
+                <h3 style="margin: 0; font-size: 1.25rem;">Personalizar Acesso Rápido</h3>
                 <button onclick="closeDashboardCustomization()" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -1628,7 +921,7 @@ function renderAppHeader($title, $backUrl = null)
                         if (function_exists('getAllAvailableCards')):
                             $allCards = getAllAvailableCards();
                             
-                            // Tentar buscar configuraÃ§Ãµes do usuÃ¡rio
+                            // Tentar buscar configurações do usuário
                             $enabledCards = [];
                             if (isset($_SESSION['user_id'])) {
                                 global $pdo;
@@ -1680,17 +973,17 @@ function renderAppHeader($title, $backUrl = null)
                         padding: 10px 20px; background: var(--primary); 
                         color: white; border: none; border-radius: 8px; 
                         cursor: pointer; font-weight: 600; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                    ">Salvar AlteraÃ§Ãµes</button>
+                    ">Salvar Alterações</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DETALHES NOTIFICAÃ‡ÃƒO -->
+    <!-- MODAL DETALHES NOTIFICAÇÃO -->
     <div id="notificationDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3050; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
         <div style="background: var(--bg-surface); border-radius: 16px; width: 90%; max-width: 500px; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; display: flex; flex-direction: column;">
             <div style="padding: 16px 20px; border-bottom: 0px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
-                <h3 style="margin: 0; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">NotificaÃ§Ã£o</h3>
+                <h3 style="margin: 0; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Notificação</h3>
                 <button onclick="closeNotificationDetail()" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted); display: flex;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -1721,7 +1014,7 @@ function renderAppHeader($title, $backUrl = null)
             const modal = document.getElementById('dashboardCustomizationModal');
             if (modal) {
                 modal.style.display = 'flex';
-                // Reiniciar Lucide icons se necessâ”œÃ­rio
+                // Reiniciar Lucide icons se necess+írio
                 if (window.lucide) lucide.createIcons();
             }
         }
@@ -1774,7 +1067,7 @@ function renderAppHeader($title, $backUrl = null)
                 }
             } catch (error) {
                 console.error(error);
-                alert('Erro na comunicaâ”œÂºâ”œÃºo com o servidor.');
+                alert('Erro na comunica+º+úo com o servidor.');
                 btnSubmit.textContent = originalText;
                 btnSubmit.disabled = false;
             }
@@ -1790,337 +1083,7 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Notifications Script -->
         <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
 
-        <style>
-            /* Notification Button - Green Outline (Dark Mode) */
-            body.dark-mode #notificationBtn,
-            body.dark-mode #notificationBtnDesktop {
-                border: 1px solid #10b981 !important; /* Emerald 500 */
-                color: #10b981 !important;
-                background: transparent !important;
-                box-shadow: none !important;
-                transition: all 0.2s;
-            }
-
-            body.dark-mode #notificationBtn:hover,
-            body.dark-mode #notificationBtnDesktop:hover {
-                background: rgba(16, 185, 129, 0.1) !important;
-                box-shadow: 0 0 12px rgba(16, 185, 129, 0.2) !important;
-                transform: translateY(-2px);
-            }
-
-            /* --- Leader Button Styles (Header) --- */
-            /* Light Mode (Original) */
-            .admin-crown-btn {
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 44px;
-                height: 44px;
-                background: #fef3c7;
-                border: 2px solid transparent;
-                border-radius: 12px;
-                text-decoration: none;
-                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25), 0 0 0 1px rgba(245, 158, 11, 0.1);
-                transition: all 0.3s;
-                color: #f59e0b;
-                cursor: pointer;
-            }
-            .admin-crown-btn i {
-                width: 20px;
-                position: relative;
-                z-index: 1;
-            }
-            
-            /* Dark Mode - LÃ­der: Teal Premium (Autoridade + Harmonia) */
-            body.dark-mode .admin-crown-btn {
-                background: rgba(13, 148, 136, 0.2) !important;
-                border: 1.5px solid rgba(45, 212, 191, 0.5) !important;
-                color: #5eead4 !important;
-                box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.1), 
-                            0 4px 12px rgba(13, 148, 136, 0.2),
-                            inset 0 1px 0 rgba(94, 234, 212, 0.1) !important;
-            }
-            body.dark-mode .admin-crown-btn:hover {
-                background: rgba(13, 148, 136, 0.35) !important;
-                border-color: #5eead4 !important;
-                box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.15),
-                            0 8px 20px rgba(13, 148, 136, 0.35),
-                            inset 0 1px 0 rgba(94, 234, 212, 0.15) !important;
-                transform: translateY(-2px);
-            }
-
-            /* --- Leader Menu Item (Dropdown) --- */
-            .lider-menu-item {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                padding: 8px 12px;
-                text-decoration: none;
-                font-size: 0.85rem;
-                border-radius: 8px;
-                transition: background 0.2s;
-                color: var(--text-main);
-            }
-            .lider-menu-item .icon-wrapper {
-                background: #fff7ed;
-                padding: 6px;
-                border-radius: 6px;
-                display: flex;
-                color: #d97706;
-                transition: all 0.2s;
-                width: 28px; height: 28px; justify-content: center; align-items: center;
-            }
-            .lider-menu-item:hover {
-                background: var(--bg-body);
-            }
-            
-            /* Dark Mode Lider Item (GREEN OUTLINE) */
-            body.dark-mode .lider-menu-item .icon-wrapper {
-                background: transparent !important;
-                border: 1px solid #10b981;
-                color: #10b981;
-            }
-            body.dark-mode .lider-menu-item span {
-                color: #10b981 !important;
-                font-weight: 600;
-            }
-            body.dark-mode .lider-menu-item:hover .icon-wrapper {
-                background: rgba(16, 185, 129, 0.1) !important;
-            }
-
-            /* Dropdown NotificaÃ§Ãµes & Footer FIX */
-            body.dark-mode .notification-dropdown {
-                background: #0f172a !important;
-                border: 1px solid #1e293b !important;
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
-            }
-            body.dark-mode .notification-header {
-                border-bottom: 1px solid #1e293b !important;
-                background: #0f172a !important;
-            }
-            body.dark-mode .notification-header h3 { color: #f1f5f9 !important; }
-            body.dark-mode .mark-all-read { color: #34d399 !important; font-weight: 600; }
-            
-            /* Footer Fix - Remover Fundo Branco */
-            body.dark-mode .notification-footer,
-            body.dark-mode .modal-footer {
-                background: #0f172a !important;
-                border-top: 1px solid #1e293b !important;
-            }
-            
-            body.dark-mode .notification-view-all,
-            body.dark-mode .view-all-btn, 
-            body.dark-mode .modal-footer a { 
-                color: #34d399 !important; 
-                background: transparent !important;
-                border-top: none !important;
-            }
-            
-            body.dark-mode .notification-view-all:hover,
-            body.dark-mode .view-all-btn:hover { 
-                background: rgba(52, 211, 153, 0.1) !important; 
-                text-decoration: none !important;
-            }
-
-            body.dark-mode .notification-empty { color: #94a3b8 !important; }
-            body.dark-mode .notification-empty i { opacity: 0.5 !important; color: #64748b !important; }
-
-            /* Profile Dropdown Container */
-            .profile-dropdown {
-                display: none;
-                position: absolute;
-                top: 54px;
-                right: 0;
-                background: var(--bg-surface);
-                border-radius: 16px;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-                min-width: 200px;
-                z-index: 2000;
-                border: 1px solid var(--border-color);
-                overflow: hidden;
-                animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-                transform-origin: top right;
-            }
-
-            /* Profile Header */
-            .profile-header {
-                padding: 12px 16px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                background: #ffffff;
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .profile-avatar-container {
-                width: 42px;
-                height: 42px;
-                border-radius: 50%;
-                overflow: hidden;
-                border: 2px solid white;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                flex-shrink: 0;
-            }
-
-            .profile-avatar-container img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .profile-info {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .profile-name {
-                font-weight: 700;
-                color: var(--text-main);
-                font-size: 0.95rem;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .profile-role {
-                font-size: 0.75rem;
-                color: #047857;
-                font-weight: 500;
-            }
-
-            /* Profile Menu Item - Base Styles */
-            .profile-menu-item {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                padding: 8px 12px;
-                text-decoration: none;
-                color: var(--text-main);
-                font-size: 0.85rem;
-                border-radius: 8px;
-                transition: all 0.2s;
-            }
-
-            .profile-menu-item .icon-wrapper {
-                padding: 6px;
-                border-radius: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 28px;
-                height: 28px;
-                transition: all 0.2s;
-            }
-
-            .profile-menu-item span {
-                font-weight: 500;
-            }
-
-            .profile-menu-item:hover {
-                background: var(--bg-body);
-            }
-
-            /* Light Mode Icon Colors */
-            .profile-menu-item:nth-child(1) .icon-wrapper { background: #e0e7ff; color: #4338ca; }
-            .profile-menu-item:nth-child(2) .icon-wrapper { background: #f1f5f9; color: #64748b; }
-            .profile-menu-item:nth-child(3) .icon-wrapper { background: #eef2ff; color: #4338ca; }
-            .profile-menu-item:nth-child(5) .icon-wrapper { background: #f1f5f9; color: #64748b; }
-
-            .logout-item {
-                color: #ef4444 !important;
-            }
-            .logout-item .icon-wrapper {
-                background: #fee2e2;
-                color: #ef4444;
-            }
-            .logout-item:hover {
-                background: #fef2f2 !important;
-            }
-
-            /* ===== DARK MODE ===== */
-
-            /* Profile Dropdown - Dark Mode */
-            body.dark-mode .profile-dropdown {
-                background: #1e293b !important;
-                border: 1px solid #334155 !important;
-                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6) !important;
-            }
-
-            /* Profile Header - Premium Gradient */
-            body.dark-mode .profile-header {
-                background: #047857 !important;
-                border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
-            }
-
-            body.dark-mode .profile-avatar-container {
-                border-color: rgba(255, 255, 255, 0.1) !important;
-            }
-
-            body.dark-mode .profile-name {
-                color: #ffffff !important;
-            }
-
-            body.dark-mode .profile-role {
-                color: #d1fae5 !important;
-            }
-
-            /* Profile Menu Items - Dark Mode */
-            body.dark-mode .profile-menu-item {
-                color: #f1f5f9 !important;
-            }
-
-            body.dark-mode .profile-menu-item:hover {
-                background: rgba(51, 65, 85, 0.5) !important;
-            }
-
-            /* Icon Wrappers - Professional Dark Look */
-            body.dark-mode .profile-menu-item .icon-wrapper {
-                background: rgba(148, 163, 184, 0.15) !important;
-                border: 1px solid rgba(148, 163, 184, 0.25) !important;
-                color: #94a3b8 !important;
-            }
-
-            /* LÃ­der Item (Dropdown) - Teal Premium */
-            body.dark-mode .lider-menu-item .icon-wrapper {
-                background: rgba(13, 148, 136, 0.25) !important;
-                border: 1.5px solid rgba(45, 212, 191, 0.4) !important;
-                color: #5eead4 !important;
-                box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2),
-                            inset 0 1px 0 rgba(94, 234, 212, 0.1) !important;
-            }
-
-            body.dark-mode .lider-menu-item span {
-                color: #5eead4 !important;
-                font-weight: 600;
-            }
-
-            body.dark-mode .lider-menu-item:hover {
-                background: rgba(13, 148, 136, 0.1) !important;
-            }
-
-            body.dark-mode .lider-menu-item:hover .icon-wrapper {
-                background: rgba(13, 148, 136, 0.4) !important;
-                border-color: #5eead4 !important;
-                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3),
-                            inset 0 1px 0 rgba(94, 234, 212, 0.15) !important;
-            }
-
-            /* Logout Button - Red Accent Dark Mode */
-            body.dark-mode .logout-item {
-                color: #fca5a5 !important;
-            }
-
-            body.dark-mode .logout-item .icon-wrapper {
-                background: rgba(239, 68, 68, 0.2) !important;
-                border: 1px solid rgba(239, 68, 68, 0.3) !important;
-                color: #f87171 !important;
-            }
-
-            body.dark-mode .logout-item:hover {
-                background: rgba(127, 29, 29, 0.3) !important;
-            }
-        </style>
+        
     </body>
     </html>
 <?php
