@@ -1,6 +1,4 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
-
 // Configurar sessão para 30 dias
 ini_set('session.gc_maxlifetime', 2592000); // 30 dias
 session_set_cookie_params([

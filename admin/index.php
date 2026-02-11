@@ -8,15 +8,15 @@ require_once '../includes/layout.php';
 $dashboardData = require 'dashboard_data.php';
 extract($dashboardData);
 
-// Obter definiÃ§Ãµes completas dos cards
+// Obter definições completas dos cards
 $allCardsDefinitions = getAllAvailableCards();
 
-renderAppHeader('VisÃ£o Geral');
+renderAppHeader('Visão Geral');
 ?>
 
 <link rel="stylesheet" href="../assets/css/pages/dashboard.css?v=<?= time() ?>">
 
-<!-- MODAL URGENTE AUTOMÃTICO -->
+<!-- MODAL URGENTE AUTOMÁTICO -->
 <?php if ($popupAviso): ?>
 <div id="urgentModal" class="urgent-modal-overlay">
     <div class="urgent-modal-card">
@@ -48,14 +48,14 @@ renderAppHeader('VisÃ£o Geral');
 </script>
 <?php endif; ?>
 
-<?php renderPageHeader('VisÃ£o Geral', 'Acesso rÃ¡pido Ã s suas atividades'); ?>
+<?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
 
 <!-- DASHBOARD CONTAINER (Removido max-width inline) -->
 <div class="dashboard-container">
     <?php
     require_once '../includes/dashboard_render.php';
     
-    // Dados para renderizaÃ§Ã£o
+    // Dados para renderização
     $renderData = [
         'pdo' => $pdo,
         'userId' => $userId,
@@ -75,12 +75,12 @@ renderAppHeader('VisÃ£o Geral');
         'historicoData' => $historicoData
     ];
 
-    // 1. Agrupar cards configurados pelo usuÃ¡rio
+    // 1. Agrupar cards configurados pelo usuário
     $groupedCards = [];
     $cardsOrder = []; 
 
-    // Mapeamento de categorias e ordem de exibiÃ§Ã£o
-    $categoryOrder = ['GestÃ£o', 'EspÃ­rito', 'Comunica', 'Admin', 'Extras'];
+    // Mapeamento de categorias e ordem de exibição
+    $categoryOrder = ['Gestão', 'Espírito', 'Comunica', 'Admin', 'Extras'];
     
     // Preparar grupos
     foreach ($categoryOrder as $cat) {
@@ -104,14 +104,14 @@ renderAppHeader('VisÃ£o Geral');
         }
     }
 
-    // 2. Renderizar SeÃ§Ãµes
+    // 2. Renderizar Seções
     foreach ($categoryOrder as $categoryName) {
         if (empty($groupedCards[$categoryName])) continue;
         
-        // TÃ­tulo da SeÃ§Ã£o
+        // Título da Seção
         echo "<h2 class='section-title'>{$categoryName}</h2>";
         
-        // Grid da SeÃ§Ã£o
+        // Grid da Seção
         echo '<div class="quick-access-grid">';
         foreach ($groupedCards[$categoryName] as $cardId) {
             renderDashboardCard($cardId, $renderData);

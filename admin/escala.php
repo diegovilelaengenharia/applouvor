@@ -3,7 +3,7 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
-// Processar exclusÃ£o em massa
+// Processar exclusão em massa
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedules'])) {
     if (!empty($_POST['schedule_ids'])) {
         $placeholders = str_repeat('?,', count($_POST['schedule_ids']) - 1) . '?';
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedules'])) 
     exit;
 }
 
-// Filtros e VisualizaÃ§Ã£o
+// Filtros e Visualização
 $viewMode = $_GET['view'] ?? 'timeline'; // timeline, list, calendar
 $infoMsg = '';
 
@@ -31,14 +31,14 @@ if (isset($_GET['filter_my']) && $_GET['filter_my'] == '1') {
     $params[] = $_SESSION['user_id'];
 }
 
-// Filtro: Membro especÃ­fico
+// Filtro: Membro específico
 if (!empty($_GET['filter_member'])) {
     $joins[] = "JOIN schedule_users su_mem ON s.id = su_mem.schedule_id";
     $wheres[] = "su_mem.user_id = ?";
     $params[] = $_GET['filter_member'];
 }
 
-// Filtro: MÃºsica especÃ­fica
+// Filtro: Música específica
 if (!empty($_GET['filter_song'])) {
     $joins[] = "JOIN schedule_songs ss_song ON s.id = ss_song.schedule_id";
     $wheres[] = "ss_song.song_id = ?";
@@ -51,7 +51,7 @@ if (!empty($_GET['filter_team'])) {
     $params[] = "%" . $_GET['filter_team'] . "%";
 }
 
-// Abas (apenas se nÃ£o estiver em modo calendÃ¡rio)
+// Abas (apenas se não estiver em modo calendário)
 $tab = $_GET['tab'] ?? 'next';
 if ($viewMode !== 'calendar') {
     if ($tab === 'history') {
@@ -62,7 +62,7 @@ if ($viewMode !== 'calendar') {
         $orderBy = "s.event_date ASC";
     }
 } else {
-    // No calendÃ¡rio, pegamos o mÃªs selecionado
+    // No calendário, pegamos o mês selecionado
     $month = $_GET['month'] ?? date('m');
     $year = $_GET['year'] ?? date('Y');
     $wheres[] = "MONTH(s.event_date) = ? AND YEAR(s.event_date) = ?";
@@ -92,45 +92,104 @@ renderAppHeader('Escalas');
 
 
 <!-- Hero Header -->
-<div class="hero-header">
+<div style="
+    background: #047857; 
+    margin: -24px -16px 32px -16px; 
+    padding: 32px 24px 64px 24px; 
+    border-radius: 0 0 32px 32px; 
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: visible;
+">
     <!-- Navigation Row -->
-    <div class="hero-nav-row">
-        <a href="index.php" class="btn-back ripple">
-            <i data-lucide="arrow-left"></i> Voltar
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <a href="index.php" class="ripple" style="
+            padding: 10px 20px;
+            border-radius: 50px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            color: #047857; 
+            background: white; 
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        ">
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Voltar
         </a>
-        
-        <div class="hero-nav-actions">
+
+        <div style="display: flex; align-items: center;">
             <?php renderGlobalNavButtons(); ?>
         </div>
     </div>
 
-    <div class="hero-title-row">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
-            <h1 class="hero-title">Escalas</h1>
-            <p class="hero-subtitle">Louvor PIB Oliveira</p>
+            <h1 style="color: white; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">Escalas</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 4px; font-weight: 500; font-size: 0.95rem;">Louvor PIB Oliveira</p>
         </div>
-        <div class="hero-actions">
+        <div style="display: flex; gap: 8px;">
             <!-- Add Button -->
-            <a href="escala_adicionar.php" class="btn-hero-action btn-add ripple">
-                <i data-lucide="plus"></i>
+            <a href="escala_adicionar.php" class="ripple" style="
+                background: var(--yellow-600); 
+                border: none; 
+                width: 44px; 
+                height: 44px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                backdrop-filter: blur(4px);
+                cursor: pointer;
+                box-shadow: 0 1px 3px rgba(217, 119, 6, 0.15);
+            ">
+                <i data-lucide="plus" style="width: 20px;"></i>
             </a>
             <!-- Filter Button -->
-            <button onclick="openFilters()" class="btn-hero-action btn-filter ripple">
-                <i data-lucide="filter"></i>
+            <button onclick="openFilters()" class="ripple" style="
+                background: rgba(255,255,255,0.2); 
+                border: none; 
+                width: 44px; 
+                height: 44px; 
+                border-radius: 12px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white;
+                backdrop-filter: blur(4px);
+                cursor: pointer;
+            ">
+                <i data-lucide="filter" style="width: 20px;"></i>
             </button>
+            <!-- View Button -->
             <!-- View Button Wrapper -->
-            <div class="view-menu-wrapper">
-                <button id="btnViewToggle" onclick="toggleViewMenu()" class="btn-hero-action btn-view ripple">
-                    <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>"></i>
+            <div style="position: relative;">
+                <button id="btnViewToggle" onclick="toggleViewMenu()" class="ripple" style="
+                    background: rgba(255,255,255,0.2); 
+                    border: none; 
+                    width: 44px; 
+                    height: 44px; 
+                    border-radius: 12px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                    color: white;
+                    backdrop-filter: blur(4px);
+                    cursor: pointer;
+                ">
+                    <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>" style="width: 20px;"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div id="viewMenu" class="view-dropdown">
-                    <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple">
-                        <i data-lucide="align-left"></i> Linha do Tempo
+                <div id="viewMenu" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: var(--shadow-lg); width: 200px; z-index: 600; margin-top: 8px; overflow: hidden;">
+                    <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
+                        <i data-lucide="align-left" style="width: 18px; color: var(--text-secondary);"></i> Linha do Tempo
                     </a>
-                    <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple">
-                        <i data-lucide="list"></i> Lista Compacta
+                    <a href="?view=list&tab=<?= $tab ?>" class="dropdown-item ripple" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: var(--text-primary); text-decoration: none;">
+                        <i data-lucide="list" style="width: 18px; color: var(--text-secondary);"></i> Lista Compacta
                     </a>
                 </div>
             </div>
@@ -138,12 +197,20 @@ renderAppHeader('Escalas');
     </div>
 
     <!-- Floating Tabs -->
-    <div class="floating-tabs-wrapper">
-        <div class="floating-tabs">
-            <a href="?tab=next" class="tab-link <?= $tab == 'next' ? 'active' : '' ?>">
-                PrÃ³ximas
+    <div style="position: absolute; bottom: -28px; left: 20px; right: 20px; z-index: 10;">
+        <div style="
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            padding: 6px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            display: flex; 
+            align-items: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        ">
+            <a href="?tab=next" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $tab === 'next' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
+                Próximas
             </a>
-            <a href="?tab=history" class="tab-link <?= $tab == 'history' ? 'active' : '' ?>">
+            <a href="?tab=history" class="ripple" style="flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; <?= $tab === 'history' ? 'background: var(--primary-green); color: white; box-shadow: var(--shadow-sm);' : 'color: var(--text-secondary);' ?>">
                 Anteriores
             </a>
         </div>
@@ -152,14 +219,14 @@ renderAppHeader('Escalas');
 
 <?php if (empty($schedules)): ?>
     <!-- Empty State -->
-    <div>
-        <div>
-            <i data-lucide="calendar-off"></i>
+    <div style="text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center;">
+        <div style="background: var(--bg-tertiary); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <i data-lucide="calendar-off" style="color: var(--text-muted); width: 40px; height: 40px;"></i>
         </div>
-        <h3>
+        <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
             Nenhuma escala encontrada
         </h3>
-        <p>
+        <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 250px; margin-bottom: 24px;">
             Tente ajustar os filtros ou adicione uma nova escala.
         </p>
     </div>
@@ -167,14 +234,14 @@ renderAppHeader('Escalas');
 
     <!-- VIEW: LIST (COMPACT) -->
     <?php if ($viewMode === 'list'): ?>
-        <div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             <?php foreach ($schedules as $schedule):
                 $date = new DateTime($schedule['event_date']);
                 $monthShort = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][$date->format('n') - 1];
                 $dayNumber = $date->format('d');
-                $weekDay = ['DOMINGO', 'SEGUNDA', 'TERÃ‡A', 'QUARTA', 'QUINTA', 'SEXTA', 'SÃBADO'][$date->format('w')];
+                $weekDay = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'][$date->format('w')];
             ?>
-                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="compact-card ripple">
+                <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="compact-card ripple" style="text-decoration: none;">
                     <!-- Left Strip handled by CSS or border -->
 
                     <!-- Date Column -->
@@ -188,10 +255,10 @@ renderAppHeader('Escalas');
 
                     <!-- Content -->
                     <div class="compact-info-col">
-                        <div class="compact-meta"><?= $weekDay ?> â€¢ 19:00</div>
+                        <div class="compact-meta"><?= $weekDay ?> • 19:00</div>
                         <div class="compact-title"><?= htmlspecialchars($schedule['event_type']) ?></div>
                         <div class="compact-sub">
-                            <i data-lucide="users"></i> Escala
+                            <i data-lucide="users" style="width: 14px; height: 14px;"></i> Escala
                         </div>
                     </div>
 
@@ -214,14 +281,14 @@ renderAppHeader('Escalas');
                 $ptMonths = [1 => 'JAN', 2 => 'FEV', 3 => 'MAR', 4 => 'ABR', 5 => 'MAI', 6 => 'JUN', 7 => 'JUL', 8 => 'AGO', 9 => 'SET', 10 => 'OUT', 11 => 'NOV', 12 => 'DEZ'];
                 $monthLabel = $ptMonths[$date->format('n')];
 
-                $weekDay = ['Domingo', 'Segunda', 'TerÃ§a', 'Quarta', 'Quinta', 'Sexta', 'SÃ¡bado'][$date->format('w')];
+                $weekDay = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')];
 
                 // Calculate time relative today
                 $today = new DateTime('today');
                 $interval = $today->diff($date);
                 $timeAgo = $interval->format('%a') . ' dias';
                 if ($date < $today) {
-                    $timeLabel = $interval->days . ' dias atrÃ¡s';
+                    $timeLabel = $interval->days . ' dias atrás';
                 } elseif ($date == $today) {
                     $timeLabel = 'Hoje';
                 } else {
@@ -237,7 +304,7 @@ renderAppHeader('Escalas');
 
                     <!-- Card -->
                     <!-- Card -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="event-card ripple">
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="event-card ripple" style="text-decoration: none;">
 
                         <!-- 1. Header: Title -->
                         <div class="event-header">
@@ -252,7 +319,7 @@ renderAppHeader('Escalas');
                             </div>
                             <div class="info-item">
                                 <i data-lucide="calendar" class="icon-sm text-blue"></i>
-                                <span><?= $weekDay ?> â€¢ 19:00</span>
+                                <span><?= $weekDay ?> • 19:00</span>
                             </div>
                         </div>
 
@@ -266,13 +333,13 @@ renderAppHeader('Escalas');
                         <div class="event-footer">
                             <div class="avatar-stack">
                                 <!-- Placeholder Avatars for "Team Preview" -->
-                                <div class="avatar-small"></div>
-                                <div class="avatar-small"></div>
-                                <div class="avatar-small"></div>
+                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=A&background=2563EB&color=fff');"></div>
+                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=B&background=059669&color=fff');"></div>
+                                <div class="avatar-small" style="background-image: url('https://ui-avatars.com/api/?name=C&background=db2777&color=fff');"></div>
                             </div>
 
                             <div class="footer-right">
-                                <div class="stat-pill" title="MÃºsicas">
+                                <div class="stat-pill" title="Músicas">
                                     <i data-lucide="music" class="icon-xs"></i> 5
                                 </div>
                                 <div class="stat-pill" title="Confirmados">
@@ -297,14 +364,14 @@ renderAppHeader('Escalas');
             <input type="hidden" name="view" value="<?= $viewMode ?>">
             <input type="hidden" name="tab" value="<?= $tab ?>">
 
-            <div>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
                 <!-- Toggle: Apenas que eu participo -->
                 <?php
                 $isMyFilterActive = isset($_GET['filter_my']) && $_GET['filter_my'] == '1';
                 $rowStyle = $isMyFilterActive ? 'background: var(--yellow-100); border: 1px solid var(--yellow-500); color: #92400E;' : 'background: var(--bg-tertiary); border: 1px solid transparent;';
                 ?>
-                <div id="filterMyRow">
-                    <span>Apenas que eu participo</span>
+                <div id="filterMyRow" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 12px; transition: all 0.2s; <?= $rowStyle ?>">
+                    <span style="font-weight: 600;">Apenas que eu participo</span>
                     <label class="switch">
                         <input type="checkbox" name="filter_my" value="1" <?= $isMyFilterActive ? 'checked' : '' ?> onchange="toggleMyRowStyle(this)">
                         <span class="slider round"></span>
@@ -313,8 +380,8 @@ renderAppHeader('Escalas');
 
                 <!-- Select Membro -->
                 <div>
-                    <label>Membro</label>
-                    <select name="filter_member" class="form-input">
+                    <label style="font-size: 0.9rem; margin-bottom: 4px; display: block; color: var(--text-secondary);">Membro</label>
+                    <select name="filter_member" class="form-input" style="width: 100%;">
                         <option value="">Todos</option>
                         <?php
                         $users = $pdo->query("SELECT id, name FROM users ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -326,10 +393,10 @@ renderAppHeader('Escalas');
                     </select>
                 </div>
 
-                <!-- Select MÃºsica -->
+                <!-- Select Música -->
                 <div>
-                    <label>MÃºsica</label>
-                    <select name="filter_song" class="form-input">
+                    <label style="font-size: 0.9rem; margin-bottom: 4px; display: block; color: var(--text-secondary);">Música</label>
+                    <select name="filter_song" class="form-input" style="width: 100%;">
                         <option value="">Todas</option>
                         <?php
                         $allSongs = $pdo->query("SELECT id, title FROM songs ORDER BY title ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -342,7 +409,7 @@ renderAppHeader('Escalas');
                 </div>
             </div>
 
-            <button type="submit" class="btn-action-save ripple">Aplicar Filtros</button>
+            <button type="submit" class="btn-action-save ripple" style="width: 100%; justify-content: center;">Aplicar Filtros</button>
         </form>
     </div>
 </div>
@@ -385,13 +452,13 @@ renderAppHeader('Escalas');
     }
 </script>
 
-<!-- Barra de ExclusÃ£o Flutuante -->
+<!-- Barra de Exclusão Flutuante -->
 <div id="deleteBar" class="delete-bar">
     <span id="selectedCount">0 selecionadas</span>
-    <button type="button" onclick="confirmDelete()">
+    <button type="button" onclick="confirmDelete()" style="background: white; color: var(--status-error); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer;">
         Excluir
     </button>
-    <button type="button" onclick="cancelSelection()">
+    <button type="button" onclick="cancelSelection()" style="background: transparent; color: white; border: 1px solid white; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer;">
         Cancelar
     </button>
 </div>
