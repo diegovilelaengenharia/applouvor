@@ -493,30 +493,7 @@ if ($isPrintMode) {
         <title>Relatório Analítico Ultra Completo</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
         <script src="https://unpkg.com/lucide@latest"></script>
-        <style>
-             body { font-family: 'Inter', sans-serif; padding: 30px; max-width: 210mm; margin: 0 auto; color: var(--slate-800); background: white; font-size: 10px; line-height: 1.4;}
-             @media print { body { padding: 0; margin: 8mm; font-size: 9px; } .no-print { display: none; } @page { margin: 10mm; } }
-             h1 { font-size: 22px; margin: 0 0 4px 0; color: var(--slate-900); }
-             h2 { font-size: 14px; margin: 25px 0 12px 0; padding-bottom: 6px; border-bottom: 2px solid var(--slate-200); color: var(--slate-900); text-transform: uppercase; font-weight: 800; page-break-after: avoid; }
-             h3 { font-size: 11px; margin: 15px 0 8px 0; font-weight: 700; color: var(--slate-500); page-break-after: avoid; }
-             table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 15px; page-break-inside: avoid; }
-             th { text-align: left; background: var(--slate-50); padding: 5px 6px; font-weight: 700; color: var(--slate-500); border-bottom: 1px solid var(--slate-300); }
-             td { padding: 5px 6px; border-bottom: 1px solid var(--slate-100); }
-             .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-             .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-             .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-             .stat-box { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--slate-100); }
-             .stat-box:last-child { border-bottom: none; }
-             .kpi-card { border: 1px solid var(--slate-200); padding: 12px; border-radius: 6px; text-align: center; page-break-inside: avoid; }
-             .kpi-value { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-             .kpi-label { font-size: 9px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; }
-             .badge { padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 8px; display: inline-block; }
-             .section { margin-bottom: 30px; page-break-inside: avoid; }
-             .alert-box { padding: 10px; border-radius: 6px; margin-bottom: 15px; page-break-inside: avoid; }
-             .podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin: 20px 0; page-break-inside: avoid; }
-             .podium-item { text-align: center; }
-             .podium-bar { border-radius: 6px 6px 0 0; padding: 10px 8px; color: white; font-weight: 800; }
-        </style>
+        <link rel="stylesheet" href="../assets/css/pages/relatorios.css?v=<?= time() ?>">
     </head>
     <body>
         <div class="no-print" style="margin-bottom: 20px; text-align: right;">
@@ -1021,392 +998,15 @@ renderAppHeader('Indicadores Avançados');
 renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
 ?>
 
-<style>
-    /* Standardized Dashboard Styles */
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-    
-    .content-card {
-        background: var(--bg-surface);
-        padding: 24px;
-        border-radius: 16px;
-        border: 1px solid var(--border-color);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        margin-bottom: 24px;
-    }
-    
-    /* Mobile Responsive Adjustments */
-    @media (max-width: 768px) {
-        .dashboard-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-        
-        .content-card {
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-    }
-
-    .kpi-card {
-        background: var(--bg-surface);
-        padding: 24px;
-        border-radius: 16px;
-        border: 1px solid var(--border-color);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        transition: transform 0.2s;
-    }
-    .kpi-card:hover { transform: translateY(-2px); }
-
-    .kpi-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-
-    .user-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin-top: 0;
-    }
-
-    .user-table th {
-        text-align: left;
-        padding: 16px 20px;
-        color: var(--text-secondary);
-        font-weight: 600;
-        font-size: 0.85rem;
-        background: var(--bg-surface-active);
-        border-bottom: 1px solid var(--border-color);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .user-table td {
-        padding: 16px 20px;
-        border-bottom: 1px solid var(--border-color);
-        color: var(--text-primary);
-        vertical-align: middle;
-        background: var(--bg-surface);
-        transition: background 0.15s;
-    }
-
-    .user-table tr:hover td {
-        background: var(--bg-surface-active);
-    }
-    
-    .user-table tr:last-child td {
-        border-bottom: none;
-    }
-    
-    .stat-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .stat-title:hover { color: var(--primary); }
-
-    /* Filters Style */
-    .filter-bar {
-        background: var(--bg-surface);
-        padding: 20px;
-        border-radius: 16px;
-        border: 1px solid var(--border-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-bottom: 30px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-    
-    .form-select {
-        padding: 10px 16px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-body);
-        color: var(--text-primary);
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: border-color 0.2s;
-    }
-    .form-select:hover { border-color: var(--primary); }
-
-    /* List Items */
-    .list-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 16px;
-        border-bottom: 1px dashed var(--border-color);
-        transition: background 0.1s;
-    }
-    .list-item:hover { background: var(--bg-surface-active); }
-    .list-item:last-child { border: none; }
-    
-    .metric-big { font-size: 18px; font-weight: 800; color: var(--text-primary); }
-    .metric-sub { font-size: 12px; color: var(--text-secondary); background: var(--bg-body); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); margin-left: 6px; }
-
-    .heatmap { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 20px; border-bottom: 1px solid var(--border-color); }
-    .heat-bar { flex: 1; background: var(--slate-300); border-radius: 4px 4px 0 0; position: relative; transition: all 0.2s; }
-    .heat-bar:hover { background: var(--primary); }
-    .heat-bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-surface); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; z-index: 10; white-space: nowrap; }
-    
-    
-    .btn-print {
-        background: var(--text-primary);
-        color: var(--bg-surface);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: opacity 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .btn-print:hover { opacity: 0.9; }
-
-    /* Accordion / Toggle Header Style */
-    .stat-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        padding: 12px 16px;
-        margin: -24px -24px 20px -24px; /* Negative margin to fill card width */
-        background: var(--bg-surface);
-        border-bottom: 1px solid var(--border-color);
-        border-radius: 16px 16px 0 0;
-        transition: background 0.2s;
-        
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        user-select: none;
-    }
-    
-    .stat-title:hover {
-        background: var(--bg-surface-active);
-    }
-    
-    .stat-title i {
-        color: var(--text-secondary);
-        transition: transform 0.2s;
-    }
-
-    
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-        /* Filter Bar Mobile */
-        .filter-bar {
-            flex-direction: column;
-            align-items: stretch !important;
-            gap: 12px;
-            padding: 16px;
-        }
-        
-        .filter-bar > div:first-child h2 {
-            font-size: 1.1rem !important;
-        }
-        
-        .filter-bar > div:first-child p {
-            font-size: 0.8rem !important;
-        }
-        
-        .filter-bar form {
-            flex-direction: column !important;
-            width: 100%;
-        }
-        
-        .form-select {
-            width: 100% !important;
-            font-size: 0.85rem;
-        }
-        
-        .btn-print {
-            width: 100%;
-            justify-content: center;
-            padding: 12px 16px;
-        }
-        
-        /* KPI Cards Mobile */
-        .kpi-card {
-            padding: 16px !important;
-            gap: 12px;
-        }
-        
-        .kpi-icon {
-            width: 40px !important;
-            height: 40px !important;
-            font-size: 1.2rem !important;
-        }
-        
-        /* Tables Mobile - Horizontal Scroll */
-        .user-table {
-            font-size: 0.75rem !important;
-        }
-        
-        .user-table th,
-        .user-table td {
-            padding: 10px 8px !important;
-            font-size: 0.75rem !important;
-        }
-        
-        /* List Items Mobile */
-        .list-item {
-            padding: 10px 12px !important;
-            font-size: 0.85rem;
-        }
-        
-        /* Stat Title Mobile */
-        .stat-title {
-            font-size: 0.95rem !important;
-            padding-bottom: 10px;
-        }
-        
-        /* Charts Mobile */
-        canvas {
-            max-height: 180px !important;
-        }
-        
-        /* Heatmap Mobile */
-        .heatmap {
-            height: 80px !important;
-            gap: 2px;
-        }
-        
-        /* MVP Podium Mobile */
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] {
-            gap: 8px !important;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-        
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div {
-            min-width: 70px !important;
-        }
-        
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:first-child {
-            width: 70px !important;
-        }
-        
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:first-child > div:first-child {
-            font-size: 1.2rem !important;
-        }
-        
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:first-child > div:nth-child(2) {
-            font-size: 1rem !important;
-        }
-        
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:nth-child(2) {
-            font-size: 0.75rem !important;
-        }
-        
-        .content-card [style*="display: flex"][style*="justify-content: center"][style*="align-items: flex-end"] > div > div:nth-child(3) {
-            font-size: 0.7rem !important;
-        }
-        
-        /* Metric Adjustments Mobile */
-        .metric-big {
-            font-size: 16px !important;
-        }
-        
-        .metric-sub {
-            font-size: 10px !important;
-        }
-        
-        /* Container Padding Mobile */
-        [style*="max-width: 1200px"] {
-            padding: 0 12px !important;
-        }
-        
-        /* Grid Layouts Mobile */
-        [style*="grid-template-columns: repeat(auto-fit"] {
-            grid-template-columns: 1fr !important;
-            gap: 12px !important;
-        }
-        
-        /* Tone/Tag Pills Mobile */
-        [style*="display: flex"][style*="gap: 6px"][style*="flex-wrap: wrap"] > div,
-        [style*="display: flex"][style*="gap: 8px"][style*="flex-wrap: wrap"] > span {
-            font-size: 0.75rem !important;
-            padding: 4px 8px !important;
-        }
-        
-        /* Completeness Cards Mobile */
-        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 8px !important;
-        }
-        
-        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] > div {
-            padding: 12px !important;
-        }
-        
-        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] > div > div:nth-child(2) {
-            font-size: 1.25rem !important;
-        }
-    }
-    
-    /* Extra Small Mobile (< 480px) */
-    @media (max-width: 480px) {
-        .content-card {
-            padding: 12px !important;
-            border-radius: 12px;
-        }
-        
-        .filter-bar {
-            padding: 12px;
-        }
-        
-        .stat-title {
-            font-size: 0.9rem !important;
-        }
-        
-        h5 {
-            font-size: 0.8rem !important;
-        }
-        
-        /* Force single column for completeness cards on very small screens */
-        [style*="grid-template-columns: repeat(auto-fit, minmax(150px"] {
-            grid-template-columns: 1fr !important;
-        }
-    }
-
-</style>
+<link rel="stylesheet" href="../assets/css/pages/relatorios.css?v=<?= time() ?>">
 
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
 
      <!-- HEADER & FILTERS -->
     <div class="filter-bar">
         <div>
-            <h2 style="margin: 0; font-size: 1.25rem; color: var(--text-primary); font-weight: 700;">Painel de Indicadores</h2>
-            <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">Análise Profunda: <strong><?= $titlePeriod ?></strong></p>
+            <h2 class="report-title">Painel de Indicadores</h2>
+            <p class="report-subtitle">Análise Profunda: <strong><?= $titlePeriod ?></strong></p>
         </div>
         
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
@@ -1500,14 +1100,14 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
                         <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">Top 10 Músicas</h5>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             <?php foreach($topSongs as $idx => $s): ?>
-                            <div class="list-item" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface);">
+                            <div class="song-list-item">
                                 <div style="display: flex; gap: 12px; align-items: center;">
-                                    <div style="font-weight: 700; color: var(--slate-400); font-size: 0.85rem; width: 20px;">#<?= $idx+1 ?></div>
+                                    <div class="song-rank-badge">#<?= $idx+1 ?></div>
                                     <div style="flex: 1; min-width: 0;">
                                         <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= $s['title'] ?></div>
                                         <div style="font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= $s['artist'] ?></div>
                                     </div>
-                                    <div style="font-weight: 700; color: var(--primary); background: var(--bg-surface-active); padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;"><?= $s['qtd'] ?>x</div>
+                                    <div class="song-count-badge"><?= $s['qtd'] ?>x</div>
                                 </div>
                             </div>
                             <?php endforeach; ?>
@@ -1821,14 +1421,14 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
                 <!-- Pódio MVP -->
                 <div style="margin-top: 20px;">
                     <h5 style="font-size: 0.9rem; margin: 0 0 24px 0; color: var(--text-primary); text-align: center; font-weight: 700;">🥇 Top 5 Membros MVP (Maior Engajamento)</h5>
-                    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 12px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 10px;">
+                    <div class="podium-scroll-container">
                         <?php foreach($mvpMembers as $idx => $mvp): 
                             $heights = [180, 220, 160, 140, 120];
                             $colors = ['#fbbf24', 'var(--yellow-500)', '#d97706', '#b45309', '#92400e'];
                             $medals = ['🥇', '🥈', '🥉', '4º', '5º'];
                         ?>
                         <div style="text-align: center; min-width: 80px;">
-                            <div style="width: 100%; height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px; color: white; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <div class="podium-bar-card" style="height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>;">
                                 <div style="font-size: 1.5rem; margin-bottom: 4px;"><?= $medals[$idx] ?></div>
                                 <div style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;"><?= $mvp['engagement_score'] ?></div>
                                 <div style="font-size: 0.7rem; opacity: 0.9; text-transform: uppercase;">pontos</div>
@@ -1889,8 +1489,8 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
 </div>
 
 <!-- Modal Músicas Pendentes -->
-<div id="modalMissingSongs" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: white; width: 90%; max-width: 500px; border-radius: 12px; padding: 20px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+<div id="modalMissingSongs" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+    <div class="modal-card" style="width: 90%; max-width: 500px; padding: 20px; max-height: 80vh; display: flex; flex-direction: column;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--slate-100); padding-bottom: 10px;">
             <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--slate-900);">Músicas Pendentes</h3>
             <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="background: none; border: none; cursor: pointer; color: var(--slate-500);">
