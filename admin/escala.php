@@ -95,38 +95,37 @@ renderAppHeader('Escalas');
 <div class="hero-header">
     <!-- Navigation Row -->
     <div class="hero-nav-row">
-        <a href="index.php" class="ripple">
+        <a href="index.php" class="btn-back ripple">
             <i data-lucide="arrow-left"></i> Voltar
         </a>
-
-        <div>
+        
+        <div class="hero-nav-actions">
             <?php renderGlobalNavButtons(); ?>
         </div>
     </div>
 
     <div class="hero-title-row">
         <div>
-            <h1>Escalas</h1>
-            <p>Louvor PIB Oliveira</p>
+            <h1 class="hero-title">Escalas</h1>
+            <p class="hero-subtitle">Louvor PIB Oliveira</p>
         </div>
-        <div>
+        <div class="hero-actions">
             <!-- Add Button -->
-            <a href="escala_adicionar.php" class="ripple">
+            <a href="escala_adicionar.php" class="btn-hero-action btn-add ripple">
                 <i data-lucide="plus"></i>
             </a>
             <!-- Filter Button -->
-            <button onclick="openFilters()" class="ripple">
+            <button onclick="openFilters()" class="btn-hero-action btn-filter ripple">
                 <i data-lucide="filter"></i>
             </button>
-            <!-- View Button -->
             <!-- View Button Wrapper -->
-            <div>
-                <button id="btnViewToggle" onclick="toggleViewMenu()" class="ripple">
+            <div class="view-menu-wrapper">
+                <button id="btnViewToggle" onclick="toggleViewMenu()" class="btn-hero-action btn-view ripple">
                     <i data-lucide="<?= $viewMode == 'calendar' ? 'calendar' : ($viewMode == 'list' ? 'list' : 'align-left') ?>"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div id="viewMenu">
+                <div id="viewMenu" class="view-dropdown">
                     <a href="?view=timeline&tab=<?= $tab ?>" class="dropdown-item ripple">
                         <i data-lucide="align-left"></i> Linha do Tempo
                     </a>
@@ -139,12 +138,12 @@ renderAppHeader('Escalas');
     </div>
 
     <!-- Floating Tabs -->
-    <div>
-        <div>
-            <a href="?tab=next" class="ripple">
+    <div class="floating-tabs-wrapper">
+        <div class="floating-tabs">
+            <a href="?tab=next" class="tab-link <?= $tab == 'next' ? 'active' : '' ?>">
                 Próximas
             </a>
-            <a href="?tab=history" class="ripple">
+            <a href="?tab=history" class="tab-link <?= $tab == 'history' ? 'active' : '' ?>">
                 Anteriores
             </a>
         </div>
