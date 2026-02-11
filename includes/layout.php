@@ -123,7 +123,10 @@ function renderAppHeader($title, $backUrl = null)
 
             @media (min-width: 1025px) {
                 #app-content {
-                    margin-left: 190px;
+                    margin-left: 250px;
+                    padding: 32px; /* Mais espaço no desktop */
+                    max-width: 1600px; /* Limite para telas ultra-wide */
+                    margin-right: auto;
                 }
             }
 
@@ -139,7 +142,7 @@ function renderAppHeader($title, $backUrl = null)
                 z-index: 90;
                 border-bottom: 1px solid var(--border-subtle);
                 box-shadow: var(--shadow-sm);
-                margin: -20px -20px 24px -20px;
+                margin: -12px -12px 24px -12px; /* Reset margem negativa do padding mobile */
             }
 
             .btn-menu-trigger {

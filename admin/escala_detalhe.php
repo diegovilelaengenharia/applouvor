@@ -159,7 +159,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
 <div class="scale-detail-wrapper">
 
     <!-- EVENT SUMMARY CARD -->
-    <div class="event-info-card mb-0">
+    <div class="event-info-card">
         <div class="event-main-row">
             <div class="event-date-box">
                 <div class="event-day"><?= $date->format('d') ?></div>
@@ -270,7 +270,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         <!-- VIEW MODE CONTENT -->
         
         <!-- PARTICIPANTS SECTION -->
-        <div class="detail-section section-box mb-0">
+        <div class="detail-section section-box">
             <div class="section-header">
                 <div class="section-title">
                     Equipe Escala <span class="section-count"><?= count($team) ?></span>
@@ -324,7 +324,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         </div>
 
         <!-- REPERTOIRE SECTION -->
-        <div class="detail-section section-box mb-0">
+        <div class="detail-section section-box">
             <div class="section-header">
                 <div class="section-title">
                     Repertório <span class="section-count"><?= count($songs) ?></span>

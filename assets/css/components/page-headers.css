@@ -5,8 +5,10 @@
 /* Cabeçalho Padrão do App (Desktop Sticky) */
 .app-page-header {
     background: var(--bg-surface);
-    padding: 12px 16px;
-    margin: -20px -20px 24px -20px;
+    padding: 16px 32px;
+    /* Aumentado padding interno também */
+    margin: -32px -32px 32px -32px;
+    /* Negative margin to match #app-content padding */
     display: flex;
     align-items: center;
     justify-content: space-between;
