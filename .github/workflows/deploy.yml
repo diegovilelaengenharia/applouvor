@@ -18,7 +18,7 @@ jobs:
         with:
           server: 147.93.64.217
           username: u884436813
-          password: ${{ secrets.FTP_PASSWORD }}
+          password: '7L#t4iHw=v2s=vky'
           server-dir: ./public_html/applouvor/
           exclude: |
             **/.git*
