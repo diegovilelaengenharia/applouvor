@@ -30,6 +30,7 @@ function checkAdmin()
 }
 
 // Função de Login
+// Função de Login
 function login($name, $password, $pdo)
 {
     // Usando Query Builder
@@ -37,21 +38,47 @@ function login($name, $password, $pdo)
         ->where('name', '=', $name)
         ->first();
 
-    if ($user && $password === $user['password']) { // Comparação direta conforme solicitado (senhas simples)
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_role'] = $user['role'];
-        $_SESSION['user_avatar'] = $user['avatar'] ?? null;
+    if ($user) {
+        // Verificar se a senha é hash (seguro) ou texto plano (legado/migração)
+        $isPasswordCorrect = false;
 
-        // Atualizar estatísticas de login usando Query Builder
-        App\DB::table('users')
-            ->where('id', '=', $user['id'])
-            ->update([
-                'last_login' => date('Y-m-d H:i:s'),
-                'login_count' => $user['login_count'] + 1
-            ]);
+        if (password_verify($password, $user['password'])) {
+            $isPasswordCorrect = true;
+            
+            // Rehash se necessário (ex: algoritmo atualizou ou custo aumentou)
+            if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+                App\DB::table('users')
+                    ->where('id', '=', $user['id'])
+                    ->update(['password' => $newHash]);
+            }
+        } elseif ($password === $user['password']) {
+            // Fallback para senha antiga em texto plano (migração automática no login)
+            $isPasswordCorrect = true;
+            
+            // Atualizar para hash imediatamente
+            $newHash = password_hash($password, PASSWORD_DEFAULT);
+            App\DB::table('users')
+                ->where('id', '=', $user['id'])
+                ->update(['password' => $newHash]);
+        }
 
-        return true;
+        if ($isPasswordCorrect) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_role'] = $user['role'];
+            $_SESSION['user_avatar'] = $user['avatar'] ?? null;
+    
+            // Atualizar estatísticas de login usando Query Builder
+            App\DB::table('users')
+                ->where('id', '=', $user['id'])
+                ->update([
+                    'last_login' => date('Y-m-d H:i:s'),
+                    'login_count' => $user['login_count'] + 1
+                ]);
+    
+            return true;
+        }
     }
     return false;
 }

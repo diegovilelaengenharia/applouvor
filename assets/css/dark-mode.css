@@ -1,276 +1,15 @@
 /* ========================================
-   DARK MODE - App Louvor PIB v2.0
-   Paleta Profissional Otimizada
+   DARK MODE OVERRIDES
+   Complementa design-system.css para casos específicos via classe .dark-mode
    ======================================== */
 
-/* === VARIÁVEIS GLOBAIS DARK MODE === */
-body.dark-mode {
-    /* ============================================
-       BACKGROUNDS - Tons Escuros Profissionais
-       ============================================ */
-
-    /* Backgrounds Principais */
-    --bg-primary: #0a0a0a;
-    /* Gray 950 - Fundo principal */
-    --bg-secondary: #171717;
-    /* Gray 900 - Cards e superfícies */
-    --bg-tertiary: #262626;
-    /* Gray 800 - Elementos elevados */
-
-    /* Surface Aliases */
-    --bg-body: #0a0a0a;
-    --bg-surface: #171717;
-    --bg-card: #171717;
-    --app-bg: #0a0a0a;
-    --card-bg: #171717;
-
-    /* ============================================
-       TEXTOS - Alto Contraste
-       ============================================ */
-
-    --text-primary: rgba(250, 250, 250, 0.98);
-    /* Quase branco */
-    --text-secondary: rgba(212, 212, 212, 0.85);
-    /* Gray 300 */
-    --text-muted: rgba(163, 163, 163, 0.70);
-    /* Gray 400 */
-    --text-main: rgba(250, 250, 250, 0.98);
-
-    /* ============================================
-       BORDAS
-       ============================================ */
-
-    --border-color: #262626;
-    /* Gray 800 */
-    --border-subtle: #404040;
-    /* Gray 700 */
-    --border-focus: #60a5fa;
-    /* Blue 400 - Mais vibrante no escuro */
-
-    /* ============================================
-       CORES PRINCIPAIS - Versões Mais Claras
-       ============================================ */
-
-    /* 🔵 AZUL - Gestão (mais vibrante no escuro) */
-    --blue-50: #172554;
-    --blue-100: #1e3a8a;
-    --blue-200: #1e40af;
-    --blue-300: #1d4ed8;
-    --blue-400: #2563eb;
-    --blue-500: #3b82f6;
-    --blue-600: #60a5fa;
-    /* ⭐ Mais vibrante para dark */
-    --blue-700: #93c5fd;
-    --blue-800: #bfdbfe;
-    --blue-900: #dbeafe;
-    --blue-950: #eff6ff;
-
-    /* 🟢 VERDE - Espiritual (mais vibrante no escuro) */
-    --green-50: #0a4522;
-    --green-100: #106734;
-    --green-200: #158242;
-    --green-300: #1a9d50;
-    --green-400: #1fb85e;
-    --green-500: #24CE6B;
-    --green-600: #34d399;
-    /* ⭐ Mais vibrante para dark */
-    --green-700: #6ee7b7;
-    --green-800: #a7f3d0;
-    --green-900: #d1fae5;
-    --green-950: #ecfdf5;
-
-    /* 🟡 AMARELO - Comunicação (mais suave no escuro) */
-    --yellow-50: #664d00;
-    --yellow-100: #8b6501;
-    --yellow-200: #a67c01;
-    --yellow-300: #cc9c01;
-    --yellow-400: #e6b001;
-    --yellow-500: #FFC501;
-    --yellow-600: #fbbf24;
-    /* ⭐ Mais suave para dark */
-    --yellow-700: #fcd34d;
-    --yellow-800: #fde68a;
-    --yellow-900: #fef3c7;
-    --yellow-950: #fffbeb;
-
-    /* 🔴 VERMELHO - Crítico (mais vibrante no escuro) */
-    --red-50: #450a0a;
-    --red-100: #7f1d1d;
-    --red-200: #991b1b;
-    --red-300: #b91c1c;
-    --red-400: #dc2626;
-    --red-500: #ef4444;
-    --red-600: #f87171;
-    /* ⭐ Mais vibrante para dark */
-    --red-700: #fca5a5;
-    --red-800: #fecaca;
-    --red-900: #fee2e2;
-    --red-950: #fef2f2;
-
-    /* 🟣 ROXO - Liderança (mais vibrante no escuro) */
-    --purple-50: #581c87;
-    --purple-100: #6b21a8;
-    --purple-200: #7e22ce;
-    --purple-300: #9333ea;
-    --purple-400: #a855f7;
-    --purple-500: #c084fc;
-    /* ⭐ Mais vibrante para dark */
-    --purple-600: #d8b4fe;
-    --purple-700: #e9d5ff;
-    --purple-800: #f3e8ff;
-    --purple-900: #faf5ff;
-
-    /* ============================================
-       PRIMARY COLOR - Azul por padrão
-       ============================================ */
-
-    --primary: #60a5fa;
-    /* Blue 400 - Vibrante */
-    --primary-hover: #93c5fd;
-    /* Blue 300 */
-    --primary-active: #bfdbfe;
-    /* Blue 200 */
-    --primary-light: #1e40af;
-    /* Blue 800 dark */
-    --primary-foreground: #0a0a0a;
-
-    /* ============================================
-       STATUS COLORS - Versões Dark
-       ============================================ */
-
-    --success: #34d399;
-    /* Green 400 */
-    --success-light: #158242;
-    /* Green 800 dark */
-    --success-dark: #6ee7b7;
-    /* Green 700 */
-
-    --warning: #fbbf24;
-    /* Yellow 400 */
-    --warning-light: #a67c01;
-    /* Yellow 800 dark */
-    --warning-dark: #fcd34d;
-    /* Yellow 700 */
-
-    --error: #f87171;
-    /* Red 400 */
-    --error-light: #991b1b;
-    /* Red 800 dark */
-    --error-dark: #fca5a5;
-    /* Red 700 */
-
-    --info: #22d3ee;
-    /* Cyan 400 */
-    --info-light: #155e75;
-    /* Cyan 800 dark */
-    --info-dark: #67e8f9;
-    /* Cyan 300 */
-
-    --status-success: #34d399;
-    --status-warning: #fbbf24;
-    --status-error: #f87171;
-    --status-info: #22d3ee;
-
-    /* ============================================
-       ACCENT COLORS
-       ============================================ */
-
-    --accent-primary: #60a5fa;
-    /* Blue 400 */
-    --accent-interactive: #93c5fd;
-    /* Blue 300 */
-    --accent-purple: #c084fc;
-    /* Purple 500 */
-    --accent-purple-light: #d8b4fe;
-    /* Purple 600 */
-    --accent-pink: #f472b6;
-    /* Pink 400 */
-    --accent-orange: #fb923c;
-    /* Orange 400 */
-    --accent-teal: #22d3ee;
-    /* Cyan 400 */
-
-    /* ============================================
-       LEGACY MAPPING
-       ============================================ */
-
-    --primary-green: #34d399;
-    --primary-green-light: #6ee7b7;
-    --primary-green-dark: #1a9d50;
-
-    --primary-blue: #60a5fa;
-    --primary-blue-light: #93c5fd;
-
-    --primary-gray: #737373;
-    --primary-gray-light: #a3a3a3;
-    --primary-gray-dark: #404040;
-
-    /* ============================================
-       GLASSMORPHISM
-       ============================================ */
-
-    --glass-bg: rgba(23, 23, 23, 0.7);
-    --glass-border: rgba(96, 165, 250, 0.2);
-    --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
-
-    /* ============================================
-       SHADOWS - Mais Intensas no Dark
-       ============================================ */
-
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.9), 0 10px 10px -5px rgba(0, 0, 0, 0.6);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
-    --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
-    --shadow-glow: 0 0 20px rgba(96, 165, 250, 0.3);
-
-    /* Sombras Coloridas */
-    --shadow-blue-sm: 0 2px 8px rgba(96, 165, 250, 0.2);
-    --shadow-blue-md: 0 4px 16px rgba(96, 165, 250, 0.25);
-    --shadow-blue-lg: 0 8px 24px rgba(96, 165, 250, 0.3);
-    --shadow-blue-xl: 0 12px 32px rgba(96, 165, 250, 0.35);
-
-    --shadow-green-sm: 0 2px 8px rgba(52, 211, 153, 0.2);
-    --shadow-green-md: 0 4px 16px rgba(52, 211, 153, 0.25);
-    --shadow-green-lg: 0 8px 24px rgba(52, 211, 153, 0.3);
-    --shadow-green-xl: 0 12px 32px rgba(52, 211, 153, 0.35);
-
-    --shadow-yellow-sm: 0 2px 8px rgba(251, 191, 36, 0.2);
-    --shadow-yellow-md: 0 4px 16px rgba(251, 191, 36, 0.25);
-    --shadow-yellow-lg: 0 8px 24px rgba(251, 191, 36, 0.3);
-    --shadow-yellow-xl: 0 12px 32px rgba(251, 191, 36, 0.35);
-
-    --shadow-red-sm: 0 2px 8px rgba(248, 113, 113, 0.2);
-    --shadow-red-md: 0 4px 16px rgba(248, 113, 113, 0.25);
-    --shadow-red-lg: 0 8px 24px rgba(248, 113, 113, 0.3);
-    --shadow-red-xl: 0 12px 32px rgba(248, 113, 113, 0.35);
-
-    --shadow-purple-sm: 0 2px 8px rgba(192, 132, 252, 0.2);
-    --shadow-purple-md: 0 4px 16px rgba(192, 132, 252, 0.25);
-    --shadow-purple-lg: 0 8px 24px rgba(192, 132, 252, 0.3);
-    --shadow-purple-xl: 0 12px 32px rgba(192, 132, 252, 0.35);
-
-    /* ============================================
-       GRADIENTES - Sólidos para Dark
-       ============================================ */
-
-    --gradient-primary: #34d399;
-    --gradient-elegant: #171717;
-    --gradient-soft: #262626;
-    --gradient-dark: #0a0a0a;
-    --gradient-hero: #34d399;
-    --gradient-green: #34d399;
-    --gradient-blue: #60a5fa;
-    --gradient-red: #f87171;
-    --gradient-yellow: #fbbf24;
-    --gradient-purple: #c084fc;
-    --gradient-vibrant: #60a5fa;
-
-    /* Header */
-    --header-bg: #171717;
-}
+/*
+   Nota: As variáveis principais de cor já estão definidas em design-system.css.
+   Este arquivo foca em:
+   1. Overrides de elementos específicos que não usam variáveis globais.
+   2. Correções para estilos inline legados.
+   3. Scrollbars e Inputs específicos.
+*/
 
 /* ============================================
    TRANSIÇÕES SUAVES
@@ -291,25 +30,26 @@ body.dark-mode ::-webkit-scrollbar {
 }
 
 body.dark-mode ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+    background: var(--bg-app);
 }
 
 body.dark-mode ::-webkit-scrollbar-thumb {
-    background: var(--border-color);
+    background: var(--border-medium);
     border-radius: 4px;
 }
 
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
+    background: var(--text-tertiary);
 }
 
-/* Links */
+/* Links em Dark Mode */
 body.dark-mode a {
-    color: var(--primary-blue-light);
+    color: var(--primary-400);
+    /* Mais claro que o padrão */
 }
 
 body.dark-mode a:hover {
-    color: var(--primary-green-light);
+    color: var(--primary-300);
 }
 
 /* ============================================
@@ -421,39 +161,30 @@ body.dark-mode .modal-footer {
 
 /* ============================================
    INPUTS E FORMULÁRIOS
-   ============================================ */
+   =========================================== */
 
+/* Inputs e Formulários - Reforço */
 body.dark-mode input[type="text"],
 body.dark-mode input[type="email"],
 body.dark-mode input[type="password"],
-body.dark-mode input[type="search"],
 body.dark-mode input[type="number"],
-body.dark-mode input[type="tel"],
-body.dark-mode input[type="url"],
+body.dark-mode select,
 body.dark-mode textarea {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-color) !important;
+    background-color: var(--slate-900);
+    border-color: var(--slate-700);
+    color: var(--slate-100);
 }
 
 body.dark-mode input:focus,
-body.dark-mode textarea:focus,
-body.dark-mode select:focus {
-    background: var(--bg-secondary) !important;
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
-    color: var(--text-primary) !important;
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    border-color: var(--primary-500);
+    background-color: var(--slate-950);
 }
 
 body.dark-mode input::placeholder,
 body.dark-mode textarea::placeholder {
     color: var(--text-muted) !important;
-}
-
-body.dark-mode select {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-color) !important;
 }
 
 body.dark-mode select option {
@@ -665,7 +396,8 @@ body.dark-mode .wrapper {
 }
 
 /* ============================================
-   OVERRIDES PARA ESTILOS INLINE
+   CORREÇÕES PARA ESTILOS INLINE (LEGACY)
+   Força cores dark em elementos com style="..." hardcoded
    ============================================ */
 
 /* Elementos com background branco inline */

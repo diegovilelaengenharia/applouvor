@@ -92,10 +92,10 @@ if (!empty($currentUser['avatar'])) {
 
         <a href="<?= $baseAdmin ?>index.php" class="nav-item nav-multicolor <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="7" height="9" x="3" y="3" rx="1" fill="#3b82f6" stroke="#3b82f6" />
-                <rect width="7" height="5" x="14" y="3" rx="1" fill="#10b981" stroke="#10b981" />
-                <rect width="7" height="9" x="14" y="12" rx="1" fill="#fbbf24" stroke="#fbbf24" />
-                <rect width="7" height="5" x="3" y="16" rx="1" fill="#ef4444" stroke="#ef4444" />
+                <rect width="7" height="9" x="3" y="3" rx="1" fill="var(--blue-500)" stroke="var(--blue-500)" />
+                <rect width="7" height="5" x="14" y="3" rx="1" fill="var(--green-500)" stroke="var(--green-500)" />
+                <rect width="7" height="9" x="14" y="12" rx="1" fill="var(--amber-500)" stroke="var(--amber-500)" />
+                <rect width="7" height="5" x="3" y="16" rx="1" fill="var(--red-500)" stroke="var(--red-500)" />
             </svg>
             <span class="sidebar-text">Visão Geral</span>
         </a>
@@ -133,7 +133,7 @@ if (!empty($currentUser['avatar'])) {
         <a href="<?= $baseAdmin ?>indisponibilidade.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/>
-                <path d="M7 12h10v2H7z" fill="#ef4444"/>
+                <path d="M7 12h10v2H7z" fill="var(--red-500)"/>
             </svg>
             <span class="sidebar-text">Ausências</span>
         </a>
@@ -214,15 +214,13 @@ if (!empty($currentUser['avatar'])) {
 </div>
 
 <style>
-    /* VARIÁVEIS LOCAIS (Compatíveis com Modo Moderate) */
+    /* VARIÁVEIS LOCAIS (Mapeadas para Design System Global) */
     :root {
-        --sidebar-width: 190px;
-        --sidebar-collapsed-width: 88px;
-        --sidebar-bg: #ffffff;
-        --sidebar-text: var(--slate-600);
-        --brand-primary: var(--slate-600);
-        --brand-light: var(--slate-100);
-        --brand-hover: var(--slate-100);
+        --sidebar-width: 240px;
+        --sidebar-collapsed-width: 80px;
+        --sidebar-bg: var(--bg-surface);
+        --sidebar-text: var(--text-secondary);
+        --sidebar-border: var(--border-subtle);
     }
 
     /* Sidebar Layout */
@@ -233,7 +231,7 @@ if (!empty($currentUser['avatar'])) {
         bottom: 0;
         width: var(--sidebar-width);
         background: var(--sidebar-bg);
-        border-right: 1px solid var(--slate-200);
+        border-right: 1px solid var(--sidebar-border);
         display: flex;
         flex-direction: column;
         z-index: 1000;
@@ -257,7 +255,7 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .sidebar:hover::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.1);
+        background: var(--border-medium);
     }
 
     /* Firefox */
@@ -267,7 +265,7 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .sidebar:hover {
-        scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+        scrollbar-color: var(--border-medium) transparent;
     }
 
     /* Navegação Item */
@@ -299,53 +297,53 @@ if (!empty($currentUser['avatar'])) {
     }
 
     /* GESTÃO → NEUTRO COM ACENTO AZUL */
-    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: var(--slate-400); }
+    .nav-item.nav-emerald svg, .nav-item.nav-blue svg, .nav-item.nav-violet svg { color: var(--text-tertiary); }
     .nav-item.nav-emerald:hover, .nav-item.nav-emerald.active,
     .nav-item.nav-blue:hover, .nav-item.nav-blue.active,
-    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: var(--slate-100); color: var(--slate-700); }
+    .nav-item.nav-violet:hover, .nav-item.nav-violet.active { background-color: var(--bg-surface-active); color: var(--text-primary); }
     
     .nav-item.nav-emerald.active svg,
     .nav-item.nav-blue.active svg,
-    .nav-item.nav-violet.active svg { color: var(--slate-600); }
+    .nav-item.nav-violet.active svg { color: var(--text-secondary); }
 
     /* ESPIRITUAL → NEUTRO COM ACENTO VERDE */
-    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: var(--slate-400); }
+    .nav-item.nav-indigo svg, .nav-item.nav-rose svg, .nav-item.nav-cyan svg { color: var(--text-tertiary); }
     .nav-item.nav-indigo:hover, .nav-item.nav-indigo.active,
     .nav-item.nav-rose:hover, .nav-item.nav-rose.active,
-    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: var(--sage-100); color: var(--sage-700); }
+    .nav-item.nav-cyan:hover, .nav-item.nav-cyan.active { background-color: var(--green-50); color: var(--green-700); }
     
     .nav-item.nav-indigo.active svg,
     .nav-item.nav-rose.active svg,
-    .nav-item.nav-cyan.active svg { color: var(--sage-600); }
+    .nav-item.nav-cyan.active svg { color: var(--green-600); }
 
     /* COMUNICAÇÃO → NEUTRO COM ACENTO ROXO */
-    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: var(--slate-400); }
+    .nav-item.nav-amber svg, .nav-item.nav-pink svg { color: var(--text-tertiary); }
     .nav-item.nav-amber:hover, .nav-item.nav-amber.active,
-    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: var(--lavender-100); color: var(--lavender-700); }
+    .nav-item.nav-pink:hover, .nav-item.nav-pink.active { background-color: var(--violet-50); color: var(--violet-700); }
     
     .nav-item.nav-amber.active svg,
-    .nav-item.nav-pink.active svg { color: var(--lavender-600); }
+    .nav-item.nav-pink.active svg { color: var(--violet-600); }
 
     /* Indicadores (Blue) */
     .nav-item.nav-indicators svg {
-        color: var(--slate-500);
+        color: var(--text-tertiary);
     }
 
     .nav-item.nav-indicators:hover,
     .nav-item.nav-indicators.active {
-        background-color: var(--slate-50);
-        color: var(--slate-700);
+        background-color: var(--bg-surface-active);
+        color: var(--text-primary);
     }
 
     .nav-item.nav-indicators:hover svg,
     .nav-item.nav-indicators.active svg {
-        color: var(--slate-700);
+        color: var(--text-primary);
     }
 
 
     .nav-item.active {
         font-weight: 700;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        box-shadow: var(--shadow-sm);
     }
 
     .nav-item svg {
@@ -353,21 +351,21 @@ if (!empty($currentUser['avatar'])) {
         height: 22px;
         transition: all 0.2s;
         /* Default fallback */
-        color: var(--slate-400);
+        color: var(--text-tertiary);
     }
 
 
     .nav-divider {
         height: 1px;
-        background: var(--slate-200);
+        background: var(--border-subtle);
         margin: 8px 16px;
     }
 
     /* CSS Extra para o Footer Integrado */
     .sidebar-footer {
         padding: 16px;
-        border-top: 1px solid var(--slate-200);
-        background: var(--slate-50);
+        border-top: 1px solid var(--border-subtle);
+        background: var(--bg-surface-hover);
         /* Slate 50 */
     }
 
@@ -391,7 +389,7 @@ if (!empty($currentUser['avatar'])) {
     }
 
     .profile-link:hover {
-        background: var(--slate-200);
+        background: var(--bg-surface-active);
     }
 
     .user-avatar-compact {
@@ -399,8 +397,8 @@ if (!empty($currentUser['avatar'])) {
         height: 40px;
         border-radius: 10px;
         object-fit: cover;
-        border: 2px solid #fff;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border: 2px solid var(--bg-surface);
+        box-shadow: var(--shadow-sm);
     }
 
     .status-indicator {
@@ -410,7 +408,7 @@ if (!empty($currentUser['avatar'])) {
         width: 12px;
         height: 12px;
         background: var(--sage-500);
-        border: 2px solid #fff;
+        border: 2px solid var(--bg-surface);
         border-radius: 50%;
     }
 
@@ -426,7 +424,7 @@ if (!empty($currentUser['avatar'])) {
         font-size: 0.9375rem;
         /* 15px */
         font-weight: 600;
-        color: var(--slate-700);
+        color: var(--text-primary);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -434,7 +432,7 @@ if (!empty($currentUser['avatar'])) {
 
     .u-role {
         font-size: 0.75rem;
-        color: var(--slate-500);
+        color: var(--text-secondary);
     }
 
     .actions-row {
@@ -449,19 +447,19 @@ if (!empty($currentUser['avatar'])) {
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        color: var(--slate-400);
+        color: var(--text-tertiary);
         transition: all 0.2s;
     }
 
     .action-icon-subtle:hover {
-        background: #fff;
-        color: var(--slate-900);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        background: var(--bg-surface);
+        color: var(--text-primary);
+        box-shadow: var(--shadow-sm);
     }
 
     .action-icon-subtle.danger:hover {
-        color: var(--rose-500);
-        background: #fff;
+        color: var(--red-500);
+        background: var(--bg-surface);
     }
 
     /* MODO RECOLHIDO (Desktop) */
@@ -519,7 +517,7 @@ if (!empty($currentUser['avatar'])) {
 
         .sidebar.open {
             transform: translateX(0);
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-lg);
         }
 
         .sidebar-collapser,
@@ -535,7 +533,7 @@ if (!empty($currentUser['avatar'])) {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(15, 23, 42, 0.4);
+        background: var(--bg-overlay);
         /* Slate 900 com opacidade */
         backdrop-filter: blur(2px);
         z-index: 999;
@@ -551,7 +549,7 @@ if (!empty($currentUser['avatar'])) {
 
     /* Botão Especial Reunião */
     .nav-item.nav-meeting {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: linear-gradient(135deg, var(--green-500) 0%, var(--green-600) 100%);
         color: white;
         margin: 8px 0;
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);

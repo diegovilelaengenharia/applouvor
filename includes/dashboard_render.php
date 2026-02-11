@@ -41,43 +41,48 @@ function renderUnifiedCard($config) {
     // Determinar cor do card
     $cardColor = $categoryColorMap[$config['category']] ?? 'blue';
     $extraClasses = $config['extra_classes'] ?? '';
-    $cardClass = "card-{$cardColor} {$extraClasses}";
+    // Adiciona classe 'card' padrão e 'card-clickable' para comportamento de link
+    $cardClass = "card card-clickable card-{$cardColor} {$extraClasses}";
     
     // Determinar tipo de badge (se existir)
     $badgeType = $config['badge']['type'] ?? $categoryBadgeMap[$config['category']] ?? 'badge-info';
     
     ?>
-    <a href="<?= $config['url'] ?>" class="access-card <?= $cardClass ?>" aria-label="Ver detalhes de <?= $config['title'] ?>">
-        <div class="card-content">
-            <div class="card-icon">
-                <i data-lucide="<?= $config['icon'] ?>"></i>
+    <a href="<?= $config['url'] ?>" class="<?= $cardClass ?>" aria-label="Ver detalhes de <?= $config['title'] ?>" style="text-decoration: none; color: inherit;">
+        <div class="card-body">
+            <div class="flex-between mb-2">
+                <div class="card-icon">
+                    <i data-lucide="<?= $config['icon'] ?>"></i>
+                </div>
+                
+                <?php if (isset($config['badge']) && $config['badge']['count'] > 0): ?>
+                    <span class="card-badge <?= $badgeType ?><?= isset($config['badge']['pulse']) && $config['badge']['pulse'] ? ' badge-pulse' : '' ?>" 
+                          aria-label="<?= $config['badge']['label'] ?>">
+                        <?php if (isset($config['badge']['icon'])): ?>
+                            <i data-lucide="<?= $config['badge']['icon'] ?>" style="width:14px;height:14px; margin-right:4px;"></i>
+                        <?php endif; ?>
+                        <?= $config['badge']['count'] ?>
+                    </span>
+                <?php endif; ?>
             </div>
-            
-            <?php if (isset($config['badge']) && $config['badge']['count'] > 0): ?>
-                <span class="card-badge <?= $badgeType ?><?= isset($config['badge']['pulse']) && $config['badge']['pulse'] ? ' badge-pulse' : '' ?>" 
-                      aria-label="<?= $config['badge']['label'] ?>">
-                    <?php if (isset($config['badge']['icon'])): ?>
-                        <i data-lucide="<?= $config['badge']['icon'] ?>" style="width:14px;height:14px;"></i>
-                    <?php endif; ?>
-                    <?= $config['badge']['count'] ?>
-                </span>
-            <?php endif; ?>
             
             <h3 class="card-title"><?= $config['title'] ?></h3>
             
-            <div class="card-info">
+            <div class="mt-3">
                 <?= $config['content'] ?>
             </div>
         </div>
         
-        <div class="card-footer-row">
-            <span class="footer-text">
+        <div class="card-footer">
+            <span class="footer-text display-flex align-center gap-2" style="font-size: 0.85rem;">
                 <?php if (isset($config['footer']['icon'])): ?>
-                    <i data-lucide="<?= $config['footer']['icon'] ?>" class="icon-tiny"></i>
+                    <i data-lucide="<?= $config['footer']['icon'] ?>" style="width: 14px; height: 14px;"></i>
                 <?php endif; ?>
                 <?= $config['footer']['text'] ?>
             </span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+            <span class="link-text display-flex align-center gap-1" style="font-size: 0.8rem; font-weight: 600; color: var(--primary);">
+                Detalhes <i data-lucide="arrow-right" style="width:14px; height: 14px;"></i>
+            </span>
         </div>
     </a>
     <?php
@@ -575,20 +580,22 @@ function renderCardGeneric($cardId, $cardDef) {
         default => '' // Não mostrar nada se não tiver descrição específica
     };
     ?>
-    <a href="<?= $cardDef['url'] ?>" class="access-card <?= $colorClass ?>" style="position: relative; overflow: hidden;">
-        <div class="card-content">
+    <a href="<?= $cardDef['url'] ?>" class="card card-clickable <?= $colorClass ?>" style="position: relative; overflow: hidden; text-decoration: none; color: inherit;">
+        <div class="card-body">
             <div class="card-icon">
                 <i data-lucide="<?= $cardDef['icon'] ?>"></i>
             </div>
             <h3 class="card-title"><?= htmlspecialchars($cardDef['title']) ?></h3>
             
             <?php if ($desc): ?>
-                <p class="card-info" style="margin-top: 8px;"><?= htmlspecialchars($desc) ?></p>
+                <p class="text-secondary mt-2" style="font-size: 0.9rem;"><?= htmlspecialchars($desc) ?></p>
             <?php endif; ?>
         </div>
-        <div class="card-footer-row">
+        <div class="card-footer">
             <span class="footer-text">Acessar</span>
-            <span class="link-text">Detalhes <i data-lucide="arrow-right" style="width:14px;"></i></span>
+            <span class="link-text display-flex align-center gap-1" style="font-size: 0.8rem; font-weight: 600; color: var(--primary);">
+                Detalhes <i data-lucide="arrow-right" style="width:14px; height: 14px;"></i>
+            </span>
         </div>
     </a>
     <?php

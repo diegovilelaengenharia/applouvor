@@ -174,7 +174,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         width: 100%; 
         height: 100%; 
         z-index: 1000; 
-        background: rgba(0,0,0,0.5); 
+        background: var(--bg-overlay); 
         backdrop-filter: blur(2px); 
     }
     
@@ -185,7 +185,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         transform: translate(-50%, -50%); 
         width: 90%; 
         max-width: 450px; 
-        background: white !important; 
+        background: var(--bg-surface) !important; 
         border-radius: 20px; 
         padding: 24px; 
         box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
@@ -195,18 +195,15 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     
     .modal-header { 
         text-align: center; 
-        margin-bottom: 24px; 
-    }
-    
     .modal-header h2 { 
         font-size: 1.25rem; 
         font-weight: 800; 
-        color: #1a1a1a !important; 
+        color: var(--text-primary) !important; 
         margin: 0 0 4px 0; 
     }
     
     .modal-header p { 
-        color: #666 !important; 
+        color: var(--text-secondary) !important; 
         font-size: 0.9rem; 
         margin: 0; 
     }
@@ -219,7 +216,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         display: block; 
         font-size: 0.9rem; 
         font-weight: 600; 
-        color: #1a1a1a !important; 
+        color: var(--text-primary) !important; 
         margin-bottom: 6px; 
     }
     
@@ -227,25 +224,25 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         width: 100%; 
         padding: 10px; 
         border-radius: 8px; 
-        border: 1px solid #ddd; 
-        background: #f9f9f9 !important; 
-        color: #1a1a1a !important; 
+        border: 1px solid var(--border-subtle); 
+        background: var(--bg-surface-hover) !important; 
+        color: var(--text-primary) !important; 
         font-size: 0.9rem; 
     }
     
     .form-input:focus { 
         outline: none; 
         border-color: var(--primary); 
-        background: white !important;
+        background: var(--bg-surface) !important;
     }
     
     .roles-container { 
         max-height: 200px; 
         overflow-y: auto; 
-        border: 1px solid #ddd; 
+        border: 1px solid var(--border-subtle); 
         border-radius: 8px; 
         padding: 8px; 
-        background: #f9f9f9 !important; 
+        background: var(--bg-surface-hover) !important; 
     }
     
     .roles-grid { 
@@ -260,18 +257,18 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         gap: 8px; 
         padding: 6px; 
         border-radius: 6px; 
-        background: white !important; 
-        border: 1px solid #ddd; 
+        background: var(--bg-surface) !important; 
+        border: 1px solid var(--border-subtle); 
         cursor: pointer; 
     }
     
     .role-option:hover { 
         border-color: var(--primary); 
-        background: #e8f5e9 !important; 
+        background: var(--bg-surface-active) !important; 
     }
     
     .role-option span {
-        color: #1a1a1a !important;
+        color: var(--text-primary) !important;
     }
     
     .role-checkbox {
@@ -476,7 +473,20 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 <?php
 function generateAvatarColor($name) {
-    $colors = ['var(--rose-500)', '#f97316', 'var(--yellow-500)', '#84cc16', 'var(--sage-500)', '#06b6d4', 'var(--slate-500)', '#6366f1', 'var(--lavender-500)', '#d946ef', '#f43f5e'];
+    // Usando apenas variáveis do Design System
+    $colors = [
+        'var(--rose-500)', 
+        'var(--orange-500)', 
+        'var(--yellow-500)', 
+        'var(--lime-500)', 
+        'var(--sage-500)', 
+        'var(--cyan-500)', 
+        'var(--slate-500)', 
+        'var(--indigo-500)', 
+        'var(--lavender-500)', 
+        'var(--fuchsia-500)', 
+        'var(--pink-500)'
+    ];
     $index = crc32($name) % count($colors);
     return $colors[$index];
 }

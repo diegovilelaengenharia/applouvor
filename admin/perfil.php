@@ -64,8 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             // Insert new user
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (name, email, phone, password, role, birth_date, avatar, instrument) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $params = [$name, $email, $phone, $password, $role, $birth_date, $avatar_path, ''];
+            $params = [$name, $email, $phone, $hashed_password, $role, $birth_date, $avatar_path, ''];
             
             $stmt = $pdo->prepare($sql);
             if ($stmt->execute($params)) {
@@ -144,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     if (isset($_POST['password']) && !empty($_POST['password'])) {
                         $sql .= ", password = ?";
-                        $params[] = $_POST['password'];
+                        $params[] = password_hash($_POST['password'], PASSWORD_DEFAULT);
                     }
                     
                     // Process roles/functions
@@ -233,11 +234,11 @@ renderPageHeader($page_title, $page_subtitle);
 }
 
 .profile-header {
-    background: white;
+    background: var(--bg-surface);
     border-radius: 12px;
     padding: 20px 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    border: 1px solid #e5e7eb;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-subtle);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -250,15 +251,15 @@ renderPageHeader($page_title, $page_subtitle);
     align-items: center;
     gap: 8px;
     padding: 12px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    background: linear-gradient(135deg, var(--sky-50) 0%, var(--sky-100) 100%);
     border-radius: 12px;
-    border: 1px solid #bae6fd;
+    border: 1px solid var(--sky-200);
 }
 
 
 .change-photo-text {
     font-size: 0.6875rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     font-weight: 600;
     cursor: pointer;
     transition: color 0.2s;
@@ -286,7 +287,7 @@ renderPageHeader($page_title, $page_subtitle);
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    background: linear-gradient(135deg, var(--slate-100) 0%, var(--slate-200) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -301,7 +302,7 @@ renderPageHeader($page_title, $page_subtitle);
 .avatar-initial {
     font-size: 3rem;
     font-weight: 700;
-    color: #9ca3af;
+    color: var(--slate-400);
 }
 
 .avatar-edit-btn {
@@ -313,7 +314,7 @@ renderPageHeader($page_title, $page_subtitle);
     border-radius: 50%;
     background: var(--primary);
     color: white;
-    border: 3px solid white;
+    border: 3px solid var(--bg-surface);
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
@@ -341,13 +342,13 @@ renderPageHeader($page_title, $page_subtitle);
 .profile-name {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--text-primary);
     margin: 0;
 }
 
 .profile-email {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin: 0;
 }
 
@@ -356,20 +357,20 @@ renderPageHeader($page_title, $page_subtitle);
     align-items: center;
     gap: 4px;
     padding: 4px 10px;
-    background: #dbeafe;
+    background: var(--blue-100);
     border-radius: 12px;
     font-size: 0.6875rem;
     font-weight: 600;
-    color: #1e40af;
+    color: var(--blue-700);
     white-space: nowrap;
 }
 
 .form-section {
-    background: white;
+    background: var(--bg-surface);
     border-radius: 12px;
     padding: 16px 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    border: 1px solid #e5e7eb;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-subtle);
     margin-bottom: 12px;
     text-align: left;
     align-items: flex-start;
@@ -381,7 +382,7 @@ renderPageHeader($page_title, $page_subtitle);
     gap: 12px;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 2px solid #f3f4f6;
+    border-bottom: 2px solid var(--slate-100);
     text-align: left;
     justify-content: flex-start;
 }
@@ -395,7 +396,7 @@ renderPageHeader($page_title, $page_subtitle);
 .section-title {
     font-size: 1rem;
     font-weight: 800;
-    color: #111827;
+    color: var(--text-primary);
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -413,7 +414,7 @@ renderPageHeader($page_title, $page_subtitle);
     display: block;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #6b7280;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
@@ -422,18 +423,18 @@ renderPageHeader($page_title, $page_subtitle);
 .form-input {
     width: 100%;
     padding: 10px 14px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-subtle);
     border-radius: 8px;
     font-size: 0.9375rem;
-    color: #111827;
-    background: #f9fafb;
+    color: var(--text-primary);
+    background: var(--bg-surface-hover);
     transition: all 0.2s;
 }
 
 .form-input:focus {
     outline: none;
     border-color: var(--primary);
-    background: white;
+    background: var(--bg-surface);
     box-shadow: 0 0 0 3px rgba(55, 106, 200, 0.1);
 }
 
@@ -454,16 +455,16 @@ renderPageHeader($page_title, $page_subtitle);
     align-items: center;
     gap: 10px;
     padding: 10px 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-subtle);
     border-radius: 8px;
-    background: #f9fafb;
+    background: var(--bg-surface-hover);
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .role-checkbox-label:hover {
     border-color: var(--primary);
-    background: rgba(55, 106, 200, 0.03);
+    background: var(--bg-surface-active);
 }
 
 .role-checkbox-label input:checked ~ .role-info {
@@ -476,7 +477,7 @@ renderPageHeader($page_title, $page_subtitle);
     align-items: center;
     gap: 6px;
     font-size: 0.875rem;
-    color: #374151;
+    color: var(--text-secondary);
     transition: all 0.2s;
 }
 
@@ -503,20 +504,20 @@ renderPageHeader($page_title, $page_subtitle);
 }
 
 .btn-secondary {
-    background: white;
-    color: #6b7280;
-    border: 1px solid #d1d5db;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
-    background: #f9fafb;
+    background: var(--bg-surface-hover);
     border-color: var(--primary);
     color: var(--primary);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, var(--green-500) 0%, var(--green-600) 100%);
     color: white;
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
 }
@@ -538,15 +539,15 @@ renderPageHeader($page_title, $page_subtitle);
 }
 
 .alert-success {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #6ee7b7;
+    background: var(--green-50);
+    color: var(--green-700);
+    border: 1px solid var(--green-200);
 }
 
 .alert-error {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
+    background: var(--red-50);
+    color: var(--red-700);
+    border: 1px solid var(--red-200);
 }
 
 

@@ -1,458 +1,228 @@
 /* ============================================
-   CARDS - Paleta Personalizada com Refinamentos
+   CARDS - Design System 2.0 (Professional UI)
    ============================================ */
 
-/* === GESTÃO CARDS (Azul Navy) === */
-.card-gestao,
-.card-blue,
-.card-slate {
-    background: #ffffff;
-    border: 1px solid var(--blue-200);
-    border-top: 3px solid var(--blue-500);
-    border-radius: var(--radius-xl);
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(1, 23, 82, 0.08);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-gestao:hover,
-.card-blue:hover,
-.card-slate:hover {
-    border-top-color: var(--blue-600);
-    box-shadow: 0 8px 24px rgba(1, 23, 82, 0.15);
-    transform: translateY(-4px);
-}
-
-.card-gestao .card-icon,
-.card-blue .card-icon {
-    background: var(--blue-100);
-    color: var(--blue-600);
-    width: 48px;
-    height: 48px;
+/* === CARDS MODERNOS (Base) === */
+.card {
+    background: var(--bg-surface);
     border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+    padding: 24px;
+    transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+    position: relative;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
+    flex-direction: column;
 }
 
-/* === ESPIRITUAL CARDS (Verde Vibrante) === */
-.card-espiritual,
-.card-green,
-.card-sage {
-    background: #ffffff;
-    border: 1px solid var(--green-200);
-    border-top: 3px solid var(--green-500);
-    border-radius: var(--radius-xl);
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(36, 206, 107, 0.08);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Hover Effect: Subtle lift */
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
 }
 
-.card-espiritual:hover,
-.card-green:hover,
-.card-sage:hover {
-    border-top-color: var(--green-600);
-    box-shadow: 0 8px 24px rgba(36, 206, 107, 0.15);
-    transform: translateY(-4px);
-}
-
-.card-espiritual .card-icon,
-.card-green .card-icon {
-    background: var(--green-100);
-    color: var(--green-600);
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-}
-
-/* === COMUNICAÇÃO CARDS (Amarelo Vibrante) === */
-.card-comunicacao,
-.card-yellow,
-.card-lavender {
-    background: #ffffff;
-    border: 1px solid var(--yellow-200);
-    border-top: 3px solid var(--yellow-500);
-    border-radius: var(--radius-xl);
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(255, 201, 40, 0.08);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-comunicacao:hover,
-.card-yellow:hover,
-.card-lavender:hover {
-    border-top-color: var(--yellow-600);
-    box-shadow: 0 8px 24px rgba(255, 201, 40, 0.15);
-    transform: translateY(-4px);
-}
-
-.card-comunicacao .card-icon,
-.card-yellow .card-icon {
-    background: var(--yellow-100);
-    color: var(--yellow-600);
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-}
-
-/* === ADMIN/DESTRUTIVO CARDS (Vermelho) === */
-.card-admin,
-.card-danger,
-.card-rose {
-    background: #ffffff;
-    border: 1px solid var(--red-200);
-    border-top: 3px solid var(--red-500);
-    border-radius: var(--radius-xl);
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-admin:hover,
-.card-danger:hover,
-.card-rose:hover {
-    border-top-color: var(--red-600);
-    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
-    transform: translateY(-4px);
-}
-
-.card-admin .card-icon,
-.card-danger .card-icon {
-    background: var(--red-100);
-    color: var(--red-600);
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-}
-
-/* === CARD HEADER === */
+/* Card Header */
 .card-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .card-title {
-    font-size: var(--font-h3);
-    font-weight: var(--font-bold);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
     margin: 0;
-    color: var(--gray-900);
+    line-height: 1.4;
 }
 
 .card-subtitle {
-    font-size: var(--font-body-sm);
-    color: var(--gray-600);
-    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
 }
 
-/* === CARD BODY === */
+/* Card Body */
 .card-body {
-    font-size: var(--font-body);
-    line-height: var(--line-height-normal);
-    color: var(--gray-700);
+    position: relative;
+    flex: 1;
+    color: var(--text-secondary);
 }
 
-/* === CARD FOOTER === */
+/* Card Footer */
 .card-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-subtle);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid var(--gray-200);
-}
-
-/* === CARD VARIANTS === */
-.card-compact {
-    padding: 12px;
-}
-
-.card-spacious {
-    padding: 28px;
-}
-
-.card-clickable {
-    cursor: pointer;
-}
-
-.card-clickable:active {
-    transform: scale(0.98);
-}
-
-/* === CARD NEUTRAL (Padrão) === */
-.card,
-.card-neutral {
-    background: #ffffff;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-xl);
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card:hover,
-.card-neutral:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-}
-
-/* ============================================
-   COMPACT CARD SYSTEM - Sistema Centralizado
-   ============================================ */
-
-/* --- BASE COMPACT CARD (Horizontal) --- */
-.compact-card {
-    display: flex;
-    align-items: center;
+    justify-content: flex-end;
     gap: 12px;
-    padding: 10px 14px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-left: 4px solid var(--blue-500);
-    border-radius: 10px;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s;
-    margin-bottom: 8px;
 }
 
-.compact-card:hover {
-    transform: translateX(4px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+/* === VARIANTES === */
+
+/* Highlight Card (Destaque sutil) */
+.card-highlight {
+    background: linear-gradient(180deg, var(--bg-surface) 0%, var(--slate-50) 100%);
+    border: 1px solid var(--primary-200);
 }
 
-/* --- COMPACT CARD ICON/BADGE --- */
-.compact-card-icon {
-    min-width: 42px;
-    height: 42px;
-    background: var(--slate-100);
-    border-radius: 8px;
+.card-highlight .card-title {
+    color: var(--primary-700);
+}
+
+/* Compact Card (Para listas densas) */
+.card-compact {
+    padding: 16px;
+}
+
+.card-compact .card-header {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+}
+
+/* === CATEGORY CARDS (Com borda colorida no topo) === */
+.card-gestao,
+.card-blue {
+    border-top: 3px solid var(--blue-500);
+}
+
+.card-espiritual,
+.card-green {
+    border-top: 3px solid var(--green-500);
+}
+
+.card-comunicacao,
+.card-yellow {
+    border-top: 3px solid var(--amber-500);
+}
+
+.card-admin,
+.card-danger {
+    border-top: 3px solid var(--red-500);
+}
+
+/* === ICONES NOS CARDS === */
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    margin-bottom: 16px;
+    font-size: 1.25rem;
 }
 
-.compact-card-icon.rounded {
-    border-radius: 50%;
+.card-gestao .card-icon {
+    background: var(--blue-50);
+    color: var(--blue-600);
 }
 
-/* --- COMPACT CARD CONTENT --- */
-.compact-card-content {
-    flex: 1;
-    min-width: 0;
+.card-espiritual .card-icon {
+    background: var(--green-50);
+    color: var(--green-600);
 }
 
-.compact-card-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.card-comunicacao .card-icon {
+    background: var(--amber-50);
+    color: var(--amber-600);
 }
 
-.compact-card-subtitle {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+.card-admin .card-icon {
+    background: var(--red-50);
+    color: var(--red-600);
 }
 
-/* --- COMPACT CARD ARROW --- */
-.compact-card-arrow {
-    color: var(--text-tertiary);
-    opacity: 0.5;
-    flex-shrink: 0;
-}
-
-/* ============================================
-   EVENT CARD SYSTEM - Para Escalas
-   ============================================ */
-
-/* --- BASE EVENT CARD --- */
+/* === EVENT CARDS (Estilo Lista/Dashboard) === */
 .event-card {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
+    gap: 16px;
+    padding: 16px;
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-left: 4px solid var(--blue-500);
-    border-radius: 12px;
+    border-left: 4px solid var(--primary-500);
+    border-radius: var(--radius-md);
     text-decoration: none;
     color: inherit;
-    transition: all 0.2s;
-    margin-bottom: 10px;
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
 }
 
 .event-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-medium);
 }
 
-.event-card.past {
-    opacity: 0.7;
-    filter: saturate(0.6);
-}
-
-.event-card.past:hover {
-    opacity: 1;
-    filter: saturate(1);
-}
-
-/* --- EVENT CARD DATE BOX --- */
 .event-card-date {
-    min-width: 56px;
-    height: 56px;
-    background: var(--blue-100);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    border-radius: 10px;
+    min-width: 60px;
+    height: 60px;
+    background: var(--primary-50);
+    border: 1px solid var(--primary-100);
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
 }
 
 .event-card-date-day {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--blue-600);
+    color: var(--primary-600);
 }
 
 .event-card-date-month {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--blue-600);
-    opacity: 0.9;
-    margin-top: 3px;
+    color: var(--primary-500);
+    margin-top: 2px;
 }
 
-/* --- EVENT CARD CONTENT --- */
 .event-card-content {
     flex: 1;
     min-width: 0;
 }
 
-.event-card-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-
 .event-card-title {
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--text-primary);
-    margin: 0;
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.event-card-badge {
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
-.event-card-badge.today {
-    background: var(--red-100);
-    color: var(--red-700);
-    text-transform: uppercase;
-}
-
-.event-card-badge.upcoming {
-    background: var(--blue-100);
-    color: var(--blue-700);
-}
-
-.event-card-badge.past {
-    background: var(--slate-100);
-    color: var(--slate-600);
-}
-
 .event-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    flex-wrap: wrap;
-}
-
-.event-card-meta-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* --- EVENT CARD AVATARS --- */
-.event-card-avatars {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.event-card-avatar-group {
-    display: flex;
-    align-items: center;
-}
-
-.event-card-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--blue-500);
-    border: 2px solid var(--bg-surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: white;
-}
-
-.event-card-avatar:not(:first-child) {
-    margin-left: -10px;
-}
-
-.event-card-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.event-card-avatar-more {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.85rem;
     color: var(--text-tertiary);
-    margin-left: 4px;
+    display: flex;
+    gap: 12px;
+}
+
+/* === COMPACT LIST ITEM === */
+.compact-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    transition: background-color 0.2s;
+}
+
+.compact-card:hover {
+    background-color: var(--bg-surface-hover);
 }
