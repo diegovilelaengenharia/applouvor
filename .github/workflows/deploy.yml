@@ -13,10 +13,16 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
+      - name: 🔍 Debug Secrets (Masked)
+        run: |
+          echo "Server: ${{ secrets.FTP_SERVER }}"
+          echo "User: ${{ secrets.FTP_USERNAME }}"
+
+
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: 147.93.64.217
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./public_html/applouvor/
