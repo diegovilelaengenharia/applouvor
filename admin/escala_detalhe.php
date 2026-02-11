@@ -151,15 +151,15 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
 <?php renderPageHeader('Detalhes da Escala', $schedule['event_type']); ?>
 
 <?php if (isset($_GET['success'])): ?>
-    <div style="background: var(--green-50); color: var(--green-600); border: 1px solid var(--green-500); padding: 12px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+    <div class="feedback-message feedback-success">
         <i data-lucide="check-circle" width="20"></i> Alterações salvas com sucesso!
     </div>
 <?php endif; ?>
 
-<div class="scale-detail-wrapper" style="display: flex; flex-direction: column; gap: 16px;">
+<div class="scale-detail-wrapper">
 
     <!-- EVENT SUMMARY CARD -->
-    <div class="event-info-card" style="background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 0;">
+    <div class="event-info-card mb-0">
         <div class="event-main-row">
             <div class="event-date-box">
                 <div class="event-day"><?= $date->format('d') ?></div>
@@ -170,7 +170,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                 <div class="event-meta">
                     <i data-lucide="calendar" width="14"></i> <?= $diaSemana ?>, <?= $date->format('Y') ?>
                 </div>
-                <div class="event-meta" style="margin-top: 4px;">
+                <div class="event-meta mt-1">
                     <i data-lucide="clock" width="14"></i> Hórario: <?= substr($schedule['event_time'], 0, 5) ?>
                 </div>
             </div>
@@ -185,8 +185,8 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         </div>
 
         <?php if($schedule['notes']): ?>
-        <div class="event-notes" style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
-            <strong><i data-lucide="sticky-note" width="14" style="vertical-align:middle"></i> Observações:</strong><br>
+        <div class="event-notes">
+            <strong><i data-lucide="sticky-note" width="14" class="align-middle"></i> Observações:</strong><br>
             <?= nl2br(htmlspecialchars($schedule['notes'])) ?>
         </div>
         <?php endif; ?>
@@ -194,23 +194,23 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
     
     <?php if ($isEditable): ?>
         <!-- EDIT FORM -->
-        <form method="POST" id="editForm" class="edit-mode-section" style="background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color);">
+        <form method="POST" id="editForm" class="edit-mode-section">
             <input type="hidden" name="save_changes" value="1">
-            <div class="edit-mode-header" style="margin-bottom: 24px;">
+            <div class="edit-mode-header">
                 <i data-lucide="edit" width="20"></i> Editando Escala
             </div>
 
             <!-- INFO SUMMARY CARD (Edit Mode) -->
             <div class="form-group">
                 <label class="form-label">Informações do Evento</label>
-                <div class="info-summary-card" style="background: var(--bg-body); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
-                    <div style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;" id="summary-type"><?= htmlspecialchars($schedule['event_type']) ?></div>
-                    <div style="font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
-                        <span id="summary-date"><i data-lucide="calendar" width="14" style="vertical-align: middle;"></i> <?= date('d/m/Y', strtotime($schedule['event_date'])) ?></span>
-                        <span id="summary-time"><i data-lucide="clock" width="14" style="vertical-align: middle;"></i> <?= substr($schedule['event_time'], 0, 5) ?></span>
+                <div class="info-summary-card">
+                    <div id="summary-type" class="summary-type"><?= htmlspecialchars($schedule['event_type']) ?></div>
+                    <div class="summary-meta-row">
+                        <span id="summary-date"><i data-lucide="calendar" width="14" class="align-middle"></i> <?= date('d/m/Y', strtotime($schedule['event_date'])) ?></span>
+                        <span id="summary-time"><i data-lucide="clock" width="14" class="align-middle"></i> <?= substr($schedule['event_time'], 0, 5) ?></span>
                     </div>
                     <?php if($schedule['notes']): ?>
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; border-top: 1px dashed var(--border-color); padding-top: 8px;" id="summary-notes">
+                    <div id="summary-notes" class="summary-notes">
                         <i data-lucide="sticky-note" width="12"></i> <?= htmlspecialchars($schedule['notes']) ?>
                     </div>
                     <?php endif; ?>
@@ -223,13 +223,13 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             <hr class="divider">
 
             <!-- MEMBERS SELECT -->
-             <div class="form-group" style="margin-top: 16px;">
+             <div class="form-group mt-4">
                 <label class="form-label">Participantes</label>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;" id="members-bag">
+                <div id="members-bag" class="members-bag">
                     <?php foreach($teamIds as $tid): 
                         $uName = ''; foreach($allUsers as $u) if($u['id']==$tid) $uName=$u['name'];
                     ?>
-                        <span class="badge" id="m-badge-<?= $tid ?>"><?= $uName ?> <i data-lucide="x" style="cursor:pointer; width:12px;" onclick="removeMember(<?= $tid ?>)"></i><input type="hidden" name="members[]" value="<?= $tid ?>"></span>
+                        <span class="badge" id="m-badge-<?= $tid ?>"><?= $uName ?> <i data-lucide="x" class="cursor-pointer" style="width:12px;" onclick="removeMember(<?= $tid ?>)"></i><input type="hidden" name="members[]" value="<?= $tid ?>"></span>
                     <?php endforeach; ?>
                 </div>
                 <button type="button" class="btn-manage" onclick="var m = document.getElementById('modalMembers'); m.style.display='flex'; m.style.opacity='1'; m.style.visibility='visible';">
@@ -240,15 +240,15 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             <hr class="divider">
 
              <!-- SONGS SELECT -->
-             <div class="form-group" style="margin-top: 16px;">
+             <div class="form-group mt-4">
                 <label class="form-label">Repertório</label>
-                <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px;" id="songs-bag">
+                <div id="songs-bag" class="songs-bag">
                     <?php foreach($songs as $sg): ?>
-                        <div class="song-card-compact" id="s-badge-<?= $sg['song_id'] ?>" style="background:var(--bg-body); padding:8px; border-radius:8px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                        <div class="song-card-compact" id="s-badge-<?= $sg['song_id'] ?>">
                             <span><?= $sg['title'] ?> - <?= $sg['artist'] ?></span>
-                            <div style="display:flex; gap:8px;">
+                            <div class="song-card-actions">
                                 <input type="hidden" name="songs[]" value="<?= $sg['song_id'] ?>">
-                                <i data-lucide="x" style="cursor:pointer; width:16px;" onclick="removeSong(<?= $sg['song_id'] ?>)"></i>
+                                <i data-lucide="x" class="cursor-pointer" style="width:16px;" onclick="removeSong(<?= $sg['song_id'] ?>)"></i>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -258,8 +258,8 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                 </button>
             </div>
 
-            <div style="margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-items: center;">
-                 <a href="?id=<?= $id ?>" class="btn-warning w-full" style="text-align:center; text-decoration:none;">Cancelar</a>
+            <div class="form-actions-grid">
+                 <a href="?id=<?= $id ?>" class="btn-warning w-full text-center text-no-decoration">Cancelar</a>
                  <button type="button" onclick="if(confirm('Excluir esta escala?')) document.getElementById('delForm').submit()" class="btn-danger w-full">Excluir</button>
                  <button type="submit" class="btn-success w-full">Salvar Alterações</button>
             </div>
@@ -270,8 +270,8 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         <!-- VIEW MODE CONTENT -->
         
         <!-- PARTICIPANTS SECTION -->
-        <div class="detail-section" style="background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 0;">
-            <div class="section-header" style="margin-bottom: 16px;">
+        <div class="detail-section section-box mb-0">
+            <div class="section-header">
                 <div class="section-title">
                     Equipe Escala <span class="section-count"><?= count($team) ?></span>
                 </div>
@@ -280,7 +280,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             <?php if(empty($team)): ?>
                 <div class="empty-state-text">Nenhum participante definido.</div>
             <?php else: ?>
-                <div class="team-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="team-list-grid">
 <?php
                     // Helper para ícones de instrumentos
 
@@ -296,23 +296,23 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                         $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
                         $iconName = getInstrumentIcon($instr);
                     ?>
-                    <div class="member-card" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-subtle);">
-                        <div class="member-avatar" style="background: <?= $member['avatar_color'] ?: '#ccc' ?>; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; position: relative; flex-shrink: 0; overflow: hidden;">
+                    <div class="member-card">
+                        <div class="member-avatar" style="background: <?= $member['avatar_color'] ?: '#ccc' ?>;">
                             <?php if($member['avatar']): 
                                 $avatarPath = $member['avatar'];
                                 if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
                                     $avatarPath = '../assets/uploads/' . $avatarPath;
                                 }
                             ?>
-                                <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($member['name']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($member['name']) ?>">
                             <?php else: ?>
                                 <?= $initials ?>
                             <?php endif; ?>
-                            <div class="status-indicator <?= $statusClass ?>" title="<?= $member['status'] ?>" style="position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--bg-body); z-index: 2;"></div>
+                            <div class="status-indicator <?= $statusClass ?>" title="<?= $member['status'] ?>"></div>
                         </div>
-                        <div class="member-info" style="display: flex; flex-direction: column; min-width: 0;">
-                            <div class="member-name" style="font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($member['name']) ?></div>
-                            <div class="member-role" style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
+                        <div class="member-info">
+                            <div class="member-name"><?= htmlspecialchars($member['name']) ?></div>
+                            <div class="member-role">
                                 <i data-lucide="<?= $iconName ?>" width="12" height="12"></i> <?= htmlspecialchars($instr) ?>
                             </div>
                         </div>
@@ -324,8 +324,8 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         </div>
 
         <!-- REPERTOIRE SECTION -->
-        <div class="detail-section" style="background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 0;">
-            <div class="section-header" style="margin-bottom: 16px;">
+        <div class="detail-section section-box mb-0">
+            <div class="section-header">
                 <div class="section-title">
                     Repertório <span class="section-count"><?= count($songs) ?></span>
                 </div>
@@ -336,38 +336,38 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             <?php else: ?>
                 <div class="song-list">
                     <?php foreach($songs as $idx => $song): ?>
-                    <div class="song-card" style="display:flex; flex-direction:row; align-items:center; justify-content:space-between; padding:12px; gap:12px; background:var(--bg-body); border-radius:12px; border:1px solid var(--border-subtle);">
-                        <div style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
-                            <div class="song-order" style="font-size:0.9rem; font-weight:bold; color:var(--text-muted); width:24px; flex-shrink:0;"><?= $idx + 1 ?></div>
-                            <div style="display:flex; flex-direction:column; min-width:0;">
-                                <div style="display:flex; align-items:center; gap:6px;">
-                                    <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-title hover-underline" style="font-weight:600; color:var(--text-main); font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?= htmlspecialchars($song['title']) ?></a>
+                    <div class="song-card">
+                        <div class="song-main-content">
+                            <div class="song-order"><?= $idx + 1 ?></div>
+                            <div class="song-info-col">
+                                <div class="song-title-row">
+                                    <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-title hover-underline"><?= htmlspecialchars($song['title']) ?></a>
                                     <?php if($song['tone']): ?>
-                                        <span class="meta-badge badge-tone" style="font-size:0.75rem; padding:2px 6px; border-radius:4px; background:var(--bg-tertiary); color:var(--text-secondary);" title="Tom Original"><?= htmlspecialchars($song['tone']) ?></span>
+                                        <span class="meta-badge badge-tone" title="Tom Original"><?= htmlspecialchars($song['tone']) ?></span>
                                     <?php endif; ?>
                                 </div>
-                                <div style="font-size:0.85rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                <div class="song-artist-row">
                                     <?= htmlspecialchars($song['artist']) ?>
                                     <?php if($song['bpm']): ?>
-                                        <span style="margin-left:6px; font-size:0.75rem;"><i data-lucide="activity" width="10" style="vertical-align:middle;"></i> <?= $song['bpm'] ?></span>
+                                        <span class="bpm-badge"><i data-lucide="activity" width="10" class="align-middle"></i> <?= $song['bpm'] ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="song-actions" style="display:flex; gap:8px; flex-shrink:0;">
+                        <div class="song-actions">
                             <!-- Lyrics -->
-                            <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" style="color:var(--text-secondary); opacity:<?= $song['link_letra'] ? '1' : '0.3' ?>; <?= $song['link_letra'] ? '' : 'pointer-events:none;' ?>" title="Letra">
+                            <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" class="action-btn-icon <?= $song['link_letra'] ? '' : 'disabled' ?>" title="Letra">
                                 <i data-lucide="align-left" width="22"></i>
                             </a>
                             
                             <!-- Chords -->
-                            <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" style="color:var(--text-secondary); opacity:<?= $song['link_cifra'] ? '1' : '0.3' ?>; <?= $song['link_cifra'] ? '' : 'pointer-events:none;' ?>" title="Cifra">
+                            <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" class="action-btn-icon <?= $song['link_cifra'] ? '' : 'disabled' ?>" title="Cifra">
                                 <i data-lucide="file-text" width="22"></i>
                             </a>
                             
                             <!-- YouTube -->
-                            <a href="<?= $song['link_video'] ?: ($song['link_audio'] ?: 'https://www.youtube.com/results?search_query='.urlencode($song['title'].' '.$song['artist'])) ?>" target="_blank" style="color:var(--text-secondary);" title="Ouvir">
+                            <a href="<?= $song['link_video'] ?: ($song['link_audio'] ?: 'https://www.youtube.com/results?search_query='.urlencode($song['title'].' '.$song['artist'])) ?>" target="_blank" class="action-btn-icon" title="Ouvir">
                                 <i data-lucide="play-circle" width="22"></i>
                             </a>
                         </div>
