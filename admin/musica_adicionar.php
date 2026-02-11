@@ -122,147 +122,7 @@ renderAppHeader('Adicionar Música');
 renderPageHeader('Nova Música', 'Cadastrar no repertório');
 ?>
 
-<style>
-    body { background: var(--bg-body); }
-
-    .compact-container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 16px 12px 60px 12px;
-    }
-
-
-    /* Compact Form Card */
-    .form-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
-        margin-bottom: 16px;
-        box-shadow: var(--shadow-sm);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .form-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; width: 4px; height: 100%;
-        background: var(--card-color, var(--primary));
-        opacity: 0.8;
-    }
-
-    .card-title {
-        font-size: var(--font-body-sm);
-        font-weight: 800;
-        color: var(--card-color, var(--text-muted));
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-    }
-
-    .form-grid { display: grid; gap: 12px; }
-    .form-grid-2 { grid-template-columns: 1fr 1fr; }
-    .form-grid-3-custom { grid-template-columns: 2fr 1fr; }
-
-    .form-group { margin-bottom: 0; }
-    .form-label {
-        font-size: var(--font-caption);
-        font-weight: 600;
-        color: var(--text-secondary);
-        margin-bottom: 6px;
-        display: block;
-    }
-
-    .form-input {
-        width: 100%;
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        background: var(--bg-body);
-        color: var(--text-main);
-        font-size: var(--font-body);
-        transition: all 0.2s;
-        font-weight: 500;
-    }
-
-    .form-input:focus {
-        outline: none;
-        border-color: var(--card-color, var(--primary));
-        background: var(--bg-surface);
-        box-shadow: 0 0 0 3px var(--focus-shadow, rgba(34, 197, 94, 0.1));
-    }
-
-    /* Input Icon */
-    .input-icon-wrapper { position: relative; }
-    .input-icon-wrapper i {
-        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-        color: var(--text-secondary); width: 18px; pointer-events: none; transition: color 0.2s;
-    }
-    .input-icon-wrapper input:focus + i, .input-icon-wrapper:focus-within i { color: var(--card-color, var(--primary)); }
-    .input-icon-wrapper input { padding-left: 40px; }
-
-    /* Tag Pills Compact */
-    .tag-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag-pill-compact {
-        display: inline-flex; align-items: center; gap: 8px;
-        padding: 8px 14px; border-radius: 20px;
-        background: var(--bg-body); border: 1px solid var(--border-color);
-        font-size: var(--font-body-sm); font-weight: 600; color: var(--text-muted);
-        cursor: pointer; transition: all 0.2s; user-select: none;
-    }
-    .tag-pill-compact:hover { border-color: var(--primary-light); color: var(--primary); background: var(--bg-surface); }
-    .tag-pill-compact input { display: none; }
-    .tag-pill-compact input:checked + .tag-dot { transform: scale(1.2); }
-    .tag-pill-compact input:checked + .tag-dot + span { color: var(--primary); } 
-    /* Hacky but works for keeping styles without complex label structure change */
-    
-    .tag-pill-compact.active {
-        background: var(--primary-subtle);
-        border-color: var(--primary);
-        color: var(--primary);
-        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
-    }
-    
-    .tag-dot {
-        width: 8px; height: 8px; border-radius: 50%;
-        transition: transform 0.2s;
-    }
-
-    .btn-action {
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; font-size: var(--font-body);
-        cursor: pointer; transition: all 0.2s; width: 100%;
-    }
-    .btn-primary {
-        background: var(--primary); color: white;
-        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
-    }
-    .btn-secondary { background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-color); }
-    .btn-secondary:hover { background: var(--bg-body); color: var(--text-main); }
-
-    .custom-field-row {
-        display: grid; grid-template-columns: 1fr 1fr 32px; gap: 10px; align-items: center;
-        margin-bottom: 10px; background: var(--bg-body); padding: 12px; border-radius: 10px;
-        border: 1px solid var(--border-color);
-    }
-    
-    .btn-close {
-        width: 32px; height: 32px; border-radius: 50%; border: none;
-        background: var(--bg-body); color: var(--text-muted); cursor: pointer;
-        display: flex; align-items: center; justify-content: center;
-    }
-
-    @media (max-width: 768px) {
-        .form-grid-2, .form-grid-3-custom { grid-template-columns: 1fr; gap: 10px; }
-        .custom-field-row { grid-template-columns: 1fr; gap: 8px; position: relative; }
-        .custom-field-row button { position: absolute; top: 8px; right: 8px; }
-    }
-</style>
+<link rel="stylesheet" href="../assets/css/pages/musica-form.css">
 
 <div class="compact-container">
 
@@ -389,7 +249,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
             <div style="border-top: 1px dashed var(--border-color); margin-top: 20px; padding-top: 20px;">
                 <label class="form-label" style="margin-bottom: 12px; color: var(--text-main);">Outras Referências</label>
                 <div id="customFieldsList"></div>
-                <button type="button" onclick="addCustomFieldUI()" class="btn-secondary" style="background:none; border:none; padding: 0; color: var(--primary); font-size: var(--font-body-sm); display: flex; align-items: center; gap: 6px;">
+                <button type="button" onclick="addCustomFieldUI()" class="btn-link" style="padding: 0;">
                     <i data-lucide="plus-circle" style="width: 16px;"></i> Adicionar Referência Personalizada
                 </button>
             </div>
@@ -430,9 +290,42 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
         </div>
 
         <!-- Bottom Actions -->
-        <div style="display: flex; gap: 12px; padding-bottom: 20px;">
-            <a href="repertorio.php" class="btn-warning" style="flex: 1; text-decoration: none; text-align: center;">Cancelar</a>
-            <button type="submit" class="btn-success" style="flex: 2;">
+        <div style="display: flex; gap: 12px; padding-bottom: 80px;">
+            <a href="repertorio.php" style="
+                flex: 1; 
+                text-decoration: none; 
+                padding: 14px 20px; 
+                border-radius: 12px; 
+                background: var(--bg-surface); 
+                border: 1px solid var(--border-color); 
+                color: var(--text-main); 
+                font-weight: 600; 
+                font-size: var(--font-body);
+                text-align: center;
+                transition: all 0.2s;
+                box-shadow: var(--shadow-sm);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            ">Cancelar</a>
+            <button type="submit" style="
+                flex: 2; 
+                padding: 14px 20px; 
+                border-radius: 12px; 
+                background: var(--primary); 
+                border: none; 
+                color: white; 
+                font-weight: 700; 
+                font-size: var(--font-body);
+                cursor: pointer;
+                transition: all 0.2s;
+                box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            ">
                 <i data-lucide="check" style="width: 18px;"></i> Salvar Música
             </button>
         </div>
