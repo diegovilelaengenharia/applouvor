@@ -14,7 +14,7 @@ $allCardsDefinitions = getAllAvailableCards();
 renderAppHeader('Visão Geral');
 ?>
 
-<link rel="stylesheet" href="../assets/css/pages/dashboard.css">
+<link rel="stylesheet" href="../assets/css/pages/dashboard.css?v=<?= time() ?>">
 
 <!-- MODAL URGENTE AUTOMÁTICO -->
 <?php if ($popupAviso): ?>
