@@ -29,6 +29,9 @@ $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 renderAppHeader('Artista');
 ?>
 
+<link rel="stylesheet" href="../assets/css/pages/shared-pages.css">
+
+
 
 
 <!-- Hero Header Compacto -->

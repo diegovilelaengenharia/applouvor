@@ -85,6 +85,9 @@ $activeTab = $_GET['tab'] ?? 'historico';
 renderAppHeader('Detalhes do Membro');
 ?>
 
+<link rel="stylesheet" href="../assets/css/pages/shared-pages.css">
+
+
 
 
 <!-- Hero Header Compacto -->
