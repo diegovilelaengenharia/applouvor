@@ -223,16 +223,73 @@
 
 /* (compact-card moved to components/cards.css) */
 
-/* Tone Colors Map (Classes) */
+/* --- Dynamic Color Classes --- */
+
+/* Tag Badge */
+.active-filter-badge.tag-badge {
+    border-color: color-mix(in srgb, var(--tag-color) 30%, transparent);
+    background: color-mix(in srgb, var(--tag-color) 15%, transparent);
+}
+
+.active-filter-badge.tag-badge .filter-label,
+.active-filter-badge.tag-badge .btn-clear-filter {
+    color: var(--tag-color);
+}
+
+/* Tone Badge */
+.active-filter-badge.tone-badge {
+    border-color: var(--tone-color);
+    background: color-mix(in srgb, var(--tone-color) 10%, transparent);
+    opacity: 1;
+}
+
+.active-filter-badge.tone-badge .filter-label,
+.active-filter-badge.tone-badge .btn-clear-filter {
+    color: var(--tone-color);
+}
+
+/* Tag Card */
+.compact-card.tag-card {
+    border-left: 3px solid var(--tag-color);
+    background: linear-gradient(to right, color-mix(in srgb, var(--tag-color) 5%, transparent), transparent);
+}
+
+.compact-card.tag-card .compact-card-icon {
+    background: color-mix(in srgb, var(--tag-color) 15%, transparent);
+    color: var(--tag-color);
+}
+
+/* Tone Card */
+.compact-card.tone-card {
+    border-left: 3px solid var(--tone-color);
+}
+
+.compact-card.tone-card .compact-card-icon {
+    background: color-mix(in srgb, var(--tone-color) 15%, transparent);
+    color: var(--tone-color);
+}
+
+/* Song Card Tone Icon */
+.compact-card-icon.has-tone {
+    color: var(--tone-color);
+    background: color-mix(in srgb, var(--tone-color) 15%, transparent);
+}
+
+/* Utilities */
+.relative {
+    position: relative;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Tone Colors Map */
 .tone-C {
     --tone-color: #ef4444;
 }
 
-.tone-Cs {
-    --tone-color: #dc2626;
-}
-
-/* C# */
+.tone-Cs,
 .tone-Db {
     --tone-color: #dc2626;
 }
@@ -241,11 +298,7 @@
     --tone-color: #f97316;
 }
 
-.tone-Ds {
-    --tone-color: #ea580c;
-}
-
-/* D# */
+.tone-Ds,
 .tone-Eb {
     --tone-color: #ea580c;
 }
@@ -258,11 +311,7 @@
     --tone-color: #22c55e;
 }
 
-.tone-Fs {
-    --tone-color: #16a34a;
-}
-
-/* F# */
+.tone-Fs,
 .tone-Gb {
     --tone-color: #16a34a;
 }
@@ -271,11 +320,7 @@
     --tone-color: #3b82f6;
 }
 
-.tone-Gs {
-    --tone-color: #2563eb;
-}
-
-/* G# */
+.tone-Gs,
 .tone-Ab {
     --tone-color: #2563eb;
 }
@@ -284,11 +329,7 @@
     --tone-color: #8b5cf6;
 }
 
-.tone-As {
-    --tone-color: #7c3aed;
-}
-
-/* A# */
+.tone-As,
 .tone-Bb {
     --tone-color: #7c3aed;
 }

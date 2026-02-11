@@ -99,8 +99,8 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                              $avatarPath = '../' . $avatarPath;
                         }
                         
-                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" style=\"width:100%; height:100%; object-fit:cover; border-radius:50%;\" onerror=\"this.style.display='none'; this.nextElementSibling.style.display='block';\">";
-                        echo "<span style='display:none;' class='fallback-initial font-bold text-lg'>" . $initial . "</span>";
+                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" class=\"avatar-img\" onerror=\"this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');\">";
+                        echo "<span class='fallback-initial hidden font-bold text-lg'>" . $initial . "</span>";
                     } else {
                         echo "<span class='font-bold text-lg'>" . $initial . "</span>";
                     }
@@ -112,7 +112,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                     <div class="compact-card-title">
                         <?= htmlspecialchars($user['name']) ?>
                         <?php if ($user['role'] === 'admin'): ?>
-                            <span style="background: var(--yellow-500); color: white; padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-left: 6px;">ADM</span>
+                            <span class="badge-admin">ADM</span>
                         <?php endif; ?>
                     </div>
                     <div class="compact-card-subtitle">
@@ -138,12 +138,12 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                             endforeach;
                             if(count($uniqueRoles) > 4): 
                         ?>
-                            <span style='font-size:0.7rem; opacity:0.7;'>+<?= (count($uniqueRoles) - 4) ?></span>
+                            <span class="more-roles">+<?= (count($uniqueRoles) - 4) ?></span>
                         <?php 
                             endif;
                         else: 
                         ?>
-                            <span style="font-size: 0.8rem; color: var(--text-tertiary); font-style: italic;">
+                            <span class="no-role">
                                 <?= htmlspecialchars($user['instrument'] ?: 'Sem função definida') ?>
                             </span>
                         <?php endif; ?>
@@ -166,7 +166,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                         <a href="perfil.php?id=<?= $user['id'] ?>" class="btn-action-icon" title="Editar Perfil">
                             <i data-lucide="edit-3" width="18"></i>
                         </a>
-                        <form method="POST" onsubmit="return confirm('Excluir este membro?');" style="margin: 0; display:flex;">
+                        <form method="POST" onsubmit="return confirm('Excluir este membro?');" class="form-actions-inline">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= $user['id'] ?>">
                             <button type="submit" class="btn-action-icon btn-action-delete" title="Excluir">

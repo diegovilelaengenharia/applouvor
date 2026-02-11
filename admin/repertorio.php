@@ -26,7 +26,8 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     </div>
     
     <!-- Botão de 3 Pontinhos -->
-    <div style="position: relative;">
+    <!-- Botão de 3 Pontinhos -->
+    <div class="relative">
         <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="btn-options">
             <i data-lucide="more-vertical" width="20"></i>
         </button>
@@ -70,8 +71,6 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             btn.classList.remove('active');
         }
     });
-
-    // Helper for PHP generated HTML usage is now mainly CSS based.
 </script>
 
 <!-- Busca -->
@@ -153,12 +152,12 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             $currentTag = $stmtTag->fetch(PDO::FETCH_ASSOC);
         ?>
             <?php if ($currentTag): ?>
-                <div class="active-filter-badge" style="border-color: <?= $currentTag['color'] ?>30; background: <?= $currentTag['color'] ?>15;">
-                    <div class="filter-label" style="color: <?= $currentTag['color'] ?>;">
+                <div class="active-filter-badge tag-badge" style="--tag-color: <?= $currentTag['color'] ?>;">
+                    <div class="filter-label">
                         <i data-lucide="folder-open" width="18"></i>
                         Pasta: <?= htmlspecialchars($currentTag['name']) ?>
                     </div>
-                    <a href="repertorio.php?tab=musicas" class="btn-clear-filter" style="color: <?= $currentTag['color'] ?>;">
+                    <a href="repertorio.php?tab=musicas" class="btn-clear-filter">
                         <i data-lucide="x" width="16"></i> Limpar
                     </a>
                 </div>
@@ -169,12 +168,12 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         <?php if ($tone):
             $toneClass = getToneClass($tone);
         ?>
-            <div class="active-filter-badge <?= $toneClass ?>" style="border-color: var(--tone-color); background: color-mix(in srgb, var(--tone-color) 10%, transparent); opacity: 1;">
-                 <div class="filter-label" style="color: var(--tone-color);">
+            <div class="active-filter-badge tone-badge <?= $toneClass ?>">
+                 <div class="filter-label">
                     <i data-lucide="music" width="18"></i>
                     Tom: <?= htmlspecialchars($tone) ?>
                 </div>
-                <a href="repertorio.php?tab=musicas" class="btn-clear-filter" style="color: var(--tone-color);">
+                <a href="repertorio.php?tab=musicas" class="btn-clear-filter">
                     <i data-lucide="x" width="16"></i> Limpar
                 </a>
             </div>
@@ -193,7 +192,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
                 <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="compact-card <?= $songToneClass ?>">
                     
                     <!-- Tom Badge -->
-                    <div class="compact-card-icon" style="<?= $song['tone'] ? 'color: var(--tone-color); background: color-mix(in srgb, var(--tone-color) 15%, transparent);' : '' ?>">
+                    <div class="compact-card-icon <?= $song['tone'] ? 'has-tone' : '' ?>">
                         <?php if ($song['tone']): ?>
                             <div style="font-size: 1rem; font-weight: 800; line-height: 1;"><?= $song['tone'] ?></div>
                             <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; margin-top: 2px;">TOM</div>
@@ -242,10 +241,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     ?>
         <div class="results-list">
             <?php foreach ($tags as $tag): $bgHex = $tag['color'] ?? 'var(--sage-500)'; ?>
-                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card" style="border-left: 3px solid <?= $bgHex ?>; background: linear-gradient(to right, <?= $bgHex ?>08, transparent);">
+                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card tag-card" style="--tag-color: <?= $bgHex ?>;">
                     
                     <!-- Ícone -->
-                    <div class="compact-card-icon" style="background: <?= $bgHex ?>20; color: <?= $bgHex ?>;">
+                    <div class="compact-card-icon">
                         <i data-lucide="folder-heart" width="20"></i>
                     </div>
 
@@ -363,10 +362,10 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <?php foreach ($tones as $toneItem):
                 $toneClass = getToneClass($toneItem['name']);
             ?>
-                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card <?= $toneClass ?>" style="border-left: 3px solid var(--tone-color);">
+                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card tone-card <?= $toneClass ?>">
                     
                     <!-- Ícone Musical -->
-                    <div class="compact-card-icon" style="background: color-mix(in srgb, var(--tone-color) 15%, transparent); color: var(--tone-color);">
+                    <div class="compact-card-icon">
                         <i data-lucide="music" width="20"></i>
                     </div>
 

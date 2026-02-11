@@ -158,7 +158,7 @@ renderPageHeader('Editar Evento', $event['title']);
             </div>
             
             <div id="time-fields" class="<?= $event['all_day'] ? 'hidden' : '' ?>">
-                <div class="time-grid">
+                <div class="time-grid-container">
                     <div class="form-group">
                         <label class="form-label">Hora Início</label>
                         <input type="time" name="start_time" class="form-input" value="<?= $startTime ?>">
@@ -209,7 +209,7 @@ renderPageHeader('Editar Evento', $event['title']);
                 </label>
             </div>
             
-            <div class="form-group color-options-group">
+            <div class="form-group mt-4">
                 <label class="form-label">Cor do Evento</label>
                 <div class="color-options">
                     <?php
@@ -239,7 +239,7 @@ renderPageHeader('Editar Evento', $event['title']);
                         <input type="checkbox" name="participants[]" value="<?= $user['id'] ?>" <?= $isSelected ? 'checked' : '' ?>>
                         <div class="member-info">
                             <div class="member-name"><?= htmlspecialchars($user['name']) ?></div>
-                            <div class="member-instrument"><?= htmlspecialchars($user['instrument'] ?: 'Membro') ?></div>
+                            <div class="member-role"><?= htmlspecialchars($user['instrument'] ?: 'Membro') ?></div>
                         </div>
                     </label>
                 <?php endforeach; ?>

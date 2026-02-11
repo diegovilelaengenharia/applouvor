@@ -142,16 +142,14 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                 </label>
             </div>
             
-            <div id="time-fields">
-                <div class="time-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label class="form-label">Hora Início</label>
-                        <input type="time" name="start_time" class="form-input" value="19:00">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Hora Fim</label>
-                        <input type="time" name="end_time" class="form-input" value="21:00">
-                    </div>
+            <div class="time-grid-container" id="time-fields">
+                <div class="form-group">
+                    <label class="form-label">Hora Início</label>
+                    <input type="time" name="start_time" class="form-input" value="19:00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Hora Fim</label>
+                    <input type="time" name="end_time" class="form-input" value="21:00">
                 </div>
             </div>
             
@@ -233,20 +231,20 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                 Selecionar Participantes
             </div>
             
-            <div style="position: relative; margin-bottom: 16px;">
-                <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px;"></i>
-                <input type="text" onkeyup="filterMembers(this.value)" class="form-input" style="padding-left: 40px;" placeholder="Buscar membro...">
+            <div class="search-container">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" onkeyup="filterMembers(this.value)" class="form-input search-input-padded" placeholder="Buscar membro...">
             </div>
             
             <div class="member-list" id="memberList">
                 <?php foreach ($allUsers as $user): ?>
                     <label class="member-item" data-search="<?= strtolower($user['name']) ?>">
                         <input type="checkbox" name="participants[]" value="<?= $user['id'] ?>">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 0.9375rem; color: var(--text-main);">
+                        <div class="member-info">
+                            <div class="member-name">
                                 <?= htmlspecialchars($user['name']) ?>
                             </div>
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">
+                            <div class="member-role">
                                 <?= htmlspecialchars($user['instrument'] ?: 'Membro') ?>
                             </div>
                         </div>
@@ -257,13 +255,13 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
         
         <!-- Navigation Buttons -->
         <div class="actions-bar">
-            <button type="button" id="btn-back" onclick="changeStep(-1)" class="btn-secondary" style="flex: 1; display: none;">
+            <button type="button" id="btn-back" onclick="changeStep(-1)" class="btn-secondary flex-1 hidden-btn">
                 Voltar
             </button>
-            <button type="button" id="btn-next" onclick="changeStep(1)" class="btn-primary" style="flex: 2;">
+            <button type="button" id="btn-next" onclick="changeStep(1)" class="btn-primary flex-2">
                 Próximo
             </button>
-            <button type="submit" id="btn-finish" class="btn-success" style="flex: 2; display: none;">
+            <button type="submit" id="btn-finish" class="btn-success flex-2 hidden-btn">
                 Criar Evento
             </button>
         </div>
@@ -359,32 +357,4 @@ lucide.createIcons();
 </script>
 
 <?php renderAppFooter(); ?>
-function toggleAllDay() {
-    const allDay = document.getElementById('all_day').checked;
-    document.getElementById('time-fields').style.display = allDay ? 'none' : 'block';
-}
 
-function updateColor(color) {
-    document.querySelector(`input[name="color"][value="${color}"]`).checked = true;
-}
-
-function filterMembers(term) {
-    term = term.toLowerCase();
-    const items = document.querySelectorAll('.member-item');
-    items.forEach(item => {
-        const text = item.getAttribute('data-search');
-        item.style.display = text.includes(term) ? 'flex' : 'none';
-    });
-}
-
-// Highlight selected
-document.querySelectorAll('.member-item input').forEach(input => {
-    input.addEventListener('change', function() {
-        this.parentElement.classList.toggle('selected', this.checked);
-    });
-});
-
-lucide.createIcons();
-</script>
-
-<?php renderAppFooter(); ?>
