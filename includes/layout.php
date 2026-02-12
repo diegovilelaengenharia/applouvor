@@ -584,7 +584,7 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple" style="width: 40px; height: 40px; padding: 0; border-radius: 50%; overflow: hidden; border: none; background: transparent;">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                         <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                     <?php else: ?>
@@ -595,15 +595,16 @@ function renderAppHeader($title, $backUrl = null)
                 </button>
 
                 <!-- Dropdown Card -->
-                <div id="headerProfileDropdown" class="dropdown-card">
+                <div id="headerProfileDropdown" class="profile-dropdown">
                     <!-- Header do Card -->
-                    <div class="dropdown-header">
-                        <div class="dropdown-avatar">
+                    <!-- Header do Card -->
+                    <div class="profile-header">
+                        <div class="profile-avatar-container">
                             <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <div class="dropdown-user-info">
-                            <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                            <div style="font-size: 0.75rem; color: var(--success-text); font-weight: 500;">Membro da Equipe</div>
+                        <div class="profile-info">
+                            <div class="profile-name"><?= htmlspecialchars($_layoutUser['name']) ?></div>
+                            <div class="profile-role">Membro da Equipe</div>
                         </div>
                     </div>
 
@@ -624,30 +625,30 @@ function renderAppHeader($title, $backUrl = null)
                         $liderLink  = $inAdmin ? 'lider.php'  : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
                         ?>
                         
-                        <a href="<?= $qsLink ?>" class="dropdown-menu-item">
-                            <div class="dropdown-icon-wrapper" style="background: var(--primary-light); color: var(--primary);">
+                        <a href="<?= $qsLink ?>" class="profile-menu-item">
+                            <div class="icon-wrapper" style="background: var(--primary-light); color: var(--primary);">
                                 <i data-lucide="circle-help" width="16"></i>
                             </div>
                             <span style="font-weight: 500;">Quem somos nós?</span>
                         </a>
 
-                        <a href="<?= $perfilLink ?>" class="dropdown-menu-item">
-                            <div class="dropdown-icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
+                        <a href="<?= $perfilLink ?>" class="profile-menu-item">
+                            <div class="icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
                                 <i data-lucide="user" width="16"></i>
                             </div>
                             <span style="font-weight: 500;">Meu Perfil</span>
                         </a>
 
-                        <a href="#" onclick="openDashboardCustomization(); return false;" class="dropdown-menu-item">
-                            <div class="dropdown-icon-wrapper" style="background: var(--info-bg); color: var(--info-text);">
+                        <a href="#" onclick="openDashboardCustomization(); return false;" class="profile-menu-item">
+                            <div class="icon-wrapper" style="background: var(--info-bg); color: var(--info-text);">
                                 <i data-lucide="layout" width="16"></i>
                             </div>
                             <span style="font-weight: 500;">Acesso Rápido</span>
                         </a>
 
                         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <a href="<?= $liderLink ?>" class="dropdown-menu-item">
-                                <div class="dropdown-icon-wrapper" style="background: var(--warning-bg); color: var(--warning-text);">
+                            <a href="<?= $liderLink ?>" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background: var(--warning-bg); color: var(--warning-text);">
                                     <i data-lucide="crown" width="16"></i>
                                 </div>
                                 <span style="font-weight: 500;">Painel do Líder</span>
@@ -655,8 +656,8 @@ function renderAppHeader($title, $backUrl = null)
                         <?php endif; ?>
 
                         <!-- Dark Mode Toggle -->
-                        <div onclick="toggleThemeMode()" class="dropdown-menu-item">
-                            <div class="dropdown-icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
+                        <div onclick="toggleThemeMode()" class="profile-menu-item" style="cursor: pointer;">
+                            <div class="icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
                                 <i data-lucide="moon" width="16"></i>
                             </div>
                             <span style="font-weight: 500;">Modo Escuro</span>
@@ -670,8 +671,8 @@ function renderAppHeader($title, $backUrl = null)
 
                         <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
 
-                        <a href="../logout.php" class="dropdown-menu-item" style="color: var(--danger);">
-                            <div class="dropdown-icon-wrapper" style="background: var(--danger-bg); color: var(--danger);">
+                        <a href="../logout.php" class="profile-menu-item" style="color: var(--danger);">
+                            <div class="icon-wrapper" style="background: var(--danger-bg); color: var(--danger);">
                                 <i data-lucide="log-out" width="16"></i>
                             </div>
                             <span style="font-weight: 600;">Sair da Conta</span>
