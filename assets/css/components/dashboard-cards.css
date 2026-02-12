@@ -1,50 +1,46 @@
-/* ========================================
-   DASHBOARD CARDS - MOBILE FIRST
-   Refactored for Touch & Visibility
-   ======================================== */
+/* ==========================================================================
+   DASHBOARD CARDS - UI-UX Pro Max Redesign
+   Clean, Accessible & Ethical Design
+   ========================================================================== */
 
+/* Grid System */
 .quick-access-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
     .quick-access-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
     }
 }
 
-/* Card Base */
+/* === CARD BASE === */
 .access-card {
     position: relative;
-    border-radius: 20px;
-    padding: 0;
-    /* Removing padding from container to handle header/footer separately */
-    height: 100%;
-    /* Force equal height in grid */
-    min-height: 160px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-left: 4px solid var(--category-color, var(--color-primary));
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     text-decoration: none;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-    /* Default Background (will be overridden by themes) */
-    background: #f8fafc;
+    transition: all var(--transition-base);
+    cursor: pointer;
 
-    /* PREMIUM: Fade-in entrance animation */
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    /* Entrance Animation */
+    animation: fadeInUp 0.4s ease-out backwards;
 }
 
-/* Entrance Animation */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(20px);
     }
 
     to {
@@ -53,7 +49,7 @@
     }
 }
 
-/* Stagger delay for sequential appearance */
+/* Stagger Animation */
 .access-card:nth-child(1) {
     animation-delay: 0.05s;
 }
@@ -94,871 +90,214 @@
     animation-delay: 0.5s;
 }
 
-.access-card:nth-child(11) {
-    animation-delay: 0.55s;
-}
-
-.access-card:nth-child(12) {
-    animation-delay: 0.6s;
-}
-
-/* Respect user's motion preferences */
-@media (prefers-reduced-motion: reduce) {
-    .access-card {
-        animation: none;
-    }
-}
-
-/* PREMIUM: Enhanced hover state */
+/* Hover State */
 .access-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.15);
+    border-color: var(--category-color, var(--color-primary));
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
 }
 
-.access-card:active {
-    transform: scale(0.98);
+/* Focus State (WCAG AAA) */
+.access-card:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
 }
 
-/* Card Content Area */
-.card-content {
-    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Icon Container */
+/* === ICON === */
 .card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    background: var(--category-color-light, var(--color-primary-bg));
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 0.75rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    /* Default gradient fallback */
-    background: white;
-    color: var(--text-secondary);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* PREMIUM: Icon rotation on card hover */
-.access-card:hover .card-icon {
-    transform: rotate(8deg) scale(1.08);
+    margin-bottom: var(--space-md);
+    transition: transform var(--transition-base);
 }
 
 .card-icon svg {
-    width: 22px;
-    height: 22px;
-    stroke-width: 2.5px;
+    width: 24px;
+    height: 24px;
+    color: var(--category-color, var(--color-primary));
+    stroke-width: 2px;
 }
 
-/* Typography - Professional & Clean */
-.card-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--slate-700);
-    /* Mais suave */
-    margin: 0 0 0.5rem 0;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-}
-
-.card-info {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin: 0;
-    line-height: 1.5;
-    font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-/* Badge - Highlighted */
-.card-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    /* Mais suave */
-    color: var(--text-primary);
-    transform: scale(1);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.access-card:hover .card-badge {
+.access-card:hover .card-icon {
     transform: scale(1.1);
 }
 
-@keyframes pulse-badge {
-    0% {
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
-    }
-
-    70% {
-        box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-    }
+/* === TYPOGRAPHY === */
+.card-title {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-sm) 0;
+    line-height: 1.3;
 }
 
+.card-info {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-md) 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
+/* === BADGE === */
 .card-badge {
-    animation: pulse-badge 3s infinite;
-    /* Slower pulse */
-}
-
-/* PREMIUM: Contextual Badge Colors */
-.badge-alert {
-    background: #dc2626;
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    background: var(--category-color, var(--color-primary));
     color: white;
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    z-index: 2;
 }
 
-.badge-info {
-    background: #2563eb;
-    color: white;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-}
-
-.badge-success {
-    background: #16a34a;
-    color: white;
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
-}
-
-.badge-warning {
-    background: #d97706;
-    color: white;
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
-}
-
-.badge-spiritual {
-    background: #14b8a6;
-    color: white;
-    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
-}
-
-/* PREMIUM: Badge bounce animation on update */
-@keyframes badgeBounce {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.2);
-    }
-}
-
-.card-badge.updated {
-    animation: badgeBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Badge icon sizing */
-.card-badge i {
-    width: 14px;
-    height: 14px;
-}
-
-/* Highlight Info Sections (Professional Look) */
+/* === INFO HIGHLIGHT === */
 .info-highlight {
-    margin-top: 10px;
-    margin-bottom: 4px;
-    padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    margin-top: var(--space-sm);
 }
 
 .highlight-title {
     font-weight: 600;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    color: var(--color-text);
+    font-size: 0.9375rem;
+    margin-bottom: 2px;
 }
 
 .highlight-subtitle {
-    font-size: 0.8rem;
-    color: var(--text-tertiary);
-    font-weight: 500;
-    margin-top: 2px;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
 }
 
-
-/* Footer/Action Area (Pricing Plan Style) */
+/* === FOOTER === */
 .card-footer-row {
-    padding: 0 1.25rem 1.25rem 1.25rem;
-    /* Integrated padding */
-    margin-top: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: transparent;
-    /* Harmonized: No separate background */
-    border-top: none;
-    /* Removed separator */
-    min-height: auto;
-}
-
-/* Footer Link -> Pill Button (Get Started Style) */
-.link-text {
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 50px;
-    /* Pill Shape */
-    transition: all 0.2s ease;
-    background: var(--bg-surface);
-    /* Default fallback */
-    border: 1px solid transparent;
+    margin-top: auto;
+    padding-top: var(--space-md);
 }
 
 .footer-text {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    font-weight: 500;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
 }
 
-
-/* ========================================
-   THEMES (Vibrant Colors + Pricing Shapes)
-   ======================================== */
-
-/* General Shape Refinements */
-.access-card {
-    border-radius: 24px;
-    /* Pricing Plan Roundness */
-    border-width: 0;
-    /* Cleaner look */
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-    /* Float effect */
-}
-
-/* BLUE THEME */
-.card-blue {
-    background: #eff6ff;
-    /* Soft Blue Background */
-}
-
-.card-blue .card-icon {
-    background: white;
-    color: #2563eb;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-    border-radius: 16px;
-}
-
-.card-blue .card-title {
-    color: #1e40af;
-    /* Blue 800 */
-}
-
-/* Badge handled globally */
-
-.card-blue .info-highlight {
-    background: white;
-    /* "Feature" shape */
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-/* BLUE THEME BUTTON */
-.card-blue .link-text,
-.card-green .link-text,
-.card-emerald .link-text,
-.card-amber .link-text,
-.card-yellow .link-text,
-.card-red .link-text,
-.card-rose .link-text,
-.card-violet .link-text,
-.card-indigo .link-text,
-.card-cyan .link-text,
-.card-fuchsia .link-text,
-.card-slate .link-text {
-    width: 120px;
-    height: 32px;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    border-radius: 50px;
-    margin-top: 0;
+.link-text {
+    font-size: 0.875rem;
     font-weight: 600;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    color: var(--category-color, var(--color-primary));
     display: inline-flex;
+    align-items: center;
     gap: 4px;
-    white-space: nowrap;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: opacity var(--transition-fast);
 }
 
-/* BLUE THEME BUTTON */
-.card-blue .link-text {
-    background: #2563eb;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+.link-text:hover {
+    opacity: 0.8;
 }
 
-.card-blue .link-text:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
-    filter: brightness(1.1);
-    /* Subtle lift */
+/* === CATEGORY COLORS === */
+
+/* Gestão (Blue) */
+.card-blue,
+.card-gestao {
+    --category-color: var(--color-gestao);
+    --category-color-light: var(--color-gestao-light);
 }
 
-
-/* GREEN THEME */
-.card-green {
-    background: #f0fdf4;
-}
-
-.card-green .card-icon {
-    background: white;
-    color: #16a34a;
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
-    border-radius: 16px;
-}
-
-.card-green .card-title {
-    color: #166534;
-    /* Green 800 */
-}
-
-/* Badge handled globally */
-
-.card-green .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-/* GREEN THEME BUTTON */
-.card-green .link-text {
-    background: #16a34a;
-    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
-}
-
-.card-green .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-
-/* AMBER THEME */
-.card-amber,
-.card-yellow {
-    background: #fffbeb;
-}
-
-.card-amber .card-icon {
-    background: white;
-    color: #d97706;
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
-    border-radius: 16px;
-}
-
-.card-amber .card-title {
-    color: #92400e;
-    /* Amber 800 */
-}
-
-/* Badge handled globally */
-
-.card-amber .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(217, 119, 6, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-/* AMBER THEME BUTTON */
-.card-amber .link-text {
-    background: #d97706;
-    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
-}
-
-.card-amber .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-
-/* RED THEME */
-.card-red {
-    background: #fef2f2;
-}
-
-.card-red .card-icon {
-    background: white;
-    color: #dc2626;
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
-}
-
-.card-red .card-title {
-    color: #991b1b;
-    /* Red 800 */
-}
-
-/* Badge handled globally */
-
-.card-red .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-/* RED THEME BUTTON */
-.card-red .link-text {
-    background: #dc2626;
-    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
-}
-
-.card-red .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-
-/* EMERALD THEME */
-.card-emerald {
-    background: #ecfdf5;
-}
-
-.card-emerald .card-icon {
-    background: white;
-    color: #059669;
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
-}
-
-.card-emerald .card-title {
-    color: #065f46;
-    /* Emerald 800 */
-}
-
-.card-emerald .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.card-emerald .link-text {
-    background: #059669;
-    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
-}
-
-.card-emerald .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-/* VIOLET/INDIGO THEME */
+/* Espiritual (Teal) */
+.card-teal,
+.card-espiritual,
 .card-violet,
 .card-indigo {
-    background: #f5f3ff;
+    --category-color: var(--color-espiritual);
+    --category-color-light: var(--color-espiritual-light);
 }
 
-.card-violet .card-icon,
-.card-indigo .card-icon {
-    background: white;
-    color: #14b8a6;
-    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15);
+/* Comunicação (Orange) */
+.card-orange,
+.card-comunicacao,
+.card-amber,
+.card-yellow {
+    --category-color: var(--color-comunicacao);
+    --category-color-light: var(--color-comunicacao-light);
 }
 
-.card-violet .card-title,
-.card-indigo .card-title {
-    color: #5b21b6;
-    /* Violet 800 */
+/* Legacy color support */
+.card-green,
+.card-emerald {
+    --category-color: #10B981;
+    --category-color-light: #D1FAE5;
 }
 
-.card-violet .info-highlight,
-.card-indigo .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(20, 184, 166, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+.card-red,
+.card-rose {
+    --category-color: #EF4444;
+    --category-color-light: #FEE2E2;
 }
 
-.card-violet .link-text,
-.card-indigo .link-text {
-    background: #14b8a6;
-    box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
-}
-
-.card-violet .link-text:hover,
-.card-indigo .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-/* CYAN THEME */
 .card-cyan {
-    background: #ecfeff;
+    --category-color: #06B6D4;
+    --category-color-light: #CFFAFE;
 }
 
-.card-cyan .card-icon {
-    background: white;
-    color: #0891b2;
-    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
-}
-
-.card-cyan .card-title {
-    color: #155e75;
-    /* Cyan 800 */
-}
-
-.card-cyan .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.card-cyan .link-text {
-    background: #0891b2;
-    box-shadow: 0 4px 10px rgba(8, 145, 178, 0.3);
-}
-
-.card-cyan .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-/* SLATE THEME */
 .card-slate {
-    background: #f1f5f9;
+    --category-color: #64748B;
+    --category-color-light: #F1F5F9;
 }
 
-.card-slate .card-icon {
-    background: white;
-    color: #475569;
-    box-shadow: 0 4px 12px rgba(71, 85, 105, 0.15);
-}
-
-.card-slate .card-title {
-    color: #1e293b;
-    /* Slate 800 */
-}
-
-.card-slate .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(71, 85, 105, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.card-slate .link-text {
-    background: #475569;
-    box-shadow: 0 4px 10px rgba(71, 85, 105, 0.3);
-}
-
-.card-slate .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-/* FUCHSIA THEME */
 .card-fuchsia {
-    background: #fdf4ff;
+    --category-color: #D946EF;
+    --category-color-light: #FAE8FF;
 }
 
-.card-fuchsia .card-icon {
-    background: white;
-    color: #c026d3;
-    box-shadow: 0 4px 12px rgba(192, 38, 211, 0.15);
-}
-
-.card-fuchsia .card-title {
-    color: #86198f;
-    /* Fuchsia 800 */
-}
-
-.card-fuchsia .info-highlight {
-    background: white;
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(192, 38, 211, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.card-fuchsia .link-text {
-    background: #c026d3;
-    box-shadow: 0 4px 10px rgba(192, 38, 211, 0.3);
-}
-
-.card-fuchsia .link-text:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-
-/* DARK MODE (Harmonized) */
-body.dark-mode .access-card {
-    background: var(--bg-surface);
-    /* Dark surface */
-    border-color: var(--border-subtle);
-}
-
-body.dark-mode .card-footer-row {
-    background: transparent;
-    border-top: none;
-}
-
-/* Dark Mode Theme specific overrides */
-body.dark-mode .card-blue {
-    background: rgba(37, 99, 235, 0.1);
-}
-
-body.dark-mode .card-green {
-    background: rgba(22, 163, 74, 0.1);
-}
-
-body.dark-mode .card-violet {
-    background: rgba(126, 34, 206, 0.1);
-}
-
-body.dark-mode .card-amber {
-    background: rgba(217, 119, 6, 0.1);
-}
-
-body.dark-mode .card-red {
-    background: rgba(220, 38, 38, 0.1);
-}
-
-body.dark-mode .info-highlight {
-    background: rgba(255, 255, 255, 0.05);
-    /* Translucent in dark mode */
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .card-icon {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-
-/* Creative Updates for Secondary Info (Icons & Tags) */
-
-/* 1. Team Icon Gradient (Escalas) */
-.card-blue .info-secondary i {
-    color: white;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    padding: 4px;
-    border-radius: 6px;
-    width: 20px;
-    height: 20px;
-    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2);
-}
-
-.card-blue .info-secondary {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--blue-700);
-    font-weight: 600;
-}
-
-/* 2. Tone Tag (Repertório) */
-.tone-tag {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    box-shadow: 0 2px 5px rgba(217, 119, 6, 0.2);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: inline-block;
-}
-
-/* 3. Event Type Badge (General) */
-.info-primary {
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-}
-
-/* Admin/Crown Icon specific small styling if appeared here */
-.icon-tiny {
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-}
-
-/* ========================================
-   PREMIUM ENHANCEMENTS
-   Skeleton, Responsiveness, Accessibility
-   ======================================== */
-
-/* PREMIUM: Skeleton Loading State */
-.card-skeleton {
-    background: linear-gradient(90deg,
-            rgba(0, 0, 0, 0.03) 25%,
-            rgba(0, 0, 0, 0.06) 50%,
-            rgba(0, 0, 0, 0.03) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-    border-radius: 12px;
-    height: 20px;
-    margin-bottom: 8px;
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: 200% 0;
-    }
-
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-.skeleton-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    background: linear-gradient(90deg,
-            rgba(0, 0, 0, 0.04) 25%,
-            rgba(0, 0, 0, 0.08) 50%,
-            rgba(0, 0, 0, 0.04) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-}
-
-.skeleton-title {
-    width: 60%;
-    height: 24px;
-}
-
-.skeleton-text {
-    width: 80%;
-    height: 16px;
-}
-
-.skeleton-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: 28px;
-    border-radius: 50px;
-}
-
-/* PREMIUM: Extra Small Screen Responsiveness */
-@media (max-width: 360px) {
-    .quick-access-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-
-    .access-card {
-        min-height: 140px;
-    }
-
-    .card-title {
-        font-size: 1rem;
-    }
-
-    .card-info {
-        font-size: 0.85rem;
-    }
-
-    .link-text {
-        width: 120px !important;
-        font-size: 0.65rem !important;
-    }
-
-    .card-badge {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-    }
-
-    .card-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .card-icon svg {
-        width: 20px;
-        height: 20px;
-    }
-}
-
-/* PREMIUM: Accessibility - WCAG AA Compliance */
-
-/* Focus visible for keyboard navigation */
-.access-card:focus-visible {
-    outline: 3px solid #2563eb;
-    outline-offset: 4px;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-}
-
-.link-text:focus-visible {
-    outline: 2px solid white;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .access-card {
-        border: 2px solid currentColor;
-    }
-
-    .card-badge {
-        border: 2px solid currentColor;
-    }
-}
-
-/* Ensure minimum touch target size (44x44px) */
-.link-text {
-    min-height: 44px;
-    min-width: 44px;
-}
-
-/* Skip animation for users who prefer reduced motion */
+/* === RESPONSIVE === */
 @media (prefers-reduced-motion: reduce) {
-
-    .card-skeleton,
-    .skeleton-icon,
-    .card-badge,
-    .access-card:hover .card-icon {
+    .access-card {
         animation: none;
-        transition: none;
     }
 
     .access-card:hover {
         transform: none;
+    }
+
+    .card-icon {
+        transition: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .access-card {
+        min-height: 160px;
+        padding: var(--space-md);
+    }
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .card-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .card-badge {
+        top: var(--space-md);
+        right: var(--space-md);
+        font-size: 0.8125rem;
+        padding: 3px 10px;
     }
 }

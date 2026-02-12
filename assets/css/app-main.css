@@ -5,9 +5,9 @@
 
 /* 1. Base & Design System (Variáveis, Resets Suaves, Tipografia) */
 /* 1. Base & Design System (Variáveis, Resets Suaves, Tipografia) */
-@import url('theme.css');
 /* NEW: Single Source of Truth */
 @import url('design-system.css');
+@import url('theme.css');
 /* Legacy Variables (Keep for compatibility) */
 
 /* 2. Componentes Modernos (Botões, Cards, Inputs) */

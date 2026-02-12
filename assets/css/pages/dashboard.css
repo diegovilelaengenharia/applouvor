@@ -16,15 +16,41 @@
     margin-bottom: clamp(1.5rem, 4vw, 2rem);
 }
 
+/* === CATEGORY HEADERS === */
+.category-header {
+    margin-bottom: var(--space-lg);
+}
+
 .section-title {
-    font-size: var(--font-sm);
-    font-weight: 700;
-    color: var(--text-secondary);
-    margin-bottom: clamp(0.75rem, 2vw, 1rem);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-left: 3px solid var(--primary);
-    padding-left: 10px;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 var(--space-md) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.section-title::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--color-primary);
+    border-radius: 2px;
+}
+
+/* Category-specific colors */
+.section-title[data-category="gestao"]::before {
+    background: var(--color-gestao);
+}
+
+.section-title[data-category="espiritual"]::before {
+    background: var(--color-espiritual);
+}
+
+.section-title[data-category="comunicacao"]::before {
+    background: var(--color-comunicacao);
 }
 
 /* Card Improvements for Dashboard */
