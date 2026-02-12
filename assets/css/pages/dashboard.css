@@ -12,15 +12,15 @@
 .quick-access-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
 }
 
 .section-title {
-    font-size: 1rem;
+    font-size: var(--font-sm);
     font-weight: 700;
     color: var(--text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: clamp(0.75rem, 2vw, 1rem);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-left: 3px solid var(--primary);

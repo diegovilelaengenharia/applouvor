@@ -7,8 +7,10 @@
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth iOS scrolling */
     box-shadow: var(--shadow-sm);
-    margin-bottom: 20px;
+    margin-bottom: clamp(1rem, 3vw, 1.25rem);
 }
 
 .table {
@@ -21,8 +23,8 @@
 /* Headers */
 .table th {
     text-align: left;
-    padding: 14px 20px;
-    font-size: 0.75rem;
+    padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.25rem);
+    font-size: var(--font-xs);
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -31,15 +33,20 @@
     /* Slightly different from surface */
     border-bottom: 1px solid var(--border-medium);
     white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 /* Cells */
 .table td {
-    padding: 14px 20px;
+    padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.25rem);
     border-bottom: 1px solid var(--border-subtle);
     color: var(--text-primary);
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     vertical-align: middle;
+    min-height: 44px;
+    /* Touch-friendly */
 }
 
 .table tr:last-child td {
@@ -115,8 +122,8 @@
 }
 
 .btn-icon-table {
-    width: 32px;
-    height: 32px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 8px;
     border: none;
     background: transparent;
@@ -136,4 +143,47 @@
 .btn-icon-table.delete:hover {
     background: var(--red-50);
     color: var(--red-600);
+}
+
+/* Mobile: Card View Option */
+@media (max-width: 768px) {
+    .table-card-view .table {
+        min-width: auto;
+    }
+
+    .table-card-view thead {
+        display: none;
+    }
+
+    .table-card-view tbody {
+        display: block;
+    }
+
+    .table-card-view tr {
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .table-card-view td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border: none;
+    }
+
+    .table-card-view td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: var(--font-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
 }
