@@ -538,7 +538,7 @@ function renderAppHeader($title, $backUrl = null)
                     $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
                     $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
                 ?>
-                <a href="<?= $liderLinkHead ?>" class="header-action-btn ripple" title="Painel do Líder" style="color: var(--warning);">
+                <a href="<?= $liderLinkHead ?>" class="header-action-btn btn-leader ripple" title="Painel do Líder">
                     <i data-lucide="crown" width="20"></i>
                 </a>
             <?php endif; ?>
@@ -584,11 +584,11 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple" style="width: 40px; height: 40px; padding: 0; border-radius: 50%; overflow: hidden; border: none; background: transparent;">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                         <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                     <?php else: ?>
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-surface-alt); color: var(--text-muted);">
+                        <div class="profile-placeholder">
                             <i data-lucide="user" width="20"></i>
                         </div>
                     <?php endif; ?>

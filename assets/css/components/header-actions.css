@@ -1,35 +1,67 @@
-/* Header Actions & Profile */
+/* ==========================================================================
+   HEADER ACTIONS - MODERN DESIGN
+   ========================================================================== */
+
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    padding-left: 16px;
+    border-left: 1px solid var(--border-subtle);
+    height: 32px;
+    /* Altura da divisória */
 }
 
+/* --- BOTÕES DE AÇÃO (Leader, Notification, etc) --- */
 .header-action-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--text-muted);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    /* Modern Squircle */
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     text-decoration: none;
+    box-shadow: var(--shadow-sm);
 }
 
 .header-action-btn:hover {
     background: var(--bg-surface-alt);
-    color: var(--text-main);
+    color: var(--text-primary);
     transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-medium);
 }
 
+.header-action-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Botão LÍDER (Destaque Amarelo/Gold) */
+.header-action-btn.btn-leader {
+    background: var(--warning-bg);
+    border-color: rgba(245, 158, 11, 0.2);
+    color: var(--warning-text);
+}
+
+.header-action-btn.btn-leader:hover {
+    background: #FEF3C7;
+    /* Amber 100 */
+    border-color: var(--warning);
+}
+
+/* Botão NOTIFICATION (Com badge) */
 .header-action-btn.active {
-    background: var(--primary-subtle);
+    background: var(--bg-surface);
     color: var(--primary);
+    border-color: var(--primary-light);
 }
 
 .header-action-btn .badge-dot {
@@ -41,26 +73,84 @@
     background: var(--danger);
     border-radius: 50%;
     border: 1.5px solid var(--bg-surface);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
+    animation: pulse-red 2s infinite;
 }
 
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+/* --- BOTÃO PERFIL --- */
 .profile-avatar-btn {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    /* Um pouco maior que os botões */
+    height: 44px;
     border-radius: 50%;
-    padding: 0;
-    overflow: hidden;
-    border: 2px solid transparent;
-    transition: all 0.2s;
+    /* Circular */
+    padding: 2px;
+    /* Espaço para o anel */
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
     cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    /* Extra space */
+    box-shadow: var(--shadow-sm);
 }
 
 .profile-avatar-btn:hover {
     border-color: var(--primary);
-    transform: scale(1.05);
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .profile-avatar-btn img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Fallback para avatar sem foto */
+.profile-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-surface-alt);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Ajuste Responsivo */
+@media (max-width: 640px) {
+    .header-actions {
+        gap: 8px;
+        padding-left: 8px;
+    }
+
+    .header-action-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .profile-avatar-btn {
+        width: 38px;
+        height: 38px;
+    }
 }
