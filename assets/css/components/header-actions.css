@@ -14,8 +14,8 @@
 
 /* --- BOTÕES DE AÇÃO (Leader, Notification, etc) --- */
 .header-action-btn {
-    width: 42px;
-    height: 42px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 12px;
     /* Modern Squircle */
     border: 1px solid var(--border-subtle);
