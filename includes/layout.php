@@ -586,7 +586,7 @@ function renderAppHeader($title, $backUrl = null)
             <div style="position: relative; margin-left: 4px;">
                 <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                        <img src="<?= $_layoutUser['photo'] ?>" alt="User">
+                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                     <?php else: ?>
                         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-surface-alt); color: var(--text-muted);">
                             <i data-lucide="user" width="20"></i>
