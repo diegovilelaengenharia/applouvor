@@ -42,6 +42,3 @@
 
 /* 7. Dark Mode (Carregado por último para sobrescrever) */
 @import url('dark-mode.css');
-
-/* 8. HEADER FIX - SOLUÇÃO DEFINITIVA (DEVE SER O ÚLTIMO!) */
-@import url('header-fix.css');
