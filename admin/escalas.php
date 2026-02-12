@@ -55,6 +55,57 @@ try {
     if (!empty($filterType)) $stmtPast->bindValue(':eventType', $filterType);
     $stmtPast->execute();
     $pastSchedules = $stmtPast->fetchAll(PDO::FETCH_ASSOC);
+
+    // --- Eager Loading (Optimization) ---
+    $allSchedules = array_merge($futureSchedules, $pastSchedules);
+    $scheduleIds = array_column($allSchedules, 'id');
+    
+    $participantsMap = [];
+    $songCountsMap = [];
+    $mySchedulesMap = [];
+
+    if (!empty($scheduleIds)) {
+        $inQuery = implode(',', array_fill(0, count($scheduleIds), '?'));
+
+        // 1. Buscando participantes
+        // Nota: Buscamos TODOS os participantes para contar corretamente no PHP
+        $sqlParts = "
+            SELECT su.schedule_id, u.id, u.name, u.photo, u.avatar_color 
+            FROM schedule_users su 
+            JOIN users u ON su.user_id = u.id 
+            WHERE su.schedule_id IN ($inQuery)
+            ORDER BY su.schedule_id, u.name
+        ";
+        $stmtParts = $pdo->prepare($sqlParts);
+        $stmtParts->execute($scheduleIds);
+        while ($row = $stmtParts->fetch(PDO::FETCH_ASSOC)) {
+            $participantsMap[$row['schedule_id']][] = [
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'photo' => $row['photo'],
+                'avatar_color' => $row['avatar_color']
+            ];
+            
+            // Build mySchedulesMap directly from participants list if appropriate
+            if ($row['id'] == $loggedUserId) {
+                $mySchedulesMap[$row['schedule_id']] = true;
+            }
+        }
+
+        // 2. Buscando contagem de músicas
+        $sqlSongs = "
+            SELECT schedule_id, COUNT(*) as total 
+            FROM schedule_songs 
+            WHERE schedule_id IN ($inQuery) 
+            GROUP BY schedule_id
+        ";
+        $stmtSongs = $pdo->prepare($sqlSongs);
+        $stmtSongs->execute($scheduleIds);
+        while ($row = $stmtSongs->fetch(PDO::FETCH_ASSOC)) {
+            $songCountsMap[$row['schedule_id']] = $row['total'];
+        }
+    }
+
 } catch (PDOException $e) {
     die("Erro ao carregar escalas: " . $e->getMessage());
 }
@@ -135,42 +186,25 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         $typeClass .= ' event-type-hoje';
                     }
 
-                    // Buscar participantes (Top 5)
-                    $stmtUsers = $pdo->prepare("
-                            SELECT u.id, u.name, u.photo, u.avatar_color 
-                            FROM schedule_users su 
-                            JOIN users u ON su.user_id = u.id 
-                            WHERE su.schedule_id = ? 
-                            LIMIT 5
-                        ");
-                    $stmtUsers->execute([$schedule['id']]);
-                    $participants = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
 
-                    // Verifica se o usuário logado está na escala
-                    $isMine = false;
-                    foreach ($participants as $p) {
-                        if (isset($p['id']) && $p['id'] == $loggedUserId) {
-                            $isMine = true;
-                            break;
-                        }
-                    }
-                    if (!$isMine) {
-                        $stmtCheck = $pdo->prepare("SELECT 1 FROM schedule_users WHERE schedule_id = ? AND user_id = ?");
-                        $stmtCheck->execute([$schedule['id'], $loggedUserId]);
-                        if ($stmtCheck->fetchColumn()) {
-                            $isMine = true;
-                        }
-                    }
+                    // --- OTIMIZADO: Usando dados carregados previamente ---
+                    
+                    // Participantes
+                    $allParticipants = $participantsMap[$schedule['id']] ?? [];
+                    $participants = array_slice($allParticipants, 0, 5); // Apenas top 5
+                    $totalParticipants = count($allParticipants);
+                    $extraCount = max(0, $totalParticipants - 5);
 
+                    // Minha presença
+                    $isMine = $mySchedulesMap[$schedule['id']] ?? false;
+
+                    // Músicas
+                    $songsCount = $songCountsMap[$schedule['id']] ?? 0;
+                    
+                    // Lógica de visualização
                     if ($isMine && !$isToday) {
                         $typeClass .= ' event-type-mine';
                     }
-
-                    // Contar total participantes
-                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
-                    $stmtCount->execute([$schedule['id']]);
-                    $totalParticipants = $stmtCount->fetchColumn();
-                    $extraCount = max(0, $totalParticipants - 5);
                     
                     // Calcular dias até o evento
                     $today = new DateTime('today');
@@ -201,12 +235,6 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 <?php endif; ?>
                             </div>
 
-                            <?php
-                                $stmtSongs = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
-                                $stmtSongs->execute([$schedule['id']]);
-                                $songsCount = $stmtSongs->fetchColumn();
-                            ?>
-
                             <div class="timeline-meta">
                                 <span class="timeline-meta-item">
                                     <i data-lucide="clock" width="14"></i>
@@ -230,24 +258,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         <!-- Avatares -->
                         <div class="timeline-avatars-col">
                             <?php if (!empty($participants)): ?>
-                                <div class="avatar-group">
-                                    <?php foreach (array_slice($participants, 0, 3) as $i => $p):
+                                <div class="avatar-stack">
+                                    <?php foreach (array_slice($participants, 0, 3) as $p):
                                         $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
                                     ?>
-                                        <div class="avatar-circle" style="
-                                            background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;
-                                            margin-left: <?= $i > 0 ? '-10px' : '0' ?>;
-                                            z-index: <?= 10 - $i ?>;
-                                        ">
+                                        <div class="avatar-stack-item" style="background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;">
                                             <?php if ($photoUrl): ?>
-                                                <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                                <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                                             <?php else: ?>
                                                 <?= strtoupper(substr($p['name'], 0, 1)) ?>
                                             <?php endif; ?>
                                         </div>
                                     <?php endforeach; ?>
                                     <?php if ($extraCount > 0): ?>
-                                        <span class="avatar-extra-count">+<?= $extraCount ?></span>
+                                        <span class="avatar-stack-more">+<?= $extraCount ?></span>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -291,39 +315,20 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         $themeLight = 'var(--slate-100)';
                     }
 
-                    // Buscar participantes (Top 5) - Query Completa Agora
-                    $stmtUsers = $pdo->prepare("
-                            SELECT u.id, u.name, u.photo, u.avatar_color 
-                            FROM schedule_users su 
-                            JOIN users u ON su.user_id = u.id 
-                            WHERE su.schedule_id = ? 
-                            LIMIT 5
-                        ");
-                    $stmtUsers->execute([$schedule['id']]);
-                    $participants = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Verifica se o usuário logado estava na escala
-                    $isMine = false;
-                    foreach ($participants as $p) {
-                        if (isset($p['id']) && $p['id'] == $loggedUserId) {
-                            $isMine = true;
-                            break;
-                        }
-                    }
-                    if (!$isMine) {
-                        $stmtCheck = $pdo->prepare("SELECT 1 FROM schedule_users WHERE schedule_id = ? AND user_id = ?");
-                        $stmtCheck->execute([$schedule['id'], $loggedUserId]);
-                        if ($stmtCheck->fetchColumn()) {
-                            $isMine = true;
-                        }
-                    }
-
-                    // Contar total participantes
-                    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users WHERE schedule_id = ?");
-                    $stmtCount->execute([$schedule['id']]);
-                    $totalParticipants = $stmtCount->fetchColumn();
-                    $extraCount = max(0, $totalParticipants - 5);
+                    // --- OTIMIZADO: Usando dados carregados previamente ---
                     
+                    // Participantes
+                    $allParticipants = $participantsMap[$schedule['id']] ?? [];
+                    $participants = array_slice($allParticipants, 0, 5);
+                    $totalParticipants = count($allParticipants);
+                    $extraCount = max(0, $totalParticipants - 5);
+
+                    // Minha presença
+                    $isMine = $mySchedulesMap[$schedule['id']] ?? false;
+
+                    // Músicas
+                    $songsCountPast = $songCountsMap[$schedule['id']] ?? 0;
+
                     // Cálculo de dias passados
                     $today = new DateTime('today');
                     $daysAgo = $date->diff($today)->days;
@@ -364,12 +369,6 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 </span>
                             </div>
 
-                            <?php
-                                $stmtSongsPast = $pdo->prepare("SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = ?");
-                                $stmtSongsPast->execute([$schedule['id']]);
-                                $songsCountPast = $stmtSongsPast->fetchColumn();
-                            ?>
-
                             <div class="timeline-meta" style="font-size: 0.8rem; gap: 10px;">
                                 <span class="timeline-meta-item">
                                     <i data-lucide="clock" width="13"></i>
@@ -393,15 +392,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         <!-- Avatares -->
                         <div class="timeline-avatars-col">
                             <?php if (!empty($participants)): ?>
-                                <div class="avatar-group">
-                                    <?php foreach (array_slice($participants, 0, 3) as $i => $p):
+                                <div class="avatar-stack">
+                                    <?php foreach (array_slice($participants, 0, 3) as $p):
                                         $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
                                     ?>
-                                        <div class="avatar-circle" style="
-                                            background: <?= $p['avatar_color'] ?: $themeColor ?>;
-                                            margin-left: <?= $i > 0 ? '-10px' : '0' ?>;
-                                            z-index: <?= 10 - $i ?>;
-                                        ">
+                                        <div class="avatar-stack-item" style="background: <?= $p['avatar_color'] ?: $themeColor ?>;">
                                             <?php if ($photoUrl): ?>
                                                 <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                                             <?php else: ?>
@@ -410,7 +405,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         </div>
                                     <?php endforeach; ?>
                                     <?php if ($extraCount > 0): ?>
-                                        <span class="avatar-extra-count">+<?= $extraCount ?></span>
+                                        <span class="avatar-stack-more">+<?= $extraCount ?></span>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -494,19 +489,19 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         }
     }
 
-    // Sheet Modal Logic
+    // Modal Logic (Standardized)
     function openSheet(id) {
-        const sheet = document.getElementById(id);
-        if (sheet) {
-            sheet.style.display = 'block';
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden'; 
         }
     }
 
     function closeSheet(id) {
-        const sheet = document.getElementById(id);
-        if (sheet) {
-            sheet.style.display = 'none';
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('active');
             document.body.style.overflow = '';
         }
     }

@@ -23,7 +23,9 @@
     border-radius: 20px;
     padding: 0;
     /* Removing padding from container to handle header/footer separately */
-    min-height: 150px;
+    height: 100%;
+    /* Force equal height in grid */
+    min-height: 160px;
     display: flex;
     flex-direction: column;
     text-decoration: none;

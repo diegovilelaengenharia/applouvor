@@ -41,8 +41,8 @@ function renderUnifiedCard($config) {
     // Determinar cor do card
     $cardColor = $categoryColorMap[$config['category']] ?? 'blue';
     $extraClasses = $config['extra_classes'] ?? '';
-    // Adiciona classe 'card' padrão e 'card-clickable' para comportamento de link
-    $cardClass = "card card-clickable card-{$cardColor} {$extraClasses}";
+    // Adiciona classe 'access-card' padrão e 'card-clickable' para comportamento de link
+    $cardClass = "access-card card-clickable card-{$cardColor} {$extraClasses}";
     
     // Determinar tipo de badge (se existir)
     $badgeType = $config['badge']['type'] ?? $categoryBadgeMap[$config['category']] ?? 'badge-info';
@@ -219,50 +219,13 @@ function renderCardMembros($totalMembros, $stats) {
 }
 
 // Renderizar card de Leitura (UNIFIED)
-function renderCardLeitura($pdo, $userId) {
-    require_once '../includes/reading_plan.php';
-    
-    $stmtSet = $pdo->prepare("SELECT setting_value FROM user_settings WHERE user_id = ? AND setting_key = 'reading_plan_start_date'");
-    $stmtSet->execute([$userId]);
-    $sDate = $stmtSet->fetchColumn() ?: date('Y-01-01');
-    
-    $startDateTime = new DateTime($sDate);
-    $nowDateTime = new DateTime();
-    $startDateTime->setTime(0,0,0); 
-    $nowDateTime->setTime(0,0,0);
-    
-    $daysSinceStart = (int)$startDateTime->diff($nowDateTime)->format('%r%a');
-    
-    $stmtProg = $pdo->prepare("SELECT month_num, day_num, verses_read FROM reading_progress WHERE user_id = ?");
-    $stmtProg->execute([$userId]);
-    $userProgress = [];
-    while($row = $stmtProg->fetch(PDO::FETCH_ASSOC)) {
-        $userProgress["{$row['month_num']}-{$row['day_num']}"] = json_decode($row['verses_read'], true) ?? [];
-    }
-    
-    $displayDayGlobal = 1;
-    for ($d = 1; $d <= 365; $d++) {
-        $m = floor(($d - 1) / 25) + 1;
-        $dayInMonth = (($d - 1) % 25) + 1;
-        $key = "$m-$dayInMonth";
-        $versesRead = $userProgress[$key] ?? [];
-        $totalVersesForDay = count($READING_PLAN[$m][$dayInMonth] ?? []);
-        $readVersesCount = count($versesRead);
-        if ($readVersesCount < $totalVersesForDay) {
-            $displayDayGlobal = $d;
-            break;
-        }
-    }
-    
-    $currentMonth = floor(($displayDayGlobal - 1) / 25) + 1;
-    $currentDayInMonth = (($displayDayGlobal - 1) % 25) + 1;
-    $todayVerses = $READING_PLAN[$currentMonth][$currentDayInMonth] ?? [];
-    $todayKey = "$currentMonth-$currentDayInMonth";
-    $todayRead = $userProgress[$todayKey] ?? [];
-    $todayProgress = count($todayRead);
-    $todayTotal = count($todayVerses);
-    $percentToday = $todayTotal > 0 ? round(($todayProgress / $todayTotal) * 100) : 0;
-    $percentYear = round(($displayDayGlobal / 365) * 100);
+function renderCardLeitura($data) {
+    // Dados extraídos do controller (dashboard_data.php)
+    $percentYear = $data['percentYear'] ?? 0;
+    $percentToday = $data['percentToday'] ?? 0;
+    $todayProgress = $data['todayProgress'] ?? 0;
+    $todayTotal = $data['todayTotal'] ?? 0;
+    $displayDayGlobal = $data['displayDayGlobal'] ?? 1;
 
     ob_start();
     ?>
@@ -580,7 +543,7 @@ function renderCardGeneric($cardId, $cardDef) {
         default => '' // Não mostrar nada se não tiver descrição específica
     };
     ?>
-    <a href="<?= $cardDef['url'] ?>" class="card card-clickable <?= $colorClass ?>" style="position: relative; overflow: hidden; text-decoration: none; color: inherit;">
+    <a href="<?= $cardDef['url'] ?>" class="access-card card-clickable <?= $colorClass ?>" style="position: relative; overflow: hidden; text-decoration: none; color: inherit;">
         <div class="card-body">
             <div class="card-icon">
                 <i data-lucide="<?= $cardDef['icon'] ?>"></i>
@@ -621,7 +584,7 @@ function renderDashboardCard($cardId, $data) {
             renderCardAgenda($data['nextEvent'] ?? null, $data['totalEvents'] ?? 0);
             break;
         case 'leitura':
-            renderCardLeitura($data['pdo'], $data['userId']);
+            renderCardLeitura($data['leituraData'] ?? []);
             break;
         case 'avisos':
             renderCardAvisos($data['ultimoAviso'], $data['unreadCount']);

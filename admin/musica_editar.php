@@ -411,69 +411,75 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 </div>
 
 <!-- Modal: Gestão de Tags Completa -->
-<div id="tagManagerModal" class="modal-overlay">
-    <div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+<div id="tagManagerModal" class="modal-overlay" onclick="if(event.target === this) closeTagManager()">
+    <div class="modal-card" style="max-height: 85vh; display: flex; flex-direction: column;">
         <div class="modal-header">
             <h3 class="modal-title">Gerenciar Classificações</h3>
-            <button type="button" onclick="closeTagManager()" class="btn-close">
-                <i data-lucide="x" style="width: 18px;"></i>
+            <button type="button" onclick="closeTagManager()" class="modal-close">
+                <i data-lucide="x" width="20"></i>
             </button>
         </div>
 
-        <!-- Lista de Tags -->
-        <div id="tagsList" style="flex: 1; overflow-y: auto; margin-bottom: 24px; min-height: 150px;">
-            <?php foreach ($allTags as $tag): ?>
-                <div class="tag-card-item" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border: 1px solid var(--border-color);">
-                    <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;">
-                        <i data-lucide="folder" style="width: 20px;"></i>
+        <div class="modal-body" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
+            
+            <!-- Lista de Tags -->
+            <div id="tagsList" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <?php foreach ($allTags as $tag): ?>
+                    <div class="tag-card-item" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border: 1px solid var(--border-color);">
+                        <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;">
+                            <i data-lucide="folder" width="20"></i>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($tag['name']) ?></div>
+                            <div style="font-size: var(--font-body-sm); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
+                        </div>
+                        <div style="display: flex; gap: 4px;">
+                            <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="btn-close" style="width: 32px; height: 32px;">
+                                <i data-lucide="edit-2" width="16"></i>
+                            </button>
+                            <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="btn-close" style="width: 32px; height: 32px; color: var(--rose-500);">
+                                <i data-lucide="trash-2" width="16"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($tag['name']) ?></div>
-                        <div style="font-size: var(--font-body-sm); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
-                    </div>
-                    <div style="display: flex; gap: 4px;">
-                        <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="btn-close" style="width: 32px; height: 32px;">
-                            <i data-lucide="edit-2" style="width: 16px;"></i>
-                        </button>
-                        <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="btn-close" style="width: 32px; height: 32px; color: var(--rose-500);">
-                            <i data-lucide="trash-2" style="width: 16px;"></i>
-                        </button>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Formulário de Nova/Editor -->
+            <div style="background: var(--bg-surface); padding: 20px; border-top: 1px solid var(--border-color); box-shadow: 0 -4px 12px rgba(0,0,0,0.05);">
+                <h4 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="plus-circle" width="16" class="text-primary"></i>
+                    <span id="tagFormTitle">Nova Classificação</span>
+                </h4>
+
+                <input type="hidden" id="editingTagId" value="">
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <input type="text" id="tagNameInput" class="form-input" placeholder="Nome da Pasta (Ex: Adoração)">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <textarea id="tagDescInput" class="form-input" rows="2" placeholder="Descrição (Opcional)"></textarea>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label">Cor</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <?php
+                        $colors = ['var(--sage-500)', 'var(--yellow-500)', 'var(--rose-500)', 'var(--slate-500)', 'var(--lavender-600)', '#EC4899', '#6366F1'];
+                        foreach ($colors as $c): ?>
+                            <label style="cursor: pointer;">
+                                <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">
+                                <div class="color-circle" style="width: 28px; height: 28px; background: <?= $c ?>; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s;"></div>
+                            </label>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
 
-        <!-- Formulário de Nova/Editor -->
-        <div style="background: var(--bg-body); border-radius: 16px; padding: 16px;">
-            <h4 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 12px;" id="tagFormTitle">Nova Classificação</h4>
-
-            <input type="hidden" id="editingTagId" value="">
-
-            <div class="form-group" style="margin-bottom: 12px;">
-                <input type="text" id="tagNameInput" class="form-input" placeholder="Nome da Pasta (Ex: Adoração)">
+                <button type="button" onclick="saveTagInline()" class="btn-primary-full">
+                    <span id="saveButtonText">Criar Classificação</span>
+                </button>
             </div>
-
-            <div class="form-group" style="margin-bottom: 12px;">
-                <textarea id="tagDescInput" class="form-input" rows="2" placeholder="Descrição (Opcional)"></textarea>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label">Cor</label>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <?php
-                    $colors = ['var(--sage-500)', 'var(--yellow-500)', 'var(--rose-500)', 'var(--slate-500)', 'var(--lavender-600)', '#EC4899', '#6366F1'];
-                    foreach ($colors as $c): ?>
-                        <label style="cursor: pointer;">
-                            <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">
-                            <div class="color-circle" style="width: 28px; height: 28px; background: <?= $c ?>; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s;"></div>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <button type="button" onclick="saveTagInline()" class="btn-primary-full">
-                <span id="saveButtonText">Criar Classificação</span>
-            </button>
         </div>
     </div>
 </div>

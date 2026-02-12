@@ -206,6 +206,84 @@ try {
     $userDashboardSettings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) { }
 
+// ===================================
+// 10. Leitura Bíblica (Pre-calc)
+// ===================================
+$leituraData = [
+    'percentToday' => 0,
+    'percentYear' => 0,
+    'todayProgress' => 0,
+    'todayTotal' => 0,
+    'displayDayGlobal' => 1
+];
+
+try {
+    require_once '../includes/reading_plan.php';
+    
+    $stmtSet = $pdo->prepare("SELECT setting_value FROM user_settings WHERE user_id = ? AND setting_key = 'reading_plan_start_date'");
+    $stmtSet->execute([$userId]);
+    $sDate = $stmtSet->fetchColumn() ?: date('Y-01-01');
+    
+    $startDateTime = new DateTime($sDate);
+    $nowDateTime = new DateTime();
+    $startDateTime->setTime(0,0,0); 
+    $nowDateTime->setTime(0,0,0);
+    
+    // Dias desde o início (independente de progresso)
+    // Se quiser mostrar o dia cronológico:
+    $displayDayGlobal = (int)$startDateTime->diff($nowDateTime)->format('%r%a') + 1;
+    if ($displayDayGlobal < 1) $displayDayGlobal = 1;
+    if ($displayDayGlobal > 365) $displayDayGlobal = 365;
+
+    // Mas a lógica original buscava o primeiro dia incompleto. Vamos manter a lógica original?
+    // O código original fazia um loop até 365 verificando progresso. Isso é pesado se feito no render, mas no controller é ok.
+    
+    $stmtProg = $pdo->prepare("SELECT month_num, day_num, verses_read FROM reading_progress WHERE user_id = ?");
+    $stmtProg->execute([$userId]);
+    $userProgress = [];
+    while($row = $stmtProg->fetch(PDO::FETCH_ASSOC)) {
+        $userProgress["{$row['month_num']}-{$row['day_num']}"] = json_decode($row['verses_read'], true) ?? [];
+    }
+    
+    // Recalcular displayDayGlobal baseado no primeiro dia incompleto (Lógica Original)
+    // Se o usuário quer "Dia Cronológico", essa lógica deve mudar, mas vamos manter comportamento visual atual.
+    $foundIncomplete = false;
+    for ($d = 1; $d <= 365; $d++) {
+        $m = floor(($d - 1) / 25) + 1;
+        $dayInMonth = (($d - 1) % 25) + 1;
+        $key = "$m-$dayInMonth";
+        $versesRead = $userProgress[$key] ?? [];
+        $totalVersesForDay = count($bibleReadingPlan[$m][$dayInMonth-1] ?? []); // Adjustment for 0-index based naming in array if needed?
+        // Wait, reading_plan.php uses $bibleReadingPlan structure. 
+        // Array index 1..12 for months. Days are 0-indexed in sub-array?
+        // Let's check reading_plan.php content again.
+        // It is `$bibleReadingPlan = [ 1 => [ ["Vs",..], ... ] ]`
+        // So day 1 is index 0. Yes.
+        
+        $totalVersesForDay = count($bibleReadingPlan[$m][$dayInMonth-1] ?? []);
+        
+        if (count($versesRead) < $totalVersesForDay) {
+            $displayDayGlobal = $d;
+            $foundIncomplete = true;
+            break;
+        }
+    }
+    if (!$foundIncomplete) $displayDayGlobal = 365; // Ou concluído
+    
+    $currentMonth = floor(($displayDayGlobal - 1) / 25) + 1;
+    $currentDayInMonth = (($displayDayGlobal - 1) % 25) + 1;
+    $todayVerses = $bibleReadingPlan[$currentMonth][$currentDayInMonth-1] ?? [];
+    $todayKey = "$currentMonth-$currentDayInMonth";
+    $todayRead = $userProgress[$todayKey] ?? [];
+    
+    $leituraData['todayProgress'] = count($todayRead);
+    $leituraData['todayTotal'] = count($todayVerses);
+    $leituraData['percentToday'] = $leituraData['todayTotal'] > 0 ? round(($leituraData['todayProgress'] / $leituraData['todayTotal']) * 100) : 0;
+    $leituraData['percentYear'] = round(($displayDayGlobal / 365) * 100);
+    $leituraData['displayDayGlobal'] = $displayDayGlobal;
+
+} catch (Exception $e) { }
+
 // Fallback padrão se vazio
 if (empty($userDashboardSettings)) {
     $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversarios', 'devocional', 'oracao'];
@@ -243,6 +321,7 @@ return [
     'proximoAniversariante' => $proximoAniversariante,
     'oracaoCount' => $oracaoCount,
     'historicoData' => $historicoData,
+    'leituraData' => $leituraData,
     'userDashboardSettings' => $userDashboardSettings,
     'saudacao' => $saudacao,
     'nomeUser' => $nomeUser

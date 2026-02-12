@@ -172,12 +172,9 @@ renderAppHeader('Detalhes da Música');
             <a href="musica_editar.php?id=' . $id . '" class="dropdown-item">
                 <i data-lucide="edit-3" width="16"></i> Editar
             </a>
-            <form method="POST" onsubmit="return confirm(\'Excluir música permanentemente?\')" style="margin: 0;">
-                <input type="hidden" name="action" value="delete_song">
-                <button type="submit" class="dropdown-item danger">
-                    <i data-lucide="trash-2" width="16"></i> Excluir
-                </button>
-            </form>
+            <button onclick="confirmDeleteSong()" class="dropdown-item danger">
+                <i data-lucide="trash-2" width="16"></i> Excluir
+            </button>
         </div>
     </div>
     <script>
@@ -381,50 +378,95 @@ renderAppHeader('Detalhes da Música');
 </div>
 
 <!-- Modal Add Tone -->
-<div id="toneModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(2px);" onclick="if(event.target === this) closeToneModal()">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: var(--bg-surface); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-xl);">
-        <h3 style="margin: 0 0 16px 0; font-size: 1.25rem; color: var(--text-primary); font-weight: 700;">Adicionar Tom por Voz</h3>
+<div id="toneModal" class="modal-overlay" onclick="if(event.target === this) closeToneModal()">
+    <div class="modal-card" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i data-lucide="plus-circle" width="18"></i> Adicionar Tom por Voz
+            </h3>
+            <button type="button" class="modal-close" onclick="closeToneModal()">
+                <i data-lucide="x" width="20"></i>
+            </button>
+        </div>
         
         <form method="POST">
-            <input type="hidden" name="action" value="add_tone">
-            
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">Membro</label>
-                <select name="user_id" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-medium); background: var(--bg-input); color: var(--text-primary);">
-                    <?php foreach ($usersList as $u): ?>
-                        <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+            <div class="modal-body">
+                <input type="hidden" name="action" value="add_tone">
+                
+                <div class="form-group">
+                    <label class="form-label">Membro</label>
+                    <select name="user_id" required class="form-control">
+                        <?php foreach ($usersList as $u): ?>
+                            <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tom</label>
+                    <select name="tone" required class="form-control">
+                        <?php foreach ($musicTones as $val => $label): ?>
+                            <option value="<?= $val ?>" <?= $val == ($song['tone'] ?? 'C') ? 'selected' : '' ?>><?= $label ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observação</label>
+                    <textarea name="observation" class="form-control" rows="3" placeholder="Ex: Usa capo na 2ª casa..."></textarea>
+                </div>
             </div>
 
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">Tom</label>
-                <select name="tone" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-medium); background: var(--bg-input); color: var(--text-primary);">
-                    <?php foreach ($musicTones as $val => $label): ?>
-                        <option value="<?= $val ?>" <?= $val == ($song['tone'] ?? 'C') ? 'selected' : '' ?>><?= $label ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">Observação</label>
-                <textarea name="observation" rows="3" placeholder="Ex: Usa capo na 2ª casa..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-medium); background: var(--bg-input); color: var(--text-primary); font-family: inherit; resize: vertical;"></textarea>
-            </div>
-
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeToneModal()" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-medium); background: transparent; font-weight: 600; cursor: pointer; color: var(--text-secondary);">Cancelar</button>
-                <button type="submit" style="flex: 2; padding: 12px; border-radius: 8px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">Salvar</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" onclick="closeToneModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- Modal Delete Song -->
+<div id="deleteSongModal" class="modal-overlay" onclick="if(event.target === this) closeDeleteSongModal()">
+    <div class="modal-card" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3 class="modal-title" style="color: var(--danger);">
+                <i data-lucide="alert-triangle" width="20"></i> Excluir Música
+            </h3>
+            <button type="button" class="modal-close" onclick="closeDeleteSongModal()">
+                <i data-lucide="x" width="20"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Tem certeza que deseja excluir <strong><?= htmlspecialchars($song['title']) ?></strong>?</p>
+            <p class="text-secondary" style="font-size: 0.9em; margin-top: 8px;">Isso removerá também todo o histórico de tons pessoais e tags associadas.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" onclick="closeDeleteSongModal()">Cancelar</button>
+            <form method="POST" style="margin:0;">
+                <input type="hidden" name="action" value="delete_song">
+                <button type="submit" class="btn btn-danger">Excluir Permanentemente</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function openToneModal() {
-        document.getElementById('toneModal').style.display = 'block';
+        document.getElementById('toneModal').classList.add('active');
     }
     function closeToneModal() {
-        document.getElementById('toneModal').style.display = 'none';
+        document.getElementById('toneModal').classList.remove('active');
+    }
+
+    function confirmDeleteSong() {
+        document.getElementById('deleteSongModal').classList.add('active');
+        // Fecha o menu dropdown se estiver aberto
+        const menu = document.getElementById('dropdown-menu');
+        if (menu) menu.style.display = 'none';
+    }
+
+    function closeDeleteSongModal() {
+        document.getElementById('deleteSongModal').classList.remove('active');
     }
 </script>
 

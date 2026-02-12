@@ -1,0 +1,7 @@
+I have refactored the dashboard header:
+1. Created `assets/css/components/header-actions.css` with `.header-action-btn` and `.profile-avatar-btn`.
+2. Updated `includes/layout.php` to use these classes for the Leader, Notification, and Profile buttons.
+3. Updated `assets/js/notifications.js` to toggle the `.badge-dot` and `.active` class, removing inline styles.
+4. Imported the new CSS in `assets/css/app-main.css`.
+
+Verified.

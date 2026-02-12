@@ -1,5 +1,6 @@
 <?php
 // admin/index.php
+header('Content-Type: text/html; charset=utf-8');
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
@@ -14,7 +15,8 @@ $allCardsDefinitions = getAllAvailableCards();
 renderAppHeader('Visão Geral');
 ?>
 
-<link rel="stylesheet" href="../assets/css/pages/dashboard.css?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/pages/dashboard.css?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/dashboard-cards.css?v=<?= time() ?>">
 
 <!-- MODAL URGENTE AUTOMÁTICO -->
 <?php if ($popupAviso): ?>

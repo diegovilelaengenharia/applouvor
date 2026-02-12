@@ -1,9 +1,10 @@
 ﻿<?php
 // includes/layout.php
+header('Content-Type: text/html; charset=utf-8');
 
-// Inicia sess+úo se n+úo estiver iniciada
+// Inicia sessão se não estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    // Configurar sess+úo para 30 dias (backup, idealmente auth.php deve ser chamado antes)
+    // Configurar sessão para 30 dias (backup, idealmente auth.php deve ser chamado antes)
     ini_set('session.gc_maxlifetime', 2592000);
     session_set_cookie_params([
         'lifetime' => 2592000,
@@ -21,7 +22,7 @@ function renderAppHeader($title, $backUrl = null)
 {
     global $pdo;
 
-    // --- L+¦gica de Usu+írio Global (Movida do Sidebar) ---
+    // --- Lógica de Usuário Global (Movida do Sidebar) ---
     $userId = $_SESSION['user_id'] ?? 1;
     $currentUser = null;
     $userPhoto = null;
@@ -36,7 +37,7 @@ function renderAppHeader($title, $backUrl = null)
         }
 
         if (!$currentUser) {
-            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usu+írio', 'phone' => '', 'avatar' => null];
+            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usuário', 'phone' => '', 'avatar' => null];
         }
 
         // Avatar Logic
@@ -76,7 +77,7 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Open Graph / WhatsApp Sharing -->
         <meta property="og:type" content="website">
         <meta property="og:title" content="App Louvor PIB Oliveira">
-        <meta property="og:description" content="Gest+úo de escalas, repert+¦rio e minist+®rio de louvor da PIB Oliveira.">
+        <meta property="og:description" content="Gestão de escalas, repertório e ministério de louvor da PIB Oliveira.">
         <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss+¡vel -->
         <meta property="og:url" content="https://app.piboliveira.com.br/">
         
@@ -126,8 +127,8 @@ function renderAppHeader($title, $backUrl = null)
         }
         ?>
 
-        <div id="app-content">
-            <!-- Header Mobile (S+¦ vis+¡vel em telas menores) -->
+        <div id="app-content" class="app-content">
+            <!-- Header Mobile (Só visível em telas menores) -->
             <header class="mobile-header">
                 <?php
                 // Logic to determine if it's the home page
@@ -166,7 +167,7 @@ function renderAppHeader($title, $backUrl = null)
 
 
 
-                    <!-- L+¡der Button (Admin only) -->
+                    <!-- Líder Button (Admin only) -->
                     <!-- Notification Button -->
                     <div style="position: relative;">
                         <button class="notification-btn ripple" onclick="toggleNotifications('notificationDropdown')" id="notificationBtn">
@@ -296,157 +297,7 @@ function renderAppHeader($title, $backUrl = null)
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
 
         <!-- 1. Sheet GEST+âO -->
-        <div id="sheet-gestao" class="bottom-sheet">
-            <div class="sheet-header">
-                <div style="background: #ecfdf5; padding: 10px; border-radius: 12px; color: #047857;">
-                    <i data-lucide="layout-grid"></i>
-                </div>
-                <div>
-                    <div class="sheet-title">Gestão</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administração do Ministério</div>
-                </div>
-            </div>
-            <div class="sheet-grid">
-                <a href="escalas.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
-                        <i data-lucide="calendar"></i>
-                    </div>
-                    Escalas
-                </a>
-                <a href="repertorio.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
-                        <i data-lucide="music"></i>
-                    </div>
-                    Repertório
-                </a>
-                <a href="indisponibilidade.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
-                        <i data-lucide="calendar-x"></i>
-                    </div>
-                    Indisponibilidades
-                </a>
-                <a href="agenda.php" class="sheet-btn">
-                    <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
-                        <i data-lucide="calendar-clock"></i>
-                    </div>
-                    Agenda
-                </a>
-            </div>
-        </div>
 
-        <!-- 2. Sheet ESP+ìRITO -->
-        <div id="sheet-espirito" class="bottom-sheet">
-            <div class="sheet-header">
-                <div style="background: #eef2ff; padding: 10px; border-radius: 12px; color: #4338ca;">
-                    <i data-lucide="flame"></i>
-                </div>
-                <div>
-                    <div class="sheet-title">Espírito</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Vida Devocional</div>
-                </div>
-            </div>
-            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista +¦nica para destaque -->
-                <a href="devocionais.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
-                    <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
-                        <i data-lucide="book-open"></i>
-                    </div>
-                    <div>
-                        <div>Devocional</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexão diária</div>
-                    </div>
-                </a>
-                <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
-                    <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
-                        <i data-lucide="heart-handshake"></i>
-                    </div>
-                    <div>
-                        <div>Oração</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercessão e gratidão</div>
-                    </div>
-                </a>
-                <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
-                    <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
-                        <i data-lucide="scroll"></i>
-                    </div>
-                    <div>
-                        <div>Leitura Bíblica</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Plano anual</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-
-
-
-        <!-- Barra de Navega+º+úo Fixa -->
-        <div class="bottom-nav-container">
-            <nav class="bottom-nav-bar">
-
-                
-
-                <!-- Botão HOME (Primeiro) com Efeito 3D Pulsante -->
-                <a href="index.php" class="b-nav-item home-3d" onclick="closeAllSheets()">
-                    <div class="b-nav-icon-wrapper">
-                        <i data-lucide="home"></i>
-                    </div>
-                    <span>Início</span>
-                </a>
-
-                <!-- Botão GERAL (Gestão ? AZUL) -->
-                <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #2563eb;">
-                    <div class="b-nav-icon-wrapper" style="background: #eff6ff;">
-                        <i data-lucide="layout-grid"></i>
-                    </div>
-                    <span>Geral</span>
-                </button>
-
-                <!-- Botão ESPÍRITO (Espiritual ? VERDE) -->
-                <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #059669;">
-                    <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
-                        <i data-lucide="flame"></i>
-                    </div>
-                    <span>Espírito</span>
-                </button>
-
-                <!-- Botão AVISOS (Comunicação ? ROXO) -->
-                <a href="avisos.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #7c3aed;">
-                    <div class="b-nav-icon-wrapper" style="background: #f5f3ff;">
-                        <i data-lucide="bell"></i>
-                    </div>
-                    <span>Avisos</span>
-                </a>
-
-
-
-            </nav>
-        </div>
-
-        <script>
-            function toggleSheet(sheetId, btn) {
-                const sheet = document.getElementById(sheetId);
-                const overlay = document.getElementById('bs-overlay');
-                const isOpen = sheet.classList.contains('open');
-
-                // 1. Fechar todos primeiro
-                closeAllSheets();
-
-                // 2. Se n+úo estava aberto, abrir o clicado
-                if (!isOpen) {
-                    sheet.classList.add('open');
-                    overlay.classList.add('active');
-
-                    // Highlight Active Button
-                    if (btn) btn.classList.add('active');
-
-                    // Haptic Feedback (Vibe)
-                    if (navigator.vibrate) navigator.vibrate(10);
-                }
-            }
-
-            function closeAllSheets() {
-                document.querySelectorAll('.bottom-sheet').forEach(el => el.classList.remove('open'));
-                document.getElementById('bs-overlay').classList.remove('active');
                 document.querySelectorAll('.b-nav-item').forEach(el => el.classList.remove('active'));
             }
         </script>
@@ -643,7 +494,7 @@ function renderAppHeader($title, $backUrl = null)
 <?php
     }
 
-    // Nova fun+º+úo para cabe+ºalhos padronizados (Clean Header)
+    // Nova função para cabeçalhos padronizados (Clean Header)
     function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
     {
         global $_layoutUser;
@@ -661,7 +512,7 @@ function renderAppHeader($title, $backUrl = null)
                     <i data-lucide="arrow-left" style="width: 22px;"></i>
                 </button>
 
-                <a href="index.php" class="ripple" title="Navega+º+úo Principal" style="
+                <a href="index.php" class="ripple" title="Navegação Principal" style="
                 width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
                 display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
             ">
@@ -678,19 +529,17 @@ function renderAppHeader($title, $backUrl = null)
         </div>
 
         <!-- Direita: Ações + Líder + Perfil -->
-        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
-
+        <div class="header-actions">
+            
             <!-- Líder Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                 <?php
-                    // Recalculate if not in same scope (though header is included, vars scope might vary if inside function)
-                    // renderPageHeader is a function, so we need to define logic inside it
                     $inAdminHead = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
                     $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
                     $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
                 ?>
-                <a href="<?= $liderLinkHead ?>" class="admin-crown-btn ripple" title="Painel do Líder">
-                    <i data-lucide="crown" style="width: 20px;"></i>
+                <a href="<?= $liderLinkHead ?>" class="header-action-btn ripple" title="Painel do Líder" style="color: var(--warning);">
+                    <i data-lucide="crown" width="20"></i>
                 </a>
             <?php endif; ?>
 
@@ -701,15 +550,10 @@ function renderAppHeader($title, $backUrl = null)
 
             <!-- Notification Button (Bell) -->
             <div style="position: relative;">
-                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="Notificações">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-                    </svg>
-                    <span class="notification-badge" id="notificationBadgeDesktop" style="display: none;">0</span>
+                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                    <i data-lucide="bell" width="20"></i>
+                    <span class="badge-dot" id="notificationBadgeDesktop" style="display: none;"></span>
                 </button>
-                
-                <!-- Desktop Dropdown -->
                 
                 <!-- Desktop Dropdown -->
                 <div class="notification-dropdown" id="notificationDropdownDesktop">
@@ -738,131 +582,101 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
             </div>
 
-            
-
             <!-- Perfil Dropdown (Card Moderno) -->
             <div style="position: relative; margin-left: 4px;">
                 <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="<?= $_layoutUser['photo'] ?>" alt="User">
                     <?php else: ?>
-                        <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-surface-alt); color: var(--text-muted);">
+                            <i data-lucide="user" width="20"></i>
+                        </div>
                     <?php endif; ?>
                 </button>
 
                 <!-- Dropdown Card -->
-                <div id="headerProfileDropdown" style="
-                    display: none; position: absolute; top: 60px; right: 0; 
-                    background: var(--bg-surface); border-radius: 16px; 
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-                    min-width: 220px; z-index: 100; border: 1px solid var(--border-color); overflow: hidden;
-                    animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-                    transform-origin: top right;
-                ">
+                <div id="headerProfileDropdown" class="dropdown-card">
                     <!-- Header do Card -->
-                    <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: #ffffff; border-bottom: 1px solid var(--border-color);">
-                        <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0;">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar">
                             <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <div style="flex: 1; min-width: 0;">
+                        <div class="dropdown-user-info">
                             <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                            <div style="font-size: 0.75rem; color: #047857; font-weight: 500;">Membro da Equipe</div>
+                            <div style="font-size: 0.75rem; color: var(--success-text); font-weight: 500;">Membro da Equipe</div>
                         </div>
                     </div>
-                    <!-- Compacted Header Desktop -->
 
-                            <div style="padding: 8px;">
-                                <?php
-                                $qsLink = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '../app/quem_somos.php' : 'quem_somos.php';
-                                if (strpos($_SERVER['PHP_SELF'], '/app/') !== false) {
-                                     // Default works
-                                } else if (strpos($_SERVER['PHP_SELF'], '/admin/') === false) {
-                                     // Probably root
-                                     if(file_exists('app/quem_somos.php')) $qsLink = 'app/quem_somos.php';
-                                }
-                                ?>
-                                <a href="<?= $qsLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #e0e7ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                                            <path d="M12 17h.01"></path>
-                                        </svg>
-                                    </div>
-                                    <span style="font-weight: 500;">Quem somos nós?</span>
-                                </a>
-
-                                <?php
-                                // Logic for dynamic links based on context (admin vs app vs root)
-                                $inAdmin = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
-                                $inApp   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
-                                
-                                $perfilLink = $inAdmin ? 'perfil.php' : ($inApp ? '../admin/perfil.php' : 'admin/perfil.php');
-                                $liderLink  = $inAdmin ? 'lider.php'  : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
-                                ?>
-
-                                <a href="<?= $perfilLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                            <circle cx="12" cy="7" r="4" />
-                                        </svg>
-                                    </div>
-                                    <span style="font-weight: 500;">Meu Perfil</span>
-                                </a>
-
-                                <a href="#" onclick="openDashboardCustomization(); return false;" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #eef2ff; padding: 6px; border-radius: 6px; display: flex; color: #4338ca;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                            <line x1="3" y1="9" x2="21" y2="9"></line>
-                                            <line x1="9" y1="21" x2="9" y2="9"></line>
-                                        </svg>
-                                    </div>
-                                    <span style="font-weight: 500;">Acesso Rápido</span>
-                                </a>
-
-                                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                                    <a href="<?= $liderLink ?>" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                        <div style="background: #fff7ed; padding: 6px; border-radius: 6px; display: flex; color: #d97706;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7z" />
-                                                <path d="M5 16v4h14v-4" />
-                                            </svg>
-                                        </div>
-                                        <span style="font-weight: 500;">Painel do Líder</span>
-                                    </a>
-                                <?php endif; ?>
-
-                                <!-- Dark Mode Toggle -->
-                                <div onclick="toggleThemeMode()" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; color: var(--text-main); font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #f1f5f9; padding: 6px; border-radius: 6px; display: flex; color: #64748b;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-                                        </svg>
-                                    </div>
-                                    <span style="font-weight: 500;">Modo Escuro</span>
-                                    <div style="margin-left: auto;">
-                                        <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
-                                            <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
-                                            <span class="slider-mini round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
-
-                                <a href="../logout.php" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-decoration: none; color: #ef4444; font-size: 0.85rem; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'">
-                                    <div style="background: #fee2e2; padding: 6px; border-radius: 6px; display: flex; color: #ef4444;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                            <polyline points="16 17 21 12 16 7" />
-                                            <line x1="21" x2="9" y1="12" y2="12" />
-                                        </svg>
-                                    </div>
-                                    <span style="font-weight: 600;">Sair da Conta</span>
-                                </a>
+                    <div style="padding: 8px;">
+                        <?php
+                        $qsLink = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '../app/quem_somos.php' : 'quem_somos.php';
+                        if (strpos($_SERVER['PHP_SELF'], '/app/') !== false) {
+                            // Default works
+                        } else if (strpos($_SERVER['PHP_SELF'], '/admin/') === false) {
+                            if(file_exists('app/quem_somos.php')) $qsLink = 'app/quem_somos.php';
+                        }
+                        
+                        // Logic for dynamic links based on context (admin vs app vs root)
+                        $inAdmin = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
+                        $inApp   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
+                        
+                        $perfilLink = $inAdmin ? 'perfil.php' : ($inApp ? '../admin/perfil.php' : 'admin/perfil.php');
+                        $liderLink  = $inAdmin ? 'lider.php'  : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
+                        ?>
+                        
+                        <a href="<?= $qsLink ?>" class="dropdown-menu-item">
+                            <div class="dropdown-icon-wrapper" style="background: var(--primary-light); color: var(--primary);">
+                                <i data-lucide="circle-help" width="16"></i>
                             </div>
+                            <span style="font-weight: 500;">Quem somos nós?</span>
+                        </a>
+
+                        <a href="<?= $perfilLink ?>" class="dropdown-menu-item">
+                            <div class="dropdown-icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
+                                <i data-lucide="user" width="16"></i>
+                            </div>
+                            <span style="font-weight: 500;">Meu Perfil</span>
+                        </a>
+
+                        <a href="#" onclick="openDashboardCustomization(); return false;" class="dropdown-menu-item">
+                            <div class="dropdown-icon-wrapper" style="background: var(--info-bg); color: var(--info-text);">
+                                <i data-lucide="layout" width="16"></i>
+                            </div>
+                            <span style="font-weight: 500;">Acesso Rápido</span>
+                        </a>
+
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <a href="<?= $liderLink ?>" class="dropdown-menu-item">
+                                <div class="dropdown-icon-wrapper" style="background: var(--warning-bg); color: var(--warning-text);">
+                                    <i data-lucide="crown" width="16"></i>
+                                </div>
+                                <span style="font-weight: 500;">Painel do Líder</span>
+                            </a>
+                        <?php endif; ?>
+
+                        <!-- Dark Mode Toggle -->
+                        <div onclick="toggleThemeMode()" class="dropdown-menu-item">
+                            <div class="dropdown-icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
+                                <i data-lucide="moon" width="16"></i>
+                            </div>
+                            <span style="font-weight: 500;">Modo Escuro</span>
+                            <div style="margin-left: auto;">
+                                <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
+                                    <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
+                                    <span class="slider-mini round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
+
+                        <a href="../logout.php" class="dropdown-menu-item" style="color: var(--danger);">
+                            <div class="dropdown-icon-wrapper" style="background: var(--danger-bg); color: var(--danger);">
+                                <i data-lucide="log-out" width="16"></i>
+                            </div>
+                            <span style="font-weight: 600;">Sair da Conta</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -1088,6 +902,7 @@ function renderAppHeader($title, $backUrl = null)
         <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
 
         
+
     </body>
     </html>
 <?php

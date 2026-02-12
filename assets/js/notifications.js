@@ -30,7 +30,7 @@ async function loadUnreadCount() {
     try {
         const response = await fetch(`${API_ENDPOINT}?action=count_unread`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
+
         const text = await response.text();
         if (!text) return; // Empty response
 
@@ -50,7 +50,7 @@ async function loadNotifications(containerId = null) {
     try {
         const response = await fetch(`${API_ENDPOINT}?action=list&limit=3&unread_only=true`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
+
         const text = await response.text();
         if (!text) return;
 
@@ -173,50 +173,53 @@ async function markAllAsRead() {
 
 // Atualizar estilo do botão ao invés de badge
 // Atualizar estilo do botão ao invés de badge
+// Atualizar estilo do botão ao invés de badge
 function updateBadge() {
-    // 1. Desktop Button (Estilo Amarelo/Icone)
+    // 1. Desktop Button
     const btnDesktop = document.getElementById('notificationBtnDesktop');
+    const badgeDesktop = document.getElementById('notificationBadgeDesktop');
+
     if (btnDesktop) {
+        // Limpar estilos inline legados
+        btnDesktop.style.background = '';
+        btnDesktop.style.color = '';
+        btnDesktop.style.borderColor = '';
+
         if (unreadCount > 0) {
-            btnDesktop.style.background = '#fef3c7';
-            btnDesktop.style.color = '#d97706';
-            btnDesktop.style.borderColor = '#fcd34d';
+            btnDesktop.classList.add('active');
+            if (badgeDesktop) badgeDesktop.style.display = 'block';
         } else {
-            btnDesktop.style.background = '';
-            btnDesktop.style.color = '';
-            btnDesktop.style.borderColor = '';
+            btnDesktop.classList.remove('active');
+            if (badgeDesktop) badgeDesktop.style.display = 'none';
         }
     }
 
     // 2. Mobile / Global Button
     const btnMobile = document.getElementById('notificationBtn');
+    const badgeMobile = document.getElementById('notificationBadge');
 
     if (btnMobile) {
+        // Limpar estilos inline legados
+        btnMobile.style.background = '';
+        btnMobile.style.color = '';
+        btnMobile.style.borderColor = '';
+        btnMobile.style.animation = '';
+
         if (unreadCount > 0) {
-            // Apply Amber/Yellow Highlight
-            btnMobile.style.background = '#fef3c7'; // Amber 100
-            btnMobile.style.color = '#d97706';      // Amber 600
-            btnMobile.style.borderColor = '#fcd34d'; // Amber 300
+            // Apply Amber/Yellow Highlight handled by CSS if needed, 
+            // or just rely on badge. For mobile, we might still want the badge count if it uses the old layout
+            // but let's try to standardize. 
+            // Assuming mobile also uses header-action-btn or similar if refactored, 
+            // but mobile header might be different. 
 
-            // Pulse animation for attention
-            btnMobile.style.animation = 'pulse-soft 2s infinite';
-
-            // Ensure badge is visible
-            const badge = document.getElementById('notificationBadge');
-            if (badge) {
-                badge.style.display = 'flex';
-                badge.textContent = unreadCount;
+            // Keeping mobile logic compatible with existing layout (which might expect text)
+            if (badgeMobile) {
+                badgeMobile.style.display = 'flex';
+                badgeMobile.textContent = unreadCount;
             }
         } else {
-            // Reset to default
-            btnMobile.style.background = '';
-            btnMobile.style.color = '';
-            btnMobile.style.borderColor = '';
-            btnMobile.style.animation = '';
-
-            const badge = document.getElementById('notificationBadge');
-            if (badge) {
-                badge.style.display = 'none';
+            if (badgeMobile) {
+                badgeMobile.style.display = 'none';
             }
         }
     }

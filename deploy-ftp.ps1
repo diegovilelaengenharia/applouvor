@@ -2,17 +2,22 @@
 # Uploads modified files to production server
 
 $ftpServer = "ftp://147.93.64.217"
-$ftpUsername = "Diego"
-$ftpPassword = "6&vHwaN]8/*k||rD"
-$ftpBasePath = "/public_html/applouvor"
+$ftpUsername = "u884436813.Diego"
+$ftpPassword = "0w;G7y#lXe:MtC&k"
+$remoteBasePath = "/applouvor"
 
 # Files to upload (relative paths)
 $filesToUpload = @(
-    @{ Local = "admin\escala.php"; Remote = "/public_html/applouvor/admin/escala.php" },
-    @{ Local = "admin\index.php"; Remote = "/public_html/applouvor/admin/index.php" },
-    @{ Local = "assets\css\pages\escala.css"; Remote = "/public_html/applouvor/assets/css/pages/escala.css" },
-    @{ Local = "assets\css\pages\dashboard.css"; Remote = "/public_html/applouvor/assets/css/pages/dashboard.css" },
-    @{ Local = "assets\css\pages\shared-pages.css"; Remote = "/public_html/applouvor/assets/css/pages/shared-pages.css" }
+    @{ Local = "includes\layout.php"; Remote = "$remoteBasePath/includes/layout.php" },
+    @{ Local = "admin\sidebar.php"; Remote = "$remoteBasePath/admin/sidebar.php" },
+    @{ Local = "assets\css\app-main.css"; Remote = "$remoteBasePath/assets/css/app-main.css" },
+    @{ Local = "assets\css\components\sidebar.css"; Remote = "$remoteBasePath/assets/css/components/sidebar.css" },
+    @{ Local = "assets\css\legacy-style.css"; Remote = "$remoteBasePath/assets/css/legacy-style.css" },
+    @{ Local = "admin\index.php"; Remote = "$remoteBasePath/admin/index.php" },
+    @{ Local = "includes\dashboard_render.php"; Remote = "$remoteBasePath/includes/dashboard_render.php" },
+    @{ Local = "assets\css\components\dashboard-cards.css"; Remote = "$remoteBasePath/assets/css/components/dashboard-cards.css" },
+    @{ Local = "assets\css\components\page-headers.css"; Remote = "$remoteBasePath/assets/css/components/page-headers.css" },
+    @{ Local = "assets\js\main.js"; Remote = "$remoteBasePath/assets/js/main.js" }
 )
 
 Write-Host "=== FTP Deploy to Hostinger ===" -ForegroundColor Cyan

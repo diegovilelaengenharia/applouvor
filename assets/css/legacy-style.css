@@ -139,13 +139,12 @@ html {
 }
 
 /* Main Content */
+/* Main Content */
 .app-content {
-    margin-top: 0;
-    /* Header removido */
-    margin-bottom: var(--bottom-nav-height);
-    padding: 24px 16px;
-    /* Padding superior aumentado para respiro */
-    min-height: calc(100vh - var(--bottom-nav-height));
+    /* Layout handled by sidebar.css and layout.php structure */
+    min-height: 100vh;
+    padding: 24px;
+    width: 100%;
 }
 
 /* Bottom Nav */
@@ -235,6 +234,39 @@ html {
 }
 
 /* Bottom Sheets */
+.bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--bg-surface, #fff);
+    border-radius: 28px 28px 0 0;
+    padding: 24px;
+    transform: translateY(110%);
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+    border-top: 1px solid var(--border-subtle);
+    max-height: 85vh;
+    overflow-y: auto;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    z-index: 1001;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-sheet.open {
+    transform: translateY(0);
+}
+
+/* Hide on Desktop */
+@media (min-width: 1025px) {
+    .bottom-sheet {
+        display: none !important;
+    }
+
+    .bottom-nav-container {
+        display: none !important;
+    }
+}
+
 .bottom-sheet-overlay {
     position: fixed;
     top: 0;
@@ -254,23 +286,6 @@ html {
 .bottom-sheet-overlay.active {
     opacity: 1;
     visibility: visible;
-}
-
-.bottom-sheet-content {
-    width: 100%;
-    background: var(--bg-secondary);
-    border-radius: 28px 28px 0 0;
-    padding: 24px;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
-    border-top: 1px solid var(--border-subtle);
-    max-height: 85vh;
-    overflow-y: auto;
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-}
-
-.bottom-sheet-overlay.active .bottom-sheet-content {
-    transform: translateY(0);
 }
 
 .sheet-header {

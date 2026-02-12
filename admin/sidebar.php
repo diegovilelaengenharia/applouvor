@@ -25,7 +25,7 @@ try {
 }
 
 if (!$currentUser) {
-    $currentUser = ['name' => 'UsuÃ¡rio', 'phone' => '', 'avatar' => null];
+    $currentUser = ['name' => 'Usuário', 'phone' => '', 'avatar' => null];
 }
 if (!$currentUser['phone']) $currentUser['phone'] = 'Membro da Equipe';
 
@@ -70,11 +70,11 @@ if (!empty($currentUser['avatar'])) {
                 <rect width="7" height="9" x="14" y="12" rx="1" fill="var(--amber-500)" stroke="var(--amber-500)" />
                 <rect width="7" height="5" x="3" y="16" rx="1" fill="var(--red-500)" stroke="var(--red-500)" />
             </svg>
-            <span class="sidebar-text">VisÃ£o Geral</span>
+            <span class="sidebar-text">Visão Geral</span>
         </a>
 
         <div class="nav-divider"></div>
-        <div class="nav-section-title">GestÃ£o de Ensaios</div>
+        <div class="nav-section-title">Gestão de Ensaios</div>
 
         <a href="<?= $baseAdmin ?>escalas.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -86,14 +86,14 @@ if (!empty($currentUser['avatar'])) {
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
             </svg>
-            <span class="sidebar-text">RepertÃ³rio</span>
+            <span class="sidebar-text">Repertório</span>
         </a>
 
         <a href="<?= $baseAdmin ?>historico.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
             </svg>
-            <span class="sidebar-text">HistÃ³rico</span>
+            <span class="sidebar-text">Histórico</span>
         </a>
 
         <a href="<?= $baseAdmin ?>membros.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
@@ -108,7 +108,7 @@ if (!empty($currentUser['avatar'])) {
                 <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/>
                 <path d="M7 12h10v2H7z" fill="var(--red-500)"/>
             </svg>
-            <span class="sidebar-text">AusÃªncias</span>
+            <span class="sidebar-text">Ausências</span>
         </a>
 
         <a href="<?= $baseAdmin ?>agenda.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'active' : '' ?>">
@@ -131,11 +131,11 @@ if (!empty($currentUser['avatar'])) {
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zM11 17.08c-1.43-.59-3.34-1.08-4.5-1.08-1.16 0-2.65.3-3.5.6V7.28c.91-.3 2.34-.58 3.5-.58 1.16 0 3.07.49 4.5 1.08v9.3z"/>
             </svg>
-            <span class="sidebar-text">Leitura BÃ­blica</span>
+            <span class="sidebar-text">Leitura Bíblica</span>
         </a>
 
         <div class="nav-divider"></div>
-        <div class="nav-section-title">ComunicaÃ§Ã£o</div>
+        <div class="nav-section-title">Comunicação</div>
 
         <a href="<?= $baseAdmin ?>avisos.php" class="nav-item nav-yellow <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -145,34 +145,11 @@ if (!empty($currentUser['avatar'])) {
             <span class="sidebar-text">Avisos</span>
         </a>
 
-        <!-- BotÃ£o Especial: ReuniÃ£o 08/02 -->
-        <a href="<?= $baseAdmin ?>reuniao_fev_2026.php" class="nav-item nav-meeting <?= basename($_SERVER['PHP_SELF']) == 'reuniao_fev_2026.php' ? 'active' : '' ?>">
-            <div class="nav-content-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-                <span class="sidebar-text" style="flex: 1;">ReuniÃ£o 08/02</span>
-                <span class="meeting-badge sidebar-text">NOVO</span>
-            </div>
-        </a>
-        
-        <!-- BotÃ£o Backup Offline -->
-        <a href="<?= $baseAdmin ?>apresentacao_offline.html" target="_blank" class="nav-item nav-meeting" style="background: var(--slate-700); border-color: var(--slate-600); margin-top: 4px;">
-            <div class="nav-content-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                <span class="sidebar-text" style="flex: 1; color: #fff;">Backup Offline</span>
-            </div>
-        </a>
+
 
     </nav>
 
-    <!-- CrÃ©ditos do Desenvolvedor -->
+    <!-- Créditos do Desenvolvedor -->
     <div class="sidebar-credits">
         <span class="sidebar-text" style="display: block; margin-bottom: 2px;">Desenvolvido por</span>
         <span class="sidebar-text" style="font-weight: 600; color: var(--text-tertiary); font-size: 0.7rem;">Diego T. N. Vilela</span>

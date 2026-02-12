@@ -61,6 +61,23 @@
     }
 }
 
+/* --- DESKTOP LAYOUT ADJUSTMENT (Replaces JS) --- */
+@media (min-width: 1025px) {
+
+    /* Default Expanded */
+    .sidebar~.app-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
+    }
+
+    /* Collapsed */
+    .sidebar.collapsed~.app-content {
+        margin-left: 88px;
+        width: calc(100% - 88px);
+    }
+}
+
 /* --- HEADER --- */
 .sidebar-header-hover {
     padding: 18px 16px;

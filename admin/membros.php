@@ -99,7 +99,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                              $avatarPath = '../' . $avatarPath;
                         }
                         
-                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" class=\"avatar-img\" onerror=\"this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');\">";
+                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" class=\"avatar-img\" loading=\"lazy\" onerror=\"this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');\">";
                         echo "<span class='fallback-initial hidden font-bold text-lg'>" . $initial . "</span>";
                     } else {
                         echo "<span class='font-bold text-lg'>" . $initial . "</span>";
@@ -166,13 +166,9 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                         <a href="perfil.php?id=<?= $user['id'] ?>" class="btn-action-icon" title="Editar Perfil">
                             <i data-lucide="edit-3" width="18"></i>
                         </a>
-                        <form method="POST" onsubmit="return confirm('Excluir este membro?');" class="form-actions-inline">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                            <button type="submit" class="btn-action-icon btn-action-delete" title="Excluir">
-                                <i data-lucide="trash-2" width="18"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="btn-action-icon btn-action-delete" title="Excluir" onclick="confirmDelete(<?= $user['id'] ?>, '<?= addslashes($user['name']) ?>')">
+                            <i data-lucide="trash-2" width="18"></i>
+                        </button>
                     <?php endif; ?>
                 </div>
             </div>
@@ -188,6 +184,33 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 <?php endif; ?>
 
 
+<!-- DELETE CONFIRMATION MODAL -->
+<div id="deleteModal" class="modal-overlay" onclick="if(event.target === this) closeDeleteModal()">
+    <div class="modal-card" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3 class="modal-title" style="color: var(--danger);">
+                <i data-lucide="trash-2" width="20"></i> Excluir Membro
+            </h3>
+            <button type="button" class="modal-close" onclick="closeDeleteModal()">
+                <i data-lucide="x" width="20"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom: 10px;">Tem certeza que deseja excluir este membro?</p>
+            <p id="deleteMemberName" style="font-weight: 600; font-size: 1.1em; color: var(--text-primary);"></p>
+            <p style="font-size: 0.9em; color: var(--text-tertiary); margin-top: 10px;">Esta ação não pode ser desfeita.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" onclick="closeDeleteModal()">Cancelar</button>
+            <form method="POST" id="deleteForm" style="margin: 0;">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="id" id="deleteMemberId">
+                <button type="submit" class="btn btn-danger">Excluir Permanentemente</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function filterMembers() {
         const term = document.getElementById('memberSearch').value.toLowerCase();
@@ -202,6 +225,16 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                 card.style.display = 'none';
             }
         });
+    }
+
+    function confirmDelete(id, name) {
+        document.getElementById('deleteMemberId').value = id;
+        document.getElementById('deleteMemberName').textContent = name;
+        document.getElementById('deleteModal').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
     }
 </script>
 

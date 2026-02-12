@@ -4,7 +4,11 @@
    ========================================================================== */
 
 /* 1. Base & Design System (Variáveis, Resets Suaves, Tipografia) */
+/* 1. Base & Design System (Variáveis, Resets Suaves, Tipografia) */
+@import url('theme.css');
+/* NEW: Single Source of Truth */
 @import url('design-system.css');
+/* Legacy Variables (Keep for compatibility) */
 
 /* 2. Componentes Modernos (Botões, Cards, Inputs) */
 @import url('components.css');
@@ -14,10 +18,13 @@
 @import url('components/badges.css');
 @import url('components/icons.css');
 @import url('components/sidebar.css');
-@import url('components/page-headers.css');
+@import url('components/page-headers.css?v=3');
+@import url('components/header-actions.css?v=2');
 @import url('components/modals.css');
 @import url('components/timeline-cards.css');
+@import url('components/timeline-cards.css');
 @import url('components/animations.css');
+@import url('components/forms.css');
 
 /* 3. Recursos Específicos (Nucelos semânticos) */
 @import url('roles.css');
