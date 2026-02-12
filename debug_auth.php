@@ -1,73 +1,57 @@
 <?php
-// debug_auth.php - Diagnóstico de Login
+// debug_auth.php - Diagnóstico de Login (JSON)
+header('Content-Type: application/json');
 require_once 'includes/db.php';
-// require_once 'includes/auth.php'; // DISABLED to avoid redirect loop if not logged in (auth.php might check login?)
-// Let's check auth.php content again... it has checkLogin() but doesn't call it globally. It calls session_start().
-// So it is safe to include.
 require_once 'includes/auth.php';
 
-$name = 'Diego'; // Nome relatado pelo usuário
-$pass = '9577';  // Senha relatada pelo usuário
+$name = 'Diego'; 
+$pass = '9577';
 
-// Plain text diagnostic for curl
-header('Content-Type: text/html; charset=utf-8');
-
-echo "<h1>Diagnóstico de Login</h1>";
-echo "<!-- DIAGNOSTIC_START -->\n";
-echo "Testando usuário: <strong>$name</strong><br>";
+$response = [
+    'user_input' => $name,
+    'pass_input' => $pass
+];
 
 try {
-    // 1. Verificar Conexão DB
-    echo "Conexão DB: OK<br>";
-
-    // 2. Buscar Usuário (Case Insensitive force)
+    // 1. Buscar Usuário
     $user = App\DB::table('users')->where('name', '=', $name)->first();
     
-    if (!$user) {
-        echo "<span style='color:red'>ERRO: Usuário '$name' (exato) não encontrado.</span><br>";
-        
-        // Tenta buscar com LIKE
-        $userLike = $pdo->query("SELECT * FROM users WHERE name LIKE '%Diego%'")->fetchAll();
-        if ($userLike) {
-            echo "Sugestão: Encontrei estes usuários parecidos:<ul>";
-            foreach ($userLike as $u) {
-                echo "<li>ID: {$u['id']} - Nome: '{$u['name']}' (Role: {$u['role']})</li>";
-            }
-            echo "</ul>";
-        }
-    } else {
-        echo "<span style='color:green'>SUCESSO: Usuário '$name' encontrado (ID: {$user['id']}).</span><br>";
-        
-        // 3. Verificar Senha
+    $response['user_found'] = (bool)$user;
+    
+    if ($user) {
+        $response['user_id'] = $user['id'];
+        $response['user_role'] = $user['role'];
         $dbPass = $user['password'];
-        $match = false;
+        $response['password_type'] = (strlen($dbPass) > 50) ? 'hash' : 'text';
         
+        $match = false;
         if (password_verify($pass, $dbPass)) {
             $match = true;
-            echo "<span style='color:green; font-weight:bold; font-size:1.2em;'>SENHA: OK (Hash)</span><br>";
+            $response['match_method'] = 'password_verify';
         } elseif ($pass === $dbPass) {
             $match = true;
-            echo "<span style='color:green; font-weight:bold; font-size:1.2em;'>SENHA: OK (Texto Plano)</span><br>";
-        } else {
-            echo "<span style='color:red; font-weight:bold; font-size:1.2em;'>SENHA: INCORRETA</span><br>";
-            echo "Hash no DB começa com: " . substr($dbPass, 0, 10) . "...<br>";
+            $response['match_method'] = 'exact_match';
         }
         
-        // 4. Verificar Sessão/Cookie param
-        echo "<h2>Verificação de Ambiente</h2>";
-        echo "HTTPS ativo server var? " . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'Sim' : 'Não') . "<br>";
-        
-        $cookieParams = session_get_cookie_params();
-        echo "Cookie Secure: " . ($cookieParams['secure'] ? 'Sim' : 'Não') . "<br>";
-        echo "Session ID: " . session_id() . "<br>";
-        
-        if ($cookieParams['secure'] && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')) {
-            echo "<p style='color:red; font-weight:bold'>ALERTA CRÍTICO: Cookies Secure=True mas HTTPS=False/Null. Login falhará.</p>";
+        $response['password_match'] = $match;
+        if (!$match) {
+             $response['hash_preview'] = substr($dbPass, 0, 10) . '...';
         }
+    } else {
+        // Search similar
+        $userLike = $pdo->query("SELECT id, name FROM users WHERE name LIKE '%Diego%'")->fetchAll(PDO::FETCH_ASSOC);
+        $response['similar_users'] = $userLike;
     }
 
+    // Ambiente
+    $response['https'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on');
+    $cookieParams = session_get_cookie_params();
+    $response['cookie_secure_flag'] = $cookieParams['secure'];
+    $response['session_id_length'] = strlen(session_id());
+
 } catch (Exception $e) {
-    echo "<p style='color:red'>Erro fatal: " . $e->getMessage() . "</p>";
+    $response['error'] = $e->getMessage();
 }
-echo "\n<!-- DIAGNOSTIC_END -->";
+
+echo json_encode($response, JSON_PRETTY_PRINT);
 ?>
