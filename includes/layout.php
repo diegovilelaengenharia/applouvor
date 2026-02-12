@@ -1,9 +1,9 @@
-<?php
+ï»¿<?php
 // includes/layout.php
 
-// Inicia sess+úo se n+úo estiver iniciada
+// Inicia sess+Ãºo se n+Ãºo estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    // Configurar sess+úo para 30 dias (backup, idealmente auth.php deve ser chamado antes)
+    // Configurar sess+Ãºo para 30 dias (backup, idealmente auth.php deve ser chamado antes)
     ini_set('session.gc_maxlifetime', 2592000);
     session_set_cookie_params([
         'lifetime' => 2592000,
@@ -21,14 +21,14 @@ function renderAppHeader($title, $backUrl = null)
 {
     global $pdo;
 
-    // --- L+¦gica de Usu+írio Global (Movida do Sidebar) ---
+    // --- L+Â¦gica de Usu+Ã­rio Global (Movida do Sidebar) ---
     $userId = $_SESSION['user_id'] ?? 1;
     $currentUser = null;
     $userPhoto = null;
 
     if ($userId) {
         try {
-            // Tenta buscar foto tamb+®m
+            // Tenta buscar foto tamb+Â®m
             $stmtUser = $pdo->prepare("SELECT name, phone, avatar FROM users WHERE id = ?");
             $stmtUser->execute([$userId]);
             $currentUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ function renderAppHeader($title, $backUrl = null)
         }
 
         if (!$currentUser) {
-            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usu+írio', 'phone' => '', 'avatar' => null];
+            $currentUser = ['name' => $_SESSION['user_name'] ?? 'Usu+Ã­rio', 'phone' => '', 'avatar' => null];
         }
 
         // Avatar Logic
@@ -51,7 +51,7 @@ function renderAppHeader($title, $backUrl = null)
         }
     }
     // Compartilhar com globais ou session para acesso no header
-    // Uma forma suja mas eficaz para templates +® usar global ou re-passar. 
+    // Uma forma suja mas eficaz para templates +Â® usar global ou re-passar. 
     // Vamos usar global $_layoutUser para acesso em renderPageHeader
     global $_layoutUser;
     $_layoutUser = [
@@ -76,8 +76,8 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Open Graph / WhatsApp Sharing -->
         <meta property="og:type" content="website">
         <meta property="og:title" content="App Louvor PIB Oliveira">
-        <meta property="og:description" content="Gest+úo de escalas, repert+¦rio e minist+®rio de louvor da PIB Oliveira.">
-        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss+¡vel -->
+        <meta property="og:description" content="Gest+Ãºo de escalas, repert+Â¦rio e minist+Â®rio de louvor da PIB Oliveira.">
+        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss+Â¡vel -->
         <meta property="og:url" content="https://app.piboliveira.com.br/">
         
         <!-- PWA Meta Tags -->
@@ -90,17 +90,21 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="manifest" href="/manifest.json">
         <link rel="apple-touch-icon" href="../assets/img/logo_pib_black.png">
 
-<!-- Google Material Icons -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <!-- Google Material Icons -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        
+        <!-- Font Awesome (Legacy Support) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        <!-- +ìcones Lucide -->
+        <!-- +Ã¬cones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Semantic Design System & App Main CSS -->
-        <link rel="stylesheet" href="../assets/css/app-main.css?v=<?= time() ?>">
+        <!-- APP URL for JS logic -->
+        <script>const APP_URL = '<?= APP_URL ?>';</script>
+
+        <!-- Main CSS (Absolute Path) -->
+        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= time() ?>">
 
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
@@ -123,7 +127,7 @@ function renderAppHeader($title, $backUrl = null)
         ?>
 
         <div id="app-content">
-            <!-- Header Mobile (S+¦ vis+¡vel em telas menores) -->
+            <!-- Header Mobile (S+Â¦ vis+Â¡vel em telas menores) -->
             <header class="mobile-header">
                 <?php
                 // Logic to determine if it's the home page
@@ -145,14 +149,14 @@ function renderAppHeader($title, $backUrl = null)
                                 <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
                             </button>
                         <?php endif; ?>
-                        <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="Início">
+                        <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="InÃ­cio">
                             <i data-lucide="home" style="width: 24px; height: 24px;"></i>
                         </a>
                     </div>
                 <?php endif; ?>
                 <div class="page-title"><?= htmlspecialchars($title) ?></div>
 
-                <!-- Right Side: Stats + L+¡der + Avatar -->
+                <!-- Right Side: Stats + L+Â¡der + Avatar -->
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <!-- Stats Button (Repertorio only) -->
 
@@ -162,7 +166,7 @@ function renderAppHeader($title, $backUrl = null)
 
 
 
-                    <!-- L+¡der Button (Admin only) -->
+                    <!-- L+Â¡der Button (Admin only) -->
                     <!-- Notification Button -->
                     <div style="position: relative;">
                         <button class="notification-btn ripple" onclick="toggleNotifications('notificationDropdown')" id="notificationBtn">
@@ -219,7 +223,7 @@ function renderAppHeader($title, $backUrl = null)
                                     <div class="icon-wrapper">
                                         <i data-lucide="circle-help" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span>Quem somos nós?</span>
+                                    <span>Quem somos nÃ³s?</span>
                                 </a>
 
                                 <a href="perfil.php" class="profile-menu-item">
@@ -233,7 +237,7 @@ function renderAppHeader($title, $backUrl = null)
                                     <div class="icon-wrapper">
                                         <i data-lucide="layout" style="width: 16px; height: 16px;"></i>
                                     </div>
-                                    <span>Acesso Rápido</span>
+                                    <span>Acesso RÃ¡pido</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -241,7 +245,7 @@ function renderAppHeader($title, $backUrl = null)
                                         <div class="icon-wrapper">
                                             <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
                                         </div>
-                                        <span>Painel do Líder</span>
+                                        <span>Painel do LÃ­der</span>
                                     </a>
                                 <?php endif; ?>
 
@@ -291,15 +295,15 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Overlay de Fundo -->
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
 
-        <!-- 1. Sheet GEST+âO -->
+        <!-- 1. Sheet GEST+Ã¢O -->
         <div id="sheet-gestao" class="bottom-sheet">
             <div class="sheet-header">
                 <div style="background: #ecfdf5; padding: 10px; border-radius: 12px; color: #047857;">
                     <i data-lucide="layout-grid"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">Gestão</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Administração do Ministério</div>
+                    <div class="sheet-title">GestÃ£o</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">AdministraÃ§Ã£o do MinistÃ©rio</div>
                 </div>
             </div>
             <div class="sheet-grid">
@@ -313,7 +317,7 @@ function renderAppHeader($title, $backUrl = null)
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
                         <i data-lucide="music"></i>
                     </div>
-                    Repertório
+                    RepertÃ³rio
                 </a>
                 <a href="indisponibilidade.php" class="sheet-btn">
                     <div class="sheet-btn-icon" style="background: #d1fae5; color: #047857;">
@@ -330,25 +334,25 @@ function renderAppHeader($title, $backUrl = null)
             </div>
         </div>
 
-        <!-- 2. Sheet ESP+ìRITO -->
+        <!-- 2. Sheet ESP+Ã¬RITO -->
         <div id="sheet-espirito" class="bottom-sheet">
             <div class="sheet-header">
                 <div style="background: #eef2ff; padding: 10px; border-radius: 12px; color: #4338ca;">
                     <i data-lucide="flame"></i>
                 </div>
                 <div>
-                    <div class="sheet-title">Espírito</div>
+                    <div class="sheet-title">EspÃ­rito</div>
                     <div style="font-size: 0.85rem; color: var(--text-muted);">Vida Devocional</div>
                 </div>
             </div>
-            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista +¦nica para destaque -->
+            <div class="sheet-grid" style="grid-template-columns: 1fr;"> <!-- Lista +Â¦nica para destaque -->
                 <a href="devocionais.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
                     <div class="sheet-btn-icon" style="background: #e0e7ff; color: #4338ca;">
                         <i data-lucide="book-open"></i>
                     </div>
                     <div>
                         <div>Devocional</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexão diária</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Sua conexÃ£o diÃ¡ria</div>
                     </div>
                 </a>
                 <a href="oracao.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -356,8 +360,8 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="heart-handshake"></i>
                     </div>
                     <div>
-                        <div>Oração</div>
-                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Intercessão e gratidão</div>
+                        <div>OraÃ§Ã£o</div>
+                        <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">IntercessÃ£o e gratidÃ£o</div>
                     </div>
                 </a>
                 <a href="leitura.php" class="sheet-btn" style="flex-direction: row; justify-content: start; text-align: left;">
@@ -365,7 +369,7 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="scroll"></i>
                     </div>
                     <div>
-                        <div>Leitura Bíblica</div>
+                        <div>Leitura BÃ­blica</div>
                         <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">Plano anual</div>
                     </div>
                 </a>
@@ -375,21 +379,21 @@ function renderAppHeader($title, $backUrl = null)
 
 
 
-        <!-- Barra de Navega+º+úo Fixa -->
+        <!-- Barra de Navega+Âº+Ãºo Fixa -->
         <div class="bottom-nav-container">
             <nav class="bottom-nav-bar">
 
                 
 
-                <!-- Botão HOME (Primeiro) com Efeito 3D Pulsante -->
+                <!-- BotÃ£o HOME (Primeiro) com Efeito 3D Pulsante -->
                 <a href="index.php" class="b-nav-item home-3d" onclick="closeAllSheets()">
                     <div class="b-nav-icon-wrapper">
                         <i data-lucide="home"></i>
                     </div>
-                    <span>Início</span>
+                    <span>InÃ­cio</span>
                 </a>
 
-                <!-- Botão GERAL (Gestão ? AZUL) -->
+                <!-- BotÃ£o GERAL (GestÃ£o ? AZUL) -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-gestao', this)" style="color: #2563eb;">
                     <div class="b-nav-icon-wrapper" style="background: #eff6ff;">
                         <i data-lucide="layout-grid"></i>
@@ -397,15 +401,15 @@ function renderAppHeader($title, $backUrl = null)
                     <span>Geral</span>
                 </button>
 
-                <!-- Botão ESPÍRITO (Espiritual ? VERDE) -->
+                <!-- BotÃ£o ESPÃRITO (Espiritual ? VERDE) -->
                 <button class="b-nav-item" onclick="toggleSheet('sheet-espirito', this)" style="color: #059669;">
                     <div class="b-nav-icon-wrapper" style="background: #ecfdf5;">
                         <i data-lucide="flame"></i>
                     </div>
-                    <span>Espírito</span>
+                    <span>EspÃ­rito</span>
                 </button>
 
-                <!-- Botão AVISOS (Comunicação ? ROXO) -->
+                <!-- BotÃ£o AVISOS (ComunicaÃ§Ã£o ? ROXO) -->
                 <a href="avisos.php" class="b-nav-item" onclick="closeAllSheets()" style="color: #7c3aed;">
                     <div class="b-nav-icon-wrapper" style="background: #f5f3ff;">
                         <i data-lucide="bell"></i>
@@ -427,7 +431,7 @@ function renderAppHeader($title, $backUrl = null)
                 // 1. Fechar todos primeiro
                 closeAllSheets();
 
-                // 2. Se n+úo estava aberto, abrir o clicado
+                // 2. Se n+Ãºo estava aberto, abrir o clicado
                 if (!isOpen) {
                     sheet.classList.add('open');
                     overlay.classList.add('active');
@@ -448,20 +452,20 @@ function renderAppHeader($title, $backUrl = null)
         </script>
 
 
-        <!-- Inicializar +ìcones -->
+        <!-- Inicializar +Ã¬cones -->
         <script>
             lucide.createIcons();
 
             // Registrar PWA Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js')
+                    navigator.serviceWorker.register('<?= APP_URL ?>/sw.js')
                         .then(registration => console.log('SW registrado com sucesso:', registration.scope))
                         .catch(err => console.log('Falha ao registrar SW:', err));
                 });
             }
 
-            // ... (Restante do script mantido, apenas adicionando verifica+º+úo para evitar duplicidade de listeners se necess+írio)
+            // ... (Restante do script mantido, apenas adicionando verifica+Âº+Ãºo para evitar duplicidade de listeners se necess+Ã­rio)
 
             // Adicionar classe animate-in aos cards principais automaticamente
             document.addEventListener('DOMContentLoaded', () => {
@@ -473,12 +477,12 @@ function renderAppHeader($title, $backUrl = null)
                 // Sidebar Swipe Logic (Vibe Coding)
                 const sidebar = document.getElementById('app-sidebar');
                 const appContent = document.getElementById('app-content');
-                if (!sidebar) return; // Seguran+ºa
+                if (!sidebar) return; // Seguran+Âºa
 
                 let touchStartX = 0;
                 let touchEndX = 0;
 
-                // ... (Mantendo a l+¦gica de swipe anterior) ...
+                // ... (Mantendo a l+Â¦gica de swipe anterior) ...
 
                 document.addEventListener('touchstart', e => {
                     touchStartX = e.changedTouches[0].screenX;
@@ -500,7 +504,7 @@ function renderAppHeader($title, $backUrl = null)
                     const isChatPage = window.location.pathname.includes('chat.php');
 
                     // Swipe Right (Esquerda -> Direita): Abrir Sidebar
-                    // Apenas se começar perto da borda esquerda (< 50px) e sidebar fechada
+                    // Apenas se comeÃ§ar perto da borda esquerda (< 50px) e sidebar fechada
                     if (diff > swipeThreshold && touchStartX < 50 && !isSidebarOpen) {
                         toggleSidebar();
                     }
@@ -600,16 +604,16 @@ function renderAppHeader($title, $backUrl = null)
                 const userAgent = navigator.userAgent.toLowerCase();
                  // iOS
                 if (/iphone|ipad|ipod/.test(userAgent)) {
-                     alert('?? Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com seta)\n2. Role para baixo e toque em "Adicionar à Tela de Início"');
+                     alert('?? Para instalar no iPhone:\n\n1. Toque no botÃ£o Compartilhar (quadrado com seta)\n2. Role para baixo e toque em "Adicionar Ã  Tela de InÃ­cio"');
                 } else {
                     // Android / Other fallback
-                    alert('?? Para instalar:\n\nToque no menu do navegador (3 pontinhos) e selecione "Instalar aplicativo" ou "Adicionar à tela inicial".');
+                    alert('?? Para instalar:\n\nToque no menu do navegador (3 pontinhos) e selecione "Instalar aplicativo" ou "Adicionar Ã  tela inicial".');
                 }
             }
         };
     </script>
     <script>
-        // Configuração Global de Caminhos
+        // ConfiguraÃ§Ã£o Global de Caminhos
         const NOTIFICATIONS_API_BASE = '<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? '' : 'admin/') ?>';
     </script>
     
@@ -617,8 +621,8 @@ function renderAppHeader($title, $backUrl = null)
     <div class="notification-dropdown" id="notificationDropdown">
         <div class="notification-header">
             <div class="notification-title">
-                Notificações
-                <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar Notificações Push">
+                NotificaÃ§Ãµes
+                <button onclick="requestNotificationPermission()" id="btnEnableNotifications" class="notification-enable-btn" title="Ativar NotificaÃ§Ãµes Push">
                     <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
                 </button>
             </div>
@@ -627,11 +631,11 @@ function renderAppHeader($title, $backUrl = null)
         <div class="notification-list" id="notificationList">
             <div class="empty-state">
                 <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                <p>Nenhuma notificação nova</p>
+                <p>Nenhuma notificaÃ§Ã£o nova</p>
             </div>
         </div>
         <div class="notification-footer">
-            <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificações</a>
+            <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">Ver todas as notificaÃ§Ãµes</a>
         </div>
     </div>
 </body>
@@ -639,7 +643,7 @@ function renderAppHeader($title, $backUrl = null)
 <?php
     }
 
-    // Nova fun+º+úo para cabe+ºalhos padronizados (Clean Header)
+    // Nova fun+Âº+Ãºo para cabe+Âºalhos padronizados (Clean Header)
     function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
     {
         global $_layoutUser;
@@ -657,7 +661,7 @@ function renderAppHeader($title, $backUrl = null)
                     <i data-lucide="arrow-left" style="width: 22px;"></i>
                 </button>
 
-                <a href="index.php" class="ripple" title="Navega+º+úo Principal" style="
+                <a href="index.php" class="ripple" title="Navega+Âº+Ãºo Principal" style="
                 width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
                 display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
             ">
@@ -673,10 +677,10 @@ function renderAppHeader($title, $backUrl = null)
             <?php endif; ?>
         </div>
 
-        <!-- Direita: Ações + Líder + Perfil -->
+        <!-- Direita: AÃ§Ãµes + LÃ­der + Perfil -->
         <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 88px;">
 
-            <!-- Líder Button (Admin only) - Desktop -->
+            <!-- LÃ­der Button (Admin only) - Desktop -->
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                 <?php
                     // Recalculate if not in same scope (though header is included, vars scope might vary if inside function)
@@ -685,19 +689,19 @@ function renderAppHeader($title, $backUrl = null)
                     $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
                     $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
                 ?>
-                <a href="<?= $liderLinkHead ?>" class="admin-crown-btn ripple" title="Painel do Líder">
+                <a href="<?= $liderLinkHead ?>" class="admin-crown-btn ripple" title="Painel do LÃ­der">
                     <i data-lucide="crown" style="width: 20px;"></i>
                 </a>
             <?php endif; ?>
 
-            <!-- Ação da Página (se houver) -->
+            <!-- AÃ§Ã£o da PÃ¡gina (se houver) -->
             <?php if (isset($rightAction) && $rightAction): ?>
                 <?= $rightAction ?>
             <?php endif; ?>
 
             <!-- Notification Button (Bell) -->
             <div style="position: relative;">
-                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="notification-btn ripple" id="notificationBtnDesktop" title="NotificaÃ§Ãµes">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
                         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
@@ -711,8 +715,8 @@ function renderAppHeader($title, $backUrl = null)
                 <div class="notification-dropdown" id="notificationDropdownDesktop">
                     <div class="notification-header">
                         <div class="notification-title">
-                            Notificações
-                            <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar Notificações Push" id="btnEnableNotifications">
+                            NotificaÃ§Ãµes
+                            <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar NotificaÃ§Ãµes Push" id="btnEnableNotifications">
                                 <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
                             </button>
                         </div>
@@ -785,7 +789,7 @@ function renderAppHeader($title, $backUrl = null)
                                             <path d="M12 17h.01"></path>
                                         </svg>
                                     </div>
-                                    <span style="font-weight: 500;">Quem somos nós?</span>
+                                    <span style="font-weight: 500;">Quem somos nÃ³s?</span>
                                 </a>
 
                                 <?php
@@ -815,7 +819,7 @@ function renderAppHeader($title, $backUrl = null)
                                             <line x1="9" y1="21" x2="9" y2="9"></line>
                                         </svg>
                                     </div>
-                                    <span style="font-weight: 500;">Acesso Rápido</span>
+                                    <span style="font-weight: 500;">Acesso RÃ¡pido</span>
                                 </a>
 
                                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -826,7 +830,7 @@ function renderAppHeader($title, $backUrl = null)
                                                 <path d="M5 16v4h14v-4" />
                                             </svg>
                                         </div>
-                                        <span style="font-weight: 500;">Painel do Líder</span>
+                                        <span style="font-weight: 500;">Painel do LÃ­der</span>
                                     </a>
                                 <?php endif; ?>
 
@@ -898,7 +902,7 @@ function renderAppHeader($title, $backUrl = null)
     <div id="dashboardCustomizationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
         <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.25rem;">Personalizar Acesso Rápido</h3>
+                <h3 style="margin: 0; font-size: 1.25rem;">Personalizar Acesso RÃ¡pido</h3>
                 <button onclick="closeDashboardCustomization()" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -921,7 +925,7 @@ function renderAppHeader($title, $backUrl = null)
                         if (function_exists('getAllAvailableCards')):
                             $allCards = getAllAvailableCards();
                             
-                            // Tentar buscar configurações do usuário
+                            // Tentar buscar configuraÃ§Ãµes do usuÃ¡rio
                             $enabledCards = [];
                             if (isset($_SESSION['user_id'])) {
                                 global $pdo;
@@ -973,17 +977,17 @@ function renderAppHeader($title, $backUrl = null)
                         padding: 10px 20px; background: var(--primary); 
                         color: white; border: none; border-radius: 8px; 
                         cursor: pointer; font-weight: 600; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                    ">Salvar Alterações</button>
+                    ">Salvar AlteraÃ§Ãµes</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DETALHES NOTIFICAÇÃO -->
+    <!-- MODAL DETALHES NOTIFICAÃ‡ÃƒO -->
     <div id="notificationDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3050; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
         <div style="background: var(--bg-surface); border-radius: 16px; width: 90%; max-width: 500px; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; display: flex; flex-direction: column;">
             <div style="padding: 16px 20px; border-bottom: 0px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
-                <h3 style="margin: 0; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Notificação</h3>
+                <h3 style="margin: 0; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">NotificaÃ§Ã£o</h3>
                 <button onclick="closeNotificationDetail()" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted); display: flex;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -1014,7 +1018,7 @@ function renderAppHeader($title, $backUrl = null)
             const modal = document.getElementById('dashboardCustomizationModal');
             if (modal) {
                 modal.style.display = 'flex';
-                // Reiniciar Lucide icons se necess+írio
+                // Reiniciar Lucide icons se necess+Ã­rio
                 if (window.lucide) lucide.createIcons();
             }
         }
@@ -1067,7 +1071,7 @@ function renderAppHeader($title, $backUrl = null)
                 }
             } catch (error) {
                 console.error(error);
-                alert('Erro na comunica+º+úo com o servidor.');
+                alert('Erro na comunica+Âº+Ãºo com o servidor.');
                 btnSubmit.textContent = originalText;
                 btnSubmit.disabled = false;
             }
