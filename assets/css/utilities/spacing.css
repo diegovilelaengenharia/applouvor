@@ -1,0 +1,63 @@
+/* ==========================================================================
+   SPACING UTILITIES - Responsive Padding and Margin
+   Fluid spacing using clamp() for adaptive layouts
+   ========================================================================== */
+
+/* Padding Utilities */
+.p-responsive {
+    padding: clamp(1rem, 3vw, 2rem);
+}
+
+.p-responsive-sm {
+    padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+.p-responsive-lg {
+    padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.px-responsive {
+    padding-left: clamp(1rem, 3vw, 2rem);
+    padding-right: clamp(1rem, 3vw, 2rem);
+}
+
+.py-responsive {
+    padding-top: clamp(1rem, 3vw, 2rem);
+    padding-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* Margin Utilities */
+.m-responsive {
+    margin: clamp(1rem, 3vw, 2rem);
+}
+
+.m-responsive-sm {
+    margin: clamp(0.5rem, 2vw, 1rem);
+}
+
+.m-responsive-lg {
+    margin: clamp(1.5rem, 4vw, 3rem);
+}
+
+.mx-responsive {
+    margin-left: clamp(1rem, 3vw, 2rem);
+    margin-right: clamp(1rem, 3vw, 2rem);
+}
+
+.my-responsive {
+    margin-top: clamp(1rem, 3vw, 2rem);
+    margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* Gap Utilities (for flex/grid) */
+.gap-responsive {
+    gap: clamp(1rem, 2vw, 2rem);
+}
+
+.gap-responsive-sm {
+    gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+.gap-responsive-lg {
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+}

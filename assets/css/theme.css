@@ -92,6 +92,27 @@
 
     /* --- 3. TIPOGRAFIA --- */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+    /* Fluid Typography (Mobile-First with clamp) */
+    --font-xs: clamp(0.75rem, 1.5vw, 0.875rem);
+    /* 12px → 14px */
+    --font-sm: clamp(0.875rem, 1.5vw, 1rem);
+    /* 14px → 16px */
+    --font-base: clamp(1rem, 1.5vw, 1.125rem);
+    /* 16px → 18px */
+    --font-lg: clamp(1.125rem, 2vw, 1.25rem);
+    /* 18px → 20px */
+    --font-xl: clamp(1.25rem, 2.5vw, 1.5rem);
+    /* 20px → 24px */
+    --font-2xl: clamp(1.5rem, 3vw, 2rem);
+    /* 24px → 32px */
+    --font-3xl: clamp(1.875rem, 4vw, 2.5rem);
+    /* 30px → 40px */
+
+    /* Line Heights */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
 }
 
 /* RESETS BÁSICOS GLOBAIS */
@@ -99,8 +120,51 @@ body {
     background-color: var(--bg-body);
     color: var(--text-main);
     font-family: var(--font-sans);
+    font-size: var(--font-base);
+    line-height: var(--leading-normal);
     -webkit-font-smoothing: antialiased;
-    line-height: 1.5;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings com tipografia fluida */
+h1 {
+    font-size: var(--font-3xl);
+    line-height: var(--leading-tight);
+    font-weight: 700;
+}
+
+h2 {
+    font-size: var(--font-2xl);
+    line-height: var(--leading-tight);
+    font-weight: 700;
+}
+
+h3 {
+    font-size: var(--font-xl);
+    line-height: var(--leading-tight);
+    font-weight: 600;
+}
+
+h4 {
+    font-size: var(--font-lg);
+    line-height: var(--leading-normal);
+    font-weight: 600;
+}
+
+h5 {
+    font-size: var(--font-base);
+    line-height: var(--leading-normal);
+    font-weight: 600;
+}
+
+h6 {
+    font-size: var(--font-sm);
+    line-height: var(--leading-normal);
+    font-weight: 600;
+}
+
+small {
+    font-size: var(--font-xs);
 }
 
 /* UTILITÁRIOS DE COR */
@@ -131,4 +195,33 @@ body {
 
 .shadow-sm {
     box-shadow: var(--shadow-sm);
+}
+
+/* UTILITÁRIOS DE TIPOGRAFIA */
+.text-xs {
+    font-size: var(--font-xs);
+}
+
+.text-sm {
+    font-size: var(--font-sm);
+}
+
+.text-base {
+    font-size: var(--font-base);
+}
+
+.text-lg {
+    font-size: var(--font-lg);
+}
+
+.text-xl {
+    font-size: var(--font-xl);
+}
+
+.text-2xl {
+    font-size: var(--font-2xl);
+}
+
+.text-3xl {
+    font-size: var(--font-3xl);
 }

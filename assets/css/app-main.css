@@ -26,6 +26,10 @@
 @import url('components/animations.css');
 @import url('components/forms.css');
 
+/* Utilities (Responsive Foundation) */
+@import url('utilities/grid.css');
+@import url('utilities/spacing.css');
+
 /* 3. Recursos Específicos (Nucelos semânticos) */
 @import url('roles.css');
 @import url('modern-enhancements.css');
