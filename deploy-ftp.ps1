@@ -22,7 +22,9 @@ $filesToUpload = @(
     @{ Local = "admin\escala_detalhe.php"; Remote = "$remoteBasePath/admin/escala_detalhe.php" },
     @{ Local = "admin\avisos.php"; Remote = "$remoteBasePath/admin/avisos.php" },
     @{ Local = "assets\css\pages\escala-detalhe.css"; Remote = "$remoteBasePath/assets/css/pages/escala-detalhe.css" },
-    @{ Local = "assets\css\pages\avisos.css"; Remote = "$remoteBasePath/assets/css/pages/avisos.css" }
+    @{ Local = "assets\css\pages\avisos.css"; Remote = "$remoteBasePath/assets/css/pages/avisos.css" },
+    @{ Local = "admin\escalas.php"; Remote = "$remoteBasePath/admin/escalas.php" },
+    @{ Local = "assets\css\pages\escalas.css"; Remote = "$remoteBasePath/assets/css/pages/escalas.css" }
 )
 
 Write-Host "=== FTP Deploy to Hostinger ===" -ForegroundColor Cyan

@@ -296,8 +296,15 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Overlay de Fundo -->
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
 
-        <!-- 1. Sheet GEST+âO -->
+        <script>
+            function closeAllSheets() {
+                const overlay = document.getElementById('bs-overlay');
+                if (overlay) overlay.classList.remove('active');
+                
+                // Fecha menus
+                document.querySelectorAll('.bottom-sheet').forEach(el => el.classList.remove('active'));
 
+                // Remove active
                 document.querySelectorAll('.b-nav-item').forEach(el => el.classList.remove('active'));
             }
         </script>
