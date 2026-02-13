@@ -461,41 +461,33 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                             $avatar = '../assets/uploads/' . $avatar;
                         }
                     ?>
-                    <div class="comment-bubble <?= $isMe ? 'my-comment' : '' ?>">
-                        <?php if(!$isMe): ?>
-                            <div class="member-avatar" style="background: <?= $cmt['avatar_color'] ?: '#ccc' ?>; width: 32px; height: 32px; font-size: 0.8rem;">
+                    <div class="comment-item">
+                        <div class="comment-avatar-wrapper">
+                            <div class="member-avatar" style="background: <?= $cmt['avatar_color'] ?: '#ccc' ?>; width: 40px; height: 40px; font-size: 0.9rem;">
                                 <?php if($avatar): ?>
                                     <img src="<?= htmlspecialchars($avatar) ?>" alt="<?= htmlspecialchars($cmt['name']) ?>">
                                 <?php else: ?>
                                     <?= strtoupper(substr($cmt['name'], 0, 1)) ?>
                                 <?php endif; ?>
                             </div>
-                        <?php endif; ?>
-                        
-                        <div class="comment-content-box">
-                            <div class="comment-header">
-                                <span class="comment-author"><?= htmlspecialchars($cmt['name']) ?></span>
-                                <span class="comment-date"><?= date('d/m H:i', strtotime($cmt['created_at'])) ?></span>
-                            </div>
-                            <div class="comment-text"><?= nl2br(htmlspecialchars($cmt['comment'])) ?></div>
-                            <?php if($isMe || $_SESSION['user_role'] === 'admin'): ?>
-                                <form method="POST" style="margin-top: 6px; text-align: right;" onsubmit="return confirm('Apagar comentário?');">
-                                    <input type="hidden" name="action" value="delete_comment">
-                                    <input type="hidden" name="comment_id" value="<?= $cmt['id'] ?>">
-                                    <button type="submit" style="background:none; border:none; color:var(--red-500); font-size:0.7rem; cursor:pointer;">Excluir</button>
-                                </form>
-                            <?php endif; ?>
                         </div>
                         
-                        <?php if($isMe): ?>
-                            <div class="member-avatar" style="background: <?= $cmt['avatar_color'] ?: '#ccc' ?>; width: 32px; height: 32px; font-size: 0.8rem;">
-                                <?php if($avatar): ?>
-                                    <img src="<?= htmlspecialchars($avatar) ?>" alt="<?= htmlspecialchars($cmt['name']) ?>">
-                                <?php else: ?>
-                                    <?= strtoupper(substr($cmt['name'], 0, 1)) ?>
+                        <div class="comment-body">
+                            <div class="comment-header-row">
+                                <span class="comment-author-name"><?= htmlspecialchars($cmt['name']) ?></span>
+                                <span class="comment-timestamp"><?= date('d/m H:i', strtotime($cmt['created_at'])) ?></span>
+                                <?php if($isMe || $_SESSION['user_role'] === 'admin'): ?>
+                                    <form method="POST" style="margin-left: auto;" onsubmit="return confirm('Apagar comentário?');">
+                                        <input type="hidden" name="action" value="delete_comment">
+                                        <input type="hidden" name="comment_id" value="<?= $cmt['id'] ?>">
+                                        <button type="submit" class="btn-delete-comment" title="Excluir">
+                                            <i data-lucide="trash-2" width="14"></i>
+                                        </button>
+                                    </form>
                                 <?php endif; ?>
                             </div>
-                        <?php endif; ?>
+                            <div class="comment-message"><?= nl2br(htmlspecialchars($cmt['comment'])) ?></div>
+                        </div>
                     </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
