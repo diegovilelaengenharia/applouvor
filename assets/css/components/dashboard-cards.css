@@ -237,16 +237,18 @@
     --category-color-light: var(--color-gestao-light);
 }
 
-/* Espiritual (Teal) */
+/* Espiritualidade (Green/Teal) */
+.card-green,
 .card-teal,
 .card-espiritual,
+.card-espiritualidade,
 .card-violet,
 .card-indigo {
     --category-color: var(--color-espiritual);
     --category-color-light: var(--color-espiritual-light);
 }
 
-/* Comunicação (Orange) */
+/* Comunicação (Orange/Amber) */
 .card-orange,
 .card-comunicacao,
 .card-amber,
