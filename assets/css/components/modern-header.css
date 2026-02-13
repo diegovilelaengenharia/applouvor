@@ -49,6 +49,7 @@
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
+    min-width: fit-content;
 }
 
 .header-nav-btn {
