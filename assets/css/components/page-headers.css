@@ -319,25 +319,31 @@
    NOTIFICATION DROPDOWN
    ============================================ */
 .notification-dropdown {
-    display: none;
-    /* Hidden by default */
     position: absolute;
-    top: 50px;
-    right: -10px;
-    /* Slight offset */
+    top: calc(100% + 8px);
+    right: 0;
     background: var(--bg-surface);
     border-radius: 16px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
     min-width: 320px;
-    z-index: 100;
+    max-width: 380px;
+    z-index: 9999;
+    /* Acima do header fixo */
     border: 1px solid var(--border-color, #e2e8f0);
     overflow: hidden;
     transform-origin: top right;
-    animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Visibility control */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
 }
 
 .notification-dropdown.active {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .notification-header {
