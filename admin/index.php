@@ -5,6 +5,9 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
+// CRÍTICO: Carregar definições de cards ANTES de tudo
+require_once '../includes/dashboard_cards.php';
+
 // Carregar dados da Dashboard (Controller)
 $dashboardData = require 'dashboard_data.php';
 extract($dashboardData);
