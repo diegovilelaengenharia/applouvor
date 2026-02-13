@@ -50,7 +50,7 @@ try {
         $inQuery = implode(',', array_fill(0, count($scheduleIds), '?'));
         
         // 1. Fetch Users
-        $sqlParts = "SELECT su.schedule_id, su.user_id, u.name, u.photo, u.avatar_color, su.is_confirmed 
+        $sqlParts = "SELECT su.schedule_id, su.user_id, u.name, u.photo, u.avatar_color, su.status 
                      FROM schedule_users su 
                      JOIN users u ON su.user_id = u.id 
                      WHERE su.schedule_id IN ($inQuery)";
@@ -186,7 +186,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $allParticipants = $participantsMap[$schedule['id']] ?? [];
                     // Filtrar participantes confirmados para destaque? (Opcional)
                     $confirmedCount = 0;
-                    foreach($allParticipants as $p) if($p['is_confirmed']) $confirmedCount++;
+                    foreach($allParticipants as $p) if(isset($p['status']) && $p['status'] === 'confirmed') $confirmedCount++;
 
                     $participants = array_slice($allParticipants, 0, 4); // Show 4 avatars
                     $extraCount = max(0, count($allParticipants) - 4);
