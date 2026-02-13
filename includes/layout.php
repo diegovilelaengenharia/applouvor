@@ -900,6 +900,7 @@ function renderAppHeader($title, $backUrl = null)
 
         <!-- Notifications Script -->
         <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
+        <script src="../assets/js/profile-dropdown.js?v=<?= time() ?>"></script>
 
         
 

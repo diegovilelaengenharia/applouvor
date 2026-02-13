@@ -283,16 +283,23 @@ function toggleNotifications(dropdownId = 'notificationDropdown') {
             return;
         }
 
-        const isVisible = dropdown.style.display === 'block';
+        // Close profile dropdown if open
+        const profileDropdown = document.getElementById('headerProfileDropdown');
+        if (profileDropdown && profileDropdown.classList.contains('active')) {
+            profileDropdown.classList.remove('active');
+        }
 
-        // Close all dropdowns first
+        // Toggle notification dropdown
+        const isActive = dropdown.classList.contains('active');
+
+        // Close all notification dropdowns first
         document.querySelectorAll('.notification-dropdown').forEach(d => {
-            d.style.display = 'none';
+            d.classList.remove('active');
         });
 
-        if (!isVisible) {
+        if (!isActive) {
             loadNotifications(null); // null = render to all .notification-list elements
-            dropdown.style.display = 'block';
+            dropdown.classList.add('active');
         }
     }
 }
@@ -304,7 +311,7 @@ document.addEventListener('click', function (e) {
             !e.target.closest('.header-action-btn') &&
             !e.target.closest('.notification-dropdown')) {
             document.querySelectorAll('.notification-dropdown').forEach(d => {
-                d.style.display = 'none';
+                d.classList.remove('active');
             });
         }
     }
