@@ -92,10 +92,15 @@
     animation-delay: 0.5s;
 }
 
-/* Hover State */
+/* Premium Hover State with Shadow Layers & Glow */
 .access-card:hover {
     border-color: var(--category-color, var(--color-primary));
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.06),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        0 16px 32px rgba(0, 0, 0, 0.06),
+        0 0 0 1px var(--category-color, var(--color-primary)),
+        0 0 20px rgba(59, 130, 246, 0.15);
     transform: translateY(-2px);
 }
 
@@ -110,13 +115,16 @@
     width: 38px;
     /* Reduzido de 48px (20%) */
     height: 38px;
-    background: var(--category-color-light, var(--color-primary-bg));
+    background: linear-gradient(135deg,
+            var(--category-color-light, var(--color-primary-bg)) 0%,
+            rgba(255, 255, 255, 0.9) 100%);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 0.8rem;
     /* Reduzido de 1rem */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: transform var(--transition-base);
 }
 
@@ -129,7 +137,7 @@
 }
 
 .access-card:hover .card-icon {
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(5deg);
 }
 
 /* === TYPOGRAPHY === */
