@@ -191,27 +191,29 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
 
 <div class="scale-detail-wrapper">
 
-    <!-- EVENT SUMMARY CARD -->
+    <!-- UNIFIED COMPACT HEADER -->
     <div class="event-info-card">
         <div class="event-main-row">
+            <!-- Compact Date -->
             <div class="event-date-box">
                 <div class="event-day"><?= $date->format('d') ?></div>
                 <div class="event-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
             </div>
+            
+            <!-- Event Details -->
             <div class="event-details">
                 <div class="event-type"><?= htmlspecialchars($schedule['event_type']) ?></div>
                 <div class="event-meta">
-                    <i data-lucide="calendar" width="14"></i> <?= $diaSemana ?>, <?= $date->format('Y') ?>
-                </div>
-                <div class="event-meta mt-1">
-                    <i data-lucide="clock" width="14"></i> Hórario: <?= substr($schedule['event_time'], 0, 5) ?>
+                    <span><i data-lucide="calendar" class="align-middle"></i> <?= $diaSemana ?></span>
+                    <span><i data-lucide="clock" class="align-middle"></i> <?= substr($schedule['event_time'], 0, 5) ?></span>
                 </div>
             </div>
-            
+
+            <!-- Edit Action (Desktop/Admin) -->
             <?php if ($_SESSION['user_role'] === 'admin' && !$isEditable): ?>
-            <div>
+            <div class="desktop-only">
                 <a href="?id=<?= $id ?>&edit=1" class="btn-icon" title="Editar">
-                    <i data-lucide="edit-2"></i>
+                    <i data-lucide="edit-2" width="18"></i>
                 </a>
             </div>
             <?php endif; ?>
@@ -219,8 +221,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
 
         <?php if($schedule['notes']): ?>
         <div class="event-notes">
-            <strong><i data-lucide="sticky-note" width="14" class="align-middle"></i> Observações:</strong><br>
-            <?= nl2br(htmlspecialchars($schedule['notes'])) ?>
+            <strong>Observações:</strong> <?= nl2br(htmlspecialchars($schedule['notes'])) ?>
         </div>
         <?php endif; ?>
     </div>
@@ -339,53 +340,41 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         </div>
         <?php endif; ?>
         
-        <!-- PARTICIPANTS SECTION -->
-        <div class="detail-section section-box">
+        <!-- PARTICIPANTS SECTION (Compact) -->
+        <div class="detail-section">
             <div class="section-header">
-                <div class="section-title">
-                    Equipe Escala <span class="section-count"><?= count($team) ?></span>
-                </div>
+                <span class="section-title">Participantes</span>
+                <span class="section-count"><?= count($team) ?></span>
             </div>
             
             <?php if(empty($team)): ?>
-                <div class="empty-state-text">Nenhum participante definido.</div>
+                <div class="text-muted" style="font-size: 0.85rem; padding: 10px;">Nenhum participante definido.</div>
             <?php else: ?>
                 <div class="team-list-grid">
                     <?php foreach($team as $member): 
-                        $statusClass = 'status-pending';
-                        if($member['status'] == 'confirmed') $statusClass = 'status-confirmed';
-                        if($member['status'] == 'declined') $statusClass = 'status-declined';
-                        
+                        $statusClass = 'status-' . ($member['is_confirmed'] ? 'confirmed' : ($member['status'] == 'declined' ? 'declined' : 'pending'));
                         $initials = strtoupper(substr($member['name'], 0, 1));
                         $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
-                        $iconName = getInstrumentIcon($instr);
                     ?>
                     <div class="member-card">
                         <div class="member-avatar" style="background: <?= $member['avatar_color'] ?: '#ccc' ?>;">
                             <?php if($member['avatar']): 
                                 $avatarPath = $member['avatar'];
                                 if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
-                                    $avatarPath = '../assets/uploads/' . $avatarPath;
+                                  $avatarPath = '../assets/uploads/' . $avatarPath;
                                 }
                             ?>
                                 <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($member['name']) ?>">
                             <?php else: ?>
-                                <?= $initials ?>
+                                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:10px;">
+                                    <?= $initials ?>
+                                </div>
                             <?php endif; ?>
-                            <div class="status-indicator <?= $statusClass ?>" title="<?= $member['status'] ?>"></div>
+                            <div class="status-indicator <?= $statusClass ?>"></div>
                         </div>
                         <div class="member-info">
-                            <div class="member-name">
-                                <?= htmlspecialchars($member['name']) ?>
-                                <?php if($member['is_rehearsed']): ?>
-                                    <span class="rehearsed-indicator" title="Estudou o repertório">
-                                        <i data-lucide="check" width="10"></i>
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-                            <div class="member-role">
-                                <i data-lucide="<?= $iconName ?>" width="12" height="12"></i> <?= htmlspecialchars($instr) ?>
-                            </div>
+                            <div class="member-name"><?= htmlspecialchars($member['name']) ?></div>
+                            <div class="member-role"><?= htmlspecialchars($instr) ?></div>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -393,53 +382,39 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             <?php endif; ?>
         </div>
 
-        <!-- REPERTOIRE SECTION -->
-        <div class="detail-section section-box">
+        <!-- REPERTOIRE SECTION (Compact) -->
+        <div class="detail-section">
             <div class="section-header">
-                <div class="section-title">
-                    Repertório <span class="section-count"><?= count($songs) ?></span>
-                </div>
+                <span class="section-title">Repertório</span>
+                <span class="section-count"><?= count($songs) ?></span>
             </div>
 
-            <?php if(empty($songs)): ?>
-                <div class="empty-state-text">Nenhuma música selecionada.</div>
-            <?php else: ?>
-                <div class="song-list">
-                    <?php foreach($songs as $idx => $song): ?>
+            <div class="song-list">
+                <?php if (empty($songs)): ?>
+                    <div class="text-muted" style="font-size: 0.85rem; padding: 10px;">Nenhuma música selecionada.</div>
+                <?php else: ?>
+                    <?php foreach ($songs as $index => $song): ?>
                     <div class="song-card">
-                        <div class="song-main-content">
-                            <div class="song-order"><?= $idx + 1 ?></div>
-                            <div class="song-info-col">
-                                <div class="song-title-row">
-                                    <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-title hover-underline"><?= htmlspecialchars($song['title']) ?></a>
-                                    <?php if($song['tone']): ?>
-                                        <span class="meta-badge badge-tone" title="Tom Original"><?= htmlspecialchars($song['tone']) ?></span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="song-artist-row">
-                                    <?= htmlspecialchars($song['artist']) ?>
-                                    <?php if($song['bpm']): ?>
-                                        <span class="bpm-badge"><i data-lucide="activity" width="10" class="align-middle"></i> <?= $song['bpm'] ?></span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
+                        <div class="song-order"><?= $index + 1 ?></div>
+                        <div class="song-info">
+                            <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-title"><?= htmlspecialchars($song['title']) ?></a>
+                            <div class="song-artist"><?= htmlspecialchars($song['artist']) ?> • <?= htmlspecialchars($song['tone']) ?></div>
                         </div>
-                        
                         <div class="song-actions">
-                            <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" class="action-btn-icon <?= $song['link_letra'] ? '' : 'disabled' ?>" title="Letra">
-                                <i data-lucide="align-left" width="22"></i>
+                            <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" class="action-icon <?= empty($song['link_letra']) ? 'disabled' : '' ?>" title="Letra">
+                                <i data-lucide="align-left" width="18"></i>
                             </a>
-                            <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" class="action-btn-icon <?= $song['link_cifra'] ? '' : 'disabled' ?>" title="Cifra">
-                                <i data-lucide="file-text" width="22"></i>
+                            <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" class="action-icon <?= empty($song['link_cifra']) ? 'disabled' : '' ?>" title="Cifra">
+                                <i data-lucide="file-text" width="18"></i>
                             </a>
-                            <a href="<?= $song['link_video'] ?: ($song['link_audio'] ?: 'https://www.youtube.com/results?search_query='.urlencode($song['title'].' '.$song['artist'])) ?>" target="_blank" class="action-btn-icon" title="Ouvir">
-                                <i data-lucide="play-circle" width="22"></i>
+                            <a href="<?= $song['link_video'] ?: ($song['link_audio'] ?: 'https://www.youtube.com/results?search_query='.urlencode($song['title'].' '.$song['artist'])) ?>" target="_blank" class="action-icon" title="Ouvir">
+                                <i data-lucide="play-circle" width="18"></i>
                             </a>
                         </div>
                     </div>
                     <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
         
         <!-- COMMENTS SECTION -->

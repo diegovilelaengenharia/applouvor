@@ -194,78 +194,49 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $isMine = $mySchedulesMap[$schedule['id']] ?? false;
                 ?>
 
-                    <!-- PREMIUM CARD -->
+                    <!-- ANTIGRAVITY COMPACT CARD -->
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-theme-color: <?= $themeColor ?>">
-                        
                         <div class="scale-card-main">
-                            <!-- Date Box -->
+                            <!-- 1. Left: Date -->
                             <div class="date-box-premium">
                                 <span class="date-day"><?= $date->format('d') ?></span>
                                 <span class="date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></span>
                             </div>
 
-                            <!-- Info -->
+                            <!-- 2. Center: Info -->
                             <div class="scale-info-col">
-                                <div>
-                                    <div class="event-type-badge">
-                                        <div style="width: 8px; height: 8px; background: currentColor; border-radius: 50%;"></div>
-                                        <?= htmlspecialchars($schedule['event_type']) ?>
-                                    </div>
-                                    <h3 class="event-title">
-                                        <?= !empty($schedule['notes']) ? htmlspecialchars($schedule['notes']) : 'Escala de Louvor' ?>
-                                    </h3>
-                                </div>
+                                <h3 class="event-title">
+                                    <?= !empty($schedule['notes']) ? htmlspecialchars($schedule['notes']) : htmlspecialchars($schedule['event_type']) ?>
+                                </h3>
                                 
                                 <div class="meta-stats-row">
                                     <div class="meta-pill">
-                                        <i data-lucide="clock" width="14"></i>
+                                        <i data-lucide="clock"></i>
                                         <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                     </div>
                                     
                                     <?php if($songsCount > 0): ?>
-                                    <div class="meta-pill highlight">
-                                        <i data-lucide="music" width="14"></i>
-                                        <?= $songsCount ?> músicas
+                                    <div class="meta-pill">
+                                        <i data-lucide="music"></i>
+                                        <?= $songsCount ?>
                                     </div>
                                     <?php endif; ?>
 
                                     <?php if($isMine): ?>
-                                    <div class="meta-pill" style="color: var(--green-600); background: var(--green-50); border-color: var(--green-200);">
-                                        <i data-lucide="check-circle-2" width="14"></i>
-                                        Você participa
+                                    <div class="meta-pill" style="color: var(--green-600);">
+                                        <i data-lucide="check-circle-2" style="width: 14px; opacity: 1;"></i>
+                                        <span class="desktop-only" style="font-size: 0.75rem;">Escalado</span>
                                     </div>
                                     <?php endif; ?>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Footer -->
-                        <div class="scale-card-footer">
-                            <div class="participants-wrapper">
-                                <div class="avatar-stack">
-                                    <?php if(empty($participants)): ?>
-                                        <span class="participants-label">Nenhum participante</span>
-                                    <?php else: ?>
-                                        <?php foreach ($participants as $p):
-                                            $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
-                                        ?>
-                                            <div class="avatar-stack-item">
-                                                <?php if ($photoUrl): ?>
-                                                    <img src="<?= htmlspecialchars($photoUrl) ?>" alt="Avatar">
-                                                <?php else: ?>
-                                                    <?= strtoupper(substr($p['name'], 0, 1)) ?>
-                                                <?php endif; ?>
-                                            </div>
-                                        <?php endforeach; ?>
-                                        <?php if ($extraCount > 0): ?>
-                                            <div class="avatar-stack-item" style="background: var(--bg-surface); color: var(--text-muted); border-color: var(--border-color); font-size: 0.7rem;">+<?= $extraCount ?></div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+                            <!-- 3. Right: Meta/Action -->
+                            <div class="scale-card-footer">
+                                <div class="days-count-badge <?= $isToday ? 'today' : '' ?>">
+                                    <?= $isToday ? 'HOJE' : ($daysUntil == 1 ? 'AMANHÃ' : $daysUntil . 'd') ?>
                                 </div>
-                            </div>
-
-                            <div class="days-count-badge <?= $isToday ? 'today' : '' ?>">
-                                <?= $isToday ? 'HOJE' : ($daysUntil == 1 ? 'AMANHÃ' : $daysUntil . ' DIAS') ?>
+                                <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted); margin-left: 8px;"></i>
                             </div>
                         </div>
                     </a>
