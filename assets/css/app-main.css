@@ -30,6 +30,7 @@
 /* Utilities (Responsive Foundation) */
 @import url('utilities/grid.css');
 @import url('utilities/spacing.css');
+@import url('utilities/typography.css');
 
 /* 3. Recursos Específicos (Nucelos semânticos) */
 @import url('roles.css');
