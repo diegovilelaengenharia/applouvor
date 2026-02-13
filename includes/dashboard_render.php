@@ -27,14 +27,14 @@ function renderUnifiedCard($config) {
     // Mapeamento de categoria para cor do card
     $categoryColorMap = [
         'gestao' => 'blue',
-        'espiritual' => 'green',
+        'espiritualidade' => 'green',
         'comunicacao' => 'amber'
     ];
     
     // Mapeamento de categoria para tipo de badge
     $categoryBadgeMap = [
         'gestao' => 'badge-info',
-        'espiritual' => 'badge-success',
+        'espiritualidade' => 'badge-success',
         'comunicacao' => 'badge-warning'
     ];
     
@@ -251,7 +251,7 @@ function renderCardLeitura($data) {
         'id' => 'leitura',
         'title' => 'Leitura Bíblica',
         'icon' => 'book-open',
-        'category' => 'espiritual',
+        'category' => 'espiritualidade',
         'url' => 'leitura.php',
         'badge' => ['count' => $percentToday, 'label' => "$percentToday% completo hoje"],
         'content' => $content,
@@ -357,7 +357,7 @@ function renderCardDevocional() {
         'id' => 'devocional',
         'title' => 'Devocional',
         'icon' => 'sunrise',
-        'category' => 'espiritual',
+        'category' => 'espiritualidade',
         'url' => 'devocionais.php',
         'badge' => null,
         'content' => $content,
@@ -390,7 +390,7 @@ function renderCardOracao($count = 0) {
         'id' => 'oracao',
         'title' => 'Oração',
         'icon' => 'heart',
-        'category' => 'espiritual',
+        'category' => 'espiritualidade',
         'url' => 'oracao.php',
         'badge' => $count > 0 ? [
             'count' => $count,

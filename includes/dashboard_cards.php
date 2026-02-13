@@ -78,7 +78,7 @@ function getAllAvailableCards() {
             'id' => 'leitura',
             'title' => 'Leitura Bíblica',
             'icon' => 'book-open',
-            'category' => 'espirito',
+            'category' => 'espiritualidade',
             'category_name' => 'Espiritualidade',
             'color' => '#10B981', // Verde
             'bg' => '#D1FAE5', 
@@ -89,7 +89,7 @@ function getAllAvailableCards() {
             'id' => 'devocional',
             'title' => 'Devocional',
             'icon' => 'sunrise',
-            'category' => 'espirito',
+            'category' => 'espiritualidade',
             'category_name' => 'Espiritualidade',
             'color' => '#10B981', // Verde
             'bg' => '#D1FAE5', 
@@ -100,7 +100,7 @@ function getAllAvailableCards() {
             'id' => 'oracao',
             'title' => 'Oração',
             'icon' => 'heart',
-            'category' => 'espirito',
+            'category' => 'espiritualidade',
             'category_name' => 'Espiritualidade',
             'color' => '#10B981', // Verde
             'bg' => '#D1FAE5', 
@@ -113,7 +113,7 @@ function getAllAvailableCards() {
             'id' => 'avisos',
             'title' => 'Avisos',
             'icon' => 'bell',
-            'category' => 'comunica',
+            'category' => 'comunicacao',
             'category_name' => 'Comunicação',
             'color' => '#F59E0B', // Amarelo/Laranja
             'bg' => '#FEF3C7', 
@@ -124,7 +124,7 @@ function getAllAvailableCards() {
             'id' => 'aniversarios',
             'title' => 'Aniversários',
             'icon' => 'cake',
-            'category' => 'comunica',
+            'category' => 'comunicacao',
             'category_name' => 'Comunicação',
             'color' => '#F59E0B', // Amarelo/Laranja
             'bg' => '#FEF3C7', 
