@@ -82,7 +82,8 @@ renderAppHeader('Visão Geral');
     $cardsOrder = []; 
 
     // Mapeamento de categorias e ordem de exibição
-    $categoryOrder = ['Gestão', 'Espírito', 'Comunica', 'Admin', 'Extras'];
+    // ATUALIZADOS para corresponder dashboard_cards.php
+    $categoryOrder = ['Gestão', 'Espiritualidade', 'Comunicação'];
     
     // Preparar grupos
     foreach ($categoryOrder as $cat) {
@@ -96,23 +97,31 @@ renderAppHeader('Visão Geral');
             $cardDef = $allCardsDefinitions[$cardId];
             $catName = $cardDef['category_name'];
             
-            // Fallback para 'Extras' se categoria desconhecida
+            // Fallback para 'Comunicação' se categoria desconhecida
             if (!isset($groupedCards[$catName])) {
-                $catName = 'Extras';
-                if (!isset($groupedCards['Extras'])) $groupedCards['Extras'] = [];
+                $catName = 'Comunicação';
+                if (!isset($groupedCards['Comunicação'])) $groupedCards['Comunicação'] = [];
             }
             
             $groupedCards[$catName][] = $cardId;
         }
     }
 
-    // 2. Renderizar Seções
+    // 2. Renderizar Se Seções com cores personalizadas
     foreach ($categoryOrder as $categoryName) {
         if (empty($groupedCards[$categoryName])) continue;
         
-        // Título da Seção
-        echo "<h2 class='section-title'>{$categoryName}</h2>";
+        // Definir cor da borda esquerda por categoria
+        $categoryColor = match($categoryName) {
+            'Gestão' => '#2563EB', // Azul
+            'Espiritualidade' => '#10B981', // Verde
+            'Comunicação' => '#F59E0B', // Amarelo
+            default => '#2563EB'
+        };
         
+        // Título da Seção com borda colorida
+        echo "<h2 class='section-title' style='border-left-color: {$categoryColor};'>{$categoryName}</h2>";
+       
         // Grid da Seção
         echo '<div class="quick-access-grid">';
         foreach ($groupedCards[$categoryName] as $cardId) {
