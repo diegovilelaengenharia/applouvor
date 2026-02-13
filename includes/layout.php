@@ -500,74 +500,73 @@ function renderAppHeader($title, $backUrl = null)
         global $_layoutUser;
         $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
-    <header class="desktop-only-header app-page-header">
+    <!-- Modern Page Header -->
+    <header class="desktop-only-header app-page-header modern-header">
+        <div class="header-gradient-bg"></div>
         
+        <div class="header-container">
+            <!-- Left: Navigation -->
+            <div class="header-left">
+                <?php if (!$isHome): ?>
+                    <button onclick="history.back()" class="header-nav-btn ripple" title="Voltar">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <a href="index.php" class="header-nav-btn header-home-btn ripple" title="Início">
+                        <i data-lucide="home"></i>
+                    </a>
+                <?php endif; ?>
+            </div>
 
-        <div style="display: flex; align-items: center; gap: 4px;">
-            <?php if (!$isHome): ?>
-                <button onclick="history.back()" class="ripple" title="Voltar" style="
-                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
-                display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
-            ">
-                    <i data-lucide="arrow-left" style="width: 22px;"></i>
-                </button>
+            <!-- Center: Title & Subtitle -->
+            <div class="header-center">
+                <div class="header-title-group">
+                    <h1 class="header-title"><?= htmlspecialchars($title) ?></h1>
+                    <?php if ($subtitle): ?>
+                        <p class="header-subtitle"><?= htmlspecialchars($subtitle) ?></p>
+                    <?php endif; ?>
+                </div>
+            </div>
 
-                <a href="index.php" class="ripple" title="Navegação Principal" style="
-                width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; 
-                display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer;
-            ">
-                    <i data-lucide="home" style="width: 22px;"></i>
-                </a>
-            <?php endif; ?>
-        </div>
-
-        <div style="flex: 1; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-            <h1 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($title) ?></h1>
-            <?php if ($subtitle): ?>
-                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($subtitle) ?></p>
-            <?php endif; ?>
-        </div>
-
-        <!-- Direita: Ações + Líder + Perfil -->
-        <div class="header-actions">
-            
-            <!-- Líder Button (Admin only) - Desktop -->
-            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                <?php
-                    $inAdminHead = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
-                    $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
-                    $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
-                ?>
-                <a href="<?= $liderLinkHead ?>" class="header-action-btn btn-leader ripple" title="Painel do Líder">
-                    <i data-lucide="crown" width="20"></i>
-                </a>
-            <?php endif; ?>
-
-            <!-- Ação da Página (se houver) -->
-            <?php if (isset($rightAction) && $rightAction): ?>
-                <?= $rightAction ?>
-            <?php endif; ?>
-
-            <!-- Notification Button (Bell) -->
-            <div style="position: relative;">
-                <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn ripple" id="notificationBtnDesktop" title="Notificações">
-                    <i data-lucide="bell" width="20"></i>
-                    <span class="badge-dot" id="notificationBadgeDesktop" style="display: none;"></span>
-                </button>
+            <!-- Right: Actions + Profile -->
+            <div class="header-actions">
                 
-                <!-- Desktop Dropdown -->
-                <div class="notification-dropdown" id="notificationDropdownDesktop">
-                    <div class="notification-header">
-                        <div class="notification-title">
-                            Notificações
-                            <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar Notificações Push" id="btnEnableNotifications">
-                                <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
-                            </button>
+                <!-- Líder Button (Admin only) -->
+                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                    <?php
+                        $inAdminHead = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
+                        $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
+                        $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
+                    ?>
+                    <a href="<?= $liderLinkHead ?>" class="header-action-btn btn-leader ripple" title="Painel do Líder">
+                        <i data-lucide="crown" width="20"></i>
+                    </a>
+                <?php endif; ?>
+
+                <!-- Custom Action (if provided) -->
+                <?php if (isset($rightAction) && $rightAction): ?>
+                    <?= $rightAction ?>
+                <?php endif; ?>
+
+                <!-- Notification Button -->
+                <div style="position: relative;">
+                    <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                        <i data-lucide="bell" width="20"></i>
+                        <span class="badge-dot" id="notificationBadgeDesktop" style="display: none;"></span>
+                    </button>
+                    
+                    <!-- Desktop Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdownDesktop">
+                        <div class="notification-header">
+                            <div class="notification-title">
+                                Notificações
+                                <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar Notificações Push" id="btnEnableNotifications">
+                                    <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
+                                </button>
+                            </div>
+                            <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
                         </div>
-                        <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
-                    </div>
-                    <div class="notification-list">
-                        <!-- JS vai preencher aqui -->
+                        <div class="notification-list">
+                            <!-- JS vai preencher aqui -->
                         <div class="empty-state">
                             <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
                             <p>Carregando...</p>
