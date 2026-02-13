@@ -1,57 +1,59 @@
 /* ==========================================================================
    APP MAIN CSS - Ponto de Entrada Central
-   Gerencia a ordem de cascata (Cascade) para evitar conflitos.
+   Design System V2 - Minimalista + Toques de Cor
    ========================================================================== */
 
-/* 1. Base & Design System (Variáveis, Resets Suaves, Tipografia) */
-/* 1. Base & Design System (Variáveis, Resets Suaves, Tipografia) */
-/* NEW: Single Source of Truth */
-@import url('design-system.css');
-@import url('theme.css');
-/* Legacy Variables (Keep for compatibility) */
+/* =====================
+   1. CORE (Base)
+   ===================== */
+@import url('core/reset.css');
+@import url('core/variables.css');
+@import url('core/utilities.css');
 
-/* 2. Componentes Modernos (Botões, Cards, Inputs) */
-@import url('components.css');
+/* =====================
+   2. COMPONENTS (Reutilizáveis)
+   ===================== */
 @import url('components/buttons.css');
 @import url('components/cards.css');
-@import url('components/dashboard-cards.css');
+@import url('components/notifications.css');
+@import url('components/modals.css');
+
+/* Legacy components (manter temporariamente) */
+@import url('components/forms.css');
 @import url('components/badges.css');
 @import url('components/icons.css');
 @import url('components/sidebar.css');
 @import url('components/page-headers.css?v=3');
 @import url('components/modern-header.css');
 @import url('components/header-actions.css?v=3');
-@import url('components/modals.css');
-@import url('components/timeline-cards.css');
 @import url('components/timeline-cards.css');
 @import url('components/animations.css');
-@import url('components/forms.css');
+@import url('components/tables.css');
 
-/* Utilities (Responsive Foundation) */
-@import url('utilities/grid.css');
-@import url('utilities/spacing.css');
-@import url('utilities/typography.css');
+/* =====================
+   3. LAYOUTS (Estruturas)
+   ===================== */
+/* Manter layouts existentes */
 
-/* 3. Recursos Específicos (Nucelos semânticos) */
-@import url('roles.css');
-@import url('modern-enhancements.css');
-@import url('membros.css');
-
-/* 4. Páginas Específicas (Carregadas globalmente por enquanto) */
+/* =====================
+   4. PAGES (Específico)
+   ===================== */
 @import url('pages/dashboard.css');
 @import url('pages/escalas.css');
+@import url('pages/escala-detalhe.css');
 @import url('pages/agenda.css');
 @import url('pages/evento-detalhe.css');
 @import url('pages/repertorio.css');
 @import url('pages/lider.css');
-@import url('pages/escala-detalhe.css');
 
-/* 5. Legacy (Mantido para compatibilidade, mas deve ser refatorado) */
+/* =====================
+   5. LEGACY (Temporário - deprecar após refatoração)
+   ===================== */
 @import url('legacy-style.css');
+@import url('modern-enhancements.css');
+@import url('membros.css');
+@import url('roles.css');
 
-/* 6. Overrides Finais */
-/* @import url('final_fix.css'); -> Conteúdo movido para os componentes ou legacy se necessário */
-@import url('final_fix.css');
-
-/* 7. Dark Mode (Carregado por último para sobrescrever) */
-@import url('dark-mode.css');
+/* =====================
+   6. DARK MODE (Opcional)
+   ===================== */

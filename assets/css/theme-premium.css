@@ -23,10 +23,10 @@
     --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 
     /* Backgrounds (Atmosphere) */
-    --bg-body: #f8fafc;
-    /* Slate-50 */
+    --bg-body: #f1f5f9;
+    /* Slate-100 (More contrast with white cards) */
     --bg-surface: #ffffff;
-    --bg-glass: rgba(255, 255, 255, 0.7);
+    --bg-glass: rgba(255, 255, 255, 0.8);
 
     /* Typography (Modern Slate) */
     --text-main: #0f172a;

@@ -179,7 +179,7 @@ $isEditable = isset($_GET['edit']) && $_GET['edit'] == '1' && $_SESSION['user_ro
 renderAppHeader('Detalhes da Escala', 'escalas.php');
 ?>
 
-<link rel="stylesheet" href="../assets/css/pages/escala-detalhe.css?v=<?= time() ?>">
+<link rel="stylesheet" href="../assets/css/pages/detail_v3.css?v=<?= time() ?>">
 
 <?php renderPageHeader('Detalhes da Escala', $schedule['event_type']); ?>
 

@@ -21,10 +21,11 @@ $filesToUpload = @(
     @{ Local = "admin\update_engagement_schema.php"; Remote = "$remoteBasePath/admin/update_engagement_schema.php" },
     @{ Local = "admin\escala_detalhe.php"; Remote = "$remoteBasePath/admin/escala_detalhe.php" },
     @{ Local = "admin\avisos.php"; Remote = "$remoteBasePath/admin/avisos.php" },
-    @{ Local = "assets\css\pages\escala-detalhe.css"; Remote = "$remoteBasePath/assets/css/pages/escala-detalhe.css" },
+    @{ Local = "assets\css\pages\detail_v3.css"; Remote = "$remoteBasePath/assets/css/pages/detail_v3.css" },
     @{ Local = "assets\css\pages\avisos.css"; Remote = "$remoteBasePath/assets/css/pages/avisos.css" },
     @{ Local = "admin\escalas.php"; Remote = "$remoteBasePath/admin/escalas.php" },
-    @{ Local = "assets\css\pages\escalas.css"; Remote = "$remoteBasePath/assets/css/pages/escalas.css" }
+    @{ Local = "assets\css\pages\escalas.css"; Remote = "$remoteBasePath/assets/css/pages/escalas.css" },
+    @{ Local = "assets\css\theme-premium.css"; Remote = "$remoteBasePath/assets/css/theme-premium.css" }
 )
 
 Write-Host "=== FTP Deploy to Hostinger ===" -ForegroundColor Cyan

@@ -147,6 +147,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 <!-- Container Grid -->
 <div>
 
+    <!-- Container Principal do Conteúdo -->
+    <div class="scales-wrapper" style="padding-top: 24px;"> <!-- Add top padding to separate from sticky header -->
+
     <!-- TAB: FUTURAS -->
     <div id="tab-future">
         <?php if (empty($futureSchedules)): ?>

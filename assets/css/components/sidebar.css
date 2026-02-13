@@ -1,20 +1,25 @@
 /* assets/css/components/sidebar.css */
+/* ANTIGRAVITY SIDEBAR V3.0 (PREMIUM) */
 
 /* --- SIDEBAR CONTAINER --- */
 .sidebar {
-    width: 250px;
+    width: 260px;
+    /* Largura ligeiramente maior para respirar */
     height: 100vh;
-    background: var(--bg-surface);
+    background: #ffffff;
+    /* Sólido mas luminoso */
     border-right: 1px solid var(--border-subtle);
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), width 0.4s ease;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+    /* Sombra difusa muito suave */
 }
 
 /* Collapsed State (Desktop) */
@@ -29,22 +34,23 @@
     opacity: 0;
     visibility: hidden;
     position: absolute;
+    pointer-events: none;
 }
 
 .sidebar.collapsed .nav-item {
     justify-content: center;
-    padding: 12px;
+    padding: 12px 0;
+    margin: 4px 12px;
 }
 
 .sidebar.collapsed .sidebar-header-hover {
     justify-content: center;
-    padding: 18px 0;
+    padding: 24px 0;
 }
 
 .sidebar.collapsed .sidebar-logo {
     margin: 0;
-    height: 32px;
-    /* Smaller logo when collapsed */
+    height: 36px;
 }
 
 /* Mobile State */
@@ -52,26 +58,23 @@
     .sidebar {
         transform: translateX(-100%);
         width: 280px;
-        /* Slightly wider on mobile */
+        box-shadow: none;
     }
 
     .sidebar.open {
         transform: translateX(0);
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.2);
     }
 }
 
-/* --- DESKTOP LAYOUT ADJUSTMENT (Replaces JS) --- */
+/* --- DESKTOP LAYOUT ADJUSTMENT (Logic handled by CSS mostly) --- */
 @media (min-width: 1025px) {
-
-    /* Default Expanded */
     .sidebar~.app-content {
-        margin-left: 250px;
-        width: calc(100% - 250px);
-        transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease;
+        margin-left: 260px;
+        width: calc(100% - 260px);
+        transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1), width 0.4s ease;
     }
 
-    /* Collapsed */
     .sidebar.collapsed~.app-content {
         margin-left: 88px;
         width: calc(100% - 88px);
@@ -80,69 +83,59 @@
 
 /* --- HEADER --- */
 .sidebar-header-hover {
-    padding: 18px 16px;
+    padding: 24px 24px 16px 24px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 16px;
     cursor: pointer;
     transition: all 0.3s;
-    border-bottom: 1px solid transparent;
-}
-
-.sidebar-header-hover:hover {
-    background: linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.05) 100%);
+    margin-bottom: 8px;
 }
 
 .sidebar-logo {
-    height: 40px;
+    height: 48px;
+    /* Logo maior */
     width: auto;
     object-fit: contain;
-    transition: all 0.3s;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
 }
 
 .sidebar-header-hover:hover .sidebar-logo {
     transform: scale(1.05) rotate(-2deg);
-    filter: drop-shadow(0 4px 8px rgba(147, 51, 234, 0.3));
 }
 
 .logo-area {
-    font-weight: 800;
-    color: var(--text-primary);
-    font-size: 1.1rem;
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .sidebar-church-name {
-    color: var(--text-primary);
-    font-size: 0.95rem;
+    font-family: var(--font-display);
+    color: var(--text-main);
+    font-size: 1.1rem;
     font-weight: 700;
-    transition: all 0.3s;
-    display: block;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
 }
 
 .sidebar-app-name {
-    color: var(--text-tertiary);
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    color: var(--primary);
+    /* Marca do App */
+    font-size: 0.8rem;
     font-weight: 600;
-    transition: all 0.3s;
-    display: block;
-}
-
-.sidebar-header-hover:hover .sidebar-church-name {
-    color: var(--purple-600);
-}
-
-.sidebar-header-hover:hover .sidebar-app-name {
-    color: var(--green-600);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 2px;
 }
 
 /* --- NAVIGATION --- */
 .sidebar-nav {
     flex: 1;
-    padding: 16px 12px;
+    padding: 0 16px;
+    /* Mais padding lateral */
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -151,125 +144,95 @@
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 12px;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    /* Mais arredondado */
     color: var(--text-secondary);
     text-decoration: none;
+    font-family: var(--font-body);
     font-weight: 500;
-    font-size: 0.9rem;
-    transition: all 0.2s;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
     border: 1px solid transparent;
+    /* Para evitar layout shift */
     position: relative;
     overflow: hidden;
 }
 
+/* Hover State - Glassy */
 .nav-item:hover {
-    background: var(--bg-surface-hover);
-    color: var(--text-primary);
-    transform: translateX(4px);
+    background: #f8fafc;
+    color: var(--text-main);
+    transform: translateX(2px);
 }
 
+/* Active State - Premium Pill */
 .nav-item.active {
-    background: var(--bg-surface-active);
-    color: var(--primary);
-    font-weight: 700;
-    box-shadow: var(--shadow-sm);
-    border-color: var(--border-subtle);
+    background: var(--primary-gradient);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
+    /* Sombra colorida */
+    border: none;
 }
 
+.nav-item.active:hover {
+    transform: translateX(0) scale(1.02);
+}
+
+/* Icons */
 .nav-item svg,
 .nav-item i {
     flex-shrink: 0;
     width: 22px;
     height: 22px;
-    transition: all 0.2s;
+    transition: all 0.3s;
+    opacity: 0.8;
 }
 
-.nav-item.active svg {
+.nav-item.active svg,
+.nav-item.active i {
+    opacity: 1;
     transform: scale(1.1);
-}
-
-/* Special Nav Item Colors (Active/Hover) */
-.nav-item.nav-blue.active {
-    color: var(--blue-600);
-    background: var(--blue-50);
-    border-color: var(--blue-100);
-}
-
-.nav-item.nav-green.active {
-    color: var(--green-600);
-    background: var(--green-50);
-    border-color: var(--green-100);
-}
-
-.nav-item.nav-yellow.active {
-    color: var(--yellow-600);
-    background: var(--yellow-50);
-    border-color: var(--yellow-100);
-}
-
-.nav-item.nav-red.active {
-    color: var(--red-600);
-    background: var(--red-50);
-    border-color: var(--red-100);
-}
-
-/* Multicolor Icon Special Handling */
-.nav-multicolor.active {
-    background: var(--bg-surface-active);
-    border-color: var(--border-subtle);
 }
 
 /* Dividers & Sections */
 .nav-divider {
     height: 1px;
     background: var(--border-subtle);
-    margin: 8px 12px;
+    margin: 12px 8px;
+    opacity: 0.6;
 }
 
 .nav-section-title {
-    padding: 0 12px 4px 12px;
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
+    padding: 4px 12px;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    color: var(--text-light);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
     margin-top: 8px;
+    margin-bottom: 4px;
 }
 
-/* Meeting Button Special */
-.nav-meeting {
-    background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-hover) 100%);
-    border: 1px solid var(--border-medium);
-}
+/* --- SPECIAL ACTIVE STATES (Overrides generic active if strict color needed) --- */
+/* Mas no premium preferimos unificar na cor primária (Indigo/Blue) para consistência */
+/* Se quiser manter cores por seção, descomentar abaixo, mas ajustando para gradients */
 
-.nav-meeting:hover {
-    border-color: var(--primary);
+/*
+.nav-item.nav-green.active {
+    background: var(--gradient-success);
+    box-shadow: 0 8px 16px -4px rgba(34, 197, 94, 0.4);
 }
-
-.nav-content-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
-
-.meeting-badge {
-    background: var(--orange-500);
-    color: white;
-    font-size: 0.6rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: 800;
-}
+*/
 
 /* --- FOOTER / CREDITS --- */
 .sidebar-credits {
-    padding: 16px;
+    padding: 24px;
     text-align: center;
-    border-top: 1px solid var(--border-subtle);
-    background: var(--bg-body);
+    /* border-top: 1px solid var(--border-subtle); Removido para visual mais limpo */
 }
 
 /* --- OVERLAY --- */
@@ -279,12 +242,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(15, 23, 42, 0.4);
+    /* Backdrop blur setup */
     z-index: 999;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
+    /* Blur real */
 }
 
 .sidebar-overlay.active {
