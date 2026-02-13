@@ -1,296 +1,241 @@
 /* assets/css/pages/escalas.css */
 
-/* FORÇANDO ESTILOS SMART FLEX (Dedup de Cache) */
-.card-content-wrapper.smart-flex {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    gap: 16px !important;
-}
-
-@media (max-width: 600px) {
-    .card-content-wrapper.smart-flex {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-    }
-
-    .card-content-wrapper.smart-flex .card-people-col {
-        width: 100% !important;
-        justify-content: flex-end !important;
-        margin-top: 4px !important;
-    }
-}
-
-.smart-flex .card-people-col {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    margin-left: auto !important;
-}
-
-/* Timeline Container */
-.timeline-container {
+/* === VERTICAL LAYOUT (STACKED) === */
+.scales-vertical-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    padding-bottom: 40px;
 }
 
-/* Empty State */
-.empty-timeline {
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.empty-icon-circle {
-    width: 64px;
-    height: 64px;
+/* === CARD DESIGN (MODERN) === */
+.scale-card {
     background: var(--bg-surface);
-    border-radius: 50%;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    padding: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-    color: var(--text-muted);
-    border: 1px solid var(--border-color);
-}
-
-/* Timeline Card (BASE) */
-.timeline-card {
-    /* Base styles already in components/cards.css or similar, refining here if needed */
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 0 16px;
-    /* Padding ajustado para alinhamento */
+    flex-direction: column;
+    gap: 16px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
 
-/* Timeline Card Content Area */
-.timeline-content {
-    flex: 1;
-    min-width: 0;
-    padding: 14px 0;
+.scale-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-subtle, #bfdbfe);
 }
 
-/* Header Row (Type + Badge) */
-.timeline-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
+/* Accent Top Border based on Event Type (Dynamic via PHP style attr or helper classes) */
+.scale-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--card-accent-color, var(--slate-300));
+    opacity: 0.8;
 }
 
-.timeline-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Meta Info Row (Time, Users, Music) */
-.timeline-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    flex-wrap: wrap;
-}
-
-.timeline-meta-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.timeline-meta-music {
-    color: var(--blue-600);
-    font-weight: 600;
-}
-
-/* Avatars Section */
-.timeline-avatars-col {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    padding-right: 14px;
-}
-
-.avatar-group {
-    display: flex;
-    align-items: center;
-}
-
-.avatar-circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--bg-surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: white;
-    overflow: hidden;
-}
-
-.avatar-extra-count {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    margin-left: 4px;
-}
-
-/* PAST SCHEDULES SPECIFIC */
-.timeline-card-past {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s;
-    margin-bottom: 10px;
+/* === MONTH SEPARATOR === */
+.month-divider {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 24px 0 4px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-left: 12px;
+    border-left: 4px solid var(--primary);
+    line-height: 1;
     opacity: 0.7;
-    filter: saturate(0.6);
 }
 
-.timeline-card-past:hover {
-    opacity: 1;
-    filter: saturate(1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* === CARD HEADER === */
+.scale-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-/* Date Box Past */
-.date-box-past {
-    min-width: 56px;
-    height: 56px;
-    border-radius: 10px;
+.date-badge-modern {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    background: var(--bg-body);
+    border-radius: 12px;
+    min-width: 56px;
+    height: 56px;
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
-.date-day-past {
-    font-size: 1.4rem;
+.date-day {
+    font-size: 1.5rem;
     font-weight: 800;
     line-height: 1;
+    color: var(--text-main);
 }
 
-.date-month-past {
-    font-size: 0.65rem;
+.date-month {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+}
+
+.status-badge-pill {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
     font-weight: 700;
     text-transform: uppercase;
-    opacity: 0.9;
-    margin-top: 3px;
+    letter-spacing: 0.02em;
 }
 
-/* Filter Sheet */
-.filter-sheet-container {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2000;
-}
-
-.filter-toggle-row {
+/* === CARD BODY === */
+.scale-card-body {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.event-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.3;
+    margin: 0;
+}
+
+.event-meta-row {
+    display: flex;
     align-items: center;
-    padding: 16px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    cursor: pointer;
-    margin-bottom: 24px;
-}
-
-.filter-toggle-checkbox {
-    transform: scale(1.3);
-    accent-color: var(--slate-800);
-}
-
-/* Radio Pill Group */
-.radio-group-container {
-    margin-bottom: 24px;
-}
-
-.radio-group-label {
-    display: block;
-    margin-bottom: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
-
-.radio-options-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.radio-pill {
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-surface);
+    gap: 12px;
     color: var(--text-muted);
     font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
+    margin-top: 4px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.meta-music-count {
+    color: var(--blue-600);
+    font-weight: 600;
+    background: var(--blue-50);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+/* === CARD FOOTER (AVATARS) === */
+.scale-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.avatar-stack {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-stack-item {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    background: var(--slate-200);
+    margin-left: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.avatar-stack-item:first-child {
+    margin-left: 0;
+}
+
+.avatar-stack-more {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-body);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.btn-arrow-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
     transition: all 0.2s;
 }
 
-.radio-option-label input:checked+.radio-pill {
-    background: var(--slate-800);
+.scale-card:hover .btn-arrow-action {
+    background: var(--text-main);
     color: white;
-    border-color: var(--slate-800);
-    box-shadow: 0 2px 8px rgba(30, 41, 59, 0.3);
+    border-color: var(--text-main);
 }
 
-.filter-actions {
-    margin-top: auto;
-    display: flex;
-    gap: 12px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
+/* === TABS & CONTROLS === */
+.page-controls-container {
+    margin-bottom: 24px;
 }
 
-.btn-reset {
-    flex: 1;
-    padding: 14px;
-    text-align: center;
-    border-radius: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    background: var(--bg-body);
-    text-decoration: none;
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+    .scale-card {
+        padding: 16px;
+    }
 }
 
-.btn-apply {
-    flex: 2;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    background: var(--primary);
-    color: white;
-    cursor: pointer;
+/* === THEME COLORS (Applied via CSS Variables in style attr) === */
+/* 
+   --card-accent-color is set inline or via utility classes
+   Culto: var(--slate-600)
+   Ensaio: var(--amber-500)
+   Jovem: #8b5cf6
+   Especial: var(--red-500)
+*/
+
+/* Past Card Specifics - Desaturated look */
+.scale-card.past-card {
+    opacity: 0.8;
+    background: #f9f9f9;
+}
+
+.scale-card.past-card:hover {
+    opacity: 1;
+    background: #fff;
 }

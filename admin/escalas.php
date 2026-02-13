@@ -68,7 +68,6 @@ try {
         $inQuery = implode(',', array_fill(0, count($scheduleIds), '?'));
 
         // 1. Buscando participantes
-        // Nota: Buscamos TODOS os participantes para contar corretamente no PHP
         $sqlParts = "
             SELECT su.schedule_id, u.id, u.name, u.photo, u.avatar_color 
             FROM schedule_users su 
@@ -86,7 +85,6 @@ try {
                 'avatar_color' => $row['avatar_color']
             ];
             
-            // Build mySchedulesMap directly from participants list if appropriate
             if ($row['id'] == $loggedUserId) {
                 $mySchedulesMap[$row['schedule_id']] = true;
             }
@@ -108,6 +106,16 @@ try {
 
 } catch (PDOException $e) {
     die("Erro ao carregar escalas: " . $e->getMessage());
+}
+
+// Helpers
+function getMonthName($m) {
+    $months = [
+        1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
+        5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
+        9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
+    ];
+    return $months[(int)$m];
 }
 
 // Contar filtros ativos para Badge
@@ -134,23 +142,22 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 
     <!-- Right Controls -->
     <div class="controls-right">
-        <!-- Botão Adicionar Escala (Admin Only) -->
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-        <a href="escala_adicionar.php" class="btn-control-icon btn-add-new">
+        <a href="escala_adicionar.php" class="btn-control-icon btn-add-new" title="Nova Escala">
             <i data-lucide="plus"></i>
         </a>
         <?php endif; ?>
 
-        <!-- Filter Button -->
         <button onclick="openSheet('filterSheet')" class="btn-control-icon btn-filter-trigger">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-            </svg>
+            <i data-lucide="filter" width="18"></i>
+            <?php if($activeFilters > 0): ?>
+            <span class="badge-dot"></span>
+            <?php endif; ?>
         </button>
     </div>
 </div>
 
-<!-- Container Timeline -->
+<!-- Container Grid -->
 <div>
 
     <!-- TAB: FUTURAS -->
@@ -165,104 +172,110 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             </div>
         <?php else: ?>
 
-            <div id="view-timeline" class="timeline-container">
-                <?php foreach ($futureSchedules as $schedule):
+            <div id="view-timeline" class="scales-vertical-list">
+                <?php 
+                $currentMonth = '';
+                foreach ($futureSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
-                    $isToday = $date->format('Y-m-d') === date('Y-m-d');
+                    $monthYear = getMonthName($date->format('n')) . ' ' . $date->format('Y');
+                    
+                    // MONTH SEPARATOR
+                    if ($monthYear !== $currentMonth) {
+                        echo '<h3 class="month-divider">' . strtoupper($monthYear) . '</h3>';
+                        $currentMonth = $monthYear;
+                    }
 
-                    // Definir Classes de Tipo
+                    $isToday = $date->format('Y-m-d') === date('Y-m-d');
                     $type = mb_strtolower($schedule['event_type']);
-                    $typeClass = 'event-type-culto'; // default
+                    
+                    // Theme Logic
+                    $accentColor = 'var(--slate-600)';
+                    $statusBadgeBg = 'var(--slate-100)';
+                    $statusBadgeColor = 'var(--slate-600)';
                     
                     if (strpos($type, 'ensaio') !== false) {
-                        $typeClass = 'event-type-ensaio';
+                        $accentColor = 'var(--amber-500)';
+                        $statusBadgeBg = 'var(--amber-50)';
+                        $statusBadgeColor = 'var(--amber-700)';
                     } elseif (strpos($type, 'jovem') !== false) {
-                        $typeClass = 'event-type-jovem';
+                        $accentColor = '#8b5cf6';
+                        $statusBadgeBg = '#f5f3ff';
+                        $statusBadgeColor = '#7c3aed';
                     } elseif (strpos($type, 'especial') !== false) {
-                        $typeClass = 'event-type-especial';
+                        $accentColor = 'var(--red-500)';
+                        $statusBadgeBg = 'var(--red-50)';
+                        $statusBadgeColor = 'var(--red-700)';
                     }
 
-                    if ($isToday) {
-                        $typeClass .= ' event-type-hoje';
-                    }
-
-
-                    // --- OTIMIZADO: Usando dados carregados previamente ---
-                    
-                    // Participantes
-                    $allParticipants = $participantsMap[$schedule['id']] ?? [];
-                    $participants = array_slice($allParticipants, 0, 5); // Apenas top 5
-                    $totalParticipants = count($allParticipants);
-                    $extraCount = max(0, $totalParticipants - 5);
-
-                    // Minha presença
-                    $isMine = $mySchedulesMap[$schedule['id']] ?? false;
-
-                    // Músicas
-                    $songsCount = $songCountsMap[$schedule['id']] ?? 0;
-                    
-                    // Lógica de visualização
-                    if ($isMine && !$isToday) {
-                        $typeClass .= ' event-type-mine';
-                    }
-                    
-                    // Calcular dias até o evento
+                    // Dias Restantes
                     $today = new DateTime('today');
                     $daysUntil = $today->diff($date)->days;
+                    
+                    // Dados
+                    $allParticipants = $participantsMap[$schedule['id']] ?? [];
+                    $participants = array_slice($allParticipants, 0, 5);
+                    $extraCount = max(0, count($allParticipants) - 5);
+                    $songsCount = $songCountsMap[$schedule['id']] ?? 0;
+                    $isMine = $mySchedulesMap[$schedule['id']] ?? false;
                 ?>
 
-                    <!-- ESCALA CARD -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card <?= $typeClass ?>">
+                    <!-- CARD ITEM -->
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-accent-color: <?= $accentColor ?>">
                         
-                        <!-- Data -->
-                        <div class="date-box">
-                            <div class="day"><?= $date->format('d') ?></div>
-                            <div class="month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
-                        </div>
-
-                        <!-- Conteúdo Central -->
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h3 class="timeline-title">
-                                    <?= htmlspecialchars($schedule['event_type']) ?>
-                                </h3>
-                                <?php if ($isToday): ?>
-                                    <span class="badge badge-error">HOJE</span>
+                        <div class="scale-card-header">
+                            <div class="date-badge-modern">
+                                <span class="date-day"><?= $date->format('d') ?></span>
+                                <span class="date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></span>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                                <?php if($isToday): ?>
+                                    <span class="status-badge-pill" style="background: var(--red-100); color: var(--red-600);">Hoje</span>
                                 <?php else: ?>
-                                    <span class="badge badge-info">
-                                        <?= $daysUntil == 1 ? 'Amanhã' : 'em ' . $daysUntil . ' dias' ?>
+                                    <span class="status-badge-pill" style="background: <?= $statusBadgeBg ?>; color: <?= $statusBadgeColor ?>;">
+                                        <?= $daysUntil == 1 ? 'Amanhã' : 'Em ' . $daysUntil . ' dias' ?>
+                                    </span>
+                                <?php endif; ?>
+                                
+                                <?php if($isMine): ?>
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--blue-600); display: flex; align-items: center; gap: 4px;">
+                                        <i data-lucide="check-circle-2" width="12"></i> Você participa
                                     </span>
                                 <?php endif; ?>
                             </div>
+                        </div>
 
-                            <div class="timeline-meta">
-                                <span class="timeline-meta-item">
+                        <div class="scale-card-body">
+                            <h3 class="event-title"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                            
+                            <div class="event-meta-row">
+                                <span class="meta-item">
                                     <i data-lucide="clock" width="14"></i>
                                     <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
                                 </span>
-                                <?php if ($totalParticipants > 0): ?>
-                                    <span class="timeline-meta-item">
-                                        <i data-lucide="users" width="14"></i>
-                                        <?= $totalParticipants ?>
-                                    </span>
-                                <?php endif; ?>
-                                <?php if ($songsCount > 0): ?>
-                                    <span class="timeline-meta-item timeline-meta-music">
-                                        <i data-lucide="music" width="14"></i>
-                                        <?= $songsCount ?> músicas
-                                    </span>
+                                <?php if($songsCount > 0): ?>
+                                <span class="meta-item meta-music-count">
+                                    <i data-lucide="music" width="12"></i> <?= $songsCount ?>
+                                </span>
                                 <?php endif; ?>
                             </div>
+                            
+                            <?php if(!empty($schedule['notes'])): ?>
+                                <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <?= htmlspecialchars($schedule['notes']) ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
-                        <!-- Avatares -->
-                        <div class="timeline-avatars-col">
-                            <?php if (!empty($participants)): ?>
-                                <div class="avatar-stack">
-                                    <?php foreach (array_slice($participants, 0, 3) as $p):
+                        <div class="scale-card-footer">
+                            <div class="avatar-stack">
+                                <?php if(empty($participants)): ?>
+                                    <span style="font-size: 0.8rem; color: var(--text-tertiary);">Nenhum participante</span>
+                                <?php else: ?>
+                                    <?php foreach ($participants as $p):
                                         $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
                                     ?>
-                                        <div class="avatar-stack-item" style="background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;">
+                                        <div class="avatar-stack-item text-xs" style="background: <?= $p['avatar_color'] ?: 'var(--slate-400)' ?>;" title="<?= htmlspecialchars($p['name']) ?>">
                                             <?php if ($photoUrl): ?>
                                                 <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                                             <?php else: ?>
@@ -271,12 +284,16 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                         </div>
                                     <?php endforeach; ?>
                                     <?php if ($extraCount > 0): ?>
-                                        <span class="avatar-stack-more">+<?= $extraCount ?></span>
+                                        <div class="avatar-stack-more">+<?= $extraCount ?></div>
                                     <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
-                            <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary);"></i>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <div class="btn-arrow-action">
+                                <i data-lucide="arrow-right" width="16"></i>
+                            </div>
                         </div>
+
                     </a>
                 <?php endforeach; ?>
             </div>
@@ -290,136 +307,86 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                 <p class="text-muted">Nenhum histórico recente.</p>
             </div>
         <?php else: ?>
-            <div id="view-timeline-past" class="timeline-container">
-                <?php foreach ($pastSchedules as $schedule):
+            <div class="scales-vertical-list">
+                <?php 
+                $currentMonth = '';
+                foreach ($pastSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
-                    // Past is never today, so $isToday is false
-                    $isToday = false; 
+                    $monthYear = getMonthName($date->format('n')) . ' ' . $date->format('Y');
 
-                    // Definir Tema de Cor (Mesma lógica das futuras)
-                    $type = mb_strtolower($schedule['event_type']);
-                    if (strpos($type, 'domingo') !== false) {
-                        $themeColor = 'var(--slate-600)'; 
-                        $themeLight = 'var(--slate-100)'; 
-                    } elseif (strpos($type, 'ensaio') !== false) {
-                        $themeColor = 'var(--amber-500)'; 
-                        $themeLight = 'var(--amber-50)'; 
-                    } elseif (strpos($type, 'jovem') !== false) {
-                        $themeColor = '#8b5cf6';
-                        $themeLight = '#f5f3ff';
-                    } elseif (strpos($type, 'especial') !== false) {
-                        $themeColor = 'var(--red-500)'; 
-                        $themeLight = 'var(--red-50)'; 
-                    } else {
-                        $themeColor = 'var(--slate-600)';
-                        $themeLight = 'var(--slate-100)';
+                     // MONTH SEPARATOR
+                    if ($monthYear !== $currentMonth) {
+                        echo '<h3 class="month-divider">' . strtoupper($monthYear) . '</h3>';
+                        $currentMonth = $monthYear;
                     }
 
-                    // --- OTIMIZADO: Usando dados carregados previamente ---
+                    $type = mb_strtolower($schedule['event_type']);
                     
-                    // Participantes
+                    // Theme Logic
+                    $accentColor = 'var(--text-tertiary)';
+                    
+                    // Dados
+                    $songsCount = $songCountsMap[$schedule['id']] ?? 0;
                     $allParticipants = $participantsMap[$schedule['id']] ?? [];
-                    $participants = array_slice($allParticipants, 0, 5);
-                    $totalParticipants = count($allParticipants);
-                    $extraCount = max(0, $totalParticipants - 5);
+                    // Mostramos menos avatares no passado para limpar
+                    $participants = array_slice($allParticipants, 0, 3);
+                    $extraCount = max(0, count($allParticipants) - 3);
 
-                    // Minha presença
-                    $isMine = $mySchedulesMap[$schedule['id']] ?? false;
-
-                    // Músicas
-                    $songsCountPast = $songCountsMap[$schedule['id']] ?? 0;
-
-                    // Cálculo de dias passados
+                    // Dias passados
                     $today = new DateTime('today');
                     $daysAgo = $date->diff($today)->days;
-
-                    // Lógica de Cores de Fundo (Pedido do Usuário)
-                    // 1. Hoje -> Verde Claro
-                    // 2. Minha Escala -> Azul Claro
-                    // 3. Outros (Culto/Ensaio) -> Cinza Claro
-                    
-                    if ($isToday) {
-                        $cardBg = 'var(--green-50)';
-                        $borderColor = 'var(--green-300)';
-                    } elseif ($isMine) {
-                        $cardBg = 'var(--blue-50)';
-                        $borderColor = 'var(--blue-200)';
-                    } else {
-                        $cardBg = 'var(--slate-50)'; // Cinza leve para futuras
-                        $borderColor = 'var(--border-subtle)';
-                    }
                 ?>
-                    <!-- ESCALA CARD (PASSADA) -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="timeline-card-past" style="background: <?= $cardBg ?>; border: 1px solid <?= $borderColor ?>; border-left: 4px solid <?= $themeColor ?>;">
+                    <!-- CARD ITEM (PASSADO) -->
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card past-card">
                         
-                        <!-- Data -->
-                        <div class="date-box-past" style="background: <?= $themeLight ?>; border: 1px solid <?= $themeColor ?>30;">
-                            <div class="date-day-past" style="color: <?= $themeColor ?>;"><?= $date->format('d') ?></div>
-                            <div class="date-month-past" style="color: <?= $themeColor ?>;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
+                        <div class="scale-card-header">
+                            <div class="date-badge-modern" style="opacity: 0.7;">
+                                <span class="date-day"><?= $date->format('d') ?></span>
+                                <span class="date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></span>
+                            </div>
+                            
+                            <span class="status-badge-pill" style="background: var(--slate-100); color: var(--text-muted); font-size: 0.65rem;">
+                                <?= $daysAgo == 1 ? 'Ontem' : $daysAgo . ' dias atrás' ?>
+                            </span>
                         </div>
 
-                        <!-- Conteúdo Central -->
-                        <div class="timeline-content">
-                            <div class="timeline-header" style="margin-bottom: 4px;">
-                                <h3 class="timeline-title">
-                                    <?= htmlspecialchars($schedule['event_type']) ?>
-                                </h3>
-                                <span style="background: var(--slate-100); color: var(--slate-600); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
-                                    <?= $daysAgo == 1 ? 'Ontem' : 'há ' . $daysAgo . ' dias' ?>
+                        <div class="scale-card-body">
+                            <h3 class="event-title" style="font-size: 1rem; color: var(--text-secondary);"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                             <div class="event-meta-row">
+                                <?php if($songsCount > 0): ?>
+                                <span class="meta-item">
+                                    <i data-lucide="music" width="12"></i> <?= $songsCount ?> músicas
                                 </span>
-                            </div>
-
-                            <div class="timeline-meta" style="font-size: 0.8rem; gap: 10px;">
-                                <span class="timeline-meta-item">
-                                    <i data-lucide="clock" width="13"></i>
-                                    <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
-                                </span>
-                                <?php if ($totalParticipants > 0): ?>
-                                    <span class="timeline-meta-item">
-                                        <i data-lucide="users" width="13"></i>
-                                        <?= $totalParticipants ?>
-                                    </span>
-                                <?php endif; ?>
-                                <?php if ($songsCountPast > 0): ?>
-                                    <span class="timeline-meta-item" style="color: var(--blue-600);">
-                                        <i data-lucide="music" width="13"></i>
-                                        <?= $songsCountPast ?>
-                                    </span>
                                 <?php endif; ?>
                             </div>
                         </div>
 
-                        <!-- Avatares -->
-                        <div class="timeline-avatars-col">
-                            <?php if (!empty($participants)): ?>
-                                <div class="avatar-stack">
-                                    <?php foreach (array_slice($participants, 0, 3) as $p):
-                                        $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
-                                    ?>
-                                        <div class="avatar-stack-item" style="background: <?= $p['avatar_color'] ?: $themeColor ?>;">
-                                            <?php if ($photoUrl): ?>
-                                                <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                                            <?php else: ?>
-                                                <?= strtoupper(substr($p['name'], 0, 1)) ?>
-                                            <?php endif; ?>
-                                        </div>
-                                    <?php endforeach; ?>
-                                    <?php if ($extraCount > 0): ?>
-                                        <span class="avatar-stack-more">+<?= $extraCount ?></span>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
-                            <i data-lucide="chevron-right" width="18" style="color: var(--text-tertiary); opacity: 0.5;"></i>
+                        <div class="scale-card-footer" style="padding-top: 12px;">
+                             <div class="avatar-stack">
+                                 <?php foreach ($participants as $p): 
+                                     $photoUrl = $p['photo'] ? '../assets/img/' . $p['photo'] : '';
+                                 ?>
+                                     <div class="avatar-stack-item" style="width: 24px; height: 24px; font-size: 0.6rem; opacity: 0.8; background: <?= $p['avatar_color'] ?: '#ccc' ?>;">
+                                        <?php if ($photoUrl): ?>
+                                            <img src="<?= htmlspecialchars($photoUrl) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                        <?php else: ?>
+                                            <?= strtoupper(substr($p['name'], 0, 1)) ?>
+                                        <?php endif; ?>
+                                     </div>
+                                 <?php endforeach; ?>
+                             </div>
+                             <div class="btn-arrow-action" style="width: 28px; height: 28px;">
+                                <i data-lucide="chevron-right" width="14"></i>
+                            </div>
                         </div>
                     </a>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-
     </div>
 </div>
 
-<!-- FILTER SHEET -->
+<!-- FILTER SHEET (Mantido igual) -->
 <div id="filterSheet" class="filter-sheet-container">
     <div class="filter-sheet-overlay" onclick="closeSheet('filterSheet')"></div>
     <div class="filter-sheet-modal">
@@ -493,7 +460,10 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     function openSheet(id) {
         const modal = document.getElementById(id);
         if (modal) {
-            modal.classList.add('active');
+            modal.style.display = 'block'; // Ensure visibility
+            requestAnimationFrame(() => {
+                modal.classList.add('active');
+            });
             document.body.style.overflow = 'hidden'; 
         }
     }
@@ -502,6 +472,9 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
         const modal = document.getElementById(id);
         if (modal) {
             modal.classList.remove('active');
+            setTimeout(() => {
+                 modal.style.display = 'none';
+            }, 300); // Wait for transition
             document.body.style.overflow = '';
         }
     }
