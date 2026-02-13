@@ -1,5 +1,5 @@
 <?php
-// admin/avisos.php - Redesign com visual roxo moderno
+// admin/avisos.php - Redesign com visual roxo moderno e Reações
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
@@ -10,10 +10,26 @@ checkLogin();
 $userId = $_SESSION['user_id'] ?? 1;
 $isAdmin = ($_SESSION['user_role'] ?? '') === 'admin';
 
-// --- LÓGICA DE POST (CRUD) ---
+// --- LÓGICA DE POST (CRUD & REAÇÕES) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
+            case 'toggle_reaction':
+                $avisoId = $_POST['aviso_id'];
+                $type = $_POST['reaction_type'];
+                
+                // Toggle logic
+                $stmt = $pdo->prepare("SELECT id FROM aviso_reactions WHERE aviso_id=? AND user_id=? AND reaction_type=?");
+                $stmt->execute([$avisoId, $userId, $type]);
+                if ($stmt->fetch()) {
+                    $pdo->prepare("DELETE FROM aviso_reactions WHERE aviso_id=? AND user_id=? AND reaction_type=?")->execute([$avisoId, $userId, $type]);
+                } else {
+                    $pdo->prepare("INSERT INTO aviso_reactions (aviso_id, user_id, reaction_type) VALUES (?, ?, ?)")->execute([$avisoId, $userId, $type]);
+                }
+                // Redirect to avoid resubmission
+                header("Location: avisos.php" . (isset($_SERVER['QUERY_STRING']) ? '?'.$_SERVER['QUERY_STRING'] : '')); 
+                exit;
+
             case 'create':
                 $stmt = $pdo->prepare("INSERT INTO avisos (title, message, priority, type, target_audience, expires_at, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
                 $stmt->execute([
@@ -151,6 +167,41 @@ $query .= " ORDER BY a.priority='urgent' DESC, a.created_at DESC";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch Reactions for Logic
+if (!empty($avisos)) {
+    $avisoIds = array_column($avisos, 'id');
+    $placeholders = str_repeat('?,', count($avisoIds) - 1) . '?';
+    try {
+        $stmtReactions = $pdo->prepare("SELECT * FROM aviso_reactions WHERE aviso_id IN ($placeholders)");
+        $stmtReactions->execute($avisoIds);
+        $allReactions = $stmtReactions->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        // Table might not exist if migration failed, fallback gracefully
+        $allReactions = [];
+    }
+    
+    // Map reactions to avisos
+    foreach ($avisos as &$av) {
+        // Init default structure
+        $av['reactions'] = ['like' => 0, 'confirm' => 0];
+        $av['user_reacted'] = ['like' => false, 'confirm' => false];
+        $av['tags'] = []; // Placeholder for tags query below
+        
+        foreach ($allReactions as $r) {
+            if ($r['aviso_id'] == $av['id']) {
+                if (isset($av['reactions'][$r['reaction_type']])) {
+                    $av['reactions'][$r['reaction_type']]++;
+                }
+                if ($r['user_id'] == $userId) {
+                    $av['user_reacted'][$r['reaction_type']] = true;
+                }
+            }
+        }
+    }
+    unset($av); // break ref
+}
+
 
 // Buscar tags de cada aviso
 foreach ($avisos as &$aviso) {
@@ -328,6 +379,30 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
+                </div>
+
+                <!-- Reactions -->
+                <div class="aviso-reactions">
+                    <form method="POST" style="margin:0;">
+                         <!-- Hidden inputs for preserving filters/search if needed, but for now simple -->
+                        <input type="hidden" name="action" value="toggle_reaction">
+                        <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
+                        <input type="hidden" name="reaction_type" value="like">
+                        <button type="submit" class="reaction-btn <?= $aviso['user_reacted']['like'] ? 'active like' : '' ?>">
+                            <i data-lucide="heart" width="16" fill="<?= $aviso['user_reacted']['like'] ? 'currentColor' : 'none' ?>"></i>
+                            Curtir <span class="reaction-count"><?= $aviso['reactions']['like'] ?: '' ?></span>
+                        </button>
+                    </form>
+                    
+                    <form method="POST" style="margin:0;">
+                        <input type="hidden" name="action" value="toggle_reaction">
+                        <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
+                        <input type="hidden" name="reaction_type" value="confirm">
+                        <button type="submit" class="reaction-btn <?= $aviso['user_reacted']['confirm'] ? 'active confirm' : '' ?>">
+                            <i data-lucide="check-circle" width="16"></i>
+                            Confirmar <span class="reaction-count"><?= $aviso['reactions']['confirm'] ?: '' ?></span>
+                        </button>
+                    </form>
                 </div>
             </div>
         <?php endforeach; ?>

@@ -871,3 +871,129 @@ body {
 .cursor-pointer {
     cursor: pointer;
 }
+
+/* COMMENTS SECTION & ENGAGEMENT */
+.comments-section {
+    margin-top: 32px;
+}
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+.comment-bubble {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.comment-content-box {
+    background: var(--bg-body);
+    padding: 12px;
+    border-radius: 12px;
+    border-top-left-radius: 2px;
+    border: 1px solid var(--border-subtle);
+    flex: 1;
+}
+.comment-bubble.my-comment .comment-content-box {
+    background: var(--blue-50);
+    border-color: rgba(59, 130, 246, 0.2);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 2px;
+}
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+}
+.comment-author {
+    font-weight: 700;
+    color: var(--text-main);
+}
+.comment-date {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+.comment-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-main);
+    white-space: pre-wrap;
+}
+.comment-form-container {
+    background: var(--bg-body);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.comment-input-row {
+    display: flex;
+    gap: 10px;
+}
+.btn-send-comment {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-send-comment:hover {
+    background: var(--blue-600);
+}
+/* REHEARSAL CHECK-IN */
+.check-in-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+}
+.check-in-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.check-in-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.check-in-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.btn-check:hover {
+    border-color: var(--green-500);
+    color: var(--green-600);
+}
+.btn-check.checked {
+    background: var(--green-500);
+    color: white;
+    border-color: var(--green-500);
+}
+.rehearsed-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: var(--green-500);
+    color: white;
+    border-radius: 50%;
+    margin-left: 6px;
+    border: 1px solid white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
