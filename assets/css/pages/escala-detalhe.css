@@ -1,85 +1,76 @@
 /* assets/css/pages/escala-detalhe.css */
-/* ANTIGRAVITY COMPACT DETAIL V2.0 */
-
-:root {
-    --header-height: 60px;
-    --primary: #2563eb;
-    --bg-body: #f8fafc;
-    --bg-surface: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-}
-
-body {
-    background: var(--bg-body);
-    font-family: 'Inter', sans-serif;
-    color: var(--text-main);
-    margin: 0;
-    padding-bottom: 80px;
-}
+/* ANTIGRAVITY PREMIUM DETAIL V3.0 (PLAYLIST STYLE) */
 
 .scale-detail-wrapper {
-    padding: 16px;
+    padding: 20px;
     max-width: 800px;
     margin: 0 auto;
+    font-family: var(--font-body);
 }
 
-/* === 1. UNIFIED HEADER CARD (The key change) === */
+/* === 1. IMMERSIVE HEADER (Hero Card Style) === */
 .event-info-card {
     background: var(--bg-surface);
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    /* Deep floating shadow */
     padding: 0;
-    /* Let children control padding */
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     overflow: hidden;
     position: relative;
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease;
 }
 
-/* Top colored strip based on event type (optional, can be js injected or generic blue) */
+/* Top Accent Strip */
 .event-info-card::before {
     content: '';
     display: block;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), #60a5fa);
+    height: 6px;
+    background: var(--primary-gradient);
     width: 100%;
 }
 
 .event-main-row {
-    padding: 20px;
+    padding: 24px;
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: flex-start;
 }
 
-/* Compact Date Box */
+/* Date Box - Prominent */
 .event-date-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--bg-body);
-    border-radius: 12px;
-    width: 50px;
-    height: 52px;
-    border: 1px solid var(--border-color);
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    /* Blue-50/100 */
+    border-radius: var(--radius-md);
+    width: 64px;
+    height: 64px;
+    color: var(--primary);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 1), var(--shadow-sm);
     flex-shrink: 0;
 }
 
 .event-day {
-    font-size: 1.4rem;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--text-main);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .event-month {
-    font-size: 0.65rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--primary);
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
     margin-top: 2px;
 }
 
@@ -89,83 +80,113 @@ body {
 }
 
 .event-type {
-    font-size: 1.1rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    /* Larger */
     font-weight: 700;
     color: var(--text-main);
     line-height: 1.2;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
 }
 
 .event-meta {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.event-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-body);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
 }
 
 .event-meta i {
-    width: 14px;
-    height: 14px;
-    opacity: 0.7;
+    color: var(--accent-purple);
 }
 
-/* Notes Section (Collapsible look) */
 .event-notes {
-    background: var(--bg-body);
-    border-top: 1px solid var(--border-color);
-    padding: 12px 20px;
-    font-size: 0.85rem;
+    background: #f8fafc;
+    border-top: 1px solid var(--border-subtle);
+    padding: 16px 24px;
+    font-size: 0.9rem;
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
-/* === 2. COMPACT LISTS (Team & Songs) === */
+/* === 2. SECTIONS (Headings) === */
 .detail-section {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     padding: 0 4px;
 }
 
 .section-title {
-    font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
 }
 
-/* Team Grid - Compact */
+.section-count {
+    background: var(--border-subtle);
+    color: var(--text-muted);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* === 3. MEMBER GRID (Cards) === */
 .team-list-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
 }
 
 .member-card {
     background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: var(--radius-md);
+    padding: 16px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    text-align: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.member-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-light);
 }
 
 .member-avatar {
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: var(--bg-body);
-    flex-shrink: 0;
     position: relative;
+    box-shadow: var(--shadow-sm);
 }
 
 .member-avatar img {
@@ -177,48 +198,43 @@ body {
 
 .status-indicator {
     position: absolute;
-    bottom: -1px;
-    right: -1px;
-    width: 10px;
-    height: 10px;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    border: 1px solid var(--bg-surface);
+    border: 2px solid var(--bg-surface);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
 .status-confirmed {
-    background: #22c55e;
+    background: var(--gradient-success);
 }
 
 .status-declined {
-    background: #ef4444;
+    background: var(--gradient-danger);
 }
 
 .status-pending {
-    background: #eab308;
-}
-
-.member-info {
-    min-width: 0;
+    background: var(--gradient-warning);
 }
 
 .member-name {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: var(--text-main);
     line-height: 1.2;
 }
 
 .member-role {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    background: var(--bg-body);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
 }
 
-/* Songs List - Ultra Compact */
+/* === 4. SONG LIST (Playlist Style) === */
 .song-list {
     display: flex;
     flex-direction: column;
@@ -227,25 +243,30 @@ body {
 
 .song-card {
     background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 8px 12px;
-    /* Slim padding */
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    transition: background 0.2s;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
-.song-card:active {
-    background: var(--bg-body);
+.song-card:hover {
+    background: #f8fafc;
+    /* Very subtle hover */
+    border-color: var(--border-subtle);
+    transform: scale(1.005);
 }
 
 .song-order {
-    font-size: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
     font-weight: 700;
-    color: var(--text-muted);
-    width: 20px;
+    color: var(--text-light);
+    /* Number is subtle */
+    width: 24px;
     text-align: center;
 }
 
@@ -255,100 +276,84 @@ body {
 }
 
 .song-title {
-    font-size: 0.9rem;
+    display: block;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-main);
+    text-decoration: none;
+    margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-decoration: none;
 }
 
 .song-artist {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-/* Actions as Icon Strip */
+/* Action Icons - Clean */
 .song-actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
 }
 
 .action-icon {
-    color: var(--text-muted);
-    transition: color 0.2s;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    /* Circular buttons */
+    background: transparent;
+    transition: all 0.2s;
 }
 
-.action-icon:hover,
-.action-icon:active {
-    color: var(--primary);
+.action-icon:hover {
     background: var(--bg-body);
-    border-radius: 6px;
+    color: var(--primary);
+    transform: rotate(5deg);
 }
 
 .action-icon.disabled {
     opacity: 0.2;
-    pointer-events: none;
+    cursor: not-allowed;
 }
 
-/* Edit Mode Overrides */
+/* === EDIT MODE OVERRIDES === */
 .edit-mode-section {
     background: var(--bg-surface);
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
 }
 
-.btn-manage {
-    width: 100%;
-    padding: 12px;
-    background: var(--bg-body);
-    border: 1px dashed var(--border-color);
-    border-radius: 8px;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-top: 8px;
-    cursor: pointer;
-}
-
-/* === MOBILE TWEAKS === */
+/* === MOBILE OPTIMIZATIONS === */
 @media (max-width: 600px) {
     .scale-detail-wrapper {
-        padding: 12px;
-        /* Tighter edge */
+        padding: 16px;
     }
 
     .event-main-row {
-        padding: 16px;
-        /* Reduced internal padding */
+        flex-direction: column;
+        /* Stack header on tiny screens? Maybe not, keep side by side is better for "Hero" look if possible. Let's keep flex row but adjust sizes */
+        padding: 20px;
+    }
+
+    .event-type {
+        font-size: 1.3rem;
     }
 
     .team-list-grid {
-        grid-template-columns: 1fr 1fr;
-        /* Force 2 columns even on small screens */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 cols fixed */
     }
 
     .member-card {
-        padding: 8px;
-        flex-direction: column;
-        /* Stack avatar and name to save horizontal space/align center */
-        text-align: center;
-        gap: 6px;
-    }
-
-    .member-info {
-        width: 100%;
-    }
-
-    .song-card {
-        padding: 10px;
+        padding: 12px;
+        /* Smaller padding */
     }
 }

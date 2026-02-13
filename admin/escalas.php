@@ -194,8 +194,8 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     $isMine = $mySchedulesMap[$schedule['id']] ?? false;
                 ?>
 
-                    <!-- ANTIGRAVITY COMPACT CARD -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-theme-color: <?= $themeColor ?>">
+                    <!-- ANTIGRAVITY HERO CARD -->
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card card-hover-effect" style="--card-theme-color: <?= $themeColor ?>">
                         <div class="scale-card-main">
                             <!-- 1. Left: Date -->
                             <div class="date-box-premium">
@@ -223,8 +223,8 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     <?php endif; ?>
 
                                     <?php if($isMine): ?>
-                                    <div class="meta-pill" style="color: var(--green-600);">
-                                        <i data-lucide="check-circle-2" style="width: 14px; opacity: 1;"></i>
+                                    <div class="meta-pill escalado">
+                                        <i data-lucide="check-circle-2"></i>
                                         <span class="desktop-only" style="font-size: 0.75rem;">Escalado</span>
                                     </div>
                                     <?php endif; ?>
@@ -236,7 +236,6 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 <div class="days-count-badge <?= $isToday ? 'today' : '' ?>">
                                     <?= $isToday ? 'HOJE' : ($daysUntil == 1 ? 'AMANHÃ' : $daysUntil . 'd') ?>
                                 </div>
-                                <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted); margin-left: 8px;"></i>
                             </div>
                         </div>
                     </a>

@@ -1,0 +1,148 @@
+/* assets/css/theme-premium.css */
+/* ANTIGRAVITY PREMIUM THEME V1.0 */
+/* Concept: Elastic, Luminous, Deep */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* === 1. PALETA DE CORES VIBRANTE (Luminous) === */
+    /* Primary uses gradients for life */
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+    /* Indigo to Blue */
+    --primary-shadow: rgba(99, 102, 241, 0.4);
+
+    /* Secondary / Accents */
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-orange: #f97316;
+    --accent-teal: #14b8a6;
+
+    /* Semantic Gradients */
+    --gradient-success: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+    --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+
+    /* Backgrounds (Atmosphere) */
+    --bg-body: #f8fafc;
+    /* Slate-50 */
+    --bg-surface: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.7);
+
+    /* Typography (Modern Slate) */
+    --text-main: #0f172a;
+    /* Slate-900 (Deepest) */
+    --text-secondary: #334155;
+    /* Slate-700 */
+    --text-muted: #64748b;
+    /* Slate-500 */
+    --text-light: #94a3b8;
+    /* Slate-400 */
+
+    /* Borders */
+    --border-subtle: #f1f5f9;
+    /* Slate-100 */
+    --border-light: #e2e8f0;
+    /* Slate-200 */
+
+    /* === 2. SOMBRAS & PROFUNDIDADE (Elastic Physics) === */
+    /* Soft, colored shadows for "floating" feel */
+    --shadow-sm: 0 2px 4px rgba(148, 163, 184, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(148, 163, 184, 0.1), 0 2px 4px -1px rgba(148, 163, 184, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(148, 163, 184, 0.1), 0 4px 6px -2px rgba(148, 163, 184, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(148, 163, 184, 0.1), 0 10px 10px -5px rgba(148, 163, 184, 0.04);
+
+    --shadow-primary: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+    /* Glow effect */
+
+    /* === 3. ESPAÇAMENTO & FORMA === */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    /* Super rounded modern look */
+    --radius-full: 9999px;
+
+    --font-display: 'Inter Tight', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+/* GLOBAL RESET UPGRADES */
+body {
+    background-color: var(--bg-body);
+    font-family: var(--font-body);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    /* Tight tracking for headings */
+    color: var(--text-main);
+}
+
+/* UTILITY CLASSES FOR PREMIUM FEEL */
+.text-gradient {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-hover-effect {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--shadow-xl);
+}
+
+.glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* BUTTONS REBOOT */
+.btn-premium {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 12px 24px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-primary);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.5);
+}
+
+.btn-premium:active {
+    transform: translateY(0);
+}
+
+/* BADGES REBOOT */
+.badge-premium {
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

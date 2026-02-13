@@ -106,6 +106,7 @@ function renderAppHeader($title, $backUrl = null)
 
         <!-- Main CSS (Absolute Path) -->
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= time() ?>">
+        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= time() ?>">
 
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
