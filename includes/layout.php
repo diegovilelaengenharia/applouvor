@@ -101,12 +101,21 @@ function renderAppHeader($title, $backUrl = null)
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Semantic Design System & App Main CSS -->
+        <!-- Semantic Design System & App Main CSS -->
         <!-- APP URL for JS logic -->
         <script>const APP_URL = '<?= APP_URL ?>';</script>
 
+        <?php
+        // Cache Busting Inteligente
+        $pathMain = __DIR__ . '/../assets/css/app-main.css';
+        $pathTheme = __DIR__ . '/../assets/css/theme-premium.css';
+        $verMain = file_exists($pathMain) ? filemtime($pathMain) : time();
+        $verTheme = file_exists($pathTheme) ? filemtime($pathTheme) : time();
+        ?>
+
         <!-- Main CSS (Absolute Path) -->
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= time() ?>">
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= time() ?>">
+        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
+        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= $verTheme ?>">
 
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
