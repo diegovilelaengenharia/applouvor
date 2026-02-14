@@ -15,9 +15,10 @@ extract($dashboardData);
 // Obter definições completas dos cards
 $allCardsDefinitions = getAllAvailableCards();
 
-renderAppHeader('Visão Geral');
+renderAppHeader('Página Inicial');
 ?>
 
+<!-- VERSÃO ATUALIZADA V2.1 - PÁGINA INICIAL -->
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/pages/dashboard.css?v=<?= time() ?>">
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/dashboard-cards.css?v=<?= time() ?>">
 
@@ -53,7 +54,7 @@ renderAppHeader('Visão Geral');
 </script>
 <?php endif; ?>
 
-<?php renderPageHeader('Visão Geral', 'Acesso rápido às suas atividades'); ?>
+<?php renderPageHeader('Página Inicial', 'Acesso rápido às suas atividades'); ?>
 
 <!-- DASHBOARD CONTAINER (Removido max-width inline) -->
 <div class="dashboard-container">
