@@ -18,9 +18,15 @@ $allCardsDefinitions = getAllAvailableCards();
 renderAppHeader('Página Inicial');
 ?>
 
-<!-- VERSÃO ATUALIZADA V2.1 - PÁGINA INICIAL -->
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/pages/dashboard.css?v=<?= time() ?>">
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/dashboard-cards.css?v=<?= time() ?>">
+<?php
+$dashboardCssPath = '../assets/css/pages/dashboard.css';
+$dashboardCardsCssPath = '../assets/css/components/dashboard-cards.css';
+$dashboardCssVer = file_exists($dashboardCssPath) ? filemtime($dashboardCssPath) : time();
+$dashboardCardsCssVer = file_exists($dashboardCardsCssPath) ? filemtime($dashboardCardsCssPath) : time();
+?>
+<!-- VERSÃO ATUALIZADA V2.2 - CACHE BUSTING -->
+<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/pages/dashboard.css?v=<?= $dashboardCssVer ?>">
+<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/dashboard-cards.css?v=<?= $dashboardCardsCssVer ?>">
 
 <!-- MODAL URGENTE AUTOMÁTICO -->
 <?php if ($popupAviso): ?>
