@@ -1,24 +1,7 @@
 /* ============================================
    LOGIN - Page Specific Styles
+   Premium Design with Unified Design System
    ============================================ */
-
-/*
-   Note: This page uses the global design-system.css variables.
-   We map specific semantic roles here but rely on the global palette.
-*/
-
-:root {
-    /* Mapeamento Semântico Local */
-    --login-bg: var(--bg-body);
-    --login-card-bg: var(--bg-surface);
-    --login-text: var(--text-primary);
-    --login-text-muted: var(--text-tertiary);
-    --login-input-bg: var(--bg-surface-active);
-    --login-border: var(--border-medium);
-}
-
-/* O modo dark é tratado automaticamente pelas variáveis globais do design-system.css
-   quando a classe .dark-mode é aplicada ao body */
 
 * {
     margin: 0;
@@ -28,136 +11,197 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--login-bg);
-    color: var(--login-text);
-    height: 100vh;
+    font-family: var(--font-body);
+    background: var(--bg-body);
+    color: var(--text-primary);
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-    transition: background 0.3s, color 0.3s;
+    padding: var(--space-lg);
+    transition: background var(--transition-base), color var(--transition-base);
+
+    /* Gradiente sutil de fundo */
+    background: linear-gradient(135deg, var(--bg-body) 0%, var(--slate-100) 100%);
 }
 
+body.dark-mode {
+    background: linear-gradient(135deg, var(--slate-900) 0%, #0a0f1a 100%);
+}
+
+/* === CONTAINER PRINCIPAL === */
 .login-wrapper {
     width: 100%;
-    max-width: 380px;
+    max-width: 420px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    animation: fadeIn 0.8s ease-out;
+    animation: fadeIn 0.8s var(--transition-bounce);
 }
 
+/* === LOGO === */
 .logo {
-    width: 80px;
+    width: 96px;
     height: auto;
-    margin-bottom: 32px;
+    margin-bottom: var(--space-2xl);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+    transition: filter var(--transition-base);
 }
 
 body.dark-mode .logo {
-    filter: invert(1) brightness(2);
+    filter: invert(1) brightness(2) drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
 }
 
+/* === CABEÇALHO === */
 h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: -0.025em;
-    color: var(--text-primary);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.03em;
+
+    /* Gradiente sutil no texto */
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--slate-700) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body.dark-mode h1 {
+    background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-300) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 p.subtitle {
-    font-size: 0.95rem;
-    color: var(--login-text-muted);
-    margin-bottom: 40px;
+    font-size: var(--font-size-base);
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-2xl);
+    font-weight: var(--font-weight-normal);
 }
 
+/* === FORMULÁRIO === */
 form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
 }
 
+/* === INPUTS === */
 input {
     width: 100%;
-    padding: 16px;
-    background: var(--login-input-bg);
-    border: 1px solid transparent;
-    border-radius: 16px;
-    font-size: 1rem;
-    color: var(--login-text);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--bg-surface);
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-base);
+    font-family: var(--font-body);
+    color: var(--text-primary);
     outline: none;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
+    box-shadow: var(--elevation-1);
+}
+
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+input:hover {
+    border-color: var(--border-medium);
+    box-shadow: var(--elevation-2);
 }
 
 input:focus {
     background: var(--bg-surface);
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px var(--blue-100);
+    box-shadow: 0 0 0 4px var(--blue-100), var(--elevation-2);
+    transform: translateY(-1px);
 }
 
 body.dark-mode input:focus {
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2), var(--elevation-2);
 }
 
-input::placeholder {
-    color: var(--login-text-muted);
-    opacity: 0.7;
-}
-
+/* === BOTÃO PRINCIPAL === */
 button.btn-primary {
     width: 100%;
-    padding: 16px;
-    background: var(--primary);
+    padding: var(--space-md) var(--space-lg);
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
     color: #ffffff;
     border: none;
-    border-radius: 16px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
     cursor: pointer;
-    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: transform 0.1s, opacity 0.2s, background 0.2s;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    gap: var(--space-sm);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-primary);
+    position: relative;
+    overflow: hidden;
 }
 
-button.btn-primary:active {
-    transform: scale(0.98);
+button.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--blue-400) 0%, var(--blue-500) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+button.btn-primary:hover::before {
+    opacity: 1;
 }
 
 button.btn-primary:hover {
-    background: var(--blue-600);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    box-shadow: var(--shadow-primary-lg);
 }
 
-/* Install Button - Premium Style */
+button.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-primary);
+}
+
+button.btn-primary>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* === BOTÃO INSTALAR === */
 .install-wrapper {
     width: 100%;
-    margin-top: 12px;
+    margin-bottom: var(--space-lg);
 }
 
 button.btn-install {
     width: 100%;
-    padding: 16px;
+    padding: var(--space-md) var(--space-lg);
     background: var(--bg-surface);
     color: var(--text-primary);
     border: 2px solid var(--border-medium);
-    border-radius: 16px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--space-sm);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    opacity: 1;
+    transition: all var(--transition-bounce);
+    box-shadow: var(--elevation-1);
     position: relative;
     overflow: hidden;
 }
@@ -166,74 +210,147 @@ button.btn-install:hover {
     border-color: var(--primary);
     color: var(--primary);
     background: var(--blue-50);
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-2);
+}
+
+body.dark-mode button.btn-install:hover {
+    background: rgba(59, 130, 246, 0.1);
 }
 
 button.btn-install:active {
-    transform: scale(0.98);
+    transform: translateY(0);
 }
 
-/* Animation */
-@keyframes pulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
-    }
-
-    50% {
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-    }
-}
-
-button.btn-install:not(.installed) {
-    /* animation: pulse 2s infinite; */
-}
-
-/* Installed state */
+/* Estado instalado */
 button.btn-install.installed {
-    background: var(--bg-surface-active);
+    background: var(--bg-surface-alt);
     color: var(--text-tertiary);
-    border-color: transparent;
+    border-color: var(--border-subtle);
     cursor: default;
     box-shadow: none;
 }
 
+button.btn-install.installed:hover {
+    transform: none;
+    border-color: var(--border-subtle);
+    background: var(--bg-surface-alt);
+    color: var(--text-tertiary);
+}
+
+/* === MENSAGEM DE ERRO === */
 .error {
     background: var(--red-50);
-    color: var(--red-600);
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 0.9rem;
+    color: var(--red-700);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
     width: 100%;
-    margin-bottom: 24px;
+    margin-bottom: var(--space-lg);
     display: flex;
     align-items: center;
-    gap: 8px;
-    border: 1px solid var(--red-200);
+    gap: var(--space-sm);
+    border: 2px solid var(--red-200);
+    box-shadow: var(--elevation-1);
+    animation: slideUp 0.3s var(--transition-bounce);
 }
 
 body.dark-mode .error {
-    background: rgba(239, 68, 68, 0.1);
-    border-color: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: var(--red-300);
 }
 
+/* === CRÉDITOS === */
 .credits {
-    margin-top: 48px;
-    font-size: 0.75rem;
-    color: var(--login-text-muted);
+    margin-top: var(--space-2xl);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-xs);
+    align-items: center;
 }
 
 .credits a {
-    color: var(--login-text);
+    color: var(--text-secondary);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
+.credits a:hover {
+    color: var(--primary);
+}
+
+/* === MODAL iOS === */
+#ios-modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-surface);
+    padding: var(--space-lg);
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    box-shadow: var(--elevation-4);
+    transform: translateY(100%);
+    transition: transform var(--transition-bounce);
+    z-index: 100;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+}
+
+#ios-modal.show {
+    transform: translateY(0);
+}
+
+#ios-modal h3 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+}
+
+#ios-modal p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    margin: 0;
+}
+
+#ios-modal button {
+    width: 100%;
+    padding: var(--space-md);
+    background: var(--bg-surface-alt);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+#ios-modal button:hover {
+    background: var(--bg-surface-active);
+}
+
+/* === ANIMAÇÕES === */
 @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -245,23 +362,30 @@ body.dark-mode .error {
     }
 }
 
-/* iOS Help Modal */
-#ios-modal {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--bg-surface);
-    padding: 24px;
-    border-radius: 24px 24px 0 0;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    border-top: 1px solid var(--border-subtle);
-    color: var(--text-primary);
+/* === RESPONSIVIDADE === */
+@media (max-width: 480px) {
+    body {
+        padding: var(--space-md);
+    }
+
+    .login-wrapper {
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: var(--font-size-2xl);
+    }
+
+    .logo {
+        width: 80px;
+        margin-bottom: var(--space-xl);
+    }
 }
 
-#ios-modal.show {
-    transform: translateY(0);
+/* === ACESSIBILIDADE === */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 }
