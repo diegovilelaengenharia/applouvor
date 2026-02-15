@@ -126,10 +126,12 @@ function renderAppHeader($title, $backUrl = null)
             
             // === TOGGLE NOTIFICATIONS ===
             window.toggleNotifications = function(dropdownId) {
+                alert('🔔 TESTE: Botão notificação clicado! ID: ' + dropdownId);
                 console.log('[CLICK] Botão notificação clicado!', dropdownId);
                 const dropdown = document.getElementById(dropdownId);
                 if (!dropdown) {
                     console.error('[ERROR] Dropdown não encontrado:', dropdownId);
+                    alert('❌ ERRO: Dropdown não encontrado: ' + dropdownId);
                     return;
                 }
                 
@@ -146,19 +148,23 @@ function renderAppHeader($title, $backUrl = null)
                 if (!isVisible) {
                     dropdown.classList.add('active');
                     console.log('[ACTION] Dropdown aberto');
+                    alert('✅ Dropdown ABERTO!');
                 } else {
                     console.log('[ACTION] Dropdown fechado');
+                    alert('✅ Dropdown FECHADO!');
                 }
             };
             
             // === TOGGLE PROFILE ===
             window.toggleProfileDropdown = function(event, dropdownId) {
                 if (event) event.stopPropagation();
+                alert('👤 TESTE: Botão perfil clicado! ID: ' + dropdownId);
                 console.log('[CLICK] Botão perfil clicado!', dropdownId);
                 
                 const dropdown = document.getElementById(dropdownId);
                 if (!dropdown) {
                     console.error('[ERROR] Dropdown perfil não encontrado:', dropdownId);
+                    alert('❌ ERRO: Dropdown perfil não encontrado: ' + dropdownId);
                     return;
                 }
                 
@@ -175,8 +181,10 @@ function renderAppHeader($title, $backUrl = null)
                 if (!isVisible) {
                     dropdown.classList.add('active');
                     console.log('[ACTION] Profile dropdown aberto');
+                    alert('✅ Profile dropdown ABERTO!');
                 } else {
                     console.log('[ACTION] Profile dropdown fechado');
+                    alert('✅ Profile dropdown FECHADO!');
                 }
             };
             
