@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <img src="assets/images/logo-black.png" alt="Logo" class="logo">
 
         <h1>Ministério de Louvor</h1>
-        <p class="subtitle">Bem-vindo(a) de volta</p>
+        <p class="subtitle">A paz do Senhor! 🙏</p>
 
         <?php if ($error): ?>
             <div class="error">
@@ -71,8 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST">
-            <input type="text" name="name" placeholder="Seu nome" required autocomplete="username">
-            <input type="password" name="password" placeholder="Senha" required autocomplete="current-password" pattern="[0-9]*" inputmode="numeric">
+            <div class="input-wrapper">
+                <i data-lucide="user" class="input-icon"></i>
+                <input type="text" name="name" placeholder="Seu nome" required autocomplete="username">
+            </div>
+            <div class="input-wrapper">
+                <i data-lucide="lock" class="input-icon"></i>
+                <input type="password" name="password" placeholder="Senha" required autocomplete="current-password" pattern="[0-9]*" inputmode="numeric">
+            </div>
 
             <button type="submit" class="btn-primary">
                 Entrar

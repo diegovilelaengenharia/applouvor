@@ -21,12 +21,23 @@ body {
     padding: var(--space-lg);
     transition: background var(--transition-base), color var(--transition-base);
 
-    /* Gradiente sutil de fundo */
-    background: linear-gradient(135deg, var(--bg-body) 0%, var(--slate-100) 100%);
+    /* Gradiente rico com padrão de pontos */
+    background:
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(14, 184, 166, 0.06) 0%, transparent 50%),
+        radial-gradient(circle, rgba(148, 163, 184, 0.3) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 20px 20px;
+    background-color: var(--bg-body);
+    background-position: 0 0, 0 0, 0 0;
 }
 
 body.dark-mode {
-    background: linear-gradient(135deg, var(--slate-900) 0%, #0a0f1a 100%);
+    background:
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(14, 184, 166, 0.1) 0%, transparent 50%),
+        radial-gradient(circle, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 20px 20px;
+    background-color: var(--slate-900);
 }
 
 /* === CONTAINER PRINCIPAL === */
@@ -42,40 +53,53 @@ body.dark-mode {
 
 /* === LOGO === */
 .logo {
-    width: 96px;
+    width: 120px;
     height: auto;
     margin-bottom: var(--space-2xl);
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-    transition: filter var(--transition-base);
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+    transition: all var(--transition-base);
+    animation: logoEntry 0.8s var(--transition-bounce);
+}
+
+@keyframes logoEntry {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 body.dark-mode .logo {
-    filter: invert(1) brightness(2) drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
+    filter: invert(1) brightness(2) drop-shadow(0 8px 20px rgba(255, 255, 255, 0.25));
 }
 
 /* === CABEÇALHO === */
 h1 {
     font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: 800;
     margin-bottom: var(--space-sm);
     letter-spacing: -0.03em;
 
-    /* Gradiente sutil no texto */
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--slate-700) 100%);
+    /* Gradiente azul-teal vibrante */
+    background: linear-gradient(135deg, var(--blue-600) 0%, var(--teal-500) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 body.dark-mode h1 {
-    background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-300) 100%);
+    background: linear-gradient(135deg, var(--blue-400) 0%, var(--teal-400) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 p.subtitle {
-    font-size: var(--font-size-base);
+    font-size: 1.05rem;
     color: var(--text-tertiary);
     margin-bottom: var(--space-2xl);
     font-weight: var(--font-weight-normal);
@@ -90,10 +114,33 @@ form {
     margin-bottom: var(--space-lg);
 }
 
+/* === INPUT WRAPPER COM ÍCONES === */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color var(--transition-base);
+    z-index: 1;
+}
+
+.input-wrapper:focus-within .input-icon {
+    color: var(--primary);
+}
+
 /* === INPUTS === */
 input {
     width: 100%;
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-md) var(--space-lg) var(--space-md) 52px;
     background: var(--bg-surface);
     border: 2px solid var(--border-subtle);
     border-radius: var(--radius-xl);
@@ -129,7 +176,7 @@ body.dark-mode input:focus {
 /* === BOTÃO PRINCIPAL === */
 button.btn-primary {
     width: 100%;
-    padding: var(--space-md) var(--space-lg);
+    padding: 18px var(--space-lg);
     background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
     color: #ffffff;
     border: none;
@@ -143,7 +190,7 @@ button.btn-primary {
     justify-content: center;
     gap: var(--space-sm);
     transition: all var(--transition-base);
-    box-shadow: var(--shadow-primary);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -166,17 +213,34 @@ button.btn-primary:hover::before {
 
 button.btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-primary-lg);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
 }
 
 button.btn-primary:active {
     transform: translateY(0);
-    box-shadow: var(--shadow-primary);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
 }
 
 button.btn-primary>* {
     position: relative;
     z-index: 1;
+}
+
+/* Animação da seta no hover */
+button.btn-primary:hover i {
+    animation: arrowSlide 0.6s ease-in-out infinite;
+}
+
+@keyframes arrowSlide {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(4px);
+    }
 }
 
 /* === BOTÃO INSTALAR === */
@@ -377,8 +441,16 @@ body.dark-mode .error {
     }
 
     .logo {
-        width: 80px;
+        width: 100px;
         margin-bottom: var(--space-xl);
+    }
+
+    input {
+        padding-left: 48px;
+    }
+
+    .input-icon {
+        left: 16px;
     }
 }
 
