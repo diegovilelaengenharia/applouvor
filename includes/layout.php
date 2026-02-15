@@ -118,8 +118,31 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= $verTheme ?>">
 
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
-        <script src="../assets/js/theme-toggle.js?v=<?= time() ?>"></script>
+        <script src="<?= APP_URL ?>/assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 
+        <!-- Temporary Global Functions (until external scripts load) -->
+        <script>
+            // Debug: Log when this script runs
+            console.log('[DEBUG] Inline script loaded');
+            
+            // Temporary placeholder functions until external scripts load
+            window.toggleNotifications = window.toggleNotifications || function(id) {
+                console.log('[DEBUG] toggleNotifications called (placeholder), id:', id);
+                alert('Aguarde... Scripts ainda carregando. Tente novamente em 2 segundos.');
+            };
+            
+            window.toggleProfileDropdown = window.toggleProfileDropdown || function(e, id) {
+                console.log('[DEBUG] toggleProfileDropdown called (placeholder), id:', id);
+                alert('Aguarde... Scripts ainda carregando. Tente novamente em 2 segundos.');
+            };
+            
+            // Check if functions are available after page load
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('[DEBUG] DOMContentLoaded fired');
+                console.log('[DEBUG] toggleNotifications available?', typeof window.toggleNotifications);
+                console.log('[DEBUG] toggleProfileDropdown available?', typeof window.toggleProfileDropdown);
+            });
+        </script>
         
     </head>
 
