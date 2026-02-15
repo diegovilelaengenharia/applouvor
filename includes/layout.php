@@ -414,8 +414,8 @@ function renderAppHeader($title, $backUrl = null)
 
         
         <!-- Main Script & Gestures (Legacy includes kept) -->
-        <script src="../assets/js/main.js"></script>
-        <script src="../assets/js/gestures.js"></script>
+        <script src="<?= APP_URL ?>/assets/js/main.js"></script>
+        <script src="<?= APP_URL ?>/assets/js/gestures.js"></script>
     <!-- PWA Install Script (Global) -->
     <script>
         // Check for Service Worker Support
@@ -916,8 +916,8 @@ function renderAppHeader($title, $backUrl = null)
 
 
         <!-- Notifications Script -->
-        <script src="../assets/js/notifications.js?v=<?= time() ?>"></script>
-        <script src="../assets/js/profile-dropdown.js?v=<?= time() ?>"></script>
+        <script src="<?= APP_URL ?>/assets/js/notifications.js?v=<?= time() ?>"></script>
+        <script src="<?= APP_URL ?>/assets/js/profile-dropdown.js?v=<?= time() ?>"></script>
 
         
 
