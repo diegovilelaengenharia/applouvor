@@ -424,159 +424,8 @@ function renderAppHeader($title, $backUrl = null)
         ?>
 
         <div id="app-content" class="app-content">
-            <!-- Header Mobile (Só visível em telas menores) -->
-            <header class="mobile-header">
-                <?php
-                // Logic to determine if it's the home page
-                $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
-                ?>
-                
-                <?php if ($isHome): ?>
-                    <button class="btn-menu-trigger" onclick="toggleSidebar()">
-                        <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
-                    </button>
-                <?php else: ?>
-                    <div style="display: flex; gap: 4px; align-items: center; margin-left: -12px;">
-                        <?php if($backUrl): ?>
-                            <a href="<?= $backUrl ?>" class="btn-menu-trigger" style="margin-left: 0; display:flex; align-items:center; justify-content:center; text-decoration:none; color:inherit;" title="Voltar">
-                                <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
-                            </a>
-                        <?php else: ?>
-                            <button onclick="history.back()" class="btn-menu-trigger" style="margin-left: 0;" title="Voltar">
-                                <i data-lucide="arrow-left" style="width: 24px; height: 24px;"></i>
-                            </button>
-                        <?php endif; ?>
-                        <a href="index.php" class="btn-menu-trigger" style="margin-left: 0; text-decoration: none;" title="Início">
-                            <i data-lucide="home" style="width: 24px; height: 24px;"></i>
-                        </a>
-                    </div>
-                <?php endif; ?>
-                <div class="page-title"><?= htmlspecialchars($title) ?></div>
-
-                <!-- Right Side: Stats + L+¡der + Avatar -->
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <!-- Stats Button (Repertorio only) -->
-
-
-                    <!-- Stats Button (Escalas only) -->
-
-
-
-
-                    <!-- Notification Button -->
-                    <div style="position: relative;">
-                        <button 
-                            class="notification-btn" 
-                            onclick="toggleNotifications('notificationDropdown')" 
-                            id="notificationBtn">
-                            <i data-lucide="bell"></i>
-                            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
-                        </button>
-                    </div>
-
-                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <a href="lider.php" class="admin-crown-btn">
-                            <i data-lucide="crown"></i>
-                        </a>
-                    <?php endif; ?>
-                    
-
-                    <!-- Mobile Profile Avatar -->
-                    <div style="position: relative;">
-                        <button 
-                            onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" 
-                            class="profile-avatar-btn">
-                            <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                                <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
-                            <?php else: ?>
-                                <i data-lucide="user" style="width: 20px; height: 20px;"></i>
-                            <?php endif; ?>
-                        </button>
-
-                        <!-- Mobile Dropdown -->
-                        <div id="mobileProfileDropdown" class="profile-dropdown">
-                            <!-- Header do Card -->
-                            <div class="profile-header">
-                                <div class="profile-avatar-container">
-                                    <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar">
-                                </div>
-                                <div class="profile-info">
-                                    <div class="profile-name"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                                    <div class="profile-role">Membro da Equipe</div>
-                                </div>
-                            </div>
-                            <!-- Compacted Header Mobile -->
-
-                            <div style="padding: 8px;">
-                                <?php
-                                $qsLink = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '../app/quem_somos.php' : 'quem_somos.php';
-                                if (strpos($_SERVER['PHP_SELF'], '/app/') !== false) {
-                                     // Already in app, so just quem_somos.php works. 
-                                     // The previous check covers admin. If in root, 'app/quem_somos.php'?
-                                     // If we are in root index.php, we are likely redirected or included.
-                                     // simpler: 
-                                     if(file_exists('app/quem_somos.php')) $qsLink = 'app/quem_somos.php';
-                                     elseif(file_exists('../app/quem_somos.php')) $qsLink = '../app/quem_somos.php';
-                                     else $qsLink = 'quem_somos.php'; // fallback for app dir
-                                }
-                                ?>
-                                <a href="<?= $qsLink ?>" class="profile-menu-item">
-                                    <div class="icon-wrapper">
-                                        <i data-lucide="circle-help" style="width: 16px; height: 16px;"></i>
-                                    </div>
-                                    <span>Quem somos nós?</span>
-                                </a>
-
-                                <a href="perfil.php" class="profile-menu-item">
-                                    <div class="icon-wrapper">
-                                        <i data-lucide="user" style="width: 16px; height: 16px;"></i>
-                                    </div>
-                                    <span>Meu Perfil</span>
-                                </a>
-
-                                <a href="#" onclick="openDashboardCustomization(); return false;" class="profile-menu-item">
-                                    <div class="icon-wrapper">
-                                        <i data-lucide="layout" style="width: 16px; height: 16px;"></i>
-                                    </div>
-                                    <span>Acesso Rápido</span>
-                                </a>
-
-                                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                                    <a href="lider.php" class="lider-menu-item">
-                                        <div class="icon-wrapper">
-                                            <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
-                                        </div>
-                                        <span>Painel do Líder</span>
-                                    </a>
-                                <?php endif; ?>
-
-                                <!-- Dark Mode Toggle -->
-                                <div onclick="toggleThemeMode()" class="profile-menu-item" style="cursor: pointer;">
-                                    <div class="icon-wrapper">
-                                        <i data-lucide="moon" style="width: 16px; height: 16px;"></i>
-                                    </div>
-                                    <span>Modo Escuro</span>
-                                    <div style="margin-left: auto;">
-                                        <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
-                                            <input type="checkbox" id="darkModeToggleMobile" onchange="toggleThemeMode()">
-                                            <span class="slider-mini round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
-
-                                <a href="../logout.php" class="profile-menu-item logout-item">
-                                    <div class="icon-wrapper">
-                                        <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
-                                    </div>
-                                    <span>Sair da Conta</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <!-- Header Mobile Legacy REMOVED to avoid double header with Pro Max Design -->
+            <?php /* Header Mobile Logic moved to renderPageHeader (Unification) */ ?>
             
         <?php
     }
@@ -820,6 +669,11 @@ function renderAppHeader($title, $backUrl = null)
                     <a href="index.php" class="header-nav-btn header-home-btn" title="Início">
                         <i data-lucide="home" width="20"></i>
                     </a>
+                <?php else: ?>
+                    <!-- Hamburger Menu for Home (Mobile/Desktop) -->
+                    <button onclick="toggleSidebar()" class="header-nav-btn" title="Menu Principal">
+                        <i data-lucide="menu" width="20"></i>
+                    </button>
                 <?php endif; ?>
             </div>
 
