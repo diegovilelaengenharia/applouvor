@@ -276,7 +276,10 @@
     transform: translate(-50%, -50%);
     transition: width 0.3s, height 0.3s;
     /* Reduced from 0.6s */
+    pointer-events: none;
+    /* CRÍTICO: Permite cliques passarem através do ripple */
 }
+
 
 .ripple:active::after {
     width: 300px;
