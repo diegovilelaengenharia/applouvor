@@ -14,7 +14,7 @@
    2. COMPONENTS (Reutilizáveis)
    ===================== */
 /* HEADER UNIFICADO - Prioridade máxima */
-@import url('components/header-complete.css');
+@import url('components/header-complete.css?v=20260215160000');
 
 @import url('components/buttons.css');
 @import url('components/cards.css');
