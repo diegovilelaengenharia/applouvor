@@ -124,11 +124,12 @@ function renderAppHeader($title, $backUrl = null)
             header.app-page-header,
             .app-page-header,
             .modern-header {
-                background: rgba(255, 255, 255, 0.8) !important;
+                /* Opacidade reduzida para 0.7 para destacar mais o glassmorphism */
+                background: rgba(255, 255, 255, 0.7) !important;
                 backdrop-filter: blur(20px) saturate(180%) !important;
                 -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
                 border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
                 
                 /* Layout & Positioning */
                 position: sticky !important;
@@ -140,16 +141,19 @@ function renderAppHeader($title, $backUrl = null)
                 justify-content: space-between !important;
             }
 
+            /* TÍTULO COM GRADIENTE (Desktop & Mobile) */
             header.app-page-header .page-title,
             .app-page-header .page-title,
-            .modern-header .page-title {
+            .modern-header .page-title,
+            .header-title { /* SELETOR CORRIGIDO PARA DESKTOP */
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
                 -webkit-background-clip: text !important;
                 -webkit-text-fill-color: transparent !important;
                 background-clip: text !important;
-                font-weight: 700 !important;
+                font-weight: 800 !important; /* Mais peso como no print */
                 font-size: 1.5rem !important;
                 font-family: 'Inter Tight', sans-serif !important;
+                letter-spacing: -0.02em !important;
             }
 
             /* Mobile Header */
