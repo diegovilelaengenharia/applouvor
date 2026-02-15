@@ -120,6 +120,27 @@ function renderAppHeader($title, $backUrl = null)
         <!-- CRITICAL INLINE CSS - Header Premium Design -->
         <style>
             /* HEADER PREMIUM - Inline para garantir aplicação */
+            /* Desktop Header */
+            header.app-page-header,
+            .app-page-header,
+            .modern-header {
+                background: rgba(255, 255, 255, 0.85) !important;
+                backdrop-filter: blur(20px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+                border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+            }
+
+            header.app-page-header .page-title,
+            .app-page-header .page-title,
+            .modern-header .page-title {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+            }
+
+            /* Mobile Header */
             header.mobile-header,
             .mobile-header {
                 background: rgba(255, 255, 255, 0.85) !important;
@@ -139,12 +160,18 @@ function renderAppHeader($title, $backUrl = null)
             }
 
             /* Dark Mode */
+            body.dark-mode header.app-page-header,
+            body.dark-mode .app-page-header,
+            body.dark-mode .modern-header,
             body.dark-mode header.mobile-header,
             body.dark-mode .mobile-header {
                 background: rgba(30, 41, 59, 0.85) !important;
                 border-bottom-color: rgba(102, 126, 234, 0.2) !important;
             }
 
+            body.dark-mode header.app-page-header .page-title,
+            body.dark-mode .app-page-header .page-title,
+            body.dark-mode .modern-header .page-title,
             body.dark-mode header.mobile-header .page-title,
             body.dark-mode .mobile-header .page-title {
                 background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%) !important;
