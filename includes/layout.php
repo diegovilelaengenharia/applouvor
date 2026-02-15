@@ -266,8 +266,14 @@ function renderAppHeader($title, $backUrl = null)
 
                     <!-- Líder Button (Admin only) -->
                     <!-- Notification Button -->
-                    <div style="position: relative;">
-                        <button class="notification-btn ripple" onclick="toggleNotifications('notificationDropdown')" id="notificationBtn">
+                    <div style="position: relative; z-index: 9999;">
+                        <button 
+                            class="notification-btn ripple" 
+                            onclick="toggleNotifications('notificationDropdown')" 
+                            onmousedown="alert('MOUSEDOWN: Botão tocado!')"
+                            ontouchstart="alert('TOUCH: Botão tocado!')"
+                            id="notificationBtn"
+                            style="position: relative; z-index: 9999; cursor: pointer;">
                             <i data-lucide="bell"></i>
                             <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
                         </button>
@@ -281,8 +287,13 @@ function renderAppHeader($title, $backUrl = null)
                     
 
                     <!-- Mobile Profile Avatar -->
-                    <div style="position: relative;">
-                        <button onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" class="profile-avatar-btn">
+                    <div style="position: relative; z-index: 9999;">
+                        <button 
+                            onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" 
+                            onmousedown="alert('MOUSEDOWN PERFIL: Botão tocado!')"
+                            ontouchstart="alert('TOUCH PERFIL: Botão tocado!')"
+                            class="profile-avatar-btn"
+                            style="position: relative; z-index: 9999; cursor: pointer;">
                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                             <?php else: ?>
