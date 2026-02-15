@@ -697,35 +697,6 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
             </div>
 
-            <script>
-                function toggleProfileDropdown(e, dropdownId = 'headerProfileDropdown') {
-                    e.stopPropagation();
-                    const dropdown = document.getElementById(dropdownId);
-                    if (!dropdown) return;
-
-                    const isVisible = dropdown.style.display === 'block';
-
-                    // Fechar outros
-                    document.querySelectorAll('[id$="Dropdown"]').forEach(d => d.style.display = 'none');
-
-                    if (!isVisible) {
-                        dropdown.style.display = 'block';
-                    }
-                }
-
-                document.addEventListener('click', function(e) {
-                    const headerDropdown = document.getElementById('headerProfileDropdown');
-                    const mobileDropdown = document.getElementById('mobileProfileDropdown');
-                    
-                    if (headerDropdown && headerDropdown.style.display === 'block') {
-                        headerDropdown.style.display = 'none';
-                    }
-                    if (mobileDropdown && mobileDropdown.style.display === 'block') {
-                        mobileDropdown.style.display = 'none';
-                    }
-                });
-
-            </script>
 
         </div>
     </header>
