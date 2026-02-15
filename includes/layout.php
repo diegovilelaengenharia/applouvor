@@ -120,28 +120,84 @@ function renderAppHeader($title, $backUrl = null)
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="<?= APP_URL ?>/assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 
-        <!-- Temporary Global Functions (until external scripts load) -->
+        <!-- INLINE FUNCTIONS - Garantia de Funcionamento -->
         <script>
-            // Debug: Log when this script runs
-            console.log('[DEBUG] Inline script loaded');
+            console.log('[INIT] Carregando funções inline...');
             
-            // Temporary placeholder functions until external scripts load
-            window.toggleNotifications = window.toggleNotifications || function(id) {
-                console.log('[DEBUG] toggleNotifications called (placeholder), id:', id);
-                alert('Aguarde... Scripts ainda carregando. Tente novamente em 2 segundos.');
+            // === TOGGLE NOTIFICATIONS ===
+            window.toggleNotifications = function(dropdownId) {
+                console.log('[CLICK] Botão notificação clicado!', dropdownId);
+                const dropdown = document.getElementById(dropdownId);
+                if (!dropdown) {
+                    console.error('[ERROR] Dropdown não encontrado:', dropdownId);
+                    return;
+                }
+                
+                // Toggle visibility
+                const isVisible = dropdown.classList.contains('active');
+                console.log('[STATE] Dropdown visível?', isVisible);
+                
+                // Fechar todos os dropdowns primeiro
+                document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
+                    d.classList.remove('active');
+                });
+                
+                // Abrir se estava fechado
+                if (!isVisible) {
+                    dropdown.classList.add('active');
+                    console.log('[ACTION] Dropdown aberto');
+                } else {
+                    console.log('[ACTION] Dropdown fechado');
+                }
             };
             
-            window.toggleProfileDropdown = window.toggleProfileDropdown || function(e, id) {
-                console.log('[DEBUG] toggleProfileDropdown called (placeholder), id:', id);
-                alert('Aguarde... Scripts ainda carregando. Tente novamente em 2 segundos.');
+            // === TOGGLE PROFILE ===
+            window.toggleProfileDropdown = function(event, dropdownId) {
+                if (event) event.stopPropagation();
+                console.log('[CLICK] Botão perfil clicado!', dropdownId);
+                
+                const dropdown = document.getElementById(dropdownId);
+                if (!dropdown) {
+                    console.error('[ERROR] Dropdown perfil não encontrado:', dropdownId);
+                    return;
+                }
+                
+                // Toggle visibility
+                const isVisible = dropdown.classList.contains('active');
+                console.log('[STATE] Profile dropdown visível?', isVisible);
+                
+                // Fechar todos os dropdowns primeiro
+                document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
+                    d.classList.remove('active');
+                });
+                
+                // Abrir se estava fechado
+                if (!isVisible) {
+                    dropdown.classList.add('active');
+                    console.log('[ACTION] Profile dropdown aberto');
+                } else {
+                    console.log('[ACTION] Profile dropdown fechado');
+                }
             };
             
-            // Check if functions are available after page load
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('[DEBUG] DOMContentLoaded fired');
-                console.log('[DEBUG] toggleNotifications available?', typeof window.toggleNotifications);
-                console.log('[DEBUG] toggleProfileDropdown available?', typeof window.toggleProfileDropdown);
+            // === FECHAR AO CLICAR FORA ===
+            document.addEventListener('click', function(e) {
+                // Se clicou fora de qualquer dropdown ou botão, fechar tudo
+                if (!e.target.closest('.notification-dropdown') && 
+                    !e.target.closest('.profile-dropdown') &&
+                    !e.target.closest('.notification-btn') &&
+                    !e.target.closest('.profile-avatar-btn') &&
+                    !e.target.closest('.header-action-btn')) {
+                    
+                    document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
+                        d.classList.remove('active');
+                    });
+                }
             });
+            
+            console.log('[SUCCESS] Funções inline carregadas!');
+            console.log('[CHECK] toggleNotifications:', typeof window.toggleNotifications);
+            console.log('[CHECK] toggleProfileDropdown:', typeof window.toggleProfileDropdown);
         </script>
         
     </head>
