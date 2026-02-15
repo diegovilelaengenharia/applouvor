@@ -6,27 +6,27 @@
 /* === MOBILE HEADER === */
 .mobile-header {
     display: none;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    height: 64px;
-    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    height: 64px !important;
+    padding: 0 20px !important;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(102, 126, 234, 0.15);
+    border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
     position: sticky;
     top: 0;
     z-index: 1001;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
 }
 
 .mobile-header .page-title {
     font-size: 17px;
     font-weight: 600;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
     flex: 1;
     text-align: center;
     overflow: hidden;
