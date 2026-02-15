@@ -117,6 +117,43 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= $verTheme ?>">
 
+        <!-- CRITICAL INLINE CSS - Header Premium Design -->
+        <style>
+            /* HEADER PREMIUM - Inline para garantir aplicação */
+            header.mobile-header,
+            .mobile-header {
+                background: rgba(255, 255, 255, 0.85) !important;
+                backdrop-filter: blur(20px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+                height: 64px !important;
+                border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+            }
+
+            header.mobile-header .page-title,
+            .mobile-header .page-title {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+            }
+
+            /* Dark Mode */
+            body.dark-mode header.mobile-header,
+            body.dark-mode .mobile-header {
+                background: rgba(30, 41, 59, 0.85) !important;
+                border-bottom-color: rgba(102, 126, 234, 0.2) !important;
+            }
+
+            body.dark-mode header.mobile-header .page-title,
+            body.dark-mode .mobile-header .page-title {
+                background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+            }
+        </style>
+
         <!-- Theme Toggle Script (Critical: Must load immediately) -->
         <script src="<?= APP_URL ?>/assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 
