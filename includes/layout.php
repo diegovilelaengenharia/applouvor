@@ -121,6 +121,10 @@ function renderAppHeader($title, $backUrl = null)
         <style>
             /* HEADER PREMIUM - Inline para garantir aplicação */
             /* Desktop Header */
+            .header-gradient-bg {
+                display: none !important; /* Oculta o background antigo que bloqueia o glassmorphism */
+            }
+
             header.app-page-header,
             .app-page-header,
             .modern-header {
@@ -129,6 +133,8 @@ function renderAppHeader($title, $backUrl = null)
                 -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
                 border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+                position: relative !important; /* Garante contexto de empilhamento */
+                z-index: 100 !important;
             }
 
             header.app-page-header .page-title,
@@ -138,6 +144,7 @@ function renderAppHeader($title, $backUrl = null)
                 -webkit-background-clip: text !important;
                 -webkit-text-fill-color: transparent !important;
                 background-clip: text !important;
+                font-weight: 700 !important;
             }
 
             /* Mobile Header */
