@@ -119,103 +119,221 @@ function renderAppHeader($title, $backUrl = null)
 
         <!-- CRITICAL INLINE CSS - Header Premium Design -->
         <style>
-            /* HEADER PREMIUM - Inline para garantir aplicação */
-            /* Desktop Header */
+            /* === HEADER PRO MAX DESIGN SYSTEM === */
+            
+            /* Root Variables for Header */
+            :root {
+                --header-height-desktop: 72px;
+                --header-height-mobile: 64px;
+                --header-bg-glass: rgba(255, 255, 255, 0.85);
+                --header-border: rgba(226, 232, 240, 0.6);
+                --header-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+                --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            }
+
+            body.dark-mode {
+                --header-bg-glass: rgba(15, 23, 42, 0.85);
+                --header-border: rgba(51, 65, 85, 0.5);
+                --header-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            }
+
+            /* Main Header Container */
             header.app-page-header,
             .app-page-header,
             .modern-header {
-                /* Opacidade reduzida para 0.7 para destacar mais o glassmorphism */
-                background: rgba(255, 255, 255, 0.7) !important;
-                backdrop-filter: blur(20px) saturate(180%) !important;
-                -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-                border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+                height: var(--header-height-desktop) !important;
+                background: var(--header-bg-glass) !important;
+                backdrop-filter: blur(16px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+                border-bottom: 1px solid var(--header-border) !important;
+                box-shadow: var(--header-shadow) !important;
                 
-                /* Layout & Positioning */
                 position: sticky !important;
                 top: 0 !important;
                 z-index: 1000 !important;
                 width: 100% !important;
                 display: flex !important;
                 align-items: center !important;
-                justify-content: center !important; /* Centraliza o container interno */
+                justify-content: center !important;
+                transition: all 0.3s ease !important;
             }
 
-            /* Container interno para alinhamento horizontal */
+            /* Inner Content Container */
             .header-container {
                 display: flex !important;
                 align-items: center !important;
                 justify-content: space-between !important;
                 width: 100% !important;
-                max-width: 1400px !important; /* Limite opcional para telas muito largas */
+                max-width: 1400px !important;
                 margin: 0 auto !important;
                 padding: 0 24px !important;
+                height: 100% !important;
             }
 
-            .header-left, .header-right, .header-actions {
+            /* Layout Sections */
+            .header-left, 
+            .header-actions {
                 display: flex !important;
                 align-items: center !important;
-                gap: 16px !important;
+                gap: 12px !important;
             }
 
-            /* TÍTULO COM GRADIENTE (Desktop & Mobile) */
-            header.app-page-header .page-title,
-            .app-page-header .page-title,
-            .modern-header .page-title,
-            .header-title-group .header-title { /* SELETOR CORRIGIDO PARA DESKTOP */
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            .header-center {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                pointer-events: none; /* Deixa cliques passarem se sobrepor algo */
+            }
+
+            /* Typography */
+            .header-title-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                pointer-events: auto;
+            }
+
+            .header-title {
+                margin: 0 !important;
+                font-family: 'Inter Tight', 'Inter', sans-serif !important;
+                font-weight: 800 !important;
+                font-size: 1.25rem !important;
+                line-height: 1.2 !important;
+                letter-spacing: -0.02em !important;
+                
+                /* Gradient Text */
+                background: var(--primary-gradient) !important;
                 -webkit-background-clip: text !important;
                 -webkit-text-fill-color: transparent !important;
                 background-clip: text !important;
-                font-weight: 800 !important; /* Mais peso como no print */
-                font-size: 1.5rem !important;
-                font-family: 'Inter Tight', sans-serif !important;
-                letter-spacing: -0.02em !important;
-                margin: 0 !important;
             }
 
             .header-subtitle {
-                font-size: 0.85rem !important;
-                color: #64748b !important;
                 margin: 0 !important;
-                font-weight: 500 !important;
+                font-size: 0.75rem !important;
+                font-weight: 600 !important;
+                color: #64748b !important;
+                letter-spacing: 0.05em !important;
+                text-transform: uppercase !important;
             }
 
-            /* Mobile Header */
+            body.dark-mode .header-subtitle { color: #94a3b8 !important; }
+
+            /* Pro Buttons */
+            .header-action-btn {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 50% !important;
+                background: transparent !important;
+                border: 1px solid transparent !important;
+                color: #64748b !important;
+                cursor: pointer !important;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                position: relative !important;
+            }
+
+            .header-action-btn:hover {
+                background: rgba(241, 245, 249, 0.8) !important;
+                color: #334155 !important;
+                transform: translateY(-1px) !important;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+            }
+
+            body.dark-mode .header-action-btn { color: #cbd5e1 !important; }
+            body.dark-mode .header-action-btn:hover {
+                background: rgba(51, 65, 85, 0.5) !important;
+                color: #f1f5f9 !important;
+            }
+
+            /* Special Buttons */
+            .btn-leader {
+                color: #d97706 !important; /* Amber 600 */
+                background: rgba(254, 243, 199, 0.5) !important; /* Amber 50 */
+            }
+            .btn-leader:hover {
+                background: rgba(254, 243, 199, 1) !important;
+                transform: scale(1.05) !important;
+            }
+
+            /* Nav Buttons (Left) */
+            .header-nav-btn {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 10px !important; /* Squircle */
+                color: #64748b !important;
+                transition: all 0.2s ease !important;
+            }
+            .header-nav-btn:hover {
+                background: rgba(241, 245, 249, 1) !important;
+                color: #0f172a !important;
+            }
+
+            /* Avatar Button */
+            .profile-avatar-btn {
+                padding: 0 !important;
+                width: 42px !important;
+                height: 42px !important;
+                border-radius: 50% !important;
+                border: 2px solid rgba(255, 255, 255, 0.5) !important;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+                overflow: hidden !important;
+                transition: all 0.2s ease !important;
+                cursor: pointer !important;
+            }
+
+            .profile-avatar-btn:hover {
+                transform: scale(1.05) !important;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+                border-color: #6366f1 !important;
+            }
+            
+            .profile-avatar-btn img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+            }
+
+            /* Notification Badge */
+            .badge-dot {
+                position: absolute !important;
+                top: 10px !important;
+                right: 10px !important;
+                width: 8px !important;
+                height: 8px !important;
+                background: #ef4444 !important;
+                border-radius: 50% !important;
+                border: 1.5px solid #fff !important;
+                box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2) !important;
+                display: block !important; /* Ensure it is block, JS toggles display:none */
+            }
+            
+            /* Mobile Header Specifics */
             header.mobile-header,
             .mobile-header {
-                background: rgba(255, 255, 255, 0.85) !important;
-                backdrop-filter: blur(20px) saturate(180%) !important;
-                -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-                height: 64px !important;
-                border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+                height: var(--header-height-mobile) !important;
+                background: var(--header-bg-glass) !important;
+                backdrop-filter: blur(16px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+                border-bottom: 1px solid var(--header-border) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 0 16px !important;
             }
 
-            header.mobile-header .page-title,
             .mobile-header .page-title {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-                -webkit-background-clip: text !important;
-                -webkit-text-fill-color: transparent !important;
-                background-clip: text !important;
-            }
-
-            /* Dark Mode */
-            body.dark-mode header.app-page-header,
-            body.dark-mode .app-page-header,
-            body.dark-mode .modern-header,
-            body.dark-mode header.mobile-header,
-            body.dark-mode .mobile-header {
-                background: rgba(30, 41, 59, 0.85) !important;
-                border-bottom-color: rgba(102, 126, 234, 0.2) !important;
-            }
-
-            body.dark-mode header.app-page-header .page-title,
-            body.dark-mode .app-page-header .page-title,
-            body.dark-mode .modern-header .page-title,
-            body.dark-mode header.mobile-header .page-title,
-            body.dark-mode .mobile-header .page-title {
-                background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%) !important;
+                font-family: 'Inter Tight', sans-serif !important;
+                font-weight: 700 !important;
+                font-size: 1.1rem !important;
+                background: var(--primary-gradient) !important;
                 -webkit-background-clip: text !important;
                 -webkit-text-fill-color: transparent !important;
                 background-clip: text !important;
@@ -689,24 +807,23 @@ function renderAppHeader($title, $backUrl = null)
         global $_layoutUser;
         $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
-    <!-- Modern Page Header -->
+    <!-- Modern Page Header (Pro Max) -->
     <header class="desktop-only-header app-page-header modern-header">
-        <!-- Background removido para garantir glassmorphism -->
         
         <div class="header-container">
-            <!-- Left: Navigation -->
+            <!-- Left: Navigation (Buttons) -->
             <div class="header-left">
                 <?php if (!$isHome): ?>
-                    <button onclick="history.back()" class="header-nav-btn ripple" title="Voltar">
-                        <i data-lucide="arrow-left"></i>
+                    <button onclick="history.back()" class="header-nav-btn" title="Voltar">
+                        <i data-lucide="arrow-left" width="20"></i>
                     </button>
-                    <a href="index.php" class="header-nav-btn header-home-btn ripple" title="Início">
-                        <i data-lucide="home"></i>
+                    <a href="index.php" class="header-nav-btn header-home-btn" title="Início">
+                        <i data-lucide="home" width="20"></i>
                     </a>
                 <?php endif; ?>
             </div>
 
-            <!-- Center: Title & Subtitle -->
+            <!-- Center: Title & Subtitle (Absolute Centered) -->
             <div class="header-center">
                 <div class="header-title-group">
                     <h1 class="header-title"><?= htmlspecialchars($title) ?></h1>
@@ -716,18 +833,23 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
             </div>
 
-            <!-- Right: Actions + Profile -->
+            <!-- Right: Actions (Buttons) -->
             <div class="header-actions">
                 
                 <!-- Líder Button (Admin only) -->
                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                     <?php
-                        $inAdminHead = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
-                        $inAppHead   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
-                        $liderLinkHead = $inAdminHead ? 'lider.php' : ($inAppHead ? '../admin/lider.php' : 'admin/lider.php');
+                        // Determine path relative to current location
+                        $paths = [
+                            'admin' => (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? 'lider.php' : 'admin/lider.php',
+                            'app' => (strpos($_SERVER['PHP_SELF'], '/app/') !== false) ? '../admin/lider.php' : 'admin/lider.php'
+                        ];
+                        $liderPath = $paths['admin']; // default approximation
+                        if(strpos($_SERVER['PHP_SELF'], '/admin/') !== false) $liderPath = 'lider.php';
+                        elseif(strpos($_SERVER['PHP_SELF'], '/app/') !== false) $liderPath = '../admin/lider.php';
                     ?>
-                    <a href="<?= $liderLinkHead ?>" class="header-action-btn btn-leader ripple" title="Painel do Líder">
-                        <i data-lucide="crown" width="20"></i>
+                    <a href="<?= $liderPath ?>" class="header-action-btn btn-leader" title="Painel do Líder">
+                        <i data-lucide="crown" width="18"></i>
                     </a>
                 <?php endif; ?>
 
@@ -738,12 +860,12 @@ function renderAppHeader($title, $backUrl = null)
 
                 <!-- Notification Button -->
                 <div style="position: relative;">
-                    <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn ripple" id="notificationBtnDesktop" title="Notificações">
+                    <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn" id="notificationBtnDesktop" title="Notificações">
                         <i data-lucide="bell" width="20"></i>
                         <span class="badge-dot" id="notificationBadgeDesktop" style="display: none;"></span>
                     </button>
                     
-                    <!-- Desktop Dropdown -->
+                    <!-- Desktop Dropdown (Maintained relative structure) -->
                     <div class="notification-dropdown" id="notificationDropdownDesktop">
                         <div class="notification-header">
                             <div class="notification-title">
@@ -755,7 +877,6 @@ function renderAppHeader($title, $backUrl = null)
                             <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
                         </div>
                         <div class="notification-list">
-                            <!-- JS vai preencher aqui -->
                         <div class="empty-state">
                             <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
                             <p>Carregando...</p>
@@ -770,13 +891,13 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
             </div>
 
-            <!-- Perfil Dropdown (Card Moderno) -->
-            <div style="position: relative; margin-left: 4px;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn ripple">
+            <!-- Perfil Avatar (Button) -->
+            <div style="position: relative;">
+                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn">
                     <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" class="img-fluid">
                     <?php else: ?>
-                        <div class="profile-placeholder">
+                        <div style="width:100%; height:100%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#64748b;">
                             <i data-lucide="user" width="20"></i>
                         </div>
                     <?php endif; ?>
@@ -785,10 +906,9 @@ function renderAppHeader($title, $backUrl = null)
                 <!-- Dropdown Card -->
                 <div id="headerProfileDropdown" class="profile-dropdown">
                     <!-- Header do Card -->
-                    <!-- Header do Card -->
                     <div class="profile-header">
                         <div class="profile-avatar-container">
-                            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar">
                         </div>
                         <div class="profile-info">
                             <div class="profile-name"><?= htmlspecialchars($_layoutUser['name']) ?></div>
