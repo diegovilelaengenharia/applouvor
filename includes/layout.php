@@ -138,14 +138,31 @@ function renderAppHeader($title, $backUrl = null)
                 width: 100% !important;
                 display: flex !important;
                 align-items: center !important;
+                justify-content: center !important; /* Centraliza o container interno */
+            }
+
+            /* Container interno para alinhamento horizontal */
+            .header-container {
+                display: flex !important;
+                align-items: center !important;
                 justify-content: space-between !important;
+                width: 100% !important;
+                max-width: 1400px !important; /* Limite opcional para telas muito largas */
+                margin: 0 auto !important;
+                padding: 0 24px !important;
+            }
+
+            .header-left, .header-right, .header-actions {
+                display: flex !important;
+                align-items: center !important;
+                gap: 16px !important;
             }
 
             /* TÍTULO COM GRADIENTE (Desktop & Mobile) */
             header.app-page-header .page-title,
             .app-page-header .page-title,
             .modern-header .page-title,
-            .header-title { /* SELETOR CORRIGIDO PARA DESKTOP */
+            .header-title-group .header-title { /* SELETOR CORRIGIDO PARA DESKTOP */
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
                 -webkit-background-clip: text !important;
                 -webkit-text-fill-color: transparent !important;
@@ -154,6 +171,14 @@ function renderAppHeader($title, $backUrl = null)
                 font-size: 1.5rem !important;
                 font-family: 'Inter Tight', sans-serif !important;
                 letter-spacing: -0.02em !important;
+                margin: 0 !important;
+            }
+
+            .header-subtitle {
+                font-size: 0.85rem !important;
+                color: #64748b !important;
+                margin: 0 !important;
+                font-weight: 500 !important;
             }
 
             /* Mobile Header */
