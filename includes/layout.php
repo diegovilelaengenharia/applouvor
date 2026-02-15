@@ -121,20 +121,23 @@ function renderAppHeader($title, $backUrl = null)
         <style>
             /* HEADER PREMIUM - Inline para garantir aplicação */
             /* Desktop Header */
-            .header-gradient-bg {
-                display: none !important; /* Oculta o background antigo que bloqueia o glassmorphism */
-            }
-
             header.app-page-header,
             .app-page-header,
             .modern-header {
-                background: rgba(255, 255, 255, 0.85) !important;
+                background: rgba(255, 255, 255, 0.8) !important;
                 backdrop-filter: blur(20px) saturate(180%) !important;
                 -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
                 border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
-                position: relative !important; /* Garante contexto de empilhamento */
-                z-index: 100 !important;
+                
+                /* Layout & Positioning */
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 1000 !important;
+                width: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
             }
 
             header.app-page-header .page-title,
@@ -145,6 +148,8 @@ function renderAppHeader($title, $backUrl = null)
                 -webkit-text-fill-color: transparent !important;
                 background-clip: text !important;
                 font-weight: 700 !important;
+                font-size: 1.5rem !important;
+                font-family: 'Inter Tight', sans-serif !important;
             }
 
             /* Mobile Header */
@@ -657,7 +662,7 @@ function renderAppHeader($title, $backUrl = null)
 ?>
     <!-- Modern Page Header -->
     <header class="desktop-only-header app-page-header modern-header">
-        <div class="header-gradient-bg"></div>
+        <!-- Background removido para garantir glassmorphism -->
         
         <div class="header-container">
             <!-- Left: Navigation -->
