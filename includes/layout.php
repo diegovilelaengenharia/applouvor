@@ -122,22 +122,16 @@ function renderAppHeader($title, $backUrl = null)
 
         <!-- INLINE FUNCTIONS - Garantia de Funcionamento -->
         <script>
-            console.log('[INIT] Carregando funções inline...');
-            
             // === TOGGLE NOTIFICATIONS ===
             window.toggleNotifications = function(dropdownId) {
-                alert('🔔 TESTE: Botão notificação clicado! ID: ' + dropdownId);
-                console.log('[CLICK] Botão notificação clicado!', dropdownId);
                 const dropdown = document.getElementById(dropdownId);
                 if (!dropdown) {
                     console.error('[ERROR] Dropdown não encontrado:', dropdownId);
-                    alert('❌ ERRO: Dropdown não encontrado: ' + dropdownId);
                     return;
                 }
                 
                 // Toggle visibility
                 const isVisible = dropdown.classList.contains('active');
-                console.log('[STATE] Dropdown visível?', isVisible);
                 
                 // Fechar todos os dropdowns primeiro
                 document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
@@ -147,30 +141,21 @@ function renderAppHeader($title, $backUrl = null)
                 // Abrir se estava fechado
                 if (!isVisible) {
                     dropdown.classList.add('active');
-                    console.log('[ACTION] Dropdown aberto');
-                    alert('✅ Dropdown ABERTO!');
-                } else {
-                    console.log('[ACTION] Dropdown fechado');
-                    alert('✅ Dropdown FECHADO!');
                 }
             };
             
             // === TOGGLE PROFILE ===
             window.toggleProfileDropdown = function(event, dropdownId) {
                 if (event) event.stopPropagation();
-                alert('👤 TESTE: Botão perfil clicado! ID: ' + dropdownId);
-                console.log('[CLICK] Botão perfil clicado!', dropdownId);
                 
                 const dropdown = document.getElementById(dropdownId);
                 if (!dropdown) {
                     console.error('[ERROR] Dropdown perfil não encontrado:', dropdownId);
-                    alert('❌ ERRO: Dropdown perfil não encontrado: ' + dropdownId);
                     return;
                 }
                 
                 // Toggle visibility
                 const isVisible = dropdown.classList.contains('active');
-                console.log('[STATE] Profile dropdown visível?', isVisible);
                 
                 // Fechar todos os dropdowns primeiro
                 document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
@@ -180,11 +165,6 @@ function renderAppHeader($title, $backUrl = null)
                 // Abrir se estava fechado
                 if (!isVisible) {
                     dropdown.classList.add('active');
-                    console.log('[ACTION] Profile dropdown aberto');
-                    alert('✅ Profile dropdown ABERTO!');
-                } else {
-                    console.log('[ACTION] Profile dropdown fechado');
-                    alert('✅ Profile dropdown FECHADO!');
                 }
             };
             
@@ -202,10 +182,6 @@ function renderAppHeader($title, $backUrl = null)
                     });
                 }
             });
-            
-            console.log('[SUCCESS] Funções inline carregadas!');
-            console.log('[CHECK] toggleNotifications:', typeof window.toggleNotifications);
-            console.log('[CHECK] toggleProfileDropdown:', typeof window.toggleProfileDropdown);
         </script>
         
     </head>
@@ -264,16 +240,12 @@ function renderAppHeader($title, $backUrl = null)
 
 
 
-                    <!-- Líder Button (Admin only) -->
                     <!-- Notification Button -->
-                    <div style="position: relative; z-index: 9999;">
+                    <div style="position: relative;">
                         <button 
-                            class="notification-btn ripple" 
+                            class="notification-btn" 
                             onclick="toggleNotifications('notificationDropdown')" 
-                            onmousedown="alert('MOUSEDOWN: Botão tocado!')"
-                            ontouchstart="alert('TOUCH: Botão tocado!')"
-                            id="notificationBtn"
-                            style="position: relative; z-index: 9999; cursor: pointer;">
+                            id="notificationBtn">
                             <i data-lucide="bell"></i>
                             <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
                         </button>
@@ -287,13 +259,10 @@ function renderAppHeader($title, $backUrl = null)
                     
 
                     <!-- Mobile Profile Avatar -->
-                    <div style="position: relative; z-index: 9999;">
+                    <div style="position: relative;">
                         <button 
                             onclick="toggleProfileDropdown(event, 'mobileProfileDropdown')" 
-                            onmousedown="alert('MOUSEDOWN PERFIL: Botão tocado!')"
-                            ontouchstart="alert('TOUCH PERFIL: Botão tocado!')"
-                            class="profile-avatar-btn"
-                            style="position: relative; z-index: 9999; cursor: pointer;">
+                            class="profile-avatar-btn">
                             <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
                                 <img src="<?= $_layoutUser['photo'] ?>" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
                             <?php else: ?>
