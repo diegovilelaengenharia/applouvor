@@ -348,6 +348,32 @@ function playSoundAndVibrate() {
     if (navigator.vibrate) navigator.vibrate([200]);
 }
 
+// Solicitar permissão para notificações push
+async function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+        alert('Este navegador não suporta notificações push.');
+        return;
+    }
+
+    if (Notification.permission === 'granted') {
+        alert('Notificações já estão ativadas! ✅');
+        return;
+    }
+
+    if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            new Notification('App Louvor PIB', {
+                body: 'Notificações ativadas com sucesso! 🔔',
+                icon: '/assets/img/logo_pib_black.png'
+            });
+        }
+    } else {
+        alert('Você bloqueou as notificações. Para ativar, vá nas configurações do navegador.');
+    }
+}
+
+
 // Fechar dropdown ao clicar fora
 document.addEventListener('click', function (e) {
     if (!e.target.closest('.notification-container') &&
@@ -450,3 +476,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Polling a cada 60 segundos (reduzido de 30s)
     setInterval(loadUnreadCount, 60000);
 });
+
+// Exportar funções para o escopo global
+window.toggleNotifications = toggleNotifications;
+window.markAllAsRead = markAllAsRead;
+window.openNotificationDetail = openNotificationDetail;
+window.closeNotificationDetail = closeNotificationDetail;
+window.requestNotificationPermission = requestNotificationPermission;
+
