@@ -4,7 +4,7 @@
    ========================================================================== */
 
 /* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
     /* === PALETA BASE === */
@@ -115,8 +115,8 @@
     --color-comunicacao-light: var(--orange-100);
 
     /* === TIPOGRAFIA === */
-    --font-heading: 'Fira Code', monospace;
-    --font-body: 'Fira Sans', sans-serif;
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
 
     --font-size-xs: 0.75rem;
     /* 12px */
