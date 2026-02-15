@@ -168,14 +168,15 @@
     z-index: 2000;
     animation: dropFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
-    /* Hidden state handled by JS (display: none/block) or opacity classes */
-    display: none;
+    /* REMOVIDO display:none - deixar notifications.css controlar com opacity/visibility */
 }
 
+/* Classe .active não precisa mais de display:block */
 .profile-dropdown.active,
 .notification-dropdown.active {
-    display: block;
+    /* Vazio - notifications.css controla com opacity/visibility */
 }
+
 
 @keyframes dropFade {
     from {
