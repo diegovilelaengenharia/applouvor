@@ -4,6 +4,8 @@
    ============================================ */
 
 /* === MOBILE HEADER === */
+/* Especificidade aumentada para sobrescrever outros CSS */
+header.mobile-header,
 .mobile-header {
     display: none;
     background: rgba(255, 255, 255, 0.85) !important;
@@ -20,6 +22,8 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
 }
 
+
+header.mobile-header .page-title,
 .mobile-header .page-title {
     font-size: 17px;
     font-weight: 600;
