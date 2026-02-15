@@ -13,6 +13,9 @@
 /* =====================
    2. COMPONENTS (Reutilizáveis)
    ===================== */
+/* HEADER UNIFICADO - Prioridade máxima */
+@import url('components/header-complete.css');
+
 @import url('components/buttons.css');
 @import url('components/cards.css');
 @import url('components/notifications.css');
@@ -23,9 +26,10 @@
 @import url('components/badges.css');
 @import url('components/icons.css');
 @import url('components/sidebar.css');
-@import url('components/page-headers.css?v=3');
-@import url('components/modern-header.css');
-@import url('components/header-actions.css?v=3');
+/* DESATIVADO - Conflita com header-complete.css */
+/* @import url('components/page-headers.css?v=3'); */
+/* @import url('components/modern-header.css'); */
+/* @import url('components/header-actions.css?v=3'); */
 @import url('components/timeline-cards.css');
 @import url('components/animations.css');
 @import url('components/tables.css');

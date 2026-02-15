@@ -57,6 +57,7 @@
 /* =====================
    DROPDOWN DE NOTIFICAÇÕES
    ===================== */
+/* DESATIVADO - Movido para header-complete.css para evitar conflitos
 .notification-dropdown {
     position: absolute;
     top: calc(100% + 12px);
@@ -75,12 +76,13 @@
     z-index: var(--z-dropdown);
 }
 
-/* CRÍTICO: Quando ativo, mostrar dropdown */
+CRÍTICO: Quando ativo, mostrar dropdown
 .notification-dropdown.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
 }
+*/
 
 /* =====================
    HEADER DO DROPDOWN
