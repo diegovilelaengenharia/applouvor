@@ -21,8 +21,10 @@
 .page-sub-header-inner {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 64px;
     gap: 12px;
+    max-width: 100%;
 }
 
 /* ===== LEFT: NAV BUTTONS ===== */
@@ -96,7 +98,6 @@
     align-items: center;
     gap: 6px;
     flex-shrink: 0;
-    margin-left: auto;
 }
 
 /* Separador visual entre grupos de botões */
