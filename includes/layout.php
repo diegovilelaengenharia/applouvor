@@ -704,39 +704,36 @@ function renderAppHeader($title, $backUrl = null)
         global $_layoutUser;
         $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
 ?>
-    <!-- Modern Page Header (Pro Max) -->
-    <header class="desktop-only-header app-page-header modern-header">
-        
-        <div class="header-container">
-            <!-- Left: Navigation (Buttons) -->
-            <div class="header-left">
+    <!-- Page Sub-Header -->
+    <div class="page-sub-header">
+        <div class="page-sub-header-inner">
+
+            <!-- Left: Breadcrumb or Back -->
+            <div class="page-sub-nav">
                 <?php if (!$isHome): ?>
-                    <button onclick="history.back()" class="header-nav-btn" title="Voltar">
-                        <i data-lucide="arrow-left" width="20"></i>
+                    <button onclick="history.back()" class="page-nav-btn" title="Voltar">
+                        <i data-lucide="arrow-left" width="18" height="18"></i>
                     </button>
-                    <a href="index.php" class="header-nav-btn header-home-btn" title="Início">
-                        <i data-lucide="home" width="20"></i>
+                    <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? 'index.php' : 'admin/index.php' ?>" class="page-nav-btn" title="Início">
+                        <i data-lucide="home" width="17" height="17"></i>
                     </a>
                 <?php else: ?>
-                    <!-- Hamburger Menu for Home (Mobile/Desktop) -->
-                    <button onclick="toggleSidebar()" class="header-nav-btn" title="Menu Principal">
-                        <i data-lucide="menu" width="20"></i>
+                    <button onclick="toggleSidebar()" class="page-nav-btn" title="Menu">
+                        <i data-lucide="menu" width="18" height="18"></i>
                     </button>
                 <?php endif; ?>
             </div>
 
-            <!-- Center: Title & Subtitle (Absolute Centered) -->
-            <div class="header-center">
-                <div class="header-title-group">
-                    <h1 class="header-title"><?= htmlspecialchars($title) ?></h1>
-                    <?php if ($subtitle): ?>
-                        <p class="header-subtitle"><?= htmlspecialchars($subtitle) ?></p>
-                    <?php endif; ?>
-                </div>
+            <!-- Center: Title Block -->
+            <div class="page-sub-title-block">
+                <h1 class="page-sub-title"><?= htmlspecialchars($title) ?></h1>
+                <?php if ($subtitle): ?>
+                    <p class="page-sub-subtitle"><?= htmlspecialchars($subtitle) ?></p>
+                <?php endif; ?>
             </div>
 
             <!-- Right: Actions (Buttons) -->
-            <div class="header-actions">
+            <div class="page-sub-actions">
                 
                 <!-- Líder Button (Admin only) -->
                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
@@ -891,9 +888,8 @@ function renderAppHeader($title, $backUrl = null)
                 </div>
             </div>
 
-
         </div>
-    </header>
+    </div><!-- /page-sub-header -->
     <!-- Dashboard Customization Modal -->
     <div id="dashboardCustomizationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
         <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);">

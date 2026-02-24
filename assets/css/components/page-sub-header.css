@@ -1,0 +1,128 @@
+/* ==========================================================================
+   PAGE SUB-HEADER — Cabeçalho interno das páginas do App Louvor
+   Design: Clean, branco, profissional, 3 colunas (nav | título | ações)
+   ========================================================================== */
+
+/* ===== CONTAINER ===== */
+.page-sub-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.page-sub-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 16px;
+}
+
+/* ===== LEFT NAV ===== */
+.page-sub-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.page-nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.page-nav-btn:hover {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+/* ===== TITLE BLOCK (center, grows) ===== */
+.page-sub-title-block {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-sub-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-sub-subtitle {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin: 1px 0 0 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== RIGHT ACTIONS ===== */
+.page-sub-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* Botões de ação (reutiliza .header-action-btn e .profile-avatar-btn do header-complete.css) */
+
+/* ===== MOBILE ===== */
+@media (max-width: 1024px) {
+    .page-sub-header {
+        padding: 0 12px;
+    }
+
+    .page-sub-title {
+        font-size: 0.95rem;
+    }
+
+    .page-sub-subtitle {
+        display: none;
+    }
+}
+
+/* ===== DARK MODE ===== */
+body.dark-mode .page-sub-header {
+    background: #0f172a;
+    border-bottom-color: #1e293b;
+}
+
+body.dark-mode .page-sub-title {
+    color: #f1f5f9;
+}
+
+body.dark-mode .page-nav-btn {
+    color: #94a3b8;
+}
+
+body.dark-mode .page-nav-btn:hover {
+    background: rgba(37, 99, 235, 0.15);
+    color: #60a5fa;
+}
