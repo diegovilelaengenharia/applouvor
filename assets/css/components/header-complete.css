@@ -1,69 +1,65 @@
-/* ============================================
-   HEADER PREMIUM - Design Moderno V2
-   Glassmorphism + Gradientes + Animações
-   ============================================ */
+/* ==========================================================================
+   HEADER PREMIUM — App Louvor
+   Paleta: Azul (#2563eb/#1d4ed8) + Dourado (#D4AF37)
+   ========================================================================== */
 
 /* === MOBILE HEADER === */
-/* Especificidade aumentada para sobrescrever outros CSS */
 header.mobile-header,
 .mobile-header {
     display: none;
-    background: rgba(255, 255, 255, 0.85) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    height: 64px !important;
-    padding: 0 20px !important;
+    height: 58px !important;
+    padding: 0 16px !important;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(102, 126, 234, 0.15) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
     position: sticky;
     top: 0;
     z-index: 1001;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
 }
-
 
 header.mobile-header .page-title,
 .mobile-header .page-title {
-    font-size: 17px;
-    font-weight: 600;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
     flex: 1;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    letter-spacing: -0.01em;
 }
 
-/* === HEADER BUTTONS (PREMIUM) === */
+/* === HEADER BUTTONS === */
 .btn-menu-trigger,
 .notification-btn,
 .profile-avatar-btn,
 .admin-crown-btn {
     background: transparent;
     border: none;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     color: #64748b;
     position: relative;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-menu-trigger:hover,
 .notification-btn:hover,
 .profile-avatar-btn:hover {
-    background: rgba(102, 126, 234, 0.1);
-    color: #667eea;
-    transform: scale(1.1);
-    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.15);
+    background: #eff6ff;
+    color: #2563eb;
+    transform: scale(1.08);
 }
 
 .btn-menu-trigger:active,
@@ -81,82 +77,65 @@ header.mobile-header .page-title,
 }
 
 .profile-avatar-btn:hover {
-    border-color: #667eea;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* Admin Crown Button */
 .admin-crown-btn {
-    color: #f59e0b;
+    color: #D4AF37;
 }
 
 .admin-crown-btn:hover {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
-    box-shadow: 0 8px 16px rgba(245, 158, 11, 0.2);
+    background: rgba(212, 175, 55, 0.1);
+    color: #b8960c;
 }
 
-/* Notification Badge (PULSANTE) */
+/* Notification Badge */
 .notification-badge {
     position: absolute;
     top: 6px;
     right: 6px;
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: #ef4444;
     color: white;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    padding: 3px 7px;
-    border-radius: 12px;
-    min-width: 20px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-    animation: badgePulse 2s ease-in-out infinite;
+    border: 1.5px solid white;
 }
 
-@keyframes badgePulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-}
-
-/* === DROPDOWNS (PREMIUM GLASSMORPHISM) === */
+/* === DROPDOWNS === */
 .notification-dropdown,
 .profile-dropdown {
     position: absolute;
-    top: calc(100% + 12px);
+    top: calc(100% + 10px);
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12),
-        0 0 0 1px rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(226, 232, 240, 0.8);
+    border: 1px solid #f1f5f9;
     overflow: hidden;
     z-index: 2000;
-    min-width: 320px;
-    max-width: 380px;
-
-    /* SIMPLE DISPLAY CONTROL */
+    min-width: 300px;
+    max-width: 360px;
     display: none;
 }
 
 .notification-dropdown.active,
 .profile-dropdown.active {
     display: block;
-    animation: dropSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: dropSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes dropSlide {
     from {
         opacity: 0;
-        transform: translateY(-20px) scale(0.95);
+        transform: translateY(-12px) scale(0.96);
     }
 
     to {
@@ -165,50 +144,23 @@ header.mobile-header .page-title,
     }
 }
 
-/* === PROFILE DROPDOWN CONTENT === */
+/* === PROFILE DROPDOWN === */
 .profile-header {
-    padding: 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
     display: flex;
     align-items: center;
-    gap: 16px;
-    position: relative;
-    overflow: hidden;
-}
-
-.profile-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-    animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-
-    0%,
-    100% {
-        transform: translate(0, 0);
-    }
-
-    50% {
-        transform: translate(-20px, -20px);
-    }
+    gap: 14px;
 }
 
 .profile-avatar-container {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    position: relative;
-    z-index: 1;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
 }
 
 .profile-avatar-container img {
@@ -219,111 +171,93 @@ header.mobile-header .page-title,
 
 .profile-info {
     flex: 1;
-    position: relative;
-    z-index: 1;
 }
 
 .profile-name {
-    font-size: 18px;
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 4px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2px;
 }
 
 .profile-role {
-    font-size: 14px;
-    opacity: 0.95;
+    font-size: 0.78rem;
+    opacity: 0.88;
 }
 
 .profile-menu-item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 20px;
+    gap: 12px;
+    padding: 12px 16px;
     color: #1e293b;
     text-decoration: none;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 12px;
-    margin: 6px 12px;
+    transition: all 0.15s ease;
+    border-radius: 10px;
+    margin: 4px 8px;
     font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .profile-menu-item:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.08);
+    background: #eff6ff;
+    color: #2563eb;
+    transform: translateX(3px);
 }
 
 .profile-menu-item .icon-wrapper {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #f1f5f9;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #667eea;
-    transition: all 0.2s ease;
+    color: #2563eb;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
 }
 
 .profile-menu-item:hover .icon-wrapper {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #2563eb;
     color: white;
-    transform: rotate(5deg) scale(1.1);
 }
 
-/* === NOTIFICATION DROPDOWN CONTENT === */
+/* === NOTIFICATION DROPDOWN === */
 .notification-dropdown {
-    max-height: 520px;
+    max-height: 500px;
     overflow-y: auto;
 }
 
 .notification-header {
-    padding: 20px;
-    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    background: #f8fafc;
 }
 
 .notification-header h3 {
-    font-size: 17px;
+    font-size: 1rem;
     font-weight: 700;
     margin: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #0f172a;
 }
 
 .notification-item {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(102, 126, 234, 0.08);
+    padding: 14px 18px;
+    border-bottom: 1px solid #f8fafc;
     cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
+    transition: background 0.15s ease;
 }
 
 .notification-item:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-    transform: translateX(4px);
+    background: #f0f9ff;
 }
 
 .notification-item.unread {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(99, 102, 241, 0.08) 100%);
-}
-
-.notification-item.unread::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 60%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 0 4px 4px 0;
+    background: #eff6ff;
+    border-left: 3px solid #2563eb;
 }
 
 /* === RESPONSIVE === */
@@ -339,16 +273,12 @@ header.mobile-header .page-title,
 
 /* === DARK MODE === */
 body.dark-mode .mobile-header {
-    background: rgba(30, 41, 59, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    border-bottom-color: rgba(102, 126, 234, 0.2);
+    background: rgba(15, 23, 42, 0.92) !important;
+    border-bottom-color: rgba(51, 65, 85, 0.5) !important;
 }
 
 body.dark-mode .mobile-header .page-title {
-    background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #f1f5f9;
 }
 
 body.dark-mode .btn-menu-trigger,
@@ -358,16 +288,15 @@ body.dark-mode .profile-avatar-btn {
 }
 
 body.dark-mode .btn-menu-trigger:hover,
-body.dark-mode .notification-btn:hover,
-body.dark-mode .profile-avatar-btn:hover {
-    background: rgba(129, 140, 248, 0.15);
-    color: #818cf8;
+body.dark-mode .notification-btn:hover {
+    background: rgba(37, 99, 235, 0.15);
+    color: #60a5fa;
 }
 
 body.dark-mode .notification-dropdown,
 body.dark-mode .profile-dropdown {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: rgba(102, 126, 234, 0.2);
+    background: rgba(15, 23, 42, 0.97);
+    border-color: rgba(51, 65, 85, 0.6);
 }
 
 body.dark-mode .profile-menu-item {
@@ -375,13 +304,9 @@ body.dark-mode .profile-menu-item {
 }
 
 body.dark-mode .profile-menu-item:hover {
-    background: linear-gradient(135deg, rgba(129, 140, 248, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+    background: rgba(37, 99, 235, 0.15);
 }
 
-body.dark-mode .notification-item {
-    border-bottom-color: rgba(102, 126, 234, 0.1);
-}
-
-body.dark-mode .notification-item:hover {
-    background: linear-gradient(135deg, rgba(129, 140, 248, 0.08) 0%, rgba(167, 139, 250, 0.08) 100%);
+body.dark-mode .notification-item.unread {
+    background: rgba(37, 99, 235, 0.1);
 }
