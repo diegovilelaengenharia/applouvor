@@ -51,7 +51,11 @@ if ($isProduction) {
     // Configurações de App
     define('APP_ENV', App\DotEnv::get('APP_ENV', 'local'));
     define('APP_DEBUG', App\DotEnv::get('APP_DEBUG', 'true') === 'true');
-    define('APP_URL', App\DotEnv::get('APP_URL', 'http://localhost:8000'));
+    
+    // APP_URL detectado automaticamente do domínio atual (funciona com localhost e applouvor.local)
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
+    define('APP_URL', $protocol . '://' . $host);
 }
 
 // ======================================
