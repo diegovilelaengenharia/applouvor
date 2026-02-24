@@ -610,33 +610,41 @@ function renderAppHeader($title, $backUrl = null)
 <?php
     }
 
-    // Nova função para cabeçalhos padronizados (Clean Header)
+    // Renderiza cabeçalho padronizado das páginas
     function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
     {
         global $_layoutUser;
-        $isHome = basename($_SERVER['PHP_SELF']) == 'index.php';
+        $isHome  = basename($_SERVER['PHP_SELF']) === 'index.php';
+        $inAdmin = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
+        $inApp   = strpos($_SERVER['PHP_SELF'], '/app/')   !== false;
+
+        // Paths contextuais
+        $homeLink  = $inAdmin ? 'index.php'           : ($inApp ? '../admin/index.php' : 'admin/index.php');
+        $notifLink = $inAdmin ? 'notificacoes.php'    : ($inApp ? '../admin/notificacoes.php' : 'admin/notificacoes.php');
+        $liderLink = $inAdmin ? 'lider.php'           : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
 ?>
-    <!-- Page Sub-Header -->
+    <!-- Page Header -->
     <div class="page-sub-header">
         <div class="page-sub-header-inner">
 
-            <!-- Left: Breadcrumb or Back -->
+            <!-- Left: Navigation -->
             <div class="page-sub-nav">
                 <?php if (!$isHome): ?>
                     <button onclick="history.back()" class="page-nav-btn" title="Voltar">
                         <i data-lucide="arrow-left" width="18" height="18"></i>
                     </button>
-                    <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? 'index.php' : 'admin/index.php' ?>" class="page-nav-btn" title="Início">
+                    <a href="<?= $homeLink ?>" class="page-nav-btn" title="Página Inicial">
                         <i data-lucide="home" width="17" height="17"></i>
                     </a>
                 <?php else: ?>
-                    <button onclick="window.innerWidth > 1024 ? toggleSidebarDesktop() : toggleSidebarMobile()" class="page-nav-btn" title="Menu">
+                    <button onclick="window.innerWidth > 1024 ? toggleSidebarDesktop() : toggleSidebarMobile()"
+                            class="page-nav-btn" title="Menu">
                         <i data-lucide="menu" width="18" height="18"></i>
                     </button>
                 <?php endif; ?>
             </div>
 
-            <!-- Center: Title Block -->
+            <!-- Center: Title -->
             <div class="page-sub-title-block">
                 <h1 class="page-sub-title"><?= htmlspecialchars($title) ?></h1>
                 <?php if ($subtitle): ?>
@@ -644,75 +652,68 @@ function renderAppHeader($title, $backUrl = null)
                 <?php endif; ?>
             </div>
 
-            <!-- Right: Actions (Buttons) -->
+            <!-- Right: Actions -->
             <div class="page-sub-actions">
-                
-                <!-- Líder Button (Admin only) -->
+
+                <!-- Custom action slot -->
+                <?php if ($rightAction): echo $rightAction; endif; ?>
+
+                <?php if ($rightAction): ?>
+                    <div class="header-actions-divider"></div>
+                <?php endif; ?>
+
+                <!-- Leader Panel (admin only) -->
                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                    <?php
-                        // Determine path relative to current location
-                        $paths = [
-                            'admin' => (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? 'lider.php' : 'admin/lider.php',
-                            'app' => (strpos($_SERVER['PHP_SELF'], '/app/') !== false) ? '../admin/lider.php' : 'admin/lider.php'
-                        ];
-                        $liderPath = $paths['admin']; // default approximation
-                        if(strpos($_SERVER['PHP_SELF'], '/admin/') !== false) $liderPath = 'lider.php';
-                        elseif(strpos($_SERVER['PHP_SELF'], '/app/') !== false) $liderPath = '../admin/lider.php';
-                    ?>
-                    <a href="<?= $liderPath ?>" class="header-action-btn btn-leader" title="Painel do Líder">
-                        <i data-lucide="crown" width="18"></i>
+                    <a href="<?= $liderLink ?>" class="header-action-btn btn-leader" title="Painel do Líder">
+                        <i data-lucide="crown" width="17"></i>
                     </a>
                 <?php endif; ?>
 
-                <!-- Custom Action (if provided) -->
-                <?php if (isset($rightAction) && $rightAction): ?>
-                    <?= $rightAction ?>
-                <?php endif; ?>
-
-                <!-- Notification Button -->
+                <!-- Notifications -->
                 <div style="position: relative;">
-                    <button onclick="toggleNotifications('notificationDropdownDesktop')" class="header-action-btn" id="notificationBtnDesktop" title="Notificações">
-                        <i data-lucide="bell" width="20"></i>
-                        <span class="badge-dot" id="notificationBadgeDesktop" style="display: none;"></span>
+                    <button onclick="toggleNotifications('notificationDropdownDesktop')"
+                            class="header-action-btn" id="notificationBtnDesktop" title="Notificações">
+                        <i data-lucide="bell" width="19"></i>
+                        <span class="badge-dot" id="notificationBadgeDesktop" style="display:none;"></span>
                     </button>
-                    
-                    <!-- Desktop Dropdown (Maintained relative structure) -->
+
                     <div class="notification-dropdown" id="notificationDropdownDesktop">
                         <div class="notification-header">
                             <div class="notification-title">
                                 Notificações
-                                <button onclick="requestNotificationPermission()" class="notification-enable-btn" title="Ativar Notificações Push" id="btnEnableNotifications">
-                                    <i data-lucide="bell-ring" style="width: 12px;"></i> Ativar
+                                <button onclick="requestNotificationPermission()" class="notification-enable-btn"
+                                        id="btnEnableNotifications" title="Ativar push">
+                                    <i data-lucide="bell-ring" style="width:12px;"></i> Ativar
                                 </button>
                             </div>
-                            <button class="mark-all-read" onclick="markAllAsRead()">Marcar todas como lidas</button>
+                            <button class="mark-all-read" onclick="markAllAsRead()">Marcar lidas</button>
                         </div>
                         <div class="notification-list">
-                        <div class="empty-state">
-                            <i data-lucide="bell-off" style="width: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                            <p>Carregando...</p>
+                            <div class="empty-state">
+                                <i data-lucide="bell-off" style="width:24px;"></i>
+                                <p>Carregando...</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="notification-footer">
-                        <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false ? 'notificacoes.php' : 'admin/notificacoes.php') ?>">
-                            Ver central completa
-                            <i data-lucide="arrow-right" style="width: 14px;"></i>
-                        </a>
+                        <div class="notification-footer">
+                            <a href="<?= $notifLink ?>">
+                                Ver todas
+                                <i data-lucide="arrow-right" style="width:14px;"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Perfil Avatar (Button) -->
-            <div style="position: relative;">
-                <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn">
-                    <?php if (isset($_layoutUser['photo']) && $_layoutUser['photo']): ?>
-                        <img src="<?= $_layoutUser['photo'] ?>" alt="User" class="img-fluid">
-                    <?php else: ?>
-                        <div style="width:100%; height:100%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#64748b;">
-                            <i data-lucide="user" width="20"></i>
-                        </div>
-                    <?php endif; ?>
-                </button>
+                <div class="header-actions-divider"></div>
+
+                <!-- Profile Avatar -->
+                <div style="position: relative;">
+                    <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn">
+                        <?php if (!empty($_layoutUser['photo'])): ?>
+                            <img src="<?= $_layoutUser['photo'] ?>" alt="<?= htmlspecialchars($_layoutUser['name'] ?? 'User') ?>">
+                        <?php else: ?>
+                            <i data-lucide="user" width="18" style="color:#64748b;"></i>
+                        <?php endif; ?>
+                    </button>
 
                 <!-- Dropdown Card -->
                 <div id="headerProfileDropdown" class="profile-dropdown">
