@@ -718,7 +718,7 @@ function renderAppHeader($title, $backUrl = null)
                         <i data-lucide="home" width="17" height="17"></i>
                     </a>
                 <?php else: ?>
-                    <button onclick="toggleSidebar()" class="page-nav-btn" title="Menu">
+                    <button onclick="window.innerWidth > 1024 ? toggleSidebarDesktop() : toggleSidebarMobile()" class="page-nav-btn" title="Menu">
                         <i data-lucide="menu" width="18" height="18"></i>
                     </button>
                 <?php endif; ?>
