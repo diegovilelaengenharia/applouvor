@@ -1,16 +1,18 @@
 <?php
 // Configurar sessão para 30 dias
-ini_set('session.gc_maxlifetime', 2592000); // 30 dias
+ini_set('session.gc_maxlifetime', 2592000);
 
-// Define se está em produção (secure cookie só em HTTPS)
-$isSecure = defined('APP_ENV') ? (APP_ENV === 'production') : true;
+// Detectar HTTPS diretamente do servidor (não depende de APP_ENV)
+// auth.php é incluso ANTES de config.php, então APP_ENV ainda não existe aqui
+$isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+         || ($_SERVER['SERVER_PORT'] ?? 80) == 443;
 
 session_set_cookie_params([
     'lifetime' => 2592000,
-    'path' => '/',
-    'secure' => $isSecure, // false em local (HTTP), true em produção (HTTPS)
+    'path'     => '/',
+    'secure'   => $isSecure,
     'httponly' => true,
-    'samesite' => 'Strict'
+    'samesite' => 'Lax', // 'Strict' bloqueia redirecionamentos entre paginas
 ]);
 session_start();
 
