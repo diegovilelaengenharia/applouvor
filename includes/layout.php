@@ -623,11 +623,11 @@ function renderAppHeader($title, $backUrl = null)
         $notifLink = $inAdmin ? 'notificacoes.php'    : ($inApp ? '../admin/notificacoes.php' : 'admin/notificacoes.php');
         $liderLink = $inAdmin ? 'lider.php'           : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
 ?>
-    <!-- Page Header -->
+    <!-- ===== PAGE HEADER ===== -->
     <div class="page-sub-header">
         <div class="page-sub-header-inner">
 
-            <!-- Left: Navigation -->
+            <!-- NAV: Back / Menu -->
             <div class="page-sub-nav">
                 <?php if (!$isHome): ?>
                     <button onclick="history.back()" class="page-nav-btn" title="Voltar">
@@ -644,7 +644,7 @@ function renderAppHeader($title, $backUrl = null)
                 <?php endif; ?>
             </div>
 
-            <!-- Center: Title -->
+            <!-- TITLE -->
             <div class="page-sub-title-block">
                 <h1 class="page-sub-title"><?= htmlspecialchars($title) ?></h1>
                 <?php if ($subtitle): ?>
@@ -652,37 +652,32 @@ function renderAppHeader($title, $backUrl = null)
                 <?php endif; ?>
             </div>
 
-            <!-- Right: Actions -->
+            <!-- ACTIONS -->
             <div class="page-sub-actions">
 
-                <!-- Custom action slot -->
                 <?php if ($rightAction): echo $rightAction; endif; ?>
+                <?php if ($rightAction): ?><div class="header-actions-divider"></div><?php endif; ?>
 
-                <?php if ($rightAction): ?>
-                    <div class="header-actions-divider"></div>
-                <?php endif; ?>
-
-                <!-- Leader Panel (admin only) -->
+                <!-- Crown: admin only -->
                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                     <a href="<?= $liderLink ?>" class="header-action-btn btn-leader" title="Painel do Líder">
                         <i data-lucide="crown" width="17"></i>
                     </a>
                 <?php endif; ?>
 
-                <!-- Notifications -->
-                <div style="position: relative;">
-                    <button onclick="toggleNotifications('notificationDropdownDesktop')"
+                <!-- Bell + Notification Dropdown -->
+                <div style="position:relative;">
+                    <button onclick="toggleNotifications('notifDropdown')"
                             class="header-action-btn" id="notificationBtnDesktop" title="Notificações">
                         <i data-lucide="bell" width="19"></i>
                         <span class="badge-dot" id="notificationBadgeDesktop" style="display:none;"></span>
                     </button>
-
-                    <div class="notification-dropdown" id="notificationDropdownDesktop">
+                    <div class="notification-dropdown" id="notifDropdown">
                         <div class="notification-header">
                             <div class="notification-title">
                                 Notificações
                                 <button onclick="requestNotificationPermission()" class="notification-enable-btn"
-                                        id="btnEnableNotifications" title="Ativar push">
+                                        id="btnEnableNotifications">
                                     <i data-lucide="bell-ring" style="width:12px;"></i> Ativar
                                 </button>
                             </div>
@@ -695,19 +690,16 @@ function renderAppHeader($title, $backUrl = null)
                             </div>
                         </div>
                         <div class="notification-footer">
-                            <a href="<?= $notifLink ?>">
-                                Ver todas
-                                <i data-lucide="arrow-right" style="width:14px;"></i>
-                            </a>
+                            <a href="<?= $notifLink ?>">Ver todas <i data-lucide="arrow-right" style="width:14px;"></i></a>
                         </div>
                     </div>
                 </div>
 
                 <div class="header-actions-divider"></div>
 
-                <!-- Profile Avatar -->
-                <div style="position: relative;">
-                    <button onclick="toggleProfileDropdown(event, 'headerProfileDropdown')" class="profile-avatar-btn">
+                <!-- Profile Avatar + Dropdown -->
+                <div style="position:relative;">
+                    <button onclick="toggleProfileDropdown(event,'headerProfileDropdown')" class="profile-avatar-btn">
                         <?php if (!empty($_layoutUser['photo'])): ?>
                             <img src="<?= $_layoutUser['photo'] ?>" alt="<?= htmlspecialchars($_layoutUser['name'] ?? 'User') ?>">
                         <?php else: ?>
@@ -715,96 +707,83 @@ function renderAppHeader($title, $backUrl = null)
                         <?php endif; ?>
                     </button>
 
-                <!-- Dropdown Card -->
-                <div id="headerProfileDropdown" class="profile-dropdown">
-                    <!-- Header do Card -->
-                    <div class="profile-header">
-                        <div class="profile-avatar-container">
-                            <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar">
+                    <!-- Profile Dropdown -->
+                    <div id="headerProfileDropdown" class="profile-dropdown">
+                        <div class="profile-header">
+                            <div class="profile-avatar-container">
+                                <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar">
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-name"><?= htmlspecialchars($_layoutUser['name'] ?? '') ?></div>
+                                <div class="profile-role">Membro da Equipe</div>
+                            </div>
                         </div>
-                        <div class="profile-info">
-                            <div class="profile-name"><?= htmlspecialchars($_layoutUser['name']) ?></div>
-                            <div class="profile-role">Membro da Equipe</div>
-                        </div>
-                    </div>
 
-                    <div style="padding: 8px;">
-                        <?php
-                        $qsLink = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '../app/quem_somos.php' : 'quem_somos.php';
-                        if (strpos($_SERVER['PHP_SELF'], '/app/') !== false) {
-                            // Default works
-                        } else if (strpos($_SERVER['PHP_SELF'], '/admin/') === false) {
-                            if(file_exists('app/quem_somos.php')) $qsLink = 'app/quem_somos.php';
-                        }
-                        
-                        // Logic for dynamic links based on context (admin vs app vs root)
-                        $inAdmin = (strpos($_SERVER['PHP_SELF'], '/admin/') !== false);
-                        $inApp   = (strpos($_SERVER['PHP_SELF'], '/app/') !== false);
-                        
-                        $perfilLink = $inAdmin ? 'perfil.php' : ($inApp ? '../admin/perfil.php' : 'admin/perfil.php');
-                        $liderLink  = $inAdmin ? 'lider.php'  : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
-                        ?>
-                        
-                        <a href="<?= $qsLink ?>" class="profile-menu-item">
-                            <div class="icon-wrapper" style="background: var(--primary-light); color: var(--primary);">
-                                <i data-lucide="circle-help" width="16"></i>
-                            </div>
-                            <span style="font-weight: 500;">Quem somos nós?</span>
-                        </a>
-
-                        <a href="<?= $perfilLink ?>" class="profile-menu-item">
-                            <div class="icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
-                                <i data-lucide="user" width="16"></i>
-                            </div>
-                            <span style="font-weight: 500;">Meu Perfil</span>
-                        </a>
-
-                        <a href="#" onclick="openDashboardCustomization(); return false;" class="profile-menu-item">
-                            <div class="icon-wrapper" style="background: var(--info-bg); color: var(--info-text);">
-                                <i data-lucide="layout" width="16"></i>
-                            </div>
-                            <span style="font-weight: 500;">Acesso Rápido</span>
-                        </a>
-
-                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <a href="<?= $liderLink ?>" class="profile-menu-item">
-                                <div class="icon-wrapper" style="background: var(--warning-bg); color: var(--warning-text);">
-                                    <i data-lucide="crown" width="16"></i>
+                        <div style="padding:8px;">
+                            <?php
+                            $qsLink     = $inAdmin ? '../app/quem_somos.php' : ($inApp ? 'quem_somos.php' : 'app/quem_somos.php');
+                            $perfilLink = $inAdmin ? 'perfil.php' : ($inApp ? '../admin/perfil.php' : 'admin/perfil.php');
+                            $logoutPath = $inAdmin ? '../logout.php' : ($inApp ? '../../logout.php' : 'logout.php');
+                            ?>
+                            <a href="<?= $qsLink ?>" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background:var(--primary-light);color:var(--primary);">
+                                    <i data-lucide="circle-help" width="16"></i>
                                 </div>
-                                <span style="font-weight: 500;">Painel do Líder</span>
+                                <span>Quem somos nós?</span>
                             </a>
-                        <?php endif; ?>
+                            <a href="<?= $perfilLink ?>" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background:var(--bg-surface-alt);color:var(--text-muted);">
+                                    <i data-lucide="user" width="16"></i>
+                                </div>
+                                <span>Meu Perfil</span>
+                            </a>
+                            <a href="#" onclick="openDashboardCustomization();return false;" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background:var(--info-bg);color:var(--info-text);">
+                                    <i data-lucide="layout" width="16"></i>
+                                </div>
+                                <span>Acesso Rápido</span>
+                            </a>
+                            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                                <a href="<?= $liderLink ?>" class="profile-menu-item">
+                                    <div class="icon-wrapper" style="background:var(--warning-bg);color:var(--warning-text);">
+                                        <i data-lucide="crown" width="16"></i>
+                                    </div>
+                                    <span>Painel do Líder</span>
+                                </a>
+                            <?php endif; ?>
 
-                        <!-- Dark Mode Toggle -->
-                        <div onclick="toggleThemeMode()" class="profile-menu-item" style="cursor: pointer;">
-                            <div class="icon-wrapper" style="background: var(--bg-surface-alt); color: var(--text-muted);">
-                                <i data-lucide="moon" width="16"></i>
+                            <!-- Dark Mode Toggle -->
+                            <div onclick="toggleThemeMode()" class="profile-menu-item" style="cursor:pointer;">
+                                <div class="icon-wrapper" style="background:var(--bg-surface-alt);color:var(--text-muted);">
+                                    <i data-lucide="moon" width="16"></i>
+                                </div>
+                                <span>Modo Escuro</span>
+                                <div style="margin-left:auto;">
+                                    <label class="toggle-switch-mini">
+                                        <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
+                                        <span class="slider-mini round"></span>
+                                    </label>
+                                </div>
                             </div>
-                            <span style="font-weight: 500;">Modo Escuro</span>
-                            <div style="margin-left: auto;">
-                                <label class="toggle-switch-mini" style="width: 30px; height: 16px;">
-                                    <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
-                                    <span class="slider-mini round"></span>
-                                </label>
-                            </div>
+
+                            <div style="height:1px;background:var(--border-color);margin:6px 12px;"></div>
+
+                            <a href="<?= $logoutPath ?>" class="profile-menu-item" style="color:var(--danger);">
+                                <div class="icon-wrapper" style="background:var(--danger-bg);color:var(--danger);">
+                                    <i data-lucide="log-out" width="16"></i>
+                                </div>
+                                <span style="font-weight:600;">Sair da Conta</span>
+                            </a>
                         </div>
+                    </div><!-- /profile-dropdown -->
+                </div><!-- /profile-wrapper -->
 
-                        <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
+            </div><!-- /page-sub-actions -->
 
-                        <?php
-                        $logoutPath = $inAdmin ? '../logout.php' : ($inApp ? '../../logout.php' : 'logout.php');
-                        ?>
-                        <a href="<?= $logoutPath ?>" class="profile-menu-item" style="color: var(--danger);">
-                            <div class="icon-wrapper" style="background: var(--danger-bg); color: var(--danger);">
-                                <i data-lucide="log-out" width="16"></i>
-                            </div>
-                            <span style="font-weight: 600;">Sair da Conta</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        </div><!-- /page-sub-header-inner -->
+    </div><!-- /page-sub-header -->
 
-        </div>
+
     </div><!-- /page-sub-header -->
     <!-- Dashboard Customization Modal -->
     <div id="dashboardCustomizationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
