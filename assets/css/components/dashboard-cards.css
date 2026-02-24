@@ -11,32 +11,29 @@
     margin-bottom: var(--space-2xl);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     .quick-access-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
     }
 }
 
 /* === CARD BASE === */
 .access-card {
     position: relative;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-light);
-    border-left: 4px solid var(--category-color, var(--primary-gradient));
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    /* Reduzido de 1.5rem (24px → 19.2px) */
-    min-height: 144px;
-    /* Reduzido de 180px (20%) */
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-top: 3px solid var(--category-color, #2563eb);
+    border-radius: 14px;
+    padding: 18px;
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     text-decoration: none;
-    transition: all var(--transition-base);
+    transition: all 0.2s ease;
     cursor: pointer;
-
-    /* Entrance Animation */
     animation: fadeInUp 0.4s ease-out backwards;
+    color: #0f172a;
 }
 
 @keyframes fadeInUp {
@@ -94,9 +91,8 @@
 
 /* Premium Hover State with Shadow Layers & Glow */
 .access-card:hover {
-    border-color: var(--category-color, var(--primary-shadow));
-    box-shadow: var(--shadow-xl);
-    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
 }
 
 /* Focus State (WCAG AAA) */
@@ -295,26 +291,27 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     .access-card {
-        min-height: 160px;
-        padding: var(--space-md);
+        min-height: 100px;
+        padding: 14px 12px;
+        border-radius: 12px;
     }
 
     .card-icon {
-        width: 44px;
-        height: 44px;
+        width: 36px;
+        height: 36px;
     }
 
     .card-icon svg {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
 
     .card-badge {
-        top: var(--space-md);
-        right: var(--space-md);
-        font-size: 0.8125rem;
-        padding: 3px 10px;
+        top: 10px;
+        right: 10px;
+        font-size: 0.7rem;
+        padding: 2px 8px;
     }
 }

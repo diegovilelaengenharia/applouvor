@@ -293,8 +293,8 @@ function renderAppHeader($title, $backUrl = null)
 
             .profile-avatar-btn:hover {
                 transform: scale(1.05) !important;
-                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
-                border-color: #6366f1 !important;
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+                border-color: #2563eb !important;
             }
             
             .profile-avatar-btn img {
