@@ -18,7 +18,9 @@ session_start();
 function checkLogin()
 {
     if (!isset($_SESSION['user_id'])) {
-        header("Location: ../index.php");
+        // Redireciona para login relativo ao root
+        $loginPath = str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) . 'index.php';
+        header("Location: " . $loginPath);
         exit;
     }
 }
@@ -33,7 +35,6 @@ function checkAdmin()
     }
 }
 
-// Função de Login
 // Função de Login
 function login($name, $password, $pdo)
 {
@@ -87,9 +88,10 @@ function login($name, $password, $pdo)
     return false;
 }
 
-// Tratamento de Logout via GET
-if (isset($_GET['logout'])) {
+// Logout via POST (seguro) ou via ?logout=1 (fallback legacy)
+if (isset($_GET['logout']) || (isset($_POST['action']) && $_POST['action'] === 'logout')) {
     session_destroy();
-    header("Location: ../index.php");
+    $loginPath = str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) . 'index.php';
+    header("Location: " . $loginPath);
     exit;
 }

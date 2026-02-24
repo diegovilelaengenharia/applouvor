@@ -26,18 +26,21 @@ $isProduction = !file_exists($envPath);
 // CREDENCIAIS DO BANCO DE DADOS
 // ======================================
 if ($isProduction) {
-    // FORÇA CREDENCIAIS DE PRODUÇÃO
-    define('DB_HOST', 'srv1074.hstgr.io');
-    define('DB_NAME', 'u884436813_applouvor');
-    define('DB_USER', 'u884436813_admin');
-    define('DB_PASS', 'Diego@159753');
-    
-    // Configurações de App
-    define('APP_ENV', 'production');
+    // Credenciais lidas de variáveis de ambiente do servidor (Hostinger)
+    // Configure em: Painel Hostinger > Avancado > PHP Config ou via .htaccess:
+    //   SetEnv DB_HOST srv1074.hstgr.io
+    //   SetEnv DB_NAME u884436813_applouvor
+    //   SetEnv DB_USER u884436813_admin
+    //   SetEnv DB_PASS sua_senha_aqui
+    define('DB_HOST', getenv('DB_HOST') ?: 'srv1074.hstgr.io');
+    define('DB_NAME', getenv('DB_NAME') ?: 'u884436813_applouvor');
+    define('DB_USER', getenv('DB_USER') ?: 'u884436813_admin');
+    define('DB_PASS', getenv('DB_PASS') ?: ''); // Senha deve vir do servidor!
+
+    define('APP_ENV',   'production');
     define('APP_DEBUG', false);
-    define('APP_URL', 'https://vilela.eng.br/applouvor');
-    
-    // Segurança
+    define('APP_URL',   'https://vilela.eng.br/applouvor');
+
     ini_set('display_errors', 0);
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
 

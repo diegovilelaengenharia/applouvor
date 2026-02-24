@@ -3,41 +3,30 @@
 
 require_once 'config.php';
 
-// ======================================
-// CONEXÃO COM O BANCO DE DADOS
-// ======================================
-// Utiliza constantes definidas em config.php para maior segurança
-
 try {
     $pdo = new PDO(
-        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8",
+        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
         DB_USER,
         DB_PASS,
-        [PDO::ATTR_PERSISTENT => true]
+        [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]
     );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    
+
     // Inicializa Query Builder com a conexão
     App\DB::setConnection($pdo);
-    
-} catch (PDOException $e) {
-    // Se for erro de "Unknown database", informa
-    if ($e->getCode() == 1049) {
-        die("<div style='font-family:sans-serif; padding:20px; text-align:center;'>
-                <h3>Banco de Dados não encontrado</h3>
-                <p>O banco <b>$dbname</b> não existe no seu MySQL local.</p>
-                <p>Por favor, crie este banco no phpMyAdmin e importe o arquivo <code>schema.sql</code>.</p>
-             </div>");
-    }
-    // Se for erro de conexão recusada (MySQL off)
-    if ($e->getCode() == 2002) {
-        die("<div style='font-family:sans-serif; padding:20px; text-align:center;'>
-                <h3>MySQL Parado</h3>
-                <p>O servidor não conseguiu conectar ao banco de dados.</p>
-                <p>👉 Abra o <b>XAMPP Control Panel</b> e inicie o serviço <b>MySQL</b>.</p>
-             </div>");
-    }
 
-    die("Erro na conexão com o banco de dados: " . $e->getMessage());
+} catch (PDOException $e) {
+    if ($e->getCode() == 1049) {
+        die("<div style='font-family:sans-serif;padding:20px;text-align:center'><h3>Banco de Dados não encontrado</h3><p>O banco <b>" . DB_NAME . "</b> não existe. Crie-o e importe o <code>schema.sql</code>.</p></div>");
+    }
+    if ($e->getCode() == 2002) {
+        die("<div style='font-family:sans-serif;padding:20px;text-align:center'><h3>MySQL Parado</h3><p>Inicie o serviço MySQL no XAMPP Control Panel.</p></div>");
+    }
+    if (defined('APP_DEBUG') && APP_DEBUG) {
+        die("Erro de conexão: " . $e->getMessage());
+    }
+    die("Erro de conexão com o banco de dados. Tente novamente mais tarde.");
 }

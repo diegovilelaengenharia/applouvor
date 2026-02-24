@@ -7,8 +7,8 @@
 /node_modules/
 
 # Arquivos de configuração sensíveis
-# IMPORTANTE: config.php contém credenciais do banco
-# includes/config.php
+# IMPORTANTE: .htaccess contém credenciais do banco (SetEnv DB_PASS)
+.htaccess
 .env
 composer.lock
 
