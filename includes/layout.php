@@ -782,9 +782,6 @@ function renderAppHeader($title, $backUrl = null)
 
         </div><!-- /page-sub-header-inner -->
     </div><!-- /page-sub-header -->
-
-
-    </div><!-- /page-sub-header -->
     <!-- Dashboard Customization Modal -->
     <div id="dashboardCustomizationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
         <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);">

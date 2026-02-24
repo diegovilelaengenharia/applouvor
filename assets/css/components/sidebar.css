@@ -74,6 +74,9 @@
 @media (min-width: 1025px) {
     .sidebar~.app-content {
         margin-left: 256px;
+        width: auto;
+        /* Sobrescreve width:100% do legacy - sem isso overflow ocorre */
+        box-sizing: border-box;
         transition: margin-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -81,6 +84,7 @@
         margin-left: 72px;
     }
 }
+
 
 /* ===== HEADER DA SIDEBAR ===== */
 .sidebar-header-hover {
