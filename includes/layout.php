@@ -91,17 +91,11 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="manifest" href="/manifest.json">
         <link rel="apple-touch-icon" href="../assets/img/logo_pib_black.png">
 
-        <!-- Google Material Icons -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-        
-        <!-- Font Awesome (Legacy Support) -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Icons: Lucide only (Material Icons and Font Awesome removed - use Lucide) -->
 
         <!-- +ìcones Lucide -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
-        <!-- Semantic Design System & App Main CSS -->
-        <!-- Semantic Design System & App Main CSS -->
         <!-- APP URL for JS logic -->
         <script>const APP_URL = '<?= APP_URL ?>';</script>
 
@@ -413,8 +407,6 @@ function renderAppHeader($title, $backUrl = null)
 
     <body>
 
-        <!-- Incluir Sidebar -->
-        <!-- Incluir Sidebar -->
         <?php 
         if (file_exists('sidebar.php')) {
             include_once 'sidebar.php';
@@ -507,93 +499,15 @@ function renderAppHeader($title, $backUrl = null)
         </script>
 
 
-        <!-- Inicializar +ìcones -->
+        <!-- Inicializar Ícones -->
         <script>
             lucide.createIcons();
-
-            // Registrar PWA Service Worker
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('<?= APP_URL ?>/sw.js')
-                        .then(registration => console.log('SW registrado com sucesso:', registration.scope))
-                        .catch(err => console.log('Falha ao registrar SW:', err));
-                });
-            }
-
-            // ... (Restante do script mantido, apenas adicionando verifica+º+úo para evitar duplicidade de listeners se necess+írio)
-
-            // Adicionar classe animate-in aos cards principais automaticamente
+            // Animate cards on load
             document.addEventListener('DOMContentLoaded', () => {
-                const cards = document.querySelectorAll('.card, .stats-card, .notice-card');
-                cards.forEach((card, index) => {
+                document.querySelectorAll('.card, .stats-card, .notice-card').forEach((card, i) => {
                     card.classList.add('animate-in');
-                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.style.animationDelay = `${i * 0.1}s`;
                 });
-                // Sidebar Swipe Logic (Vibe Coding)
-                const sidebar = document.getElementById('app-sidebar');
-                const appContent = document.getElementById('app-content');
-                if (!sidebar) return; // Seguran+ºa
-
-                let touchStartX = 0;
-                let touchEndX = 0;
-
-                // ... (Mantendo a l+¦gica de swipe anterior) ...
-
-                document.addEventListener('touchstart', e => {
-                    touchStartX = e.changedTouches[0].screenX;
-                }, {
-                    passive: true
-                });
-
-                document.addEventListener('touchend', e => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    handleSidebarSwipe();
-                }, {
-                    passive: true
-                });
-
-                function handleSidebarSwipe() {
-                    const swipeThreshold = 80; // Sensibilidade do swipe
-                    const diff = touchEndX - touchStartX;
-                    const isSidebarOpen = sidebar.classList.contains('active');
-                    const isChatPage = window.location.pathname.includes('chat.php');
-
-                    // Swipe Right (Esquerda -> Direita): Abrir Sidebar
-                    // Apenas se começar perto da borda esquerda (< 50px) e sidebar fechada
-                    if (diff > swipeThreshold && touchStartX < 50 && !isSidebarOpen) {
-                        toggleSidebar();
-                    }
-                    
-                    // Swipe Left (Direita -> Esquerda): Fechar Sidebar se aberta...
-                    if (diff < -swipeThreshold && isSidebarOpen) {
-                        toggleSidebar();
-                        return;
-                    }
-
-                    // Se sidebar fechada, deixar o Drawer Logic (mais abaixo) lidar com o Chat
-                }
-
-                function toggleSidebar() {
-                    sidebar.classList.toggle('active');
-                    let overlay = document.getElementById('sidebar-overlay');
-                    if (!overlay) {
-                        overlay = document.createElement('div');
-                        overlay.id = 'sidebar-overlay';
-                        overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:99;opacity:0;transition:opacity 0.3s;';
-                        overlay.onclick = toggleSidebar;
-                        document.body.appendChild(overlay);
-                        setTimeout(() => overlay.style.opacity = '1', 10);
-                    } else {
-                        if (sidebar.classList.contains('active')) {
-                            overlay.style.display = 'block';
-                            setTimeout(() => overlay.style.opacity = '1', 10);
-                        } else {
-                            overlay.style.opacity = '0';
-                            setTimeout(() => overlay.style.display = 'none', 300);
-                        }
-                    }
-                }
-
             });
         </script>
         
@@ -605,13 +519,11 @@ function renderAppHeader($title, $backUrl = null)
         <script src="<?= APP_URL ?>/assets/js/gestures.js"></script>
     <!-- PWA Install Script (Global) -->
     <script>
-        // Check for Service Worker Support
+        // Service Worker Registration (single instance)
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('SW Registered!', reg))
-                    .catch(err => console.log('SW Registration Failed', err));
-            });
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW Registered:', reg.scope))
+                .catch(err => console.warn('SW Failed:', err));
         }
 
         // toggleThemeMode is defined in theme-toggle.js (loaded in HEAD)
@@ -878,7 +790,10 @@ function renderAppHeader($title, $backUrl = null)
 
                         <div style="height: 1px; background: var(--border-color); margin: 6px 12px;"></div>
 
-                        <a href="../logout.php" class="profile-menu-item" style="color: var(--danger);">
+                        <?php
+                        $logoutPath = $inAdmin ? '../logout.php' : ($inApp ? '../../logout.php' : 'logout.php');
+                        ?>
+                        <a href="<?= $logoutPath ?>" class="profile-menu-item" style="color: var(--danger);">
                             <div class="icon-wrapper" style="background: var(--danger-bg); color: var(--danger);">
                                 <i data-lucide="log-out" width="16"></i>
                             </div>
