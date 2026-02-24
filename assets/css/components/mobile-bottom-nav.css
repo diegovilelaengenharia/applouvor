@@ -1,0 +1,142 @@
+/* ==========================================================================
+   MOBILE BOTTOM NAVIGATION — App Louvor
+   Aparece apenas em mobile (< 1024px)
+   Estilo: Tab bar moderna, iOS/Android feel
+   ========================================================================== */
+
+/* ===== BOTTOM NAV CONTAINER ===== */
+.bottom-nav {
+    display: none;
+    /* Escondido por padrão (desktop) */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 998;
+
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
+
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    /* iPhone notch */
+
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Mostra apenas no mobile */
+@media (max-width: 1024px) {
+    .bottom-nav {
+        display: flex;
+    }
+
+    /* Espaço para não cobrir o conteúdo */
+    .app-content {
+        padding-bottom: 72px !important;
+    }
+}
+
+/* ===== ITEMS ===== */
+.bottom-nav-items {
+    display: flex;
+    width: 100%;
+    height: 62px;
+    align-items: stretch;
+}
+
+.bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 4px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 0.65rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.01em;
+    transition: color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+    border: none;
+    background: none;
+    min-width: 0;
+    min-height: 44px;
+    /* Touch target */
+}
+
+.bottom-nav-item:hover,
+.bottom-nav-item:active {
+    color: #2563eb;
+}
+
+/* ===== ACTIVE STATE ===== */
+.bottom-nav-item.active {
+    color: #2563eb;
+}
+
+.bottom-nav-item.active .bnav-icon-wrap {
+    background: #eff6ff;
+    transform: scale(1.05);
+}
+
+/* ===== ICON WRAPPER ===== */
+.bnav-icon-wrap {
+    width: 36px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bnav-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+}
+
+.bottom-nav-item .bnav-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* ===== MENU BUTTON (abre sidebar) ===== */
+.bnav-menu-btn .bnav-icon-wrap {
+    border-radius: 12px;
+}
+
+/* ===== BADGE ===== */
+.bnav-badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 20px);
+    width: 16px;
+    height: 16px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    display: none;
+}
+
+.bnav-badge.visible {
+    display: flex;
+}
+
+.bottom-nav-item {
+    position: relative;
+}

@@ -66,7 +66,7 @@ function renderAppHeader($title, $backUrl = null)
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>App Louvor PIB</title>
 
         <!-- Fonte Inter (Google Fonts) -->
@@ -113,9 +113,11 @@ function renderAppHeader($title, $backUrl = null)
         $verTheme = file_exists($pathTheme) ? filemtime($pathTheme) : time();
         ?>
 
-        <!-- Main CSS (Absolute Path) -->
+        <!-- Main CSS -->
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= $verTheme ?>">
+        <!-- Mobile Bottom Nav -->
+        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/mobile-bottom-nav.css?v=<?= $verMain ?>">
 
         <!-- CRITICAL INLINE CSS - Header Premium Design -->
         <style>
@@ -123,12 +125,12 @@ function renderAppHeader($title, $backUrl = null)
             
             /* Root Variables for Header */
             :root {
-                --header-height-desktop: 72px;
-                --header-height-mobile: 64px;
-                --header-bg-glass: rgba(255, 255, 255, 0.85);
-                --header-border: rgba(226, 232, 240, 0.6);
-                --header-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-                --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+                --header-height-desktop: 64px;
+                --header-height-mobile: 58px;
+                --header-bg-glass: rgba(255, 255, 255, 0.92);
+                --header-border: rgba(226, 232, 240, 0.8);
+                --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+                --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             }
 
             body.dark-mode {
@@ -439,8 +441,54 @@ function renderAppHeader($title, $backUrl = null)
 
         
 
-        <!-- Bottom Navigation & Submenus (Mobile Only) -->
-        
+        <!-- Bottom Navigation (Mobile Only — oculta em desktop via CSS) -->
+        <nav class="bottom-nav" id="bottom-nav" role="navigation" aria-label="Menu principal">
+            <div class="bottom-nav-items">
+                <!-- Início -->
+                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>index.php"
+                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : '' ?>">
+                    <div class="bnav-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <span class="bnav-label">Início</span>
+                </a>
+
+                <!-- Escalas -->
+                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>escalas.php"
+                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'escalas.php' ? 'active' : '' ?>">
+                    <div class="bnav-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <span class="bnav-label">Escalas</span>
+                </a>
+
+                <!-- Repertório -->
+                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>repertorio.php"
+                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'repertorio.php' ? 'active' : '' ?>">
+                    <div class="bnav-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    </div>
+                    <span class="bnav-label">Repertório</span>
+                </a>
+
+                <!-- Leitura -->
+                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>leitura.php"
+                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'leitura.php' ? 'active' : '' ?>">
+                    <div class="bnav-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <span class="bnav-label">Leitura</span>
+                </a>
+
+                <!-- Menu (abre sidebar) -->
+                <button class="bottom-nav-item bnav-menu-btn" onclick="toggleSidebarMobile ? toggleSidebarMobile() : (window.toggleSidebar && window.toggleSidebar())" aria-label="Menu">
+                    <div class="bnav-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </div>
+                    <span class="bnav-label">Menu</span>
+                </button>
+            </div>
+        </nav>
 
         <!-- Overlay de Fundo -->
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
