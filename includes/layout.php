@@ -4,12 +4,12 @@ header('Content-Type: text/html; charset=utf-8');
 
 // Inicia sessão se não estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    // Configurar sessão para 30 dias (backup, idealmente auth.php deve ser chamado antes)
     ini_set('session.gc_maxlifetime', 2592000);
+    $isSecure = defined('APP_ENV') ? (APP_ENV === 'production') : true;
     session_set_cookie_params([
         'lifetime' => 2592000,
         'path' => '/',
-        'secure' => true,
+        'secure' => $isSecure, // false em local, true em produção
         'httponly' => true,
         'samesite' => 'Strict'
     ]);

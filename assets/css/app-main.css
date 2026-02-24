@@ -1,46 +1,41 @@
 /* ==========================================================================
    APP MAIN CSS - Ponto de Entrada Central
    Design System V2 - Minimalista + Toques de Cor
+   ORDEM CORRETA: Legacy primeiro → Design System sobrescreve → Pages por último
    ========================================================================== */
 
 /* =====================
-   1. CORE (Base)
+   1. LEGACY (Carregado PRIMEIRO para ser sobrescrito)
+   ===================== */
+@import url('legacy-style.css');
+@import url('modern-enhancements.css');
+@import url('roles.css');
+
+/* =====================
+   2. CORE (Base do Design System)
    ===================== */
 @import url('core/reset.css');
 @import url('core/variables.css');
 @import url('core/utilities.css');
 
 /* =====================
-   2. COMPONENTS (Reutilizáveis)
+   3. COMPONENTS (Reutilizáveis)
    ===================== */
-/* HEADER UNIFICADO - Prioridade máxima */
 @import url('components/header-complete.css?v=20260215161530');
-
 @import url('components/buttons.css');
 @import url('components/cards.css');
 @import url('components/notifications.css');
 @import url('components/modals.css');
-
-/* Legacy components (manter temporariamente) */
 @import url('components/forms.css');
 @import url('components/badges.css');
 @import url('components/icons.css');
 @import url('components/sidebar.css');
-/* DESATIVADO - Conflita com header-complete.css */
-/* @import url('components/page-headers.css?v=3'); */
-/* @import url('components/modern-header.css'); */
-/* @import url('components/header-actions.css?v=3'); */
 @import url('components/timeline-cards.css');
 @import url('components/animations.css');
 @import url('components/tables.css');
 
 /* =====================
-   3. LAYOUTS (Estruturas)
-   ===================== */
-/* Manter layouts existentes */
-
-/* =====================
-   4. PAGES (Específico)
+   4. PAGES (Última prioridade - mais específico)
    ===================== */
 @import url('pages/dashboard.css');
 @import url('pages/escalas.css');
@@ -49,15 +44,3 @@
 @import url('pages/evento-detalhe.css');
 @import url('pages/repertorio.css');
 @import url('pages/lider.css');
-
-/* =====================
-   5. LEGACY (Temporário - deprecar após refatoração)
-   ===================== */
-@import url('legacy-style.css');
-@import url('modern-enhancements.css');
-@import url('membros.css');
-@import url('roles.css');
-
-/* =====================
-   6. DARK MODE (Opcional)
-   ===================== */

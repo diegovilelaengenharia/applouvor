@@ -87,6 +87,8 @@
     --primary: var(--blue-500);
     --primary-hover: var(--blue-600);
     --primary-active: var(--blue-700);
+    --primary-light: var(--blue-100);
+    --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
 
     /* Backgrounds */
     --bg-body: var(--slate-50);
@@ -193,7 +195,7 @@ body.dark-mode {
     --bg-surface: var(--slate-800);
     --bg-surface-alt: var(--slate-700);
     --bg-surface-active: var(--slate-700);
-    --bg-surface-hover: var(--slate-750);
+    --bg-surface-hover: #263347; /* slate-750 - valor fixo pois não existe variável padrão */
 
     --text-primary: var(--slate-50);
     --text-secondary: var(--slate-300);
