@@ -185,29 +185,27 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 
 
 <!-- DELETE CONFIRMATION MODAL -->
-<div id="deleteModal" class="modal-overlay" onclick="if(event.target === this) closeDeleteModal()">
-    <div class="modal-card" style="max-width: 400px;">
-        <div class="modal-header">
-            <h3 class="modal-title" style="color: var(--danger);">
-                <i data-lucide="trash-2" width="20"></i> Excluir Membro
-            </h3>
-            <button type="button" class="modal-close" onclick="closeDeleteModal()">
-                <i data-lucide="x" width="20"></i>
-            </button>
+<div id="deleteModal" class="urgent-modal-overlay" onclick="if(event.target === this) closeDeleteModal()">
+    <div class="urgent-modal-card">
+        
+        <div class="urgent-icon-wrapper">
+             <i data-lucide="alert-triangle" width="32"></i>
         </div>
-        <div class="modal-body">
-            <p style="margin-bottom: 10px;">Tem certeza que deseja excluir este membro?</p>
-            <p id="deleteMemberName" style="font-weight: 600; font-size: 1.1em; color: var(--text-primary);"></p>
-            <p style="font-size: 0.9em; color: var(--text-tertiary); margin-top: 10px;">Esta ação não pode ser desfeita.</p>
+        
+        <h3 class="urgent-title">Excluir Membro</h3>
+        <p class="urgent-subtitle" id="deleteMemberName"></p>
+        
+        <div class="urgent-body">
+            Tem certeza que deseja excluir este membro?<br>
+            Esta ação não pode ser desfeita e todo o histórico associado (como escalas) pode ser afetado ou perdido.
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-ghost" onclick="closeDeleteModal()">Cancelar</button>
-            <form method="POST" id="deleteForm" style="margin: 0;">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" id="deleteMemberId">
-                <button type="submit" class="btn btn-danger">Excluir Permanentemente</button>
-            </form>
-        </div>
+        
+        <form method="POST" id="deleteForm" style="margin: 0; width: 100%;">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" id="deleteMemberId">
+            <button type="submit" class="btn-urgent-action">Sim, Excluir Membro</button>
+            <button type="button" class="btn btn-ghost" style="width: 100%; margin-top: 12px;" onclick="closeDeleteModal()">Cancelar</button>
+        </form>
     </div>
 </div>
 
@@ -220,9 +218,9 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
             const name = card.getAttribute('data-name');
             const role = card.getAttribute('data-role');
             if (name.includes(term) || role.includes(term)) {
-                card.style.display = 'flex';
+                card.classList.remove('is-hidden');
             } else {
-                card.style.display = 'none';
+                card.classList.add('is-hidden');
             }
         });
     }
@@ -230,11 +228,12 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     function confirmDelete(id, name) {
         document.getElementById('deleteMemberId').value = id;
         document.getElementById('deleteMemberName').textContent = name;
-        document.getElementById('deleteModal').classList.add('active');
+        // O urgent-modal usa style.display = 'flex' no CSS dele
+        document.getElementById('deleteModal').style.display = 'flex';
     }
 
     function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('active');
+        document.getElementById('deleteModal').style.display = 'none';
     }
 </script>
 
