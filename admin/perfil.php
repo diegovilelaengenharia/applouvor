@@ -333,17 +333,26 @@ renderPageHeader($page_title, $page_subtitle);
                     </div>
 
                     <div class="form-field">
-                        <label class="form-label">Nível de Acesso</label>
-                        <select name="role" class="form-input">
-                            <option value="user" <?= $user['role'] === 'user' ? 'selected' : '' ?>>Membro</option>
-                            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
+                        <label class="form-label">Nível de Acesso (Cargo no Sistema)</label>
+                        <select name="role" class="form-input" style="font-weight: 600;">
+                            <option value="user" <?= $user['role'] === 'user' ? 'selected' : '' ?>>👤 Membro Padrão</option>
+                            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>👑 Administrador</option>
                         </select>
                     </div>
 
                     <div class="form-field">
                         <label class="form-label">Senha de Acesso</label>
-                        <input type="text" name="password" value="<?= htmlspecialchars($user['password'] ?? '') ?>" <?= $is_creating_new ? 'required' : '' ?> class="form-input" placeholder="<?= $is_creating_new ? '4 dígitos' : 'Deixe em branco para não alterar' ?>">
-                        <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 4px;">Recomendado: Últimos 4 dígitos do celular</p>
+                        <div style="position: relative;">
+                            <!-- Type password changed from text -->
+                            <input type="password" id="passwordInput" name="password" <?= $is_creating_new ? 'required' : '' ?> class="form-input" placeholder="<?= $is_creating_new ? 'Crie uma senha de acesso' : '•••••••• (Deixe em branco para não alterar)' ?>" style="padding-right: 48px; letter-spacing: 2px;">
+                            <button type="button" class="btn-ghost-slate" onclick="togglePassword()" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 6px;" title="Ver/Ocultar Senha">
+                                <i data-lucide="eye" id="eyeIcon" width="18"></i>
+                            </button>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 6px;">
+                            <i data-lucide="info" width="12" style="display: inline-block; vertical-align: middle;"></i> 
+                            Recomendado: Usar os 4 últimos dígitos do celular para facilitar.
+                        </p>
                     </div>
                 </div>
 
@@ -351,17 +360,20 @@ renderPageHeader($page_title, $page_subtitle);
                 <div class="form-section">
                     <div class="section-header">
                         <i data-lucide="music" class="section-icon"></i>
-                        <h3 class="section-title">Funções / Instrumentos</h3>
+                        <h3 class="section-title">Atuação Minsterial (Funções)</h3>
                     </div>
 
-                    <div class="roles-grid">
+                    <div class="roles-grid" style="gap: 12px;">
                         <?php foreach ($allRoles as $role): ?>
-                            <label class="role-checkbox-label">
-                                <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" <?= in_array($role['id'], $user_roles) ? 'checked' : '' ?> style="width: 18px; height: 18px; cursor: pointer;">
-                                <span class="role-info">
-                                    <span><?= $role['icon'] ?></span>
-                                    <span><?= $role['name'] ?></span>
-                                </span>
+                            <label class="role-info with-toggle" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin: 0;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.1rem; line-height: 1;"><?= $role['icon'] ?></span>
+                                    <span style="font-weight: 600; color: var(--text-primary);"><?= $role['name'] ?></span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" <?= in_array($role['id'], $user_roles) ? 'checked' : '' ?>>
+                                    <span class="toggle-slider"></span>
+                                </div>
                             </label>
                         <?php endforeach; ?>
                     </div>
@@ -428,6 +440,19 @@ function previewImage(input) {
         
         reader.readAsDataURL(input.files[0]);
     }
+}
+
+function togglePassword() {
+    const pwd = document.getElementById('passwordInput');
+    const eye = document.getElementById('eyeIcon');
+    if (pwd.type === 'password') {
+        pwd.type = 'text';
+        eye.setAttribute('data-lucide', 'eye-off');
+    } else {
+        pwd.type = 'password';
+        eye.setAttribute('data-lucide', 'eye');
+    }
+    lucide.createIcons(); // Recarrega os ícones para aplicar o eye-off
 }
 </script>
 

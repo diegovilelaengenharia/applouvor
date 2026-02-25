@@ -9,19 +9,7 @@ checkAdmin();
 renderAppHeader('Painel do Líder');
 renderPageHeader('Painel do Líder', 'Dashboard Executivo');
 
-// --- DATA QUERIES ---
-$today = date('Y-m-d');
-
-// 1. Next Scale
-$stmt = $pdo->prepare("SELECT * FROM schedules WHERE event_date >= ? ORDER BY event_date ASC, event_time ASC LIMIT 1");
-$stmt->execute([$today]);
-$next_scale = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// 2. Counts
-$total_songs = $pdo->query("SELECT COUNT(*) FROM songs")->fetchColumn();
-$total_members = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
-$total_avisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE archived_at IS NULL")->fetchColumn();
-
+// --- ESTILOS ESPECÍFICOS ---
 ?>
 <link rel="stylesheet" href="../assets/css/pages/lider.css?v=<?= time() ?>">
 

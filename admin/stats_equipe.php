@@ -81,103 +81,86 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
         </div>
 
-        <div style="overflow-x: auto;">
-            <table class="user-table">
-                <thead>
-                    <tr>
-                        <th>Membro</th>
-                        <th>Último Acesso</th>
-                        <th>Frequência</th>
-                        <th>Escalas (60d)</th>
-                        <th>Leitura (30d)</th>
-                        <th>Engagement Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($members as $member): 
-                        // Calcular tempo relativo
-                        $last_login_ts = strtotime($member['last_login']);
-                        $now = time();
-                        $diff = $now - $last_login_ts;
-                        
-                        // Status logic
-                        if ($member['last_login'] && $diff < 300) { // 5 min
-                            $status_class = 'status-online';
-                            $status_text = 'Online agora';
-                            $time_text = 'Online';
-                        } elseif ($member['last_login'] && $diff < 86400) { // 24h
-                            $status_class = 'status-recent';
-                            $status_text = 'Acesso recente';
-                            $time_text = 'Há ' . floor($diff / 3600) . 'h';
-                        } else {
-                            $status_class = 'status-offline';
-                            $status_text = 'Ausente';
-                            $days = floor($diff / 86400);
-                            $time_text = $member['last_login'] ? "Há $days dias" : 'Nunca acessou';
-                        }
+            <div style="display: flex; flex-direction: column; gap: 12px; padding: 16px;">
+                <?php foreach ($members as $member): 
+                    // Calcular tempo relativo
+                    $last_login_ts = strtotime($member['last_login']);
+                    $now = time();
+                    $diff = $now - $last_login_ts;
+                    
+                    // Status logic
+                    if ($member['last_login'] && $diff < 300) { // 5 min
+                        $status_class = 'status-online';
+                        $status_color = 'var(--green-500)';
+                        $time_text = 'Online';
+                    } elseif ($member['last_login'] && $diff < 86400) { // 24h
+                        $status_class = 'status-recent';
+                        $status_color = 'var(--blue-500)';
+                        $time_text = 'Há ' . floor($diff / 3600) . 'h';
+                    } else {
+                        $status_class = 'status-offline';
+                        $status_color = 'var(--slate-400)';
+                        $days = floor($diff / 86400);
+                        $time_text = $member['last_login'] ? "Há $days dias" : 'Nunca';
+                    }
 
-                        // Engagement Score (0-10)
-                        // Login count weight (capped at 50) + Reading weight + Scale weight
-                        $score = 0;
-                        if ($member['last_login'] && $diff < 7 * 86400) $score += 3; // Logged in last week
-                        $score += min($member['reading_activity'], 3); // Up to 3 points for reading
-                        $score += min($member['scale_count'] * 2, 4); // Up to 4 points for scales
-                        
-                        $score_class = 'badge-low';
-                        if ($score >= 7) $score_class = 'badge-high';
-                        elseif ($score >= 4) $score_class = 'badge-med';
-                    ?>
-                    <tr>
-                        <td data-label="Membro">
-                            <div class="user-profile">
-                                <div class="avatar-wrapper">
-                                    <?php if ($member['avatar']): 
-                                        $avatarUrl = strpos($member['avatar'], 'http') === 0 ? $member['avatar'] : '../assets/uploads/' . $member['avatar'];
-                                    ?>
-                                        <img src="<?= htmlspecialchars($avatarUrl) ?>" class="avatar-circle" alt="<?= htmlspecialchars($member['name']) ?>">
-                                    <?php else: ?>
-                                        <div class="avatar-circle">
-                                            <?= strtoupper(substr($member['name'], 0, 1)) ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="status-indicator <?= $status_class ?>" title="<?= $status_text ?>"></div>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;"><?= htmlspecialchars($member['name']) ?></div>
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);"><?= ucfirst($member['role']) ?></div>
-                                </div>
+                    // Engagement Score (0-10)
+                    $score = 0;
+                    if ($member['last_login'] && $diff < 7 * 86400) $score += 3;
+                    $score += min($member['reading_activity'], 3);
+                    $score += min($member['scale_count'] * 2, 4);
+                    
+                    $score_title = $score >= 7 ? 'Baixo Risco (Ativo)' : ($score >= 4 ? 'Atenção (Morno)' : 'Risco de Evasão (Frio)');
+                    $score_bg = $score >= 7 ? 'var(--green-50)' : ($score >= 4 ? 'var(--yellow-50)' : 'var(--red-50)');
+                    $score_color = $score >= 7 ? 'var(--green-700)' : ($score >= 4 ? 'var(--yellow-700)' : 'var(--red-700)');
+                ?>
+                <div class="compact-card" style="position: relative; padding: 16px; border-left: 4px solid <?= $score_color ?>;">
+                    <div class="avatar-wrapper" style="width: 48px; height: 48px; min-width: 48px;">
+                        <?php if ($member['avatar']): 
+                            $avatarUrl = strpos($member['avatar'], 'http') === 0 ? $member['avatar'] : '../assets/uploads/' . $member['avatar'];
+                        ?>
+                            <img src="<?= htmlspecialchars($avatarUrl) ?>" class="avatar-circle" alt="<?= htmlspecialchars($member['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        <?php else: ?>
+                            <div class="avatar-circle" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--slate-100); color: var(--slate-600); border-radius: 50%; font-weight: 800; font-size: 1.2rem;">
+                                <?= strtoupper(substr($member['name'], 0, 1)) ?>
                             </div>
-                        </td>
-                        <td data-label="Último Acesso">
+                        <?php endif; ?>
+                        <div class="status-indicator" style="position: absolute; bottom: 0; right: 0; width: 14px; height: 14px; background: <?= $status_color ?>; border: 2px solid white; border-radius: 50%;"></div>
+                    </div>
+                    
+                    <div class="compact-card-content" style="flex: 1; margin-left: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
-                                <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= $time_text ?></div>
-                                <?php if($member['last_login']): ?>
-                                    <div style="font-size: 0.75rem; color: var(--text-tertiary);"><?= date('d/m H:i', strtotime($member['last_login'])) ?></div>
-                                <?php endif; ?>
+                                <div class="compact-card-title" style="font-size: 1.05rem; font-weight: 800; margin-bottom: 2px;">
+                                    <?= htmlspecialchars($member['name']) ?>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 8px;">
+                                    <?= ucfirst($member['role']) ?> • Acesso: <?= $time_text ?>
+                                </div>
                             </div>
-                        </td>
-                        <td data-label="Frequência">
-                            <div style="font-weight: 700; color: var(--text-primary);"><?= $member['login_count'] ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">acessos</div>
-                        </td>
-                        <td data-label="Escalas (60d)">
-                            <div style="font-weight: 700; color: var(--text-primary);"><?= $member['scale_count'] ?></div>
-                        </td>
-                        <td data-label="Leitura (30d)">
-                            <div style="font-weight: 700; color: var(--text-primary);"><?= $member['reading_activity'] ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-tertiary);">capítulos</div>
-                        </td>
-                        <td data-label="Engajamento">
-                            <span class="badge <?= $score_class ?>">
-                                <?php if($score >= 7): ?><i data-lucide="trending-up" width="14"></i><?php endif; ?>
-                                <?= $score >= 7 ? 'Alto' : ($score >= 4 ? 'Médio' : 'Baixo') ?>
+                            <span style="background: <?= $score_bg ?>; color: <?= $score_color ?>; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                Score: <?= $score ?>/10
                             </span>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px; margin-top: 8px;">
+                            <div style="background: var(--slate-50); padding: 6px 10px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid var(--slate-100);">
+                                <div style="font-size: 1.1rem; font-weight: 800; color: var(--slate-800);"><?= $member['scale_count'] ?></div>
+                                <div style="font-size: 0.7rem; color: var(--slate-500); text-transform: uppercase;">Escalas</div>
+                            </div>
+                            <div style="background: var(--slate-50); padding: 6px 10px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid var(--slate-100);">
+                                <div style="font-size: 1.1rem; font-weight: 800; color: var(--slate-800);"><?= $member['reading_activity'] ?></div>
+                                <div style="font-size: 0.7rem; color: var(--slate-500); text-transform: uppercase;">Aulas</div>
+                            </div>
+                            <div style="background: var(--slate-50); padding: 6px 10px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid var(--slate-100);">
+                                <div style="font-size: 1.1rem; font-weight: 800; color: var(--slate-800);"><?= $member['login_count'] ?></div>
+                                <div style="font-size: 0.7rem; color: var(--slate-500); text-transform: uppercase;">Acessos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
     </div>
 
 </div>

@@ -172,21 +172,21 @@ renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
                             </div>
 
                             <!-- Reason & Sub -->
-                            <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 600; color: var(--slate-600);">
+                            <h4 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: var(--text-primary);">
                                 <?= htmlspecialchars($item['reason']) ?>
                             </h4>
 
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-                                <span style="font-size: 0.8rem; background: var(--slate-100); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--slate-200);">
-                                    <?= $periodo ?>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; background: var(--slate-100); color: var(--slate-600); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--slate-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 4px;">
+                                    <i data-lucide="calendar" width="12"></i> <?= $periodo ?>
                                 </span>
                                 <?php if ($item['replacement_name']): ?>
-                                    <span style="font-size: 0.8rem; color: var(--primary); background: var(--primary-50); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--primary-100); display: flex; align-items: center; gap: 4px; font-weight: 600;">
-                                        <i data-lucide="user-check" width="12"></i> <?= htmlspecialchars($item['replacement_name']) ?>
+                                    <span style="font-size: 0.75rem; color: var(--blue-700); background: var(--blue-50); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--blue-200); box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15); display: flex; align-items: center; gap: 4px; font-weight: 700;">
+                                        <i data-lucide="user-check" width="12"></i> Subs: <?= htmlspecialchars($item['replacement_name']) ?>
                                     </span>
                                 <?php else: ?>
-                                    <span style="font-size: 0.8rem; color: var(--rose-600); background: var(--rose-50); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--rose-100);">
-                                        Sem substituto
+                                    <span style="font-size: 0.75rem; color: var(--rose-700); background: var(--rose-50); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--rose-200); box-shadow: 0 2px 6px rgba(225, 29, 72, 0.15); display: flex; align-items: center; gap: 4px; font-weight: 700;">
+                                        <i data-lucide="alert-circle" width="12"></i> Sem substituto
                                     </span>
                                 <?php endif; ?>
                             </div>
