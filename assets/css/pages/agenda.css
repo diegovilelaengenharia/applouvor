@@ -142,7 +142,7 @@
     min-height: 140px;
     padding: 12px;
     position: relative;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     border-right: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
 }
@@ -152,25 +152,22 @@
 }
 
 .calendar-day:hover {
-    background-color: #fafafa;
-    transform: scale(1.002);
+    background-color: var(--bg-body);
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border-radius: var(--radius-md);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    /* Luminous shadow */
+    border-radius: var(--radius-lg);
+    transform: translateY(-2px);
+    /* Elastic lift */
 }
 
 .calendar-day.other-month {
-    background: #fcfcfc;
-    /* Diagonal stripe pattern for other month */
-    background-image: repeating-linear-gradient(45deg,
-            transparent,
-            transparent 10px,
-            #f8fafc 10px,
-            #f8fafc 20px);
+    background: var(--bg-body);
+    opacity: 0.6;
 }
 
 .calendar-day.today {
-    background: var(--blue-50);
+    background: color-mix(in srgb, var(--blue-50) 50%, transparent);
 }
 
 .day-header {
@@ -181,8 +178,9 @@
 }
 
 .day-num {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
     width: 28px;
     height: 28px;
     display: flex;
@@ -193,7 +191,7 @@
 }
 
 .today .day-num {
-    background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+    background: var(--primary-gradient);
     color: white;
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
     transform: scale(1.1);
@@ -204,61 +202,63 @@
     opacity: 0.5;
 }
 
-/* Event Chips */
+/* Event Chips - Premium Update */
 .event-chip {
+    font-family: var(--font-body);
     font-size: 0.75rem;
     padding: 6px 10px;
     border-radius: var(--radius-md);
     margin-bottom: 6px;
     cursor: pointer;
-    background: white;
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-left-width: 4px;
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     display: flex;
     align-items: center;
     gap: 6px;
-    /* Space for icon */
+    font-weight: 600;
 }
 
 .event-chip i {
     flex-shrink: 0;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 .event-chip:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    /* Stronger shadow on hover */
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-md);
     z-index: 10;
+}
+
+.event-chip:active {
+    transform: translateY(0) scale(0.98);
 }
 
 /* Variants - Adjusted via inline styles in PHP but defaults here */
 .event-chip.type-escala {
     border-left-color: var(--blue-500);
-    background: linear-gradient(to right, var(--blue-50), white);
-    /* Subtle gradient */
-    color: var(--blue-900);
-    border-color: var(--blue-100);
-    border-left-width: 4px;
+    background: linear-gradient(to right, color-mix(in srgb, var(--blue-50) 60%, transparent), transparent);
+    color: var(--blue-700);
+    border-color: color-mix(in srgb, var(--blue-200) 50%, transparent);
 }
 
 .event-chip.type-evento {
     border-left-color: var(--amber-500);
-    background: linear-gradient(to right, var(--amber-50), white);
-    color: var(--amber-900);
-    border-color: var(--amber-100);
-    border-left-width: 4px;
+    background: linear-gradient(to right, color-mix(in srgb, var(--amber-50) 60%, transparent), transparent);
+    color: var(--amber-800);
+    border-color: color-mix(in srgb, var(--amber-200) 50%, transparent);
 }
 
 .event-time {
+    font-family: var(--font-mono);
     font-size: 0.7rem;
-    opacity: 0.8;
+    opacity: 0.7;
     margin-right: 4px;
     font-weight: 600;
     color: var(--text-secondary);
@@ -274,23 +274,28 @@
 .list-item {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
+    /* Mais arredondado */
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 24px;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
     color: inherit;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .list-item:hover {
-    transform: translateX(4px);
+    transform: translateY(-2px);
     border-color: var(--blue-300);
-    background: var(--slate-50);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-lg);
+}
+
+.list-item:active {
+    transform: translateY(0);
 }
 
 .list-item::before {
@@ -299,20 +304,20 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 4px;
+    width: 6px;
     background: var(--slate-300);
     /* Default */
     transition: background 0.2s;
 }
 
 .list-item:hover::before {
-    background: var(--blue-500);
+    background: var(--primary-gradient);
 }
 
 .date-badge {
-    background: var(--slate-50);
+    background: var(--bg-body);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     padding: 12px;
     text-align: center;
     min-width: 70px;

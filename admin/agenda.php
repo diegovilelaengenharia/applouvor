@@ -352,6 +352,7 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     // Mobile Swipe Gestures
     let touchStartX = 0;
     let touchEndX = 0;
+    let isNavigating = false; // Debounce flag
     
     const calendarWrapper = document.querySelector('.calendar-wrapper, .list-wrapper');
     if (calendarWrapper && window.innerWidth <= 768) {
@@ -365,10 +366,13 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
         }, { passive: true });
         
         function handleSwipe() {
+            if(isNavigating) return;
+            
             const swipeThreshold = 50;
             const diff = touchStartX - touchEndX;
             
             if (Math.abs(diff) > swipeThreshold) {
+                isNavigating = true; // Trava novos swipes até recarregar
                 if (diff > 0) {
                     // Swipe left - next
                     navigate(1);
