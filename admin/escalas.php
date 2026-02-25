@@ -144,11 +144,8 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
     </div>
 </div>
 
-<!-- Container Grid -->
-<div>
-
     <!-- Container Principal do Conteúdo -->
-    <div class="scales-wrapper" style="padding-top: 24px;"> <!-- Add top padding to separate from sticky header -->
+    <div class="scales-wrapper">
 
     <!-- TAB: FUTURAS -->
     <div id="tab-future">
@@ -293,7 +290,6 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             </div>
         <?php endif; ?>
     </div>
-</div>
 
 <!-- FILTER SHEET (Mantido igual) -->
 <div id="filterSheet" class="filter-sheet-container">

@@ -1,9 +1,109 @@
 /* assets/css/pages/escalas.css */
 /* ANTIGRAVITY PREMIUM SCALES V3.0 (HERO CARDS) */
 
+/* === CONTROLS & TABS === */
+.page-controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    position: sticky;
+    top: var(--header-height, 64px);
+    /* Pós-header */
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+body.dark-mode .page-controls-container {
+    background: rgba(15, 23, 42, 0.85);
+    /* slate-900 */
+}
+
+/* Base style for toggle container (Segmented Control) */
+.toggle-switch-container {
+    display: flex;
+    background: var(--bg-surface-alt);
+    padding: 4px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+}
+
+.btn-toggle {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-toggle.active {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.controls-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-control-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.btn-control-icon:hover,
+.btn-control-icon:active {
+    background: var(--bg-surface-alt);
+    color: var(--text-primary);
+    transform: scale(0.95);
+}
+
+.btn-add-new {
+    background: var(--primary-green);
+    color: white !important;
+    border: none;
+}
+
+.btn-add-new:hover,
+.btn-add-new:active {
+    background: var(--primary-green-dark, #047857);
+}
+
+.btn-filter-trigger .badge-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary-blue);
+    border: 2px solid var(--bg-surface);
+    border-radius: 50%;
+}
+
 /* Container */
 .scales-wrapper {
-    padding: 16px;
+    padding: 0 16px 80px 16px;
+    /* Padding extra embaixo pro mobile nav */
     max-width: 600px;
     margin: 0 auto;
     display: flex;
@@ -11,21 +111,38 @@
     gap: 20px;
 }
 
+
 /* Month Divider styling */
-.month-divider {
+.month-divider-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 12px 0;
+    position: sticky;
+    top: 130px;
+    /* Below header and tabs */
+    z-index: 5;
+    background: transparent;
+}
+
+.month-divider-label {
     font-family: var(--font-display);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 800;
-    color: var(--text-light);
-    /* Muted slate */
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin: 20px 0 8px 8px;
-    position: sticky;
-    top: 70px;
-    /* Below header */
-    z-index: 5;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.month-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border-subtle), transparent);
 }
 
 /* === THE HERO CARD === */
