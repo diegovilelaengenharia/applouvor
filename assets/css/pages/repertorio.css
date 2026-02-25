@@ -73,19 +73,30 @@
 
 /* Dropdown Menu */
 .options-dropdown {
-    display: none;
     position: absolute;
     top: 60px;
     right: 0;
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    box-shadow: var(--shadow-lg);
-    min-width: 200px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-xl);
+    min-width: 220px;
     z-index: 1000;
     overflow: hidden;
-    padding: 6px;
-    animation: fadeIn 0.1s ease-out;
+    padding: 8px;
+
+    /* Animation base */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transform-origin: top right;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.options-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
 }
 
 .dropdown-item {

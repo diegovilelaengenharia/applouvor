@@ -53,13 +53,8 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     function toggleOptionsMenu() {
         const menu = document.getElementById('options-menu');
         const btn = document.getElementById('options-menu-btn');
-        if (getComputedStyle(menu).display === 'none') {
-            menu.style.display = 'block';
-            btn.classList.add('active');
-        } else {
-            menu.style.display = 'none';
-            btn.classList.remove('active');
-        }
+        menu.classList.toggle('active');
+        btn.classList.toggle('active');
     }
     
     // Fechar menu ao clicar fora
@@ -67,7 +62,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         const menu = document.getElementById('options-menu');
         const btn = document.getElementById('options-menu-btn');
         if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
-            menu.style.display = 'none';
+            menu.classList.remove('active');
             btn.classList.remove('active');
         }
     });
