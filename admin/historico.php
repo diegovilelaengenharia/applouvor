@@ -257,70 +257,61 @@ try {
             
             <div class="results-count" id="resultsCount"></div>
             
-            <div class="table-container">
-                <table id="raioXTable" class="data-table">
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable(0)" style="cursor: pointer; width: 40%;">Música</th>
-                            <th onclick="sortTable(1)" style="cursor: pointer; width: 20%;" class="hide-mobile">Última Vez</th>
-                            <th onclick="sortTable(2)" style="cursor: pointer; width: 20%;">Status</th>
-                            <th onclick="sortTable(3)" style="cursor: pointer; text-align: center; width: 10%;">Freq (90d)</th>
-                            <th style="text-align: center; width: 10%;">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($musicasXRay as $m): 
-                            $days = $m['days_since_last'];
-                            $badgeClass = 'badge-slate';
-                            $badgeText = 'Normal';
-                            
-                            if ($m['freq_total'] == 0) {
-                                $badgeClass = 'badge-yellow'; $badgeText = 'Nunca Tocada';
-                            } elseif ($m['freq_period'] >= 3) {
-                                $badgeClass = 'badge-rose'; $badgeText = 'Alta Rotatividade';
-                            } elseif ($days > 180) {
-                                $badgeClass = 'badge-slate'; $badgeText = 'Esquecida';
-                            } elseif ($days > 90) {
-                                $badgeClass = 'badge-blue'; $badgeText = 'Geladeira';
-                            } else {
-                                $badgeClass = 'badge-green'; $badgeText = 'Saudável';
-                            }
-                        ?>
-                        <tr>
-                            <td>
-                                <div class="font-bold text-primary"><?= htmlspecialchars($m['title']) ?></div>
-                                <div class="text-xs text-secondary mt-1 flex items-center gap-2">
-                                    <?= htmlspecialchars($m['artist']) ?> 
-                                    <?php if($m['tone']): ?>
-                                        <span class="badge-slate" style="font-size: 0.65rem; padding: 2px 6px;"><?= $m['tone'] ?></span>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                            <td class="hide-mobile">
-                                <?php if ($m['last_played']): ?>
-                                    <div class="text-primary font-medium"><?= date('d/m/Y', strtotime($m['last_played'])) ?></div>
-                                    <div class="text-xs text-tertiary"><?= $days ?> dias atrás</div>
-                                <?php else: ?>
-                                    <span class="text-tertiary">--</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <span class="<?= $badgeClass ?> badge-status">
-                                    <?= $badgeText ?>
+            <div id="raioXList" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Cabeçalho de Ordenação Simplificado para Mobile -->
+                <div class="flex-between mb-2 text-tertiary" style="padding: 0 8px; font-size: 0.8rem;">
+                    <span>Música e Status</span>
+                    <span>Freq. / Ações</span>
+                </div>
+
+                <?php foreach ($musicasXRay as $m): 
+                    $days = $m['days_since_last'];
+                    $badgeClass = 'badge-slate';
+                    $badgeText = 'Normal';
+                    
+                    if ($m['freq_total'] == 0) {
+                        $badgeClass = 'badge-yellow'; $badgeText = 'Nunca Tocada';
+                    } elseif ($m['freq_period'] >= 3) {
+                        $badgeClass = 'badge-rose'; $badgeText = 'Alta Rotatividade';
+                    } elseif ($days > 180) {
+                        $badgeClass = 'badge-slate'; $badgeText = 'Esquecida';
+                    } elseif ($days > 90) {
+                        $badgeClass = 'badge-blue'; $badgeText = 'Geladeira';
+                    } else {
+                        $badgeClass = 'badge-green'; $badgeText = 'Saudável';
+                    }
+                ?>
+                <a href="musica_detalhe.php?id=<?= $m['id'] ?>" class="compact-card" data-title="<?= strtolower(htmlspecialchars($m['title'])) ?>" data-artist="<?= strtolower(htmlspecialchars($m['artist'])) ?>" data-status-class="<?= $badgeClass ?>">
+                    <div class="compact-card-icon" style="background: var(--bg-surface-alt);">
+                        <?php if($m['tone']): ?>
+                            <span style="font-weight: 800; font-size: 0.9rem; color: var(--text-primary);"><?= $m['tone'] ?></span>
+                        <?php else: ?>
+                            <i data-lucide="music" width="18" style="opacity: 0.3; color: var(--text-primary);"></i>
+                        <?php endif; ?>
+                    </div>
+                    <div class="compact-card-content">
+                        <div class="compact-card-title"><?= htmlspecialchars($m['title']) ?></div>
+                        <div class="compact-card-subtitle">
+                            <?= htmlspecialchars($m['artist']) ?>
+                        </div>
+                        <div style="margin-top: 4px;">
+                            <span class="<?= $badgeClass ?>" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; display: inline-block;">
+                                <?= $badgeText ?>
+                            </span>
+                            <?php if ($m['last_played']): ?>
+                                <span class="text-tertiary" style="font-size: 0.7rem; margin-left: 6px;">
+                                    Há <?= $days ?> dias
                                 </span>
-                            </td>
-                            <td class="center">
-                                <div class="font-bold text-primary text-lg"><?= $m['freq_period'] ?></div>
-                            </td>
-                            <td class="center">
-                                <a href="musica_detalhe.php?id=<?= $m['id'] ?>" class="btn-ghost-slate btn-sm" title="Ver Detalhes">
-                                    <i data-lucide="eye" width="18"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    
+                    <!-- Lado Direito do Card (Métricas) -->
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center; min-width: 50px;">
+                        <span style="font-size: 1.1rem; font-weight: 800; color: var(--primary);"><?= $m['freq_period'] ?>x</span>
+                    </div>
+                </a>
+                <?php endforeach; ?>
                 
                 <?php if (empty($musicasXRay)): ?>
                     <div style="padding: 40px; text-align: center; color: var(--text-tertiary);">
@@ -331,79 +322,50 @@ try {
         </div>
 
         <script>
-            // Filter Logic
+            // Filter Logic (Adaptado para class compact-card)
             let currentStatusFilter = 'all';
+            
             function filterByStatus(status) {
                 currentStatusFilter = status;
                 document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
                 document.querySelector(`[data-status="${status}"]`).classList.add('active');
-                filterTable();
+                filterCards();
             }
             
-            function filterTable() {
+            function filterCards() {
                 const input = document.getElementById('tableSearch');
                 const filter = input.value.toLowerCase();
-                const table = document.getElementById('raioXTable');
-                const rows = table.getElementsByTagName('tr');
+                const cards = document.querySelectorAll('#raioXList .compact-card');
                 let visibleCount = 0;
                 
-                for (let i = 1; i < rows.length; i++) {
-                    const cells = rows[i].getElementsByTagName('td');
-                    if (cells.length > 0) {
-                        const text = cells[0].textContent.toLowerCase();
-                        const statusCell = cells[2];
-                        const statusClass = statusCell.querySelector('span').className;
-                        
-                        let statusMatch = true;
-                        if (currentStatusFilter !== 'all') {
-                            if (currentStatusFilter === 'em_alta') statusMatch = statusClass.includes('badge-rose');
-                            else if (currentStatusFilter === 'ok') statusMatch = statusClass.includes('badge-green');
-                            else if (currentStatusFilter === 'geladeira') statusMatch = statusClass.includes('badge-blue');
-                            else if (currentStatusFilter === 'esquecida') statusMatch = statusClass.includes('badge-slate');
-                            else if (currentStatusFilter === 'virgem') statusMatch = statusClass.includes('badge-yellow');
-                        }
-                        
-                        if (text.includes(filter) && statusMatch) {
-                            rows[i].style.display = '';
-                            visibleCount++;
-                        } else {
-                            rows[i].style.display = 'none';
-                        }
+                cards.forEach(card => {
+                    const title = card.getAttribute('data-title') || '';
+                    const artist = card.getAttribute('data-artist') || '';
+                    const statusClass = card.getAttribute('data-status-class') || '';
+                    
+                    let statusMatch = true;
+                    if (currentStatusFilter !== 'all') {
+                        if (currentStatusFilter === 'em_alta') statusMatch = statusClass.includes('badge-rose');
+                        else if (currentStatusFilter === 'ok') statusMatch = statusClass.includes('badge-green');
+                        else if (currentStatusFilter === 'geladeira') statusMatch = statusClass.includes('badge-blue');
+                        else if (currentStatusFilter === 'esquecida') statusMatch = statusClass.includes('badge-slate');
+                        else if (currentStatusFilter === 'virgem') statusMatch = statusClass.includes('badge-yellow');
                     }
-                }
+                    
+                    if ((title.includes(filter) || artist.includes(filter)) && statusMatch) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
                 document.getElementById('resultsCount').textContent = `Exibindo ${visibleCount} música${visibleCount !== 1 ? 's' : ''}`;
             }
-            
-            // Sort Logic
-            function sortTable(n) {
-                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-                table = document.getElementById("raioXTable");
-                switching = true;
-                dir = "asc";
-                while (switching) {
-                    switching = false;
-                    rows = table.rows;
-                    for (i = 1; i < (rows.length - 1); i++) {
-                        shouldSwitch = false;
-                        x = rows[i].getElementsByTagName("TD")[n];
-                        y = rows[i + 1].getElementsByTagName("TD")[n];
-                        var xContent = x.innerText.toLowerCase();
-                        var yContent = y.innerText.toLowerCase();
-                        var isNumber = n === 3;
-                        if (isNumber) { xContent = parseInt(xContent)||0; yContent = parseInt(yContent)||0; }
-                        if (dir == "asc") { if (xContent > yContent) { shouldSwitch = true; break; } } 
-                        else if (dir == "desc") { if (xContent < yContent) { shouldSwitch = true; break; } }
-                    }
-                    if (shouldSwitch) {
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                        switchcount ++;
-                    } else {
-                        if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
-                    }
-                }
-            }
-            window.addEventListener('DOMContentLoaded', filterTable);
+
+            // Atrelar o keyup do input de busca ao filterCards()
+            document.getElementById('tableSearch').addEventListener('keyup', filterCards);
+            window.addEventListener('DOMContentLoaded', filterCards);
         </script>
 
     <!-- TAB: TAGS & TONS -->
@@ -416,50 +378,50 @@ try {
                 </h3>
                 
                 <?php if (!empty($topTags)): ?>
-                <div class="table-container" style="margin-bottom: 0;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 5%; text-align: center;">#</th>
-                                <th style="width: 40%;">Tag / Estilo</th>
-                                <th style="width: 25%; text-align: center;">Execuções</th>
-                                <th style="width: 15%; text-align: center;">% Total</th>
-                                <th style="width: 15%; text-align: center;">Tendência</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $maxUses = !empty($topTags) ? $topTags[0]['uses_period'] : 1;
-                            $totalExec = array_sum(array_column($topTags, 'uses_period'));
-                            $rank = 1;
-                            foreach ($topTags as $tag): 
-                                $percentTotal = $totalExec > 0 ? round(($tag['uses_period'] / $totalExec) * 100, 1) : 0;
-                            ?>
-                            <tr>
-                                <td class="center" style="color: var(--text-tertiary); font-weight: 600;"><?= $rank++ ?></td>
-                                <td>
-                                    <div style="display: flex; align-items: center;">
-                                        <span class="tag-indicator" style="background: <?= $tag['color'] ?>; margin-right: 8px;"></span>
-                                        <div>
-                                            <div class="font-bold text-primary"><?= htmlspecialchars($tag['name']) ?></div>
-                                            <div class="text-xs text-secondary mt-0.5"><?= $tag['uses_total'] ?? 0 ?> no histórico</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="center font-bold text-primary"><?= $tag['uses_period'] ?></td>
-                                <td class="center text-sm text-secondary"><?= $percentTotal ?>%</td>
-                                <td class="center">
-                                    <?php 
-                                    $trend = $tag['uses_period'] >= 3 ? 'up' : ($tag['uses_period'] == 1 ? 'down' : 'stable');
-                                    $trendColor = $trend == 'up' ? 'var(--green-500)' : ($trend == 'down' ? 'var(--red-500)' : 'var(--slate-400)');
-                                    $trendIcon = $trend == 'up' ? 'trending-up' : ($trend == 'down' ? 'trending-down' : 'minus');
-                                    ?>
-                                    <i data-lucide="<?= $trendIcon ?>" width="18" style="color: <?= $trendColor ?>; opacity: 0.8;"></i>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Cabeçalho simplificado para Mobile -->
+                    <div class="flex-between mb-2 text-tertiary" style="padding: 0 8px; font-size: 0.8rem;">
+                        <span>Tag e Frequência</span>
+                        <span>% e Tend.</span>
+                    </div>
+
+                    <?php 
+                    $maxUses = !empty($topTags) ? $topTags[0]['uses_period'] : 1;
+                    $totalExec = array_sum(array_column($topTags, 'uses_period'));
+                    $rank = 1;
+                    foreach ($topTags as $tag): 
+                        $percentTotal = $totalExec > 0 ? round(($tag['uses_period'] / $totalExec) * 100, 1) : 0;
+                        
+                        $trend = $tag['uses_period'] >= 3 ? 'up' : ($tag['uses_period'] == 1 ? 'down' : 'stable');
+                        $trendColor = $trend == 'up' ? 'var(--green-500)' : ($trend == 'down' ? 'var(--red-500)' : 'var(--slate-400)');
+                        $trendIcon = $trend == 'up' ? 'trending-up' : ($trend == 'down' ? 'trending-down' : 'minus');
+                    ?>
+                    <div class="compact-card" style="padding-left: 12px; cursor: default;">
+                        <div style="min-width: 20px; font-weight: 700; color: var(--text-tertiary); font-size: 0.9rem;">
+                            <?= $rank++ ?>º
+                        </div>
+                        <div class="compact-card-icon" style="background: <?= $tag['color'] ?>; opacity: 0.8; width: 32px; height: 32px; border-radius: 8px; margin-left: 8px;">
+                            <i data-lucide="tag" width="16" style="color: #fff;"></i>
+                        </div>
+                        <div class="compact-card-content" style="margin-left: 12px;">
+                            <div class="compact-card-title"><?= htmlspecialchars($tag['name']) ?></div>
+                            <div class="compact-card-subtitle">
+                                <?= $tag['uses_total'] ?? 0 ?> execuções totais
+                            </div>
+                        </div>
+                        
+                        <!-- Lado Direito do Card -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; min-width: 70px;">
+                            <span style="font-size: 1.1rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 4px;">
+                                <?= $tag['uses_period'] ?>x
+                            </span>
+                            <span class="text-secondary" style="font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
+                                <?= $percentTotal ?>% 
+                                <i data-lucide="<?= $trendIcon ?>" width="14" style="color: <?= $trendColor ?>;"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
                 <?php else: ?>
                     <p class="text-center text-tertiary p-4">Nenhuma tag registrada neste período.</p>

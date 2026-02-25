@@ -21,19 +21,22 @@
 /* === CARD BASE === */
 .access-card {
     position: relative;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 20px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    /* Maior respiro */
     min-height: 130px;
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     overflow: hidden;
     animation: fadeInUp 0.35s ease-out backwards;
+    box-shadow: var(--shadow-sm);
+    /* Sombra inicial sutil */
 }
 
 @keyframes fadeInUp {
@@ -48,7 +51,7 @@
     }
 }
 
-/* Stagger */
+/* Stagger (Animação em cascata) */
 .access-card:nth-child(1) {
     animation-delay: 0.04s;
 }
@@ -81,7 +84,7 @@
     animation-delay: 0.32s;
 }
 
-/* Linha colorida no topo do card */
+/* Linha colorida luminosa no topo do card */
 .access-card::before {
     content: '';
     position: absolute;
@@ -89,17 +92,21 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: var(--category-color, #2563eb);
-    border-radius: 16px 16px 0 0;
+    background: var(--category-color, var(--primary));
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow: 0 1px 4px var(--category-color-light, transparent);
+    /* Micro-brilho */
 }
 
 .access-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    /* Luminous Shadow ampla */
+    border-color: var(--category-border, var(--border-medium));
 }
 
 .access-card:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
 /* Focus WCAG */
