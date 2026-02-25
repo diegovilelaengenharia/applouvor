@@ -108,18 +108,28 @@ if (isset($_SESSION['success'])) { $success = $_SESSION['success']; unset($_SESS
 if (isset($_SESSION['error'])) { $error = $_SESSION['error']; unset($_SESSION['error']); }
 
 // --- DADOS ---
-$stmt = $pdo->prepare("
-    SELECT u.*, r.name as replacement_name 
-    FROM user_unavailability u
-    LEFT JOIN users r ON u.replacement_id = r.id
-    WHERE u.user_id = ? AND u.end_date >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-    ORDER BY u.start_date ASC
-");
-$stmt->execute([$user_id]);
-$my_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$my_items = [];
+try {
+    $stmt = $pdo->prepare("
+        SELECT u.*, r.name as replacement_name 
+        FROM user_unavailability u
+        LEFT JOIN users r ON u.replacement_id = r.id
+        WHERE u.user_id = ? AND u.end_date >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+        ORDER BY u.start_date ASC
+    ");
+    $stmt->execute([$user_id]);
+    $my_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Graceful degradation: fail silently se a tabela não existir
+}
 
-$stmt = $pdo->query("SELECT id, name FROM users WHERE id != $user_id ORDER BY name ASC");
-$users_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$users_list = [];
+try {
+    $stmt = $pdo->query("SELECT id, name FROM users WHERE id != $user_id ORDER BY name ASC");
+    $users_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Graceful degradation
+}
 
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 

@@ -72,13 +72,23 @@ if ($userFilter) {
 
 $sql .= " ORDER BY u.start_date ASC";
 
-$stmt = $pdo->prepare($sql);
-$stmt->bindValue(':month', $monthFilter);
-if ($userFilter) $stmt->bindValue(':userId', $userFilter);
-$stmt->execute();
-$absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$absences = [];
+try {
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':month', $monthFilter);
+    if ($userFilter) $stmt->bindValue(':userId', $userFilter);
+    $stmt->execute();
+    $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Graceful degradation
+}
 
-$users = $pdo->query("SELECT id, name FROM users ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
+$users = [];
+try {
+    $users = $pdo->query("SELECT id, name FROM users ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Graceful degradation
+}
 
 renderAppHeader('Gerenciar Ausências');
 renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
