@@ -50,31 +50,39 @@ if ($viewMode === 'week') {
 }
 
 // Buscar eventos no intervalo calculado
-$stmtEvents = $pdo->prepare("
-    SELECT e.*, 
-           u.name as creator_name,
-           COUNT(DISTINCT ep.id) as participant_count
-    FROM events e
-    LEFT JOIN users u ON e.created_by = u.id
-    LEFT JOIN event_participants ep ON e.id = ep.event_id
-    WHERE DATE(e.start_datetime) BETWEEN ? AND ?
-    GROUP BY e.id
-    ORDER BY e.start_datetime ASC
-");
-$stmtEvents->execute([$startDate, $endDate]);
-$events = $stmtEvents->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $stmtEvents = $pdo->prepare("
+        SELECT e.*, 
+               u.name as creator_name,
+               COUNT(DISTINCT ep.id) as participant_count
+        FROM events e
+        LEFT JOIN users u ON e.created_by = u.id
+        LEFT JOIN event_participants ep ON e.id = ep.event_id
+        WHERE DATE(e.start_datetime) BETWEEN ? AND ?
+        GROUP BY e.id
+        ORDER BY e.start_datetime ASC
+    ");
+    $stmtEvents->execute([$startDate, $endDate]);
+    $events = $stmtEvents->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $events = []; // Fallback em caso de banco incompleto
+}
 
 // Buscar escalas no intervalo
-$stmtSchedules = $pdo->prepare("
-    SELECT s.*, COUNT(DISTINCT su.id) as participant_count
-    FROM schedules s
-    LEFT JOIN schedule_users su ON s.id = su.schedule_id
-    WHERE s.event_date BETWEEN ? AND ?
-    GROUP BY s.id
-    ORDER BY s.event_date ASC
-");
-$stmtSchedules->execute([$startDate, $endDate]);
-$schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $stmtSchedules = $pdo->prepare("
+        SELECT s.*, COUNT(DISTINCT su.id) as participant_count
+        FROM schedules s
+        LEFT JOIN schedule_users su ON s.id = su.schedule_id
+        WHERE s.event_date BETWEEN ? AND ?
+        GROUP BY s.id
+        ORDER BY s.event_date ASC
+    ");
+    $stmtSchedules->execute([$startDate, $endDate]);
+    $schedules = $stmtSchedules->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $schedules = [];
+}
 
 // Organizar eventos por dia
 $eventsByDay = [];
