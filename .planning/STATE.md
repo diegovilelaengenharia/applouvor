@@ -9,7 +9,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 1: Git Cleanup** — Status: NOT STARTED
+**Phase 1: Git Cleanup** — Status: CONTEXT GATHERED (ready for planning)
 
 ## Phase Progress
 
@@ -31,6 +31,8 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - `desktop.ini` rastreado incorretamente — remover com `git rm --cached`
 - App está rodando localmente e em produção (vilela.eng.br/applouvor)
 - Usuário prefere YOLO mode + fases finas + commits no git
+- Versão antiga (23.01.2026) está em `App louvor 23.01.2026/` — versão atual é mais completa, usar só como referência
+- Problemas da versão antiga JÁ RESOLVIDOS: schema fixes (avatar, notificações, estatísticas), features incompletas (orações, devocionais)
 
 ## Key Files
 
