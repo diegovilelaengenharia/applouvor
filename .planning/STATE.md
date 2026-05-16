@@ -9,13 +9,13 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 1: Git Cleanup** — Status: CONTEXT GATHERED (ready for planning)
+**Phase 1: Git Cleanup** — Status: READY TO EXECUTE (3 plans, 2 waves)
 
 ## Phase Progress
 
 | Phase | Name | Status | Started | Completed |
 |-------|------|--------|---------|-----------|
-| 1 | Git Cleanup | ⬜ Not Started | — | — |
+| 1 | Git Cleanup | 📋 Ready to Execute | 2026-05-16 | — |
 | 2 | Confirmar Escala | ⬜ Not Started | — | — |
 | 3 | Roteiro de Culto | ⬜ Not Started | — | — |
 | 4 | Registrar Faltas | ⬜ Not Started | — | — |
