@@ -36,10 +36,12 @@
 2. `desktop.ini` não aparece mais no `git status` (está em `.gitignore`)
 3. Todos os scripts de manutenção organizados em `maintenance/` e commitados
 
-**Plans:**
-- Plan 1A: Analisar mudanças do Gemini, separar em commits semânticos, commitar
-- Plan 1B: Adicionar `desktop.ini` ao `.gitignore`, remover do tracking com `git rm --cached`
-- Plan 1C: Commitar scripts de manutenção organizados em `maintenance/`
+**Plans:** 3 planos
+
+Plans:
+- [ ] 01A-PLAN.md — Commits semanticos por area (admin/, includes/, api/, assets/css/, utilitarios)
+- [ ] 01B-PLAN.md — Remover desktop.ini do tracking + .gitignore atualizado com pasta backup
+- [ ] 01C-PLAN.md — Versionar maintenance/ e scripts de setup na raiz
 
 ---
 
