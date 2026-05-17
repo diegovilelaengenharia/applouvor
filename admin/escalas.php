@@ -301,6 +301,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                         }
                     }
                 ?>
+                    <div class="scale-card-wrapper">
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-theme-color: <?= $themeColor ?>; opacity: 0.75;">
                         <div class="scale-card-main" style="padding: 16px;">
                             <div class="date-box-premium" style="min-width: 50px; height: 50px;">
@@ -320,6 +321,21 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             </div>
                         </div>
                     </a>
+                    <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                    <a href="registrar_faltas.php?id=<?= $schedule['id'] ?>"
+                       class="btn-registrar-faltas"
+                       style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:600;
+                              color:var(--orange-500,#f97316);text-decoration:none;padding:6px 10px;
+                              border:1px solid var(--orange-500,#f97316);border-radius:8px;margin-top:6px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                           stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="23" y2="8"/>
+                        <line x1="20" y1="5" x2="20" y2="11"/></svg>
+                      Registrar Faltas
+                    </a>
+                    <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>

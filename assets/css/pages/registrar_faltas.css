@@ -1,0 +1,228 @@
+/* registrar_faltas.css — Tela de registro de presenças/faltas */
+
+.page-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 100px; /* espaço para o save-footer */
+}
+
+.schedule-info-card {
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.schedule-info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.event-type-badge {
+  background: var(--blue-500, #3b82f6);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.event-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700, #374151);
+}
+
+.schedule-info-hint {
+  font-size: 0.8rem;
+  color: var(--gray-500, #6b7280);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Feedback */
+.feedback-msg {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.feedback-msg.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+.feedback-msg.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Participant Cards */
+.participants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.participant-card {
+  padding: 14px;
+}
+
+.participant-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.participant-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.participant-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.participant-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+}
+
+.participant-instrument {
+  font-size: 0.75rem;
+  color: var(--gray-500, #6b7280);
+}
+
+/* Status Toggle */
+.status-toggle {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.toggle-btn {
+  flex: 1;
+  min-width: 90px;
+  padding: 8px 6px;
+  border: 1.5px solid var(--gray-300, #d1d5db);
+  background: var(--gray-50, #f9fafb);
+  color: var(--gray-600, #4b5563);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 44px;
+  text-align: center;
+}
+
+.toggle-btn.active {
+  background: var(--green-100, #d1fae5);
+  border-color: var(--green-500, #10b981);
+  color: var(--green-700, #065f46);
+}
+
+.toggle-btn.active.absent {
+  background: var(--red-100, #fee2e2);
+  border-color: var(--red-500, #ef4444);
+  color: var(--red-700, #b91c1c);
+}
+
+.toggle-btn.active.justified {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+/* Absence Note */
+.absence-note-field {
+  margin-top: 10px;
+}
+
+.absence-note-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-300, #d1d5db);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--gray-800, #1f2937);
+  background: var(--gray-50, #f9fafb);
+  box-sizing: border-box;
+  min-height: 44px;
+}
+
+.absence-note-input:focus {
+  outline: none;
+  border-color: var(--blue-500, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Save Footer */
+.save-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid var(--gray-200, #e5e7eb);
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 100;
+}
+
+.btn-save-primary {
+  flex: 1;
+  padding: 14px;
+  background: var(--blue-500, #3b82f6);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 0.15s;
+}
+
+.btn-save-primary:hover:not(:disabled) {
+  background: var(--blue-600, #2563eb);
+}
+
+.btn-save-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  padding: 14px 20px;
+  border: 1.5px solid var(--gray-300, #d1d5db);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gray-600, #4b5563);
+  text-decoration: none;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
