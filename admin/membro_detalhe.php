@@ -36,8 +36,10 @@ if (!$member) {
 
 // Buscar histórico de escalas
 $stmtHistory = $pdo->prepare("
-    SELECT s.*, 
-           (SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = s.id) as total_songs
+    SELECT s.*,
+           (SELECT COUNT(*) FROM schedule_songs WHERE schedule_id = s.id) as total_songs,
+           su.status as presence_status,
+           su.absence_note
     FROM schedules s
     JOIN schedule_users su ON s.id = su.schedule_id
     WHERE su.user_id = ?
@@ -67,6 +69,23 @@ if ($stats['total_escalas'] > 1 && $stats['primeira_escala'] && $stats['ultima_e
     $dias_total = $primeira->diff($ultima)->days;
     $frequencia_media = $dias_total > 0 ? round($dias_total / ($stats['total_escalas'] - 1), 1) : 0;
 }
+
+// Calcular breakdown de presença
+$totalEscalas = count($schedules);
+$totalPresente = 0;
+$totalFaltou = 0;
+$totalJustificou = 0;
+
+foreach ($schedules as $sc) {
+    $st = $sc['presence_status'] ?? 'pending';
+    if (in_array($st, ['confirmed', 'pending'])) $totalPresente++;
+    elseif ($st === 'absent') $totalFaltou++;
+    elseif ($st === 'absent_justified') $totalJustificou++;
+}
+
+$taxaPresenca = $totalEscalas > 0
+    ? round(($totalPresente / $totalEscalas) * 100)
+    : 0;
 
 // Buscar próxima escala
 $stmtNext = $pdo->prepare("
@@ -205,6 +224,33 @@ renderAppHeader('Detalhes do Membro');
     </div>
 </div>
 
+<!-- Stats de Presença -->
+<div style="padding: 0 16px; margin-bottom: 20px;">
+  <div class="presence-stats-card pib-card" style="padding:16px;">
+    <h4 style="margin:0 0 12px;font-size:0.9rem;font-weight:700;color:var(--gray-700,#374151);">
+      Histórico de Presença
+    </h4>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:80px;text-align:center;padding:10px;background:#d1fae5;border-radius:8px;">
+        <div style="font-size:1.4rem;font-weight:800;color:#065f46;"><?= $totalPresente ?></div>
+        <div style="font-size:0.7rem;font-weight:600;color:#047857;">Presente</div>
+      </div>
+      <div style="flex:1;min-width:80px;text-align:center;padding:10px;background:#fee2e2;border-radius:8px;">
+        <div style="font-size:1.4rem;font-weight:800;color:#991b1b;"><?= $totalFaltou ?></div>
+        <div style="font-size:0.7rem;font-weight:600;color:#b91c1c;">Faltou</div>
+      </div>
+      <div style="flex:1;min-width:80px;text-align:center;padding:10px;background:#fef3c7;border-radius:8px;">
+        <div style="font-size:1.4rem;font-weight:800;color:#92400e;"><?= $totalJustificou ?></div>
+        <div style="font-size:0.7rem;font-weight:600;color:#b45309;">Justificou</div>
+      </div>
+      <div style="flex:1;min-width:80px;text-align:center;padding:10px;background:var(--blue-50,#eff6ff);border-radius:8px;border:2px solid var(--blue-500,#3b82f6);">
+        <div style="font-size:1.4rem;font-weight:800;color:var(--blue-700,#1d4ed8);"><?= $taxaPresenca ?>%</div>
+        <div style="font-size:0.7rem;font-weight:600;color:var(--blue-600,#2563eb);">Taxa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div style="padding: 0 16px;">
     <!-- Tabs -->
     <div class="tabs-nav">
@@ -223,17 +269,36 @@ renderAppHeader('Detalhes do Membro');
             <?php foreach ($schedules as $schedule):
                 $date = new DateTime($schedule['event_date']);
             ?>
+                <?php
+                $pStatus = $schedule['presence_status'] ?? 'pending';
+                $statusLabel = match($pStatus) {
+                    'confirmed'        => ['✅', 'Presente',  '#d1fae5', '#065f46'],
+                    'absent'           => ['❌', 'Faltou',    '#fee2e2', '#991b1b'],
+                    'absent_justified' => ['⚠️', 'Justificou','#fef3c7', '#92400e'],
+                    'declined'         => ['🚫', 'Recusou',   '#f3f4f6', '#6b7280'],
+                    default            => ['🕐', 'Pendente',  '#f3f4f6', '#6b7280'],
+                };
+                [$icon, $label, $bg, $color] = $statusLabel;
+                ?>
                 <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="history-item">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex:1;">
                             <div style="font-weight: 600; color: var(--text-primary); font-size: var(--font-body); margin-bottom: 2px;">
                                 <?= htmlspecialchars($schedule['event_type']) ?>
                             </div>
-                            <div style="font-size: var(--font-caption); color: var(--text-secondary);">
+                            <div style="font-size: var(--font-caption); color: var(--text-secondary); margin-bottom: 4px;">
                                 <?= $date->format('d/m/Y') ?> • <?= $schedule['total_songs'] ?> música<?= $schedule['total_songs'] != 1 ? 's' : '' ?>
                             </div>
+                            <span style="display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:12px;background:<?= $bg ?>;color:<?= $color ?>;">
+                              <?= $icon ?> <?= $label ?>
+                            </span>
+                            <?php if (in_array($pStatus, ['absent','absent_justified']) && !empty($schedule['absence_note'])): ?>
+                            <p style="font-size:0.72rem;color:var(--gray-500,#6b7280);margin:4px 0 0;font-style:italic;">
+                              <?= htmlspecialchars($schedule['absence_note']) ?>
+                            </p>
+                            <?php endif; ?>
                         </div>
-                        <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted);"></i>
+                        <i data-lucide="chevron-right" style="width: 16px; color: var(--text-muted); flex-shrink:0; margin-top:2px;"></i>
                     </div>
                 </a>
             <?php endforeach; ?>
