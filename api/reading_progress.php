@@ -15,7 +15,8 @@ $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
 try {
     switch ($action) {
-        case 'get_user_settings':
+        case 'get_settings':
+            // Get user's reading plan settings
             $stmt = $pdo->prepare("
                 SELECT plan_id, start_date, created_at 
                 FROM user_reading_settings 
@@ -28,11 +29,11 @@ try {
             
             echo json_encode([
                 'success' => true,
-                'settings' => $settings
+                'settings' => $settings ?: null
             ]);
             break;
 
-        case 'save_user_settings':
+        case 'save_settings':
             $planId = $_POST['plan_id'] ?? '';
             $startDate = $_POST['start_date'] ?? date('Y-m-d');
             
@@ -63,7 +64,7 @@ try {
             }
             
             $stmt = $pdo->prepare("
-                SELECT day_number, passage_index, is_completed, completed_at
+                SELECT day_number, passage_index, completed_at
                 FROM reading_progress
                 WHERE user_id = ? AND plan_id = ?
                 ORDER BY day_number, passage_index
@@ -77,32 +78,42 @@ try {
             ]);
             break;
 
-        case 'mark_passage':
+        case 'mark_complete':
             $planId = $_POST['plan_id'] ?? '';
             $dayNumber = $_POST['day_number'] ?? 0;
             $passageIndex = $_POST['passage_index'] ?? 0;
-            $isCompleted = $_POST['is_completed'] ?? false;
             
             if (empty($planId) || !$dayNumber) {
                 throw new Exception('Dados incompletos');
             }
             
             $stmt = $pdo->prepare("
-                INSERT INTO reading_progress 
-                    (user_id, plan_id, day_number, passage_index, is_completed, completed_at)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE 
-                    is_completed = VALUES(is_completed),
-                    completed_at = VALUES(completed_at),
-                    updated_at = CURRENT_TIMESTAMP
+                INSERT INTO reading_progress (user_id, plan_id, day_number, passage_index)
+                VALUES (?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE completed_at = CURRENT_TIMESTAMP
             ");
-            
-            $completedAt = $isCompleted ? date('Y-m-d H:i:s') : null;
-            $stmt->execute([$userId, $planId, $dayNumber, $passageIndex, $isCompleted, $completedAt]);
+            $stmt->execute([$userId, $planId, $dayNumber, $passageIndex]);
             
             echo json_encode([
                 'success' => true,
-                'message' => $isCompleted ? 'Passagem marcada como lida' : 'Marcação removida'
+                'message' => 'Passagem marcada como lida'
+            ]);
+            break;
+
+        case 'mark_incomplete':
+            $planId = $_POST['plan_id'] ?? '';
+            $dayNumber = $_POST['day_number'] ?? 0;
+            $passageIndex = $_POST['passage_index'] ?? 0;
+            
+            $stmt = $pdo->prepare("
+                DELETE FROM reading_progress 
+                WHERE user_id = ? AND plan_id = ? AND day_number = ? AND passage_index = ?
+            ");
+            $stmt->execute([$userId, $planId, $dayNumber, $passageIndex]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Marcação removida'
             ]);
             break;
 
@@ -110,18 +121,17 @@ try {
             $planId = $_POST['plan_id'] ?? '';
             $dayNumber = $_POST['day_number'] ?? 0;
             $passageRef = $_POST['passage_reference'] ?? '';
-            $noteText = $_POST['note_text'] ?? '';
+            $noteContent = $_POST['note_content'] ?? '';
             
-            if (empty($planId) || !$dayNumber || empty($noteText)) {
+            if (empty($planId) || !$dayNumber || empty($noteContent)) {
                 throw new Exception('Dados incompletos');
             }
             
             $stmt = $pdo->prepare("
-                INSERT INTO reading_notes 
-                    (user_id, plan_id, day_number, passage_reference, note_text)
+                INSERT INTO reading_notes (user_id, plan_id, day_number, passage_reference, note_content)
                 VALUES (?, ?, ?, ?, ?)
             ");
-            $stmt->execute([$userId, $planId, $dayNumber, $passageRef, $noteText]);
+            $stmt->execute([$userId, $planId, $dayNumber, $passageRef, $noteContent]);
             
             echo json_encode([
                 'success' => true,
@@ -134,16 +144,7 @@ try {
             $planId = $_GET['plan_id'] ?? '';
             $dayNumber = $_GET['day_number'] ?? null;
             
-            if (empty($planId)) {
-                throw new Exception('Plan ID é obrigatório');
-            }
-            
-            $sql = "
-                SELECT id, day_number, passage_reference, note_text, created_at
-                FROM reading_notes
-                WHERE user_id = ? AND plan_id = ?
-            ";
-            
+            $sql = "SELECT * FROM reading_notes WHERE user_id = ? AND plan_id = ?";
             $params = [$userId, $planId];
             
             if ($dayNumber !== null) {
@@ -170,35 +171,32 @@ try {
                 throw new Exception('Plan ID é obrigatório');
             }
             
-            // Total de passagens completadas
+            // Total de passagens lidas
             $stmt = $pdo->prepare("
-                SELECT COUNT(*) as completed_count
+                SELECT COUNT(*) as total_read
                 FROM reading_progress
-                WHERE user_id = ? AND plan_id = ? AND is_completed = 1
+                WHERE user_id = ? AND plan_id = ?
             ");
             $stmt->execute([$userId, $planId]);
             $stats = $stmt->fetch(PDO::FETCH_ASSOC);
             
             // Streak (dias consecutivos)
             $stmt = $pdo->prepare("
-                SELECT DISTINCT DATE(completed_at) as completion_date
+                SELECT DISTINCT DATE(completed_at) as read_date
                 FROM reading_progress
-                WHERE user_id = ? AND plan_id = ? AND is_completed = 1
-                ORDER BY completion_date DESC
+                WHERE user_id = ? AND plan_id = ?
+                ORDER BY read_date DESC
             ");
             $stmt->execute([$userId, $planId]);
             $dates = $stmt->fetchAll(PDO::FETCH_COLUMN);
             
-            $currentStreak = 0;
+            $streak = 0;
             $today = new DateTime();
-            
-            foreach ($dates as $index => $dateStr) {
+            foreach ($dates as $dateStr) {
                 $date = new DateTime($dateStr);
-                $expectedDate = clone $today;
-                $expectedDate->modify("-{$index} days");
-                
-                if ($date->format('Y-m-d') === $expectedDate->format('Y-m-d')) {
-                    $currentStreak++;
+                $diff = $today->diff($date)->days;
+                if ($diff === $streak) {
+                    $streak++;
                 } else {
                     break;
                 }
@@ -207,9 +205,8 @@ try {
             echo json_encode([
                 'success' => true,
                 'stats' => [
-                    'completed_count' => (int)$stats['completed_count'],
-                    'current_streak' => $currentStreak,
-                    'total_notes' => 0 // TODO: implement if needed
+                    'total_read' => (int)$stats['total_read'],
+                    'current_streak' => $streak
                 ]
             ]);
             break;
