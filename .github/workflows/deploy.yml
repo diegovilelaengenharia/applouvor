@@ -16,9 +16,9 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 147.93.64.217
-          username: u884436813.Diego
+          username: u884436813
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /applouvor/
+          server-dir: /public_html/applouvor/
           exclude: |
             **/.git*
             **/.git*/**
