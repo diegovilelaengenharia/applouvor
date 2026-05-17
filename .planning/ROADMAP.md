@@ -133,9 +133,9 @@ Plans:
 - Campo opcional de motivo (texto livre) para o líder anotar internamente
 
 **Plans:**
-- Plan 4A: Tela `admin/registrar_faltas.php` com lista + toggles (presente/faltou/justificado)
-- Plan 4B: API de salvamento de faltas (`api/save_absences.php`) + suporte a `absent_justified`
-- Plan 4C: Integração com perfil do membro (estatísticas de presença)
+- [x] Plan 4A (04-01): Migration 004 + botão em escalas.php + tela `admin/registrar_faltas.php` com toggles *(FAL-01, FAL-02 — 2026-05-17)*
+- [x] Plan 4B (04-02): API `api/save_absences.php` + suporte a `absent_justified` *(FAL-03 — 2026-05-17)*
+- [x] Plan 4C (04-03): Integração com `admin/membro_detalhe.php` — badges + stats de presença *(FAL-04 — 2026-05-17)*
 
 ---
 
@@ -278,7 +278,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 2 | Confirmar Escala | Músico confirma/recusa + push real | 4 | ✅ Concluída |
 | 3 | Roteiro de Culto | Líder monta fluxo do culto + nota interna | 4 | ✅ Concluída |
 | 3.5 | Limpeza & Organização | Deletar obsoletos, arquivar scripts, organizar tools/ | 3 | ⬜ |
-| 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ⬜ |
+| 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ✅ Concluída |
 | 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ⬜ |
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ⬜ |
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ⬜ |
