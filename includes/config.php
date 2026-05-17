@@ -47,7 +47,7 @@ if ($isProduction) {
 } else {
     // AMBIENTE LOCAL (Usa .env ou defaults)
     define('DB_HOST', App\DotEnv::get('DB_HOST', 'localhost'));
-    define('DB_NAME', App\DotEnv::get('DB_NAME', 'louvor_pib'));
+    define('DB_NAME', App\DotEnv::get('DB_NAME', 'pibo_louvor'));
     define('DB_USER', App\DotEnv::get('DB_USER', 'root'));
     define('DB_PASS', App\DotEnv::get('DB_PASS', ''));
 

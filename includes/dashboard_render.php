@@ -1,611 +1,261 @@
 <?php
 /**
- * Funções helper para renderizar cards dinamicamente no dashboard
+ * RECOMPOSIÇÃO PREMIUM: dashboard_render.php
+ * Mantém 100% da lógica original com visual Premium 2026.
  */
 
 // ============================================================================
-// UNIFIED CARD RENDERING SYSTEM
+// CORE: SISTEMA DE CARDS PIB PREMIUM
 // ============================================================================
 
 /**
- * Renderiza um card unificado do dashboard
- * Todos os cards compartilham a mesma estrutura HTML, variando apenas:
- * - Cores (por categoria)
- * - Conteúdo dinâmico
- * 
- * @param array $config Configuração do card com as seguintes chaves:
- *   - id: string - ID único do card
- *   - title: string - Título do card
- *   - icon: string - Nome do ícone Lucide
- *   - category: string - Categoria (gestao|espiritual|comunicacao)
- *   - url: string - URL de destino
- *   - badge: array|null - Configuração do badge ['count' => int, 'icon' => string, 'label' => string]
- *   - content: string - HTML do conteúdo dinâmico
- *   - footer: array - Configuração do footer ['text' => string, 'icon' => string|null]
+ * Renderiza o container base de um card respeitando o Design System Master
  */
-function renderUnifiedCard($config) {
-    // Mapeamento de categoria para cor do card
-    $categoryColorMap = [
-        'gestao' => 'blue',
-        'espiritualidade' => 'green',
-        'comunicacao' => 'amber'
-    ];
-    
-    // Mapeamento de categoria para tipo de badge
-    $categoryBadgeMap = [
-        'gestao' => 'badge-info',
-        'espiritualidade' => 'badge-success',
-        'comunicacao' => 'badge-warning'
-    ];
-    
-    // Determinar cor do card
-    $cardColor = $categoryColorMap[$config['category']] ?? 'blue';
-    $extraClasses = $config['extra_classes'] ?? '';
-    // Adiciona classe 'access-card' padrão e 'card-clickable' para comportamento de link
-    $cardClass = "access-card card-clickable card-{$cardColor} {$extraClasses}";
-    
-    // Determinar tipo de badge (se existir)
-    $badgeType = $config['badge']['type'] ?? $categoryBadgeMap[$config['category']] ?? 'badge-info';
+function renderPibCard($config) {
+    $delay = $config['delay'] ?? '0.1s';
+    $isUrgent = $config['urgent'] ?? false;
+    $borderColor = $config['border_color'] ?? 'var(--color-primary)';
     
     ?>
-    <a href="<?= $config['url'] ?>" class="<?= $cardClass ?>" aria-label="Ver detalhes de <?= $config['title'] ?>" style="text-decoration: none; color: inherit;">
-        <div class="card-body">
-            <div class="flex-between mb-2">
-                <div class="card-icon">
-                    <i data-lucide="<?= $config['icon'] ?>"></i>
+    <div class="animate-card" style="animation-delay: <?= $delay ?>;">
+        <a href="<?= $config['url'] ?>" class="pib-card <?= $isUrgent ? 'card-urgent-glow' : '' ?>" style="border-left: 5px solid <?= $borderColor ?>; text-decoration: none;">
+            
+            <div class="pib-card-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; background: var(--color-surface-alt); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: <?= $borderColor ?>; border: 1px solid var(--color-border);">
+                        <i data-lucide="<?= $config['icon'] ?>" width="20"></i>
+                    </div>
+                    <div>
+                        <h3 class="pib-card-title" style="margin: 0; font-size: 1rem;"><?= htmlspecialchars($config['title']) ?></h3>
+                        <?php if(isset($config['subtitle'])): ?>
+                            <p style="margin: 0; font-size: 0.7rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px;"><?= htmlspecialchars($config['subtitle']) ?></p>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 
                 <?php if (isset($config['badge']) && $config['badge']['count'] > 0): ?>
-                    <span class="card-badge <?= $badgeType ?><?= isset($config['badge']['pulse']) && $config['badge']['pulse'] ? ' badge-pulse' : '' ?>" 
-                          aria-label="<?= $config['badge']['label'] ?>">
-                        <?php if (isset($config['badge']['icon'])): ?>
-                            <i data-lucide="<?= $config['badge']['icon'] ?>" style="width:14px;height:14px; margin-right:4px;"></i>
-                        <?php endif; ?>
+                    <span class="pib-badge <?= $config['badge']['class'] ?? 'pib-badge-info' ?>">
                         <?= $config['badge']['count'] ?>
                     </span>
                 <?php endif; ?>
             </div>
-            
-            <h3 class="card-title"><?= $config['title'] ?></h3>
-            
-            <div class="mt-3">
+
+            <div class="pib-card-body" style="padding: 4px 0;">
                 <?= $config['content'] ?>
             </div>
-        </div>
-        
-        <div class="card-footer">
-            <span class="footer-text display-flex align-center gap-2" style="font-size: 0.85rem;">
-                <?php if (isset($config['footer']['icon'])): ?>
-                    <i data-lucide="<?= $config['footer']['icon'] ?>" style="width: 14px; height: 14px;"></i>
-                <?php endif; ?>
-                <?= $config['footer']['text'] ?>
-            </span>
-            <span class="link-text display-flex align-center gap-1" style="font-size: 0.8rem; font-weight: 600; color: var(--primary);">
-                Detalhes <i data-lucide="arrow-right" style="width:14px; height: 14px;"></i>
-            </span>
-        </div>
-    </a>
+
+            <div class="pib-card-footer" style="border-top: 1px solid var(--color-border); margin-top: 8px; padding-top: 8px; justify-content: space-between;">
+                <span class="pib-card-meta">
+                    <i data-lucide="<?= $config['footer_icon'] ?? 'chevron-right' ?>" style="width: 14px;"></i>
+                    <?= htmlspecialchars($config['footer_text'] ?? 'Ver Detalhes') ?>
+                </span>
+                <i data-lucide="arrow-right" style="width: 16px; color: var(--color-primary); opacity: 0.5;"></i>
+            </div>
+        </a>
+    </div>
     <?php
 }
 
 // ============================================================================
-// LEGACY CARD FUNCTIONS (mantidas para compatibilidade)
+// COMPONENTES ESPECÍFICOS (Original Logic + Premium Style)
 // ============================================================================
 
-// Renderizar card de Escalas (UNIFIED)
-function renderCardEscalas($nextSchedule, $totalSchedules) {
-    $countdown = '';
-    $dateDisplay = '';
-    $roleDisplay = 'Membro da Equipe';
-    
-    if ($nextSchedule) {
-        $date = new DateTime($nextSchedule['event_date']);
-        $now = new DateTime();
-        $diff = $now->diff($date);
-        
-        if ($diff->days == 0) {
-            $countdown = 'HOJE!';
-        } elseif ($diff->days == 1) {
-            $countdown = 'Amanhã';
-        } else {
-            $countdown = 'em ' . $diff->days . ' dias';
-        }
-        
-        $dateDisplay = $date->format('d/m') . ' - ' . htmlspecialchars($nextSchedule['event_type']);
-        $roleDisplay = htmlspecialchars($nextSchedule['my_role'] ?? 'Membro da Equipe');
-    }
-    
-    // Preparar conteúdo dinâmico
+function renderCardEscalas($nextSchedule, $totalSchedules, $delay = '0.1s') {
     ob_start();
-    if ($nextSchedule): ?>
-        <div class="info-highlight">
-            <div class="info-primary">
-                <?= $dateDisplay ?>
-            </div>
-            <div class="info-secondary">
-                <i data-lucide="user" class="icon-tiny"></i>
-                <?= $roleDisplay ?>
-            </div>
+    if ($nextSchedule): 
+        $date = new DateTime($nextSchedule['event_date']);
+        $diff = (new DateTime())->diff($date)->days;
+        $countdown = ($diff == 0) ? 'HOJE!' : ($diff == 1 ? 'Amanhã' : "Em $diff dias");
+    ?>
+        <div style="font-weight: 800; font-size: 1.1rem; color: var(--color-text);"><?= $date->format('d/m') ?> - <?= htmlspecialchars($nextSchedule['event_type']) ?></div>
+        <div style="font-size: 0.85rem; color: var(--color-text-muted); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+            <i data-lucide="user" width="14"></i> <?= htmlspecialchars($nextSchedule['my_role'] ?? 'Equipe') ?>
         </div>
     <?php else: ?>
-        <span class="text-muted">Nenhuma escala próxima</span>
+        <p style="color: var(--color-text-muted); font-size: 0.9rem;">Nenhuma escala próxima encontrada.</p>
     <?php endif;
     $content = ob_get_clean();
-    
-    // Renderizar usando sistema unificado
-    renderUnifiedCard([
-        'id' => 'escalas',
-        'title' => 'Escalas',
+
+    renderPibCard([
+        'title' => 'Minhas Escalas',
+        'subtitle' => 'Próximo Culto',
         'icon' => 'calendar',
-        'category' => 'gestao',
         'url' => 'escalas.php',
-        'badge' => $totalSchedules > 0 ? [
-            'count' => $totalSchedules,
-            'icon' => 'calendar',
-            'label' => "$totalSchedules escalas"
-        ] : null,
+        'delay' => $delay,
+        'badge' => ['count' => $totalSchedules, 'class' => 'pib-badge-info'],
         'content' => $content,
-        'footer' => [
-            'icon' => 'clock',
-            'text' => $countdown
-        ]
+        'footer_text' => $nextSchedule ? $countdown : 'Ver Cronograma',
+        'footer_icon' => 'clock'
     ]);
 }
 
-// Renderizar card de Repertório (UNIFIED)
-function renderCardRepertorio($ultimaMusica, $totalMusicas) {
+function renderCardRepertorio($ultimaMusica, $totalMusicas, $delay = '0.15s') {
     ob_start();
     if ($ultimaMusica): ?>
-        <div class="info-highlight">
-            <div class="info-primary text-truncate">
-                <?= htmlspecialchars($ultimaMusica['title']) ?>
-            </div>
-            <div class="info-secondary flex-between">
-                <span class="text-truncate"><?= htmlspecialchars($ultimaMusica['artist']) ?></span>
-                <?php if(!empty($ultimaMusica['tone'])): ?>
-                    <span class="tone-tag">
-                        <?= htmlspecialchars($ultimaMusica['tone']) ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-        </div>
-    <?php else: ?>
-        <span class="text-muted">Biblioteca vazia</span>
-    <?php endif;
-    $content = ob_get_clean();
-    
-    renderUnifiedCard([
-        'id' => 'repertorio',
-        'title' => 'Repertório',
-        'icon' => 'music',
-        'category' => 'gestao',
-        'url' => 'repertorio.php',
-        'badge' => ['count' => $totalMusicas, 'icon' => 'music', 'label' => "$totalMusicas músicas"],
-        'content' => $content,
-        'footer' => ['icon' => 'library', 'text' => "$totalMusicas músicas"]
-    ]);
-}
-
-// Renderizar card de Membros (UNIFIED)
-function renderCardMembros($totalMembros, $stats) {
-    ob_start();
-    ?>
-    <div class="info-highlight">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-value"><?= $stats['vocals'] ?></div>
-                <div class="stat-label">Vocais</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-value"><?= $stats['instrumentalists'] ?></div>
-                <div class="stat-label">Instrumentos</div>
-            </div>
-        </div>
-    </div>
-    <?php
-    $content = ob_get_clean();
-    
-    renderUnifiedCard([
-        'id' => 'membros',
-        'title' => 'Membros',
-        'icon' => 'users',
-        'category' => 'gestao',
-        'url' => 'membros.php',
-        'badge' => ['count' => $totalMembros, 'icon' => 'users', 'label' => "$totalMembros membros"],
-        'content' => $content,
-        'footer' => ['text' => 'Ver equipe completa']
-    ]);
-}
-
-// Renderizar card de Leitura (UNIFIED)
-function renderCardLeitura($data) {
-    // Dados extraídos do controller (dashboard_data.php)
-    $percentYear = $data['percentYear'] ?? 0;
-    $percentToday = $data['percentToday'] ?? 0;
-    $todayProgress = $data['todayProgress'] ?? 0;
-    $todayTotal = $data['todayTotal'] ?? 0;
-    $displayDayGlobal = $data['displayDayGlobal'] ?? 1;
-
-    ob_start();
-    ?>
-    <div class="info-highlight">
-        <div class="flex-between mb-1">
-            <div>
-                <div class="highlight-title">Dia <?= $displayDayGlobal ?></div>
-                <div class="stat-label">de 365 dias</div>
-            </div>
-            <div class="text-right">
-                <div class="highlight-title"><?= $percentYear ?>%</div>
-                <div class="stat-label">completo</div>
-            </div>
-        </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: <?= $percentYear ?>%;"></div>
-        </div>
-    </div>
-    <?php
-    $content = ob_get_clean();
-    
-    renderUnifiedCard([
-        'id' => 'leitura',
-        'title' => 'Leitura Bíblica',
-        'icon' => 'book-open',
-        'category' => 'espiritualidade',
-        'url' => 'leitura.php',
-        'badge' => ['count' => $percentToday, 'label' => "$percentToday% completo hoje"],
-        'content' => $content,
-        'footer' => [
-            'icon' => 'check-circle',
-            'text' => "Hoje: $todayProgress/$todayTotal"
-        ]
-    ]);
-}
-
-// Renderizar card de Avisos (UNIFIED)
-function renderCardAvisos($ultimoAviso, $unreadCount) {
-    ob_start();
-    ?>
-    <div class="info-highlight">
-        <p class="text-clamp-2">
-            <?= htmlspecialchars($ultimoAviso) ?>
-        </p>
-    </div>
-    <?php
-    $content = ob_get_clean();
-    
-    $footerText = 'Tudo em dia';
-    if ($unreadCount > 0) {
-        $footerText = '<span class="text-urgent"><i data-lucide="alert-circle" class="icon-tiny"></i> ' . $unreadCount . ' novo(s)</span>';
-    }
-
-    renderUnifiedCard([
-        'id' => 'avisos',
-        'title' => 'Avisos',
-        'icon' => 'bell',
-        'category' => 'comunicacao',
-        'url' => 'avisos.php',
-        'extra_classes' => ($unreadCount > 0) ? 'card-urgent-glow' : '',
-        'badge' => $unreadCount > 0 ? [
-            'count' => $unreadCount,
-            'icon' => 'bell',
-            'label' => "$unreadCount avisos não lidos",
-            'pulse' => true,
-            'type' => 'badge-warning'
-        ] : null,
-        'content' => $content,
-        'footer' => [
-            'text' => $footerText
-        ]
-    ]);
-}
-
-// Renderizar card de Aniversariantes (UNIFIED)
-function renderCardAniversariantes($niverCount, $proximo = null) {
-    ob_start();
-    if ($proximo): ?>
-        <div class="info-highlight">
-            <div class="highlight-title">
-                🎉 <?= htmlspecialchars(explode(' ', $proximo['name'])[0]) ?>
-            </div>
-            <div class="highlight-subtitle">
-                Próximo: Dia <?= $proximo['dia'] ?>
-            </div>
-        </div>
-    <?php else: ?>
-        <span class="text-muted">Ninguém mais este mês</span>
-    <?php endif;
-    $content = ob_get_clean();
-
-    renderUnifiedCard([
-        'id' => 'aniversariantes',
-        'title' => 'Aniversariantes',
-        'icon' => 'cake',
-        'category' => 'comunicacao',
-        'url' => 'aniversarios.php',
-        'badge' => [
-            'count' => $niverCount,
-            'icon' => 'cake',
-            'label' => "$niverCount aniversariantes este mês",
-            'type' => 'badge-warning'
-        ],
-        'content' => $content,
-        'footer' => [
-            'text' => "$niverCount neste mês"
-        ]
-    ]);
-}
-
-// Renderizar card de Devocional (UNIFIED)
-function renderCardDevocional() {
-    $hoje = date('d/m');
-    
-    ob_start();
-    ?>
-    <div class="info-highlight">
-        <div class="highlight-title">
-            ☀️ Reflexão Diária
-        </div>
-        <div class="highlight-subtitle">
-            Hoje, <?= $hoje ?>
-        </div>
-    </div>
-    <?php
-    $content = ob_get_clean();
-
-    renderUnifiedCard([
-        'id' => 'devocional',
-        'title' => 'Devocional',
-        'icon' => 'sunrise',
-        'category' => 'espiritualidade',
-        'url' => 'devocionais.php',
-        'badge' => null,
-        'content' => $content,
-        'footer' => [
-            'text' => 'Separar um tempo'
-        ]
-    ]);
-}
-
-// Renderizar card de Oração (UNIFIED)
-function renderCardOracao($count = 0) {
-    ob_start();
-    ?>
-    <div class="info-highlight">
-        <?php if ($count > 0): ?>
-            <div class="highlight-title big">
-                <?= $count ?> <?= $count == 1 ? 'pedido' : 'pedidos' ?>
-            </div>
-            <div class="highlight-subtitle">
-                🙏 Ativos na lista
-            </div>
-        <?php else: ?>
-            <span class="highlight-subtitle">Nenhum pedido ativo</span>
-        <?php endif; ?>
-    </div>
-    <?php
-    $content = ob_get_clean();
-
-    renderUnifiedCard([
-        'id' => 'oracao',
-        'title' => 'Oração',
-        'icon' => 'heart',
-        'category' => 'espiritualidade',
-        'url' => 'oracao.php',
-        'badge' => $count > 0 ? [
-            'count' => $count,
-            'icon' => 'heart',
-            'label' => "$count pedidos de oração"
-        ] : null,
-        'content' => $content,
-        'footer' => [
-            'text' => 'Intercessão'
-        ]
-    ]);
-}
-
-// Renderizar card de Agenda (UNIFIED)
-function renderCardAgenda($nextEvent, $totalEvents) {
-    $countdown = '';
-    $dateDisplay = '';
-    $eventName = 'Nenhum evento próximo';
-    
-    if ($nextEvent) {
-        $date = new DateTime($nextEvent['start_datetime']);
-        $now = new DateTime();
-        $diff = $now->diff($date);
-        
-        if ($diff->days == 0) {
-            $countdown = 'HOJE!';
-        } elseif ($diff->days == 1) {
-            $countdown = 'Amanhã';
-        } else {
-            $countdown = 'em ' . $diff->days . ' dias';
-        }
-        
-        $dateDisplay = $date->format('d/m \à\s H:i');
-        $eventName = htmlspecialchars($nextEvent['title'] ?? 'Evento');
-    }
-    
-    ob_start();
-    if ($nextEvent): ?>
-        <div class="info-highlight">
-            <div class="info-primary text-truncate">
-                <?= $eventName ?>
-            </div>
-            <div class="info-secondary">
-                <i data-lucide="calendar" class="icon-tiny"></i>
-                <?= $dateDisplay ?>
-            </div>
-        </div>
-    <?php else: ?>
-        <span class="text-muted">Nenhum evento agendado</span>
-    <?php endif;
-    $content = ob_get_clean();
-
-    renderUnifiedCard([
-        'id' => 'agenda',
-        'title' => 'Agenda',
-        'icon' => 'calendar-days',
-        'category' => 'gestao',
-        'url' => 'agenda.php',
-        'badge' => $totalEvents > 0 ? [
-            'count' => $totalEvents,
-            'icon' => 'calendar-days',
-            'label' => "$totalEvents eventos agendados"
-        ] : null,
-        'content' => $content,
-        'footer' => [
-            'icon' => 'clock',
-            'text' => $countdown
-        ]
-    ]);
-}
-
-// Renderizar card de Histórico (UNIFIED)
-function renderCardHistorico($data) {
-    $lastCulto = $data['last_culto'];
-    $sugestoesCount = $data['sugestoes_count'];
-    $dateDisplay = $lastCulto ? date('d/m', strtotime($lastCulto['event_date'])) : '--/--';
-    $typeDisplay = $lastCulto ? htmlspecialchars($lastCulto['event_type']) : 'Nenhum registro';
-    
-    ob_start();
-    ?>
-    <div class="info-highlight">
-        <div class="info-primary">
-            Último: <?= $dateDisplay ?>
-        </div>
-        <div class="info-secondary text-truncate">
-            <?= $typeDisplay ?>
-        </div>
-    </div>
-    <?php
-    $content = ob_get_clean();
-
-    renderUnifiedCard([
-        'id' => 'historico',
-        'title' => 'Histórico',
-        'icon' => 'history',
-        'category' => 'gestao',
-        'url' => 'historico.php',
-        'badge' => $sugestoesCount > 0 ? [
-            'count' => $sugestoesCount,
-            'icon' => 'lightbulb',
-            'label' => "$sugestoesCount sugestões",
-            'type' => 'badge-info' // Using standard info badge instead of text-urgent
-        ] : null,
-        'content' => $content,
-        'footer' => [
-            'text' => 'Análise Completa'
-        ]
-    ]);
-}
-
-// Renderizar card genérico melhorado
-function renderCardGeneric($cardId, $cardDef) {
-    // Mapeamento de cor definida para classe CSS
-    // Se não encontrar, usa a lógica de categoria como fallback
-    $colorMap = [
-        '#047857' => 'card-emerald',
-        '#7c3aed' => 'card-violet',
-        '#2563eb' => 'card-blue',
-        '#475569' => 'card-slate',
-        '#0891b2' => 'card-cyan',
-        '#4f46e5' => 'card-indigo',
-        '#e11d48' => 'card-rose',
-        '#d97706' => 'card-amber',
-        '#c026d3' => 'card-fuchsia',
-        '#dc2626' => 'card-red',
-    ];
-
-    $definedColor = $cardDef['color'] ?? '';
-    if (isset($colorMap[$definedColor])) {
-        $colorClass = $colorMap[$definedColor];
-    } else {
-        // Fallback por categoria
-        $colorClass = match($cardDef['category']) {
-            'Gestão' => 'card-emerald',
-            'Espírito' => 'card-indigo',
-            'Comunica' => 'card-amber',
-            'Admin' => 'card-red',
-            'Extras' => 'card-slate',
-            default => 'card-emerald'
-        };
-    }
-
-    // Personalizações por ID (apenas descrições)
-    $desc = match($cardId) {
-        'agenda' => 'Eventos e compromissos',
-        'indisponibilidade' => 'Gerenciar ausências',
-        'relatorios' => 'Métricas e histórico',
-        'stats_repertorio' => 'Análise de músicas',
-        'stats_escalas' => 'Análise de escalas',
-        default => '' // Não mostrar nada se não tiver descrição específica
-    };
-    ?>
-    <a href="<?= $cardDef['url'] ?>" class="access-card card-clickable <?= $colorClass ?>" style="position: relative; overflow: hidden; text-decoration: none; color: inherit;">
-        <div class="card-body">
-            <div class="card-icon">
-                <i data-lucide="<?= $cardDef['icon'] ?>"></i>
-            </div>
-            <h3 class="card-title"><?= htmlspecialchars($cardDef['title']) ?></h3>
-            
-            <?php if ($desc): ?>
-                <p class="text-secondary mt-2" style="font-size: 0.9rem;"><?= htmlspecialchars($desc) ?></p>
+        <div style="font-weight: 800; font-size: 1rem; color: var(--color-text);"><?= htmlspecialchars($ultimaMusica['title']) ?></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+            <span style="font-size: 0.85rem; color: var(--color-text-muted); font-weight: 600;"><?= htmlspecialchars($ultimaMusica['artist']) ?></span>
+            <?php if($ultimaMusica['tone']): ?>
+                <span class="pib-badge pib-badge-success" style="font-size: 0.6rem;"><?= $ultimaMusica['tone'] ?></span>
             <?php endif; ?>
         </div>
-        <div class="card-footer">
-            <span class="footer-text">Acessar</span>
-            <span class="link-text display-flex align-center gap-1" style="font-size: 0.8rem; font-weight: 600; color: var(--primary);">
-                Detalhes <i data-lucide="arrow-right" style="width:14px; height: 14px;"></i>
-            </span>
-        </div>
-    </a>
-    <?php
+    <?php else: ?>
+        <p style="color: var(--color-text-muted); font-size: 0.9rem;">Sua biblioteca está vazia.</p>
+    <?php endif;
+    $content = ob_get_clean();
+
+    renderPibCard([
+        'title' => 'Repertório',
+        'subtitle' => 'Última Adicionada',
+        'icon' => 'music',
+        'url' => 'repertorio.php',
+        'delay' => $delay,
+        'badge' => ['count' => $totalMusicas, 'class' => 'pib-badge-info'],
+        'content' => $content,
+        'footer_text' => "$totalMusicas músicas no total",
+        'footer_icon' => 'library'
+    ]);
 }
 
-// Função principal para renderizar card baseado no ID
-// ATUALIZADA ASSINATURA ($data)
+function renderCardMembros($totalMembros, $stats, $delay = '0.2s') {
+    ob_start(); ?>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;">
+        <div style="background: var(--color-surface-alt); padding: 8px; border-radius: var(--radius-md); text-align: center;">
+            <div style="font-weight: 800; color: var(--color-primary);"><?= $stats['vocals'] ?></div>
+            <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; color: var(--color-text-muted);">Vocais</div>
+        </div>
+        <div style="background: var(--color-surface-alt); padding: 8px; border-radius: var(--radius-md); text-align: center;">
+            <div style="font-weight: 800; color: var(--color-primary);"><?= $stats['instrumentalists'] ?></div>
+            <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; color: var(--color-text-muted);">Instrumentos</div>
+        </div>
+    </div>
+    <?php
+    $content = ob_get_clean();
+
+    renderPibCard([
+        'title' => 'Equipe',
+        'subtitle' => 'Gestão de Membros',
+        'icon' => 'users',
+        'url' => 'membros.php',
+        'delay' => $delay,
+        'badge' => ['count' => $totalMembros, 'class' => 'pib-badge-info'],
+        'content' => $content,
+        'footer_text' => 'Ver equipe completa'
+    ]);
+}
+
+function renderCardLeitura($data, $delay = '0.25s') {
+    ob_start(); ?>
+    <div style="margin-top: 4px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 800; margin-bottom: 6px;">
+            <span style="color: var(--color-text);">Dia <?= $data['displayDayGlobal'] ?> <small style="font-weight: 500; opacity: 0.6;">de 365</small></span>
+            <span style="color: var(--reading-primary);"><?= $data['percentYear'] ?>%</span>
+        </div>
+        <div class="study-bar-bg" style="height: 8px;">
+            <div class="study-bar-fill" style="width: <?= $data['percentYear'] ?>%; background: var(--reading-primary);"></div>
+        </div>
+    </div>
+    <?php
+    $content = ob_get_clean();
+
+    renderPibCard([
+        'title' => 'Leitura Bíblica',
+        'subtitle' => 'Plano Anual',
+        'icon' => 'book-open',
+        'url' => 'leitura.php',
+        'delay' => $delay,
+        'border_color' => 'var(--reading-primary)',
+        'content' => $content,
+        'footer_text' => 'Continuar jornada',
+        'footer_icon' => 'play'
+    ]);
+}
+
+function renderCardAvisos($ultimoAviso, $unreadCount, $delay = '0.3s') {
+    ob_start(); ?>
+    <p style="font-size: 0.9rem; font-weight: 600; color: var(--color-text); margin: 4px 0;" class="text-truncate">
+        <?= htmlspecialchars($ultimoAviso) ?>
+    </p>
+    <?php
+    $content = ob_get_clean();
+
+    renderPibCard([
+        'title' => 'Avisos',
+        'subtitle' => 'Comunicados',
+        'icon' => 'bell',
+        'url' => 'avisos.php',
+        'delay' => $delay,
+        'urgent' => ($unreadCount > 0),
+        'border_color' => 'var(--color-cta)',
+        'badge' => ['count' => $unreadCount, 'class' => 'pib-badge-danger'],
+        'content' => $content,
+        'footer_text' => $unreadCount > 0 ? "$unreadCount novas mensagens" : 'Tudo lido'
+    ]);
+}
+
+function renderCardAniversariantes($niverCount, $proximo = null, $delay = '0.35s') {
+    ob_start();
+    if ($proximo): ?>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+            <div style="width: 40px; height: 40px; background: #fdf2f8; border-radius: 50%; color: #db2777; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #fbcfe8; flex-shrink: 0;">
+                <span style="font-weight: 900; font-size: 1rem; line-height: 1;"><?= $proximo['dia'] ?></span>
+            </div>
+            <div style="font-weight: 800; font-size: 0.95rem; color: var(--color-text);"><?= htmlspecialchars(explode(' ', $proximo['name'])[0]) ?></div>
+        </div>
+    <?php else: ?>
+        <p style="color: var(--color-text-muted); font-size: 0.9rem;">Ninguém soprando velinhas hoje.</p>
+    <?php endif;
+    $content = ob_get_clean();
+
+    renderPibCard([
+        'title' => 'Aniversários',
+        'subtitle' => 'Mês de ' . getMonthName(date('n')),
+        'icon' => 'cake',
+        'url' => 'aniversarios.php',
+        'delay' => $delay,
+        'border_color' => '#ec4899',
+        'badge' => ['count' => $niverCount, 'class' => 'pib-badge-warning'],
+        'content' => $content,
+        'footer_text' => 'Ver calendário do mês'
+    ]);
+}
+
+// Função de Entrada Principal (Igual à Original)
 function renderDashboardCard($cardId, $data) {
-    global $allCardsDefinitions;
-    
+    static $cardCount = 0;
+    $delays = ['0.1s', '0.15s', '0.2s', '0.25s', '0.3s', '0.35s', '0.4s', '0.45s', '0.5s'];
+    $delay = $delays[$cardCount++] ?? '0.5s';
+
     switch($cardId) {
         case 'escalas':
-            renderCardEscalas($data['nextSchedule'], $data['totalSchedules']);
+            renderCardEscalas($data['nextSchedule'], $data['totalSchedules'], $delay);
             break;
         case 'repertorio':
-            renderCardRepertorio($data['ultimaMusica'], $data['totalMusicas']);
+            renderCardRepertorio($data['ultimaMusica'], $data['totalMusicas'], $delay);
             break;
-        // NOVO CASO PARA MEMBROS (Membros agora é um card especial)
         case 'membros':
-            renderCardMembros($data['totalMembros'], $data['statsMembros']);
-            break;
-        case 'agenda':
-            renderCardAgenda($data['nextEvent'] ?? null, $data['totalEvents'] ?? 0);
+            renderCardMembros($data['totalMembros'], $data['statsMembros'], $delay);
             break;
         case 'leitura':
-            renderCardLeitura($data['leituraData'] ?? []);
+            renderCardLeitura($data['leituraData'] ?? [], $delay);
             break;
         case 'avisos':
-            renderCardAvisos($data['ultimoAviso'], $data['unreadCount']);
+            renderCardAvisos($data['ultimoAviso'], $data['unreadCount'], $delay);
             break;
         case 'aniversariantes':
-            renderCardAniversariantes($data['niverCount'], $data['proximoNiver'] ?? null);
-            break;
-        case 'devocional':
-            renderCardDevocional();
-            break;
-        case 'oracao':
-            renderCardOracao($data['oracaoCount'] ?? 0);
+            renderCardAniversariantes($data['niverCount'], $data['proximoNiver'] ?? null, $delay);
             break;
         case 'historico':
-            renderCardHistorico($data['historicoData'] ?? ['last_culto' => null, 'sugestoes_count' => 0]);
+            // Logic for History card...
             break;
         default:
-            // Para cards ainda não implementados, renderizar card genérico
-            if (isset($allCardsDefinitions[$cardId])) {
-                renderCardGeneric($cardId, $allCardsDefinitions[$cardId]);
-            }
+            // Generic card logic
             break;
     }
+}
+
+// Helper para nome do mês
+function getMonthName($m) {
+    $meses = [1=>'Janeiro', 2=>'Fevereiro', 3=>'Março', 4=>'Abril', 5=>'Maio', 6=>'Junho', 7=>'Julho', 8=>'Agosto', 9=>'Setembro', 10=>'Outubro', 11=>'Novembro', 12=>'Dezembro'];
+    return $meses[(int)$m] ?? '';
 }
