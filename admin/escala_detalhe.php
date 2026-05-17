@@ -351,8 +351,10 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                 <div class="text-muted" style="font-size: 0.85rem; padding: 10px;">Nenhum participante definido.</div>
             <?php else: ?>
                 <div class="team-list-grid">
-                    <?php foreach($team as $member): 
-                        $statusClass = 'status-' . ($member['is_confirmed'] ? 'confirmed' : ($member['status'] == 'declined' ? 'declined' : 'pending'));
+                    <?php foreach($team as $member):
+                        $memberStatus = $member['status'] ?? 'pending';
+                        // Normalizar: 'absent' exibe como 'declined' visualmente (whitelist — T-02B-02)
+                        $statusClass = in_array($memberStatus, ['confirmed', 'declined', 'absent']) ? 'status-' . $memberStatus : 'status-pending';
                         $initials = strtoupper(substr($member['name'], 0, 1));
                         $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
                     ?>
@@ -375,6 +377,17 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                         <div class="member-info">
                             <div class="member-name"><?= htmlspecialchars($member['name']) ?></div>
                             <div class="member-role"><?= htmlspecialchars($instr) ?></div>
+                            <div class="member-status-badge <?= $statusClass ?>">
+                                <?php
+                                $statusLabels = [
+                                    'status-confirmed' => '&#10003; Confirmado',
+                                    'status-pending'   => '&middot; Pendente',
+                                    'status-declined'  => '&#10007; Recusado',
+                                    'status-absent'    => '&#10007; Ausente',
+                                ];
+                                echo $statusLabels[$statusClass] ?? '&middot; Pendente';
+                                ?>
+                            </div>
                         </div>
                     </div>
                     <?php endforeach; ?>
