@@ -9,14 +9,14 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 2: Confirmar Escala** — Status: ⬜ Not Started (próxima após retorno da viagem)
+**Phase 2: Confirmar Escala** — Status: 📋 Ready to Execute (4 planos, 3 waves)
 
 ## Phase Progress
 
 | Phase | Name | Status | Started | Completed |
 |-------|------|--------|---------|-----------|
 | 1 | Git Cleanup + Hardening | ✅ Completed | 2026-05-16 | 2026-05-17 |
-| 2 | Confirmar Escala | ⬜ Not Started | — | — |
+| 2 | Confirmar Escala | 📋 Planned | 2026-05-17 | — |
 | 3 | Roteiro de Culto | ⬜ Not Started | — | — |
 | 4 | Registrar Faltas | ⬜ Not Started | — | — |
 | 5 | Música Modernizada | ⬜ Not Started | — | — |
