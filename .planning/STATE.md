@@ -9,7 +9,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 2: Confirmar Escala** — Status: 🔄 Em Execução (plano 03/04 concluído)
+**Phase 2: Confirmar Escala** — Status: 🔄 Em Execução (02-01 e 02-03 concluídos, 02-02 e 02-04 pendentes)
 
 ## Phase Progress
 
@@ -43,12 +43,16 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Phase 2 — Progress (em execução 2026-05-17)
 
+- Plan 02-01 concluído: Footer sticky de confirmação com AJAX em escala_detalhe.php (ESC-01, ESC-02 entregues)
+  - CSS: .confirm-footer, .confirm-footer-status, .btn-confirm, .btn-decline, .has-confirm-footer
+  - JS: fetch() para api/confirm_scale.php, transição de estado sem reload, safe-area-inset-bottom para iOS
 - Plan 02-03 concluído: Badge "X/Y confirmados" nos cards de escala (ESC-04 entregue)
-- Plan 02-01 concluído: CSS do footer sticky de confirmação em detail_v3.css
 - Plans 02-02 e 02-04 ainda pendentes
 
 ## Decisions Made
 
+- "Footer só renderizado quando $myMemberData !== null && !$isEditable — garante isolamento entre edição e confirmação" (02-01)
+- "Transição de estado via outerHTML replacement — simples, sem estado global, vanilla JS" (02-01)
 - "Reutilizar $participantsMap já carregado para contador de confirmações — zero queries extras no loop" (02-03)
 - "Badge invisível quando escala não tem participantes — evita '0/0 confirmados'" (02-03)
 
