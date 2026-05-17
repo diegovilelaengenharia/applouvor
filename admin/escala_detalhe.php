@@ -189,7 +189,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
     </div>
 <?php endif; ?>
 
-<div class="scale-detail-wrapper">
+<div class="scale-detail-wrapper<?= ($myMemberData && $myMemberData['status'] === 'pending') ? ' has-confirm-footer' : '' ?>">
 
     <!-- UNIFIED COMPACT HEADER -->
     <div class="event-info-card">
@@ -798,6 +798,111 @@ function closeInfoModal(save) {
 }
 
 </script>
+<?php endif; ?>
+
+<?php if ($myMemberData !== null && !$isEditable):
+    $currentStatus = $myMemberData['status'];
+    $scheduleIdForJs = (int)$id;
+?>
+
+<?php if ($currentStatus === 'pending'): ?>
+<div class="confirm-footer" id="confirm-footer">
+    <button class="btn-confirm" onclick="confirmPresence('confirmed')">
+        <i data-lucide="check-circle" width="20"></i> Confirmar
+    </button>
+    <button class="btn-decline" onclick="confirmPresence('declined')">
+        <i data-lucide="x-circle" width="20"></i> Recusar
+    </button>
+</div>
+<?php elseif ($currentStatus === 'confirmed'): ?>
+<div class="confirm-footer-status" id="confirm-footer">
+    <span class="status-label is-confirmed">
+        <i data-lucide="check-circle" width="20"></i> Confirmado
+    </span>
+    <button class="btn-change" onclick="showConfirmButtons()">Alterar</button>
+</div>
+<?php elseif ($currentStatus === 'declined'): ?>
+<div class="confirm-footer-status" id="confirm-footer">
+    <span class="status-label is-declined">
+        <i data-lucide="x-circle" width="20"></i> Recusado
+    </span>
+    <button class="btn-change" onclick="showConfirmButtons()">Alterar</button>
+</div>
+<?php endif; ?>
+
+<script>
+(function() {
+    var scheduleId = <?= $scheduleIdForJs ?>;
+
+    function confirmPresence(status) {
+        var footer = document.getElementById('confirm-footer');
+        var btnConfirm = footer.querySelector('.btn-confirm');
+        var btnDecline = footer.querySelector('.btn-decline');
+        if (btnConfirm) btnConfirm.disabled = true;
+        if (btnDecline) btnDecline.disabled = true;
+
+        fetch('../api/confirm_scale.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ schedule_id: scheduleId, status: status })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                var isConfirmed = (status === 'confirmed');
+                var labelText = isConfirmed ? 'Confirmado' : 'Recusado';
+                var labelClass = isConfirmed ? 'is-confirmed' : 'is-declined';
+                var iconName = isConfirmed ? 'check-circle' : 'x-circle';
+
+                footer.outerHTML = '<div class="confirm-footer-status" id="confirm-footer">'
+                    + '<span class="status-label ' + labelClass + '">'
+                    + '<i data-lucide="' + iconName + '" width="20"></i> ' + labelText
+                    + '</span>'
+                    + '<button class="btn-change" onclick="showConfirmButtons()">Alterar</button>'
+                    + '</div>';
+
+                // Re-render Lucide icons no novo elemento
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                // Atualizar padding do wrapper
+                var wrapper = document.querySelector('.scale-detail-wrapper');
+                if (wrapper) wrapper.classList.remove('has-confirm-footer');
+            } else {
+                alert('Erro ao salvar: ' + (data.message || 'Tente novamente.'));
+                if (btnConfirm) btnConfirm.disabled = false;
+                if (btnDecline) btnDecline.disabled = false;
+            }
+        })
+        .catch(function(err) {
+            alert('Erro de conexão. Tente novamente.');
+            if (btnConfirm) btnConfirm.disabled = false;
+            if (btnDecline) btnDecline.disabled = false;
+        });
+    }
+
+    function showConfirmButtons() {
+        var footer = document.getElementById('confirm-footer');
+        footer.outerHTML = '<div class="confirm-footer" id="confirm-footer">'
+            + '<button class="btn-confirm" onclick="confirmPresence(\'confirmed\')">'
+            + '<i data-lucide="check-circle" width="20"></i> Confirmar'
+            + '</button>'
+            + '<button class="btn-decline" onclick="confirmPresence(\'declined\')">'
+            + '<i data-lucide="x-circle" width="20"></i> Recusar'
+            + '</button>'
+            + '</div>';
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        var wrapper = document.querySelector('.scale-detail-wrapper');
+        if (wrapper) wrapper.classList.add('has-confirm-footer');
+    }
+
+    // Expor para onclick inline
+    window.confirmPresence = confirmPresence;
+    window.showConfirmButtons = showConfirmButtons;
+})();
+</script>
+
 <?php endif; ?>
 
 <?php renderAppFooter(); ?>
