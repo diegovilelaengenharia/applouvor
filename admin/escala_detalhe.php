@@ -533,12 +533,21 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                 <?php if (empty($songs)): ?>
                     <div class="text-muted" style="font-size: 0.85rem; padding: 10px;">Nenhuma música selecionada.</div>
                 <?php else: ?>
-                    <?php foreach ($songs as $index => $song): ?>
+                    <?php foreach ($songs as $index => $song):
+                        $resolvedTone = $customToneMap[(int)$song['song_id']] ?? null;
+                        $isCustomTone = !empty($resolvedTone);
+                        $toneDisplay  = $isCustomTone ? $resolvedTone : ($song['tone'] ?? '');
+                    ?>
                     <div class="song-card">
                         <div class="song-order"><?= $index + 1 ?></div>
                         <div class="song-info">
                             <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="song-title"><?= htmlspecialchars($song['title']) ?></a>
-                            <div class="song-artist"><?= htmlspecialchars($song['artist']) ?> • <?= htmlspecialchars($song['tone']) ?></div>
+                            <div class="song-artist">
+                                <?= htmlspecialchars($song['artist']) ?>
+                                <?php if ($toneDisplay): ?>
+                                    • <span class="song-tone-badge <?= $isCustomTone ? 'song-tone-custom' : 'song-tone-default' ?>"><?= htmlspecialchars($toneDisplay) ?></span>
+                                <?php endif; ?>
+                            </div>
                         </div>
                         <div class="song-actions">
                             <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" class="action-icon <?= empty($song['link_letra']) ? 'disabled' : '' ?>" title="Letra">
