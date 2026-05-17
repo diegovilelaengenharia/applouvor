@@ -467,3 +467,33 @@
 .has-confirm-footer {
     padding-bottom: 90px;
 }
+
+/* === STATUS BADGES nos cards de participantes (Phase 2B) === */
+
+/* Badge de texto inline no card (label legível) */
+.member-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.member-status-badge.status-confirmed {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.member-status-badge.status-pending {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.member-status-badge.status-declined,
+.member-status-badge.status-absent {
+    background: #fee2e2;
+    color: #dc2626;
+}
