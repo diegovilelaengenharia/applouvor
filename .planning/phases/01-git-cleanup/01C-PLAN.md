@@ -68,14 +68,8 @@ Output: Dois commits — um para maintenance/ (incluindo restore_db.php movido d
 <task type="auto">
   <name>Task 1: Commitar scripts de manutencao em maintenance/ (incluindo restore_db.php)</name>
   <files>
-    maintenance/debug_auth.php
-    maintenance/debug_roles.php
-    maintenance/debug_vocals.php
-    maintenance/exemplos_uso.php
-    maintenance/fix_mariana.php
     maintenance/migrate_passwords.php
-    maintenance/temp_backup.txt
-    maintenance/temp_gen_keys.php
+    maintenance/exemplos_uso.php
     maintenance/restore_db.php
     restore_db.php
   </files>
@@ -84,58 +78,69 @@ Output: Dois commits — um para maintenance/ (incluindo restore_db.php movido d
       git status -- maintenance/
       ls maintenance/
 
-    Confirmar que os seguintes arquivos estao presentes como untracked (??):
-      maintenance/debug_auth.php
-      maintenance/debug_roles.php
-      maintenance/debug_vocals.php
-      maintenance/exemplos_uso.php
-      maintenance/fix_mariana.php
-      maintenance/migrate_passwords.php
-      maintenance/temp_backup.txt
-      maintenance/temp_gen_keys.php
+    Arquivos a DELETAR (nao versionar — sao descartaveis):
+      maintenance/debug_auth.php    (debug script pontual)
+      maintenance/debug_roles.php   (debug script pontual)
+      maintenance/debug_vocals.php  (debug script pontual)
+      maintenance/temp_backup.txt   (backup textual sem proposito)
+      maintenance/temp_gen_keys.php (gerador de chaves ja consumido)
+      maintenance/fix_mariana.php   (fix pontual de usuario ja aplicado)
+
+    Arquivos a VERSIONAR em maintenance/:
+      maintenance/migrate_passwords.php  (auditoria historica de migração de senhas)
+      maintenance/exemplos_uso.php       (documentacao por exemplo)
+      maintenance/restore_db.php         (utilitario valido)
 
     Verificar se restore_db.php esta na raiz como untracked:
       git status -- restore_db.php
 
-    Deve aparecer como "?? restore_db.php" (novo arquivo nao rastreado na raiz).
-
     Verificar se maintenance/restore_db.php JA existe:
       ls maintenance/restore_db.php 2>/dev/null || echo "NAO EXISTE"
-
-    Se NAO existir: restore_db.php da raiz deve ser movido para maintenance/ antes do commit.
-    Se JA existir: ambos existem — commitar o de maintenance/ e registrar a deleção do da raiz.
   </read_first>
   <action>
-    PASSO 1 — Mover restore_db.php da raiz para maintenance/ (se ainda nao foi movido):
+    PASSO 1 — DELETAR os arquivos descartaveis de maintenance/ (NAO versionar):
 
-    Verificar se maintenance/restore_db.php existe:
-      ls maintenance/restore_db.php
+    Remove-Item maintenance/debug_auth.php
+    Remove-Item maintenance/debug_roles.php
+    Remove-Item maintenance/debug_vocals.php
+    Remove-Item maintenance/temp_backup.txt
+    Remove-Item maintenance/temp_gen_keys.php
+    Remove-Item maintenance/fix_mariana.php
 
-    Se NAO existir: mover o arquivo
-      mv restore_db.php maintenance/restore_db.php
-      (ou no Windows PowerShell: Move-Item restore_db.php maintenance/restore_db.php)
+    (Alternativa Bash: rm maintenance/debug_auth.php maintenance/debug_roles.php maintenance/debug_vocals.php maintenance/temp_backup.txt maintenance/temp_gen_keys.php maintenance/fix_mariana.php)
 
-    Se JA existir em maintenance/: o arquivo foi copiado — deletar o da raiz:
-      rm restore_db.php
-      (ou no Windows PowerShell: Remove-Item restore_db.php)
+    PASSO 2 — Mover restore_db.php da raiz para maintenance/ (se ainda nao foi movido):
 
-    PASSO 2 — Fazer staging de TODOS os arquivos de maintenance/ e da deleção da raiz:
+    Se maintenance/restore_db.php NAO existir:
+      Move-Item restore_db.php maintenance/restore_db.php
+    Se JA existir em maintenance/:
+      Remove-Item restore_db.php
 
-    Staging dos novos arquivos em maintenance/:
-      git add maintenance/debug_auth.php maintenance/debug_roles.php maintenance/debug_vocals.php maintenance/exemplos_uso.php maintenance/fix_mariana.php maintenance/migrate_passwords.php maintenance/temp_backup.txt maintenance/temp_gen_keys.php maintenance/restore_db.php
+    PASSO 3 — Fazer staging dos arquivos validos de maintenance/:
 
-    Staging da deleção do restore_db.php da raiz (se estava rastreado):
-      git status -- restore_db.php
-      # Se aparecer como "D restore_db.php" (deletado): git add restore_db.php
-      # Se aparecer como "?? restore_db.php" (nunca foi rastreado): nenhuma acao necessaria para a raiz
+    git add maintenance/migrate_passwords.php maintenance/exemplos_uso.php maintenance/restore_db.php
 
-    PASSO 3 — Verificar staging antes do commit:
-      git status -- maintenance/ restore_db.php
+    PASSO 4 — CRITICO: stagear TAMBEM as delecoes dos arquivos antigos da raiz (tracked com status "D"):
 
-    Deve mostrar todos os arquivos de maintenance/ como "new file" no staged area.
+    Os seguintes arquivos estavam na raiz como tracked e foram deletados do disco — o git ainda nao sabe:
+      debug_auth.php, debug_roles.php, debug_vocals.php, exemplos_uso.php,
+      fix_mariana.php, migrate_passwords.php, temp_backup.txt, temp_gen_keys.php
 
-    PASSO 4 — Commitar:
-      git commit -m "chore(maintenance): organiza scripts de manutencao em maintenance/"
+    git add -u
+    # Este comando stageia TODAS as mudancas de arquivos ja rastreados (incluindo delecoes)
+    # NAO adiciona arquivos novos (so os tracked deletados/modificados)
+
+    PASSO 5 — Verificar staging antes do commit:
+      git status
+
+    Deve mostrar:
+    - new file: maintenance/migrate_passwords.php
+    - new file: maintenance/exemplos_uso.php
+    - new file: maintenance/restore_db.php
+    - deleted: debug_auth.php (e outros da lista acima)
+
+    PASSO 6 — Commitar:
+      git commit -m "chore(maintenance): organiza scripts de manutencao e remove descartaveis"
 
     IMPORTANTE: Scripts de SETUP (ACESSAR_SISTEMA.bat, adicionar_hosts.bat, setup_local.ps1) NAO entram neste commit — eles ficam na raiz e serao commitados na Task 2.
   </action>
@@ -143,14 +148,14 @@ Output: Dois commits — um para maintenance/ (incluindo restore_db.php movido d
     <automated>git log --oneline -1 | grep "chore(maintenance)"</automated>
   </verify>
   <acceptance_criteria>
-    - `git log --oneline -1` mostra: "chore(maintenance): organiza scripts de manutencao em maintenance/"
-    - `git show --stat HEAD` lista: maintenance/debug_auth.php, maintenance/debug_roles.php, maintenance/debug_vocals.php, maintenance/exemplos_uso.php, maintenance/fix_mariana.php, maintenance/migrate_passwords.php, maintenance/temp_backup.txt, maintenance/temp_gen_keys.php, maintenance/restore_db.php
-    - `git show --stat HEAD` mostra "D restore_db.php" se o arquivo estava rastreado antes, ou apenas os novos arquivos em maintenance/ se restore_db.php nunca havia sido rastreado
+    - `git log --oneline -1` mostra: "chore(maintenance): organiza scripts de manutencao e remove descartaveis"
+    - `git show --stat HEAD` lista: maintenance/migrate_passwords.php, maintenance/exemplos_uso.php, maintenance/restore_db.php (new files) + as delecoes da raiz (D debug_auth.php, D debug_roles.php, etc.)
     - `ls maintenance/restore_db.php` retorna o arquivo (existe no disco)
-    - `ls restore_db.php 2>/dev/null | wc -l` retorna 0 (NAO existe mais na raiz)
-    - `git status -- maintenance/` nao mostra mais arquivos como untracked
+    - `ls maintenance/debug_auth.php 2>/dev/null` retorna vazio (foi deletado, nao versionado)
+    - `ls restore_db.php 2>/dev/null` retorna vazio (NAO existe mais na raiz)
+    - `git status -- maintenance/` nao mostra mais arquivos como untracked relevantes
   </acceptance_criteria>
-  <done>Todos os scripts de manutencao commitados em maintenance/; restore_db.php movido da raiz.</done>
+  <done>Scripts de manutencao valiosos commitados; descartaveis deletados; delecoes da raiz stageiadas com git add -u; restore_db.php movido.</done>
 </task>
 
 <task type="auto">

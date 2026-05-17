@@ -23,11 +23,13 @@ must_haves:
   truths:
     - "Nenhum desktop.ini aparece em 'git status' apos o commit"
     - ".gitignore contem entrada para 'App louvor 23.01.2026/' (pasta de backup ignorada)"
+    - ".gitignore contem entrada para '.env.*' (protecao de credenciais)"
+    - ".gitignore contem entrada para 'includes/vapid_config.php' (protecao de chave VAPID)"
     - "git ls-files nao retorna nenhum arquivo desktop.ini"
     - "Existe um commit dedicado exclusivo para remocao do desktop.ini tracking"
   artifacts:
     - path: ".gitignore"
-      provides: "Protecao futura contra retracking de desktop.ini e pasta de backup"
+      provides: "Protecao futura contra retracking de desktop.ini, pasta de backup e credenciais"
       contains: "App louvor 23.01.2026/"
   key_links:
     - from: "git rm --cached"
@@ -37,11 +39,11 @@ must_haves:
 ---
 
 <objective>
-Remover todos os arquivos desktop.ini do rastreamento git (git index) e garantir que nunca sejam rastreados novamente. Adicionar a pasta de backup antiga ao .gitignore.
+Remover todos os arquivos desktop.ini do rastreamento git (git index), garantir que nunca sejam rastreados novamente, e expandir o .gitignore para proteger credenciais e arquivos sensiveis.
 
-Purpose: desktop.ini e um arquivo de metadados do Windows Explorer — nao tem lugar num repositorio de codigo. Uma vez que o entry e removido do index git, o .gitignore (que ja contem "desktop.ini") previne futuros re-trackings automaticamente.
+Purpose: desktop.ini e um arquivo de metadados do Windows Explorer — nao tem lugar num repositorio de codigo. Alem disso, o .gitignore precisa proteger .env.production, .env.backup e includes/vapid_config.php que contem credenciais de producao — eles sao removidos do tracking no plano 01D, mas o .gitignore ja deve estar preparado.
 
-Output: Um commit dedicado removendo todos os 8 desktop.ini do tracking + .gitignore atualizado com "App louvor 23.01.2026/".
+Output: Um commit dedicado removendo todos os 8 desktop.ini do tracking + .gitignore expandido com entradas para pasta de backup, credenciais de ambiente e chaves privadas.
 </objective>
 
 <execution_context>
@@ -120,14 +122,33 @@ Output: Um commit dedicado removendo todos os 8 desktop.ini do tracking + .gitig
     A nova entrada "App louvor 23.01.2026/" deve ser adicionada em uma secao adequada.
   </read_first>
   <action>
-    PASSO 1 — Adicionar "App louvor 23.01.2026/" ao .gitignore:
+    PASSO 1 — Expandir o .gitignore com entradas de seguranca e backup:
 
-    Abrir .gitignore e adicionar ao final do arquivo (ou apos a secao de arquivos de sistema):
+    Abrir .gitignore e adicionar ao FINAL do arquivo o seguinte bloco:
 
     # Versao antiga (backup local — nao versionar)
     App louvor 23.01.2026/
 
+    # Credenciais de ambiente (NUNCA versionar)
+    .env
+    .env.*
+    !.env.example
+    .env.backup
+
+    # Chaves privadas (VAPID, JWT, etc.)
+    includes/vapid_config.php
+    includes/*_secret.php
+
+    # Backups e dumps
+    *.backup
+    *.dump
+    *.sql.gz
+
     Salvar o arquivo.
+
+    NOTA: ".env" e ".env.backup" ja podem estar no .gitignore — verificar antes de duplicar.
+    Usar grep para checar: grep -E "\.env|vapid_config|App louvor" .gitignore
+    Adicionar apenas as linhas que ainda nao existem.
 
     PASSO 2 — Remover todos os desktop.ini do git index:
 
@@ -167,10 +188,12 @@ Output: Um commit dedicado removendo todos os 8 desktop.ini do tracking + .gitig
     - `git log --oneline -1` mostra: "chore(git): remove desktop.ini tracking e ignora pasta de backup antiga"
     - `git show --stat HEAD` lista exatamente: .gitignore modificado + 8 desktop.ini deletados (prefixados com "D")
     - `grep "App louvor 23.01.2026/" .gitignore` retorna a linha (entry existe no arquivo)
+    - `grep "\.env\.\*" .gitignore` retorna a linha (protecao de credenciais existe)
+    - `grep "vapid_config" .gitignore` retorna a linha (protecao de chave VAPID existe)
     - `git status` NAO mostra nenhum desktop.ini em nenhum diretorio
     - Os arquivos desktop.ini AINDA EXISTEM no disco (apenas foram removidos do tracking — nao foram deletados fisicamente). Verificar: ls desktop.ini (deve existir)
   </acceptance_criteria>
-  <done>Todos os 8 desktop.ini removidos do git index; .gitignore atualizado com pasta de backup; commit dedicado criado.</done>
+  <done>Todos os 8 desktop.ini removidos do git index; .gitignore expandido com backup, credenciais e chaves privadas; commit dedicado criado.</done>
 </task>
 
 </tasks>
