@@ -9,7 +9,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 4: Registrar Faltas** — Status: ⬜ Não iniciada
+**Phase 4: Registrar Faltas** — Status: ⬜ Não iniciada (Phase 3.5 Limpeza concluída 2026-05-17)
 
 ## Phase Progress
 
@@ -18,6 +18,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 1 | Git Cleanup + Hardening | ✅ Completed | 2026-05-16 | 2026-05-17 |
 | 2 | Confirmar Escala | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 3 | Roteiro de Culto | ✅ Completed | 2026-05-17 | 2026-05-17 |
+| 3.5 | Limpeza & Organização | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 4 | Registrar Faltas | ⬜ Not Started | — | — |
 | 5 | Música Modernizada | ⬜ Not Started | — | — |
 | 6 | Metrônomo Pro | ⬜ Not Started | — | — |
