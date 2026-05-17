@@ -46,13 +46,18 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Plan 02-01 concluído: Footer sticky de confirmação com AJAX em escala_detalhe.php (ESC-01, ESC-02 entregues)
   - CSS: .confirm-footer, .confirm-footer-status, .btn-confirm, .btn-decline, .has-confirm-footer
   - JS: fetch() para api/confirm_scale.php, transição de estado sem reload, safe-area-inset-bottom para iOS
+- Plan 02-02 concluído: Badges visuais de status nos cards de participantes (ESC-03 entregue)
+  - Badge .member-status-badge verde/amarelo/vermelho em cada card de participante
+  - Logica de statusClass corrigida: usa $member['status'] diretamente com in_array() whitelist
 - Plan 02-03 concluído: Badge "X/Y confirmados" nos cards de escala (ESC-04 entregue)
-- Plans 02-02 e 02-04 ainda pendentes
+- Plan 02-04 ainda pendente (push notifications de lembrete)
 
 ## Decisions Made
 
 - "Footer só renderizado quando $myMemberData !== null && !$isEditable — garante isolamento entre edição e confirmação" (02-01)
 - "Transição de estado via outerHTML replacement — simples, sem estado global, vanilla JS" (02-01)
+- "in_array() whitelist para statusClass: valor inesperado do banco cai em status-pending — previne classes CSS injetadas" (02-02)
+- "Badge com texto legível além do indicador circular — acessibilidade e clareza visual em telas pequenas" (02-02)
 - "Reutilizar $participantsMap já carregado para contador de confirmações — zero queries extras no loop" (02-03)
 - "Badge invisível quando escala não tem participantes — evita '0/0 confirmados'" (02-03)
 

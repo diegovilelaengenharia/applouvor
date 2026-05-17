@@ -68,7 +68,7 @@ Plans:
 
 **Plans:**
 - [x] Plan 2A (02-01): UI de confirmação na view do músico (`admin/escala_detalhe.php`) — footer sticky com AJAX *(ESC-01, ESC-02 entregues — 2026-05-17)*
-- Plan 2B (02-02): Badges de status nos cards de participantes (admin + músico)
+- [x] Plan 2B (02-02): Badges de status nos cards de participantes (admin + músico) *(ESC-03 entregue — 2026-05-17)*
 - [x] Plan 2C (02-03): Contador de confirmações na listagem de escalas (`admin/escalas.php`) *(ESC-04 entregue — 2026-05-17)*
 - Plan 2D (02-04): Push server-side — envio na publicação + lembrete 2 dias antes (cron ou manual)
 
