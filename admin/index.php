@@ -128,4 +128,79 @@ $categoryNames = [
 
 </div>
 
+<?php if ($userRole === 'admin'): ?>
+<?php
+// Buscar escalas nos próximos 2 dias com participantes pending
+$upcomingWithPending = [];
+try {
+    $stmtReminder = $pdo->prepare("
+        SELECT s.id, s.event_type, s.event_date, s.event_time,
+               COUNT(su.user_id) as pending_count
+        FROM schedules s
+        JOIN schedule_users su ON s.id = su.schedule_id
+        WHERE s.event_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 2 DAY)
+          AND su.status = 'pending'
+        GROUP BY s.id
+        HAVING pending_count > 0
+    ");
+    $stmtReminder->execute();
+    $upcomingWithPending = $stmtReminder->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {}
+?>
+<?php if (!empty($upcomingWithPending)): ?>
+<div style="margin: 0 var(--space-md) var(--space-md);">
+    <div class="pib-card" style="border-left: 4px solid #f97316; padding: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <i data-lucide="bell" width="20" style="color: #f97316;"></i>
+            <span style="font-weight: 800; font-size: 0.95rem;">Lembretes Pendentes</span>
+        </div>
+        <?php foreach ($upcomingWithPending as $upcoming): ?>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+            <div>
+                <div style="font-weight: 700; font-size: 0.9rem;"><?= htmlspecialchars($upcoming['event_type']) ?></div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+                    <?= date('d/m', strtotime($upcoming['event_date'])) ?> as <?= substr($upcoming['event_time'], 0, 5) ?>
+                    &mdash; <?= (int)$upcoming['pending_count'] ?> sem confirmar
+                </div>
+            </div>
+            <button
+                onclick="sendReminder(<?= (int)$upcoming['id'] ?>, this)"
+                style="background: #f97316; color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; min-height: 44px; white-space: nowrap;">
+                <i data-lucide="send" width="14"></i> Lembrar
+            </button>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+function sendReminder(scheduleId, btn) {
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    fetch('../api/send_reminders.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ schedule_id: scheduleId })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success) {
+            btn.textContent = 'Enviado!';
+            btn.style.background = '#16a34a';
+        } else {
+            btn.textContent = 'Erro';
+            btn.style.background = '#dc2626';
+            btn.disabled = false;
+            alert('Erro: ' + (data.message || 'Tente novamente.'));
+        }
+    })
+    .catch(function() {
+        btn.textContent = 'Erro';
+        btn.disabled = false;
+    });
+}
+</script>
+<?php endif; ?>
+<?php endif; ?>
+
 <?php renderAppFooter(); ?>

@@ -106,6 +106,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $pdo->commit();
+
+            // Push de convocação (D-03) — dispara após commit bem-sucedido
+            try {
+                require_once '../includes/web_push_helper.php';
+                $vapidPublic  = defined('VAPID_PUBLIC_KEY')  ? VAPID_PUBLIC_KEY  : (getenv('VAPID_PUBLIC_KEY')  ?: '');
+                $vapidPrivate = defined('VAPID_PRIVATE_KEY') ? VAPID_PRIVATE_KEY : (getenv('VAPID_PRIVATE_KEY') ?: '');
+                if (!empty($vapidPublic) && !empty($vapidPrivate)) {
+                    // Buscar participantes com status=pending desta escala que tenham subscription
+                    $stmtPushUsers = $pdo->prepare("
+                        SELECT su.user_id, ps.endpoint, ps.p256dh, ps.auth
+                        FROM schedule_users su
+                        JOIN push_subscriptions ps ON ps.user_id = su.user_id
+                        WHERE su.schedule_id = ? AND su.status = 'pending'
+                    ");
+                    $stmtPushUsers->execute([$id]);
+                    $pushTargets = $stmtPushUsers->fetchAll(PDO::FETCH_ASSOC);
+                    if (!empty($pushTargets)) {
+                        $pushHelper = new WebPushHelper($vapidPublic, $vapidPrivate, 'mailto:contato@pibolveira.com');
+                        $eventDate = date('d/m', strtotime($_POST['event_date']));
+                        $eventTime = substr($_POST['event_time'], 0, 5);
+                        $convocPayload = [
+                            'title' => 'Nova Escala',
+                            'body'  => "Voce foi escalado para " . htmlspecialchars($_POST['event_type']) . " em $eventDate as $eventTime. Confirme no app!",
+                            'url'   => '/applouvor/admin/escala_detalhe.php?id=' . (int)$id,
+                        ];
+                        foreach ($pushTargets as $target) {
+                            $sub = ['endpoint' => $target['endpoint'], 'p256dh' => $target['p256dh'], 'auth' => $target['auth']];
+                            $pushHelper->sendNotification($sub, $convocPayload);
+                        }
+                    }
+                }
+            } catch (Exception $pushEx) {
+                // Push falhou — não interrompe o fluxo de salvamento (D-02 fallback)
+                error_log('Push convocação falhou: ' . $pushEx->getMessage());
+            }
+
             header("Location: escala_detalhe.php?id=$id&success=1");
             exit;
         } catch (Exception $e) {

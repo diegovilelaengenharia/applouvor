@@ -41,6 +41,9 @@ if ($isProduction) {
     define('APP_DEBUG', false);
     define('APP_URL',   'https://vilela.eng.br/applouvor');
 
+    define('VAPID_PUBLIC_KEY',  getenv('VAPID_PUBLIC_KEY')  ?: '');
+    define('VAPID_PRIVATE_KEY', getenv('VAPID_PRIVATE_KEY') ?: '');
+
     ini_set('display_errors', 0);
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
 
@@ -59,6 +62,9 @@ if ($isProduction) {
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
     define('APP_URL', $protocol . '://' . $host);
+
+    define('VAPID_PUBLIC_KEY',  App\DotEnv::get('VAPID_PUBLIC_KEY',  ''));
+    define('VAPID_PRIVATE_KEY', App\DotEnv::get('VAPID_PRIVATE_KEY', ''));
 }
 
 // ======================================
