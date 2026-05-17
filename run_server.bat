@@ -1,13 +1,17 @@
 @echo off
 echo ========================================================
-echo   Iniciando Servidor Local do App Louvor
+echo   App Louvor - Iniciador XAMPP (porta 8080)
 echo ========================================================
 echo.
-echo 1. O servidor estara disponivel em: http://localhost:8000
-echo 2. Para resetar o banco, acesse: http://localhost:8000/reset_db_v2.php
-echo 3. Mantenha essa janela aberta enquanto usa o App.
+echo OPCAO 1: Use o XAMPP Control Panel (RECOMENDADO)
+echo   - Inicie Apache e MySQL pelo XAMPP Control Panel
+echo   - Acesse: http://applouvor.local:8080
+echo   - Ou: http://localhost:8080/applouvor (via htdocs)
 echo.
-echo Pressione Ctrl+C para encerrar o servidor.
+echo OPCAO 2: PHP Built-in Server (sem XAMPP Apache)
+echo   - O servidor estara disponivel em: http://localhost:8080
+echo.
+echo Pressione Ctrl+C para encerrar o servidor (Opcao 2).
 echo.
 
 REM Caminho do PHP no XAMPP
@@ -27,15 +31,14 @@ if exist "C:\xampp\mysql_start.bat" (
     start /min "MySQL XAMPP" "C:\xampp\mysql_start.bat"
     timeout /t 3 >nul
 ) else (
-    echo [AVISO] O script de inicio do MySQL nao foi encontrado.
-    echo Certifique-se de iniciar o 'MySQL' pelo XAMPP Control Panel.
+    echo [AVISO] Inicie o MySQL pelo XAMPP Control Panel.
 )
 
-REM Abre o navegador automaticamente após 2 segundos
+REM Abre o navegador automaticamente apos 2 segundos
 timeout /t 2 >nul
-start http://localhost:8000
+start http://localhost:8080
 
 REM Inicia o servidor usando o PHP do XAMPP
 echo.
-echo Iniciando PHP Server...
-%PHP_BIN% -S localhost:8000
+echo Iniciando PHP Built-in Server na porta 8080...
+%PHP_BIN% -S localhost:8080
