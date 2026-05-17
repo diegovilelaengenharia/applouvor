@@ -328,6 +328,19 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
                 </button>
             </div>
 
+            <hr class="divider">
+
+            <!-- ROTEIRO DE CULTO (Edit Mode) -->
+            <div class="form-group mt-4" id="roteiro-edit-section">
+                <label class="form-label">Roteiro de Culto</label>
+                <div id="roteiro-list" class="roteiro-edit-list">
+                    <div class="roteiro-empty" id="roteiro-empty-state">Nenhum item no roteiro. Clique em "Adicionar Item".</div>
+                </div>
+                <button type="button" class="btn-manage" onclick="openRoteiroModal()">
+                    <i data-lucide="plus" width="16"></i> Adicionar Item
+                </button>
+            </div>
+
             <div class="form-actions-grid">
                  <a href="?id=<?= $id ?>" class="btn-warning w-full text-center text-no-decoration">Cancelar</a>
                  <button type="button" onclick="if(confirm('Excluir esta escala?')) document.getElementById('delForm').submit()" class="btn-danger w-full">Excluir</button>
@@ -335,6 +348,63 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             </div>
         </form>
         <form id="delForm" method="POST" style="display:none;"><input type="hidden" name="delete_schedule" value="1"></form>
+
+        <!-- MODAL: Adicionar Item ao Roteiro -->
+        <div id="modalRoteiro" class="roteiro-modal-overlay">
+            <div class="roteiro-modal-card">
+                <h3><i data-lucide="list-ordered" width="18" style="vertical-align:middle;margin-right:6px;"></i>Adicionar Item ao Roteiro</h3>
+
+                <div class="roteiro-field-group">
+                    <label>Tipo do Item</label>
+                    <select id="roteiro-type" class="form-input w-full" onchange="handleRoteiroTypeChange(this.value)">
+                        <option value="musica">🎵 Música</option>
+                        <option value="oracao">🙏 Oração</option>
+                        <option value="palavra">📖 Palavra</option>
+                        <option value="anuncio">📢 Anúncio</option>
+                        <option value="intervalo">☕ Intervalo</option>
+                        <option value="livre">➕ Livre</option>
+                    </select>
+                </div>
+
+                <!-- Só aparece quando tipo = musica -->
+                <div class="roteiro-field-group" id="roteiro-song-group">
+                    <label>Música da Escala</label>
+                    <select id="roteiro-song" class="form-input w-full" onchange="onRoteiroSongChange(this)">
+                        <option value="">— selecione uma música —</option>
+                        <?php foreach ($songs as $sg): ?>
+                        <option value="<?= $sg['song_id'] ?>"
+                                data-title="<?= htmlspecialchars($sg['title']) ?>"
+                                data-tone="<?= htmlspecialchars($sg['tone'] ?? '') ?>">
+                            <?= htmlspecialchars($sg['title']) ?> — <?= htmlspecialchars($sg['artist']) ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Tom customizado — só aparece quando tipo = musica -->
+                <div class="roteiro-field-group" id="roteiro-tone-group">
+                    <label>Tom customizado <small style="font-weight:400;text-transform:none;">(deixe vazio para usar o tom padrão)</small></label>
+                    <input type="text" id="roteiro-custom-tone" class="form-input w-full" placeholder="Ex: D, Em, F#m..." maxlength="10">
+                </div>
+
+                <!-- Título — obrigatório para não-músicas, opcional para músicas -->
+                <div class="roteiro-field-group" id="roteiro-title-group">
+                    <label id="roteiro-title-label">Título / Descrição</label>
+                    <input type="text" id="roteiro-title" class="form-input w-full" placeholder="Ex: Momento de intercessão" maxlength="255">
+                </div>
+
+                <div class="roteiro-field-group">
+                    <label>Nota interna <small style="font-weight:400;text-transform:none;">(só você vê — não aparece para músicos)</small></label>
+                    <textarea id="roteiro-nota" class="form-input w-full" rows="2" placeholder="Ex: Aqui Diego prega os pedidos de oração"></textarea>
+                </div>
+
+                <div class="roteiro-modal-actions">
+                    <button type="button" class="btn-warning" onclick="closeRoteiroModal()">Cancelar</button>
+                    <button type="button" class="btn-primary" onclick="submitRoteiroItem()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+
     <?php else: ?>
 
         <!-- VIEW MODE CONTENT -->
@@ -952,6 +1022,210 @@ function closeInfoModal(save) {
 })();
 </script>
 
+<?php endif; ?>
+
+<?php if ($isEditable): ?>
+<script>
+(function() {
+    var scheduleId = <?= (int)$id ?>;
+    var roteiroItems = [];
+
+    var ROTEIRO_ICONS = {
+        musica: 'music', oracao: 'hands', palavra: 'book-open',
+        anuncio: 'megaphone', intervalo: 'coffee', livre: 'more-horizontal'
+    };
+    var ROTEIRO_LABELS = {
+        musica: 'Música', oracao: 'Oração', palavra: 'Palavra',
+        anuncio: 'Anúncio', intervalo: 'Intervalo', livre: 'Livre'
+    };
+
+    function loadRoteiro() {
+        fetch('../api/roteiro.php?schedule_id=' + scheduleId)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    roteiroItems = data.data || [];
+                    renderRoteiroList();
+                }
+            });
+    }
+
+    function renderRoteiroList() {
+        var list = document.getElementById('roteiro-list');
+        var emptyState = document.getElementById('roteiro-empty-state');
+        if (!list) return;
+
+        var existingItems = list.querySelectorAll('.roteiro-item');
+        existingItems.forEach(function(el) { el.remove(); });
+
+        if (roteiroItems.length === 0) {
+            if (emptyState) emptyState.style.display = 'block';
+            return;
+        }
+        if (emptyState) emptyState.style.display = 'none';
+
+        roteiroItems.forEach(function(item, idx) {
+            var isFirst = idx === 0;
+            var isLast  = idx === roteiroItems.length - 1;
+            var icon    = ROTEIRO_ICONS[item.item_type] || 'more-horizontal';
+            var label   = ROTEIRO_LABELS[item.item_type] || item.item_type;
+
+            var displayTitle = item.item_type === 'musica' && item.song_title
+                ? item.song_title
+                : (item.title || label);
+
+            var subParts = [label];
+            if (item.item_type === 'musica' && item.song_artist) subParts.push(item.song_artist);
+            if (item.custom_tone) subParts.push('<strong>' + escHtml(item.custom_tone) + '</strong>');
+            else if (item.song_tone) subParts.push(escHtml(item.song_tone));
+
+            var notaHtml = item.nota_interna
+                ? '<div class="roteiro-item-nota"><i data-lucide="eye-off" style="width:11px;vertical-align:middle;margin-right:3px;"></i>' + escHtml(item.nota_interna) + '</div>'
+                : '';
+
+            var el = document.createElement('div');
+            el.className = 'roteiro-item';
+            el.dataset.id  = item.id;
+            el.dataset.pos = item.order_position;
+            el.innerHTML = ''
+                + '<div class="roteiro-item-icon"><i data-lucide="' + icon + '" width="18"></i></div>'
+                + '<div class="roteiro-item-info">'
+                +   '<div class="roteiro-item-title">' + escHtml(displayTitle) + '</div>'
+                +   '<div class="roteiro-item-sub">' + subParts.join(' · ') + '</div>'
+                +   notaHtml
+                + '</div>'
+                + '<div class="roteiro-item-actions">'
+                +   '<button type="button" class="roteiro-btn-arrow" onclick="moveRoteiroItem(' + idx + ', -1)" ' + (isFirst ? 'disabled' : '') + ' title="Mover para cima">▲</button>'
+                +   '<button type="button" class="roteiro-btn-arrow" onclick="moveRoteiroItem(' + idx + ', 1)"  ' + (isLast  ? 'disabled' : '') + ' title="Mover para baixo">▼</button>'
+                + '</div>'
+                + '<button type="button" class="roteiro-btn-delete" onclick="deleteRoteiroItem(' + item.id + ')" title="Excluir item">'
+                +   '<i data-lucide="trash-2" width="16"></i>'
+                + '</button>';
+            list.appendChild(el);
+        });
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function moveRoteiroItem(idx, direction) {
+        var newIdx = idx + direction;
+        if (newIdx < 0 || newIdx >= roteiroItems.length) return;
+
+        var tmp = roteiroItems[idx];
+        roteiroItems[idx] = roteiroItems[newIdx];
+        roteiroItems[newIdx] = tmp;
+
+        roteiroItems.forEach(function(item, i) { item.order_position = i; });
+        renderRoteiroList();
+
+        var payload = roteiroItems.map(function(item) { return {id: item.id, pos: item.order_position}; });
+        fetch('../api/roteiro.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'reorder', schedule_id: scheduleId, items: payload})
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            if (!data.success) alert('Erro ao reordenar: ' + (data.message || ''));
+        });
+    }
+
+    function deleteRoteiroItem(itemId) {
+        if (!confirm('Excluir este item do roteiro?')) return;
+        fetch('../api/roteiro.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'delete', id: itemId, schedule_id: scheduleId})
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            if (data.success) {
+                roteiroItems = roteiroItems.filter(function(i) { return i.id !== itemId; });
+                roteiroItems.forEach(function(item, i) { item.order_position = i; });
+                renderRoteiroList();
+            } else {
+                alert('Erro ao excluir: ' + (data.message || ''));
+            }
+        });
+    }
+
+    window.openRoteiroModal = function() {
+        document.getElementById('roteiro-type').value = 'musica';
+        document.getElementById('roteiro-song').value = '';
+        document.getElementById('roteiro-custom-tone').value = '';
+        document.getElementById('roteiro-title').value = '';
+        document.getElementById('roteiro-nota').value = '';
+        handleRoteiroTypeChange('musica');
+        var m = document.getElementById('modalRoteiro');
+        m.style.display = 'flex';
+    };
+
+    window.closeRoteiroModal = function() {
+        document.getElementById('modalRoteiro').style.display = 'none';
+    };
+
+    window.handleRoteiroTypeChange = function(type) {
+        var isSong = type === 'musica';
+        document.getElementById('roteiro-song-group').style.display  = isSong ? 'block' : 'none';
+        document.getElementById('roteiro-tone-group').style.display  = isSong ? 'block' : 'none';
+        var titleLabel = document.getElementById('roteiro-title-label');
+        if (titleLabel) titleLabel.textContent = isSong ? 'Título alternativo (opcional)' : 'Título / Descrição *';
+    };
+
+    window.onRoteiroSongChange = function(sel) {
+        var tone = sel.options[sel.selectedIndex].getAttribute('data-tone') || '';
+        var toneInput = document.getElementById('roteiro-custom-tone');
+        if (toneInput) toneInput.placeholder = tone ? 'Ex: ' + tone + ' (padrão — deixe vazio para manter)' : 'Ex: D, Em, F#m...';
+    };
+
+    window.submitRoteiroItem = function() {
+        var type = document.getElementById('roteiro-type').value;
+        var songId = type === 'musica' ? (parseInt(document.getElementById('roteiro-song').value) || null) : null;
+        var customTone = type === 'musica' ? (document.getElementById('roteiro-custom-tone').value.trim() || null) : null;
+        var title = document.getElementById('roteiro-title').value.trim() || null;
+        var nota = document.getElementById('roteiro-nota').value.trim() || null;
+
+        if (type !== 'musica' && !title) {
+            alert('Preencha o título do item.');
+            document.getElementById('roteiro-title').focus();
+            return;
+        }
+
+        var payload = {
+            action: 'add',
+            schedule_id: scheduleId,
+            item_type: type,
+            song_id: songId,
+            custom_tone: customTone,
+            title: title,
+            nota_interna: nota
+        };
+
+        fetch('../api/roteiro.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            if (data.success) {
+                closeRoteiroModal();
+                loadRoteiro();
+            } else {
+                alert('Erro ao adicionar: ' + (data.message || ''));
+            }
+        });
+    };
+
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    window.moveRoteiroItem   = moveRoteiroItem;
+    window.deleteRoteiroItem = deleteRoteiroItem;
+
+    loadRoteiro();
+})();
+</script>
 <?php endif; ?>
 
 <?php renderAppFooter(); ?>

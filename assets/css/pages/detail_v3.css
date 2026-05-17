@@ -497,3 +497,169 @@
     background: #fee2e2;
     color: #dc2626;
 }
+
+/* === ROTEIRO DE CULTO — EDIT (Phase 3B) === */
+.roteiro-edit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.roteiro-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-body);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.roteiro-item-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.roteiro-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.roteiro-item-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.roteiro-item-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.roteiro-item-nota {
+    font-size: 0.72rem;
+    color: var(--primary);
+    margin-top: 2px;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.roteiro-item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.roteiro-btn-arrow {
+    background: none;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 2px 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    line-height: 1;
+    font-size: 0.8rem;
+    min-width: 28px;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.roteiro-btn-arrow:hover {
+    background: var(--bg-surface);
+    color: var(--text-main);
+}
+
+.roteiro-btn-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.roteiro-btn-delete {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.roteiro-btn-delete:hover {
+    background: #fef2f2;
+}
+
+.roteiro-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border: 1px dashed var(--border-subtle);
+    border-radius: 10px;
+}
+
+/* Modal de adição de item */
+.roteiro-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+}
+
+.roteiro-modal-card {
+    background: var(--bg-surface);
+    width: 90%;
+    max-width: 440px;
+    border-radius: 16px;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.roteiro-modal-card h3 {
+    margin: 0 0 16px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.roteiro-field-group {
+    margin-bottom: 14px;
+}
+
+.roteiro-field-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.roteiro-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
