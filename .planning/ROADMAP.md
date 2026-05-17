@@ -258,7 +258,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 |---|------|------|-------|--------|
 | 1 | Git Cleanup + Hardening | Base limpa + segurança pré-viagem | 4 | ✅ Concluída |
 | 2 | Confirmar Escala | Músico confirma/recusa + push real | 4 | ✅ Concluída |
-| 3 | Roteiro de Culto | Líder monta fluxo do culto + nota interna | 4 | ⬜ |
+| 3 | Roteiro de Culto | Líder monta fluxo do culto + nota interna | 4 | ✅ Concluída |
 | 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ⬜ |
 | 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ⬜ |
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ⬜ |

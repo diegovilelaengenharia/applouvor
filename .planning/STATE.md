@@ -9,7 +9,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 2: Confirmar Escala** — Status: ✅ Concluída (todos os 4 planos entregues — 2026-05-17)
+**Phase 4: Registrar Faltas** — Status: ⬜ Não iniciada
 
 ## Phase Progress
 
@@ -17,7 +17,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 |-------|------|--------|---------|-----------|
 | 1 | Git Cleanup + Hardening | ✅ Completed | 2026-05-16 | 2026-05-17 |
 | 2 | Confirmar Escala | ✅ Completed | 2026-05-17 | 2026-05-17 |
-| 3 | Roteiro de Culto | ⬜ Not Started | — | — |
+| 3 | Roteiro de Culto | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 4 | Registrar Faltas | ⬜ Not Started | — | — |
 | 5 | Música Modernizada | ⬜ Not Started | — | — |
 | 6 | Metrônomo Pro | ⬜ Not Started | — | — |
@@ -40,6 +40,16 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 3 — Summary (completada 2026-05-17)
+
+4 commits entregues em 4 waves sequenciais:
+- Wave 1 (03-01): `feat(03): add schedule_roteiro migration + api/roteiro.php CRUD` — commit 14bc968
+- Wave 2 (03-02): `feat(03): add roteiro edit UI — admin can add/reorder/delete items via modal` — commit 74f31e7
+- Wave 3 (03-03): `feat(03): add roteiro view — músico vê itens ordenados com tom e tipo` — commit e9bc582
+- Wave 4 (03-04): `feat(03): integrate custom_tone badge in song cards (ROT-05 complete)` — commit a45d543
+
+**Resultado:** schedule_roteiro table criada | api/roteiro.php CRUD | UI edição líder com modal + setas ▲/▼ | View músico read-only (nota_interna server-side protegida) | badge custom_tone laranja nos cards de repertório
 
 ## Phase 2 — Progress (em execução 2026-05-17)
 
