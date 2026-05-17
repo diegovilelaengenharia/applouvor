@@ -98,6 +98,24 @@ Plans:
 
 ---
 
+### Phase 3.5: Limpeza & Organização
+**Goal:** Remover arquivos obsoletos, arquivar scripts one-time de manutenção, e mover utilitários de dev/deploy para `tools/` — deixando o projeto limpo para as próximas fases.
+**Mode:** mvp
+
+**Success Criteria:**
+1. Todos os arquivos backup/test/debug removidos do tracking
+2. Scripts one-time de maintenance/ movidos para maintenance/ARCHIVED/
+3. Scripts de deploy e dev organizados em tools/
+4. `desktop.ini` removido de todas as pastas (maintenance/, database/)
+5. Working tree limpa com commits semânticos por área
+
+**Plans:**
+- Plan 3.5-A: Deletar arquivos obsoletos (backups, test, .bak, desktop.ini residuais)
+- Plan 3.5-B: Arquivar scripts de manutenção one-time em maintenance/ARCHIVED/
+- Plan 3.5-C: Criar tools/ e mover scripts de deploy/dev
+
+---
+
 ### Phase 4: Registrar Faltas
 **Goal:** Após um culto/ensaio, líder registra quem compareceu e quem faltou. Isso alimenta o histórico de presença.
 **Mode:** mvp
@@ -259,6 +277,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 1 | Git Cleanup + Hardening | Base limpa + segurança pré-viagem | 4 | ✅ Concluída |
 | 2 | Confirmar Escala | Músico confirma/recusa + push real | 4 | ✅ Concluída |
 | 3 | Roteiro de Culto | Líder monta fluxo do culto + nota interna | 4 | ✅ Concluída |
+| 3.5 | Limpeza & Organização | Deletar obsoletos, arquivar scripts, organizar tools/ | 3 | ⬜ |
 | 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ⬜ |
 | 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ⬜ |
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ⬜ |
