@@ -17,7 +17,7 @@
 - [ ] **ESC-01**: Músico visualiza botão "Confirmar" / "Recusar" na tela de detalhe da sua escala
 - [ ] **ESC-02**: Músico confirma ou recusa presença via toggle/botão com feedback visual imediato (AJAX)
 - [ ] **ESC-03**: Status de confirmação (confirmado/pendente/recusado) visível no card de cada participante
-- [ ] **ESC-04**: Líder vê quantos confirmaram vs pendente vs recusaram na lista de escalas
+- [x] **ESC-04**: Líder vê quantos confirmaram vs pendente vs recusaram na lista de escalas *(entregue em 02-03, 2026-05-17)*
 - [ ] **ESC-05**: Notificação push automática 2 dias antes da escala para músicos que não confirmaram
 
 ### ESCALA — Roteiro de Culto

@@ -67,9 +67,9 @@ Plans:
 - Verificar se Hostinger suporta cron job; se não, criar botão "Enviar lembrete" manual
 
 **Plans:**
-- Plan 2A: UI de confirmação na view do músico (`admin/escala_detalhe.php`) — botões com AJAX
+- Plan 2A: UI de confirmação na view do músico (`admin/escala_detalhe.php`) — botões com AJAX *(CSS preparado em 02-01)*
 - Plan 2B: Badges de status nos cards de participantes (admin + músico)
-- Plan 2C: Contador de confirmações na listagem de escalas (`admin/escalas.php`)
+- [x] Plan 2C: Contador de confirmações na listagem de escalas (`admin/escalas.php`) *(ESC-04 entregue — 2026-05-17)*
 - Plan 2D: Push server-side — envio na publicação + lembrete 2 dias antes (cron ou manual)
 
 ---

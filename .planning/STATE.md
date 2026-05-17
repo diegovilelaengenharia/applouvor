@@ -9,7 +9,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 2: Confirmar Escala** — Status: 📋 Ready to Execute (4 planos, 3 waves)
+**Phase 2: Confirmar Escala** — Status: 🔄 Em Execução (plano 03/04 concluído)
 
 ## Phase Progress
 
@@ -40,6 +40,17 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 2 — Progress (em execução 2026-05-17)
+
+- Plan 02-03 concluído: Badge "X/Y confirmados" nos cards de escala (ESC-04 entregue)
+- Plan 02-01 concluído: CSS do footer sticky de confirmação em detail_v3.css
+- Plans 02-02 e 02-04 ainda pendentes
+
+## Decisions Made
+
+- "Reutilizar $participantsMap já carregado para contador de confirmações — zero queries extras no loop" (02-03)
+- "Badge invisível quando escala não tem participantes — evita '0/0 confirmados'" (02-03)
 
 ## Context Notes
 
