@@ -34,3 +34,20 @@ error_log
 *.tmp
 *.bak
 *.cache
+
+# Versao antiga (backup local — nao versionar)
+App louvor 23.01.2026/
+
+# Credenciais de ambiente (NUNCA versionar)
+.env.*
+!.env.example
+.env.backup
+
+# Chaves privadas (VAPID, JWT, etc.)
+includes/vapid_config.php
+includes/*_secret.php
+
+# Backups e dumps
+*.backup
+*.dump
+*.sql.gz
