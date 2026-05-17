@@ -90,5 +90,5 @@ try {
 
 } catch (Exception $e) {
     error_log('send_reminders.php error: ' . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Erro interno: ' . $e->getMessage()]);
+    echo json_encode(['success' => false, 'message' => 'Erro interno ao processar lembretes.']);
 }

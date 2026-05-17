@@ -82,16 +82,23 @@ class WebPushHelper {
         }
 
         // HKDF para derivar chave de criptografia e nonce
-        // PRK = HMAC-SHA256(auth, sharedSecret)
-        $prk = $this->hkdfExtract($userAuthToken, $sharedSecret);
+        // Per draft-ietf-webpush-encryption-04 §3.3
+        // Passo 1: combinar sharedSecret com auth token
+        $prkCombine = $this->hkdfExtract($userAuthToken, $sharedSecret);
+        $ikm = $this->hkdfExpand($prkCombine, "Content-Encoding: auth\x00", 32);
+        // Passo 2: derivar PRK final usando salt aleatório
+        $prk = $this->hkdfExtract($salt, $ikm);
+
+        // Context string: "P-256\x00" + len(receiver_key) + receiver_key + len(sender_key) + sender_key
+        $context = "P-256\x00"
+            . pack('n', strlen($userPublicKey)) . $userPublicKey
+            . pack('n', strlen($localPublicKeyRaw)) . $localPublicKeyRaw;
 
         // CEK (Content Encryption Key) 16 bytes
-        $cekInfo = "Content-Encoding: aesgcm\x00";
-        $cek = $this->hkdfExpand($prk, $salt . $localPublicKeyRaw . $userPublicKey . $cekInfo, 16);
+        $cek = $this->hkdfExpand($prk, "Content-Encoding: aesgcm\x00" . $context, 16);
 
         // NONCE 12 bytes
-        $nonceInfo = "Content-Encoding: nonce\x00";
-        $nonce = $this->hkdfExpand($prk, $salt . $localPublicKeyRaw . $userPublicKey . $nonceInfo, 12);
+        $nonce = $this->hkdfExpand($prk, "Content-Encoding: nonce\x00" . $context, 12);
 
         // Padding: 2 bytes de padding length (0) + payload
         $paddedPayload = "\x00\x00" . $payload;

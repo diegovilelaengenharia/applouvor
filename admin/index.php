@@ -53,6 +53,7 @@ renderAppHeader('Dashboard');
 </script>
 <?php endif; ?>
 
+<?php
 // 2. Organizar Cards por Categoria (Sistema Original)
 $groupedCards = [
     'gestao' => ['escalas', 'repertorio', 'membros', 'agenda', 'historico'],
