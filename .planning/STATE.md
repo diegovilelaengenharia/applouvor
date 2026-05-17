@@ -9,14 +9,14 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 2: Confirmar Escala** — Status: 🔄 Em Execução (02-01 e 02-03 concluídos, 02-02 e 02-04 pendentes)
+**Phase 2: Confirmar Escala** — Status: ✅ Concluída (todos os 4 planos entregues — 2026-05-17)
 
 ## Phase Progress
 
 | Phase | Name | Status | Started | Completed |
 |-------|------|--------|---------|-----------|
 | 1 | Git Cleanup + Hardening | ✅ Completed | 2026-05-16 | 2026-05-17 |
-| 2 | Confirmar Escala | 📋 Planned | 2026-05-17 | — |
+| 2 | Confirmar Escala | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 3 | Roteiro de Culto | ⬜ Not Started | — | — |
 | 4 | Registrar Faltas | ⬜ Not Started | — | — |
 | 5 | Música Modernizada | ⬜ Not Started | — | — |
@@ -50,7 +50,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
   - Badge .member-status-badge verde/amarelo/vermelho em cada card de participante
   - Logica de statusClass corrigida: usa $member['status'] diretamente com in_array() whitelist
 - Plan 02-03 concluído: Badge "X/Y confirmados" nos cards de escala (ESC-04 entregue)
-- Plan 02-04 ainda pendente (push notifications de lembrete)
+- Plan 02-04 concluído: AESGCM real em web_push_helper.php + api/send_reminders.php + widget dashboard + trigger auto no save_changes (ESC-05 entregue)
+  - AESGCM: openssl_encrypt(aes-128-gcm) + ECDH P-256 + HKDF em PHP puro
+  - Fallback D-02: push sem payload se criptografia falhar (erro logado)
+  - Botão "Lembrar" no dashboard admin para escalas com pending nos próximos 2 dias
+  - Push automático ao salvar escala (dentro de try/catch separado, nao interrompe o save)
 
 ## Decisions Made
 
@@ -60,6 +64,10 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - "Badge com texto legível além do indicador circular — acessibilidade e clareza visual em telas pequenas" (02-02)
 - "Reutilizar $participantsMap já carregado para contador de confirmações — zero queries extras no loop" (02-03)
 - "Badge invisível quando escala não tem participantes — evita '0/0 confirmados'" (02-03)
+- "AESGCM puro PHP: openssl_encrypt(aes-128-gcm) + ECDH P-256 + HKDF sem dependências externas" (02-04)
+- "Fallback D-02: if encrypt null — push sem payload + error_log — garante valor mínimo" (02-04)
+- "Push trigger isolado em try/catch próprio em escala_detalhe.php — falha não interrompe o redirect" (02-04)
+- "VAPID keys via config.php (getenv em prod, DotEnv em local) — nunca hardcoded no código" (02-04)
 
 ## Context Notes
 
