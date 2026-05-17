@@ -206,6 +206,27 @@ $stmtComments = $pdo->prepare("
 $stmtComments->execute([$id]);
 $comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
 
+// Buscar Roteiro de Culto
+$stmtRoteiro = $pdo->prepare("
+    SELECT r.id, r.order_position, r.item_type, r.title,
+           r.song_id, r.custom_tone, r.nota_interna,
+           s.title as song_title, s.artist as song_artist, s.tone as song_tone
+    FROM schedule_roteiro r
+    LEFT JOIN songs s ON s.id = r.song_id
+    WHERE r.schedule_id = ?
+    ORDER BY r.order_position ASC, r.id ASC
+");
+$stmtRoteiro->execute([$id]);
+$roteiro = $stmtRoteiro->fetchAll(PDO::FETCH_ASSOC);
+
+// Mapa de custom_tone por song_id (para override nos cards de repertório — ROT-05)
+$customToneMap = [];
+foreach ($roteiro as $rItem) {
+    if ($rItem['item_type'] === 'musica' && $rItem['song_id'] && !empty($rItem['custom_tone'])) {
+        $customToneMap[(int)$rItem['song_id']] = $rItem['custom_tone'];
+    }
+}
+
 // Listas completas para Edit Mode
 $allUsers = $pdo->query("SELECT id, name, instrument, avatar_color FROM users ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 $allSongs = $pdo->query("SELECT id, title, artist, tone FROM songs ORDER BY title")->fetchAll(PDO::FETCH_ASSOC);
@@ -536,6 +557,75 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             </div>
         </div>
         
+        <!-- ROTEIRO DE CULTO (View Mode — Read-Only) -->
+        <?php if (!empty($roteiro)): ?>
+        <div class="detail-section roteiro-view-section">
+            <div class="section-header">
+                <span class="section-title">Roteiro de Culto</span>
+                <span class="section-count"><?= count($roteiro) ?></span>
+            </div>
+
+            <?php
+            $roteiroIcons = [
+                'musica'    => 'music',
+                'oracao'    => 'hands',
+                'palavra'   => 'book-open',
+                'anuncio'   => 'megaphone',
+                'intervalo' => 'coffee',
+                'livre'     => 'more-horizontal',
+            ];
+            $roteiroLabels = [
+                'musica'    => 'Música',
+                'oracao'    => 'Oração',
+                'palavra'   => 'Palavra',
+                'anuncio'   => 'Anúncio',
+                'intervalo' => 'Intervalo',
+                'livre'     => 'Livre',
+            ];
+            foreach ($roteiro as $idx => $item):
+                $icon  = $roteiroIcons[$item['item_type']]  ?? 'more-horizontal';
+                $label = $roteiroLabels[$item['item_type']] ?? $item['item_type'];
+
+                $displayTitle = ($item['item_type'] === 'musica' && $item['song_title'])
+                    ? $item['song_title']
+                    : ($item['title'] ?: $label);
+
+                $displayTone = null;
+                if ($item['item_type'] === 'musica') {
+                    $displayTone = (!empty($item['custom_tone'])) ? $item['custom_tone'] : ($item['song_tone'] ?? null);
+                }
+            ?>
+            <div class="roteiro-view-item">
+                <div class="roteiro-view-num"><?= $idx + 1 ?></div>
+                <div class="roteiro-view-icon">
+                    <i data-lucide="<?= $icon ?>" width="18"></i>
+                </div>
+                <div class="roteiro-view-info">
+                    <div class="roteiro-view-title"><?= htmlspecialchars($displayTitle) ?></div>
+                    <div class="roteiro-view-meta">
+                        <span><?= htmlspecialchars($label) ?></span>
+                        <?php if ($item['item_type'] === 'musica' && $item['song_artist']): ?>
+                            <span><?= htmlspecialchars($item['song_artist']) ?></span>
+                        <?php endif; ?>
+                        <?php if ($displayTone): ?>
+                            <span class="roteiro-view-tone"><?= htmlspecialchars($displayTone) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <?php
+                    // nota_interna visível APENAS para admin (ROT-04 — músico não vê)
+                    if (!empty($item['nota_interna']) && $_SESSION['user_role'] === 'admin'):
+                    ?>
+                    <div class="roteiro-view-nota">
+                        <i data-lucide="eye-off" width="12" style="flex-shrink:0;margin-top:2px;"></i>
+                        <span><?= htmlspecialchars($item['nota_interna']) ?></span>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
         <!-- COMMENTS SECTION -->
         <div class="detail-section section-box comments-section" id="comments">
             <div class="section-header">
