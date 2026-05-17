@@ -25,23 +25,25 @@
 
 ## Fases Detalhadas
 
-### Phase 1: Git Cleanup
-**Goal:** Commitar o estado atual do projeto de forma organizada, remover desktop.ini do tracking e preparar base limpa para desenvolvimento.
+### Phase 1: Git Cleanup + Hardening ✅ CONCLUÍDA (2026-05-17)
+**Goal:** Commitar o estado atual do projeto de forma organizada, remover desktop.ini do tracking, organizar maintenance/, e hardenizar segurança antes da viagem do Diego.
 **Mode:** mvp
 
-**Requirements:** GIT-01, GIT-02, GIT-03
+**Requirements:** GIT-01 ✅, GIT-02 ✅, GIT-03 ✅
 
-**Success Criteria:**
-1. `git status` mostra working tree clean após commit
-2. `desktop.ini` não aparece mais no `git status` (está em `.gitignore`)
-3. Todos os scripts de manutenção organizados em `maintenance/` e commitados
+**Resultado:** 12 commits semânticos | working tree clean | secrets fora do tracking | deploy.php removido | maintenance/ organizado
 
-**Plans:** 3 planos
+**Ações manuais pendentes (Diego — antes de viajar):**
+- Rotacionar DB_PASS no Hostinger + atualizar .htaccess de produção
+- Regenerar VAPID keys + upload para produção
+- Criar `maintenance/.htaccess` com `Require all denied` em produção
+- Ver roteiro em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
 
 Plans:
-- [ ] 01A-PLAN.md — Commits semanticos por area (admin/, includes/, api/, assets/css/, utilitarios)
-- [ ] 01B-PLAN.md — Remover desktop.ini do tracking + .gitignore atualizado com pasta backup
-- [ ] 01C-PLAN.md — Versionar maintenance/ e scripts de setup na raiz
+- [x] 01A-PLAN.md — Commits semânticos por área
+- [x] 01B-PLAN.md — desktop.ini removido + .gitignore expandido (credenciais, VAPID, backup)
+- [x] 01C-PLAN.md — maintenance/ organizado + scripts de setup versionados
+- [x] 01D-PLAN.md — Hardening pré-viagem (secrets, deploy.php, scripts admin)
 
 ---
 
@@ -51,17 +53,24 @@ Plans:
 
 **Requirements:** ESC-01, ESC-02, ESC-03, ESC-04, ESC-05
 
+**Estado atual encontrado:** `api/confirm_scale.php` já pronta e funcionando. Coluna `schedule_users.status` suporta confirmed/pending/absent. Infraestrutura de push subscriptions existe — falta script de envio server-side.
+
 **Success Criteria:**
 1. Músico vê botões "Confirmar" e "Recusar" na sua escala e ao clicar o status muda sem reload
 2. Badge de status (confirmado 🟢 / pendente 🟡 / recusado 🔴) visível em cada participante
 3. Contador "X/Y confirmados" aparece na listagem de escalas para o líder
-4. Notificação push é disparada 2 dias antes para músicos com status pendente
+4. Push notification disparada na **publicação da escala** (convocação) E 2 dias antes (lembrete)
+
+**Gaps adicionados pela auditoria (2026-05-17):**
+- Push de publicação (convocação inicial) — não estava no plano original
+- `api/send_reminders.php` com envio server-side real (subscriptions existem, envio não)
+- Verificar se Hostinger suporta cron job; se não, criar botão "Enviar lembrete" manual
 
 **Plans:**
 - Plan 2A: UI de confirmação na view do músico (`admin/escala_detalhe.php`) — botões com AJAX
 - Plan 2B: Badges de status nos cards de participantes (admin + músico)
 - Plan 2C: Contador de confirmações na listagem de escalas (`admin/escalas.php`)
-- Plan 2D: Cron job + push notification 2 dias antes (usar infraestrutura de push existente)
+- Plan 2D: Push server-side — envio na publicação + lembrete 2 dias antes (cron ou manual)
 
 ---
 
@@ -77,10 +86,14 @@ Plans:
 3. Músico visualiza roteiro completo em read-only na sua view da escala
 4. Tom customizado por música na escala pode ser definido e difere do tom padrão
 
+**Gaps adicionados pela auditoria (2026-05-17):**
+- Tabela `schedule_roteiro` deve ter `nota_interna` por item (visível só para líder — ex: "aqui Diego prega os pedidos de oração"). É o que separa app de lista de app ministerial.
+- Usar setas ▲/▼ para reordenação mobile — drag-and-drop é frágil no toque; preservar como enhancement desktop opcional
+
 **Plans:**
-- Plan 3A: Tabela `schedule_roteiro` no banco + migrations (id, schedule_id, order, type, title, custom_tone, notes)
-- Plan 3B: UI de edição do roteiro para líder (add/reorder/delete items)
-- Plan 3C: View do roteiro para músico (read-only, clean layout)
+- Plan 3A: Tabela `schedule_roteiro` no banco + migrations (id, schedule_id, order, type, title, custom_tone, nota_interna)
+- Plan 3B: UI de edição do roteiro para líder (add/reorder com setas ▲/▼/delete items)
+- Plan 3C: View do roteiro para músico (read-only, clean layout — nota_interna oculta)
 - Plan 3D: Campo "tom customizado" por música na escala
 
 ---
@@ -93,13 +106,17 @@ Plans:
 
 **Success Criteria:**
 1. Botão "Registrar Faltas" aparece em escalas passadas no dashboard do líder
-2. Tela exibe lista de participantes com toggle "faltou" por pessoa
-3. Salvamento atualiza `schedule_users.status = 'absent'` no banco
+2. Tela exibe lista de participantes com toggle "faltou / justificou / presente" por pessoa
+3. Salvamento persiste status no banco (`schedule_users.status`)
 4. Histórico do membro já reflete as faltas registradas
 
+**Gaps adicionados pela auditoria (2026-05-17):**
+- Dois estados de ausência: `absent` (faltou sem aviso) vs `absent_justified` (justificou com antecedência). Peso pastoral diferente no histórico.
+- Campo opcional de motivo (texto livre) para o líder anotar internamente
+
 **Plans:**
-- Plan 4A: Tela `admin/registrar_faltas.php` com lista + toggles de ausência
-- Plan 4B: API de salvamento de faltas (`api/save_absences.php`)
+- Plan 4A: Tela `admin/registrar_faltas.php` com lista + toggles (presente/faltou/justificado)
+- Plan 4B: API de salvamento de faltas (`api/save_absences.php`) + suporte a `absent_justified`
 - Plan 4C: Integração com perfil do membro (estatísticas de presença)
 
 ---
@@ -113,30 +130,40 @@ Plans:
 **Success Criteria:**
 1. Detalhe da música exibe Spotify, YouTube, Cifra Club, Letras como cards visuais com ícone
 2. Tom, BPM e Duração aparecem em cards destacados lado a lado (não texto inline)
-3. Músico pode abrir formulário de sugestão e enviar nome + artista + link
+3. Músico pode abrir formulário de sugestão — líder aprova/rejeita na fila de sugestões
 4. Setlist de uma escala tem versão para impressão/compartilhamento
+
+**Gaps adicionados pela auditoria (2026-05-17):**
+- Sugestão de música precisa de fila de aprovação (status: suggested/approved/rejected) + badge no dashboard do líder "X sugestões pendentes"
+- Stats básicas de repertório: última vez que cada música foi tocada + frequência. Simples, alto valor.
 
 **Plans:**
 - Plan 5A: Redesign de `admin/musica_detalhe.php` — streaming cards + stats cards
-- Plan 5B: Formulário de sugestão de música para o músico (view + API)
+- Plan 5B: Formulário de sugestão + fila de aprovação para líder + badge no dashboard
 - Plan 5C: Página de setlist para impressão/compartilhamento (`admin/escala_setlist.php`)
+- Plan 5D: Stats de repertório — última vez usada + ranking de uso (query em schedule_songs JOIN songs)
 
 ---
 
 ### Phase 6: Metrônomo Pro
-**Goal:** Metrônomo com Tap BPM funcional, slider vertical, e integração com BPM da música selecionada na escala.
+**Goal:** Metrônomo com Tap BPM funcional, clique audível, slider vertical, e integração com BPM da música selecionada na escala.
 **Mode:** mvp
 
 **Requirements:** MET-01, MET-02, MET-03
 
 **Success Criteria:**
 1. Tap BPM calcula média dos últimos 4+ toques e exibe BPM em tempo real
-2. Slider vertical permite ajuste fino do BPM (40-220) com arraste
-3. Se músico acessa metrônomo a partir de uma música, BPM é pré-carregado
+2. Clique audível (Web Audio API) — metrônomo funciona no ensaio sem fones
+3. Slider vertical permite ajuste fino do BPM (40-220) com arraste
+4. Se músico acessa metrônomo a partir de uma música, BPM é pré-carregado
+
+**Gaps adicionados pela auditoria (2026-05-17):**
+- **Clique audível é a feature mais importante de um metrônomo** — sem áudio é só visual, inútil no ensaio. Usar Web Audio API (`AudioContext`, `OscillatorNode`) — sem dependências.
+- Página deve estar no cache do SW (uso offline durante ensaio com sinal fraco)
 
 **Plans:**
-- Plan 6A: Refatorar `admin/metrônomo.php` — Tap BPM com média + slider vertical
-- Plan 6B: Integração BPM da música: parâmetro `?bpm=127` pré-carrega o valor
+- Plan 6A: Refatorar `admin/metrônomo.php` — Tap BPM com média + slider vertical + clique audível (Web Audio API)
+- Plan 6B: Integração BPM da música: parâmetro `?bpm=127` pré-carrega o valor + garantir cache no SW
 
 ---
 
@@ -147,19 +174,24 @@ Plans:
 **Requirements:** MEM-01, MEM-02, MEM-03
 
 **Success Criteria:**
-1. Perfil do músico exibe lista das últimas 10 escalas com status (confirmou/faltou)
+1. Perfil do músico exibe lista das últimas 10 escalas com status (confirmou/faltou/justificou)
 2. Porcentagem de presença (ex: "8/10 escalas — 80%") visível no card do membro
-3. Líder vê ranking de presença na página de membros (ordenável)
+3. Líder vê ranking de presença na página de membros (ordenável) — visível SOMENTE para admin
+4. Alerta pastoral discreto quando presença cai abaixo de 60% nas últimas 4 escalas
+
+**Gaps adicionados pela auditoria (2026-05-17):**
+- Alerta pastoral — "pode precisar de atenção" transforma auditoria em cuidado cristão
+- Ranking de presença visível só para admin (evitar competição e constrangimento entre músicos)
 
 **Plans:**
 - Plan 7A: Query de histórico de escalas por membro + UI em `admin/membro_detalhe.php`
-- Plan 7B: Cálculo e exibição de taxa de presença no card do membro
-- Plan 7C: Ranking de presença em `admin/membros.php`
+- Plan 7B: Cálculo e exibição de taxa de presença + alerta pastoral (queda < 60% em 4 escalas)
+- Plan 7C: Ranking de presença em `admin/membros.php` (admin only)
 
 ---
 
 ### Phase 8: Devocional+
-**Goal:** Devocional tem streak de leitura visível e um versículo/hino da semana na home do músico.
+**Goal:** Devocional tem streak de leitura visível, versículo/hino da semana, e orações de intercessão da equipe.
 **Mode:** mvp
 
 **Requirements:** DEV-01, DEV-02
@@ -167,36 +199,48 @@ Plans:
 **Success Criteria:**
 1. Home do músico exibe versículo/hino da semana (definido pelo líder como aviso especial)
 2. Devocional exibe streak atual de dias consecutivos lidos com ícone de chama
+3. Líder posta pedidos de oração semanais; equipe visualiza na home
+
+**Gaps adicionados pela auditoria (2026-05-17):**
+- Orações de intercessão da equipe — `admin/oracao.php` existia na versão antiga (23.01.2026) e foi perdido. Resgate ou recriação simples com lista de pedidos + quem está orando.
+- Streak deve ser calculado do banco (`reading_progress`), não de localStorage (já está no banco, só calcular os dias consecutivos)
 
 **Plans:**
-- Plan 8A: Streak de leitura — calcular dias consecutivos e exibir na `admin/leitura.php`
+- Plan 8A: Streak de leitura — calcular dias consecutivos a partir de `reading_progress` + exibir na `admin/leitura.php`
 - Plan 8B: Versículo da semana na home — aviso com tag especial ou campo dedicado
+- Plan 8C: Orações de intercessão — resgate de `admin/oracao.php` com pedidos da semana + visualização na home do músico
 
 ---
 
 ### Phase 9: Deploy Final
-**Goal:** App atualizado em produção no Hostinger com PWA e HTTPS verificados.
+**Goal:** App atualizado em produção no Hostinger com PWA e HTTPS verificados, processo de deploy documentado.
 **Mode:** mvp
 
 **Requirements:** PWA-01, PWA-02, PWA-03
 
 **Success Criteria:**
 1. `vilela.eng.br/applouvor` carrega a versão com todas as features do milestone
-2. Service worker atualizado (cache bust + nova versão)
+2. Service worker atualizado (cache bust + nova versão) com versionamento ligado ao APP_VERSION
 3. HTTPS ativo, manifest e install prompt funcionando em iOS e Android
+4. Processo de deploy documentado em `DEPLOY.md` (sem deploy.php — foi removido na Phase 1)
+
+**Gaps adicionados pela auditoria (2026-05-17):**
+- `deploy.php` removido em Phase 1 — criar `DEPLOY.md` com processo manual (FTP + FileZilla ou SSH)
+- Auditar quais rotas estão no cache do SW (músico precisa ver escala + metrônomo offline)
+- Convenção de versionamento: `CACHE_NAME = 'louvor-pib-v' . APP_VERSION` — constante em `includes/config.php`
 
 **Plans:**
-- Plan 9A: Preparar deploy (atualizar versão, cache bust do SW, checar .htaccess)
-- Plan 9B: Upload via FTP/Hostinger e verificação pós-deploy
-- Plan 9C: Testes de PWA install em iOS e Android + verificar push notifications
+- Plan 9A: Criar `DEPLOY.md` com processo manual + atualizar versionamento do SW em `config.php`
+- Plan 9B: Auditar cache do SW — garantir que escala, roteiro e metrônomo estão cacheados offline
+- Plan 9C: Upload via FTP/Hostinger + verificação pós-deploy + testes de PWA install em iOS e Android
 
 ---
 
 ## Dependencies
 
 ```
-Phase 1 (Git) → todas as outras (base limpa)
-Phase 2 (Confirmar) → Phase 4 (Faltas) — status 'absent' usa mesma coluna
+Phase 1 (Git) → todas as outras (base limpa) ✅ CONCLUÍDA
+Phase 2 (Confirmar) → Phase 4 (Faltas) — status 'absent'/'absent_justified' usa mesma coluna
 Phase 3 (Roteiro) → independente
 Phase 4 (Faltas) → Phase 7 (Histórico) — alimenta estatísticas
 Phase 5 (Música) → independente
@@ -207,4 +251,20 @@ Phase 9 (Deploy) → todas as fases anteriores
 ```
 
 ---
-*Criado: 2026-05-16 | v1.0*
+
+## Visão Geral (Atualizada)
+
+| # | Fase | Goal | Plans | Status |
+|---|------|------|-------|--------|
+| 1 | Git Cleanup + Hardening | Base limpa + segurança pré-viagem | 4 | ✅ Concluída |
+| 2 | Confirmar Escala | Músico confirma/recusa + push real | 4 | ⬜ |
+| 3 | Roteiro de Culto | Líder monta fluxo do culto + nota interna | 4 | ⬜ |
+| 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ⬜ |
+| 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ⬜ |
+| 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ⬜ |
+| 7 | Histórico Membro | Presença + alerta pastoral | 3 | ⬜ |
+| 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ⬜ |
+| 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ⬜ |
+
+---
+*Criado: 2026-05-16 | v1.1 — Atualizado 2026-05-17 com gaps da auditoria profissional*

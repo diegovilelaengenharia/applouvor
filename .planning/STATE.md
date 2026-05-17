@@ -9,13 +9,13 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 1: Git Cleanup** — Status: READY TO EXECUTE (3 plans, 2 waves)
+**Phase 2: Confirmar Escala** — Status: ⬜ Not Started (próxima após retorno da viagem)
 
 ## Phase Progress
 
 | Phase | Name | Status | Started | Completed |
 |-------|------|--------|---------|-----------|
-| 1 | Git Cleanup | 📋 Ready to Execute | 2026-05-16 | — |
+| 1 | Git Cleanup + Hardening | ✅ Completed | 2026-05-16 | 2026-05-17 |
 | 2 | Confirmar Escala | ⬜ Not Started | — | — |
 | 3 | Roteiro de Culto | ⬜ Not Started | — | — |
 | 4 | Registrar Faltas | ⬜ Not Started | — | — |
@@ -25,14 +25,30 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 8 | Devocional+ | ⬜ Not Started | — | — |
 | 9 | Deploy Final | ⬜ Not Started | — | — |
 
+## Phase 1 — Summary (completada 2026-05-17)
+
+12 commits semânticos criados em 4 waves:
+- Wave 1 (01A): 5 commits — admin/, includes/, api/, assets/css/, utilitários
+- Wave 2 (01B): 1 commit — desktop.ini removidos + .gitignore expandido (credenciais, VAPID, backup)
+- Wave 2 (01C): 2 commits — maintenance/ organizado + scripts de setup versionados
+- Wave 3 (01D): 4 commits — secrets removidos do tracking, deploy.php deletado, scripts admin movidos
+
+**Estado final:** working tree clean | git ls-files *.ini = vazio | .env.production/vapid_config.php fora do tracking
+
+**Ações manuais pendentes para o Diego (ANTES DE VIAJAR):**
+- Rotacionar DB_PASS no painel Hostinger + atualizar .htaccess de produção
+- Regenerar chaves VAPID + upload para produção
+- Criar maintenance/.htaccess com `Require all denied` em produção
+- Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
 ## Context Notes
 
-- Git tem 33 arquivos modificados não commitados (mudanças do Gemini CLI)
-- `desktop.ini` rastreado incorretamente — remover com `git rm --cached`
+- App está ~65% pronto para uso ministerial pleno
 - App está rodando localmente e em produção (vilela.eng.br/applouvor)
 - Usuário prefere YOLO mode + fases finas + commits no git
-- Versão antiga (23.01.2026) está em `App louvor 23.01.2026/` — versão atual é mais completa, usar só como referência
-- Problemas da versão antiga JÁ RESOLVIDOS: schema fixes (avatar, notificações, estatísticas), features incompletas (orações, devocionais)
+- `api/confirm_scale.php` já pronta — Phase 2 só precisa de UI
+- Versão antiga (23.01.2026) está em `App louvor 23.01.2026/` (gitignored) — usar como referência se precisar resgatar features (ex: admin/oracao.php)
+- **Gaps identificados pela auditoria profissional** — ver `.claude/plans/ok-incremente-mas-leia-elegant-lamport.md` para lista completa de ajustes por fase
 
 ## Key Files
 
