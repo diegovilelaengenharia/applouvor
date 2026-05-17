@@ -79,100 +79,82 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
     </div>
 
     <!-- Members List (Timeline/Compact Style) -->
-    <div class="members-list">
-        <?php foreach ($users as $user): ?>
-            <!-- Compact Card Structure -->
-            <div class="compact-card" 
+    <div class="members-list" style="display: flex; flex-direction: column; gap: var(--space-md); padding-bottom: 100px;">
+        <?php 
+        $delay = 0.1;
+        foreach ($users as $user): 
+            $initial = strtoupper(substr($user['name'], 0, 1));
+            $avatarPath = !empty($user['avatar']) ? $user['avatar'] : '';
+            if (!empty($avatarPath)) {
+                if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
+                    $avatarPath = '../assets/uploads/' . $avatarPath;
+                } elseif (strpos($avatarPath, 'assets/') === 0) {
+                     $avatarPath = '../' . $avatarPath;
+                }
+            }
+        ?>
+            <!-- PIB MEMBER CARD -->
+            <div class="animate-card" style="animation-delay: <?= $delay ?>s;" 
                  data-name="<?= strtolower($user['name']) ?>" 
-                 data-role="<?= strtolower($user['instrument'] ?? '') ?>"
-                 style="border-left-color: var(--primary);">
+                 data-role="<?= strtolower($user['instrument'] ?? '') ?>">
                 
-                <!-- Avatar/Icon -->
-                <div class="compact-card-icon rounded">
-                    <?php 
-                    $initial = strtoupper(substr($user['name'], 0, 1));
-                    if (!empty($user['avatar'])) {
-                        $avatarPath = $user['avatar'];
-                        if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
-                            $avatarPath = '../assets/uploads/' . $avatarPath;
-                        } elseif (strpos($avatarPath, 'assets/') === 0) {
-                             $avatarPath = '../' . $avatarPath;
-                        }
+                <div class="pib-card" style="flex-direction: row; align-items: center; gap: var(--space-md);">
+                    <!-- Avatar -->
+                    <div style="width: 56px; height: 56px; border-radius: 50%; overflow: hidden; background: var(--color-surface-alt); border: 2px solid var(--color-primary); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        <?php if ($avatarPath): ?>
+                            <img src="<?= htmlspecialchars($avatarPath) ?>" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none; font-weight: 800; font-size: 1.2rem; color: var(--color-primary);"><?= $initial ?></span>
+                        <?php else: ?>
+                            <span style="font-weight: 800; font-size: 1.2rem; color: var(--color-primary);"><?= $initial ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Info -->
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <h3 style="margin: 0; font-size: 1rem; font-weight: 800;"><?= htmlspecialchars($user['name']) ?></h3>
+                            <?php if ($user['role'] === 'admin'): ?>
+                                <span class="pib-badge pib-badge-danger" style="font-size: 0.5rem; padding: 1px 6px;">ADM</span>
+                            <?php endif; ?>
+                        </div>
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;">
+                            <?php 
+                            if (!empty($user['roles'])): 
+                                $displayRoles = array_slice($user['roles'], 0, 3);
+                                foreach ($displayRoles as $role): 
+                            ?>
+                                <span style="background: var(--color-surface-alt); color: var(--color-text-muted); padding: 2px 8px; border-radius: var(--radius-sm); font-size: 0.65rem; font-weight: 700; border: 1px solid var(--color-border); display: flex; align-items: center; gap: 4px;">
+                                    <span><?= $role['icon'] ?></span>
+                                    <span><?= htmlspecialchars($role['name']) ?></span>
+                                </span>
+                            <?php endforeach; endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" style="width: 36px; height: 36px; background: #25d366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);" title="WhatsApp">
+                            <i data-lucide="message-circle" style="width: 18px;"></i>
+                        </a>
                         
-                        echo "<img src=\"" . htmlspecialchars($avatarPath) . "\" alt=\"" . htmlspecialchars($user['name']) . "\" class=\"avatar-img\" loading=\"lazy\" onerror=\"this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');\">";
-                        echo "<span class='fallback-initial hidden font-bold text-lg'>" . $initial . "</span>";
-                    } else {
-                        echo "<span class='font-bold text-lg'>" . $initial . "</span>";
-                    }
-                    ?>
-                </div>
-
-                <!-- Content -->
-                <div class="compact-card-content">
-                    <div class="compact-card-title">
-                        <?= htmlspecialchars($user['name']) ?>
-                        <?php if ($user['role'] === 'admin'): ?>
-                            <span class="badge-admin">ADM</span>
+                        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                            <a href="perfil.php?id=<?= $user['id'] ?>" style="width: 36px; height: 36px; background: var(--color-surface-alt); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-border);" title="Editar">
+                                <i data-lucide="edit-3" style="width: 18px;"></i>
+                            </a>
+                            <button type="button" onclick="confirmDelete(<?= $user['id'] ?>, '<?= addslashes($user['name']) ?>')" style="width: 36px; height: 36px; background: #fee2e2; color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #fecaca; cursor: pointer;" title="Excluir">
+                                <i data-lucide="trash-2" style="width: 18px;"></i>
+                            </button>
+                        <?php else: ?>
+                            <a href="perfil.php?id=<?= $user['id'] ?>" style="width: 36px; height: 36px; background: var(--color-surface-alt); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-border);">
+                                <i data-lucide="user" style="width: 18px;"></i>
+                            </a>
                         <?php endif; ?>
                     </div>
-                    <div class="compact-card-subtitle">
-                        <?php 
-                        if (!empty($user['roles'])): 
-                            $uniqueRoles = [];
-                            $seen = [];
-                            foreach ($user['roles'] as $r) {
-                                if (!in_array($r['name'], $seen)) {
-                                    $seen[] = $r['name'];
-                                    $uniqueRoles[] = $r;
-                                }
-                            }
-                            // Show max 4 roles to keep it compact
-                            $displayRoles = array_slice($uniqueRoles, 0, 4);
-                            foreach ($displayRoles as $role): 
-                        ?>
-                            <span class="list-role-badge">
-                                <span><?= $role['icon'] ?></span>
-                                <span><?= htmlspecialchars($role['name']) ?></span>
-                            </span>
-                        <?php 
-                            endforeach;
-                            if(count($uniqueRoles) > 4): 
-                        ?>
-                            <span class="more-roles">+<?= (count($uniqueRoles) - 4) ?></span>
-                        <?php 
-                            endif;
-                        else: 
-                        ?>
-                            <span class="no-role">
-                                <?= htmlspecialchars($user['instrument'] ?: 'Sem função definida') ?>
-                            </span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="member-actions-wrapper">
-                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" class="btn-action-icon btn-action-whatsapp" title="WhatsApp">
-                        <i data-lucide="message-circle" width="18"></i>
-                    </a>
-                    
-                    <?php if ($user['id'] == $_SESSION['user_id']): ?>
-                        <a href="perfil.php" class="btn-action-icon btn-action-profile" title="Meu Perfil">
-                            <i data-lucide="user" width="18"></i>
-                        </a>
-                    <?php endif; ?>
-                    
-                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <a href="perfil.php?id=<?= $user['id'] ?>" class="btn-action-icon" title="Editar Perfil">
-                            <i data-lucide="edit-3" width="18"></i>
-                        </a>
-                        <button type="button" class="btn-action-icon btn-action-delete" title="Excluir" onclick="confirmDelete(<?= $user['id'] ?>, '<?= addslashes($user['name']) ?>')">
-                            <i data-lucide="trash-2" width="18"></i>
-                        </button>
-                    <?php endif; ?>
                 </div>
             </div>
-        <?php endforeach; ?>
+        <?php 
+            $delay += 0.05;
+        endforeach; ?>
     </div>
 </div>
 
@@ -212,15 +194,15 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
 <script>
     function filterMembers() {
         const term = document.getElementById('memberSearch').value.toLowerCase();
-        const cards = document.querySelectorAll('.compact-card');
+        const cards = document.querySelectorAll('.animate-card');
 
         cards.forEach(card => {
             const name = card.getAttribute('data-name');
             const role = card.getAttribute('data-role');
             if (name.includes(term) || role.includes(term)) {
-                card.classList.remove('is-hidden');
+                card.style.display = 'block';
             } else {
-                card.classList.add('is-hidden');
+                card.style.display = 'none';
             }
         });
     }

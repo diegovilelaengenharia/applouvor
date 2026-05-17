@@ -174,49 +174,74 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             </div>
         <?php endif; ?>
 
-        <!-- MUSIC LIST (TIMELINE CARDS) -->
-        <div class="results-list">
-            <?php foreach ($songs as $song): 
+        <!-- MUSIC LIST (PIB CARDS) -->
+        <div class="results-list" style="display: flex; flex-direction: column; gap: var(--space-md); padding-bottom: 100px;">
+            <?php 
+            $delay = 0.1;
+            foreach ($songs as $song): 
                 $stmtSongTags = $pdo->prepare("SELECT t.id, t.name, t.color FROM tags t JOIN song_tags st ON t.id = st.tag_id WHERE st.song_id = ? ORDER BY t.name");
                 $stmtSongTags->execute([$song['id']]);
                 $songTags = $stmtSongTags->fetchAll(PDO::FETCH_ASSOC);
-                
-                $songToneClass = $song['tone'] ? getToneClass($song['tone']) : '';
             ?>
-                <!-- COMPACT MUSIC CARD -->
-                <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="compact-card <?= $songToneClass ?>">
-                    
-                    <!-- Tom Badge -->
-                    <div class="compact-card-icon <?= $song['tone'] ? 'has-tone' : '' ?>">
-                        <?php if ($song['tone']): ?>
-                            <div style="font-size: 1rem; font-weight: 800; line-height: 1;"><?= $song['tone'] ?></div>
-                            <div style="font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; margin-top: 2px;">TOM</div>
-                        <?php else: ?>
-                            <i data-lucide="music" width="20" style="opacity:0.3; color: var(--text-tertiary);"></i>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- Conteúdo -->
-                    <div class="compact-card-content">
-                        <div class="compact-card-title">
-                            <?= htmlspecialchars($song['title']) ?>
+                <!-- PIB MUSIC CARD -->
+                <div class="animate-card" style="animation-delay: <?= $delay ?>s;">
+                    <div class="pib-card" style="border-left: 5px solid <?= !empty($songTags) ? $songTags[0]['color'] : 'var(--color-primary)' ?>;">
+                        <div class="pib-card-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 36px; height: 36px; background: var(--color-surface-alt); border-radius: var(--radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--color-border);">
+                                    <span style="font-size: 0.9rem; font-weight: 800; color: var(--color-primary);"><?= $song['tone'] ?: '?' ?></span>
+                                    <span style="font-size: 0.5rem; font-weight: 700; opacity: 0.6;">TOM</span>
+                                </div>
+                                <div>
+                                    <h3 class="pib-card-title" style="margin: 0; font-size: 1rem;"><?= htmlspecialchars($song['title']) ?></h3>
+                                    <p style="margin: 0; font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;"><?= htmlspecialchars($song['artist']) ?></p>
+                                </div>
+                            </div>
+                            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" style="color: var(--color-primary); opacity: 0.5;">
+                                <i data-lucide="chevron-right" style="width: 20px;"></i>
+                            </a>
                         </div>
-                        <div class="compact-card-subtitle">
-                            <span><?= htmlspecialchars($song['artist']) ?></span>
-                            <?php if (!empty($songTags)): ?>
-                                <?php foreach (array_slice($songTags, 0, 2) as $tag): ?>
-                                    <span style="background: <?= $tag['color'] ?>15; color: <?= $tag['color'] ?>; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
-                                        <?= htmlspecialchars($tag['name']) ?>
-                                    </span>
-                                <?php endforeach; ?>
+
+                        <!-- Tags -->
+                        <?php if (!empty($songTags)): ?>
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;">
+                            <?php foreach ($songTags as $tag): ?>
+                                <span class="pib-badge" style="background: <?= $tag['color'] ?>15; color: <?= $tag['color'] ?>; font-size: 0.6rem; padding: 2px 8px;">
+                                    <?= htmlspecialchars($tag['name']) ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <!-- Study Actions -->
+                        <div class="pib-card-footer" style="padding-top: var(--space-sm); margin-top: var(--space-xs); border-top: 1px solid var(--color-border); justify-content: flex-start; gap: var(--space-md);">
+                            <?php if ($song['link_cifra']): ?>
+                                <a href="<?= $song['link_cifra'] ?>" target="_blank" class="pib-card-meta" style="color: var(--color-primary);">
+                                    <i data-lucide="file-text" style="width: 14px;"></i> Cifra
+                                </a>
+                            <?php endif; ?>
+                            <?php if ($song['link_video']): ?>
+                                <a href="<?= $song['link_video'] ?>" target="_blank" class="pib-card-meta" style="color: #ef4444;">
+                                    <i data-lucide="play-circle" style="width: 14px;"></i> Vídeo
+                                </a>
+                            <?php endif; ?>
+                            <?php if ($song['link_audio']): ?>
+                                <a href="<?= $song['link_audio'] ?>" target="_blank" class="pib-card-meta" style="color: #10b981;">
+                                    <i data-lucide="headphones" style="width: 14px;"></i> Áudio
+                                </a>
+                            <?php endif; ?>
+                            
+                            <?php if (!$song['link_cifra'] && !$song['link_video'] && !$song['link_audio']): ?>
+                                <span class="pib-card-meta" style="opacity: 0.4;">
+                                    <i data-lucide="info" style="width: 14px;"></i> Sem links de estudo
+                                </span>
                             <?php endif; ?>
                         </div>
                     </div>
-
-                    <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
-                </a>
-            <?php endforeach; ?>
+                </div>
+            <?php 
+                $delay += 0.05;
+            endforeach; ?>
             
             <?php if(empty($songs)): ?>
                 <div class="empty-timeline">

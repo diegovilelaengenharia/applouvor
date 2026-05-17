@@ -159,87 +159,91 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
             </div>
         <?php else: ?>
 
-            <div id="view-timeline" class="scales-vertical-list">
+            <div id="view-timeline" class="scales-vertical-list" style="display: flex; flex-direction: column; gap: var(--space-md); padding-bottom: 40px;">
                 <?php 
                 $currentMonth = '';
+                $delay = 0.1;
                 foreach ($futureSchedules as $schedule):
                     $date = new DateTime($schedule['event_date']);
                     $monthYear = getMonthName($date->format('n')) . ' ' . $date->format('Y');
                     
                     // Month Divider
-                    if ($monthYear !== $currentMonth) {
-                        echo '<div class="month-divider-container">
-                                <span class="month-divider-label">' . $monthYear . '</span>
-                                <div class="month-divider-line"></div>
-                              </div>';
+                    if ($monthYear !== $currentMonth):
                         $currentMonth = $monthYear;
-                    }
+                ?>
+                        <div class="animate-card" style="animation-delay: <?= $delay ?>s; margin: var(--space-md) 0 var(--space-xs);">
+                            <span style="font-size: 0.75rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px;"><?= $monthYear ?></span>
+                        </div>
+                <?php 
+                        $delay += 0.05;
+                    endif;
 
                     $isToday = $date->format('Y-m-d') === date('Y-m-d');
-                    $themeColor = getThemeColor($schedule['event_type']);
-                    
-                    // Dias Restantes
-                    $today = new DateTime('today');
-                    $daysUntil = $today->diff($date)->days;
-                    
-                    // Dados
-                    $allParticipants = $participantsMap[$schedule['id']] ?? [];
-                    // Filtrar participantes confirmados para destaque? (Opcional)
-                    $confirmedCount = 0;
-                    foreach($allParticipants as $p) if(isset($p['status']) && $p['status'] === 'confirmed') $confirmedCount++;
-
-                    $participants = array_slice($allParticipants, 0, 4); // Show 4 avatars
-                    $extraCount = max(0, count($allParticipants) - 4);
                     $songsCount = $songCountsMap[$schedule['id']] ?? 0;
                     $isMine = $mySchedulesMap[$schedule['id']] ?? false;
+                    
+                    // Buscar meu status específico nesta escala
+                    $myStatus = 'pending';
+                    if (isset($participantsMap[$schedule['id']])) {
+                        foreach($participantsMap[$schedule['id']] as $p) {
+                            if ($p['user_id'] == $loggedUserId) {
+                                $myStatus = $p['status'];
+                                break;
+                            }
+                        }
+                    }
                 ?>
 
-                    <!-- ANTIGRAVITY HERO CARD -->
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card card-hover-effect" style="--card-theme-color: <?= $themeColor ?>">
-                        <div class="scale-card-main">
-                            <!-- 1. Left: Date -->
-                            <div class="date-box-premium">
-                                <span class="date-day"><?= $date->format('d') ?></span>
-                                <span class="date-month"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></span>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="pib-card pib-card-schedule animate-card" style="animation-delay: <?= $delay ?>s; flex-direction: row; gap: var(--space-md); align-items: stretch; <?= $isToday ? 'border-left-color: var(--color-cta);' : '' ?>">
+                        
+                        <!-- Date Box Lateral (Original Style) -->
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; background: var(--color-surface-alt); border-radius: var(--radius-md); text-align: center; border: 1px solid var(--color-border); flex-shrink: 0;">
+                            <span style="font-size: 1.5rem; font-weight: 900; color: var(--color-text); line-height: 1;"><?= $date->format('d') ?></span>
+                            <span style="font-size: 0.65rem; font-weight: 800; color: var(--color-primary); text-transform: uppercase; margin-top: 2px;"><?= getMonthName($date->format('n')) ?></span>
+                        </div>
+
+                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div class="pib-card-header" style="margin-bottom: 4px;">
+                                <span class="pib-card-date" style="font-size: 0.7rem;">
+                                    <?= $isToday ? 'HOJE • ' : '' ?><?= $date->format('H:i') ?>
+                                </span>
+                                <?php if ($isMine): ?>
+                                    <span class="pib-badge <?= $myStatus == 'confirmed' ? 'pib-badge-success' : ($myStatus == 'declined' ? 'pib-badge-danger' : 'pib-badge-warning') ?>" style="font-size: 0.55rem; padding: 2px 8px;">
+                                        <?= $myStatus == 'confirmed' ? 'Confirmado' : ($myStatus == 'declined' ? 'Recusado' : 'Pendente') ?>
+                                    </span>
+                                <?php endif; ?>
                             </div>
 
-                            <!-- 2. Center: Info -->
-                            <div class="scale-info-col">
-                                <h3 class="event-title">
-                                    <?= !empty($schedule['notes']) ? htmlspecialchars($schedule['notes']) : htmlspecialchars($schedule['event_type']) ?>
-                                </h3>
-                                
-                                <div class="meta-stats-row">
-                                    <div class="meta-pill">
-                                        <i data-lucide="clock"></i>
-                                        <?= isset($schedule['event_time']) ? substr($schedule['event_time'], 0, 5) : '19:00' ?>
-                                    </div>
-                                    
-                                    <?php if($songsCount > 0): ?>
-                                    <div class="meta-pill">
-                                        <i data-lucide="music"></i>
-                                        <?= $songsCount ?>
-                                    </div>
-                                    <?php endif; ?>
-
-                                    <?php if($isMine): ?>
-                                    <div class="meta-pill escalado">
-                                        <i data-lucide="check-circle-2"></i>
-                                        <span class="desktop-only" style="font-size: 0.75rem;">Escalado</span>
-                                    </div>
+                            <h3 class="pib-card-title" style="margin: 0; font-size: 1rem;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                            
+                            <!-- Avatares dos Participantes (Original functionality) -->
+                            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                                <div style="display: flex; padding-left: 6px;">
+                                    <?php 
+                                    $parts = $participantsMap[$schedule['id']] ?? [];
+                                    $count = 0;
+                                    foreach ($parts as $p): 
+                                        if ($count++ >= 4) break;
+                                        $pAvatar = !empty($p['photo']) ? $p['photo'] : 'https://ui-avatars.com/api/?name='.urlencode($p['name']).'&background=random';
+                                        if (strpos($pAvatar, 'http') === false) $pAvatar = '../' . $pAvatar;
+                                    ?>
+                                        <img src="<?= $pAvatar ?>" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--color-surface); margin-left: -6px; object-fit: cover;" title="<?= htmlspecialchars($p['name']) ?>">
+                                    <?php endforeach; ?>
+                                    <?php if (count($parts) > 4): ?>
+                                        <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--color-surface-alt); border: 2px solid var(--color-surface); margin-left: -6px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; color: var(--color-text-muted);">+<?= count($parts)-4 ?></div>
                                     <?php endif; ?>
                                 </div>
-                            </div>
-
-                            <!-- 3. Right: Meta/Action -->
-                            <div class="scale-card-footer">
-                                <div class="days-count-badge <?= $isToday ? 'today' : '' ?>">
-                                    <?= $isToday ? 'HOJE' : ($daysUntil == 1 ? 'AMANHÃ' : $daysUntil . 'd') ?>
-                                </div>
+                                <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;"><?= $songsCount ?> músicas</span>
                             </div>
                         </div>
+
+                        <div style="display: flex; align-items: center; padding-left: 4px;">
+                             <i data-lucide="chevron-right" style="width: 18px; color: var(--color-primary); opacity: 0.5;"></i>
+                        </div>
                     </a>
-                <?php endforeach; ?>
+                <?php 
+                    $delay += 0.05;
+                endforeach; ?>
             </div>
         <?php endif; ?>
     </div>

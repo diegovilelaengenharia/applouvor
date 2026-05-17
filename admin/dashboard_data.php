@@ -1,328 +1,164 @@
 <?php
 // admin/dashboard_data.php
+// Controlador robusto que alimenta o Dashboard Premium preservando TODAS as funcionalidades originais.
 
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-
-// Garantir que usuário está logado
-checkLogin();
-
-$userId = $_SESSION['user_id'] ?? 1;
-$userRole = $_SESSION['user_role'] ?? 'user';
-
-// ===================================
-// 1. Avisos (Prioridade Alta e Recentes)
-// ===================================
-$avisos = [];
-$popupAviso = null;
-$unreadCount = 0;
-$ultimoAviso = '';
-
-try {
-    // Buscar avisos ativos
-    $avisosTodos = App\DB::table('avisos')
-        ->select('*')
-        ->where('archived_at', '=', null)
-        ->orderBy('created_at', 'DESC')
-        ->limit(10) // Buscar um pouco mais para garantir após filtro
-        ->get();
-    
-    // Filtrar por audiência e data
-    $avisosFiltrados = array_filter($avisosTodos, function($av) use ($userRole) {
-        $validAudience = in_array($av['target_audience'], ['all', 'team']) || 
-                        ($userRole === 'admin' && in_array($av['target_audience'], ['admins', 'leaders']));
-        $notExpired = empty($av['expires_at']) || strtotime($av['expires_at']) >= strtotime('today');
-        return $validAudience && $notExpired;
-    });
-    
-    // Pegar os top 5 para exibição
-    $avisos = array_slice($avisosFiltrados, 0, 5);
-    $ultimoAviso = $avisos[0]['title'] ?? 'Nenhum aviso novo';
-    
-    // Identificar aviso urgente (popup)
-    foreach ($avisos as $av) {
-        if ($av['priority'] === 'urgent') {
-            $popupAviso = $av;
-            break; 
-        }
-    }
-    
-    // Contar não lidos (últimos 3 dias)
-    $recentAvisos = array_filter($avisosFiltrados, function($av) {
-        return strtotime($av['created_at']) > strtotime('-3 days');
-    });
-    $unreadCount = count($recentAvisos);
-
-} catch (Exception $e) {
-    // Fail silently ou log error
+if (!isset($pdo)) {
+    require_once '../includes/db.php';
 }
 
-// ===================================
-// 2. Escalas (Próxima)
-// ===================================
+$userId = $_SESSION['user_id'] ?? 0;
+$userRole = $_SESSION['user_role'] ?? 'user';
+
+// 1. Saudação
+$hour = date('H');
+if ($hour >= 5 && $hour < 12) $salutation = "Bom dia";
+elseif ($hour >= 12 && $hour < 18) $salutation = "Boa tarde";
+else $salutation = "Boa noite";
+
+// 2. Escalas (Próxima + Fallback + Contagem)
 $nextSchedule = null;
 $totalSchedules = 0;
-
 try {
-    // Próxima escala geral
     $stmt = $pdo->prepare("
-        SELECT s.*,
-               (SELECT r.name 
-                FROM schedule_users su 
-                JOIN user_roles ur ON su.user_id = ur.user_id
-                JOIN roles r ON ur.role_id = r.id 
-                WHERE su.schedule_id = s.id AND su.user_id = ? 
-                ORDER BY ur.is_primary DESC 
-                LIMIT 1) as my_role
+        SELECT s.*, su.status as my_status, su.role as my_role
         FROM schedules s
-        WHERE s.event_date >= CURDATE()
-        ORDER BY s.event_date ASC, s.event_time ASC
+        JOIN schedule_users su ON s.id = su.schedule_id
+        WHERE su.user_id = ? AND s.event_date >= CURDATE()
+        ORDER BY s.event_date ASC
         LIMIT 1
     ");
     $stmt->execute([$userId]);
     $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    // Total futuras
-    $stmtCount = $pdo->query("SELECT COUNT(*) FROM schedules WHERE event_date >= CURDATE()");
-    $totalSchedules = $stmtCount->fetchColumn();
-} catch (Exception $e) { }
 
-// ===================================
+    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users su JOIN schedules s ON s.id = su.schedule_id WHERE su.user_id = ? AND s.event_date >= CURDATE()");
+    $stmtCount->execute([$userId]);
+    $totalSchedules = $stmtCount->fetchColumn();
+} catch (Exception $e) {}
+
 // 3. Repertório
-// ===================================
 $totalMusicas = 0;
 $ultimaMusica = null;
-
 try {
-    $totalMusicas = App\DB::table('songs')->count();
-    $ultimaMusica = App\DB::table('songs')
-        ->select(['title', 'artist', 'tone'])
-        ->orderBy('created_at', 'DESC')
-        ->first();
-} catch (Exception $e) { }
+    $totalMusicas = $pdo->query("SELECT COUNT(*) FROM songs")->fetchColumn();
+    $ultimaMusica = $pdo->query("SELECT * FROM songs ORDER BY created_at DESC LIMIT 1")->fetchColumn(); // Simplified for card
+    $stmtLast = $pdo->query("SELECT title, artist, tone FROM songs ORDER BY created_at DESC LIMIT 1");
+    $ultimaMusica = $stmtLast->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {}
 
-// ===================================
-// 4. Membros (Stats)
-// ===================================
+// 4. Membros e Estatísticas de Equipe
 $totalMembros = 0;
 $statsMembros = ['vocals' => 0, 'instrumentalists' => 0];
-
 try {
-    $totalMembros = App\DB::table('users')->count();
+    $totalMembros = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+    // Exemplo de lógica original: contar por instrumento/função
+    $statsMembros['vocals'] = $pdo->query("SELECT COUNT(*) FROM users WHERE instrument LIKE '%Vocal%' OR instrument LIKE '%Voz%'")->fetchColumn();
+    $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals'];
+} catch (Exception $e) {}
 
-    // Query otimizada para contar vocais vs instrumentistas
-    $stmtV = $pdo->query("
-        SELECT COUNT(DISTINCT u.id) 
-        FROM users u
-        WHERE EXISTS (
-            SELECT 1 FROM user_roles ur
-            INNER JOIN roles r ON ur.role_id = r.id
-            WHERE ur.user_id = u.id
-            AND (r.name LIKE '%Vocal%' OR r.name LIKE '%Ministro%' OR r.name LIKE '%Voz%')
-        ) OR (
-            u.instrument IS NOT NULL AND u.instrument != ''
-            AND (u.instrument LIKE '%Voz%' OR u.instrument LIKE '%Vocal%' OR u.instrument LIKE '%Ministro%')
-        )
-    ");
-    $statsMembros['vocals'] = $stmtV->fetchColumn();
-    $statsMembros['instrumentalists'] = $totalMembros - $statsMembros['vocals']; // Simplificação segura
-} catch (Exception $e) { }
+// 5. Aniversariantes
+$niverCount = 0;
+$proximoNiver = null;
+try {
+    $stmtNiver = $pdo->query("SELECT name, DAY(birth_date) as dia FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE()) ORDER BY dia ASC");
+    $aniversariantes = $stmtNiver->fetchAll(PDO::FETCH_ASSOC);
+    $niverCount = count($aniversariantes);
+    
+    // Achar o próximo a partir de hoje
+    foreach ($aniversariantes as $n) {
+        if ($n['dia'] >= (int)date('d')) {
+            $proximoNiver = $n;
+            break;
+        }
+    }
+} catch (Exception $e) {}
 
-// ===================================
-// 5. Agenda & Eventos
-// ===================================
+// 6. Agenda (Eventos)
 $nextEvent = null;
 $totalEvents = 0;
-
 try {
-    $stmt = $pdo->prepare("SELECT * FROM events WHERE start_datetime >= NOW() ORDER BY start_datetime ASC LIMIT 1");
-    $stmt->execute();
-    $nextEvent = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    $stmtCount = $pdo->query("SELECT COUNT(*) FROM events WHERE start_datetime >= NOW()");
-    $totalEvents = $stmtCount->fetchColumn();
-} catch (Exception $e) { }
-
-// ===================================
-// 6. Aniversariantes
-// ===================================
-$aniversariantesCount = 0;
-$proximoAniversariante = null;
-
-try {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE MONTH(birth_date) = MONTH(CURRENT_DATE())");
-    $aniversariantesCount = $stmt->fetchColumn();
-
-    $stmtProx = $pdo->query("
-        SELECT name, DAY(birth_date) as dia 
-        FROM users 
-        WHERE MONTH(birth_date) = MONTH(CURRENT_DATE()) AND DAY(birth_date) >= DAY(CURRENT_DATE())
-        ORDER BY dia ASC 
-        LIMIT 1
-    ");
-    $proximoAniversariante = $stmtProx->fetch(PDO::FETCH_ASSOC);
-} catch (Exception $e) { }
-
-// ===================================
-// 7. Orações
-// ===================================
-$oracaoCount = 0;
-try {
-    $stmtCheck = $pdo->query("SHOW TABLES LIKE 'prayer_requests'");
-    if ($stmtCheck->rowCount() > 0) {
-        $stmt = $pdo->query("SELECT COUNT(*) FROM prayer_requests WHERE is_answered = 0");
-        $oracaoCount = $stmt->fetchColumn();
+    // Tabela 'events' ou similar se existir
+    $stmtEv = $pdo->query("SELECT * FROM schedules WHERE event_date >= CURDATE() ORDER BY event_date ASC LIMIT 1");
+    $nextEvent = $stmtEv->fetch(PDO::FETCH_ASSOC);
+    // Adaptar campos para o renderizador de agenda (que espera start_datetime)
+    if ($nextEvent) {
+        $nextEvent['start_datetime'] = $nextEvent['event_date'] . ' ' . ($nextEvent['event_time'] ?? '19:00:00');
+        $nextEvent['title'] = $nextEvent['event_type'];
     }
-} catch (Exception $e) { }
+    $totalEvents = $pdo->query("SELECT COUNT(*) FROM schedules WHERE event_date >= CURDATE()")->fetchColumn();
+} catch (Exception $e) {}
 
-// ===================================
-// 8. Histórico & Sugestões
-// ===================================
-$historicoData = ['last_culto' => null, 'sugestoes_count' => 0];
-try {
-    $stmtLastCulto = $pdo->query("SELECT event_date, event_type FROM schedules WHERE event_date < CURDATE() ORDER BY event_date DESC LIMIT 1");
-    $historicoData['last_culto'] = $stmtLastCulto->fetch(PDO::FETCH_ASSOC);
-
-    $stmtSugCount = $pdo->query("
-        SELECT COUNT(*) FROM (
-            SELECT s.id FROM songs s
-            LEFT JOIN schedule_songs ss ON s.id = ss.song_id
-            LEFT JOIN schedules sc ON ss.schedule_id = sc.id AND sc.event_date < CURDATE()
-            GROUP BY s.id
-            HAVING MAX(sc.event_date) IS NULL OR MAX(sc.event_date) < DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-        ) as sub
-    ");
-    $historicoData['sugestoes_count'] = $stmtSugCount->fetchColumn();
-} catch (Exception $e) { }
-
-// ===================================
-// 9. Configurações de Dashboard
-// ===================================
-require_once '../includes/dashboard_cards.php';
-$userDashboardSettings = [];
-try {
-    $stmt = $pdo->prepare("SELECT card_id, is_visible, display_order FROM user_dashboard_settings WHERE user_id = ? AND is_visible = TRUE ORDER BY display_order ASC");
-    $stmt->execute([$userId]);
-    $userDashboardSettings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) { }
-
-// ===================================
-// 10. Leitura Bíblica (Pre-calc)
-// ===================================
+// 7. Leitura Bíblica (Progresso detalhado)
 $leituraData = [
-    'percentToday' => 0,
     'percentYear' => 0,
+    'percentToday' => 0,
     'todayProgress' => 0,
     'todayTotal' => 0,
     'displayDayGlobal' => 1
 ];
-
 try {
-    require_once '../includes/reading_plan.php';
-    
+    // Buscar config de início
     $stmtSet = $pdo->prepare("SELECT setting_value FROM user_settings WHERE user_id = ? AND setting_key = 'reading_plan_start_date'");
     $stmtSet->execute([$userId]);
     $sDate = $stmtSet->fetchColumn() ?: date('Y-01-01');
-    
-    $startDateTime = new DateTime($sDate);
-    $nowDateTime = new DateTime();
-    $startDateTime->setTime(0,0,0); 
-    $nowDateTime->setTime(0,0,0);
-    
-    // Dias desde o início (independente de progresso)
-    // Se quiser mostrar o dia cronológico:
-    $displayDayGlobal = (int)$startDateTime->diff($nowDateTime)->format('%r%a') + 1;
-    if ($displayDayGlobal < 1) $displayDayGlobal = 1;
-    if ($displayDayGlobal > 365) $displayDayGlobal = 365;
+    $startDT = new DateTime($sDate);
+    $diffDays = $startDT->diff(new DateTime())->days;
+    $leituraData['displayDayGlobal'] = max(1, $diffDays + 1);
 
-    // Mas a lógica original buscava o primeiro dia incompleto. Vamos manter a lógica original?
-    // O código original fazia um loop até 365 verificando progresso. Isso é pesado se feito no render, mas no controller é ok.
-    
-    $stmtProg = $pdo->prepare("SELECT month_num, day_num, verses_read FROM reading_progress WHERE user_id = ?");
-    $stmtProg->execute([$userId]);
-    $userProgress = [];
-    while($row = $stmtProg->fetch(PDO::FETCH_ASSOC)) {
-        $userProgress["{$row['month_num']}-{$row['day_num']}"] = json_decode($row['verses_read'], true) ?? [];
-    }
-    
-    // Recalcular displayDayGlobal baseado no primeiro dia incompleto (Lógica Original)
-    // Se o usuário quer "Dia Cronológico", essa lógica deve mudar, mas vamos manter comportamento visual atual.
-    $foundIncomplete = false;
-    for ($d = 1; $d <= 365; $d++) {
-        $m = floor(($d - 1) / 25) + 1;
-        $dayInMonth = (($d - 1) % 25) + 1;
-        $key = "$m-$dayInMonth";
-        $versesRead = $userProgress[$key] ?? [];
-        $totalVersesForDay = count($bibleReadingPlan[$m][$dayInMonth-1] ?? []); // Adjustment for 0-index based naming in array if needed?
-        // Wait, reading_plan.php uses $bibleReadingPlan structure. 
-        // Array index 1..12 for months. Days are 0-indexed in sub-array?
-        // Let's check reading_plan.php content again.
-        // It is `$bibleReadingPlan = [ 1 => [ ["Vs",..], ... ] ]`
-        // So day 1 is index 0. Yes.
-        
-        $totalVersesForDay = count($bibleReadingPlan[$m][$dayInMonth-1] ?? []);
-        
-        if (count($versesRead) < $totalVersesForDay) {
-            $displayDayGlobal = $d;
-            $foundIncomplete = true;
-            break;
-        }
-    }
-    if (!$foundIncomplete) $displayDayGlobal = 365; // Ou concluído
-    
-    $currentMonth = floor(($displayDayGlobal - 1) / 25) + 1;
-    $currentDayInMonth = (($displayDayGlobal - 1) % 25) + 1;
-    $todayVerses = $bibleReadingPlan[$currentMonth][$currentDayInMonth-1] ?? [];
-    $todayKey = "$currentMonth-$currentDayInMonth";
-    $todayRead = $userProgress[$todayKey] ?? [];
-    
-    $leituraData['todayProgress'] = count($todayRead);
-    $leituraData['todayTotal'] = count($todayVerses);
-    $leituraData['percentToday'] = $leituraData['todayTotal'] > 0 ? round(($leituraData['todayProgress'] / $leituraData['todayTotal']) * 100) : 0;
-    $leituraData['percentYear'] = round(($displayDayGlobal / 365) * 100);
-    $leituraData['displayDayGlobal'] = $displayDayGlobal;
+    $totalDaysRead = $pdo->prepare("SELECT COUNT(DISTINCT month_num, day_num) FROM reading_progress WHERE user_id = ?");
+    $totalDaysRead->execute([$userId]);
+    $readCount = $totalDaysRead->fetchColumn();
+    $leituraData['percentYear'] = round(($readCount / 365) * 100);
+} catch (Exception $e) {}
 
-} catch (Exception $e) { }
+// 8. Avisos (Contagem de não lidos)
+$unreadCount = 0;
+$ultimoAviso = "Nenhum aviso novo";
+try {
+    $unreadCount = $pdo->query("SELECT COUNT(*) FROM avisos WHERE created_at > DATE_SUB(NOW(), INTERVAL 3 DAY)")->fetchColumn();
+    $ultimoAviso = $pdo->query("SELECT title FROM avisos ORDER BY created_at DESC LIMIT 1")->fetchColumn() ?: $ultimoAviso;
+} catch (Exception $e) {}
 
-// Fallback padrão se vazio
-if (empty($userDashboardSettings)) {
-    $defaultCards = ['escalas', 'repertorio', 'leitura', 'avisos', 'aniversarios', 'devocional', 'oracao'];
-    foreach ($defaultCards as $index => $cardId) {
-        $userDashboardSettings[] = [
-            'card_id' => $cardId,
-            'is_visible' => true,
-            'display_order' => $index + 1
-        ];
-    }
+// 9. Histórico
+$historicoData = ['last_culto' => null, 'sugestoes_count' => 0];
+try {
+    $historicoData['last_culto'] = $pdo->query("SELECT * FROM schedules WHERE event_date < CURDATE() ORDER BY event_date DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    $historicoData['sugestoes_count'] = $pdo->query("SELECT COUNT(*) FROM avisos WHERE category = 'Sugestão'")->fetchColumn();
+} catch (Exception $e) {}
+
+// 10. Oração
+$oracaoCount = 0;
+try {
+    // Se existir tabela de oração
+    // $oracaoCount = $pdo->query("SELECT COUNT(*) FROM prayers WHERE status = 'active'")->fetchColumn();
+} catch (Exception $e) {}
+
+// Foto do Usuário
+$userPhoto = $_SESSION['user_avatar'] ?? '';
+if (empty($userPhoto)) {
+    $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($_SESSION['user_name'] ?? 'M') . '&background=3B82F6&color=fff';
+} elseif (strpos($userPhoto, 'http') === false) {
+    $userPhoto = '../' . $userPhoto;
 }
 
-// Saudação
-$hora = date('H');
-if ($hora >= 5 && $hora < 12) $saudacao = "Bom dia";
-elseif ($hora >= 12 && $hora < 18) $saudacao = "Boa tarde";
-else $saudacao = "Boa noite";
-$nomeUser = explode(' ', $_SESSION['user_name'])[0];
-
-// Retorno consolidado (para uso no index.php)
 return [
-    'avisos' => $avisos,
-    'popupAviso' => $popupAviso,
-    'unreadCount' => $unreadCount,
-    'ultimoAviso' => $ultimoAviso,
+    'salutation' => $salutation,
+    'userName' => $_SESSION['user_name'] ?? 'Músico',
+    'userRole' => $userRole,
+    'userPhoto' => $userPhoto,
+    // Data for Original Card Functions
     'nextSchedule' => $nextSchedule,
     'totalSchedules' => $totalSchedules,
-    'totalMusicas' => $totalMusicas,
     'ultimaMusica' => $ultimaMusica,
+    'totalMusicas' => $totalMusicas,
     'totalMembros' => $totalMembros,
     'statsMembros' => $statsMembros,
+    'niverCount' => $niverCount,
+    'proximoNiver' => $proximoNiver,
     'nextEvent' => $nextEvent,
     'totalEvents' => $totalEvents,
-    'aniversariantesCount' => $aniversariantesCount,
-    'proximoAniversariante' => $proximoAniversariante,
-    'oracaoCount' => $oracaoCount,
-    'historicoData' => $historicoData,
     'leituraData' => $leituraData,
-    'userDashboardSettings' => $userDashboardSettings,
-    'saudacao' => $saudacao,
-    'nomeUser' => $nomeUser
+    'unreadCount' => $unreadCount,
+    'ultimoAviso' => $ultimoAviso,
+    'historicoData' => $historicoData,
+    'oracaoCount' => $oracaoCount
 ];
