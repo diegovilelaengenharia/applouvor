@@ -192,6 +192,16 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                             }
                         }
                     }
+
+                    // Contador de confirmações (ESC-04)
+                    $confirmedCount = 0;
+                    $totalParticipants = 0;
+                    if (isset($participantsMap[$schedule['id']])) {
+                        $totalParticipants = count($participantsMap[$schedule['id']]);
+                        foreach ($participantsMap[$schedule['id']] as $p) {
+                            if ($p['status'] === 'confirmed') $confirmedCount++;
+                        }
+                    }
                 ?>
 
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="pib-card pib-card-schedule animate-card" style="animation-delay: <?= $delay ?>s; flex-direction: row; gap: var(--space-md); align-items: stretch; <?= $isToday ? 'border-left-color: var(--color-cta);' : '' ?>">
@@ -234,6 +244,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                     <?php endif; ?>
                                 </div>
                                 <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;"><?= $songsCount ?> músicas</span>
+                                <?php if ($totalParticipants > 0): ?>
+                                <span class="pib-badge <?= $confirmedCount === $totalParticipants ? 'pib-badge-success' : ($confirmedCount > 0 ? 'pib-badge-warning' : '') ?>" style="font-size: 0.6rem; padding: 2px 8px; font-weight: 800;">
+                                    <?= $confirmedCount ?>/<?= $totalParticipants ?> confirmados
+                                </span>
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -272,9 +287,19 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     }
 
                     $themeColor = 'var(--text-tertiary)';
-                    
+
                     // Dados
                     $songsCount = $songCountsMap[$schedule['id']] ?? 0;
+
+                    // Contador de confirmações (ESC-04)
+                    $confirmedCount = 0;
+                    $totalParticipants = 0;
+                    if (isset($participantsMap[$schedule['id']])) {
+                        $totalParticipants = count($participantsMap[$schedule['id']]);
+                        foreach ($participantsMap[$schedule['id']] as $p) {
+                            if ($p['status'] === 'confirmed') $confirmedCount++;
+                        }
+                    }
                 ?>
                     <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-theme-color: <?= $themeColor ?>; opacity: 0.75;">
                         <div class="scale-card-main" style="padding: 16px;">
@@ -286,6 +311,11 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                                 <h3 class="event-title" style="font-size: 1rem; margin-bottom: 4px;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
                                 <div class="meta-stats-row">
                                     <span style="font-size: 0.8rem; color: var(--text-muted);"><?= $songsCount ?> músicas</span>
+                                    <?php if ($totalParticipants > 0): ?>
+                                    <span class="pib-badge <?= $confirmedCount === $totalParticipants ? 'pib-badge-success' : ($confirmedCount > 0 ? 'pib-badge-warning' : '') ?>" style="font-size: 0.6rem; padding: 2px 8px; font-weight: 800;">
+                                        <?= $confirmedCount ?>/<?= $totalParticipants ?> confirmados
+                                    </span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
