@@ -111,8 +111,9 @@ function renderAppHeader($title, $backUrl = null)
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/core/variables.css?v=<?= time() ?>">
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= $verTheme ?>">
-        <!-- Mobile Bottom Nav -->
+        <!-- Mobile Bottom Nav + Sidebar -->
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/mobile-bottom-nav.css?v=<?= $verMain ?>">
+        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/sidebar.css?v=<?= $verMain ?>">
         <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/pib-cards.css?v=<?= time() ?>">
 
 
