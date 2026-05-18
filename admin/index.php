@@ -134,6 +134,63 @@ $categoryNames = [
     </a>
     <?php endif; ?>
 
+    <!-- WIDGET: Versículo da Semana (mais recente aviso type=versiculo) -->
+    <?php
+    $weeklyVerse = null;
+    try {
+        $stmtV = $pdo->query("SELECT title, message FROM avisos WHERE type = 'versiculo' AND (expires_at IS NULL OR expires_at >= CURDATE()) ORDER BY created_at DESC LIMIT 1");
+        $weeklyVerse = $stmtV->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {}
+    if ($weeklyVerse):
+    ?>
+    <div style="margin-bottom: var(--space-md); padding: 16px 18px; background: linear-gradient(135deg, #fdf4ff 0%, #faf5ff 100%); border: 1.5px solid #c084fc; border-radius: 14px; position: relative;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#7c3aed;">Versículo da Semana</span>
+        </div>
+        <p style="margin:0 0 6px;font-size:.95rem;font-weight:700;color:#581c87;line-height:1.4;"><?= htmlspecialchars($weeklyVerse['title']) ?></p>
+        <p style="margin:0;font-size:.82rem;color:#6b21a8;line-height:1.5;font-style:italic;"><?= nl2br(htmlspecialchars($weeklyVerse['message'])) ?></p>
+    </div>
+    <?php endif; ?>
+
+    <!-- WIDGET: Pedidos de Oração da Equipe (3 mais recentes, não respondidos) -->
+    <?php
+    $prayerRequests = [];
+    try {
+        $stmtP = $pdo->query("
+            SELECT pr.title, pr.is_urgent, pr.is_anonymous, pr.prayer_count, u.name as author
+            FROM prayer_requests pr
+            JOIN users u ON u.id = pr.user_id
+            WHERE pr.is_answered = 0
+            ORDER BY pr.is_urgent DESC, pr.created_at DESC
+            LIMIT 3
+        ");
+        $prayerRequests = $stmtP->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {}
+    if (!empty($prayerRequests)):
+    ?>
+    <a href="oracao.php" style="display:block;margin-bottom:var(--space-md);padding:14px 16px;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:14px;text-decoration:none;color:inherit;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#dc2626" stroke="none">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#dc2626;">Orando juntos</span>
+            <span style="margin-left:auto;font-size:.7rem;color:#991b1b;font-weight:700;">Ver todos →</span>
+        </div>
+        <?php foreach ($prayerRequests as $pr): ?>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid #fecaca;">
+            <?php if ($pr['is_urgent']): ?>
+            <span style="font-size:.6rem;font-weight:800;color:#dc2626;">🔥</span>
+            <?php endif; ?>
+            <span style="flex:1;font-size:.85rem;font-weight:600;color:#7f1d1d;"><?= htmlspecialchars($pr['title']) ?></span>
+            <span style="font-size:.7rem;color:#991b1b;"><?= (int)$pr['prayer_count'] ?> 🙏</span>
+        </div>
+        <?php endforeach; ?>
+    </a>
+    <?php endif; ?>
+
     <!-- RENDERIZAÇÃO DINÂMICA POR CATEGORIAS (Original Logic) -->
     <?php foreach ($groupedCards as $catId => $cards): ?>
         <section class="category-section">

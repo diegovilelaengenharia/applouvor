@@ -208,7 +208,7 @@ Plans:
 
 ---
 
-### Phase 8: Devocional+
+### Phase 8: Devocional+ ✅ CONCLUÍDA (2026-05-18)
 **Goal:** Devocional tem streak de leitura visível, versículo/hino da semana, e orações de intercessão da equipe.
 **Mode:** mvp
 
@@ -282,7 +282,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ✅ Concluída |
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ✅ Concluída |
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ✅ Concluída |
-| 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ⬜ |
+| 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ✅ Concluída |
 | 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ⬜ |
 
 ---

@@ -103,7 +103,25 @@ foreach($allProgress as $p) {
 }
 
 $completionPercent = round(($totalDaysRead / $planInfo['total_days']) * 100);
-$currentStreak = 0; // Logic for streak would go here
+
+// Streak: dias consecutivos com pelo menos 1 passagem lida (walk back do plan day atual)
+$progressDays = [];
+foreach ($allProgress as $p) {
+    $verses = json_decode($p['verses_read'] ?? '[]', true) ?: [];
+    if (count($verses) > 0) {
+        $progressDays[(int)$p['day_num']] = true;
+    }
+}
+$currentStreak = 0;
+$todayPlanDay = $daysPassed + 1;
+$startCheck = isset($progressDays[$todayPlanDay]) ? $todayPlanDay : $todayPlanDay - 1;
+for ($d = $startCheck; $d >= 1; $d--) {
+    if (isset($progressDays[$d])) {
+        $currentStreak++;
+    } else {
+        break;
+    }
+}
 
 // Get today's readings
 $todayReadings = getReadingsForDay($selectedPlanType, $planDayIndex);

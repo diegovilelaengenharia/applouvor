@@ -453,6 +453,7 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
                     <label class="form-label">Tipo</label>
                     <select name="type" class="form-select" id="avisoType">
                         <option value="geral">Geral</option>
+                        <option value="versiculo">📖 Versículo da Semana</option>
                         <option value="espiritual">Espiritual</option>
                         <option value="eventos">Eventos</option>
                         <option value="musica">Música</option>

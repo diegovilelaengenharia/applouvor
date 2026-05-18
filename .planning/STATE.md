@@ -9,8 +9,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 8: Devocional+** — Status: ⬜ Próxima fase
+**Phase 9: Deploy Final** — Status: ⬜ Última fase
 
+**Phase 8: Devocional+** — Status: ✅ Completed (2026-05-18)
 **Phase 7: Histórico Membro** — Status: ✅ Completed (2026-05-17)
 **Phase 6: Metrônomo Pro** — Status: ✅ Completed (2026-05-17)
 **Phase 5: Música Modernizada** — Status: ✅ Completed (2026-05-17)
@@ -27,7 +28,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 5 | Música Modernizada | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 6 | Metrônomo Pro | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 7 | Histórico Membro | ✅ Completed | 2026-05-17 | 2026-05-17 |
-| 8 | Devocional+ | ⬜ Not Started | — | — |
+| 8 | Devocional+ | ✅ Completed | 2026-05-18 | 2026-05-18 |
 | 9 | Deploy Final | ⬜ Not Started | — | — |
 
 ## Phase 1 — Summary (completada 2026-05-17)
@@ -45,6 +46,16 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 8 — Summary (completada 2026-05-18)
+
+1 commit entregue (oracao.php já existia):
+- Streak real em `admin/leitura.php` — calcula dias consecutivos com pelo menos 1 passagem lida (walk back from current plan day)
+- Tipo `versiculo` adicionado ao enum de tipos de aviso em `admin/avisos.php`
+- Widget "Versículo da Semana" no dashboard — exibe aviso mais recente type='versiculo' não expirado (gradient roxo + ícone book)
+- Widget "Orando juntos" no dashboard — top 3 pedidos não respondidos (vermelho suave, badge urgente, contador 🙏)
+
+**Resultado:** Sequência de leitura visível e correta | Versículo da semana destacado | Pedidos de oração da equipe visíveis na home | DEV-01 e DEV-02 entregues
 
 ## Phase 7 — Summary (completada 2026-05-17)
 
