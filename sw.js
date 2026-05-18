@@ -1,9 +1,15 @@
 // CACHE_NAME deve seguir APP_VERSION em includes/config.php
-const CACHE_NAME = 'louvor-pib-v5.0.1';
+const CACHE_NAME = 'louvor-pib-v5.1.0';
 const urlsToCache = [
   '/',
   '/index.php',
-  '/assets/css/style.css',
+  '/assets/css/core/variables.css',
+  '/assets/css/app-main.css',
+  '/assets/css/theme-premium.css',
+  '/assets/css/components/mobile-bottom-nav.css',
+  '/assets/css/components/sidebar.css',
+  '/assets/css/components/pib-cards.css',
+  '/assets/js/theme-toggle.js',
   '/assets/images/logo-black.png',
   '/assets/images/logo-white.png',
   '/admin/index.php',
@@ -20,11 +26,11 @@ self.addEventListener('install', event => {
   // Força o SW a ativar imediatamente
   self.skipWaiting();
 
+  // Tolerância a falha individual: 1 URL ruim não derruba o install inteiro
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache =>
+      Promise.allSettled(urlsToCache.map(url => cache.add(url)))
+    )
   );
 });
 
