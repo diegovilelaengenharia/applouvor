@@ -7,8 +7,8 @@
 /node_modules/
 
 # Arquivos de configuração sensíveis
-# IMPORTANTE: .htaccess contém credenciais do banco (SetEnv DB_PASS)
-.htaccess
+# Diego: .htaccess versionado intencionalmente para o webhook deployar (decisão explícita).
+# Senha de DB em plain text — não compartilhar repositório publicamente sem rotacionar antes.
 .env
 composer.lock
 
@@ -37,6 +37,7 @@ error_log
 
 # Versao antiga (backup local — nao versionar)
 App louvor 23.01.2026/
+app louvor arquivos hostinger atual/
 
 # Credenciais de ambiente (NUNCA versionar)
 .env.*

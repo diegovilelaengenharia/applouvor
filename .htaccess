@@ -1,0 +1,37 @@
+# .htaccess - App Louvor PIB
+
+# === SEGURANÇA ===
+Options -Indexes
+ServerSignature Off
+
+# === VARIÁVEIS DE AMBIENTE (Banco de Dados) ===
+# IMPORTANTE: Configurar estes valores no painel Hostinger ou aqui:
+SetEnv DB_HOST srv1074.hstgr.io
+SetEnv DB_NAME u884436813_applouvor
+SetEnv DB_USER u884436813_admin
+SetEnv DB_PASS Diego@159753
+
+# HTTPS: configurado no painel Hostinger (nao necessario aqui)
+
+# === CACHE INTELIGENTE ===
+# PHP/CSS/JS: sem cache (para garantir atualizações)
+<FilesMatch "\.(php|css|js)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</FilesMatch>
+
+# Imagens e fontes: cache longo
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/png  "access plus 6 months"
+    ExpiresByType image/webp "access plus 6 months"
+    ExpiresByType image/jpg  "access plus 6 months"
+    ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
+
+# ETag
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+FileETag None
