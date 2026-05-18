@@ -113,6 +113,27 @@ $categoryNames = [
         </a>
     </div>
 
+    <!-- BADGE: Sugestões de Música Pendentes (admin only) -->
+    <?php if ($pendingSuggestions > 0 && $_SESSION['user_role'] === 'admin'): ?>
+    <a href="sugestoes_musicas.php" style="
+        display:flex;align-items:center;gap:10px;
+        padding:12px 16px;margin-bottom:var(--space-md);
+        background:#fff7ed;border:1.5px solid #f97316;border-radius:12px;
+        text-decoration:none;color:#92400e;">
+        <span style="background:#f97316;color:#fff;font-size:.75rem;font-weight:800;
+                     padding:3px 9px;border-radius:20px;">
+            <?= $pendingSuggestions ?>
+        </span>
+        <span style="font-size:.875rem;font-weight:600;">
+            sugestão<?= $pendingSuggestions > 1 ? 'ões' : '' ?> de música pendente<?= $pendingSuggestions > 1 ? 's' : '' ?>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+             fill="none" stroke="#f97316" stroke-width="2" style="margin-left:auto;">
+            <polyline points="9 18 15 12 9 6"/>
+        </svg>
+    </a>
+    <?php endif; ?>
+
     <!-- RENDERIZAÇÃO DINÂMICA POR CATEGORIAS (Original Logic) -->
     <?php foreach ($groupedCards as $catId => $cards): ?>
         <section class="category-section">

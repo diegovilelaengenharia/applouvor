@@ -122,8 +122,11 @@ try {
 $historicoData = ['last_culto' => null, 'sugestoes_count' => 0];
 try {
     $historicoData['last_culto'] = $pdo->query("SELECT * FROM schedules WHERE event_date < CURDATE() ORDER BY event_date DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-    $historicoData['sugestoes_count'] = $pdo->query("SELECT COUNT(*) FROM avisos WHERE category = 'Sugestão'")->fetchColumn();
+    $historicoData['sugestoes_count'] = $pdo->query("SELECT COUNT(*) FROM song_suggestions WHERE status = 'pending'")->fetchColumn();
 } catch (Exception $e) {}
+
+// Sugestões pendentes (para badge no dashboard — admin only)
+$pendingSuggestions = ($userRole === 'admin') ? (int)$historicoData['sugestoes_count'] : 0;
 
 // 10. Oração
 $oracaoCount = 0;
@@ -160,5 +163,6 @@ return [
     'unreadCount' => $unreadCount,
     'ultimoAviso' => $ultimoAviso,
     'historicoData' => $historicoData,
-    'oracaoCount' => $oracaoCount
+    'oracaoCount' => $oracaoCount,
+    'pendingSuggestions' => $pendingSuggestions
 ];
