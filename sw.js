@@ -1,5 +1,5 @@
 // CACHE_NAME deve seguir APP_VERSION em includes/config.php
-const CACHE_NAME = 'louvor-pib-v5.0.0';
+const CACHE_NAME = 'louvor-pib-v5.0.1';
 const urlsToCache = [
   '/',
   '/index.php',
