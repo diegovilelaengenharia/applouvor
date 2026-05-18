@@ -163,7 +163,7 @@ Plans:
 
 ---
 
-### Phase 6: Metrônomo Pro
+### Phase 6: Metrônomo Pro ✅ CONCLUÍDA (2026-05-17)
 **Goal:** Metrônomo com Tap BPM funcional, clique audível, slider vertical, e integração com BPM da música selecionada na escala.
 **Mode:** mvp
 
@@ -180,8 +180,8 @@ Plans:
 - Página deve estar no cache do SW (uso offline durante ensaio com sinal fraco)
 
 **Plans:**
-- Plan 6A: Refatorar `admin/metrônomo.php` — Tap BPM com média + slider vertical + clique audível (Web Audio API)
-- Plan 6B: Integração BPM da música: parâmetro `?bpm=127` pré-carrega o valor + garantir cache no SW
+- [x] Plan 6A (06-01): Criar `admin/metronomo.php` — Tap BPM com média + slider + clique audível (Web Audio API) *(MET-01, MET-02)*
+- [x] Plan 6B (06-02): Card no dashboard + link de musica_detalhe.php + cache no SW *(MET-03)*
 
 ---
 
@@ -280,7 +280,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 3.5 | Limpeza & Organização | Deletar obsoletos, arquivar scripts, organizar tools/ | 3 | ⬜ |
 | 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ✅ Concluída |
 | 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ✅ Concluída |
-| 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ⬜ |
+| 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ✅ Concluída |
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ⬜ |
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ⬜ |
 | 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ⬜ |

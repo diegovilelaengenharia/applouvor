@@ -9,8 +9,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 6: Metrônomo Pro** — Status: ⬜ Próxima fase
+**Phase 7: Histórico Membro** — Status: ⬜ Próxima fase
 
+**Phase 6: Metrônomo Pro** — Status: ✅ Completed (2026-05-17)
 **Phase 5: Música Modernizada** — Status: ✅ Completed (2026-05-17)
 
 ## Phase Progress
@@ -23,7 +24,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 3.5 | Limpeza & Organização | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 4 | Registrar Faltas | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 5 | Música Modernizada | ✅ Completed | 2026-05-17 | 2026-05-17 |
-| 6 | Metrônomo Pro | ⬜ Not Started | — | — |
+| 6 | Metrônomo Pro | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 7 | Histórico Membro | ⬜ Not Started | — | — |
 | 8 | Devocional+ | ⬜ Not Started | — | — |
 | 9 | Deploy Final | ⬜ Not Started | — | — |
@@ -43,6 +44,14 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 6 — Summary (completada 2026-05-17)
+
+2 commits entregues:
+- Plan 06-01 (a35ae5f): `feat(06): create metronomo.php — tap BPM, web audio click, slider` — página completa com 309 linhas
+- Plan 06-02 (f042ed1): `feat(06): integrate metronomo — dashboard card, music link, SW cache` — 4 arquivos modificados
+
+**Resultado:** Metrônomo funcional com áudio (Web Audio API) | Tap BPM com média 4+ batidas | Slider 40-220 BPM | Card no dashboard | Link "Abrir no metrônomo" em musica_detalhe.php quando BPM existe | Cache offline via SW v2.3.0
 
 ## Phase 5 — Summary (completada 2026-05-17)
 
