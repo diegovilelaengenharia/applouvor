@@ -9,8 +9,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 7: Histórico Membro** — Status: ⬜ Próxima fase
+**Phase 8: Devocional+** — Status: ⬜ Próxima fase
 
+**Phase 7: Histórico Membro** — Status: ✅ Completed (2026-05-17)
 **Phase 6: Metrônomo Pro** — Status: ✅ Completed (2026-05-17)
 **Phase 5: Música Modernizada** — Status: ✅ Completed (2026-05-17)
 
@@ -25,7 +26,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 4 | Registrar Faltas | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 5 | Música Modernizada | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 6 | Metrônomo Pro | ✅ Completed | 2026-05-17 | 2026-05-17 |
-| 7 | Histórico Membro | ⬜ Not Started | — | — |
+| 7 | Histórico Membro | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 8 | Devocional+ | ⬜ Not Started | — | — |
 | 9 | Deploy Final | ⬜ Not Started | — | — |
 
@@ -44,6 +45,13 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 7 — Summary (completada 2026-05-17)
+
+1 commit entregue (MEM-01 e MEM-02 já entregues na Phase 4):
+- 70b7f8b: `feat(07): ranking de presença + alerta pastoral (admin only)` — MEM-03
+
+**Resultado:** Cards de membros em membros.php mostram badge colorido de taxa de presença (admin only) | Ordenação por nome/presença/escalas | Alerta pastoral discreto em membro_detalhe.php quando últimas 4 escalas têm ≥2 ausências e taxa < 60% (tom cuidadoso, heart icon âmbar)
 
 ## Phase 6 — Summary (completada 2026-05-17)
 

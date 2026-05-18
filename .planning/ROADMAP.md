@@ -185,7 +185,7 @@ Plans:
 
 ---
 
-### Phase 7: Histórico e Estatísticas do Membro
+### Phase 7: Histórico e Estatísticas do Membro ✅ CONCLUÍDA (2026-05-17)
 **Goal:** Cada músico e o líder conseguem ver o histórico de participação em escalas e a taxa de presença.
 **Mode:** mvp
 
@@ -202,9 +202,9 @@ Plans:
 - Ranking de presença visível só para admin (evitar competição e constrangimento entre músicos)
 
 **Plans:**
-- Plan 7A: Query de histórico de escalas por membro + UI em `admin/membro_detalhe.php`
-- Plan 7B: Cálculo e exibição de taxa de presença + alerta pastoral (queda < 60% em 4 escalas)
-- Plan 7C: Ranking de presença em `admin/membros.php` (admin only)
+- [x] Plan 7A: Histórico de escalas em membro_detalhe.php *(entregue na Phase 4 — MEM-01)*
+- [x] Plan 7B: Taxa de presença em membro_detalhe.php *(entregue na Phase 4 — MEM-02)* + alerta pastoral (queda < 60% em 4 escalas) *(Phase 7 — admin only)*
+- [x] Plan 7C: Ranking de presença em `admin/membros.php` (admin only) + ordenação por nome/presença/escalas *(MEM-03)*
 
 ---
 
@@ -281,7 +281,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ✅ Concluída |
 | 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ✅ Concluída |
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ✅ Concluída |
-| 7 | Histórico Membro | Presença + alerta pastoral | 3 | ⬜ |
+| 7 | Histórico Membro | Presença + alerta pastoral | 3 | ✅ Concluída |
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ⬜ |
 | 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ⬜ |
 
