@@ -3,6 +3,24 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 
+// Helper: detecta plataforma pelo URL e retorna [label, color, bg, icon_svg]
+function detectPlatform(string $url, string $type): array {
+    $url = strtolower($url);
+    if ($type === 'audio') {
+        if (str_contains($url, 'spotify')) return ['Spotify',   '#1db954', '#f0fdf4', '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.42c-.2.32-.62.42-.94.22-2.58-1.58-5.83-1.93-9.65-1.06-.37.08-.73-.15-.81-.52-.08-.37.15-.73.52-.81 4.18-.95 7.76-.54 10.66 1.23.32.2.42.62.22.94zm1.24-2.76c-.25.4-.78.52-1.18.27-2.95-1.81-7.45-2.34-10.94-1.28-.45.14-.93-.12-1.07-.57-.14-.45.12-.93.57-1.07 3.99-1.21 8.96-.62 12.35 1.46.4.25.52.78.27 1.19zm.11-2.87C14.25 8.85 8.84 8.68 5.82 9.57c-.54.16-1.11-.14-1.27-.68-.16-.54.14-1.11.68-1.27 3.48-1.05 9.27-.85 12.93 1.38.47.28.62.89.34 1.36-.28.47-.89.62-1.36.34z"/>'];
+        if (str_contains($url, 'deezer'))  return ['Deezer',    '#a238ff', '#faf5ff', '<path d="M18.81 11.38H22v1.88h-3.19v-1.88zm-4.57 0h3.19v1.88h-3.19v-1.88zM2 11.38h3.19v1.88H2v-1.88zm4.57 0h3.19v1.88H6.57v-1.88zm4.58 0h3.19v1.88h-3.19v-1.88zM18.81 8H22v1.88h-3.19V8zm-4.57 0h3.19v1.88h-3.19V8zm-9.15 3.38H8.28v1.88H5.09v-1.88zm0-3.38H8.28v1.88H5.09V8zm4.57 3.38h3.19v1.88h-3.19v-1.88zM9.66 8h3.19v1.88H9.66V8zm0 6.75h3.19v1.88H9.66v-1.88zm4.58 0h3.19v1.88h-3.19v-1.88z"/>'];
+        return ['Áudio',    '#64748b', '#f8fafc', '<path d="M9 18V5l12-2v13M6 15H3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1zm12-2h-3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/>'];
+    }
+    if ($type === 'video') {
+        if (str_contains($url, 'youtube') || str_contains($url, 'youtu.be'))
+            return ['YouTube',  '#ff0000', '#fff5f5', '<path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>'];
+        return ['Vídeo',    '#64748b', '#f8fafc', '<path d="M22 8s-2.76-3-6-3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12c3.24 0 6-3 6-3V8zM16 12l-5 3V9l5 3z"/>'];
+    }
+    if ($type === 'cifra')  return ['Cifra Club', '#f97316', '#fff7ed', '<path d="M9 18h6M7 22h10M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 6v4l3 3"/>'];
+    // letra
+    return ['Letras',    '#6366f1', '#eef2ff', '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16zm0-6h3v1.5H8V10z"/>'];
+}
+
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
@@ -233,17 +251,17 @@ renderAppHeader('Detalhes da Música');
         <div class="panel-card">
             <!-- Grid de Metricas -->
             <div class="info-grid-row">
-                <div class="info-box">
-                    <label>Tom Original</label>
-                    <value><?= $song['tone'] ?: '-' ?></value>
+                <div class="info-box" style="background:#eff6ff;border:1.5px solid #3b82f6;border-radius:10px;padding:12px;text-align:center;">
+                    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;margin-bottom:4px;">Tom Original</div>
+                    <div style="font-size:1.4rem;font-weight:800;color:#111827;"><?= $song['tone'] ?: '-' ?></div>
                 </div>
-                <div class="info-box">
-                    <label>BPM</label>
-                    <value><?= $song['bpm'] ?: '-' ?></value>
+                <div class="info-box" style="background:#fff7ed;border:1.5px solid #f97316;border-radius:10px;padding:12px;text-align:center;">
+                    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;margin-bottom:4px;">BPM</div>
+                    <div style="font-size:1.4rem;font-weight:800;color:#111827;"><?= $song['bpm'] ?: '-' ?></div>
                 </div>
-                <div class="info-box">
-                    <label>Duração</label>
-                    <value><?= $song['duration'] ?: '-' ?></value>
+                <div class="info-box" style="background:#f0fdf4;border:1.5px solid #10b981;border-radius:10px;padding:12px;text-align:center;">
+                    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;margin-bottom:4px;">Duração</div>
+                    <div style="font-size:1.4rem;font-weight:800;color:#111827;"><?= $song['duration'] ?: '-' ?></div>
                 </div>
             </div>
 
@@ -320,41 +338,44 @@ renderAppHeader('Detalhes da Música');
     <div id="tab-refs" class="tab-panel">
         <div class="panel-card">
             <div class="links-grid">
-                <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" class="link-card">
-                    <div class="link-card-icon icon-orange"><i data-lucide="file-text" width="24"></i></div>
-                    <div class="link-card-content">
-                        <div class="link-card-title">Letra</div>
-                        <div class="link-card-status"><?= $song['link_letra'] ? 'Acessar Link' : 'Não cadastrado' ?></div>
-                    </div>
-                    <?php if($song['link_letra']): ?><i data-lucide="external-link" width="16" style="color: var(--text-tertiary);"></i><?php endif; ?>
-                </a>
-                
-                <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" class="link-card">
-                    <div class="link-card-icon icon-green"><i data-lucide="music" width="24"></i></div>
-                    <div class="link-card-content">
-                        <div class="link-card-title">Cifra</div>
-                        <div class="link-card-status"><?= $song['link_cifra'] ? 'Acessar Link' : 'Não cadastrado' ?></div>
-                    </div>
-                     <?php if($song['link_cifra']): ?><i data-lucide="external-link" width="16" style="color: var(--text-tertiary);"></i><?php endif; ?>
-                </a>
-                
-                <a href="<?= $song['link_audio'] ?: '#' ?>" target="_blank" class="link-card">
-                    <div class="link-card-icon icon-slate"><i data-lucide="headphones" width="24"></i></div>
-                    <div class="link-card-content">
-                        <div class="link-card-title">Áudio</div>
-                        <div class="link-card-status"><?= $song['link_audio'] ? 'Acessar Link' : 'Não cadastrado' ?></div>
-                    </div>
-                     <?php if($song['link_audio']): ?><i data-lucide="external-link" width="16" style="color: var(--text-tertiary);"></i><?php endif; ?>
-                </a>
-                
-                <a href="<?= $song['link_video'] ?: '#' ?>" target="_blank" class="link-card">
-                    <div class="link-card-icon icon-rose"><i data-lucide="video" width="24"></i></div>
-                    <div class="link-card-content">
-                        <div class="link-card-title">Vídeo</div>
-                        <div class="link-card-status"><?= $song['link_video'] ? 'Acessar Link' : 'Não cadastrado' ?></div>
-                    </div>
-                     <?php if($song['link_video']): ?><i data-lucide="external-link" width="16" style="color: var(--text-tertiary);"></i><?php endif; ?>
-                </a>
+<?php
+$linkDefs = [
+    ['url' => $song['link_letra'],  'type' => 'letra'],
+    ['url' => $song['link_cifra'],  'type' => 'cifra'],
+    ['url' => $song['link_audio'],  'type' => 'audio'],
+    ['url' => $song['link_video'],  'type' => 'video'],
+];
+foreach ($linkDefs as $lnk):
+    $hasUrl  = !empty($lnk['url']);
+    [$label, $color, $bg, $svgPath] = detectPlatform($hasUrl ? $lnk['url'] : '', $lnk['type']);
+    $href    = $hasUrl ? htmlspecialchars($lnk['url']) : '#';
+    $opacity = $hasUrl ? '1' : '0.45';
+?>
+        <a href="<?= $href ?>" <?= $hasUrl ? 'target="_blank" rel="noopener"' : 'onclick="return false"' ?>
+           style="display:flex;align-items:center;gap:12px;padding:14px 16px;
+                  border-radius:12px;border:1.5px solid <?= $hasUrl ? $color : '#e5e7eb' ?>;
+                  background:<?= $bg ?>;text-decoration:none;opacity:<?= $opacity ?>;
+                  transition:box-shadow .15s;min-height:56px;"
+           <?= $hasUrl ? 'onmouseover="this.style.boxShadow=\'0 4px 12px rgba(0,0,0,.12)\'" onmouseout="this.style.boxShadow=\'none\'"' : '' ?>>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                 fill="<?= $lnk['type'] === 'audio' && str_contains(strtolower($lnk['url'] ?? ''), 'spotify') ? $color : 'none' ?>"
+                 stroke="<?= in_array($lnk['type'], ['letra','cifra','video']) || !str_contains(strtolower($lnk['url'] ?? ''), 'spotify') ? $color : 'none' ?>"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <?= $svgPath ?>
+            </svg>
+            <div style="flex:1;">
+                <div style="font-size:.9rem;font-weight:700;color:<?= $color ?>;"><?= $label ?></div>
+                <div style="font-size:.75rem;color:#6b7280;"><?= $hasUrl ? 'Acessar →' : 'Não cadastrado' ?></div>
+            </div>
+            <?php if ($hasUrl): ?>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                 fill="none" stroke="#9ca3af" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <?php endif; ?>
+        </a>
+<?php endforeach; ?>
             </div>
         </div>
     </div>
