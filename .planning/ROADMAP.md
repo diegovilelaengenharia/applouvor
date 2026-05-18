@@ -139,7 +139,7 @@ Plans:
 
 ---
 
-### Phase 5: Música Modernizada
+### Phase 5: Música Modernizada ✅ CONCLUÍDA (2026-05-17)
 **Goal:** Página de detalhe da música tem visual moderno com links de streaming como cards, tom/BPM em destaque, e músico pode sugerir músicas.
 **Mode:** mvp
 
@@ -156,10 +156,10 @@ Plans:
 - Stats básicas de repertório: última vez que cada música foi tocada + frequência. Simples, alto valor.
 
 **Plans:**
-- Plan 5A: Redesign de `admin/musica_detalhe.php` — streaming cards + stats cards
-- Plan 5B: Formulário de sugestão + fila de aprovação para líder + badge no dashboard
-- Plan 5C: Página de setlist para impressão/compartilhamento (`admin/escala_setlist.php`)
-- Plan 5D: Stats de repertório — última vez usada + ranking de uso (query em schedule_songs JOIN songs)
+- [x] Plan 5A (05-01): Redesign de `admin/musica_detalhe.php` — streaming cards com branding de plataforma + stats cards destacados *(MUS-01, MUS-02)*
+- [x] Plan 5B (05-02): Badge de sugestões pendentes no dashboard (admin only) + corrigir contagem em dashboard_data.php *(MUS-03)*
+- [x] Plan 5C (05-03): Página de setlist para impressão/compartilhamento (`admin/escala_setlist.php`) + link em escala_detalhe.php *(MUS-04)*
+- [x] Plan 5D (05-04): Stats de repertório — "última vez tocada" em cada card de música no repertorio.php *(MUS-05)*
 
 ---
 
@@ -279,7 +279,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 3 | Roteiro de Culto | Líder monta fluxo do culto + nota interna | 4 | ✅ Concluída |
 | 3.5 | Limpeza & Organização | Deletar obsoletos, arquivar scripts, organizar tools/ | 3 | ⬜ |
 | 4 | Registrar Faltas | Ausente vs justificado + pastoral | 3 | ✅ Concluída |
-| 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ⬜ |
+| 5 | Música Modernizada | Cards streaming + aprovação sugestões + stats | 4 | ✅ Concluída |
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ⬜ |
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ⬜ |
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ⬜ |

@@ -9,7 +9,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 5: Música Modernizada** — Status: ⬜ Não iniciada (Phase 4 concluída 2026-05-17)
+**Phase 6: Metrônomo Pro** — Status: ⬜ Próxima fase
+
+**Phase 5: Música Modernizada** — Status: ✅ Completed (2026-05-17)
 
 ## Phase Progress
 
@@ -20,7 +22,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 3 | Roteiro de Culto | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 3.5 | Limpeza & Organização | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 4 | Registrar Faltas | ✅ Completed | 2026-05-17 | 2026-05-17 |
-| 5 | Música Modernizada | ⬜ Not Started | — | — |
+| 5 | Música Modernizada | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 6 | Metrônomo Pro | ⬜ Not Started | — | — |
 | 7 | Histórico Membro | ⬜ Not Started | — | — |
 | 8 | Devocional+ | ⬜ Not Started | — | — |
@@ -41,6 +43,16 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 5 — Summary (completada 2026-05-17)
+
+4 commits entregues:
+- Plan 05-01 (95ded72): `feat(05): platform branding in Tab Referências + styled Tom/BPM/Duração cards` — detectPlatform() helper + branded link cards + colored stat boxes
+- Plan 05-02 (354ac9c): `feat(05): fix sugestoes count to use song_suggestions + add pending badge in dashboard` — contagem corrigida + badge laranja para admin
+- Plan 05-03 (7fe651a): `feat(05): create escala_setlist.php + add Setlist link in escala_detalhe.php` — página de setlist com impressão/compartilhamento
+- Plan 05-04 (696a952): `feat(05): add last_played date to all song card queries in repertorio.php` — "Última: dd/mm/yy" ou "Nunca tocada" em cada card
+
+**Resultado:** musica_detalhe.php com branding visual de plataforma | dashboard admin com notificação de sugestões | setlist imprimível/compartilhável | repertório com data de última vez tocada
 
 ## Phase 3 — Summary (completada 2026-05-17)
 
