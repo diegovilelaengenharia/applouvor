@@ -29,19 +29,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmtAllRoles = $pdo->query("SELECT * FROM roles ORDER BY category, name");
 $allRoles = $stmtAllRoles->fetchAll(PDO::FETCH_ASSOC);
 
-// Buscar todos os membros com suas funções
+// Ordenação (admin only)
+$isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+$sort = $_GET['sort'] ?? 'name';
+$orderBy = match($sort) {
+    'taxa'    => 'taxa DESC, u.name ASC',
+    'escalas' => 'total_escalas DESC, u.name ASC',
+    default   => 'u.name ASC',
+};
+
+// Buscar todos os membros com suas funções + taxa de presença
 $stmt = $pdo->query("
-    SELECT u.*, 
+    SELECT u.*,
            GROUP_CONCAT(
                CONCAT(r.id, ':', r.name, ':', r.icon, ':', r.color, ':', IFNULL(ur.is_primary, 0))
                ORDER BY ur.is_primary DESC, r.name
                SEPARATOR '||'
-           ) as roles_data
+           ) as roles_data,
+           (
+               SELECT COUNT(*)
+               FROM schedule_users su
+               JOIN schedules sch ON sch.id = su.schedule_id
+               WHERE su.user_id = u.id AND sch.event_date < CURDATE()
+           ) as total_escalas,
+           (
+               SELECT ROUND(
+                   SUM(CASE WHEN su.status IN ('confirmed','pending') THEN 1 ELSE 0 END) * 100.0
+                   / NULLIF(COUNT(su.schedule_id), 0)
+               )
+               FROM schedule_users su
+               JOIN schedules sch ON sch.id = su.schedule_id
+               WHERE su.user_id = u.id AND sch.event_date < CURDATE()
+           ) as taxa
     FROM users u
     LEFT JOIN user_roles ur ON u.id = ur.user_id
     LEFT JOIN roles r ON ur.role_id = r.id
     GROUP BY u.id
-    ORDER BY u.name ASC
+    ORDER BY $orderBy
 ");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -77,6 +101,19 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         <i data-lucide="search" class="search-icon" width="20"></i>
         <input type="text" id="memberSearch" placeholder="Buscar por nome ou instrumento..." onkeyup="filterMembers()">
     </div>
+
+    <?php if ($isAdmin): ?>
+    <!-- Ordenação (admin only) -->
+    <div style="display:flex;gap:6px;margin:8px 0 12px;font-size:.75rem;">
+        <span style="color:#6b7280;font-weight:600;align-self:center;">Ordenar:</span>
+        <a href="?sort=name" style="padding:4px 10px;border-radius:8px;text-decoration:none;font-weight:700;
+           background:<?= $sort === 'name' ? '#3b82f6' : '#f3f4f6' ?>;color:<?= $sort === 'name' ? '#fff' : '#374151' ?>;">Nome</a>
+        <a href="?sort=taxa" style="padding:4px 10px;border-radius:8px;text-decoration:none;font-weight:700;
+           background:<?= $sort === 'taxa' ? '#3b82f6' : '#f3f4f6' ?>;color:<?= $sort === 'taxa' ? '#fff' : '#374151' ?>;">Presença</a>
+        <a href="?sort=escalas" style="padding:4px 10px;border-radius:8px;text-decoration:none;font-weight:700;
+           background:<?= $sort === 'escalas' ? '#3b82f6' : '#f3f4f6' ?>;color:<?= $sort === 'escalas' ? '#fff' : '#374151' ?>;">Escalas</a>
+    </div>
+    <?php endif; ?>
 
     <!-- Members List (Timeline/Compact Style) -->
     <div class="members-list" style="display: flex; flex-direction: column; gap: var(--space-md); padding-bottom: 100px;">
@@ -116,18 +153,34 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
                             <?php if ($user['role'] === 'admin'): ?>
                                 <span class="pib-badge pib-badge-danger" style="font-size: 0.5rem; padding: 1px 6px;">ADM</span>
                             <?php endif; ?>
+                            <?php
+                            // Badge de taxa de presença (admin only)
+                            if ($isAdmin && $user['taxa'] !== null) {
+                                $taxa = (int)$user['taxa'];
+                                if ($taxa >= 80) { $bg = '#d1fae5'; $color = '#065f46'; }
+                                elseif ($taxa >= 60) { $bg = '#dbeafe'; $color = '#1e40af'; }
+                                elseif ($taxa >= 40) { $bg = '#fef3c7'; $color = '#92400e'; }
+                                else { $bg = '#fee2e2'; $color = '#991b1b'; }
+                                echo '<span style="background:'.$bg.';color:'.$color.';font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:10px;">'.$taxa.'%</span>';
+                            }
+                            ?>
                         </div>
                         <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;">
-                            <?php 
-                            if (!empty($user['roles'])): 
+                            <?php
+                            if (!empty($user['roles'])):
                                 $displayRoles = array_slice($user['roles'], 0, 3);
-                                foreach ($displayRoles as $role): 
+                                foreach ($displayRoles as $role):
                             ?>
                                 <span style="background: var(--color-surface-alt); color: var(--color-text-muted); padding: 2px 8px; border-radius: var(--radius-sm); font-size: 0.65rem; font-weight: 700; border: 1px solid var(--color-border); display: flex; align-items: center; gap: 4px;">
                                     <span><?= $role['icon'] ?></span>
                                     <span><?= htmlspecialchars($role['name']) ?></span>
                                 </span>
                             <?php endforeach; endif; ?>
+                            <?php if ($isAdmin && (int)$user['total_escalas'] > 0): ?>
+                                <span style="background:#eff6ff;color:#1d4ed8;padding:2px 8px;border-radius:var(--radius-sm);font-size:.6rem;font-weight:700;">
+                                    <?= (int)$user['total_escalas'] ?> escala<?= $user['total_escalas'] > 1 ? 's' : '' ?>
+                                </span>
+                            <?php endif; ?>
                         </div>
                     </div>
 

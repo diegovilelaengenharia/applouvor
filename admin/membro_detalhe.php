@@ -87,6 +87,27 @@ $taxaPresenca = $totalEscalas > 0
     ? round(($totalPresente / $totalEscalas) * 100)
     : 0;
 
+// Alerta pastoral — últimas 4 escalas (admin only)
+$isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+$pastoralAlert = false;
+if ($isAdmin && count($schedules) >= 4) {
+    $last4 = array_slice($schedules, 0, 4);
+    $ausenciasRecentes = 0;
+    foreach ($last4 as $sc) {
+        $st = $sc['presence_status'] ?? 'pending';
+        if (in_array($st, ['absent', 'absent_justified', 'declined'])) {
+            $ausenciasRecentes++;
+        }
+    }
+    $taxaRecente = round((4 - $ausenciasRecentes) / 4 * 100);
+    if ($ausenciasRecentes >= 2 && $taxaRecente < 60) {
+        $pastoralAlert = [
+            'ausencias' => $ausenciasRecentes,
+            'taxa' => $taxaRecente
+        ];
+    }
+}
+
 // Buscar próxima escala
 $stmtNext = $pdo->prepare("
     SELECT s.*
@@ -223,6 +244,26 @@ renderAppHeader('Detalhes do Membro');
         </div>
     </div>
 </div>
+
+<?php if ($pastoralAlert): ?>
+<!-- Alerta pastoral (admin only, discreto) -->
+<div style="padding:0 16px;margin-bottom:16px;">
+    <div style="background:#fffbeb;border:1.5px solid #f59e0b;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:#fef3c7;border-radius:50%;width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <i data-lucide="heart" style="width:18px;color:#b45309;"></i>
+        </div>
+        <div style="flex:1;">
+            <div style="font-size:.85rem;font-weight:800;color:#78350f;margin-bottom:4px;">
+                Pode precisar de uma conversa
+            </div>
+            <div style="font-size:.75rem;color:#92400e;line-height:1.4;">
+                <?= $pastoralAlert['ausencias'] ?> ausência<?= $pastoralAlert['ausencias'] > 1 ? 's' : '' ?> nas últimas 4 escalas (<?= $pastoralAlert['taxa'] ?>% de presença).
+                Considerar um contato pastoral.
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- Stats de Presença -->
 <div style="padding: 0 16px; margin-bottom: 20px;">
