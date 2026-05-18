@@ -265,6 +265,22 @@ renderAppHeader('Detalhes da Música');
                 </div>
             </div>
 
+            <?php if (!empty($song['bpm'])): ?>
+            <div style="text-align:center;margin-top:12px;">
+                <a href="metronomo.php?bpm=<?= (int)$song['bpm'] ?>"
+                   style="display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;
+                          color:#3b82f6;text-decoration:none;padding:10px 16px;
+                          background:#eff6ff;border:1.5px solid #3b82f6;border-radius:10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="14" r="8"/><path d="M12 6V2"/><path d="M9 2h6"/>
+                        <path d="M12 14l3-3"/>
+                    </svg>
+                    Abrir no metrônomo — <?= (int)$song['bpm'] ?> BPM
+                </a>
+            </div>
+            <?php endif; ?>
+
             <!-- Classificações -->
             <div style="text-align: center;">
                 <div class="classifications-title">Classificações</div>

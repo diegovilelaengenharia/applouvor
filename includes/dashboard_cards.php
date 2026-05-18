@@ -73,6 +73,18 @@ function getAllAvailableCards() {
             'admin_only' => false
         ],
 
+        'metronomo' => [
+            'id' => 'metronomo',
+            'title' => 'Metrônomo',
+            'icon' => 'timer',
+            'category' => 'gestao',
+            'category_name' => 'Gestão',
+            'color' => '#2563EB',
+            'bg' => '#DBEAFE',
+            'url' => 'metronomo.php',
+            'admin_only' => false
+        ],
+
         // ===== ESPIRITUALIDADE (VERDE) =====
         'leitura' => [
             'id' => 'leitura',

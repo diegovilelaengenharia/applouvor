@@ -1,10 +1,11 @@
-const CACHE_NAME = 'louvor-pib-v2.2.0';
+const CACHE_NAME = 'louvor-pib-v2.3.0';
 const urlsToCache = [
   '/',
   '/index.php',
   '/assets/css/style.css',
   '/assets/images/logo-black.png',
   '/assets/images/logo-white.png',
+  '/admin/metronomo.php',
   'https://unpkg.com/lucide@latest'
 ];
 
