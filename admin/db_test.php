@@ -107,5 +107,58 @@ try {
     echo '</div>';
 }
 
+// === 5. Migration runner ===
+if (isset($pdo)) {
+    echo '<h2>5. Migrations</h2>';
+    $migrationsDir = realpath(__DIR__ . '/../database/migrations');
+    $files = glob($migrationsDir . '/*.sql');
+    sort($files);
+
+    $runMode = ($_GET['migrate'] ?? '') === '1';
+
+    echo '<table><tr><th>Arquivo</th><th>Status</th>' . ($runMode ? '<th>Execução</th>' : '') . '</tr>';
+    foreach ($files as $file) {
+        $name = basename($file);
+        $sql = file_get_contents($file);
+        $applied = false;
+        // heurística: tenta detectar se já foi aplicada por meio de CREATE TABLE IF NOT EXISTS
+        if (preg_match('/CREATE TABLE\s+(IF NOT EXISTS\s+)?`?(\w+)`?/i', $sql, $m)) {
+            $table = $m[2];
+            try {
+                $pdo->query("SELECT 1 FROM `$table` LIMIT 1");
+                $applied = true;
+            } catch (Exception $e) {}
+        } elseif (preg_match('/ALTER TABLE\s+`?(\w+)`?[\s\S]*ADD COLUMN\s+`?(\w+)`?/i', $sql, $m)) {
+            $table = $m[1]; $col = $m[2];
+            try {
+                $stmt = $pdo->query("SHOW COLUMNS FROM `$table` LIKE '$col'");
+                $applied = (bool)$stmt->fetch();
+            } catch (Exception $e) {}
+        }
+
+        echo "<tr><td><code>$name</code></td>";
+        echo '<td>' . ($applied ? '<span class="ok">✓ aplicada</span>' : '<span class="warn">⚠ pendente</span>') . '</td>';
+
+        if ($runMode) {
+            if ($applied) {
+                echo '<td><span class="ok">skip</span></td>';
+            } else {
+                try {
+                    $pdo->exec($sql);
+                    echo '<td class="ok">✓ executada</td>';
+                } catch (Exception $e) {
+                    echo '<td class="err">✗ ' . htmlspecialchars($e->getMessage()) . '</td>';
+                }
+            }
+        }
+        echo '</tr>';
+    }
+    echo '</table>';
+
+    if (!$runMode) {
+        echo '<p><a href="?token=' . htmlspecialchars($_GET['token']) . '&migrate=1" style="display:inline-block;padding:10px 18px;background:#3b82f6;color:#fff;border-radius:8px;text-decoration:none;font-weight:700;">▶ Rodar migrations pendentes</a></p>';
+    }
+}
+
 echo '<hr style="margin-top:40px"><p style="opacity:.6;font-size:.8rem">⚠ Esta página é temporária. Apagar após diagnóstico via <code>git rm admin/db_test.php</code></p>';
 echo '</body></html>';
