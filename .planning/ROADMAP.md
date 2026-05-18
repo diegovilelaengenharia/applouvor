@@ -230,7 +230,7 @@ Plans:
 
 ---
 
-### Phase 9: Deploy Final
+### Phase 9: Deploy Final ✅ CONCLUÍDA (2026-05-18)
 **Goal:** App atualizado em produção no Hostinger com PWA e HTTPS verificados, processo de deploy documentado.
 **Mode:** mvp
 
@@ -283,7 +283,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 6 | Metrônomo Pro | Tap BPM + áudio + slider + offline | 2 | ✅ Concluída |
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ✅ Concluída |
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ✅ Concluída |
-| 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ⬜ |
+| 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ✅ Concluída |
 
 ---
 *Criado: 2026-05-16 | v1.1 — Atualizado 2026-05-17 com gaps da auditoria profissional*

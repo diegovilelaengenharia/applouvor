@@ -1,11 +1,18 @@
-const CACHE_NAME = 'louvor-pib-v2.3.0';
+// CACHE_NAME deve seguir APP_VERSION em includes/config.php
+const CACHE_NAME = 'louvor-pib-v5.0.0';
 const urlsToCache = [
   '/',
   '/index.php',
   '/assets/css/style.css',
   '/assets/images/logo-black.png',
   '/assets/images/logo-white.png',
+  '/admin/index.php',
   '/admin/metronomo.php',
+  '/admin/escalas.php',
+  '/admin/repertorio.php',
+  '/admin/leitura.php',
+  '/admin/devocionais.php',
+  '/admin/oracao.php',
   'https://unpkg.com/lucide@latest'
 ];
 

@@ -9,8 +9,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 
 ## Current Phase
 
-**Phase 9: Deploy Final** — Status: ⬜ Última fase
+**Milestone 1 — CONCLUÍDO** 🎉 (2026-05-18)
 
+**Phase 9: Deploy Final** — Status: ✅ Completed (2026-05-18)
 **Phase 8: Devocional+** — Status: ✅ Completed (2026-05-18)
 **Phase 7: Histórico Membro** — Status: ✅ Completed (2026-05-17)
 **Phase 6: Metrônomo Pro** — Status: ✅ Completed (2026-05-17)
@@ -29,7 +30,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 | 6 | Metrônomo Pro | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 7 | Histórico Membro | ✅ Completed | 2026-05-17 | 2026-05-17 |
 | 8 | Devocional+ | ✅ Completed | 2026-05-18 | 2026-05-18 |
-| 9 | Deploy Final | ⬜ Not Started | — | — |
+| 9 | Deploy Final | ✅ Completed | 2026-05-18 | 2026-05-18 |
 
 ## Phase 1 — Summary (completada 2026-05-17)
 
@@ -46,6 +47,14 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
 - Ver roteiro completo em `.planning/phases/01-git-cleanup/01D-SUMMARY.md`
+
+## Phase 9 — Summary (completada 2026-05-18)
+
+- `includes/config.php`: APP_VERSION 4.1 → 5.0 (marco do Milestone 1)
+- `sw.js`: CACHE_NAME sincronizado (v5.0.0) + cache offline expandido (escalas, repertorio, metronomo, leitura, devocionais, oracao)
+- `DEPLOY.md`: criado com fluxo de deploy, versionamento, rollback, migrações e arquivos gitignored
+
+PWA-01/02/03 entregues. Webhook Hostinger já estava configurado em fases anteriores.
 
 ## Phase 8 — Summary (completada 2026-05-18)
 

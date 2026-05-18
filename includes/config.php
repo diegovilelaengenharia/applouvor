@@ -80,5 +80,5 @@ define('CHURCH_INSTAGRAM', 'https://www.instagram.com/piboliveiramg/');
 define('CHURCH_FACEBOOK', 'https://www.facebook.com/piboliveiramg');
 
 // System Info
-define('APP_VERSION', '4.1'); // Atualizado para refletir melhorias
+define('APP_VERSION', '5.0'); // Milestone 1 — Modernização + Features Faltantes (2026-05-18)
 define('APP_COPYRIGHT', '© ' . date('Y') . ' Louvor PIB Oliveira');
