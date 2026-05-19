@@ -1,24 +1,24 @@
 // CACHE_NAME deve seguir APP_VERSION em includes/config.php
-const CACHE_NAME = 'louvor-pib-v5.1.0';
+const CACHE_NAME = 'louvor-pib-v5.2.0';
 const urlsToCache = [
-  '/',
-  '/index.php',
-  '/assets/css/core/variables.css',
-  '/assets/css/app-main.css',
-  '/assets/css/theme-premium.css',
-  '/assets/css/components/mobile-bottom-nav.css',
-  '/assets/css/components/sidebar.css',
-  '/assets/css/components/pib-cards.css',
-  '/assets/js/theme-toggle.js',
-  '/assets/images/logo-black.png',
-  '/assets/images/logo-white.png',
-  '/admin/index.php',
-  '/admin/metronomo.php',
-  '/admin/escalas.php',
-  '/admin/repertorio.php',
-  '/admin/leitura.php',
-  '/admin/devocionais.php',
-  '/admin/oracao.php',
+  '/applouvor/',
+  '/applouvor/index.php',
+  '/applouvor/assets/css/core/variables.css',
+  '/applouvor/assets/css/app-main.css',
+  '/applouvor/assets/css/theme-premium.css',
+  '/applouvor/assets/css/components/mobile-bottom-nav.css',
+  '/applouvor/assets/css/components/sidebar.css',
+  '/applouvor/assets/css/components/pib-cards.css',
+  '/applouvor/assets/js/theme-toggle.js',
+  '/applouvor/assets/images/logo-black.png',
+  '/applouvor/assets/images/logo-white.png',
+  '/applouvor/admin/index.php',
+  '/applouvor/admin/metronomo.php',
+  '/applouvor/admin/escalas.php',
+  '/applouvor/admin/repertorio.php',
+  '/applouvor/admin/leitura.php',
+  '/applouvor/admin/devocionais.php',
+  '/applouvor/admin/oracao.php',
   'https://unpkg.com/lucide@latest'
 ];
 
@@ -76,8 +76,8 @@ self.addEventListener('push', function (event) {
 
     const options = {
       body: data.body,
-      icon: data.icon || '/assets/images/logo-black.png',
-      badge: '/assets/images/logo-white.png', // Ícone pequeno monocromático para Android
+      icon: data.icon || '/applouvor/assets/images/logo-black.png',
+      badge: '/applouvor/assets/images/logo-white.png', // Ícone pequeno monocromático para Android
       vibrate: [100, 50, 100],
       data: data.data || {}
     };

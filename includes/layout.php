@@ -88,7 +88,7 @@ function renderAppHeader($title, $backUrl = null)
         <meta name="apple-mobile-web-app-title" content="App Louvor PIB">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="view-transition" content="same-origin">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="/applouvor/manifest.json">
         <link rel="apple-touch-icon" href="../assets/img/logo_pib_black.png">
 
         <!-- Icons: Lucide only (Material Icons and Font Awesome removed - use Lucide) -->
@@ -302,7 +302,7 @@ function renderAppHeader($title, $backUrl = null)
     <script>
         // Service Worker Registration (single instance)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            navigator.serviceWorker.register('/applouvor/sw.js')
                 .then(reg => console.log('SW Registered:', reg.scope))
                 .catch(err => console.warn('SW Failed:', err));
         }
