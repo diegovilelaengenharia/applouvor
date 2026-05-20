@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.2
+milestone_name: milestone
+status: unknown
+last_updated: "2026-05-20T14:24:40.087Z"
+progress:
+  total_phases: 11
+  completed_phases: 5
+  total_plans: 25
+  completed_plans: 21
+  percent: 84
+---
+
 # STATE.md — App Louvor PIB Oliveira
 
 ## Project Reference
@@ -8,6 +22,10 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 **Current milestone:** Milestone 1 — Modernização + Features Faltantes
 
 ## Current Phase
+
+**Phase 10: Harmonização Visual** — Status: 📋 Planejada (2026-05-20) — pronta para `/gsd-execute-phase 10`
+- UI-SPEC + RESEARCH + VALIDATION + 4 PLANs (4 waves cascade-safe) gerados e verificados (plan-checker: VERIFICATION PASSED)
+- Achado crítico: 5 CSS de página redefinem `:root` (oracao, devocionais, leitura, evento-detalhe, avisos) — Wave 1 remove primeiro
 
 **Milestone 1 — CONCLUÍDO** 🎉 (2026-05-18)
 
@@ -35,6 +53,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 ## Phase 1 — Summary (completada 2026-05-17)
 
 12 commits semânticos criados em 4 waves:
+
 - Wave 1 (01A): 5 commits — admin/, includes/, api/, assets/css/, utilitários
 - Wave 2 (01B): 1 commit — desktop.ini removidos + .gitignore expandido (credenciais, VAPID, backup)
 - Wave 2 (01C): 2 commits — maintenance/ organizado + scripts de setup versionados
@@ -43,6 +62,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-16)
 **Estado final:** working tree clean | git ls-files *.ini = vazio | .env.production/vapid_config.php fora do tracking
 
 **Ações manuais pendentes para o Diego (ANTES DE VIAJAR):**
+
 - Rotacionar DB_PASS no painel Hostinger + atualizar .htaccess de produção
 - Regenerar chaves VAPID + upload para produção
 - Criar maintenance/.htaccess com `Require all denied` em produção
@@ -59,6 +79,7 @@ PWA-01/02/03 entregues. Webhook Hostinger já estava configurado em fases anteri
 ## Phase 8 — Summary (completada 2026-05-18)
 
 1 commit entregue (oracao.php já existia):
+
 - Streak real em `admin/leitura.php` — calcula dias consecutivos com pelo menos 1 passagem lida (walk back from current plan day)
 - Tipo `versiculo` adicionado ao enum de tipos de aviso em `admin/avisos.php`
 - Widget "Versículo da Semana" no dashboard — exibe aviso mais recente type='versiculo' não expirado (gradient roxo + ícone book)
@@ -69,6 +90,7 @@ PWA-01/02/03 entregues. Webhook Hostinger já estava configurado em fases anteri
 ## Phase 7 — Summary (completada 2026-05-17)
 
 1 commit entregue (MEM-01 e MEM-02 já entregues na Phase 4):
+
 - 70b7f8b: `feat(07): ranking de presença + alerta pastoral (admin only)` — MEM-03
 
 **Resultado:** Cards de membros em membros.php mostram badge colorido de taxa de presença (admin only) | Ordenação por nome/presença/escalas | Alerta pastoral discreto em membro_detalhe.php quando últimas 4 escalas têm ≥2 ausências e taxa < 60% (tom cuidadoso, heart icon âmbar)
@@ -76,6 +98,7 @@ PWA-01/02/03 entregues. Webhook Hostinger já estava configurado em fases anteri
 ## Phase 6 — Summary (completada 2026-05-17)
 
 2 commits entregues:
+
 - Plan 06-01 (a35ae5f): `feat(06): create metronomo.php — tap BPM, web audio click, slider` — página completa com 309 linhas
 - Plan 06-02 (f042ed1): `feat(06): integrate metronomo — dashboard card, music link, SW cache` — 4 arquivos modificados
 
@@ -84,6 +107,7 @@ PWA-01/02/03 entregues. Webhook Hostinger já estava configurado em fases anteri
 ## Phase 5 — Summary (completada 2026-05-17)
 
 4 commits entregues:
+
 - Plan 05-01 (95ded72): `feat(05): platform branding in Tab Referências + styled Tom/BPM/Duração cards` — detectPlatform() helper + branded link cards + colored stat boxes
 - Plan 05-02 (354ac9c): `feat(05): fix sugestoes count to use song_suggestions + add pending badge in dashboard` — contagem corrigida + badge laranja para admin
 - Plan 05-03 (7fe651a): `feat(05): create escala_setlist.php + add Setlist link in escala_detalhe.php` — página de setlist com impressão/compartilhamento
@@ -94,6 +118,7 @@ PWA-01/02/03 entregues. Webhook Hostinger já estava configurado em fases anteri
 ## Phase 3 — Summary (completada 2026-05-17)
 
 4 commits entregues em 4 waves sequenciais:
+
 - Wave 1 (03-01): `feat(03): add schedule_roteiro migration + api/roteiro.php CRUD` — commit 14bc968
 - Wave 2 (03-02): `feat(03): add roteiro edit UI — admin can add/reorder/delete items via modal` — commit 74f31e7
 - Wave 3 (03-03): `feat(03): add roteiro view — músico vê itens ordenados com tom e tipo` — commit e9bc582
