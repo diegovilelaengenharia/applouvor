@@ -143,6 +143,7 @@ function getComments($pdo, $prayerId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+renderAppHeader('Mural de Oração');
 ?>
 
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -161,7 +162,7 @@ function getComments($pdo, $prayerId) {
         <p style="color: var(--slate-700); font-size: var(--font-body); max-width: 350px; margin: 0 auto 20px;">
             Para usar o Mural de Oração, é necessário criar as tabelas no banco de dados.
         </p>
-        <a href="../setup_prayers.php" style="display: inline-flex; align-items: center; gap: 8px; background: var(--slate-600); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
+        <a href="../maintenance/run_all_setup.php" style="display: inline-flex; align-items: center; gap: 8px; background: var(--slate-600); color: white; padding: 12px 24px; border-radius: 24px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(55, 106, 200, 0.3);">
             <i data-lucide="settings" style="width: 18px;"></i>
             Executar Setup
         </a>
@@ -380,7 +381,7 @@ function getComments($pdo, $prayerId) {
                     <?= $showAnswered ? 'As orações respondidas aparecerão aqui.' : 'Seja o primeiro a compartilhar um pedido de oração!' ?>
                 </p>
                 <?php if (!$showAnswered): ?>
-                <button onclick="openCreateModal()" class="btn-new-prayer">
+                <button onclick="openCreateModal()" class="btn btn-success">
                     <i data-lucide="plus" style="width: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
                     Novo Pedido
                 </button>
@@ -487,10 +488,10 @@ function getComments($pdo, $prayerId) {
             
             <!-- Buttons -->
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">
+                <button type="button" onclick="closeModal()" class="btn btn-secondary" style="flex: 1;">
                     Cancelar
                 </button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">
+                <button type="submit" class="btn btn-success" style="flex: 2;">
                     Enviar Pedido
                 </button>
             </div>

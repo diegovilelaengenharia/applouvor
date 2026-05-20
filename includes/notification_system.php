@@ -374,8 +374,17 @@ class NotificationSystem {
 
             // Instanciar Helper
             if (class_exists('WebPushHelper')) {
-                // Carregar configurações VAPID
-                $vapid = require __DIR__ . '/vapid_config.php';
+                // Carregar configurações VAPID defensivamente
+                $vapidFile = __DIR__ . '/vapid_config.php';
+                if (!file_exists($vapidFile)) {
+                    error_log("NotificationSystem: vapid_config.php não encontrado.");
+                    return false;
+                }
+                $vapid = require $vapidFile;
+                if (!is_array($vapid) || empty($vapid['publicKey']) || empty($vapid['privateKey']) || empty($vapid['subject'])) {
+                    error_log("NotificationSystem: vapid_config.php mal formatado ou com chaves vazias.");
+                    return false;
+                }
                 
                 $webPush = new WebPushHelper(
                     $vapid['publicKey'],

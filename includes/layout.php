@@ -73,7 +73,7 @@ function renderAppHeader($title, $backUrl = null)
         <?php require_once __DIR__ . '/head.php'; ?>
     </head>
 
-    <body>
+    <body<?= (basename($_SERVER['PHP_SELF']) === 'index.php') ? ' class="page-is-dashboard"' : '' ?>>
 
         <?php 
         if (file_exists('sidebar.php')) {
@@ -222,7 +222,7 @@ function renderAppHeader($title, $backUrl = null)
     }
 
     // Renderiza cabeçalho padronizado das páginas
-    function renderPageHeader($title, $subtitle = 'Louvor PIB Oliveira', $rightAction = null)
+    function renderPageHeader($title, $subtitle = '', $rightAction = null)
     {
         global $_layoutUser;
         $isHome  = basename($_SERVER['PHP_SELF']) === 'index.php';
@@ -235,6 +235,7 @@ function renderAppHeader($title, $backUrl = null)
         $liderLink = $inAdmin ? 'lider.php'           : ($inApp ? '../admin/lider.php'  : 'admin/lider.php');
 ?>
     <!-- ===== PAGE HEADER ===== -->
+    <?php if (!$isHome): ?>
     <div class="page-sub-header">
         <div class="page-sub-header-inner">
 
@@ -308,28 +309,34 @@ function renderAppHeader($title, $backUrl = null)
 
                 <div class="header-actions-divider"></div>
 
-                <!-- Profile Avatar + Dropdown -->
+                <!-- Profile Avatar Pill + Dropdown -->
                 <div style="position:relative;">
-                    <button onclick="toggleProfileDropdown(event,'headerProfileDropdown')" class="profile-avatar-btn">
+                    <button onclick="toggleProfileDropdown(event,'headerProfileDropdown')" class="user-profile-pill" title="Opções de Perfil">
                         <?php if (!empty($_layoutUser['photo'])): ?>
-                            <img src="<?= $_layoutUser['photo'] ?>" alt="<?= htmlspecialchars($_layoutUser['name'] ?? 'User') ?>">
+                            <img class="user-pill-avatar" src="<?= $_layoutUser['photo'] ?>" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); flex-shrink: 0;" alt="<?= htmlspecialchars($_layoutUser['name'] ?? 'User') ?>">
                         <?php else: ?>
-                            <i data-lucide="user" width="18" style="color:#64748b;"></i>
+                            <div class="user-pill-avatar-placeholder" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-500), var(--cyan-400)); color: white; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 1.5px solid white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); flex-shrink: 0;">
+                                <?= strtoupper(substr($_layoutUser['name'] ?? 'U', 0, 1)) ?>
+                            </div>
                         <?php endif; ?>
+                        <div class="user-pill-info">
+                            <span class="user-pill-name"><?= htmlspecialchars(explode(' ', $_layoutUser['name'] ?? 'Usuário')[0]) ?></span>
+                            <span class="user-pill-role"><?= (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') ? 'Líder' : 'Músico' ?></span>
+                        </div>
+                        <i data-lucide="chevron-down" class="user-pill-chevron" width="14" height="14"></i>
                     </button>
-
+ 
                     <!-- Profile Dropdown -->
                     <div id="headerProfileDropdown" class="profile-dropdown">
                         <div class="profile-header">
-                            <div class="profile-avatar-container">
-                                <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" alt="Avatar">
+                            <div class="profile-avatar-container" style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2); flex-shrink: 0;">
+                                <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" style="width: 100%; height: 100%; object-fit: cover;" alt="Avatar">
                             </div>
                             <div class="profile-info">
                                 <div class="profile-name"><?= htmlspecialchars($_layoutUser['name'] ?? '') ?></div>
                                 <div class="profile-role">Membro da Equipe</div>
                             </div>
                         </div>
-
                         <div style="padding:8px;">
                             <?php
                             $qsLink     = $inAdmin ? '../app/quem_somos.php' : ($inApp ? 'quem_somos.php' : 'app/quem_somos.php');
@@ -387,12 +394,13 @@ function renderAppHeader($title, $backUrl = null)
                             </a>
                         </div>
                     </div><!-- /profile-dropdown -->
-                </div><!-- /profile-wrapper -->
+                </div><!-- /profile-wrapper-container -->
 
             </div><!-- /page-sub-actions -->
 
         </div><!-- /page-sub-header-inner -->
     </div><!-- /page-sub-header -->
+    <?php endif; ?>
     <!-- Dashboard Customization Modal -->
     <?php require_once __DIR__ . '/modals/dashboard-modal.php'; ?>
 

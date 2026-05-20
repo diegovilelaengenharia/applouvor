@@ -152,174 +152,334 @@
     font-weight: 700;
 }
 
-/* === 3. MEMBER GRID (Cards) === */
-.team-list-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-}
-
-.member-card {
+/* === 3. MINISTRY CONTAINER & TEAM LIST (Premium Grid) === */
+.ministry-container {
     background: var(--bg-surface);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 12px;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-sm);
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
-    cursor: default;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.member-card:hover {
+.ministry-container:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
     border-color: var(--border-light);
 }
 
-.member-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--bg-body);
-    position: relative;
-    box-shadow: var(--shadow-sm);
+.ministry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
 }
 
-.member-avatar img {
+.ministry-title-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ministry-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ministry-icon {
+    color: var(--cyan-500);
+    display: flex;
+    align-items: center;
+}
+
+.ministry-badge-count {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    background: var(--bg-body);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.ministry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.member-card-premium {
+    background: var(--bg-surface-alt);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border-subtle);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.member-card-premium:hover {
+    background: var(--bg-surface);
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateX(2px);
+}
+
+.member-avatar-premium {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--bg-surface);
+}
+
+.member-avatar-premium img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.status-indicator {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 12px;
-    height: 12px;
+.member-avatar-fallback {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    border: 2px solid var(--bg-surface);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.status-confirmed {
-    background: var(--gradient-success);
-}
-
-.status-declined {
-    background: var(--gradient-danger);
-}
-
-.status-pending {
-    background: var(--gradient-warning);
-}
-
-.member-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-main);
-    line-height: 1.2;
-}
-
-.member-role {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    background: var(--bg-body);
-    padding: 4px 10px;
-    border-radius: var(--radius-full);
-}
-
-/* === 4. SONG LIST (Playlist Style) === */
-.song-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.song-card {
-    background: var(--bg-surface);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 16px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
 }
 
-.song-card:hover {
-    background: #f8fafc;
-    /* Very subtle hover */
-    border-color: var(--border-subtle);
-    transform: scale(1.005);
-}
-
-.song-order {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-light);
-    /* Number is subtle */
-    width: 24px;
-    text-align: center;
-}
-
-.song-info {
+.member-info-premium {
     flex: 1;
     min-width: 0;
 }
 
-.song-title {
-    display: block;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-main);
-    text-decoration: none;
-    margin-bottom: 2px;
+.member-name-premium {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.member-instrument-premium {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 1px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.song-artist {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+.status-indicator-mini {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-/* Action Icons - Clean */
-.song-actions {
+.status-indicator-mini.status-confirmed {
+    background: var(--gradient-success);
+}
+
+.status-indicator-mini.status-declined,
+.status-indicator-mini.status-absent {
+    background: var(--gradient-danger);
+}
+
+.status-indicator-mini.status-pending {
+    background: var(--gradient-warning);
+}
+
+/* === 4. REPERTOIRE SECTION (Spotify Playlist Style) === */
+.spotify-playlist {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.action-icon {
-    width: 36px;
-    height: 36px;
+.spotify-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.spotify-row:hover {
+    background: var(--bg-surface-alt);
+    border-color: var(--border-subtle);
+}
+
+.spotify-index {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Simulated CD/Album art */
+.spotify-art {
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spotify-row:hover .spotify-art {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.spotify-art-letter {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--cyan-400, #22d3ee);
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+}
+
+.spotify-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.spotify-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.spotify-song-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: color 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spotify-song-title:hover {
+    color: var(--primary-blue, #2563eb);
+}
+
+body.dark-mode .spotify-song-title:hover {
+    color: var(--cyan-400);
+}
+
+.spotify-artist {
+    font-size: 0.75rem;
     color: var(--text-secondary);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Spotify action buttons */
+.spotify-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.spotify-btn {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    /* Circular buttons */
-    background: transparent;
-    transition: all 0.2s;
-}
-
-.action-icon:hover {
     background: var(--bg-body);
-    color: var(--primary);
-    transform: rotate(5deg);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.action-icon.disabled {
-    opacity: 0.2;
+.spotify-btn:hover {
+    background: var(--bg-surface);
+    color: var(--primary-blue, #2563eb);
+    border-color: var(--primary-blue, #2563eb);
+    transform: scale(1.1) translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .spotify-btn:hover {
+    color: var(--cyan-400);
+    border-color: var(--cyan-400);
+    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.2);
+}
+
+.spotify-btn.btn-play-action {
+    background: #2563eb;
+    color: white;
+    border: none;
+}
+
+body.dark-mode .spotify-btn.btn-play-action {
+    background: #0d9488;
+}
+
+.spotify-btn.btn-play-action:hover {
+    background: #1d4ed8;
+    color: white;
+    border: none;
+}
+
+body.dark-mode .spotify-btn.btn-play-action:hover {
+    background: #0f766e;
+    color: white;
+}
+
+.spotify-btn.disabled {
+    opacity: 0.15;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* === EDIT MODE OVERRIDES === */
@@ -782,4 +942,34 @@
     content: "✦ ";
     font-size: 0.65rem;
     opacity: 0.8;
+}
+
+/* === DARK MODE PREMIUM OVERRIDES === */
+body.dark-mode .ministry-container {
+    background: rgba(15, 23, 42, 0.95);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .member-card-premium {
+    background: rgba(30, 41, 59, 0.4);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .spotify-playlist {
+    background: rgba(15, 23, 42, 0.95);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .spotify-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .spotify-btn {
+    background: rgba(30, 41, 59, 0.4);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .member-avatar-premium {
+    border-color: rgba(15, 23, 42, 0.95);
 }

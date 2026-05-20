@@ -6,83 +6,27 @@ require_once '../includes/layout.php';
 // Check if user is logged in
 checkLogin();
 
-// ==========================================
-// BUSCAR PRÓXIMA ESCALA DO USUÁRIO
-// ==========================================
-$nextSchedule = null;
-$scheduleSongs = [];
+$userId = $_SESSION['user_id'] ?? 0;
+$userName = $_SESSION['user_name'] ?? 'Voluntário';
 
-try {
-    $stmt = $pdo->prepare("
-        SELECT s.*, 
-               GROUP_CONCAT(DISTINCT u.name ORDER BY u.name SEPARATOR ', ') as team_members,
-               COUNT(DISTINCT ss.song_id) as song_count
-        FROM schedules s
-        JOIN schedule_users su ON s.id = su.schedule_id
-        LEFT JOIN schedule_users su2 ON s.id = su2.schedule_id
-        LEFT JOIN users u ON su2.user_id = u.id
-        LEFT JOIN schedule_songs ss ON s.id = ss.schedule_id
-        WHERE su.user_id = ? 
-          AND s.event_date >= CURDATE()
-        GROUP BY s.id
-        ORDER BY s.event_date ASC
-        LIMIT 1
-    ");
-    $stmt->execute([$_SESSION['user_id']]);
-    $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
+// 1. Saudação
+$hour = date('H');
+if ($hour >= 5 && $hour < 12) $salutation = "Bom dia";
+elseif ($hour >= 12 && $hour < 18) $salutation = "Boa tarde";
+else $salutation = "Boa noite";
 
-    if ($nextSchedule) {
-        $stmt = $pdo->prepare("
-            SELECT sg.title, sg.artist, ss.position
-            FROM schedule_songs ss
-            JOIN songs sg ON ss.song_id = sg.id
-            WHERE ss.schedule_id = ?
-            ORDER BY ss.position ASC
-        ");
-        $stmt->execute([$nextSchedule['id']]);
-        $scheduleSongs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-} catch (Exception $e) {
-    error_log("Error fetching schedule: " . $e->getMessage());
-}
-
-// ==========================================
-// BUSCAR ÚLTIMOS AVISOS
-// ==========================================
-$recentAvisos = [];
-try {
-    $stmt = $pdo->query("
-        SELECT a.*, u.name as author_name
-        FROM avisos a
-        JOIN users u ON a.created_by = u.id
-        ORDER BY a.created_at DESC
-        LIMIT 3
-    ");
-    $recentAvisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $recentAvisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    // Silently fail
-}
-
-// ==========================================
-// STATUS LEITURA (Popup Logic)
-// ==========================================
+// 2. Status Leitura (Popup Logic)
 $showReadingPopup = false;
 $readingPopupData = null;
 try {
-    // Verificar se já marcou o dia de hoje
     $m = (int)date('n');
-    $d = min((int)date('j'), 25); // Limita a 25 do plano
+    $d = min((int)date('j'), 25);
     
-    // Verifica se completou
     $stmt = $pdo->prepare("SELECT id FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
-    $stmt->execute([$_SESSION['user_id'], $m, $d]);
+    $stmt->execute([$userId, $m, $d]);
     $readingDone = $stmt->fetch();
 
     if (!$readingDone) {
-        // Se não fez, verifica filtro de cookie/sessão para não mostrar toda hora?
-        // O cliente pediu "popup que apareça na tela após abrir o aplicativo".
-        // Vamos mostrar sempre que entrar na Home se não tiver feito.
         $showReadingPopup = true;
         $readingPopupData = [
             'month' => $m,
@@ -91,224 +35,352 @@ try {
     }
 } catch (Exception $e) {}
 
+// Foto do Usuário
+$userPhoto = $_SESSION['user_avatar'] ?? '';
+if (empty($userPhoto)) {
+    $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($userName) . '&background=dbeafe&color=1e40af';
+} elseif (strpos($userPhoto, 'http') === false) {
+    if (strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
+        $userPhoto = '../assets/uploads/' . $userPhoto;
+    } else {
+        $userPhoto = '../' . $userPhoto;
+    }
+}
+
+// 3. Próxima Escala
+$nextSchedule = null;
+try {
+    $stmt = $pdo->prepare("
+        SELECT s.*, su.status as my_status, su.role as my_role
+        FROM schedules s
+        JOIN schedule_users su ON s.id = su.schedule_id
+        WHERE su.user_id = ? AND s.event_date >= CURDATE()
+        ORDER BY s.event_date ASC
+        LIMIT 1
+    ");
+    $stmt->execute([$userId]);
+    $nextSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {}
+
+// Definição dos atalhos específicos para voluntários
+$shortcuts = [
+    [
+        'title' => 'Minhas Escalas',
+        'url' => '../admin/escalas.php',
+        'icon' => 'calendar',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)'
+    ],
+    [
+        'title' => 'Repertório',
+        'url' => '../admin/repertorio.php',
+        'icon' => 'music-2',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)'
+    ],
+    [
+        'title' => 'Histórico',
+        'url' => '../admin/historico.php',
+        'icon' => 'history',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)'
+    ],
+    [
+        'title' => 'Ausências',
+        'url' => '../admin/indisponibilidade.php',
+        'icon' => 'calendar-off',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)'
+    ],
+    [
+        'title' => 'Agenda',
+        'url' => '../admin/agenda.php',
+        'icon' => 'calendar-range',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)'
+    ],
+    [
+        'title' => 'Metrônomo',
+        'url' => '../admin/metronomo.php',
+        'icon' => 'timer',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)'
+    ],
+    [
+        'title' => 'Devocional',
+        'url' => '../admin/devocionais.php',
+        'icon' => 'book-heart',
+        'category' => 'espiritualidade',
+        'color' => 'var(--emerald-600)',
+        'bg' => 'rgba(5, 150, 105, 0.08)'
+    ],
+    [
+        'title' => 'Oração',
+        'url' => '../admin/oracao.php',
+        'icon' => 'heart',
+        'category' => 'espiritualidade',
+        'color' => 'var(--emerald-600)',
+        'bg' => 'rgba(5, 150, 105, 0.08)'
+    ],
+    [
+        'title' => 'Bíblia',
+        'url' => 'leitura.php',
+        'icon' => 'book-open',
+        'category' => 'espiritualidade',
+        'color' => 'var(--emerald-600)',
+        'bg' => 'rgba(5, 150, 105, 0.08)'
+    ],
+    [
+        'title' => 'Avisos',
+        'url' => '../admin/avisos.php',
+        'icon' => 'megaphone',
+        'category' => 'comunicacao',
+        'color' => 'var(--amber-600)',
+        'bg' => 'rgba(245, 158, 11, 0.08)'
+    ],
+    [
+        'title' => 'Aniversários',
+        'url' => '../admin/aniversarios.php',
+        'icon' => 'cake',
+        'category' => 'comunicacao',
+        'color' => 'var(--amber-600)',
+        'bg' => 'rgba(245, 158, 11, 0.08)'
+    ]
+];
+
 renderAppHeader('Início');
 ?>
 <!-- Import JSON for Popup -->
 <script src="../assets/js/reading_plan_data.js"></script>
 
-<!-- Hero Section User -->
-<div class="app-hero animate-card">
-    <!-- Navigation Row -->
-    <div class="app-hero-nav">
-        <!-- Botão WhatsApp -->
-        <a href="https://chat.whatsapp.com/LmNlohl5XFiGGKQdONQMv2" target="_blank" class="app-hero-btn ripple" title="Grupo WhatsApp">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-            </svg>
-        </a>
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+        gap: var(--space-md);
+    }
+    
+    @media (min-width: 768px) {
+        .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+    }
 
-        <!-- Avatar do Usuário -->
-        <div onclick="openSheet('sheet-perfil')" class="app-hero-avatar ripple">
-            <?php if (!empty($_SESSION['user_avatar'])): ?>
-                <img src="../assets/uploads/<?= htmlspecialchars($_SESSION['user_avatar']) ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
-            <?php else: ?>
-                <span style="font-weight: var(--font-weight-bold); font-size: 1rem; color: white;">
-                    <?= substr($_SESSION['user_name'] ?? 'U', 0, 1) ?>
-                </span>
-            <?php endif; ?>
-        </div>
-    </div>
 
-    <div class="app-hero-greeting">
-        <h1>Olá, <?= explode(' ', $_SESSION['user_name'])[0] ?>!</h1>
-        <p>Área do Voluntário</p>
-    </div>
-</div>
 
-<div class="dashboard-grid">
+    .dashboard-section-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        letter-spacing: 1.5px;
+        margin: var(--space-lg) 0 var(--space-md);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-    <!-- Card: Próxima Escala -->
-    <div class="dashboard-card">
-        <div class="dashboard-card-header">
-            <div class="dashboard-card-title">
-                <div class="dashboard-card-icon" style="background: var(--primary);">
-                    <i data-lucide="calendar" style="width: 20px; color: white;"></i>
+    .shortcuts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: var(--space-xl);
+    }
+
+    @media (min-width: 480px) {
+        .shortcuts-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 768px) {
+        .shortcuts-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 1024px) {
+        .shortcuts-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 1280px) {
+        .shortcuts-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    .shortcut-btn {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 52px;
+    }
+
+    body.dark-mode .shortcut-btn {
+        border-color: rgba(255, 255, 255, 0.04);
+        box-shadow: none;
+    }
+
+    .shortcut-icon-box {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.25s;
+    }
+
+    .shortcut-icon-box i {
+        width: 17px;
+        height: 17px;
+        stroke-width: 2.2;
+    }
+
+    .shortcut-title {
+        font-size: 0.85rem;
+        font-weight: 750;
+        color: var(--color-text);
+        line-height: 1.2;
+        transition: all 0.25s;
+    }
+
+    .shortcut-hover-dot {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%) scale(0);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        transition: all 0.25s ease;
+        opacity: 0;
+    }
+
+    /* Hover/Tátil State */
+    .shortcut-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.06);
+        background: var(--color-surface-hover);
+        border-color: var(--color-border-hover);
+    }
+
+    body.dark-mode .shortcut-btn:hover {
+        background: rgba(255, 255, 255, 0.02);
+        box-shadow: 0 10px 25px -10px rgba(0,0,0,0.5);
+    }
+
+    .shortcut-btn:hover .shortcut-icon-box {
+        transform: scale(1.05);
+    }
+
+    .shortcut-btn:hover .shortcut-hover-dot {
+        transform: translateY(-50%) scale(1);
+        opacity: 0.8;
+    }
+
+    /* Cores específicas de borda no Hover de cada Categoria */
+    .shortcut-gestao:hover { border-color: rgba(59, 130, 246, 0.35); }
+    .shortcut-espiritualidade:hover { border-color: rgba(16, 185, 129, 0.35); }
+    .shortcut-comunicacao:hover { border-color: rgba(245, 158, 11, 0.35); }
+</style>
+
+<div class="dashboard-container" style="padding: var(--space-md) var(--space-md) 100px;">
+    
+    <!-- HEADER HERO PREMIUM DE BOAS-VINDAS -->
+    <div class="dashboard-hero animate-card">
+        <!-- Elementos decorativos de fundo para premium feel -->
+        <div class="hero-glow-1"></div>
+        <div class="hero-glow-2"></div>
+        
+        <div class="hero-main-content">
+            <!-- Bloco Info Usuário (Esquerda) -->
+            <div class="hero-user-section">
+                <div class="hero-avatar-wrapper">
+                    <div class="hero-avatar-ring"></div>
+                    <a href="perfil.php" style="display: block;">
+                        <img src="<?= $userPhoto ?>" alt="Avatar" class="hero-avatar">
+                    </a>
                 </div>
-                Minha Próxima Escala
-            </div>
-        </div>
-
-        <?php if ($nextSchedule): ?>
-            <div class="event-info">
-                <div class="event-date-box">
-                    <div class="event-day"><?= date('d', strtotime($nextSchedule['event_date'])) ?></div>
-                    <div class="event-month"><?= date('M', strtotime($nextSchedule['event_date'])) ?></div>
-                </div>
-                <div class="event-details">
-                    <h4 class="event-type"><?= htmlspecialchars($nextSchedule['event_type']) ?></h4>
-                    <div class="event-time">
-                        <i data-lucide="clock" style="width: 14px;"></i>
-                        <?= date('H:i', strtotime($nextSchedule['event_time'] ?? '19:00:00')) ?>
+                <div class="hero-welcome-text">
+                    <div class="hero-badge">
+                        <i data-lucide="sparkles" width="12" height="12"></i> PIB Oliveira Louvor
                     </div>
+                    <h2 class="hero-title"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>! 👋</h2>
+                    <p class="hero-subtitle">Pronto para servir e adorar hoje?</p>
                 </div>
             </div>
 
-            <div class="schedule-summary">
-                <div class="schedule-summary-row">
-                    <span class="schedule-summary-stat">
-                        <i data-lucide="music" style="width: 14px;"></i>
-                        <?= count($scheduleSongs) ?> música(s)
-                    </span>
-                    <span class="schedule-summary-stat">
-                        <i data-lucide="users" style="width: 14px;"></i>
-                        <?= $nextSchedule['song_count'] ?? 0 ?> pessoas
-                    </span>
-                </div>
-
-                <div id="schedule-details" class="schedule-details-panel">
-                    <?php if (!empty($scheduleSongs)): ?>
-                        <div style="margin-bottom: 12px;">
-                            <div class="schedule-details-label">Repertório</div>
-                            <ul class="song-list">
-                                <?php foreach ($scheduleSongs as $index => $song): ?>
-                                    <li class="song-item">
-                                        <div class="song-number"><?= $index + 1 ?></div>
-                                        <div class="song-info">
-                                            <h5 class="song-title"><?= htmlspecialchars($song['title']) ?></h5>
-                                            <?php if ($song['artist']): ?>
-                                                <p class="song-artist"><?= htmlspecialchars($song['artist']) ?></p>
-                                            <?php endif; ?>
-                                        </div>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($nextSchedule['team_members']): ?>
-                        <div>
-                            <div class="schedule-details-label">Equipe</div>
-                            <p style="font-size: 0.85rem; color: var(--text-primary); margin: 0;">
-                                <?= htmlspecialchars($nextSchedule['team_members']) ?>
-                            </p>
-                        </div>
-                    <?php endif; ?>
-                </div>
-
-                <button onclick="toggleScheduleDetails()" id="toggle-btn" class="toggle-details-btn ripple">
-                    <i data-lucide="chevron-down" style="width: 16px;" id="toggle-icon"></i>
-                    <span id="toggle-text">Ver Detalhes</span>
-                </button>
-            </div>
-        <?php else: ?>
-            <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i data-lucide="calendar-x" style="width: 30px; color: var(--text-muted);"></i>
-                </div>
-                <h4 class="empty-state-title">Livre!</h4>
-                <p class="empty-state-text">Você não tem escalas próximas.</p>
-            </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- Card: Leitura Bíblica -->
-    <div class="dashboard-card">
-        <a href="leitura.php" class="card-link-row ripple">
-            <div class="card-link-icon" style="background: var(--success);">
-                <i data-lucide="book-open" style="width: 24px; color: white;"></i>
-            </div>
-            <div class="card-link-text">
-                <h4>Leitura Bíblica</h4>
-                <p>Acompanhe seu plano</p>
-            </div>
-            <i data-lucide="chevron-right" class="card-link-arrow" style="width: 20px;"></i>
-        </a>
-    </div>
-
-    <!-- Card: Avisos -->
-    <div class="dashboard-card">
-        <div class="dashboard-card-header">
-            <div class="dashboard-card-title">
-                <div class="dashboard-card-icon" style="background: #FFC107;">
-                    <i data-lucide="bell" style="width: 20px; color: white;"></i>
-                </div>
-                Avisos
-            </div>
-        </div>
-
-        <?php if (!empty($recentAvisos)): ?>
-            <?php foreach ($recentAvisos as $aviso): ?>
-                <div class="aviso-item <?= $aviso['priority'] ?>">
-                    <div class="aviso-header">
-                        <h5 class="aviso-title"><?= htmlspecialchars($aviso['title']) ?></h5>
-                        <span class="priority-badge priority-<?= $aviso['priority'] ?>">
-                            <?php
-                            $priorityLabels = ['urgent' => '🔴!', 'important' => '🟡', 'info' => '🔵'];
-                            echo $priorityLabels[$aviso['priority']] ?? '•';
+            <!-- Bloco Próxima Escala (Direita) -->
+            <div class="hero-info-section">
+                <?php if (!empty($nextSchedule)): ?>
+                    <div class="hero-scale-card">
+                        <div class="scale-card-header">
+                            <span class="scale-label"><i data-lucide="calendar" width="13" height="13"></i> Próxima Escala</span>
+                            <?php 
+                            $statusClass = 'status-pending';
+                            $statusText = 'Pendente';
+                            if (($nextSchedule['my_status'] ?? '') === 'confirmed') {
+                                $statusClass = 'status-confirmed';
+                                $statusText = 'Confirmada';
+                            } elseif (($nextSchedule['my_status'] ?? '') === 'declined') {
+                                $statusClass = 'status-declined';
+                                $statusText = 'Recusada';
+                            }
                             ?>
-                        </span>
+                            <span class="scale-status <?= $statusClass ?>"><?= $statusText ?></span>
+                        </div>
+                        <div class="scale-card-body">
+                            <span class="scale-date"><?= date('d/m', strtotime($nextSchedule['event_date'])) ?></span>
+                            <div class="scale-details">
+                                <span class="scale-event"><?= htmlspecialchars($nextSchedule['event_type']) ?></span>
+                                <span class="scale-role"><?= htmlspecialchars($nextSchedule['my_role'] ?? 'Músico') ?></span>
+                            </div>
+                        </div>
                     </div>
-                    <p class="aviso-message"><?= nl2br(htmlspecialchars($aviso['message'])) ?></p>
-                    <div class="aviso-meta">
-                        <?= htmlspecialchars($aviso['author_name']) ?> • <?= date('d/m', strtotime($aviso['created_at'])) ?>
+                <?php else: ?>
+                    <div class="hero-scale-card empty-scale">
+                        <i data-lucide="calendar-heart" width="20" height="20" style="flex-shrink: 0;"></i>
+                        <div class="scale-details">
+                            <span class="scale-event" style="font-size: 0.8rem; font-weight: 700;">Nenhuma escala próxima</span>
+                            <span class="scale-role" style="font-size: 0.68rem; white-space: normal;">Acompanhe os cultos no menu Escalas.</span>
+                        </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i data-lucide="bell-off" style="width: 30px; color: var(--text-muted);"></i>
-                </div>
-                <p class="empty-state-text">Nenhum aviso no momento.</p>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
 
-    <!-- Card: Atalhos -->
-    <div class="dashboard-card">
-        <a href="../admin/repertorio.php" class="card-link-row ripple">
-            <div class="card-link-icon" style="background: var(--primary);">
-                <i data-lucide="music" style="width: 24px; color: white;"></i>
-            </div>
-            <div class="card-link-text">
-                <h4>Repertório</h4>
-                <p>Ver todas as músicas</p>
-            </div>
-            <i data-lucide="chevron-right" class="card-link-arrow" style="width: 20px;"></i>
-        </a>
+    <!-- SEÇÃO ATALHOS RÁPIDOS TÁTEIS -->
+    <div class="dashboard-section-title animate-card">
+        <i data-lucide="layout-grid" width="16" height="16" style="color: var(--primary);"></i>
+        Acesso Rápido
     </div>
-
+    <div class="shortcuts-grid">
+        <?php foreach ($shortcuts as $sc): ?>
+            <a href="<?= $sc['url'] ?>" class="shortcut-btn shortcut-<?= $sc['category'] ?> animate-card" style="text-decoration: none;">
+                <div class="shortcut-icon-box" style="background: <?= $sc['bg'] ?>; color: <?= $sc['color'] ?>;">
+                    <i data-lucide="<?= $sc['icon'] ?>"></i>
+                </div>
+                <span class="shortcut-title"><?= htmlspecialchars($sc['title']) ?></span>
+                <div class="shortcut-hover-dot" style="background: <?= $sc['color'] ?>;"></div>
+            </a>
+        <?php endforeach; ?>
+    </div>
 
 </div>
 
 <script>
-    function toggleScheduleDetails() {
-        const details = document.getElementById('schedule-details');
-        const icon = document.getElementById('toggle-icon');
-        const text = document.getElementById('toggle-text');
-
-        if (details.style.display === 'none') {
-            details.style.display = 'block';
-            icon.setAttribute('data-lucide', 'chevron-up');
-            text.textContent = 'Ocultar Detalhes';
-        } else {
-            details.style.display = 'none';
-            icon.setAttribute('data-lucide', 'chevron-down');
-            text.textContent = 'Ver Detalhes';
-        }
-        lucide.createIcons();
-    }
-
     // Reading Popup Logic
     const showReadingPopup = <?= $showReadingPopup ? 'true' : 'false' ?>;
     const readingData = <?= json_encode($readingPopupData) ?>;
 
     if (showReadingPopup && readingData && bibleReadingPlan) {
         window.addEventListener('load', () => {
-            // Check if already dismissed in session to avoid annoyance?
-            // User requested "popup que apareça na tela após abrir o aplicativo".
-            // Let's create the modal HTML dynamically
-            
             const verses = bibleReadingPlan[readingData.month][readingData.day - 1];
             if (!verses) return;
 

@@ -3,11 +3,6 @@
    Estilo Premium para Leitura Bíblica - App Louvor 2026
 */
 
-:root {
-    --reading-primary: #10b981; /* Esmeralda */
-    --reading-primary-dark: #065f46;
-    --reading-bg: var(--color-background);
-}
 
 /* Tab Navigation Premium */
 .repertorio-controls {

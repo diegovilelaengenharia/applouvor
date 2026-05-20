@@ -220,8 +220,12 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             endforeach; ?>
             
             <?php if(empty($songs)): ?>
-                <div class="empty-timeline">
-                    <p class="text-tertiary">Nenhuma música encontrada.</p>
+                <div class="empty-card" style="border: 2px dashed var(--border-medium); border-radius: var(--radius-lg); padding: 40px 20px; text-align: center; margin-top: 20px; width: 100%; box-sizing: border-box; background: var(--bg-surface);">
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-surface-active); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i data-lucide="music" style="color: var(--text-tertiary); width: 24px; height: 24px;"></i>
+                    </div>
+                    <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 800; color: var(--text-primary);">Sua biblioteca está vazia</h4>
+                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Nenhuma música encontrada no repertório.</p>
                 </div>
             <?php endif; ?>
         </div>

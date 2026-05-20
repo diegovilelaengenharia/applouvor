@@ -339,11 +339,7 @@
     --category-color-light: #f8fafc;
 }
 
-.card-indigo,
-.card-violet {
-    --category-color: #4f46e5;
-    --category-color-light: #eef2ff;
-}
+
 
 /* === CARD URGENT === */
 .card-urgent-glow::before {

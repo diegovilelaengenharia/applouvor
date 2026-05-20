@@ -138,9 +138,13 @@ try {
 // Foto do Usuário
 $userPhoto = $_SESSION['user_avatar'] ?? '';
 if (empty($userPhoto)) {
-    $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($_SESSION['user_name'] ?? 'M') . '&background=3B82F6&color=fff';
+    $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($_SESSION['user_name'] ?? 'M') . '&background=3b82f6&color=fff';
 } elseif (strpos($userPhoto, 'http') === false) {
-    $userPhoto = '../' . $userPhoto;
+    if (strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
+        $userPhoto = '../assets/uploads/' . $userPhoto;
+    } else {
+        $userPhoto = '../' . $userPhoto;
+    }
 }
 
 return [

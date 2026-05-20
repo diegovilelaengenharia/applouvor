@@ -110,15 +110,16 @@ class UXAuditor:
         
         self.files_checked += 1
         filename = os.path.basename(filepath)
+        is_css = filename.endswith('.css')
 
         # Pre-calculate common flags
-        has_long_text = bool(re.search(r'<p|<div.*class=.*text|article|<span.*text', content, re.IGNORECASE))
-        has_form = bool(re.search(r'<form|<input|password|credit|card|payment', content, re.IGNORECASE))
-        complex_elements = len(re.findall(r'<input|<select|<textarea|<option', content, re.IGNORECASE))
+        has_long_text = False if is_css else bool(re.search(r'<p|<div.*class=.*text|article|<span.*text', content, re.IGNORECASE))
+        has_form = False if is_css else bool(re.search(r'<form|<input|password|credit|card|payment', content, re.IGNORECASE))
+        complex_elements = 0 if is_css else len(re.findall(r'<input|<select|<textarea|<option', content, re.IGNORECASE))
 
         # --- 1. PSYCHOLOGY LAWS ---
         # Hick's Law
-        nav_items = len(re.findall(r'<NavLink|<Link|<a\s+href|nav-item', content, re.IGNORECASE))
+        nav_items = 0 if is_css else len(re.findall(r'<NavLink|<Link|<a\s+href|nav-item', content, re.IGNORECASE))
         if nav_items > 7:
             self.issues.append(f"[Hick's Law] {filename}: {nav_items} nav items (Max 7)")
         
@@ -502,8 +503,10 @@ class UXAuditor:
                         '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE', '#EDE9FE',
                         '#8b5cf6', '#a855f7', '#9333ea', '#7c3aed', '#6d28d9',
                         'purple', 'violet', 'fuchsia', 'magenta', 'lavender']
+        content_no_comments = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+        content_no_comments = re.sub(r'//.*', '', content_no_comments)
         for purple in purple_hexes:
-            if purple.lower() in content.lower():
+            if purple.lower() in content_no_comments.lower():
                 self.issues.append(f"[Color] {filename}: PURPLE DETECTED ('{purple}'). Banned by Maestro rules. Use Teal/Cyan/Emerald instead.")
                 break
 
@@ -674,7 +677,7 @@ class UXAuditor:
     def audit_directory(self, directory: str) -> None:
         extensions = {'.tsx', '.jsx', '.html', '.vue', '.svelte', '.css'}
         for root, dirs, files in os.walk(directory):
-            dirs[:] = [d for d in dirs if d not in {'node_modules', '.git', 'dist', 'build', '.next'}]
+            dirs[:] = [d for d in dirs if d not in {'node_modules', '.git', 'dist', 'build', '.next', 'app antigo', 'app_antigo'}]
             for file in files:
                 if Path(file).suffix in extensions:
                     self.audit_file(os.path.join(root, file))

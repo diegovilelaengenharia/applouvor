@@ -62,8 +62,8 @@
 }
 
 .pib-card-date {
-    font-size: 0.75rem;
-    font-weight: 800;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
     color: var(--color-primary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -71,17 +71,17 @@
 }
 
 .pib-card-title {
-    font-size: 1.1rem;
-    font-weight: 800;
-    line-height: 1.2;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
     margin: 4px 0;
     letter-spacing: -0.01em;
 }
 
 .pib-card-body {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
     color: var(--color-text-muted);
-    line-height: 1.5;
+    line-height: var(--line-height-normal);
 }
 
 /* Estudo / Preparação */

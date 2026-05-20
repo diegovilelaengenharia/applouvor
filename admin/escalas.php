@@ -58,10 +58,10 @@ try {
 // Helpers
 function getThemeColor($type) {
     $type = mb_strtolower($type);
-    if (strpos($type, 'ensaio') !== false) return 'var(--amber-500)';
-    if (strpos($type, 'jovem') !== false) return '#8b5cf6'; // Violet
-    if (strpos($type, 'especial') !== false) return 'var(--red-500)';
-    return 'var(--blue-500)'; // Default/Culto
+    if (strpos($type, 'ensaio') !== false) return '#d97706'; // Âmbar sutil
+    if (strpos($type, 'jovem') !== false) return '#0d9488'; // Ciano/Teal brilhante
+    if (strpos($type, 'especial') !== false) return '#e11d48'; // Coral sofisticado
+    return '#2563eb'; // Azul safira limpo (Culto principal)
 }
 
 function getMonthName($m) {
@@ -169,56 +169,67 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     }
                 ?>
 
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="pib-card pib-card-schedule animate-card" style="animation-delay: <?= $delay ?>s; flex-direction: row; gap: var(--space-md); align-items: stretch; <?= $isToday ? 'border-left-color: var(--color-cta);' : '' ?>">
-                        
-                        <!-- Date Box Lateral (Original Style) -->
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; background: var(--color-surface-alt); border-radius: var(--radius-md); text-align: center; border: 1px solid var(--color-border); flex-shrink: 0;">
-                            <span style="font-size: 1.5rem; font-weight: 900; color: var(--color-text); line-height: 1;"><?= $date->format('d') ?></span>
-                            <span style="font-size: 0.65rem; font-weight: 800; color: var(--color-primary); text-transform: uppercase; margin-top: 2px;"><?= getMonthName($date->format('n')) ?></span>
-                        </div>
-
-                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                            <div class="pib-card-header" style="margin-bottom: 4px;">
-                                <span class="pib-card-date" style="font-size: 0.7rem;">
-                                    <?= $isToday ? 'HOJE • ' : '' ?><?= $date->format('H:i') ?>
-                                </span>
-                                <?php if ($isMine): ?>
-                                    <span class="pib-badge <?= $myStatus == 'confirmed' ? 'pib-badge-success' : ($myStatus == 'declined' ? 'pib-badge-danger' : 'pib-badge-warning') ?>" style="font-size: 0.55rem; padding: 2px 8px;">
-                                        <?= $myStatus == 'confirmed' ? 'Confirmado' : ($myStatus == 'declined' ? 'Recusado' : 'Pendente') ?>
-                                    </span>
-                                <?php endif; ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card animate-card <?= $isToday ? 'today' : '' ?>" style="animation-delay: <?= $delay ?>s; --card-accent-color: <?= getThemeColor($schedule['event_type']) ?>;">
+                        <div class="scale-card-main">
+                            <!-- Bloco de Data Premium -->
+                            <div class="date-box-premium">
+                                <span class="date-day"><?= $date->format('d') ?></span>
+                                <span class="date-month"><?= substr(getMonthName($date->format('n')), 0, 3) ?></span>
                             </div>
 
-                            <h3 class="pib-card-title" style="margin: 0; font-size: 1rem;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
-                            
-                            <!-- Avatares dos Participantes (Original functionality) -->
-                            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
-                                <div style="display: flex; padding-left: 6px;">
-                                    <?php 
-                                    $parts = $participantsMap[$schedule['id']] ?? [];
-                                    $count = 0;
-                                    foreach ($parts as $p): 
-                                        if ($count++ >= 4) break;
-                                        $pAvatar = !empty($p['photo']) ? $p['photo'] : 'https://ui-avatars.com/api/?name='.urlencode($p['name']).'&background=random';
-                                        if (strpos($pAvatar, 'http') === false) $pAvatar = '../' . $pAvatar;
-                                    ?>
-                                        <img src="<?= $pAvatar ?>" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--color-surface); margin-left: -6px; object-fit: cover;" title="<?= htmlspecialchars($p['name']) ?>">
-                                    <?php endforeach; ?>
-                                    <?php if (count($parts) > 4): ?>
-                                        <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--color-surface-alt); border: 2px solid var(--color-surface); margin-left: -6px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; color: var(--color-text-muted);">+<?= count($parts)-4 ?></div>
+                            <!-- Conteúdo do Card -->
+                            <div class="scale-info-col">
+                                <div class="scale-card-meta">
+                                    <span class="scale-time">
+                                        <i data-lucide="clock" style="width: 12px; height: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i>
+                                        <?= $isToday ? 'HOJE • ' : '' ?><?= $date->format('H:i') ?>
+                                    </span>
+                                    <?php if ($isMine): ?>
+                                        <span class="badge-presence <?= $myStatus == 'confirmed' ? 'confirmed' : ($myStatus == 'declined' ? 'declined' : 'pending') ?>">
+                                            <?= $myStatus == 'confirmed' ? 'Confirmado' : ($myStatus == 'declined' ? 'Recusado' : 'Pendente') ?>
+                                        </span>
                                     <?php endif; ?>
                                 </div>
-                                <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;"><?= $songsCount ?> músicas</span>
-                                <?php if ($totalParticipants > 0): ?>
-                                <span class="pib-badge <?= $confirmedCount === $totalParticipants ? 'pib-badge-success' : ($confirmedCount > 0 ? 'pib-badge-warning' : '') ?>" style="font-size: 0.6rem; padding: 2px 8px; font-weight: 800;">
-                                    <?= $confirmedCount ?>/<?= $totalParticipants ?> confirmados
-                                </span>
-                                <?php endif; ?>
-                            </div>
-                        </div>
 
-                        <div style="display: flex; align-items: center; padding-left: 4px;">
-                             <i data-lucide="chevron-right" style="width: 18px; color: var(--color-primary); opacity: 0.5;"></i>
+                                <h3 class="event-title"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                                
+                                <div class="scale-footer-details">
+                                    <!-- Avatares empilhados dos participantes -->
+                                    <div class="avatar-stack">
+                                        <?php 
+                                        $parts = $participantsMap[$schedule['id']] ?? [];
+                                        $count = 0;
+                                        foreach ($parts as $p): 
+                                            if ($count++ >= 4) break;
+                                            $pAvatar = !empty($p['photo']) ? $p['photo'] : 'https://ui-avatars.com/api/?name='.urlencode($p['name']).'&background=random';
+                                            if (strpos($pAvatar, 'http') === false) $pAvatar = '../' . $pAvatar;
+                                        ?>
+                                            <img src="<?= $pAvatar ?>" alt="<?= htmlspecialchars($p['name']) ?>" title="<?= htmlspecialchars($p['name']) ?>">
+                                        <?php endforeach; ?>
+                                        <?php if (count($parts) > 4): ?>
+                                            <div class="avatar-stack-more">+<?= count($parts) - 4 ?></div>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <!-- Indicadores e Badges de confirmação -->
+                                    <div class="scale-stats-info">
+                                        <span class="music-count-pill">
+                                            <i data-lucide="music" style="width: 12px; height: 12px; margin-right: 3px; display: inline-block; vertical-align: middle;"></i>
+                                            <?= $songsCount ?>
+                                        </span>
+                                        <?php if ($totalParticipants > 0): ?>
+                                            <span class="confirmed-badge <?= $confirmedCount === $totalParticipants ? 'all-confirmed' : ($confirmedCount > 0 ? 'some-confirmed' : '') ?>">
+                                                <?= $confirmedCount ?>/<?= $totalParticipants ?> Conf.
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Indicação visual lateral (Chevron) -->
+                            <div class="scale-card-chevron">
+                                <i data-lucide="chevron-right" style="width: 16px;"></i>
+                            </div>
                         </div>
                     </a>
                 <?php 
@@ -267,22 +278,43 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     }
                 ?>
                     <div class="scale-card-wrapper">
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-theme-color: <?= $themeColor ?>; opacity: 0.75;">
-                        <div class="scale-card-main" style="padding: 16px;">
-                            <div class="date-box-premium" style="min-width: 50px; height: 50px;">
-                                <span class="date-day" style="font-size: 1.2rem;"><?= $date->format('d') ?></span>
-                                <span class="date-month" style="font-size: 0.6rem;"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></span>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card" style="--card-accent-color: <?= getThemeColor($schedule['event_type']) ?>; opacity: 0.85;">
+                        <div class="scale-card-main">
+                            <!-- Bloco de Data Premium -->
+                            <div class="date-box-premium">
+                                <span class="date-day"><?= $date->format('d') ?></span>
+                                <span class="date-month"><?= substr(getMonthName($date->format('n')), 0, 3) ?></span>
                             </div>
+
+                            <!-- Conteúdo do Card -->
                             <div class="scale-info-col">
-                                <h3 class="event-title" style="font-size: 1rem; margin-bottom: 4px;"><?= htmlspecialchars($schedule['event_type']) ?></h3>
-                                <div class="meta-stats-row">
-                                    <span style="font-size: 0.8rem; color: var(--text-muted);"><?= $songsCount ?> músicas</span>
-                                    <?php if ($totalParticipants > 0): ?>
-                                    <span class="pib-badge <?= $confirmedCount === $totalParticipants ? 'pib-badge-success' : ($confirmedCount > 0 ? 'pib-badge-warning' : '') ?>" style="font-size: 0.6rem; padding: 2px 8px; font-weight: 800;">
-                                        <?= $confirmedCount ?>/<?= $totalParticipants ?> confirmados
+                                <div class="scale-card-meta">
+                                    <span class="scale-time">
+                                        <i data-lucide="clock" style="width: 12px; height: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i>
+                                        <?= $date->format('H:i') ?>
                                     </span>
-                                    <?php endif; ?>
                                 </div>
+
+                                <h3 class="event-title"><?= htmlspecialchars($schedule['event_type']) ?></h3>
+                                
+                                <div class="scale-footer-details">
+                                    <div class="scale-stats-info">
+                                        <span class="music-count-pill">
+                                            <i data-lucide="music" style="width: 12px; height: 12px; margin-right: 3px; display: inline-block; vertical-align: middle;"></i>
+                                            <?= $songsCount ?> Músicas
+                                        </span>
+                                        <?php if ($totalParticipants > 0): ?>
+                                            <span class="confirmed-badge <?= $confirmedCount === $totalParticipants ? 'all-confirmed' : ($confirmedCount > 0 ? 'some-confirmed' : '') ?>">
+                                                <?= $confirmedCount ?>/<?= $totalParticipants ?> Confirmados
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Indicação visual lateral (Chevron) -->
+                            <div class="scale-card-chevron">
+                                <i data-lucide="chevron-right" style="width: 16px;"></i>
                             </div>
                         </div>
                     </a>

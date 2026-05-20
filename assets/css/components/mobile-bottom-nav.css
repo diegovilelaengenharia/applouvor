@@ -57,7 +57,7 @@
     color: #94a3b8;
     font-size: 0.65rem;
     font-weight: 500;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     letter-spacing: 0.01em;
     transition: color 0.15s ease;
     -webkit-tap-highlight-color: transparent;

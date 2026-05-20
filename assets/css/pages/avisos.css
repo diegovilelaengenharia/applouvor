@@ -711,7 +711,7 @@
 }
 
 .stat-card.tags {
-    color: var(--lavender-600);
+    color: var(--amber-600);
 }
 
 .stat-icon {
@@ -770,13 +770,13 @@
 }
 
 .filter-select:hover {
-    border-color: #c4b5fd;
+    border-color: var(--primary-hover);
 }
 
 .filter-select:focus {
     outline: none;
-    border-color: var(--lavender-600);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-shadow);
 }
 
 .filters-row {
@@ -807,7 +807,7 @@
 }
 
 .tag-multiselect-trigger:hover {
-    border-color: #c4b5fd;
+    border-color: var(--primary-hover);
 }
 
 .tag-multiselect-dropdown {
@@ -862,7 +862,7 @@
 }
 
 .filter-pill.active {
-    background: #a78bfa;
+    background: var(--primary);
     color: white;
     border-color: transparent;
 }
@@ -877,8 +877,8 @@
 }
 
 .aviso-item:hover {
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
-    border-color: #c4b5fd;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+    border-color: var(--primary-hover);
 }
 
 .aviso-header-row {
@@ -914,8 +914,8 @@
 }
 
 .pin-badge {
-    background: var(--lavender-100);
-    color: var(--lavender-600);
+    background: var(--amber-100);
+    color: var(--amber-600);
     padding: 3px 8px;
     border-radius: 10px;
     font-size: var(--font-caption);
@@ -942,9 +942,9 @@
 }
 
 .btn-icon:hover {
-    background: var(--lavender-100);
-    color: var(--lavender-600);
-    border-color: #c4b5fd;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-color: var(--primary-hover);
 }
 
 .create-aviso-btn {
@@ -1004,9 +1004,9 @@
 }
 
 .btn-tags:hover {
-    background: var(--lavender-100);
-    border-color: #c4b5fd;
-    color: var(--lavender-600);
+    background: var(--primary-light);
+    border-color: var(--primary-hover);
+    color: var(--primary-dark);
 }
 
 .form-grid {

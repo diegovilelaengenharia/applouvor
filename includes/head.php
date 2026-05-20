@@ -47,10 +47,13 @@ $verMain = file_exists($pathMain) ? filemtime($pathMain) : time();
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/design-system.css?v=<?= $verDS ?>">
 <!-- Main CSS -->
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
+<!-- Barra Superior Global (Cache Busting direto para evitar cache antigo de importação) -->
+<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/page-sub-header.css?v=<?= time() ?>">
 <!-- Mobile Bottom Nav + Sidebar -->
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/mobile-bottom-nav.css?v=<?= $verMain ?>">
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/sidebar.css?v=<?= $verMain ?>">
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/pib-cards.css?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/dashboard-hero.css?v=<?= time() ?>">
 
 <!-- Scripts Globais Críticos -->
 <script src="<?= APP_URL ?>/assets/js/theme-toggle.js?v=<?= time() ?>"></script>

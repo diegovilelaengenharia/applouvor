@@ -58,9 +58,17 @@ $stmt->execute($params);
 $kpi_songs = $stmt->fetchColumn();
 
 // Chapters Count
-$stmt = $pdo->prepare("SELECT SUM(JSON_LENGTH(verses_read)) FROM reading_progress WHERE completed_at BETWEEN :start AND :end");
+$stmt = $pdo->prepare("SELECT verses_read FROM reading_progress WHERE completed_at BETWEEN :start AND :end");
 $stmt->execute($params);
-$kpi_chapters = $stmt->fetchColumn() ?: 0;
+$kpi_chapters = 0;
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $verses = json_decode($row['verses_read'] ?? '[]', true) ?: [];
+    if (empty($verses)) {
+        $kpi_chapters += 1;
+    } else {
+        $kpi_chapters += count($verses);
+    }
+}
 
 
 // B. SCALES & TEAM (Expanded)
@@ -261,20 +269,33 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute($params);
 $bpmStats = $stmt->fetch(PDO::FETCH_ASSOC);
+$avgBpm = $bpmStats['bpm_medio'] ?? 0;
 
 // 8. Completude do Repertório (Links)
 $stmt = $pdo->prepare("
     SELECT 
         COUNT(*) as total,
-        SUM(CASE WHEN link_cifra IS NOT NULL AND link_cifra != '' THEN 1 ELSE 0 END) as com_cifra,
-        SUM(CASE WHEN link_letra IS NOT NULL AND link_letra != '' THEN 1 ELSE 0 END) as com_letra,
-        SUM(CASE WHEN link_audio IS NOT NULL AND link_audio != '' THEN 1 ELSE 0 END) as com_audio,
-        SUM(CASE WHEN link_video IS NOT NULL AND link_video != '' THEN 1 ELSE 0 END) as com_video
+        SUM(CASE WHEN link IS NOT NULL AND link != '' THEN 1 ELSE 0 END) as com_link
     FROM songs
     WHERE id IN (SELECT DISTINCT song_id FROM schedule_songs ss JOIN schedules s ON ss.schedule_id = s.id WHERE $dateCondition)
 ");
 $stmt->execute($params);
-$repertoireCompleteness = $stmt->fetch(PDO::FETCH_ASSOC);
+$repertoireData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$repertoireCompleteness = [
+    'total' => $repertoireData['total'] ?? 0,
+    'com_cifra' => $repertoireData['com_link'] ?? 0,
+    'com_letra' => $repertoireData['com_link'] ?? 0,
+    'com_audio' => $repertoireData['com_link'] ?? 0,
+    'com_video' => $repertoireData['com_link'] ?? 0,
+];
+$total_songs = $repertoireCompleteness['total'] > 0 ? $repertoireCompleteness['total'] : 1;
+$completeness = [
+    'cifra' => round(($repertoireCompleteness['com_cifra'] / $total_songs) * 100),
+    'letra' => round(($repertoireCompleteness['com_letra'] / $total_songs) * 100),
+    'audio' => round(($repertoireCompleteness['com_audio'] / $total_songs) * 100),
+    'video' => round(($repertoireCompleteness['com_video'] / $total_songs) * 100),
+];
 
 
 // D. SPIRITUAL DEEP DIVE
@@ -285,7 +306,7 @@ $stmt = $pdo->query("
         u.name, 
         u.avatar_color,
         (SELECT setting_value FROM user_settings WHERE user_id = u.id AND setting_key = 'reading_plan_type' LIMIT 1) as plan,
-        IFNULL((SELECT SUM(JSON_LENGTH(verses_read)) FROM reading_progress rp WHERE rp.user_id = u.id AND rp.completed_at BETWEEN '$startDate' AND '$endDate'), 0) as chapters_period
+        IFNULL((SELECT SUM(IF(rp.verses_read IS NULL OR rp.verses_read = '' OR rp.verses_read = '[]', 0, LENGTH(rp.verses_read) - LENGTH(REPLACE(rp.verses_read, ',', '')) + 1)) FROM reading_progress rp WHERE rp.user_id = u.id AND rp.completed_at BETWEEN '$startDate' AND '$endDate'), 0) as chapters_period
     FROM users u
     ORDER BY chapters_period DESC, u.name ASC
 ");
@@ -301,14 +322,14 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute($params);
 $readingHoursRaw = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$readingHours = [];
+$readingHours = array_fill(0, 24, 0);
 foreach($readingHoursRaw as $r) $readingHours[$r['hour_of_day']] = $r['qtd'];
 
 // 3. Ranking de Leitores (Top 10)
 $stmt = $pdo->prepare("
     SELECT u.name, u.avatar_color,
            COUNT(DISTINCT rp.id) as total_leituras,
-           IFNULL(SUM(JSON_LENGTH(rp.verses_read)), 0) as total_capitulos
+           IFNULL(SUM(IF(rp.verses_read IS NULL OR rp.verses_read = '' OR rp.verses_read = '[]', 0, LENGTH(rp.verses_read) - LENGTH(REPLACE(rp.verses_read, ',', '')) + 1)), 0) as total_capitulos
     FROM users u
     LEFT JOIN reading_progress rp ON u.id = rp.user_id AND rp.completed_at BETWEEN :start AND :end
     GROUP BY u.id
@@ -334,7 +355,7 @@ $stmt = $pdo->prepare("
     SELECT 
         IFNULL((SELECT setting_value FROM user_settings WHERE user_id = u.id AND setting_key = 'reading_plan_type' LIMIT 1), 'nenhum') as plano,
         COUNT(DISTINCT u.id) as usuarios,
-        IFNULL(SUM(JSON_LENGTH(rp.verses_read)), 0) as capitulos
+        IFNULL(SUM(IF(rp.verses_read IS NULL OR rp.verses_read = '' OR rp.verses_read = '[]', 0, LENGTH(rp.verses_read) - LENGTH(REPLACE(rp.verses_read, ',', '')) + 1)), 0) as capitulos
     FROM users u
     LEFT JOIN reading_progress rp ON u.id = rp.user_id AND rp.completed_at BETWEEN :start AND :end
     GROUP BY plano
@@ -443,28 +464,39 @@ $audioRate = $audioData['total'] > 0 ? round(($audioData['com_audio'] / $audioDa
 // F. CROSS ANALYSIS (NEW SECTION)
 // --------------------------------
 // 1. Correlação Participação x Leitura (Engagement Score)
+$crossParams = [
+    'start' => $startDate,
+    'end' => $endDate,
+    'start_rp' => $startDate,
+    'end_rp' => $endDate,
+    'start_ua' => $startDate,
+    'end_ua' => $endDate
+];
+
 $stmt = $pdo->prepare("
     SELECT 
         u.name,
         u.avatar_color,
         u.instrument,
         COUNT(DISTINCT su.schedule_id) as escalas_confirmadas,
-        IFNULL(SUM(JSON_LENGTH(rp.verses_read)), 0) as capitulos_lidos,
+        IFNULL(SUM(IF(rp.verses_read IS NULL OR rp.verses_read = '' OR rp.verses_read = '[]', 0, LENGTH(rp.verses_read) - LENGTH(REPLACE(rp.verses_read, ',', '')) + 1)), 0) as capitulos_lidos,
         COUNT(DISTINCT ua.id) as ausencias
     FROM users u
     LEFT JOIN schedule_users su ON u.id = su.user_id AND su.status = 'confirmed'
     LEFT JOIN schedules s ON su.schedule_id = s.id AND $dateCondition
-    LEFT JOIN reading_progress rp ON u.id = rp.user_id AND rp.completed_at BETWEEN :start AND :end
-    LEFT JOIN user_unavailability ua ON u.id = ua.user_id AND ua.start_date BETWEEN :start AND :end
+    LEFT JOIN reading_progress rp ON u.id = rp.user_id AND rp.completed_at BETWEEN :start_rp AND :end_rp
+    LEFT JOIN user_unavailability ua ON u.id = ua.user_id AND ua.start_date BETWEEN :start_ua AND :end_ua
     GROUP BY u.id
     ORDER BY escalas_confirmadas DESC, capitulos_lidos DESC
 ");
-$stmt->execute($params);
+$stmt->execute($crossParams);
 $engagementData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Calcular Score de Engajamento (0-100)
-$maxScales = max(array_column($engagementData, 'escalas_confirmadas')) ?: 1;
-$maxChapters = max(array_column($engagementData, 'capitulos_lidos')) ?: 1;
+$scales_col = array_column($engagementData, 'escalas_confirmadas');
+$maxScales = (!empty($scales_col) ? max($scales_col) : 1) ?: 1;
+$chapters_col = array_column($engagementData, 'capitulos_lidos');
+$maxChapters = (!empty($chapters_col) ? max($chapters_col) : 1) ?: 1;
 foreach($engagementData as &$member) {
     $scaleScore = ($member['escalas_confirmadas'] / $maxScales) * 40;
     $readingScore = ($member['capitulos_lidos'] / $maxChapters) * 40;
@@ -1028,7 +1060,7 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
                 </select>
                 <?php endif; ?>
             </form>
-             <button onclick="window.open('relatorios_gerais.php?print=true&period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>', '_blank')" class="btn-print ripple">
+             <button onclick="window.open('relatorios_gerais.php?print=true&period=<?= $period ?>&year=<?= $year ?>&month=<?= $month ?>', '_blank')" class="btn btn-secondary">
                 <i data-lucide="printer" style="width: 16px;"></i> Imprimir
             </button>
         </div>
@@ -1131,7 +1163,7 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
                                 <h5 style="font-size: 0.8rem; margin: 0 0 8px 0; color: var(--text-secondary);">BPM Médio</h5>
                                 <div style="font-size: 2.5rem; font-weight: 800; color: var(--slate-700); line-height: 1;"><?= round($avgBpm) ?></div>
                                 <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
-                                    Min: <?= $bpmStats['min_bpm'] ?> | Max: <?= $bpmStats['max_bpm'] ?>
+                                    Min: <?= $bpmStats['bpm_min'] ?? 0 ?> | Max: <?= $bpmStats['bpm_max'] ?? 0 ?>
                                 </div>
                             </div>
 
@@ -1509,7 +1541,7 @@ renderPageHeader('Relatórios', 'Análise Profunda e Indicadores');
 <?php
 // Pre-fetch missing songs data for the modal
 $missingData = [];
-$types = ['cifra' => 'link_cifra', 'letra' => 'link_letra', 'áudio' => 'link_audio', 'vídeo' => 'link_video'];
+$types = ['cifra' => 'link', 'letra' => 'link', 'audio' => 'link', 'video' => 'link'];
 
 foreach ($types as $label => $col) {
     $stmt = $pdo->prepare("SELECT id, title, artist FROM songs WHERE ($col IS NULL OR $col = '') ORDER BY title ASC");

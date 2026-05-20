@@ -33,7 +33,7 @@
 .kpi-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     padding: 24px;
     box-shadow: var(--shadow-sm);
     display: flex;
@@ -73,7 +73,7 @@
     /* blue-50 */
     color: #2563eb;
     /* blue-600 */
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     backdrop-filter: none;
 }
 
@@ -81,7 +81,7 @@
     width: 48px;
     height: 48px;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,7 +94,7 @@
 }
 
 .kpi-label {
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     color: var(--text-secondary);
     font-weight: 600;
     margin-bottom: 4px;
@@ -103,7 +103,7 @@
 }
 
 .kpi-value {
-    font-size: 1.75rem;
+    font-size: var(--font-size-3xl);
     font-weight: 800;
     line-height: 1;
     margin-bottom: 4px;
@@ -111,7 +111,7 @@
 }
 
 .kpi-sub {
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     color: var(--text-muted);
     font-weight: 500;
 }
@@ -139,7 +139,7 @@
 .kpi-icon-mini {
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -155,8 +155,8 @@
 }
 
 .kpi-card.mini .text-teal {
-    color: #7e22ce;
-    background: #f3e8ff;
+    color: #0d9488;
+    background: #f0fdfa;
 }
 
 .kpi-card.mini .text-orange {
@@ -205,14 +205,14 @@
 
 
 .kpi-value-mini {
-    font-size: 1.25rem;
+    font-size: var(--font-size-2xl);
     font-weight: 800;
     color: var(--text-primary);
     line-height: 1;
 }
 
 .kpi-label-mini {
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     color: var(--text-secondary);
     font-weight: 600;
 }
@@ -220,8 +220,8 @@
 
 /* --- SECTIONS --- */
 .section-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
     color: var(--text-secondary);
     margin: 0 0 16px 0;
     display: flex;
@@ -247,7 +247,7 @@
 }
 
 .action-card {
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     padding: 24px;
     display: flex;
     flex-direction: column;
@@ -270,7 +270,7 @@
 .card-icon-glass {
     width: 48px;
     height: 48px;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -287,15 +287,15 @@
 }
 
 .card-title {
-    font-size: 1.1rem;
-    font-weight: 800;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
     color: white;
     margin-bottom: 2px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .card-subtitle {
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
     color: rgba(255, 255, 255, 0.85);
     font-weight: 500;
 }
@@ -309,8 +309,8 @@
     background: linear-gradient(135deg, #6366f1, #4f46e5);
 }
 
-.color-teal-gradient {
-    background: linear-gradient(135deg, #a855f7, #9333ea);
+.color-cyan-gradient-alt {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
 }
 
 .color-pink-gradient {
@@ -398,10 +398,7 @@
     color: #4f46e5;
 }
 
-.action-card.simple.teal .card-icon-glass {
-    background: #f3e8ff;
-    color: #7e22ce;
-}
+/* Teal card styling resides below to prevent duplicate */
 
 .action-card.simple.red .card-icon-glass {
     background: #fef2f2;
@@ -476,6 +473,6 @@
     }
 
     .card-title {
-        font-size: 1rem;
+        font-size: var(--font-size-base);
     }
 }

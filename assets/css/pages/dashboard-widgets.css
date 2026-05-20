@@ -1,0 +1,871 @@
+/* ==========================================================================
+   WIDGETS PREMIUM & SISTEMA DE ANIMAÇÕES — APP LOUVOR PIB OLIVEIRA
+   Design ultra-estético contemporâneo SaaS com efeitos glassmorphic avançados,
+   micro-interações de física de mola e respeito absoluto ao "Purple Ban".
+   ========================================================================== */
+
+/* 1. Coreografia de Entrada (Staggered Entrance Animation) */
+@keyframes widget-stagger-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.animate-stagger-1 { animation: widget-stagger-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.05s; opacity: 0; }
+.animate-stagger-2 { animation: widget-stagger-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.12s; opacity: 0; }
+.animate-stagger-3 { animation: widget-stagger-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.18s; opacity: 0; }
+.animate-stagger-4 { animation: widget-stagger-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.24s; opacity: 0; }
+.animate-stagger-5 { animation: widget-stagger-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.30s; opacity: 0; }
+.animate-stagger-6 { animation: widget-stagger-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.36s; opacity: 0; }
+
+/* 2. Grid Assimétrico Moderno */
+.widgets-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 50px;
+}
+
+@media (min-width: 1024px) {
+    .widgets-grid {
+        grid-template-columns: 1.4fr 1fr;
+        align-items: start;
+    }
+}
+
+.widgets-column-main,
+.widgets-column-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* 3. Base do Widget Premium */
+.dashboard-widget {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(148, 163, 184, 0.12),
+                0 1px 3px -1px rgba(148, 163, 184, 0.1);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+body.dark-mode .dashboard-widget {
+    background: rgba(30, 41, 59, 0.45);
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Hover de Levitação por Física de Mola */
+.dashboard-widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -15px rgba(148, 163, 184, 0.25),
+                0 0 0 1px var(--blue-500) inset;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .dashboard-widget:hover {
+    box-shadow: 0 25px 50px -20px rgba(0, 0, 0, 0.6),
+                inset 0 0 0 1px rgba(59, 130, 246, 0.4);
+    background: rgba(30, 41, 59, 0.6);
+}
+
+/* Faixa Decorativa Lateral Sutil */
+.dashboard-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.widget-primary::before { background: var(--blue-500); }
+.widget-secondary::before { background: var(--cyan-400); }
+.widget-accent::before { background: var(--yellow-500); }
+.widget-success::before { background: var(--green-500); }
+
+/* Cabeçalho do Widget */
+.widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.widget-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    letter-spacing: -0.3px;
+}
+
+body.dark-mode .widget-title {
+    color: var(--slate-100);
+}
+
+.widget-title i {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.2;
+}
+
+.widget-header-action {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--blue-600);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+    background: rgba(59, 130, 246, 0.08);
+    padding: 6px 12px;
+    border-radius: 100px;
+}
+
+body.dark-mode .widget-header-action {
+    color: var(--blue-400);
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.widget-header-action:hover {
+    background: var(--blue-500);
+    color: white;
+    transform: translateX(2px);
+}
+
+/* ==========================================================================
+   WIDGET 1: PRÓXIMA ESCALA (HERO CARD)
+   ========================================================================== */
+.widget-scale-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.scale-hero-info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(34, 211, 238, 0.04) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark-mode .scale-hero-info {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.5) 100%);
+    border-color: rgba(255, 255, 255, 0.03);
+}
+
+.scale-hero-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.scale-badge-type {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--slate-900);
+}
+
+body.dark-mode .scale-badge-type {
+    color: white;
+}
+
+.scale-badge-date {
+    font-size: 0.8rem;
+    color: var(--slate-500);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+body.dark-mode .scale-badge-date {
+    color: var(--slate-400);
+}
+
+/* Status Pill */
+.scale-status-pill {
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-approved {
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803d;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+body.dark-mode .status-approved {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+}
+
+.status-pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #b45309;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+body.dark-mode .status-pending {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+/* Playlist / Musicas */
+.scale-playlist-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.scale-playlist-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--slate-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.scale-playlist-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+}
+
+.scale-playlist-item:hover {
+    border-color: var(--blue-300);
+    transform: translateX(4px);
+    background: var(--color-surface-hover);
+}
+
+body.dark-mode .scale-playlist-item:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.playlist-music-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* Permite truncamento */
+}
+
+.playlist-music-title {
+    font-size: 0.85rem;
+    font-weight: 750;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist-music-meta {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.playlist-music-tone {
+    background: rgba(59, 130, 246, 0.08);
+    color: var(--blue-600);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+body.dark-mode .playlist-music-tone {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--blue-300);
+}
+
+.playlist-music-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.playlist-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.playlist-action-btn:hover {
+    background: var(--blue-500);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Stack de Participantes com Fotos Reais */
+.scale-team-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--color-border);
+    padding-top: 14px;
+    margin-top: 6px;
+}
+
+.scale-team-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.avatar-stack {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-stack-item {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--color-surface);
+    margin-left: -8px;
+    object-fit: cover;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: var(--slate-200);
+}
+
+.avatar-stack-item:first-child {
+    margin-left: 0;
+}
+
+.avatar-stack-item:hover {
+    transform: translateY(-4px) scale(1.1);
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.avatar-stack-more {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--slate-100);
+    border: 2px solid var(--color-surface);
+    color: var(--slate-600);
+    font-size: 0.72rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -8px;
+    z-index: 1;
+}
+
+body.dark-mode .avatar-stack-more {
+    background: var(--slate-800);
+    color: var(--slate-300);
+}
+
+/* Empty State Escalas */
+.scale-empty-state {
+    padding: 30px 20px;
+    text-align: center;
+    background: rgba(59, 130, 246, 0.02);
+    border: 1px dashed var(--color-border);
+    border-radius: 16px;
+}
+
+.scale-empty-state i {
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+    opacity: 0.7;
+}
+
+.scale-empty-state p {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ==========================================================================
+   WIDGET 2: REPERTÓRIO & NOVIdADES (3D VINYL EFFECT)
+   ========================================================================== */
+.widget-repertoire-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cd-cover-container {
+    position: relative;
+    width: 86px;
+    height: 86px;
+    flex-shrink: 0;
+    perspective: 800px;
+    cursor: pointer;
+}
+
+.cd-vinyl-disk {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #090d16 35%, #182235 60%, #030712 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    top: 3px;
+    left: 20px;
+    z-index: 1;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cd-vinyl-disk::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--blue-500);
+    border: 2px solid #000;
+}
+
+.cd-jacket {
+    position: absolute;
+    width: 86px;
+    height: 86px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--blue-600) 0%, var(--cyan-500) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 2;
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cd-jacket i {
+    width: 32px;
+    height: 32px;
+    opacity: 0.9;
+}
+
+/* Hover 3D e rotação elegante */
+.cd-cover-container:hover .cd-vinyl-disk {
+    left: 42px;
+    transform: rotate(180deg);
+}
+
+.cd-cover-container:hover .cd-jacket {
+    transform: rotateY(-15deg);
+    box-shadow: 12px 10px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+.repertoire-music-detail {
+    min-width: 0;
+    flex: 1;
+}
+
+.repertoire-music-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--blue-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+}
+
+body.dark-mode .repertoire-music-label {
+    color: var(--blue-400);
+}
+
+.repertoire-music-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+.repertoire-music-artist {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.repertoire-stats-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    border-top: 1px solid var(--color-border);
+    padding-top: 16px;
+    margin-top: 18px;
+}
+
+.repertoire-stat-card {
+    background: var(--color-surface-alt);
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--color-border);
+}
+
+.repertoire-stat-num {
+    font-size: 1.2rem;
+    font-weight: 850;
+    color: var(--color-text);
+    line-height: 1.1;
+}
+
+.repertoire-stat-text {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Banner Cintilante de Sugestões Pendentes */
+.admin-suggestions-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(251, 191, 36, 0.05) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.25s;
+}
+
+.admin-suggestions-banner:hover {
+    border-color: rgba(245, 158, 11, 0.4);
+    transform: translateY(-1px);
+}
+
+.suggestions-text {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #b45309;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+body.dark-mode .suggestions-text {
+    color: #fbbf24;
+}
+
+.suggestions-badge {
+    background: #f59e0b;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 850;
+    padding: 3px 8px;
+    border-radius: 100px;
+    animation: heartbeat 2s infinite ease-in-out;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   WIDGET 3: JORNADA BÍBLICA & DEVOCIONAL (GLOWING PROGRESS)
+   ========================================================================== */
+.widget-bible-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.bible-progress-card {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.bible-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.bible-progress-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.bible-progress-percentage {
+    font-size: 0.8rem;
+    font-weight: 850;
+    color: var(--cyan-500);
+}
+
+.bible-progress-bar-bg {
+    height: 8px;
+    background: var(--color-border);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bible-progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan-400), var(--blue-500));
+    border-radius: 100px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+    transition: width 1s ease-in-out;
+}
+
+.bible-verse-block {
+    border-left: 3.5px solid var(--cyan-400);
+    padding-left: 14px;
+    margin: 4px 0;
+}
+
+.bible-verse-text {
+    font-size: 0.86rem;
+    font-style: italic;
+    color: var(--color-text);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.bible-verse-reference {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--cyan-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+}
+
+body.dark-mode .bible-verse-reference {
+    color: var(--cyan-400);
+}
+
+/* ==========================================================================
+   WIDGET 4: MURAL DE INTERCESSÃO (ORANDO JUNTOS)
+   ========================================================================== */
+.widget-prayer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.prayer-item-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.prayer-item-card:hover {
+    border-color: rgba(16, 185, 129, 0.25);
+    background: var(--color-surface-hover);
+}
+
+.prayer-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.prayer-author {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.prayer-date {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.prayer-body {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+/* Botão de Amém Interativo */
+.prayer-amen-row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.amen-button {
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    color: #059669;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.dark-mode .amen-button {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+}
+
+.amen-button:hover {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+    transform: scale(1.05);
+}
+
+.amen-button:active {
+    transform: scale(0.95);
+}
+
+.amen-button i {
+    width: 13px;
+    height: 13px;
+    transition: transform 0.2s;
+}
+
+.amen-button:hover i {
+    transform: scale(1.2);
+}
+
+/* ==========================================================================
+   WIDGET 5: ANIVERSÁRIOS & COMUNIDADE
+   ========================================================================== */
+.widget-niver-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.niver-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    transition: all 0.2s ease;
+}
+
+.niver-item-card:hover {
+    transform: translateX(4px);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.niver-user-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.niver-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border);
+}
+
+.niver-user-name {
+    font-size: 0.82rem;
+    font-weight: 750;
+    color: var(--color-text);
+}
+
+.niver-date-badge {
+    background: rgba(245, 158, 11, 0.08);
+    color: #d97706;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+body.dark-mode .niver-date-badge {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.niver-date-badge i {
+    width: 12px;
+    height: 12px;
+}
+
+.niver-empty-state {
+    text-align: center;
+    padding: 20px 10px;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+}

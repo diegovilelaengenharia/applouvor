@@ -1,0 +1,366 @@
+/* ==========================================================================
+   DASHBOARD HERO BANNER — App Louvor Premium
+   Design: Glassmorphism, Modern Typography, Next Scale Widget
+   ========================================================================== */
+
+/* 1. ESTILO PADRÃO (MODO CLARO) */
+.dashboard-hero {
+    margin-bottom: var(--space-lg);
+    background: linear-gradient(135deg, #ffffff 0%, var(--slate-50) 100%);
+    border-radius: 20px;
+    padding: 24px 28px;
+    color: var(--text-primary);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 10px 30px -10px rgba(148, 163, 184, 0.12);
+    transition: all 0.3s ease;
+}
+
+/* Background glows */
+.hero-glow-1 {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero-glow-2 {
+    position: absolute;
+    bottom: -50px;
+    left: 10%;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Layout Content */
+.hero-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+@media (min-width: 768px) {
+    .hero-main-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+    }
+}
+
+/* Left side: User Section */
+.hero-user-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.hero-avatar-wrapper {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
+
+.hero-avatar-ring {
+    position: absolute;
+    inset: -3px;
+    background: linear-gradient(135deg, var(--blue-500), var(--cyan-400));
+    border-radius: 50%;
+    padding: 2px;
+    animation: pulse-border 3s infinite alternate;
+}
+
+.hero-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+    box-shadow: var(--shadow-lg);
+}
+
+.hero-welcome-text {
+    flex: 1;
+}
+
+.hero-badge {
+    background: rgba(59, 130, 246, 0.08);
+    color: var(--primary);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.hero-title {
+    font-size: 1.45rem;
+    font-weight: 850;
+    margin: 0;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    margin: 4px 0 0 0;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* Right side: Info Card (Next Scale) */
+.hero-info-section {
+    flex-shrink: 0;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .hero-info-section {
+        width: 300px;
+    }
+}
+
+.hero-scale-card {
+    background: rgba(0, 0, 0, 0.015);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 12px 14px;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s;
+}
+
+.hero-scale-card:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.scale-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.scale-label {
+    font-size: 0.7rem;
+    font-weight: 750;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.scale-status {
+    font-size: 0.62rem;
+    font-weight: 850;
+    padding: 2px 7px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.scale-status.status-pending {
+    background: rgba(245, 158, 11, 0.08);
+    color: var(--warning-text);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.scale-status.status-confirmed {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--green-600);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.scale-status.status-declined {
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--red-600);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.scale-card-body {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.scale-date {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--primary);
+    background: rgba(59, 130, 246, 0.06);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.scale-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+}
+
+.scale-event {
+    font-size: 0.8rem;
+    font-weight: 750;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scale-role {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.empty-scale {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-style: dashed;
+}
+
+.empty-scale i {
+    color: var(--text-tertiary);
+}
+
+.empty-scale .scale-event {
+    color: var(--text-primary);
+}
+
+.empty-scale .scale-role {
+    color: var(--text-secondary);
+}
+
+@keyframes pulse-border {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.05); opacity: 1; }
+}
+
+
+/* 2. OVERRIDES DO MODO ESCURO (DARK MODE) */
+body.dark-mode .dashboard-hero {
+    background: linear-gradient(135deg, #090d16 0%, #111827 100%);
+    border-color: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+body.dark-mode .hero-glow-1 {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+}
+
+body.dark-mode .hero-glow-2 {
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+}
+
+body.dark-mode .hero-avatar {
+    border-color: #090d16;
+}
+
+body.dark-mode .hero-badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: #93c5fd;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .hero-title {
+    color: #ffffff;
+}
+
+body.dark-mode .hero-subtitle {
+    color: #94a3b8;
+}
+
+body.dark-mode .hero-scale-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .hero-scale-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .scale-label {
+    color: #94a3b8;
+}
+
+body.dark-mode .scale-event {
+    color: #f1f5f9;
+}
+
+body.dark-mode .scale-role {
+    color: #94a3b8;
+}
+
+body.dark-mode .scale-date {
+    background: rgba(59, 130, 246, 0.12);
+    color: #ffffff;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+body.dark-mode .scale-status.status-pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+body.dark-mode .scale-status.status-confirmed {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+body.dark-mode .scale-status.status-declined {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+body.dark-mode .empty-scale i {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .empty-scale .scale-event {
+    color: #f8fafc;
+}
+
+body.dark-mode .empty-scale .scale-role {
+    color: #94a3b8;
+}

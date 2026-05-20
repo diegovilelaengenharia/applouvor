@@ -7,12 +7,27 @@ require_once '../includes/layout.php';
 function getInstrumentIcon($instrument) {
     $inst = mb_strtolower($instrument, 'UTF-8');
     if (strpos($inst, 'vocal') !== false || strpos($inst, 'voz') !== false || strpos($inst, 'cantor') !== false) return 'mic';
-    if (strpos($inst, 'violão') !== false || strpos($inst, 'guitarra') !== false) return 'guitar';
+    if (strpos($inst, 'violão') !== false || strpos($inst, 'guitarra') !== false || strpos($inst, 'guitar') !== false) return 'guitar';
     if (strpos($inst, 'bateria') !== false || strpos($inst, 'cajon') !== false) return 'drum';
-    if (strpos($inst, 'teclado') !== false || strpos($inst, 'piano') !== false) return 'keyboard-music'; 
-    if (strpos($inst, 'baixo') !== false) return 'zap'; 
+    if (strpos($inst, 'teclado') !== false || strpos($inst, 'piano') !== false) return 'keyboard'; 
+    if (strpos($inst, 'baixo') !== false) return 'music'; 
     if (strpos($inst, 'sax') !== false || strpos($inst, 'sopra') !== false) return 'wind';
     return 'music'; // Fallback
+}
+
+// Helper para classificar em Ministérios
+function getMinistryGroup($instrument) {
+    $inst = mb_strtolower($instrument, 'UTF-8');
+    if (strpos($inst, 'vocal') !== false || strpos($inst, 'voz') !== false || strpos($inst, 'cantor') !== false || strpos($inst, 'ministro') !== false) {
+        return 'Vocal / Vozes';
+    }
+    if (strpos($inst, 'violão') !== false || strpos($inst, 'guitarra') !== false || strpos($inst, 'baixo') !== false || strpos($inst, 'teclado') !== false || strpos($inst, 'piano') !== false || strpos($inst, 'synth') !== false || strpos($inst, 'guitar') !== false) {
+        return 'Harmonia / Cordas';
+    }
+    if (strpos($inst, 'bateria') !== false || strpos($inst, 'drum') !== false || strpos($inst, 'cajon') !== false || strpos($inst, 'percussão') !== false) {
+        return 'Ritmo / Percussão';
+    }
+    return 'Som & Apoio';
 }
 
 $id = $_GET['id'] ?? null;
@@ -126,6 +141,18 @@ $diaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sáb
 // Buscar Membros
 $team = $scheduleRepo->getParticipants($id);
 $teamIds = array_column($team, 'user_id');
+
+// Agrupar a equipe por Ministérios/Funções
+$groupedTeam = [];
+foreach ($team as $member) {
+    $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
+    $groupName = getMinistryGroup($instr);
+    $groupedTeam[$groupName][] = $member;
+}
+uksort($groupedTeam, function($a, $b) {
+    $order = ['Vocal / Vozes' => 1, 'Harmonia / Cordas' => 2, 'Ritmo / Percussão' => 3, 'Som & Apoio' => 4];
+    return ($order[$a] ?? 99) <=> ($order[$b] ?? 99);
+});
 
 // Verificar se sou membro desta escala
 $myMemberData = null;
@@ -410,58 +437,67 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
         </div>
         <?php endif; ?>
         
-        <!-- PARTICIPANTS SECTION (Compact) -->
+        <!-- PARTICIPANTS SECTION (Premium Ministry Groupings) -->
         <div class="detail-section">
             <div class="section-header">
-                <span class="section-title">Participantes</span>
+                <span class="section-title">Equipe & Ministérios</span>
                 <span class="section-count"><?= count($team) ?></span>
             </div>
             
-            <?php if(empty($team)): ?>
+            <?php if(empty($groupedTeam)): ?>
                 <div class="text-muted" style="font-size: 0.85rem; padding: 10px;">Nenhum participante definido.</div>
             <?php else: ?>
-                <div class="team-list-grid">
-                    <?php foreach($team as $member):
-                        $memberStatus = $member['status'] ?? 'pending';
-                        // Normalizar: 'absent' exibe como 'declined' visualmente (whitelist — T-02B-02)
-                        $statusClass = in_array($memberStatus, ['confirmed', 'declined', 'absent']) ? 'status-' . $memberStatus : 'status-pending';
-                        $initials = strtoupper(substr($member['name'], 0, 1));
-                        $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
-                    ?>
-                    <div class="member-card">
-                        <div class="member-avatar" style="background: <?= $member['avatar_color'] ?: '#ccc' ?>;">
-                            <?php if($member['avatar']): 
-                                $avatarPath = $member['avatar'];
-                                if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
-                                  $avatarPath = '../assets/uploads/' . $avatarPath;
-                                }
-                            ?>
-                                <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($member['name']) ?>">
-                            <?php else: ?>
-                                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:10px;">
-                                    <?= $initials ?>
-                                </div>
-                            <?php endif; ?>
-                            <div class="status-indicator <?= $statusClass ?>"></div>
+                <?php 
+                $ministryIcons = [
+                    'Vocal / Vozes' => 'mic',
+                    'Harmonia / Cordas' => 'guitar',
+                    'Ritmo / Percussão' => 'drum',
+                    'Som & Apoio' => 'sliders'
+                ];
+                foreach($groupedTeam as $ministryName => $members): 
+                    $minIcon = $ministryIcons[$ministryName] ?? 'users';
+                ?>
+                <div class="ministry-container">
+                    <div class="ministry-header">
+                        <div class="ministry-title-block">
+                            <span class="ministry-icon"><i data-lucide="<?= $minIcon ?>" width="16" height="16"></i></span>
+                            <span class="ministry-title"><?= htmlspecialchars($ministryName) ?></span>
                         </div>
-                        <div class="member-info">
-                            <div class="member-name"><?= htmlspecialchars($member['name']) ?></div>
-                            <div class="member-role"><?= htmlspecialchars($instr) ?></div>
-                            <div class="member-status-badge <?= $statusClass ?>">
-                                <?php
-                                $statusLabels = [
-                                    'status-confirmed' => '&#10003; Confirmado',
-                                    'status-pending'   => '&middot; Pendente',
-                                    'status-declined'  => '&#10007; Recusado',
-                                    'status-absent'    => '&#10007; Ausente',
-                                ];
-                                echo $statusLabels[$statusClass] ?? '&middot; Pendente';
+                        <span class="ministry-badge-count"><?= count($members) ?></span>
+                    </div>
+                    
+                    <div class="ministry-grid">
+                        <?php foreach($members as $member):
+                            $memberStatus = $member['status'] ?? 'pending';
+                            $statusClass = in_array($memberStatus, ['confirmed', 'declined', 'absent']) ? 'status-' . $memberStatus : 'status-pending';
+                            $initials = strtoupper(substr($member['name'], 0, 1));
+                            $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
+                        ?>
+                        <div class="member-card-premium">
+                            <div class="member-avatar-premium" style="background: <?= $member['avatar_color'] ?: '#2563eb' ?>;">
+                                <?php if($member['avatar']): 
+                                    $avatarPath = $member['avatar'];
+                                    if (strpos($avatarPath, 'http') === false && strpos($avatarPath, 'assets') === false && strpos($avatarPath, 'uploads') === false) {
+                                      $avatarPath = '../assets/uploads/' . $avatarPath;
+                                    }
                                 ?>
+                                    <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($member['name']) ?>">
+                                <?php else: ?>
+                                    <div class="member-avatar-fallback">
+                                        <?= $initials ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="status-indicator-mini <?= $statusClass ?>"></div>
+                            </div>
+                            <div class="member-info-premium">
+                                <div class="member-name-premium" title="<?= htmlspecialchars($member['name']) ?>"><?= htmlspecialchars($member['name']) ?></div>
+                                <div class="member-instrument-premium" title="<?= htmlspecialchars($instr) ?>"><?= htmlspecialchars($instr) ?></div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
+                <?php endforeach; ?>
             <?php endif; ?>
         </div>
 

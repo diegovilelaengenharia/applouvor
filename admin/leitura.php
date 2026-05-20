@@ -4,10 +4,116 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 require_once '../includes/reading_plans_data.php';
+require_once '../includes/reading_plan.php';
 
 checkLogin();
 
 $userId = $_SESSION['user_id'];
+
+// --- BACKEND: Processar Requisições AJAX POST ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+    $action = $_POST['action'] ?? '';
+    
+    if ($action === 'select_plan') {
+        $planType = $_POST['plan_type'] ?? 'navigators';
+        $startDate = $_POST['start_date'] ?? date('Y-m-d');
+        
+        try {
+            $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) 
+                VALUES (?, 'reading_plan_type', ?) 
+                ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")
+                ->execute([$userId, $planType]);
+                
+            $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) 
+                VALUES (?, 'reading_plan_start_date', ?) 
+                ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")
+                ->execute([$userId, $startDate]);
+                
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            exit;
+        }
+    }
+    
+    if ($action === 'save_reading_passage') {
+        $planDay = (int)($_POST['plan_day'] ?? 1);
+        $passageIndex = (int)($_POST['passage_index'] ?? 0);
+        $completed = ($_POST['completed'] ?? 'false') === 'true';
+        
+        try {
+            // Buscar progresso atual deste dia (mapeando planDay para month_num e day_num)
+            $m = ceil($planDay / 25);
+            $d = $planDay - ($m - 1) * 25;
+            
+            $stmt = $pdo->prepare("SELECT id, verses_read FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+            $stmt->execute([$userId, $m, $d]);
+            $row = $stmt->fetch();
+            
+            $completedPassages = [];
+            if ($row) {
+                $completedPassages = json_decode($row['verses_read'] ?? '[]', true) ?: [];
+            }
+            
+            if ($completed) {
+                if (!in_array($passageIndex, $completedPassages)) {
+                    $completedPassages[] = $passageIndex;
+                }
+            } else {
+                $completedPassages = array_values(array_diff($completedPassages, [$passageIndex]));
+            }
+            
+            $versesReadJson = json_encode($completedPassages);
+            
+            if ($row) {
+                $pdo->prepare("UPDATE reading_progress SET verses_read = ?, completed_at = NOW() WHERE id = ?")
+                    ->execute([$versesReadJson, $row['id']]);
+            } else {
+                $pdo->prepare("INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, comment, note_title, completed_at) 
+                    VALUES (?, ?, ?, ?, '', '', NOW())")
+                    ->execute([$userId, $m, $d, $versesReadJson]);
+            }
+            
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            exit;
+        }
+    }
+    
+    if ($action === 'save_diary_note') {
+        $planDay = (int)($_POST['plan_day'] ?? 1);
+        $comment = trim($_POST['comment'] ?? '');
+        
+        try {
+            $m = ceil($planDay / 25);
+            $d = $planDay - ($m - 1) * 25;
+            
+            $stmt = $pdo->prepare("SELECT id FROM reading_progress WHERE user_id = ? AND month_num = ? AND day_num = ?");
+            $stmt->execute([$userId, $m, $d]);
+            $row = $stmt->fetch();
+            
+            if ($row) {
+                $pdo->prepare("UPDATE reading_progress SET comment = ?, completed_at = NOW() WHERE id = ?")
+                    ->execute([$comment, $row['id']]);
+            } else {
+                $pdo->prepare("INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, comment, note_title, completed_at) 
+                    VALUES (?, ?, ?, '[]', ?, '', NOW())")
+                    ->execute([$userId, $m, $d, $comment]);
+            }
+            
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            exit;
+        }
+    }
+}
+
 $tab = $_GET['tab'] ?? 'reading';
 
 // --- BACKEND: Carregar Configurações ---
@@ -17,7 +123,26 @@ $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
 $startDateStr = $settings['reading_plan_start_date'] ?? null;
 $selectedPlanType = $settings['reading_plan_type'] ?? null;
-$planStarted = !empty($startDateStr) && !empty($selectedPlanType);
+
+// Se não começou o plano, inicializar automaticamente para o plano Navigators (300 dias)
+if (empty($startDateStr) || empty($selectedPlanType)) {
+    $startDateStr = date('Y-m-d');
+    $selectedPlanType = 'navigators';
+    try {
+        $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) 
+            VALUES (?, 'reading_plan_type', 'navigators') 
+            ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")
+            ->execute([$userId]);
+            
+        $pdo->prepare("INSERT INTO user_settings (user_id, setting_key, setting_value) 
+            VALUES (?, 'reading_plan_start_date', ?) 
+            ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")
+            ->execute([$userId, $startDateStr]);
+    } catch (Exception $e) {
+        // Ignorar
+    }
+}
+$planStarted = true;
 
 // Se não começou o plano, redirecionar logicamente (ou incluir tela de seleção)
 if (!$planStarted) {
@@ -92,26 +217,47 @@ $allProgress = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalDaysRead = 0;
 $totalChaptersRead = 0;
 $currentDayProgress = null;
+$progressDays = [];
 
 foreach($allProgress as $p) {
+    $m = (int)$p['month_num'];
+    $d = (int)$p['day_num'];
+    
+    // Mapear month_num e day_num para o índice linear de 1 a 300
+    if ($m > 0) {
+        $computedDay = ($m - 1) * 25 + $d;
+    } else {
+        // Fallback para registros antigos onde month_num era 0
+        $computedDay = $d;
+    }
+    
+    // Obter passagens para esse dia específico para verificar se está completo
+    $m_plan = ceil($computedDay / 25);
+    $d_plan = $computedDay - ($m_plan - 1) * 25;
+    $dayVersesList = $bibleReadingPlan[$m_plan][$d_plan - 1] ?? [];
+    
     $verses = json_decode($p['verses_read'] ?? '[]', true) ?: [];
-    if(count($verses) > 0) {
+    if (empty($verses) && !empty($dayVersesList)) {
+        // Se existe o registro de progresso mas verses_read está em branco (ex: marcado via celular/voluntário),
+        // assumimos que todas as passagens daquele dia foram lidas.
+        $verses = array_keys($dayVersesList);
+    }
+    
+    if (count($verses) > 0) {
         $totalDaysRead++;
         $totalChaptersRead += count($verses);
+        $progressDays[$computedDay] = true;
     }
-    if($p['day_num'] == $planDayIndex) $currentDayProgress = $p;
+    
+    if ($computedDay == $planDayIndex) {
+        $currentDayProgress = $p;
+        $currentDayProgress['verses_read'] = json_encode($verses); // Atualiza localmente para marcar os checkboxes
+    }
 }
 
 $completionPercent = round(($totalDaysRead / $planInfo['total_days']) * 100);
 
 // Streak: dias consecutivos com pelo menos 1 passagem lida (walk back do plan day atual)
-$progressDays = [];
-foreach ($allProgress as $p) {
-    $verses = json_decode($p['verses_read'] ?? '[]', true) ?: [];
-    if (count($verses) > 0) {
-        $progressDays[(int)$p['day_num']] = true;
-    }
-}
 $currentStreak = 0;
 $todayPlanDay = $daysPassed + 1;
 $startCheck = isset($progressDays[$todayPlanDay]) ? $todayPlanDay : $todayPlanDay - 1;
@@ -123,8 +269,17 @@ for ($d = $startCheck; $d >= 1; $d--) {
     }
 }
 
-// Get today's readings
-$todayReadings = getReadingsForDay($selectedPlanType, $planDayIndex);
+// Obter passagens do dia atual usando o plano unificado
+$todayReadings = [];
+$m_curr = ceil($planDayIndex / 25);
+$d_curr = $planDayIndex - ($m_curr - 1) * 25;
+$passagesList = $bibleReadingPlan[$m_curr][$d_curr - 1] ?? [];
+foreach ($passagesList as $passage) {
+    $todayReadings[] = [
+        'reference' => $passage,
+        'link' => getBibleLink($passage)
+    ];
+}
 $completedPassages = json_decode($currentDayProgress['verses_read'] ?? '[]', true) ?: [];
 
 renderAppHeader('Leitura Bíblica');

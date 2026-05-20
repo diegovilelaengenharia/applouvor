@@ -1,7 +1,7 @@
 <?php
 // admin/sidebar.php
-// Recomposição Clássico-Premium de Alta Fidelidade.
-// Mantém TODOS os links originais, a geometria clássica e o estilo visual premium leve.
+// Recomposição Premium de Alta Fidelidade para a Barra Lateral
+// Mantém todos os links estáveis, mas adiciona badges numéricos, perfil no rodapé e migra o CSS.
 
 $userId = $_SESSION['user_id'] ?? 1;
 
@@ -15,7 +15,7 @@ if (!isset($pdo)) {
 }
 
 try {
-    $stmtUser = $pdo->prepare("SELECT name, role, photo FROM users WHERE id = ?");
+    $stmtUser = $pdo->prepare("SELECT name, role, photo, avatar FROM users WHERE id = ?");
     $stmtUser->execute([$userId]);
     $sideUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) { 
@@ -24,36 +24,77 @@ try {
 
 $sideUserName = $sideUser['name'] ?? 'Músico';
 $sideUserRole = $sideUser['role'] ?? 'user';
-$sideUserPhoto = !empty($sideUser['photo']) ? $sideUser['photo'] : '';
+$sideUserPhoto = !empty($sideUser['avatar']) ? $sideUser['avatar'] : (!empty($sideUser['photo']) ? $sideUser['photo'] : '');
 
 if (empty($sideUserPhoto)) {
     $sideUserPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($sideUserName) . '&background=1e40af&color=fff';
 } elseif (strpos($sideUserPhoto, 'http') === false) {
-    $sideUserPhoto = '../' . $sideUserPhoto;
+    if (strpos($sideUserPhoto, 'assets') === false && strpos($sideUserPhoto, 'uploads') === false) {
+        $sideUserPhoto = '../assets/uploads/' . $sideUserPhoto;
+    } else {
+        $sideUserPhoto = '../' . $sideUserPhoto;
+    }
 }
+
+// Queries para os Badges
+$countUpcomingSchedules = 0;
+$countUnreadAvisos = 0;
+$countPendingSuggestions = 0;
+
+try {
+    // Total de escalas futuras atribuídas a este usuário
+    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM schedule_users su JOIN schedules s ON s.id = su.schedule_id WHERE su.user_id = ? AND s.event_date >= CURDATE() AND su.status = 'pending'");
+    $stmtCount->execute([$userId]);
+    $countUpcomingSchedules = (int)$stmtCount->fetchColumn();
+} catch (Exception $e) {}
+
+try {
+    // Avisos criados nos últimos 3 dias
+    $stmtCountAvisos = $pdo->query("SELECT COUNT(*) FROM avisos WHERE created_at > DATE_SUB(NOW(), INTERVAL 3 DAY)");
+    $countUnreadAvisos = (int)$stmtCountAvisos->fetchColumn();
+} catch (Exception $e) {}
+
+try {
+    // Sugestões pendentes para o administrador
+    if ($sideUserRole === 'admin') {
+        $countPendingSuggestions = (int)$pdo->query("SELECT COUNT(*) FROM song_suggestions WHERE status = 'pending'")->fetchColumn();
+    }
+} catch (Exception $e) {}
 ?>
 
 <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebarMobile()"></div>
 
 <aside id="app-sidebar" class="sidebar">
-    <!-- 1. Cabeçalho Sidebar com Logo (Clicável para Recolher no Desktop) -->
-    <div onclick="toggleSidebarDesktop()" class="sidebar-logo-container" title="Expandir/Recolher Menu">
+    <!-- 1. Cabeçalho Sidebar com Logo -->
+    <div class="sidebar-logo-container">
         <div class="logo-area">
             <?php 
-            $logoPath = '../assets/img/logo_pib_black.png';
-            if (file_exists(__DIR__ . '/../assets/img/logo_pib_black.png')): 
+            $pathPrefix = '';
+            if (file_exists('assets/img/logo_pib_black.png')) {
+                $pathPrefix = '';
+            } elseif (file_exists('../assets/img/logo_pib_black.png')) {
+                $pathPrefix = '../';
+            } elseif (file_exists('../../assets/img/logo_pib_black.png')) {
+                $pathPrefix = '../../';
+            }
+            
+            $logoBlack = $pathPrefix . 'assets/img/logo_pib_black.png';
+            $logoWhite = $pathPrefix . 'assets/img/logo_pib_white.png';
+
+            if (file_exists($logoBlack) || file_exists(__DIR__ . '/../assets/img/logo_pib_black.png')): 
             ?>
-                <img src="<?= $logoPath ?>" alt="PIB Oliveira" class="logo-img">
+                <img src="<?= $logoBlack ?>" alt="PIB Oliveira" class="logo-img logo-light-only">
+                <img src="<?= $logoWhite ?>" alt="PIB Oliveira" class="logo-img logo-dark-only">
             <?php else: ?>
                 <div class="logo-fallback-icon"><i data-lucide="music-4"></i></div>
             <?php endif; ?>
 
             <div class="logo-text-block">
-                <span class="sidebar-text main-brand-title">PIB Oliveira</span>
-                <span class="sidebar-text sub-brand-title">App Louvor</span>
+                <span class="main-brand-title">PIB Oliveira</span>
+                <span class="sub-brand-title">App Louvor</span>
             </div>
         </div>
-        <button class="side-close-mobile" onclick="toggleSidebarMobile(); event.stopPropagation();">
+        <button class="side-close-mobile" onclick="toggleSidebarMobile()" aria-label="Fechar Menu">
             <i data-lucide="x"></i>
         </button>
     </div>
@@ -64,503 +105,154 @@ if (empty($sideUserPhoto)) {
             
             <!-- SEÇÃO: PRINCIPAL -->
             <div class="nav-section">
-                <span class="sidebar-text section-title-label">Principal</span>
+                <span class="section-title-label">Principal</span>
                 
                 <a href="<?= $baseAdmin ?>index.php" class="nav-item nav-primary <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="layout-dashboard"></i></div>
-                    <span class="sidebar-text">Visão Geral</span>
+                    <span class="nav-item-text">Visão Geral</span>
                 </a>
             </div>
 
             <!-- SEÇÃO: GESTÃO DE ENSAIOS -->
             <div class="nav-section">
-                <span class="sidebar-text section-title-label">Gestão de Ensaios</span>
+                <span class="section-title-label">Gestão de Ensaios</span>
                 
                 <a href="<?= $baseAdmin ?>escalas.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="calendar"></i></div>
-                    <span class="sidebar-text">Escalas</span>
+                    <span class="nav-item-text">Escalas</span>
+                    <?php if ($countUpcomingSchedules > 0): ?>
+                        <span class="nav-badge badge-blue"><?= $countUpcomingSchedules ?></span>
+                    <?php endif; ?>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>repertorio.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="music-2"></i></div>
-                    <span class="sidebar-text">Repertório</span>
+                    <span class="nav-item-text">Repertório</span>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>historico.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="history"></i></div>
-                    <span class="sidebar-text">Histórico</span>
+                    <span class="nav-item-text">Histórico</span>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>membros.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="users"></i></div>
-                    <span class="sidebar-text">Membros</span>
+                    <span class="nav-item-text">Membros</span>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>indisponibilidade.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="calendar-off"></i></div>
-                    <span class="sidebar-text">Ausências</span>
+                    <span class="nav-item-text">Ausências</span>
                 </a>
 
                 <a href="<?= $baseAdmin ?>agenda.php" class="nav-item nav-blue <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="calendar-range"></i></div>
-                    <span class="sidebar-text">Agenda</span>
+                    <span class="nav-item-text">Agenda</span>
                 </a>
             </div>
 
             <!-- SEÇÃO: ESPIRITUAL -->
             <div class="nav-section">
-                <span class="sidebar-text section-title-label">Espiritual</span>
+                <span class="section-title-label">Espiritual</span>
                 
                 <a href="<?= $baseAdmin ?>devocionais.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="book-heart"></i></div>
-                    <span class="sidebar-text">Devocional</span>
+                    <span class="nav-item-text">Devocional</span>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>oracao.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="heart"></i></div>
-                    <span class="sidebar-text">Oração</span>
+                    <span class="nav-item-text">Oração</span>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>leitura.php" class="nav-item nav-green <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="book-open"></i></div>
-                    <span class="sidebar-text">Leitura Bíblica</span>
+                    <span class="nav-item-text">Leitura Bíblica</span>
                 </a>
             </div>
 
             <!-- SEÇÃO: COMUNICAÇÃO -->
             <div class="nav-section">
-                <span class="sidebar-text section-title-label">Comunicação</span>
+                <span class="section-title-label">Comunicação</span>
                 
                 <a href="<?= $baseAdmin ?>avisos.php" class="nav-item nav-amber <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="megaphone"></i></div>
-                    <span class="sidebar-text">Avisos</span>
+                    <span class="nav-item-text">Avisos</span>
+                    <?php if ($countUnreadAvisos > 0): ?>
+                        <span class="nav-badge badge-orange"><?= $countUnreadAvisos ?></span>
+                    <?php endif; ?>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>aniversarios.php" class="nav-item nav-amber <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="cake"></i></div>
-                    <span class="sidebar-text">Aniversariantes</span>
+                    <span class="nav-item-text">Aniversariantes</span>
                 </a>
             </div>
 
             <!-- SEÇÃO: ADMINISTRAÇÃO (Apenas Líderes) -->
             <?php if ($sideUserRole === 'admin'): ?>
             <div class="nav-section">
-                <span class="sidebar-text section-title-label">Administração</span>
+                <span class="section-title-label">Administração</span>
                 
                 <a href="<?= $baseAdmin ?>escalas_gestao.php" class="nav-item nav-red <?= basename($_SERVER['PHP_SELF']) == 'escalas_gestao.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="sliders"></i></div>
-                    <span class="sidebar-text">Gestão de Escalas</span>
+                    <span class="nav-item-text">Gestão de Escalas</span>
+                    <?php if ($countPendingSuggestions > 0): ?>
+                        <span class="nav-badge badge-red"><?= $countPendingSuggestions ?></span>
+                    <?php endif; ?>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>relatorios_gerais.php" class="nav-item nav-red <?= basename($_SERVER['PHP_SELF']) == 'relatorios_gerais.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="trending-up"></i></div>
-                    <span class="sidebar-text">Relatórios</span>
+                    <span class="nav-item-text">Relatórios</span>
                 </a>
                 
                 <a href="<?= $baseAdmin ?>manutencao.php" class="nav-item nav-red <?= basename($_SERVER['PHP_SELF']) == 'manutencao.php' ? 'active' : '' ?>">
                     <div class="side-icon-box"><i data-lucide="database"></i></div>
-                    <span class="sidebar-text">Manutenção</span>
+                    <span class="nav-item-text">Manutenção</span>
                 </a>
             </div>
             <?php endif; ?>
+        </nav>
+    </div>
 
-            <div class="nav-divider"></div>
-
-            <!-- BOTÃO SAIR -->
-            <div class="nav-section logout-section">
-                <a href="../logout.php" class="nav-item nav-logout">
-                    <div class="side-icon-box"><i data-lucide="log-out"></i></div>
-                    <span class="sidebar-text">Sair do App</span>
+    <!-- 3. Rodapé com Perfil do Usuário e Alternador de Tema -->
+    <div class="sidebar-footer">
+        <div class="sidebar-profile-card">
+            <div class="profile-avatar-wrapper">
+                <img class="profile-avatar" src="<?= $sideUserPhoto ?>" alt="<?= htmlspecialchars($sideUserName) ?>">
+            </div>
+            <div class="profile-info">
+                <span class="profile-name"><?= htmlspecialchars(explode(' ', $sideUserName)[0]) ?></span>
+                <span class="profile-role-tag <?= $sideUserRole === 'admin' ? 'role-admin' : 'role-user' ?>">
+                    <?= $sideUserRole === 'admin' ? 'Líder' : 'Músico' ?>
+                </span>
+            </div>
+            <div class="profile-actions">
+                <!-- Dark Mode Switcher -->
+                <div class="theme-toggle-switch" title="Alternar Tema" onclick="toggleThemeMode()">
+                    <input type="checkbox" id="darkModeToggleSidebar">
+                    <label for="darkModeToggleSidebar" class="theme-toggle-label" onclick="event.stopPropagation()">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </label>
+                </div>
+                
+                <!-- Logout -->
+                <?php
+                $logoutPath = $isAdminDir ? '../logout.php' : ($inApp ? '../../logout.php' : 'logout.php');
+                ?>
+                <a href="<?= $logoutPath ?>" class="profile-logout-btn" title="Sair da Conta">
+                    <i data-lucide="log-out"></i>
                 </a>
             </div>
-        </nav>
-
-        <!-- 3. Rodapé Créditos do Desenvolvedor -->
+        </div>
+        
         <div class="sidebar-credits">
-            <span class="sidebar-text credits-label">Desenvolvido por</span>
-            <span class="sidebar-text developer-name">Diego T. N. Vilela</span>
+            <span>Desenvolvido por <strong>Diego T. N. Vilela</strong></span>
         </div>
     </div>
 </aside>
-
-<style>
-    /* ==========================================================================
-       ESTILOS PREMIUM DA SIDEBAR CLÁSSICA (Lógica e Geometria Estáveis)
-       ========================================================================== */
-    :root {
-        --sidebar-width: 200px;
-        --sidebar-collapsed-width: 80px;
-        --sidebar-bg: #0f172a; /* Slate 900 */
-        --sidebar-text: #94a3b8; /* Slate 400 */
-        --sidebar-border: rgba(255, 255, 255, 0.06);
-        
-        /* Paleta Clássica Premium (Sem Roxos) */
-        --color-primary: #1e40af; /* Azul Profundo */
-        --color-primary-light: rgba(30, 64, 175, 0.15);
-        --color-blue-item: #3b82f6; /* Gestão */
-        --color-blue-bg: rgba(59, 130, 246, 0.1);
-        --color-green-item: #10b981; /* Espiritual */
-        --color-green-bg: rgba(16, 185, 129, 0.1);
-        --color-amber-item: #f59e0b; /* Comunicação */
-        --color-amber-bg: rgba(245, 158, 11, 0.1);
-        --color-red-item: #ef4444; /* Admin */
-        --color-red-bg: rgba(239, 68, 68, 0.1);
-    }
-
-    body.dark-mode {
-        --sidebar-bg: #0b0f19;
-    }
-
-    /* Sidebar Base */
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--sidebar-width);
-        background: var(--sidebar-bg);
-        border-right: 1px solid var(--sidebar-border);
-        display: flex;
-        flex-direction: column;
-        z-index: 1000;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-    }
-
-    /* Scroll Area */
-    .sidebar-scroll-area {
-        flex: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .sidebar-scroll-area::-webkit-scrollbar {
-        width: 4px;
-    }
-    .sidebar-scroll-area::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 2px;
-    }
-
-    /* Header Logo */
-    .sidebar-logo-container {
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-        border-bottom: 1px solid var(--sidebar-border);
-        min-height: 72px;
-        background: rgba(0, 0, 0, 0.15);
-    }
-
-    .logo-area {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        transition: all 0.3s;
-    }
-
-    .logo-img {
-        height: 40px;
-        width: auto;
-        object-fit: contain;
-        transition: transform 0.3s;
-    }
-    
-    .logo-fallback-icon {
-        width: 40px;
-        height: 40px;
-        background: var(--color-primary-light);
-        color: var(--color-blue-item);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .logo-fallback-icon i {
-        width: 20px;
-        height: 20px;
-    }
-
-    .logo-text-block {
-        display: flex;
-        flex-direction: column;
-        line-height: 1.1;
-        transition: opacity 0.2s;
-    }
-
-    .main-brand-title {
-        color: #f8fafc;
-        font-weight: 800;
-        font-size: 0.95rem;
-    }
-
-    .sub-brand-title {
-        font-size: 0.72rem;
-        color: var(--sidebar-text);
-        font-weight: 600;
-    }
-
-    .side-close-mobile {
-        display: none;
-        background: transparent;
-        border: none;
-        color: var(--sidebar-text);
-        cursor: pointer;
-    }
-
-    /* Navegação */
-    .sidebar-nav {
-        padding: 16px 12px;
-    }
-
-    .nav-section {
-        margin-bottom: 16px;
-    }
-
-    .section-title-label {
-        display: block;
-        padding: 0 12px 6px;
-        font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.3);
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: opacity 0.2s;
-    }
-
-    .nav-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 12px;
-        border-radius: 10px;
-        color: var(--sidebar-text);
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-        margin-bottom: 2px;
-    }
-
-    .side-icon-box {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-        background: rgba(255, 255, 255, 0.03);
-    }
-    
-    .side-icon-box i {
-        width: 17px;
-        height: 17px;
-        stroke-width: 2.2;
-    }
-
-    /* --- Temas de Cores Específicas nos Itens --- */
-    
-    /* 1. Principal (Azul Profundo) */
-    .nav-item.nav-primary .side-icon-box { color: #60a5fa; }
-    .nav-item.nav-primary:hover,
-    .nav-item.nav-primary.active {
-        background: var(--color-primary-light);
-        color: #60a5fa;
-    }
-    .nav-item.nav-primary.active .side-icon-box {
-        background: var(--color-primary);
-        color: #ffffff;
-    }
-
-    /* 2. Gestão (Azul/Ciano) */
-    .nav-item.nav-blue .side-icon-box { color: var(--color-blue-item); }
-    .nav-item.nav-blue:hover,
-    .nav-item.nav-blue.active {
-        background: var(--color-blue-bg);
-        color: #ffffff;
-    }
-    .nav-item.nav-blue.active .side-icon-box {
-        background: var(--color-blue-item);
-        color: #ffffff;
-    }
-
-    /* 3. Espiritual (Verde) */
-    .nav-item.nav-green .side-icon-box { color: var(--color-green-item); }
-    .nav-item.nav-green:hover,
-    .nav-item.nav-green.active {
-        background: var(--color-green-bg);
-        color: #ffffff;
-    }
-    .nav-item.nav-green.active .side-icon-box {
-        background: var(--color-green-item);
-        color: #ffffff;
-    }
-
-    /* 4. Comunicação (Laranja/Âmbar) */
-    .nav-item.nav-amber .side-icon-box { color: var(--color-amber-item); }
-    .nav-item.nav-amber:hover,
-    .nav-item.nav-amber.active {
-        background: var(--color-amber-bg);
-        color: #ffffff;
-    }
-    .nav-item.nav-amber.active .side-icon-box {
-        background: var(--color-amber-item);
-        color: #ffffff;
-    }
-
-    /* 5. Admin (Vermelho) */
-    .nav-item.nav-red .side-icon-box { color: var(--color-red-item); }
-    .nav-item.nav-red:hover,
-    .nav-item.nav-red.active {
-        background: var(--color-red-bg);
-        color: #ffffff;
-    }
-    .nav-item.nav-red.active .side-icon-box {
-        background: var(--color-red-item);
-        color: #ffffff;
-    }
-
-    /* 6. Logout (Vermelho Suave) */
-    .nav-item.nav-logout {
-        color: #ef4444;
-        background: rgba(239, 68, 68, 0.05);
-        margin-top: 10px;
-    }
-    .nav-item.nav-logout .side-icon-box {
-        color: #ef4444;
-        background: transparent;
-    }
-    .nav-item.nav-logout:hover {
-        background: #ef4444;
-        color: #ffffff;
-    }
-    .nav-item.nav-logout:hover .side-icon-box {
-        color: #ffffff;
-    }
-
-    .nav-divider {
-        height: 1px;
-        background: var(--sidebar-border);
-        margin: 8px 12px 16px;
-    }
-
-    /* Créditos do Desenvolvedor */
-    .sidebar-credits {
-        padding: 24px 16px;
-        text-align: center;
-        border-top: 1px solid var(--sidebar-border);
-        background: rgba(0, 0, 0, 0.1);
-        margin-top: auto;
-    }
-
-    .credits-label {
-        display: block;
-        font-size: 0.65rem;
-        color: rgba(255, 255, 255, 0.25);
-        margin-bottom: 2px;
-        font-weight: 500;
-    }
-
-    .developer-name {
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: #cbd5e1;
-    }
-
-    /* ==========================================================================
-       MODO RECOLHIDO (Desktop)
-       ========================================================================== */
-    .sidebar.collapsed {
-        width: var(--sidebar-collapsed-width);
-    }
-
-    .sidebar.collapsed .sidebar-text {
-        opacity: 0;
-        pointer-events: none;
-        width: 0;
-        display: inline-block;
-        overflow: hidden;
-    }
-    
-    .sidebar.collapsed .section-title-label {
-        height: 0;
-        padding: 0;
-        margin: 0;
-        opacity: 0;
-        overflow: hidden;
-    }
-
-    .sidebar.collapsed .logo-text-block {
-        display: none;
-    }
-
-    .sidebar.collapsed .nav-item {
-        justify-content: center;
-        padding: 10px;
-    }
-
-    .sidebar.collapsed .logo-area {
-        justify-content: center;
-        width: 100%;
-    }
-
-    .sidebar.collapsed .sidebar-credits {
-        display: none;
-    }
-
-    /* ==========================================================================
-       MOBILE RESPONSIVO
-       ========================================================================== */
-    @media (max-width: 1024px) {
-        .sidebar {
-            transform: translateX(-100%);
-            width: 240px;
-            max-width: 80%;
-            background: #0f172a;
-            box-shadow: none;
-        }
-
-        .sidebar.open {
-            transform: translateX(0);
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .side-close-mobile {
-            display: flex;
-        }
-        
-        .sidebar-logo-container {
-            cursor: default;
-        }
-    }
-
-    /* Overlay Mobile */
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(4px);
-        z-index: 999;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-    }
-
-    .sidebar-overlay.active {
-        opacity: 1;
-        visibility: visible;
-    }
-</style>
 
 <script>
     const sidebar = document.getElementById('app-sidebar');
@@ -570,14 +262,9 @@ if (empty($sideUserPhoto)) {
         return window.innerWidth > 1024;
     }
 
+    // A sidebar desktop agora é 100% fixa e não recolhível.
     function toggleSidebarDesktop() {
-        if (!isDesktop()) return;
-        sidebar.classList.toggle('collapsed');
-        const isCollapsed = sidebar.classList.contains('collapsed');
-        if (content) {
-            content.style.marginLeft = isCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)';
-        }
-        localStorage.setItem('sidebarCollapsed', isCollapsed);
+        console.log("Desktop sidebar is fixed.");
     }
 
     function toggleSidebarMobile() {
@@ -588,14 +275,7 @@ if (empty($sideUserPhoto)) {
     // Inicialização geométrica no carregamento
     document.addEventListener('DOMContentLoaded', () => {
         if (isDesktop()) {
-            const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-            if (savedCollapsed) {
-                sidebar.classList.add('collapsed');
-                if (content) content.style.marginLeft = 'var(--sidebar-collapsed-width)';
-            } else {
-                sidebar.classList.remove('collapsed');
-                if (content) content.style.marginLeft = 'var(--sidebar-width)';
-            }
+            if (content) content.style.marginLeft = 'var(--sidebar-width)';
         } else {
             if (content) content.style.marginLeft = '0';
         }

@@ -2,6 +2,7 @@
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
+require_once '../includes/reading_plan.php';
 
 checkLogin();
 
@@ -60,13 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $d = (int)$_POST['day'];
         $comment = trim($_POST['comment'] ?? '');
         
+        $versesList = $bibleReadingPlan[$m][$d - 1] ?? [];
+        $versesReadJson = json_encode(array_keys($versesList));
+        
         try {
             $stmt = $pdo->prepare("
-                INSERT INTO reading_progress (user_id, month_num, day_num, comment, completed_at)
-                VALUES (?, ?, ?, ?, NOW())
-                ON DUPLICATE KEY UPDATE comment = VALUES(comment), completed_at = NOW()
+                INSERT INTO reading_progress (user_id, month_num, day_num, verses_read, comment, completed_at)
+                VALUES (?, ?, ?, ?, ?, NOW())
+                ON DUPLICATE KEY UPDATE comment = VALUES(comment), verses_read = VALUES(verses_read), completed_at = NOW()
             ");
-            $stmt->execute([$userId, $m, $d, $comment]);
+            $stmt->execute([$userId, $m, $d, $versesReadJson, $comment]);
         } catch (Exception $e) { /* Ignore */ }
         
         // Retorna status para AJAX ou recarrega
@@ -95,15 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmtInsert = $pdo->prepare("
-                INSERT IGNORE INTO reading_progress (user_id, month_num, day_num, comment, completed_at)
-                VALUES (?, ?, ?, 'Ajuste de leitura rápido', NOW())
+                INSERT IGNORE INTO reading_progress (user_id, month_num, day_num, verses_read, comment, completed_at)
+                VALUES (?, ?, ?, ?, 'Ajuste de leitura rápido', NOW())
             ");
 
-            for ($m = 1; $m <= $currentMonth; $m++) {
-                $maxDay = ($m === $currentMonth) ? $calcDay : 25;
-                for ($d = 1; $d <= $maxDay; $d++) {
-                    if (!isset($completed[$m][$d])) {
-                        $stmtInsert->execute([$userId, $m, $d]);
+            for ($m_loop = 1; $m_loop <= $currentMonth; $m_loop++) {
+                $maxDay = ($m_loop === $currentMonth) ? $calcDay : 25;
+                for ($d_loop = 1; $d_loop <= $maxDay; $d_loop++) {
+                    if (!isset($completed[$m_loop][$d_loop])) {
+                        $versesList = $bibleReadingPlan[$m_loop][$d_loop - 1] ?? [];
+                        $versesReadJson = json_encode(array_keys($versesList));
+                        $stmtInsert->execute([$userId, $m_loop, $d_loop, $versesReadJson]);
                     }
                 }
             }
@@ -318,7 +324,11 @@ function init() {
     
     // Check Notification Permission
     if ("Notification" in window && Notification.permission !== "granted") {
-        Notification.requestPermission()function renderTodayCard() {
+        Notification.requestPermission();
+    }
+}
+
+function renderTodayCard() {
     const list = document.getElementById('today-verses-list');
     const dateDisplay = document.getElementById('today-date-display');
     const btn = document.getElementById('btn-mark-today');
@@ -485,7 +495,6 @@ function renderFullList() {
         container.appendChild(daysContainer);
     }
     lucide.createIcons();
-}ide.createIcons();
 }
 
 function getMonthName(m) {

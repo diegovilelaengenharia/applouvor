@@ -1,29 +1,12 @@
 /* assets/css/pages/devocionais.css */
 /* Estilos da Página de Devocionais - Tema Verde (Espiritualidade) */
 
-:root {
-    /* Redefinindo Primary para Verde #16A34A */
-    --primary: #16A34A;
-    /* green-600 */
-    --primary-hover: #15803d;
-    /* green-700 */
-    --primary-light: #dcfce7;
-    /* green-100 */
-    --primary-subtle: #f0fdf4;
-    /* green-50 */
 
-    --bg-surface: #ffffff;
-    --border-color: #e2e8f0;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --radius-lg: 16px;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
 
 /* Devocionais Cards */
 .devotional-card {
     background: var(--bg-surface);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     border: 1px solid var(--border-color);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
@@ -33,7 +16,7 @@
 
 .devotional-card:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border-color: var(--primary-light);
+    border-color: var(--green-100);
 }
 
 /* Header do Card */
@@ -58,7 +41,7 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--primary);
+    background: var(--reading-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,7 +73,7 @@
     align-items: center;
     gap: 4px;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     font-size: 0.75rem;
     font-weight: 600;
 }
@@ -120,7 +103,7 @@
 /* Media Embed */
 .dev-media {
     margin: 12px 0;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     border: 1px solid var(--border-color);
 }
@@ -142,7 +125,7 @@
 .dev-tag {
     font-size: 0.75rem;
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: var(--radius-full);
     font-weight: 600;
     background: var(--bg-body);
     color: var(--text-muted);
@@ -163,7 +146,7 @@
 }
 
 .dev-action-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     background: none;
@@ -173,13 +156,13 @@
     font-weight: 600;
     cursor: pointer;
     padding: 6px 10px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     transition: all 0.2s;
 }
 
 .dev-action-btn:hover {
-    background: var(--primary-subtle);
-    color: var(--primary);
+    background: var(--green-50);
+    color: var(--reading-primary);
 }
 
 /* Comments Section */
@@ -196,23 +179,23 @@
 
 .comment-submit {
     padding: 10px 16px;
-    background: var(--primary);
+    background: var(--reading-primary);
     color: white;
     border: none;
-    border-radius: 24px;
+    border-radius: var(--radius-full);
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .comment-submit:hover {
-    background: var(--primary-hover);
+    background: var(--green-700);
 }
 
 /* Type Badges */
 .type-text {
-    background: var(--primary-subtle);
-    color: var(--primary);
+    background: var(--green-50);
+    color: var(--reading-primary);
 }
 
 .type-video {
@@ -225,31 +208,7 @@
     color: var(--slate-600);
 }
 
-/* FAB */
-.fab-create {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
 
-.fab-create:hover {
-    transform: scale(1.05);
-    background: var(--primary-hover);
-    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
-}
 
 /* Filter Toolbar */
 .filter-toolbar {
@@ -264,7 +223,7 @@
     padding: 10px 12px 10px 36px;
     background-color: white;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-main);
@@ -278,8 +237,8 @@
 }
 
 .filter-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-light);
+    border-color: var(--reading-primary);
+    box-shadow: 0 0 0 3px var(--green-100);
     outline: none;
 }
 
@@ -289,7 +248,7 @@
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-    color: var(--primary);
+    color: var(--reading-primary);
 }
 
 .btn-advanced-filter {
@@ -300,7 +259,7 @@
     justify-content: center;
     background: white;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     color: var(--text-muted);
     cursor: pointer;
     transition: all 0.2s;
@@ -309,21 +268,21 @@
 }
 
 .btn-advanced-filter.active {
-    background: var(--primary-subtle);
-    color: var(--primary);
-    border-color: var(--primary);
+    background: var(--green-50);
+    color: var(--reading-primary);
+    border-color: var(--reading-primary);
 }
 
 .btn-advanced-filter:hover {
     background: var(--bg-body);
-    color: var(--primary);
-    border-color: var(--primary-light);
+    color: var(--reading-primary);
+    border-color: var(--green-100);
 }
 
 /* Filter Pills (Nova Interface de Busca) */
 .filter-pill {
     padding: 6px 14px;
-    border-radius: 20px;
+    border-radius: var(--radius-full);
     font-size: 0.85rem;
     font-weight: 600;
     background: var(--bg-surface);
@@ -337,22 +296,22 @@
 }
 
 .filter-pill:hover {
-    background: var(--primary-subtle);
-    color: var(--primary);
-    border-color: var(--primary);
+    background: var(--green-50);
+    color: var(--reading-primary);
+    border-color: var(--reading-primary);
 }
 
 .filter-pill.active {
-    background: var(--primary);
+    background: var(--reading-primary);
     color: white;
-    border-color: var(--primary);
+    border-color: var(--reading-primary);
     box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
 }
 
 /* Cards Lidos vs Não Lidos */
 .devotional-card.unread {
     background: var(--bg-surface);
-    border-left: 3px solid var(--primary);
+    border-left: 3px solid var(--reading-primary);
 }
 
 /* MODAL & FORM STYLING - PREMIUM PLUS */
@@ -378,7 +337,7 @@
 #devotionalModal textarea {
     background: var(--bg-body);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 14px 16px;
     font-size: 0.95rem;
     transition: all 0.2s ease;
@@ -391,9 +350,9 @@
 #devotionalModal input[type="text"]:focus,
 #devotionalModal input[type="url"]:focus,
 #devotionalModal select:focus {
-    border-color: var(--primary);
+    border-color: var(--reading-primary);
     background: white;
-    box-shadow: 0 0 0 4px var(--primary-subtle), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 0 0 4px var(--green-50), inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 /* Custom Tag Badges (Checkbox Hidden) */
@@ -403,7 +362,7 @@
     gap: 6px;
     padding: 8px 16px;
     border: 1px solid transparent;
-    border-radius: 20px;
+    border-radius: var(--radius-full);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -427,9 +386,9 @@
 
 /* Checked State */
 #devotionalModal .dev-tag-option:has(input:checked) {
-    background: var(--primary);
+    background: var(--reading-primary);
     color: white;
-    border-color: var(--primary);
+    border-color: var(--reading-primary);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
 }
@@ -447,7 +406,7 @@
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     background: white;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 1rem;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
@@ -468,7 +427,7 @@
 }
 
 #devotionalModal button[type="submit"] {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    background: linear-gradient(135deg, var(--reading-primary) 0%, var(--green-700) 100%);
     color: white;
     border: none;
     font-weight: 700;
@@ -481,7 +440,7 @@
 .page-tabs {
     background: var(--slate-100);
     padding: 6px;
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     display: flex;
     gap: 6px;
     margin-bottom: 24px;
@@ -500,7 +459,7 @@
     font-weight: 600;
     color: var(--text-muted);
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     transition: all 0.2s;
     text-align: center;
 }
@@ -512,7 +471,7 @@
 
 .tab-btn.active {
     background: white;
-    color: var(--primary);
+    color: var(--reading-primary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     font-weight: 700;
 }
@@ -560,7 +519,7 @@
     align-items: center;
     gap: 8px;
     padding: 12px 20px;
-    border-radius: 50px;
+    border-radius: var(--radius-full);
     color: white;
     font-weight: 700;
     font-size: 0.9rem;
@@ -589,7 +548,7 @@
 /* PRAYER CARDS (Ported from oracao.css) */
 .prayer-card {
     background: var(--bg-surface);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     margin-bottom: 16px;
@@ -614,7 +573,7 @@
 .prayer-avatar {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     object-fit: cover;
 }
 
@@ -650,7 +609,7 @@
 
 .cat-badge {
     padding: 4px 8px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -703,7 +662,7 @@
     justify-content: center;
     gap: 6px;
     padding: 8px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     background: white;
     color: var(--text-muted);
