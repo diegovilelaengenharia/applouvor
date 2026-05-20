@@ -65,6 +65,13 @@
 - [ ] **PWA-02**: Service worker atualizado para versão atual do app
 - [ ] **PWA-03**: Deploy pós-milestone: arquivos atualizados no Hostinger
 
+### UI — Harmonização Visual (Phase 10)
+
+- [ ] **UI-01**: Escala tipográfica única via tokens do design-system (base 16px, secundário 14px, títulos proporcionais) — sem font-size/family rígidos nos CSS de página
+- [ ] **UI-02**: Botões padronizados em tamanho e estados (altura mínima de toque 44px, raio 8–12px, hierarquia primário/secundário/ghost consistente)
+- [ ] **UI-03**: Espaçamentos e densidade padronizados por tokens (paddings de página, gaps, `.pib-card` uniforme) — visual harmônico em desktop e mobile
+- [ ] **UI-04**: Auditoria visual de todas as páginas (admin + músico) confirmando consistência em 375px e desktop, sem regressões funcionais
+
 ---
 
 ## v2 Requirements (próximo milestone)
@@ -101,6 +108,7 @@
 | MEM-01..03 | Phase 7 | — |
 | DEV-01..02 | Phase 8 | — |
 | PWA-01..03 | Phase 9 | — |
+| UI-01..04 | Phase 10 | — |
 
 ---
 *Gerado: 2026-05-16 | Milestone 1 — Modernização & Features Faltantes*

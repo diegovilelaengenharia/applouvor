@@ -254,6 +254,25 @@ Plans:
 
 ---
 
+### Phase 10: Harmonização Visual
+**Goal:** Padronizar tipografia, botões, espaçamentos e densidade em todas as páginas (admin + músico), criando um sistema visual harmônico e consistente no desktop e no mobile (mobile-first 375px), sem quebrar funcionalidades existentes.
+**Mode:** ui
+
+**Requirements:** UI-01, UI-02, UI-03, UI-04
+
+**Estado atual encontrado:** `assets/css/design-system.css` já define fontes (Inter / Inter Tight), cor primária `#3B82F6` e componente base `.pib-card`. Porém vários CSS de páginas declaram fontes/tamanhos/raios redundantes, gerando inconsistência (elementos grandes demais, outros espremidos), especialmente no mobile.
+
+**Success Criteria:**
+1. Escala tipográfica única (tamanho base 16px, secundário 14px, títulos proporcionais) aplicada via tokens do design-system — sem font-size/family rígidos espalhados nos CSS de página
+2. Botões com tamanhos e estados padronizados (altura mínima de toque 44px, raio 8–12px, hierarquia primário/secundário/ghost consistente)
+3. Espaçamentos e densidade padronizados por tokens (paddings de página, gaps de cards, .pib-card uniforme) — visual harmônico em desktop e mobile
+4. Auditoria visual de todas as páginas (admin + músico) confirmando consistência em viewport 375px e desktop, sem regressões funcionais
+
+**Plans:**
+- (a definir após UI-SPEC.md + plan-phase)
+
+---
+
 ## Dependencies
 
 ```
@@ -284,6 +303,8 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ✅ Concluída |
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ✅ Concluída |
 | 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ✅ Concluída |
+| 10 | Harmonização Visual | Tipografia + botões + espaçamentos consistentes (desktop + mobile) | TBD | ⬜ |
 
 ---
 *Criado: 2026-05-16 | v1.1 — Atualizado 2026-05-17 com gaps da auditoria profissional*
+*v1.2 — Adicionada Phase 10 (Harmonização Visual) em 2026-05-20*
