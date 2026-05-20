@@ -23,6 +23,146 @@ if (!empty($avisos)) {
 }
 
 renderAppHeader('Dashboard');
+renderPageHeader('Dashboard', 'Visão Geral');
+
+// Definição dos atalhos rápidos táteis
+$shortcuts = [
+    [
+        'title' => 'Escalas',
+        'url' => 'escalas.php',
+        'icon' => 'calendar',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Repertório',
+        'url' => 'repertorio.php',
+        'icon' => 'music-2',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Histórico',
+        'url' => 'historico.php',
+        'icon' => 'history',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Membros',
+        'url' => 'membros.php',
+        'icon' => 'users',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Ausências',
+        'url' => 'indisponibilidade.php',
+        'icon' => 'calendar-off',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Agenda',
+        'url' => 'agenda.php',
+        'icon' => 'calendar-range',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Metrônomo',
+        'url' => 'metronomo.php',
+        'icon' => 'timer',
+        'category' => 'gestao',
+        'color' => 'var(--blue-500)',
+        'bg' => 'rgba(59, 130, 246, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Devocional',
+        'url' => 'devocionais.php',
+        'icon' => 'book-heart',
+        'category' => 'espiritualidade',
+        'color' => 'var(--emerald-600)',
+        'bg' => 'rgba(5, 150, 105, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Oração',
+        'url' => 'oracao.php',
+        'icon' => 'heart',
+        'category' => 'espiritualidade',
+        'color' => 'var(--emerald-600)',
+        'bg' => 'rgba(5, 150, 105, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Bíblia',
+        'url' => 'leitura.php',
+        'icon' => 'book-open',
+        'category' => 'espiritualidade',
+        'color' => 'var(--emerald-600)',
+        'bg' => 'rgba(5, 150, 105, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Avisos',
+        'url' => 'avisos.php',
+        'icon' => 'megaphone',
+        'category' => 'comunicacao',
+        'color' => 'var(--amber-600)',
+        'bg' => 'rgba(245, 158, 11, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Aniversários',
+        'url' => 'aniversarios.php',
+        'icon' => 'cake',
+        'category' => 'comunicacao',
+        'color' => 'var(--amber-600)',
+        'bg' => 'rgba(245, 158, 11, 0.08)',
+        'admin_only' => false
+    ],
+    [
+        'title' => 'Gestão Escalas',
+        'url' => 'escalas_gestao.php',
+        'icon' => 'sliders',
+        'category' => 'admin',
+        'color' => 'var(--red-600)',
+        'bg' => 'rgba(239, 68, 68, 0.08)',
+        'admin_only' => true
+    ],
+    [
+        'title' => 'Relatórios',
+        'url' => 'relatorios_gerais.php',
+        'icon' => 'trending-up',
+        'category' => 'admin',
+        'color' => 'var(--red-600)',
+        'bg' => 'rgba(239, 68, 68, 0.08)',
+        'admin_only' => true
+    ],
+    [
+        'title' => 'Manutenção',
+        'url' => 'manutencao.php',
+        'icon' => 'database',
+        'category' => 'admin',
+        'color' => 'var(--red-600)',
+        'bg' => 'rgba(239, 68, 68, 0.08)',
+        'admin_only' => true
+    ]
+];
 ?>
 
 <!-- MODAL URGENTE (Premium Style) -->
@@ -98,19 +238,199 @@ $categoryNames = [
         height: 1px;
         background: var(--color-border);
     }
+
+    /* ESTILOS DE ACESSO RÁPIDO & BOAS-VINDAS PREMIUM */
+    .dashboard-hero {
+        margin-bottom: var(--space-lg);
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 20px;
+        padding: 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.3);
+    }
+
+    body.dark-mode .dashboard-hero {
+        background: linear-gradient(135deg, #080c14 0%, #111827 100%);
+        border-color: rgba(255, 255, 255, 0.04);
+    }
+
+    @keyframes pulse-border {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .dashboard-section-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        letter-spacing: 1.5px;
+        margin: var(--space-lg) 0 var(--space-md);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .shortcuts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: var(--space-xl);
+    }
+
+    @media (min-width: 480px) {
+        .shortcuts-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 768px) {
+        .shortcuts-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 1024px) {
+        .shortcuts-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 1280px) {
+        .shortcuts-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    .shortcut-btn {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 52px;
+    }
+
+    body.dark-mode .shortcut-btn {
+        border-color: rgba(255, 255, 255, 0.04);
+        box-shadow: none;
+    }
+
+    .shortcut-icon-box {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.25s;
+    }
+
+    .shortcut-icon-box i {
+        width: 17px;
+        height: 17px;
+        stroke-width: 2.2;
+    }
+
+    .shortcut-title {
+        font-size: 0.85rem;
+        font-weight: 750;
+        color: var(--color-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all 0.25s;
+    }
+
+    .shortcut-hover-dot {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%) scale(0);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        transition: all 0.25s ease;
+        opacity: 0;
+    }
+
+    /* Hover/Tátil State */
+    .shortcut-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.06);
+        background: var(--color-surface-hover);
+        border-color: var(--color-border-hover);
+    }
+
+    body.dark-mode .shortcut-btn:hover {
+        background: rgba(255, 255, 255, 0.02);
+        box-shadow: 0 10px 25px -10px rgba(0,0,0,0.5);
+    }
+
+    .shortcut-btn:hover .shortcut-icon-box {
+        transform: scale(1.05);
+    }
+
+    .shortcut-btn:hover .shortcut-hover-dot {
+        transform: translateY(-50%) scale(1);
+        opacity: 0.8;
+    }
+
+    /* Cores específicas de borda no Hover de cada Categoria */
+    .shortcut-gestao:hover { border-color: rgba(59, 130, 246, 0.35); }
+    .shortcut-espiritualidade:hover { border-color: rgba(16, 185, 129, 0.35); }
+    .shortcut-comunicacao:hover { border-color: rgba(245, 158, 11, 0.35); }
+    .shortcut-admin:hover { border-color: rgba(239, 68, 68, 0.35); }
 </style>
 
 <div class="dashboard-container" style="padding: var(--space-md) var(--space-md) 100px;">
     
-    <!-- HEADER PREMIUM -->
-    <div style="margin-bottom: var(--space-lg); display: flex; align-items: center; justify-content: space-between;" class="animate-card">
-        <div>
-            <h2 style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); margin: 0; color: var(--text-primary);"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>!</h2>
-            <p style="color: var(--text-muted); font-size: var(--font-size-sm); margin: 0;">Bem-vindo ao Painel <?= $userRole === 'admin' ? 'do Líder' : 'do Músico' ?></p>
+    <!-- HEADER HERO PREMIUM DE BOAS-VINDAS -->
+    <div class="dashboard-hero animate-card">
+        <!-- Elementos decorativos de fundo para premium feel -->
+        <div style="position: absolute; top: -50px; right: -50px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%); pointer-events: none;"></div>
+        <div style="position: absolute; bottom: -30px; left: 10%; width: 140px; height: 140px; background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%); pointer-events: none;"></div>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; position: relative; z-index: 2;">
+            <div>
+                <span style="background: rgba(59,130,246,0.15); color: #93c5fd; font-size: 0.68rem; font-weight: 800; padding: 5px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; border: 1px solid rgba(59,130,246,0.25);">
+                    <i data-lucide="sparkles" width="11" height="11"></i> PIB Oliveira Louvor
+                </span>
+                <h2 style="font-size: 1.6rem; font-weight: 800; margin: 0; color: #ffffff; letter-spacing: -0.5px;"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>!</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin: 6px 0 0 0; font-weight: 500; line-height: 1.4;">
+                    Bem-vindo ao seu Painel <?= $userRole === 'admin' ? 'do Líder' : 'do Músico' ?>. Escolha um atalho abaixo para iniciar.
+                </p>
+            </div>
+            <div style="position: relative; flex-shrink: 0;">
+                <div style="position: absolute; inset: -3px; background: linear-gradient(135deg, var(--blue-500), var(--cyan-400)); border-radius: 50%; padding: 2px; animation: pulse-border 3s infinite alternate;"></div>
+                <a href="perfil.php" style="display: block; position: relative; z-index: 2;">
+                    <img src="<?= $userPhoto ?>" style="width: 58px; height: 58px; border-radius: 50%; border: 3px solid #0f172a; object-fit: cover; box-shadow: var(--shadow-lg);">
+                </a>
+            </div>
         </div>
-        <a href="perfil.php">
-            <img src="<?= $userPhoto ?>" style="width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-md);">
-        </a>
+    </div>
+
+    <!-- SEÇÃO ATALHOS RÁPIDOS TÁTEIS -->
+    <div class="dashboard-section-title animate-card">
+        <i data-lucide="layout-grid" width="16" height="16" style="color: var(--primary);"></i>
+        Acesso Rápido
+    </div>
+    <div class="shortcuts-grid">
+        <?php foreach ($shortcuts as $sc): ?>
+            <?php if ($sc['admin_only'] && $userRole !== 'admin') continue; ?>
+            <a href="<?= $sc['url'] ?>" class="shortcut-btn shortcut-<?= $sc['category'] ?> animate-card" style="text-decoration: none;">
+                <div class="shortcut-icon-box" style="background: <?= $sc['bg'] ?>; color: <?= $sc['color'] ?>;">
+                    <i data-lucide="<?= $sc['icon'] ?>"></i>
+                </div>
+                <span class="shortcut-title"><?= htmlspecialchars($sc['title']) ?></span>
+                <div class="shortcut-hover-dot" style="background: <?= $sc['color'] ?>;"></div>
+            </a>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- SEÇÃO INFORMAÇÕES E ESTATÍSTICAS -->
+    <div class="dashboard-section-title animate-card" style="margin-top: var(--space-xl);">
+        <i data-lucide="activity" width="16" height="16" style="color: var(--primary);"></i>
+        Visão Geral & Estatísticas
     </div>
 
     <!-- BADGE: Sugestões de Música Pendentes (admin only) -->

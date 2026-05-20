@@ -38,6 +38,7 @@ error_log
 # Versao antiga (backup local — nao versionar)
 App louvor 23.01.2026/
 app louvor arquivos hostinger atual/
+app antigo/
 
 # Credenciais de ambiente (NUNCA versionar)
 .env.*

@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20),
     password VARCHAR(255) NOT NULL, -- Senha (4 últimos dígitos)
     avatar_color VARCHAR(7) DEFAULT '#D4AF37', -- Cor para o avatar (iniciais)
+    photo VARCHAR(255) NULL,
+    avatar VARCHAR(255) NULL,
+    last_login DATETIME NULL,
+    login_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
