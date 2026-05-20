@@ -203,7 +203,7 @@ body.dark-mode .page-controls-container {
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--accent-purple);
+    color: var(--cyan-600);
     /* Premium accent */
     margin-top: 4px;
 }

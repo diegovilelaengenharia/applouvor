@@ -303,3 +303,337 @@ body.dark-mode tr:nth-child(even) {
 body.dark-mode tr:hover {
     background: var(--slate-700);
 }
+
+/* ============================================
+   BOTTOM SHEETS DARK
+   ============================================ */
+
+body.dark-mode .bs-overlay {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+body.dark-mode .bottom-sheet-content,
+body.dark-mode [id*="sheet-"],
+body.dark-mode [id*="Sheet"] {
+    background: var(--slate-800) !important;
+    border-top: 1px solid var(--slate-700);
+}
+
+body.dark-mode .sheet-header {
+    color: var(--slate-100);
+    border-bottom-color: var(--slate-700);
+}
+
+body.dark-mode .sheet-item {
+    background: var(--slate-700);
+    border-color: var(--slate-600);
+}
+
+body.dark-mode .sheet-item:active {
+    background: var(--slate-600);
+}
+
+body.dark-mode .sheet-icon-wrapper {
+    background: var(--slate-600) !important;
+}
+
+body.dark-mode .sheet-item span {
+    color: var(--slate-100);
+}
+
+/* ============================================
+   APP HERO DARK
+   ============================================ */
+
+body.dark-mode .app-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+}
+
+body.dark-mode .app-hero-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .app-hero-avatar {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ============================================
+   DASHBOARD CARDS DARK
+   ============================================ */
+
+body.dark-mode .dashboard-card {
+    background: linear-gradient(145deg, var(--slate-800) 0%, #263347 100%);
+    border-color: var(--slate-700);
+}
+
+body.dark-mode .dashboard-card:hover {
+    border-color: var(--slate-600);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .dashboard-card-title {
+    color: var(--slate-100);
+}
+
+body.dark-mode .event-info {
+    background: var(--slate-700);
+    border-color: var(--slate-600);
+}
+
+body.dark-mode .event-type {
+    color: var(--slate-100);
+}
+
+body.dark-mode .event-time {
+    color: var(--slate-400);
+}
+
+body.dark-mode .song-item {
+    background: var(--slate-700);
+}
+
+body.dark-mode .song-item:hover {
+    background: var(--slate-600);
+}
+
+body.dark-mode .song-title {
+    color: var(--slate-100);
+}
+
+body.dark-mode .song-artist {
+    color: var(--slate-400);
+}
+
+body.dark-mode .aviso-item {
+    background: var(--slate-700);
+    border-left-color: var(--slate-500);
+}
+
+body.dark-mode .aviso-item.urgent {
+    background: rgba(127, 29, 29, 0.3);
+    border-left-color: var(--red-500);
+}
+
+body.dark-mode .aviso-item.important {
+    background: rgba(146, 64, 14, 0.3);
+    border-left-color: var(--yellow-500);
+}
+
+body.dark-mode .aviso-item.info {
+    background: rgba(30, 64, 175, 0.3);
+    border-left-color: var(--blue-400);
+}
+
+body.dark-mode .aviso-title {
+    color: var(--slate-100);
+}
+
+body.dark-mode .aviso-message {
+    color: var(--slate-300);
+}
+
+body.dark-mode .aviso-meta {
+    color: var(--slate-500);
+}
+
+body.dark-mode .priority-urgent {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--red-400);
+}
+
+body.dark-mode .priority-important {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--amber-500);
+}
+
+body.dark-mode .priority-info {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--blue-400);
+}
+
+body.dark-mode .empty-state {
+    color: var(--slate-500);
+}
+
+body.dark-mode .empty-state-icon {
+    background: var(--slate-700);
+    border-color: var(--slate-600);
+}
+
+body.dark-mode .empty-state-title {
+    color: var(--slate-400);
+}
+
+body.dark-mode .schedule-summary {
+    background: var(--slate-700);
+    border-color: var(--slate-600);
+}
+
+body.dark-mode .schedule-summary-stat {
+    color: var(--slate-400);
+}
+
+body.dark-mode .schedule-details-panel {
+    border-top-color: var(--slate-600);
+}
+
+body.dark-mode .schedule-details-label {
+    color: var(--slate-500);
+}
+
+body.dark-mode .toggle-details-btn {
+    border-color: var(--slate-600);
+    color: var(--slate-400);
+}
+
+body.dark-mode .toggle-details-btn:hover {
+    background: var(--slate-700);
+    color: var(--slate-200);
+    border-color: var(--slate-500);
+}
+
+body.dark-mode .card-link-row {
+    color: var(--slate-100);
+}
+
+body.dark-mode .card-link-row:hover {
+    background: var(--slate-700);
+}
+
+body.dark-mode .card-link-text h4 {
+    color: var(--slate-100);
+}
+
+body.dark-mode .card-link-text p {
+    color: var(--slate-400);
+}
+
+body.dark-mode .card-link-arrow {
+    color: var(--slate-500);
+}
+
+/* ============================================
+   BOTTOM NAVIGATION ITEMS DARK
+   ============================================ */
+
+body.dark-mode .bottom-nav-categories {
+    background: var(--slate-800);
+    border-top-color: var(--slate-700);
+}
+
+body.dark-mode .nav-cat-item {
+    color: var(--slate-400);
+}
+
+body.dark-mode .nav-cat-item:nth-child(1) svg,
+body.dark-mode .nav-cat-item:nth-child(1) i {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--green-400);
+}
+
+body.dark-mode .nav-cat-item:nth-child(2) svg,
+body.dark-mode .nav-cat-item:nth-child(2) i {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--amber-500);
+}
+
+body.dark-mode .nav-cat-item:nth-child(3) svg,
+body.dark-mode .nav-cat-item:nth-child(3) i {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--blue-400);
+}
+
+body.dark-mode .nav-cat-item:nth-child(4) svg,
+body.dark-mode .nav-cat-item:nth-child(4) i {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--red-400);
+}
+
+body.dark-mode .nav-cat-item:nth-child(5) svg,
+body.dark-mode .nav-cat-item:nth-child(5) i {
+    background: rgba(100, 116, 139, 0.15);
+    color: var(--slate-400);
+}
+
+/* ============================================
+   FORMS DARK (additional)
+   ============================================ */
+
+body.dark-mode .form-group label,
+body.dark-mode .form-label {
+    color: var(--slate-300);
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-select {
+    background: var(--slate-900);
+    border-color: var(--slate-700);
+    color: var(--slate-100);
+}
+
+body.dark-mode .form-input:focus,
+body.dark-mode .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* ============================================
+   MODAL READING POPUP DARK
+   ============================================ */
+
+body.dark-mode #reading-modal .modal-content,
+body.dark-mode [id*="reading-modal"] > div {
+    background: var(--slate-800) !important;
+    border: 1px solid var(--slate-700);
+}
+
+body.dark-mode #reading-modal h3,
+body.dark-mode #reading-modal h4 {
+    color: var(--slate-100) !important;
+}
+
+/* ============================================
+   CLEAN TABLE DARK
+   ============================================ */
+
+body.dark-mode .clean-table-container {
+    background: var(--slate-800);
+    border-color: var(--slate-700);
+}
+
+body.dark-mode .clean-table th {
+    background: var(--slate-700);
+    color: var(--slate-300);
+    border-bottom-color: var(--slate-600);
+}
+
+body.dark-mode .clean-table td {
+    border-bottom-color: var(--slate-700);
+    color: var(--slate-200);
+}
+
+body.dark-mode .clean-table tr:hover td {
+    background: var(--slate-700);
+}
+
+/* ============================================
+   MODAL OVERLAY DARK
+   ============================================ */
+
+body.dark-mode .modal-overlay {
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ============================================
+   SECTION HEADERS
+   ============================================ */
+
+body.dark-mode .section-title {
+    color: var(--slate-100);
+}
+
+body.dark-mode .section-action {
+    color: var(--blue-400);
+}

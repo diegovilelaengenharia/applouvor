@@ -31,9 +31,9 @@
         display: flex;
     }
 
-    /* Espaço para não cobrir o conteúdo */
+    /* Espaço para não cobrir o conteúdo (computado com a SafeArea do iOS) */
     .app-content {
-        padding-bottom: 72px !important;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
     }
 }
 

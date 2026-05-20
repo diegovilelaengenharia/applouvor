@@ -83,6 +83,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: leitura.php?success=1");
         exit;
     }
+
+    if ($action === 'catch_up_today') {
+        try {
+            // Marcar todos os dias anteriores e de hoje como concluídos se não tiverem sido marcados
+            $stmtCheck = $pdo->prepare("SELECT month_num, day_num FROM reading_progress WHERE user_id = ?");
+            $stmtCheck->execute([$userId]);
+            $completed = [];
+            while ($row = $stmtCheck->fetch(PDO::FETCH_ASSOC)) {
+                $completed[$row['month_num']][$row['day_num']] = true;
+            }
+
+            $stmtInsert = $pdo->prepare("
+                INSERT IGNORE INTO reading_progress (user_id, month_num, day_num, comment, completed_at)
+                VALUES (?, ?, ?, 'Ajuste de leitura rápido', NOW())
+            ");
+
+            for ($m = 1; $m <= $currentMonth; $m++) {
+                $maxDay = ($m === $currentMonth) ? $calcDay : 25;
+                for ($d = 1; $d <= $maxDay; $d++) {
+                    if (!isset($completed[$m][$d])) {
+                        $stmtInsert->execute([$userId, $m, $d]);
+                    }
+                }
+            }
+            header("Location: leitura.php?success=catchup");
+            exit;
+        } catch (Exception $e) {
+            error_log("Catch up failed: " . $e->getMessage());
+        }
+    }
 }
 
 // Fetch Progress
@@ -116,25 +146,51 @@ renderAppHeader('Leitura Bíblica');
     
     <!-- Stats Cards -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
-        <div class="form-card" style="margin:0; padding: 16px; text-align: center; border-left: 4px solid var(--primary);">
-            <div style="font-size: 2rem; font-weight: 800; color: var(--primary);"><?= $percentage ?>%</div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">CONCLUÍDO</div>
+        <div class="form-card" style="margin:0; padding: 18px 16px; text-align: center; border-left: 4px solid var(--primary); box-shadow: var(--shadow-sm); border-radius: var(--radius-lg);">
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-extrabold); color: var(--primary);"><?= $percentage ?>%</div>
+            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Concluído</div>
         </div>
-        <div class="form-card" style="margin:0; padding: 16px; text-align: center; border-left: 4px solid <?= $delay > 0 ? '#ef4444' : '#10b981' ?>;">
-            <div style="font-size: 2rem; font-weight: 800; color: <?= $delay > 0 ? '#ef4444' : '#10b981' ?>;"><?= $delay ?></div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">DIAS DE ATRASO</div>
+        <div class="form-card" style="margin:0; padding: 18px 16px; text-align: center; border-left: 4px solid <?= $delay > 0 ? 'var(--red-500)' : 'var(--success)' ?>; box-shadow: var(--shadow-sm); border-radius: var(--radius-lg);">
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-extrabold); color: <?= $delay > 0 ? 'var(--red-500)' : 'var(--success)' ?>;"><?= $delay ?></div>
+            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Dias de Atraso</div>
         </div>
+        
+        <?php if ($delay > 0): ?>
+            <!-- Botão de Ajuste Rápido de Atraso -->
+            <form method="POST" style="grid-column: span 2; margin-top: -8px;">
+                <input type="hidden" name="action" value="catch_up_today">
+                <button type="submit" class="ripple" style="
+                    width: 100%;
+                    padding: 12px;
+                    background: rgba(239, 68, 68, 0.08);
+                    color: var(--red-500);
+                    border: 1px solid rgba(239, 68, 68, 0.2);
+                    border-radius: var(--radius-md);
+                    font-size: var(--font-size-xs);
+                    font-weight: var(--font-weight-bold);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    transition: all 0.2s;
+                ">
+                    <i data-lucide="zap" style="width: 14px;"></i>
+                    Ajustar Leitura para Hoje
+                </button>
+            </form>
+        <?php endif; ?>
     </div>
 
     <!-- Today's Reading (or Next Pending) -->
-    <div id="today-reading-card" class="form-card" style="background: #0f172a; color: white; border: none;">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+    <div id="today-reading-card" class="form-card animate-card" style="background: var(--primary-gradient); color: white; border: none; box-shadow: var(--shadow-md); border-radius: var(--radius-xl); padding: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 18px;">
             <div>
-                <div style="font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; font-weight: 600;">Leitura de Hoje</div>
-                <h2 style="font-size: 1.5rem; margin: 4px 0 0 0;" id="today-date-display">Dia <?= $currentDay ?>/<?= $currentMonth ?></h2>
+                <div style="font-size: var(--font-size-xs); opacity: 0.85; text-transform: uppercase; font-weight: var(--font-weight-bold); letter-spacing: 0.05em;">Leitura de Hoje</div>
+                <h2 style="font-size: 1.5rem; margin: 4px 0 0 0; font-weight: var(--font-weight-extrabold);" id="today-date-display">Dia <?= $currentDay ?>/<?= $currentMonth ?></h2>
             </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">
-                <i data-lucide="book-open" style="color:white;"></i>
+            <div style="background: rgba(255,255,255,0.15); padding: 8px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="book-open" style="color:white; width: 22px; height: 22px;"></i>
             </div>
         </div>
         
@@ -147,16 +203,17 @@ renderAppHeader('Leitura Bíblica');
         <button id="btn-mark-today" class="ripple" style="
             width: 100%;
             padding: 14px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             border: none;
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
+            background: white;
+            color: var(--blue-900);
+            font-weight: var(--font-weight-bold);
             display: flex; 
             align-items: center; 
             justify-content: center; 
             gap: 8px;
-            font-size: 1rem;
+            font-size: var(--font-size-base);
+            box-shadow: var(--shadow-sm);
         ">
             <i data-lucide="check-circle"></i>
             Marcar como Lido
@@ -166,56 +223,61 @@ renderAppHeader('Leitura Bíblica');
         <div id="today-comment-box" style="margin-top: 16px; display: none;">
             <textarea id="today-comment" placeholder="Adicione uma anotação sobre a leitura de hoje..." style="
                 width: 100%;
-                background: rgba(255,255,255,0.1);
+                background: rgba(255,255,255,0.12);
                 border: 1px solid rgba(255,255,255,0.2);
-                border-radius: 8px;
+                border-radius: var(--radius-md);
                 padding: 12px;
                 color: white;
                 font-family: inherit;
                 resize: vertical;
                 min-height: 80px;
+                outline: none;
             "></textarea>
             <button onclick="saveTodayComment()" style="
                 margin-top: 8px;
-                background: rgba(255,255,255,0.2);
-                border: none;
+                background: rgba(255,255,255,0.25);
+                border: 1px solid rgba(255,255,255,0.3);
                 padding: 8px 16px;
-                border-radius: 6px;
+                border-radius: var(--radius-md);
                 color: white;
-                font-size: 0.85rem;
-                font-weight: 600;
+                font-size: var(--font-size-xs);
+                font-weight: var(--font-weight-semibold);
+                cursor: pointer;
             ">Salvar Anotação</button>
         </div>
         <div id="today-comment-toggle" onclick="toggleCommentBox()" style="
             text-align: center; 
-            margin-top: 12px; 
-            font-size: 0.85rem; 
-            opacity: 0.7; 
+            margin-top: 14px; 
+            font-size: var(--font-size-xs); 
+            opacity: 0.8; 
             cursor: pointer; 
             text-decoration: underline;
+            font-weight: 500;
         ">Adicionar anotação</div>
     </div>
 
     <!-- Config Notification -->
-    <div class="form-card">
+    <div class="form-card" style="box-shadow: var(--shadow-sm); border-radius: var(--radius-lg);">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; gap: 12px; align-items: center;">
-                <div style="background: var(--bg-body); padding: 8px; border-radius: 8px;">
+                <div style="background: var(--bg-surface-alt); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="bell" style="width: 20px; color: var(--primary);"></i>
                 </div>
                 <div>
-                    <h4 style="margin: 0; font-size: 0.95rem;">Lembrete Diário</h4>
-                    <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Receba um aviso para ler</p>
+                    <h4 style="margin: 0; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary);">Lembrete Diário</h4>
+                    <p style="margin: 2px 0 0 0; font-size: var(--font-size-xs); color: var(--text-secondary);">Receba um aviso para ler</p>
                 </div>
             </div>
             <form method="POST" id="form-notif" style="display: flex; gap: 8px; align-items: center;">
                 <input type="hidden" name="action" value="save_settings">
                 <input type="time" name="notification_time" value="<?= htmlspecialchars($notifTime) ?>" onchange="this.form.submit()" style="
-                    padding: 8px;
-                    border: 1px solid var(--border-color);
-                    border-radius: 8px;
-                    background: var(--bg-body);
-                    color: var(--text-main);
+                    padding: 8px 12px;
+                    border: 1px solid var(--border-subtle);
+                    border-radius: var(--radius-md);
+                    background: var(--bg-surface-alt);
+                    color: var(--text-primary);
+                    font-size: var(--font-size-sm);
+                    font-weight: 600;
                 ">
             </form>
         </div>
@@ -256,11 +318,7 @@ function init() {
     
     // Check Notification Permission
     if ("Notification" in window && Notification.permission !== "granted") {
-        Notification.requestPermission();
-    }
-}
-
-function renderTodayCard() {
+        Notification.requestPermission()function renderTodayCard() {
     const list = document.getElementById('today-verses-list');
     const dateDisplay = document.getElementById('today-date-display');
     const btn = document.getElementById('btn-mark-today');
@@ -288,7 +346,7 @@ function renderTodayCard() {
     todayVerses.forEach(verse => {
         const d = document.createElement('div');
         d.className = 'verse-pill';
-        d.style.cssText = 'background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 8px; font-weight: 500; font-size: 0.95rem;';
+        d.style.cssText = 'background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: var(--radius-md); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.1);';
         d.textContent = verse;
         list.appendChild(d);
     });
@@ -299,7 +357,9 @@ function renderTodayCard() {
     const read = isRead(targetMonth, targetDayIndex);
     if (read) {
         btn.innerHTML = '<i data-lucide="check-circle" style="width:20px;"></i> Leitura Concluída!';
-        btn.style.background = '#10b981'; // Green
+        btn.style.background = 'rgba(255,255,255,0.2)'; 
+        btn.style.color = 'white';
+        btn.style.border = '1px solid rgba(255,255,255,0.4)';
         btn.onclick = null;
         
         // Show comment if exists
@@ -310,7 +370,9 @@ function renderTodayCard() {
         }
     } else {
         btn.innerHTML = '<i data-lucide="circle" style="width:20px;"></i> Marcar como Lido';
-        btn.style.background = 'var(--primary)';
+        btn.style.background = 'white';
+        btn.style.color = 'var(--blue-900)';
+        btn.style.border = 'none';
         btn.onclick = () => markRead(targetMonth, targetDayIndex, true);
     }
 }
@@ -358,7 +420,7 @@ function renderFullList() {
 
         // Month Header
         const monthHeader = document.createElement('div');
-        monthHeader.style.cssText = 'padding: 12px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;';
+        monthHeader.style.cssText = 'padding: 14px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm); transition: all 0.2s;';
         
         // Calculate progress for month
         let completedCount = 0;
@@ -370,18 +432,18 @@ function renderFullList() {
         
         monthHeader.innerHTML = `
             <div style="display:flex; gap:12px; align-items:center;">
-                <div style="font-weight: 700;">${getMonthName(m)}</div>
-                <div style="font-size: 0.75rem; background: var(--bg-body); padding: 2px 8px; border-radius: 12px; color: var(--text-muted);">${completedCount}/25</div>
+                <div style="font-weight: var(--font-weight-bold); font-size: var(--font-size-sm); color: var(--text-primary);">${getMonthName(m)}</div>
+                <div style="font-size: var(--font-size-xs); background: var(--bg-surface-alt); padding: 2px 8px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); color: var(--text-secondary); font-weight: 600;">${completedCount}/25</div>
             </div>
-            <i data-lucide="${icon}" style="width: 18px; color: var(--text-muted);"></i>
+            <i data-lucide="${icon}" style="width: 18px; color: var(--text-secondary);"></i>
         `;
 
         // Days Container
         const daysContainer = document.createElement('div');
         daysContainer.style.display = isCurrent ? 'block' : 'none'; // Only open current month default
-        daysContainer.style.padding = '0 0 16px 12px';
-        daysContainer.style.borderLeft = '2px solid var(--border-color)';
-        daysContainer.style.marginLeft = '12px';
+        daysContainer.style.padding = '0 0 16px 16px';
+        daysContainer.style.borderLeft = '2px solid var(--border-subtle)';
+        daysContainer.style.marginLeft = '14px';
 
         monthHeader.onclick = () => {
             const isHidden = daysContainer.style.display === 'none';
@@ -395,11 +457,11 @@ function renderFullList() {
             const read = isRead(m, dayNum);
             
             const dayRow = document.createElement('div');
-            dayRow.style.cssText = 'display: flex; gap: 12px; align-items: flex-start; margin-top: 12px; position: relative;';
+            dayRow.style.cssText = 'display: flex; gap: 14px; align-items: flex-start; margin-top: 14px; position: relative;';
             
-            const checkColor = read ? '#10b981' : 'var(--border-color)';
+            const checkColor = read ? 'var(--success)' : 'var(--border-subtle)';
             const checkIcon = read ? 'check-circle' : 'circle';
-            const textColor = read ? 'var(--text-muted)' : 'var(--text-main)';
+            const textColor = read ? 'var(--text-secondary)' : 'var(--text-primary)';
 
             dayRow.innerHTML = `
                 <div onclick="markRead(${m}, ${dayNum}, true)" style="cursor: pointer; padding-top: 2px;">
@@ -408,12 +470,12 @@ function renderFullList() {
                 <div style="flex: 1;">
                     <div style="font-weight: 600; font-size: 0.9rem; color: ${textColor}; display: flex; justify-content:space-between;">
                         <span>Dia ${dayNum}</span>
-                        ${read && read.comment ? '<i data-lucide="message-square" style="width: 14px; color: var(--text-muted);"></i>' : ''}
+                        ${read && read.comment ? '<i data-lucide="message-square" style="width: 14px; color: var(--text-secondary);"></i>' : ''}
                     </div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; margin-top: 2px;">
                         ${verses.join(', ')}
                     </div>
-                    ${read && read.comment ? `<div style="font-size: 0.8rem; background: var(--bg-body); padding: 6px; border-radius: 6px; margin-top: 4px; color: var(--text-main);">"${read.comment}"</div>` : ''}
+                    ${read && read.comment ? `<div style="font-size: var(--font-size-xs); background: var(--bg-surface-alt); border: 1px solid var(--border-subtle); padding: 8px 12px; border-radius: var(--radius-md); margin-top: 6px; color: var(--text-primary); font-style: italic;">"${read.comment}"</div>` : ''}
                 </div>
             `;
             daysContainer.appendChild(dayRow);
@@ -423,6 +485,7 @@ function renderFullList() {
         container.appendChild(daysContainer);
     }
     lucide.createIcons();
+}ide.createIcons();
 }
 
 function getMonthName(m) {
