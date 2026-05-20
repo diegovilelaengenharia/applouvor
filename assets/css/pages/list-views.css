@@ -1,0 +1,309 @@
+/* ==========================================================================
+   LIST VIEWS (Compact, Simple, Timeline)
+   ========================================================================== */
+
+/* === LIST VIEW (COMPACT) === */
+.list-view-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+    gap: 16px;
+    transition: background 0.2s;
+}
+
+.list-view-item:active {
+    background: var(--bg-tertiary);
+}
+
+.list-view-date-box {
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.list-view-day {
+    font-size: var(--font-h1);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.list-view-month {
+    font-size: var(--font-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.list-view-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.list-view-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: var(--font-h3);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-view-sub {
+    font-size: var(--font-body-sm);
+    color: var(--text-secondary);
+}
+
+/* === COMPACT LIST VIEW STYLES === */
+.compact-card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 2px solid #E5E7EB;
+    transition: transform 0.2s, background 0.2s, border-color 0.2s;
+    overflow: hidden;
+}
+
+body.dark-mode .compact-card {
+    background: #18181B;
+    border-color: #374151;
+}
+
+.compact-card:active {
+    background: var(--bg-secondary);
+    transform: scale(0.99);
+    border-color: var(--primary-green);
+}
+
+/* Left colored strip (Green) */
+.compact-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: var(--primary-green);
+    border-radius: 4px 0 0 4px;
+}
+
+/* Date Column */
+.compact-date-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    height: 56px;
+    background: #059669;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+}
+
+.compact-day {
+    font-size: var(--font-h1);
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+}
+
+.compact-month {
+    font-size: var(--font-small);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Vertical Divider */
+.compact-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border-subtle);
+}
+
+/* Info Column */
+.compact-info-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.compact-meta {
+    font-size: var(--font-small);
+    font-weight: 700;
+    color: var(--primary-orange);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.compact-title {
+    font-size: var(--font-h3);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+body.dark-mode .compact-title {
+    color: #F4F4F5;
+}
+
+.compact-sub {
+    font-size: var(--font-body-sm);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+/* Arrow */
+.compact-arrow {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* === SIMPLE LIST VIEW (CLEAN & MINIMAL) === */
+.list-card-simple {
+    background: #F9FAFB;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #D1D5DB;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+body.dark-mode .list-card-simple {
+    background: #18181B;
+    border-color: #374151;
+}
+
+.list-card-simple:active {
+    transform: scale(0.98);
+    background: #F3F4F6;
+}
+
+body.dark-mode .list-card-simple:active {
+    background: #27272A;
+}
+
+/* Left accent strip */
+.list-card-simple::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-green);
+}
+
+/* Date Column */
+.list-date-simple {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 48px;
+    padding-left: 8px;
+}
+
+.list-day-simple {
+    font-size: var(--font-display);
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+body.dark-mode .list-day-simple {
+    color: white;
+}
+
+.list-month-simple {
+    font-size: var(--font-small);
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* Content Column */
+.list-content-simple {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.list-meta-simple {
+    font-size: var(--font-small);
+    font-weight: 700;
+    color: #F59E0B;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.list-title-simple {
+    font-size: var(--font-h2);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+body.dark-mode .list-title-simple {
+    color: #F4F4F5;
+}
+
+.list-sub-simple {
+    font-size: var(--font-body-sm);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Arrow */
+.list-arrow-simple {
+    color: var(--text-muted);
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+}
+
+/* === COLOR VARIANTS FOR EVENT TYPES === */
+.list-card-simple.event-special::before {
+    background: #059669;
+}
+.list-card-simple.event-morning::before {
+    background: #2563EB;
+}
+.list-card-simple.event-night::before {
+    background: #14b8a6;
+}
+.list-card-simple.event-rehearsal::before {
+    background: #F59E0B;
+}
+.list-card-simple.event-other::before {
+    background: #EC4899;
+}

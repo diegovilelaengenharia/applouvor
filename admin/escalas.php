@@ -10,65 +10,31 @@ $filterType = $_GET['type'] ?? '';
 // ID do usuário logado (Assumindo sessão ou hardcoded 1 para dev se não tiver sessão ainda)
 $loggedUserId = $_SESSION['user_id'] ?? 1;
 
-// --- SIMPLIFIED QUERY TO AVOID SQL ERRORS ---
-// Selecting basic schedule info first
-$sqlFuture = "SELECT * FROM schedules WHERE event_date >= CURDATE()";
-if (!empty($filterType)) {
-    $sqlFuture .= " AND event_type = :eventType";
-}
-$sqlFuture .= " ORDER BY event_date ASC";
-
-$sqlPast = "SELECT * FROM schedules WHERE event_date < CURDATE()";
-if (!empty($filterType)) {
-    $sqlPast .= " AND event_type = :eventType";
-}
-$sqlPast .= " ORDER BY event_date DESC LIMIT 15";
+// Instancia o repositório
+require_once '../includes/classes/ScheduleRepository.php';
+$scheduleRepo = new \App\Repositories\ScheduleRepository($pdo);
 
 try {
-    // Executar Futuras
-    $stmtFuture = $pdo->prepare($sqlFuture);
-    if (!empty($filterType)) $stmtFuture->bindValue(':eventType', $filterType);
-    $stmtFuture->execute();
-    $futureResults = $stmtFuture->fetchAll(PDO::FETCH_ASSOC);
+    // Buscar Escalas (usando o repository)
+    $futureResults = $scheduleRepo->getFutureSchedules($filterType);
+    $pastResults   = $scheduleRepo->getPastSchedules($filterType, 15);
 
-    // Executar Passadas
-    $stmtPast = $pdo->prepare($sqlPast);
-    if (!empty($filterType)) $stmtPast->bindValue(':eventType', $filterType);
-    $stmtPast->execute();
-    $pastResults = $stmtPast->fetchAll(PDO::FETCH_ASSOC);
-
-    // --- Eager Loading & Filtering in PHP (Safer/Easier) ---
-    // Extract IDs
+    // Unir IDs para buscar dados complementares
     $allSchedulesTemp = array_merge($futureResults, $pastResults);
     $scheduleIds = array_column($allSchedulesTemp, 'id');
     
-    $participantsMap = [];
-    $songCountsMap = [];
-    $mySchedulesMap = [];
+    // Buscar dependências em batch (Repository)
+    $participantsMap = $scheduleRepo->getParticipantsByScheduleIds($scheduleIds);
+    $songCountsMap   = $scheduleRepo->getSongCountsByScheduleIds($scheduleIds);
     
-    if (!empty($scheduleIds)) {
-        $inQuery = implode(',', array_fill(0, count($scheduleIds), '?'));
-        
-        // 1. Fetch Users
-        $sqlParts = "SELECT su.schedule_id, su.user_id, u.name, u.photo, u.avatar_color, su.status 
-                     FROM schedule_users su 
-                     JOIN users u ON su.user_id = u.id 
-                     WHERE su.schedule_id IN ($inQuery)";
-        $stmtParts = $pdo->prepare($sqlParts);
-        $stmtParts->execute($scheduleIds);
-        while ($row = $stmtParts->fetch(PDO::FETCH_ASSOC)) {
-            $participantsMap[$row['schedule_id']][] = $row;
-            if ($row['user_id'] == $loggedUserId) {
-                $mySchedulesMap[$row['schedule_id']] = true;
+    // Processar "My Schedules" (mantendo a lógica PHP existente para evitar refazer queries pesadas)
+    $mySchedulesMap = [];
+    foreach ($participantsMap as $schId => $participants) {
+        foreach ($participants as $p) {
+            if ($p['user_id'] == $loggedUserId) {
+                $mySchedulesMap[$schId] = true;
+                break;
             }
-        }
-
-        // 2. Fetch Song Counts
-        $sqlSongs = "SELECT schedule_id, COUNT(*) as total FROM schedule_songs WHERE schedule_id IN ($inQuery) GROUP BY schedule_id";
-        $stmtSongs = $pdo->prepare($sqlSongs);
-        $stmtSongs->execute($scheduleIds);
-        while ($row = $stmtSongs->fetch(PDO::FETCH_ASSOC)) {
-            $songCountsMap[$row['schedule_id']] = $row['total'];
         }
     }
 
@@ -85,8 +51,7 @@ try {
         $pastSchedules[] = $s;
     }
 
-
-} catch (PDOException $e) {
+} catch (Exception $e) {
     die("Erro ao carregar escalas: " . $e->getMessage());
 }
 

@@ -22,6 +22,12 @@ $artists = array_column($artists, 'artist'); // Converter para array simples
 
 // Processar formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     // Processar campos customizados
     $customFields = [];
     if (!empty($_POST['custom_field_name']) && !empty($_POST['custom_field_link'])) {
@@ -128,6 +134,7 @@ renderPageHeader('Nova Música', 'Cadastrar no repertório');
 
 
     <form method="POST">
+        <?= App\AuthMiddleware::csrfField() ?>
         <!-- Card 1: Informações Principais -->
         <div class="form-card" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
             <div class="card-title">

@@ -3,7 +3,7 @@
 header('Content-Type: application/json');
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
-require_once '../includes/web_push_helper.php';
+require_once '../includes/classes/NotificationService.php';
 
 // Apenas admin pode enviar lembretes
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
@@ -13,16 +13,6 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
 
 $data = json_decode(file_get_contents('php://input'), true);
 $scheduleId = isset($data['schedule_id']) ? (int)$data['schedule_id'] : 0;
-
-// Buscar VAPID keys da config/env
-$vapidPublic  = defined('VAPID_PUBLIC_KEY')  ? VAPID_PUBLIC_KEY  : (getenv('VAPID_PUBLIC_KEY')  ?: '');
-$vapidPrivate = defined('VAPID_PRIVATE_KEY') ? VAPID_PRIVATE_KEY : (getenv('VAPID_PRIVATE_KEY') ?: '');
-
-if (empty($vapidPublic) || empty($vapidPrivate)) {
-    error_log('send_reminders.php: VAPID keys não configuradas');
-    echo json_encode(['success' => false, 'message' => 'Push não configurado. Configure as VAPID keys.']);
-    exit;
-}
 
 try {
     // Buscar escalas nos próximos 2 dias com participantes pending
@@ -54,30 +44,27 @@ try {
         exit;
     }
 
-    $helper = new WebPushHelper($vapidPublic, $vapidPrivate, 'mailto:contato@pibolveira.com');
-    $sent   = 0;
+    $notificationService = new \App\Services\NotificationService($pdo);
+    $sent = 0;
     $failed = 0;
 
     foreach ($pendingUsers as $pu) {
-        // Buscar subscriptions do usuário
-        $stmtSub = $pdo->prepare("SELECT endpoint, p256dh, auth FROM push_subscriptions WHERE user_id = ?");
-        $stmtSub->execute([$pu['user_id']]);
-        $subscriptions = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($subscriptions)) continue;
-
         $eventDate = date('d/m', strtotime($pu['event_date']));
         $eventTime = substr($pu['event_time'], 0, 5);
-        $payload = [
-            'title' => 'Lembrete de Escala',
-            'body'  => "Voce nao confirmou presenca no " . $pu['event_type'] . " de $eventDate as $eventTime. Confirme no app!",
-            'url'   => '/applouvor/admin/escalas.php',
-        ];
+        $title = 'Lembrete de Escala';
+        $body  = "Voce nao confirmou presenca no " . $pu['event_type'] . " de $eventDate as $eventTime. Confirme no app!";
+        $url   = '/applouvor/admin/escalas.php';
 
-        foreach ($subscriptions as $sub) {
-            $ok = $helper->sendNotification($sub, $payload);
-            if ($ok) $sent++;
-            else $failed++;
+        $res = $notificationService->sendPushToUser($pu['user_id'], $title, $body, $url);
+        if ($res['success']) {
+            $sent += $res['sent'];
+        } else {
+            // Se falhou por causa das chaves VAPID não configuradas
+            if ($res['message'] === 'VAPID keys não configuradas') {
+                echo json_encode(['success' => false, 'message' => 'Push não configurado. Configure as VAPID keys.']);
+                exit;
+            }
+            $failed++;
         }
     }
 
@@ -92,3 +79,4 @@ try {
     error_log('send_reminders.php error: ' . $e->getMessage());
     echo json_encode(['success' => false, 'message' => 'Erro interno ao processar lembretes.']);
 }
+

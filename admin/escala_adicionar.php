@@ -10,6 +10,12 @@ $allSongs = $pdo->query("SELECT id, title, artist, tone FROM songs ORDER BY titl
 
 // Processar formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     $eventType = $_POST['event_type'];
     if ($eventType === 'Outro' && !empty($_POST['custom_event_type'])) {
         $eventType = $_POST['custom_event_type'];
@@ -87,6 +93,7 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
     </div>
 
     <form method="POST" id="wizardForm">
+        <?= App\AuthMiddleware::csrfField() ?>
 
         <!-- PASSO 1: Detalhes -->
         <div class="form-card active" id="step-1" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">

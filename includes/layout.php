@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // includes/layout.php
 header('Content-Type: text/html; charset=utf-8');
 
@@ -14,6 +14,11 @@ if (session_status() === PHP_SESSION_NONE) {
         'samesite' => 'Strict'
     ]);
     session_start();
+}
+
+// Garante que o token CSRF esteja disponível em todas as páginas
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 require_once 'db.php';
@@ -65,125 +70,7 @@ function renderAppHeader($title, $backUrl = null)
     <html lang="pt-BR">
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>App Louvor PIB</title>
-
-        <!-- Fonte Inter (Google Fonts) -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-        <!-- Open Graph / WhatsApp Sharing -->
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="App Louvor PIB Oliveira">
-        <meta property="og:description" content="Gestão de escalas, repertório e ministério de louvor da PIB Oliveira.">
-        <meta property="og:image" content="https://app.piboliveira.com.br/assets/img/logo_pib_black.png"> <!-- Ajuste para URL absoluta real quando poss+¡vel -->
-        <meta property="og:url" content="https://app.piboliveira.com.br/">
-        
-        <!-- PWA Meta Tags -->
-        <meta name="theme-color" content="#376ac8">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="App Louvor PIB">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="view-transition" content="same-origin">
-        <link rel="manifest" href="/applouvor/manifest.json">
-        <link rel="apple-touch-icon" href="../assets/img/logo_pib_black.png">
-
-        <!-- Icons: Lucide only (Material Icons and Font Awesome removed - use Lucide) -->
-
-        <!-- +ìcones Lucide -->
-        <script src="https://unpkg.com/lucide@latest"></script>
-
-        <!-- APP URL for JS logic -->
-        <script>const APP_URL = '<?= APP_URL ?>';</script>
-
-        <?php
-        // Cache Busting Inteligente
-        $pathMain = __DIR__ . '/../assets/css/app-main.css';
-        $pathTheme = __DIR__ . '/../assets/css/theme-premium.css';
-        $verMain = file_exists($pathMain) ? filemtime($pathMain) : time();
-        $verTheme = file_exists($pathTheme) ? filemtime($pathTheme) : time();
-        ?>
-
-        <!-- Main CSS -->
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/core/variables.css?v=<?= time() ?>">
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/theme-premium.css?v=<?= $verTheme ?>">
-        <!-- Mobile Bottom Nav + Sidebar -->
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/mobile-bottom-nav.css?v=<?= $verMain ?>">
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/sidebar.css?v=<?= $verMain ?>">
-        <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/pib-cards.css?v=<?= time() ?>">
-
-
-        <!-- Theme Toggle Script (Critical: Must load immediately) -->
-        <script src="<?= APP_URL ?>/assets/js/theme-toggle.js?v=<?= time() ?>"></script>
-
-        <!-- INLINE FUNCTIONS - Garantia de Funcionamento -->
-        <script>
-            // === TOGGLE NOTIFICATIONS ===
-            window.toggleNotifications = function(dropdownId) {
-                const dropdown = document.getElementById(dropdownId);
-                if (!dropdown) {
-                    console.error('[ERROR] Dropdown não encontrado:', dropdownId);
-                    return;
-                }
-                
-                // Toggle visibility
-                const isVisible = dropdown.classList.contains('active');
-                
-                // Fechar todos os dropdowns primeiro
-                document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
-                    d.classList.remove('active');
-                });
-                
-                // Abrir se estava fechado
-                if (!isVisible) {
-                    dropdown.classList.add('active');
-                }
-            };
-            
-            // === TOGGLE PROFILE ===
-            window.toggleProfileDropdown = function(event, dropdownId) {
-                if (event) event.stopPropagation();
-                
-                const dropdown = document.getElementById(dropdownId);
-                if (!dropdown) {
-                    console.error('[ERROR] Dropdown perfil não encontrado:', dropdownId);
-                    return;
-                }
-                
-                // Toggle visibility
-                const isVisible = dropdown.classList.contains('active');
-                
-                // Fechar todos os dropdowns primeiro
-                document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
-                    d.classList.remove('active');
-                });
-                
-                // Abrir se estava fechado
-                if (!isVisible) {
-                    dropdown.classList.add('active');
-                }
-            };
-            
-            // === FECHAR AO CLICAR FORA ===
-            document.addEventListener('click', function(e) {
-                // Se clicou fora de qualquer dropdown ou botão, fechar tudo
-                if (!e.target.closest('.notification-dropdown') && 
-                    !e.target.closest('.profile-dropdown') &&
-                    !e.target.closest('.notification-btn') &&
-                    !e.target.closest('.profile-avatar-btn') &&
-                    !e.target.closest('.header-action-btn')) {
-                    
-                    document.querySelectorAll('.notification-dropdown, .profile-dropdown').forEach(d => {
-                        d.classList.remove('active');
-                    });
-                }
-            });
-        </script>
-        
+        <?php require_once __DIR__ . '/head.php'; ?>
     </head>
 
     <body>
@@ -215,69 +102,12 @@ function renderAppHeader($title, $backUrl = null)
         
 
         <!-- Bottom Navigation (Mobile Only — oculta em desktop via CSS) -->
-        <nav class="bottom-nav" id="bottom-nav" role="navigation" aria-label="Menu principal">
-            <div class="bottom-nav-items">
-                <!-- Início -->
-                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>index.php"
-                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : '' ?>">
-                    <div class="bnav-icon-wrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                    </div>
-                    <span class="bnav-label">Início</span>
-                </a>
-
-                <!-- Escalas -->
-                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>escalas.php"
-                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'escalas.php' ? 'active' : '' ?>">
-                    <div class="bnav-icon-wrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    </div>
-                    <span class="bnav-label">Escalas</span>
-                </a>
-
-                <!-- Repertório -->
-                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>repertorio.php"
-                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'repertorio.php' ? 'active' : '' ?>">
-                    <div class="bnav-icon-wrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                    </div>
-                    <span class="bnav-label">Repertório</span>
-                </a>
-
-                <!-- Leitura -->
-                <a href="<?= (strpos($_SERVER['PHP_SELF'], '/admin/') !== false) ? '' : '../admin/' ?>leitura.php"
-                   class="bottom-nav-item <?= basename($_SERVER['PHP_SELF']) === 'leitura.php' ? 'active' : '' ?>">
-                    <div class="bnav-icon-wrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                    </div>
-                    <span class="bnav-label">Leitura</span>
-                </a>
-
-                <!-- Menu (abre sidebar) -->
-                <button class="bottom-nav-item bnav-menu-btn" onclick="toggleSidebarMobile ? toggleSidebarMobile() : (window.toggleSidebar && window.toggleSidebar())" aria-label="Menu">
-                    <div class="bnav-icon-wrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                    </div>
-                    <span class="bnav-label">Menu</span>
-                </button>
-            </div>
-        </nav>
+        <?php require_once __DIR__ . '/bottom-nav.php'; ?>
 
         <!-- Overlay de Fundo -->
         <div id="bs-overlay" class="bs-overlay" onclick="closeAllSheets()"></div>
 
-        <script>
-            function closeAllSheets() {
-                const overlay = document.getElementById('bs-overlay');
-                if (overlay) overlay.classList.remove('active');
-                
-                // Fecha menus
-                document.querySelectorAll('.bottom-sheet').forEach(el => el.classList.remove('active'));
 
-                // Remove active
-                document.querySelectorAll('.b-nav-item').forEach(el => el.classList.remove('active'));
-            }
-        </script>
 
 
         <!-- Inicializar Ícones -->
@@ -302,7 +132,7 @@ function renderAppHeader($title, $backUrl = null)
     <script>
         // Service Worker Registration (single instance)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/applouvor/sw.js')
+            navigator.serviceWorker.register('/sw.js')
                 .then(reg => console.log('SW Registered:', reg.scope))
                 .catch(err => console.warn('SW Failed:', err));
         }
@@ -564,189 +394,12 @@ function renderAppHeader($title, $backUrl = null)
         </div><!-- /page-sub-header-inner -->
     </div><!-- /page-sub-header -->
     <!-- Dashboard Customization Modal -->
-    <div id="dashboardCustomizationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
-        <div style="background: var(--bg-surface); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.25rem;">Personalizar Acesso Rápido</h3>
-                <button onclick="closeDashboardCustomization()" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
-                Selecione os atalhos que deseja exibir no seu painel.
-            </p>
-            
-            <form id="dashboardCustomizationForm">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
-                    <?php
-                        // Ensure dashboard_cards is loaded
-                        if (file_exists(__DIR__ . '/dashboard_cards.php')) {
-                            require_once __DIR__ . '/dashboard_cards.php';
-                        } elseif (file_exists(__DIR__ . '/../includes/dashboard_cards.php')) {
-                            require_once __DIR__ . '/../includes/dashboard_cards.php';
-                        }
-                        
-                        if (function_exists('getAllAvailableCards')):
-                            $allCards = getAllAvailableCards();
-                            
-                            // Tentar buscar configurações do usuário
-                            $enabledCards = [];
-                            if (isset($_SESSION['user_id'])) {
-                                global $pdo;
-                                if ($pdo) {
-                                    try {
-                                        $stmt = $pdo->prepare("SELECT card_id FROM user_dashboard_settings WHERE user_id = ? AND is_visible = 1");
-                                        $stmt->execute([$_SESSION['user_id']]);
-                                        $enabledCards = $stmt->fetchAll(PDO::FETCH_COLUMN);
-                                    } catch (Exception $e) {}
-                                }
-                            }
-                            
-                            // Default if empty
-                            if (empty($enabledCards)) {
-                                $enabledCards = array_keys($allCards); 
-                            }
-                            
-                            foreach($allCards as $id => $card):
-                                $checked = in_array($id, $enabledCards) ? 'checked' : '';
-                    ?>
-                    <label style="
-                        display: flex; align-items: center; gap: 10px; padding: 12px; 
-                        border: 1px solid var(--border-color); border-radius: 12px; 
-                        cursor: pointer; transition: all 0.2s; background: var(--bg-body);
-                    ">
-                        <input type="checkbox" name="cards[]" value="<?= $id ?>" <?= $checked ?> style="width: 16px; height: 16px; accent-color: var(--primary);">
-                        <div style="
-                            width: 28px; height: 28px; border-radius: 8px; 
-                            background: <?= $card['bg'] ?>; color: <?= $card['color'] ?>;
-                            display: flex; align-items: center; justify-content: center;
-                        ">
-                            <i data-lucide="<?= $card['icon'] ?>" style="width: 16px;"></i>
-                        </div>
-                        <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-main);"><?= $card['title'] ?></span>
-                    </label>
-                    <?php 
-                            endforeach;
-                        endif; 
-                    ?>
-                </div>
-                
-                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border-color);">
-                    <button type="button" onclick="closeDashboardCustomization()" style="
-                        padding: 10px 20px; border: 1px solid var(--red-300); 
-                        background: var(--red-50); border-radius: 8px; cursor: pointer; 
-                        color: var(--red-700); font-weight: 600; transition: all 0.2s;
-                    " onmouseover="this.style.background='var(--red-100)'" onmouseout="this.style.background='var(--red-50)'">Cancelar</button>
-                    <button type="submit" style="
-                        padding: 10px 20px; background: var(--primary); 
-                        color: white; border: none; border-radius: 8px; 
-                        cursor: pointer; font-weight: 600; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                    ">Salvar Alterações</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <?php require_once __DIR__ . '/modals/dashboard-modal.php'; ?>
 
     <!-- MODAL DETALHES NOTIFICAÇÃO -->
-    <div id="notificationDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3050; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
-        <div style="background: var(--bg-surface); border-radius: 16px; width: 90%; max-width: 500px; box-shadow: var(--shadow-lg); animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; display: flex; flex-direction: column;">
-            <div style="padding: 16px 20px; border-bottom: 0px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
-                <h3 style="margin: 0; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Notificação</h3>
-                <button onclick="closeNotificationDetail()" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted); display: flex;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            <div style="padding: 0 24px 24px 24px;">
-                <div style="display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start;">
-                    <div id="notifDetailIcon" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"></div>
-                    <div>
-                        <h4 id="notifDetailTitle" style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main); line-height: 1.3;"></h4>
-                        <span id="notifDetailDate" style="font-size: 0.85rem; color: var(--text-muted);"></span>
-                    </div>
-                </div>
-                <div style="background: var(--bg-body); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                    <div id="notifDetailMessage" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main); white-space: pre-wrap;"></div>
-                </div>
-                <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                     <button onclick="closeNotificationDetail()" style="padding: 12px 24px; border: 1px solid var(--border-color); background: transparent; border-radius: 10px; cursor: pointer; color: var(--text-main); font-weight: 600;">Fechar</button>
-                     <a id="notifDetailLink" href="#" style="padding: 12px 24px; background: var(--primary); color: white; border-radius: 10px; text-decoration: none; font-weight: 600; display: none; align-items: center; gap: 8px; box-shadow: var(--shadow-sm);">
-                        Ver Completo <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                     </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php require_once __DIR__ . '/modals/notification-modal.php'; ?>
 
-    <script>
-        function openDashboardCustomization() {
-            const modal = document.getElementById('dashboardCustomizationModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                // Reiniciar Lucide icons se necess+írio
-                if (window.lucide) lucide.createIcons();
-            }
-        }
 
-        function closeDashboardCustomization() {
-            const modal = document.getElementById('dashboardCustomizationModal');
-            if (modal) modal.style.display = 'none';
-        }
-
-        document.getElementById('dashboardCustomizationForm')?.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const btnSubmit = this.querySelector('button[type="submit"]');
-            const originalText = btnSubmit.textContent;
-            btnSubmit.textContent = 'Salvando...';
-            btnSubmit.disabled = true;
-            
-            const formData = new FormData(this);
-            const selectedCards = [];
-            
-            formData.getAll('cards[]').forEach((id, index) => {
-                selectedCards.push({
-                    card_id: id,
-                    is_visible: true,
-                    display_order: index + 1
-                });
-            });
-            
-            // Determinar API URL correto
-            const isAdmin = window.location.pathname.includes('/admin/');
-            const apiUrl = isAdmin ? 'api/save_dashboard_settings.php' : 'admin/api/save_dashboard_settings.php';
-            
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ cards: selectedCards })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    location.reload();
-                } else {
-                    alert('Erro ao salvar: ' + (result.message || 'Erro desconhecido'));
-                    btnSubmit.textContent = originalText;
-                    btnSubmit.disabled = false;
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Erro na comunica+º+úo com o servidor.');
-                btnSubmit.textContent = originalText;
-                btnSubmit.disabled = false;
-            }
-        });
-        
-        // Close on click outside
-        document.getElementById('dashboardCustomizationModal')?.addEventListener('click', function(e) {
-            if (e.target === this) closeDashboardCustomization();
-        });
-    </script>
 
 
         <!-- Notifications Script -->

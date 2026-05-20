@@ -1,27 +1,33 @@
 /* ==========================================================================
    APP MAIN CSS - Ponto de Entrada Central
-   Design System V2 - Minimalista + Toques de Cor
-   ORDEM CORRETA: Legacy primeiro → Design System sobrescreve → Pages por último
+   Design System V3 - Milestone 2 Rebuild
+   ORDEM: Design System → Reset → Legacy (compat) → Components → Pages
    ========================================================================== */
 
 /* =====================
-   1. LEGACY (Carregado PRIMEIRO para ser sobrescrito)
+   1. DESIGN SYSTEM UNIFICADO (Fonte única de variáveis)
+   Deve vir PRIMEIRO para que todas as var() estejam definidas
    ===================== */
-@import url('legacy-style.css');
+@import url('design-system.css');
+
+/* =====================
+   2. CORE (Reset + Utilities)
+   variables.css removido — absorvido pelo design-system.css
+   ===================== */
+@import url('core/reset.css');
+@import url('core/utilities.css');
+
+/* =====================
+   3. LEGACY (Mantido temporariamente para compatibilidade)
+   Será removido progressivamente nas próximas fases
+   ===================== */
 @import url('modern-enhancements.css');
 @import url('roles.css');
 
 /* =====================
-   2. CORE (Base do Design System)
+   4. COMPONENTS (Reutilizáveis)
    ===================== */
-@import url('core/reset.css');
-@import url('core/variables.css');
-@import url('core/utilities.css');
-
-/* =====================
-   3. COMPONENTS (Reutilizáveis)
-   ===================== */
-@import url('components/header-complete.css?v=20260215161530');
+@import url('components/header-complete.css');
 @import url('components/buttons.css');
 @import url('components/cards.css');
 @import url('components/notifications.css');
@@ -35,9 +41,11 @@
 @import url('components/timeline-cards.css');
 @import url('components/animations.css');
 @import url('components/tables.css');
+@import url('components/layout.css');
+@import url('components/action-buttons.css');
 
 /* =====================
-   4. PAGES (Última prioridade - mais específico)
+   5. PAGES (Última prioridade — mais específico)
    ===================== */
 @import url('pages/dashboard.css');
 @import url('pages/escalas.css');
@@ -46,3 +54,10 @@
 @import url('pages/evento-detalhe.css');
 @import url('pages/repertorio.css');
 @import url('pages/lider.css');
+@import url('pages/list-views.css');
+
+/* =====================
+   6. THEME & DARK MODE (Última camada — overrides finais)
+   ===================== */
+@import url('theme-premium.css');
+@import url('dark-mode.css');

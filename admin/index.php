@@ -105,32 +105,26 @@ $categoryNames = [
     <!-- HEADER PREMIUM -->
     <div style="margin-bottom: var(--space-lg); display: flex; align-items: center; justify-content: space-between;" class="animate-card">
         <div>
-            <h2 style="font-size: 1.5rem; font-weight: 800; margin: 0;"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>!</h2>
-            <p style="color: var(--color-text-muted); font-size: 0.9rem; margin: 0;">Bem-vindo ao Painel <?= $userRole === 'admin' ? 'do Líder' : 'do Músico' ?></p>
+            <h2 style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); margin: 0; color: var(--text-primary);"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>!</h2>
+            <p style="color: var(--text-muted); font-size: var(--font-size-sm); margin: 0;">Bem-vindo ao Painel <?= $userRole === 'admin' ? 'do Líder' : 'do Músico' ?></p>
         </div>
         <a href="perfil.php">
-            <img src="<?= $userPhoto ?>" style="width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--color-primary); object-fit: cover; box-shadow: var(--shadow-md);">
+            <img src="<?= $userPhoto ?>" style="width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-md);">
         </a>
     </div>
 
     <!-- BADGE: Sugestões de Música Pendentes (admin only) -->
     <?php if ($pendingSuggestions > 0 && $_SESSION['user_role'] === 'admin'): ?>
-    <a href="sugestoes_musicas.php" style="
-        display:flex;align-items:center;gap:10px;
-        padding:12px 16px;margin-bottom:var(--space-md);
-        background:#fff7ed;border:1.5px solid #f97316;border-radius:12px;
-        text-decoration:none;color:#92400e;">
-        <span style="background:#f97316;color:#fff;font-size:.75rem;font-weight:800;
-                     padding:3px 9px;border-radius:20px;">
-            <?= $pendingSuggestions ?>
-        </span>
-        <span style="font-size:.875rem;font-weight:600;">
-            sugestão<?= $pendingSuggestions > 1 ? 'ões' : '' ?> de música pendente<?= $pendingSuggestions > 1 ? 's' : '' ?>
-        </span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-             fill="none" stroke="#f97316" stroke-width="2" style="margin-left:auto;">
-            <polyline points="9 18 15 12 9 6"/>
-        </svg>
+    <a href="sugestoes_musicas.php" class="pib-card" style="border-left: 5px solid var(--orange-500); margin-bottom: var(--space-md); flex-direction: row; align-items: center; justify-content: space-between; padding: var(--space-md);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="pib-badge" style="background: var(--orange-500); color: white;">
+                <?= $pendingSuggestions ?>
+            </span>
+            <span style="font-size: var(--text-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary);">
+                sugestão<?= $pendingSuggestions > 1 ? 'ões' : '' ?> de música pendente<?= $pendingSuggestions > 1 ? 's' : '' ?>
+            </span>
+        </div>
+        <i data-lucide="chevron-right" style="color: var(--orange-500); width: 18px;"></i>
     </a>
     <?php endif; ?>
 
@@ -143,15 +137,13 @@ $categoryNames = [
     } catch (Exception $e) {}
     if ($weeklyVerse):
     ?>
-    <div style="margin-bottom: var(--space-md); padding: 16px 18px; background: linear-gradient(135deg, #fdf4ff 0%, #faf5ff 100%); border: 1.5px solid #c084fc; border-radius: 14px; position: relative;">
+    <div class="pib-card" style="border-left: 5px solid var(--lavender-600); margin-bottom: var(--space-md); background: var(--color-surface);">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-            <span style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#7c3aed;">Versículo da Semana</span>
+            <i data-lucide="book" style="color: var(--lavender-600); width: 18px;"></i>
+            <span style="font-size: 0.7rem; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lavender-600);">Versículo da Semana</span>
         </div>
-        <p style="margin:0 0 6px;font-size:.95rem;font-weight:700;color:#581c87;line-height:1.4;"><?= htmlspecialchars($weeklyVerse['title']) ?></p>
-        <p style="margin:0;font-size:.82rem;color:#6b21a8;line-height:1.5;font-style:italic;"><?= nl2br(htmlspecialchars($weeklyVerse['message'])) ?></p>
+        <p style="margin:0 0 6px; font-size: 0.95rem; font-weight: var(--font-weight-bold); color: var(--text-primary); line-height: 1.4;"><?= htmlspecialchars($weeklyVerse['title']) ?></p>
+        <p style="margin:0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; font-style: italic;"><?= nl2br(htmlspecialchars($weeklyVerse['message'])) ?></p>
     </div>
     <?php endif; ?>
 
@@ -171,21 +163,19 @@ $categoryNames = [
     } catch (Exception $e) {}
     if (!empty($prayerRequests)):
     ?>
-    <a href="oracao.php" style="display:block;margin-bottom:var(--space-md);padding:14px 16px;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:14px;text-decoration:none;color:inherit;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#dc2626" stroke="none">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-            <span style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#dc2626;">Orando juntos</span>
-            <span style="margin-left:auto;font-size:.7rem;color:#991b1b;font-weight:700;">Ver todos →</span>
+    <a href="oracao.php" class="pib-card" style="border-left: 5px solid var(--red-500); margin-bottom: var(--space-md); text-decoration: none;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <i data-lucide="heart" style="color: var(--red-500); width: 18px; fill: var(--red-500);"></i>
+            <span style="font-size: 0.7rem; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.08em; color: var(--red-600);">Orando juntos</span>
+            <span style="margin-left:auto; font-size: 0.7rem; color: var(--red-500); font-weight: var(--font-weight-semibold);">Ver todos &rarr;</span>
         </div>
         <?php foreach ($prayerRequests as $pr): ?>
-        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid #fecaca;">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--border-subtle);">
             <?php if ($pr['is_urgent']): ?>
-            <span style="font-size:.6rem;font-weight:800;color:#dc2626;">🔥</span>
+            <span style="font-size: 0.8rem; color: var(--red-500);">🔥</span>
             <?php endif; ?>
-            <span style="flex:1;font-size:.85rem;font-weight:600;color:#7f1d1d;"><?= htmlspecialchars($pr['title']) ?></span>
-            <span style="font-size:.7rem;color:#991b1b;"><?= (int)$pr['prayer_count'] ?> 🙏</span>
+            <span style="flex:1; font-size: 0.85rem; font-weight: var(--font-weight-semibold); color: var(--text-primary);"><?= htmlspecialchars($pr['title']) ?></span>
+            <span style="font-size: 0.75rem; color: var(--red-500); font-weight: var(--font-weight-medium);"><?= (int)$pr['prayer_count'] ?> 🙏</span>
         </div>
         <?php endforeach; ?>
     </a>
@@ -228,24 +218,24 @@ try {
 ?>
 <?php if (!empty($upcomingWithPending)): ?>
 <div style="margin: 0 var(--space-md) var(--space-md);">
-    <div class="pib-card" style="border-left: 4px solid #f97316; padding: 16px;">
+    <div class="pib-card" style="border-left: 5px solid var(--orange-500); padding: var(--space-md);">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-            <i data-lucide="bell" width="20" style="color: #f97316;"></i>
-            <span style="font-weight: 800; font-size: 0.95rem;">Lembretes Pendentes</span>
+            <i data-lucide="bell" style="color: var(--orange-500); width: 20px;"></i>
+            <span style="font-weight: var(--font-weight-bold); font-size: 0.95rem; color: var(--text-primary);">Lembretes Pendentes</span>
         </div>
         <?php foreach ($upcomingWithPending as $upcoming): ?>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
             <div>
-                <div style="font-weight: 700; font-size: 0.9rem;"><?= htmlspecialchars($upcoming['event_type']) ?></div>
-                <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+                <div style="font-weight: var(--font-weight-semibold); font-size: 0.9rem; color: var(--text-primary);"><?= htmlspecialchars($upcoming['event_type']) ?></div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
                     <?= date('d/m', strtotime($upcoming['event_date'])) ?> as <?= substr($upcoming['event_time'], 0, 5) ?>
                     &mdash; <?= (int)$upcoming['pending_count'] ?> sem confirmar
                 </div>
             </div>
             <button
                 onclick="sendReminder(<?= (int)$upcoming['id'] ?>, this)"
-                style="background: #f97316; color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; min-height: 44px; white-space: nowrap;">
-                <i data-lucide="send" width="14"></i> Lembrar
+                style="background: var(--orange-500); color: white; border: none; border-radius: var(--radius-sm); padding: 8px 14px; font-weight: var(--font-weight-bold); font-size: 0.8rem; cursor: pointer; min-height: 44px; white-space: nowrap; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="send" style="width: 14px;"></i> Lembrar
             </button>
         </div>
         <?php endforeach; ?>

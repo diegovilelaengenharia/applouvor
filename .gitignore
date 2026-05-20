@@ -52,3 +52,7 @@ includes/*_secret.php
 *.backup
 *.dump
 *.sql.gz
+
+# Backups locais e pastas temporárias pesadas
+site todo/
+site todo/**

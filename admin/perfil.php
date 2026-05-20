@@ -34,6 +34,12 @@ $error = '';
 
 // Processar Formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     // 1. Criar novo usuário (apenas admin)
     if (isset($_POST['create_user'])) {
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
@@ -249,6 +255,7 @@ renderPageHeader($page_title, $page_subtitle);
     <?php endif; ?>
 
     <form method="POST" enctype="multipart/form-data">
+        <?= App\AuthMiddleware::csrfField() ?>
         <?php if ($is_creating_new): ?>
             <input type="hidden" name="create_user" value="1">
         <?php else: ?>

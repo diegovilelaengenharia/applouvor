@@ -19,6 +19,12 @@ try {
 
 // --- LÓGICA DE POST (CRUD) ---
 if ($tableExists && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     if (isset($_POST['action'])) {
         try {
             switch ($_POST['action']) {
@@ -317,6 +323,7 @@ function getComments($pdo, $prayerId) {
                     
                     <?php if ($prayer['user_id'] == $userId && !$prayer['is_answered']): ?>
                     <form method="POST" style="margin: 0;" onclick="event.stopPropagation()">
+                        <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="answered">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
                         <button type="submit" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
@@ -351,6 +358,7 @@ function getComments($pdo, $prayerId) {
                     
                     <!-- Comment Form -->
                     <form method="POST" style="display: flex; gap: 8px; margin-top: 12px;">
+                        <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="comment">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
                         <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: 0.9rem; outline: none;">
@@ -412,6 +420,7 @@ function getComments($pdo, $prayerId) {
         </div>
         
         <form method="POST" id="prayerForm" onsubmit="return preparePrayerSubmit()">
+            <?= App\AuthMiddleware::csrfField() ?>
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="description" id="hiddenDescription">
             
@@ -562,6 +571,14 @@ function getComments($pdo, $prayerId) {
         
         form.appendChild(inputAction);
         form.appendChild(inputId);
+        
+        // Adicionar CSRF token ao form dinâmico
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrf_token';
+        csrfInput.value = '<?= htmlspecialchars($_SESSION["csrf_token"]) ?>';
+        form.appendChild(csrfInput);
+        
         document.body.appendChild(form);
         form.submit();
     }

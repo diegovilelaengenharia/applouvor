@@ -3,6 +3,9 @@
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 require_once 'init_db_suggestions.php';
+require_once '../includes/classes/MusicRepository.php';
+
+$musicRepo = new \App\Repositories\MusicRepository($pdo);
 
 // Filtros e Busca
 $search = $_GET['q'] ?? '';
@@ -104,49 +107,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
         $tagId = $_GET['tag_id'] ?? null;
         $tone = $_GET['tone'] ?? null;
         try {
-            if ($tagId) {
-                // Busca por Tag
-                $sql = "
-                    SELECT s.*, MAX(sch.event_date) as last_played
-                    FROM songs s
-                    JOIN song_tags st ON s.id = st.song_id
-                    LEFT JOIN schedule_songs ss ON ss.song_id = s.id
-                    LEFT JOIN schedules sch ON sch.id = ss.schedule_id
-                    WHERE st.tag_id = :tagId ";
-                 if (!empty($search)) { $sql .= " AND (s.title LIKE :q OR s.artist LIKE :q) "; }
-                $sql .= " GROUP BY s.id ORDER BY s.title ASC LIMIT 50";
-                
-                $stmt = $pdo->prepare($sql);
-                $params = ['tagId' => $tagId];
-                if (!empty($search)) { $params['q'] = "%$search%"; }
-                $stmt->execute($params);
-            } elseif ($tone) {
-                // Busca por Tom
-                $sql = "SELECT s.*, MAX(sch.event_date) as last_played
-                        FROM songs s
-                        LEFT JOIN schedule_songs ss ON ss.song_id = s.id
-                        LEFT JOIN schedules sch ON sch.id = ss.schedule_id
-                        WHERE s.tone = :tone";
-                if (!empty($search)) { $sql .= " AND (s.title LIKE :q OR s.artist LIKE :q) "; }
-                $sql .= " GROUP BY s.id ORDER BY s.title ASC LIMIT 50";
-                
-                $stmt = $pdo->prepare($sql);
-                $params = ['tone' => $tone];
-                if (!empty($search)) { $params['q'] = "%$search%"; }
-                $stmt->execute($params);
-            } else {
-                // Busca Normal
-                $sql = "SELECT s.*, MAX(sch.event_date) as last_played
-                        FROM songs s
-                        LEFT JOIN schedule_songs ss ON ss.song_id = s.id
-                        LEFT JOIN schedules sch ON sch.id = ss.schedule_id
-                        WHERE s.title LIKE :q OR s.artist LIKE :q
-                        GROUP BY s.id
-                        ORDER BY s.title ASC LIMIT 50";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute(['q' => "%$search%"]);
-            }
-            $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $songs = $musicRepo->getSongs($search, $tagId, $tone, 50);
         } catch (Exception $e) {
             $songs = [];
         }
@@ -154,9 +115,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
 
         <!-- Filter Badge for Tag -->
         <?php if ($tagId):
-            $stmtTag = $pdo->prepare("SELECT name, color FROM tags WHERE id = ?");
-            $stmtTag->execute([$tagId]);
-            $currentTag = $stmtTag->fetch(PDO::FETCH_ASSOC);
+            $currentTag = $musicRepo->getTagById($tagId);
         ?>
             <?php if ($currentTag): ?>
                 <div class="active-filter-badge tag-badge" style="--tag-color: <?= $currentTag['color'] ?>;">
@@ -191,9 +150,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
             <?php 
             $delay = 0.1;
             foreach ($songs as $song): 
-                $stmtSongTags = $pdo->prepare("SELECT t.id, t.name, t.color FROM tags t JOIN song_tags st ON t.id = st.tag_id WHERE st.song_id = ? ORDER BY t.name");
-                $stmtSongTags->execute([$song['id']]);
-                $songTags = $stmtSongTags->fetchAll(PDO::FETCH_ASSOC);
+                $songTags = $musicRepo->getSongTags($song['id']);
             ?>
                 <!-- PIB MUSIC CARD -->
                 <div class="animate-card" style="animation-delay: <?= $delay ?>s;">
@@ -273,9 +230,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     <!-- Conteúdo: Pastas (Tags) -->
     <?php if ($tab === 'pastas'):
         try {
-            $sql = "SELECT t.*, COUNT(st.song_id) as count FROM tags t LEFT JOIN song_tags st ON t.id = st.tag_id GROUP BY t.id ORDER BY t.name ASC";
-            $stmt = $pdo->query($sql);
-            $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $tags = $musicRepo->getTagsWithCount();
         } catch (Exception $e) { $tags = []; }
     ?>
         <div class="results-list">
@@ -307,43 +262,19 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     <!-- Conteúdo: Artistas -->
     <?php if ($tab === 'artistas'):
         try {
-            $sql = "SELECT artist as name, COUNT(*) as count FROM songs WHERE artist IS NOT NULL AND artist != '' GROUP BY artist ORDER BY artist ASC";
-            $stmt = $pdo->query($sql);
-            $artists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $artists = $musicRepo->getArtistsWithCount();
         } catch (Exception $e) { $artists = []; }
     ?>
         <div class="results-list">
             <?php foreach ($artists as $artist): 
                 // Buscar tags mais usadas pelo artista
                 try {
-                    $sqlTags = "
-                        SELECT t.name, t.color, COUNT(*) as usage_count
-                        FROM songs s
-                        JOIN song_tags st ON s.id = st.song_id
-                        JOIN tags t ON st.tag_id = t.id
-                        WHERE s.artist = :artist
-                        GROUP BY t.id
-                        ORDER BY usage_count DESC
-                        LIMIT 2
-                    ";
-                    $stmtTags = $pdo->prepare($sqlTags);
-                    $stmtTags->execute(['artist' => $artist['name']]);
-                    $artistTags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+                    $artistTags = $musicRepo->getTopTagsByArtist($artist['name'], 2);
                 } catch (Exception $e) { $artistTags = []; }
                 
                 // Buscar tons mais usados pelo artista
                 try {
-                    $sqlTones = "
-                        SELECT tone, COUNT(*) as usage_count
-                        FROM songs
-                        WHERE artist = :artist AND tone IS NOT NULL AND tone != ''
-                        GROUP BY tone
-                        ORDER BY usage_count DESC
-                        LIMIT 2
-                    ";
-                    $stmtTones = $pdo->prepare($sqlTones);
-                    $stmtTones->execute(['artist' => $artist['name']]);
-                    $artistTones = $stmtTones->fetchAll(PDO::FETCH_ASSOC);
+                    $artistTones = $musicRepo->getTopTonesByArtist($artist['name'], 2);
                 } catch (Exception $e) { $artistTones = []; }
             ?>
                 <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card">
@@ -392,9 +323,7 @@ renderPageHeader('Repertório', 'Gestão de Músicas');
     <!-- Conteúdo: Tons -->
     <?php if ($tab === 'tons'):
         try {
-            $sql = "SELECT tone as name, COUNT(*) as count FROM songs WHERE tone IS NOT NULL AND tone != '' GROUP BY tone ORDER BY tone ASC";
-            $stmt = $pdo->query($sql);
-            $tones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $tones = $musicRepo->getTonesWithCount();
         } catch (Exception $e) { $tones = []; }
     ?>
         <div class="results-grid-2col">

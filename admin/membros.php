@@ -8,6 +8,12 @@ checkLogin();
 
 // --- LÓGICA DE POST ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     if (isset($_POST['action'])) {
         // Backend Validation (RBAC)
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
@@ -236,6 +242,7 @@ renderPageHeader('Equipe', count($users) . ' membros cadastrados');
         </div>
         
         <form method="POST" id="deleteForm" style="margin: 0; width: 100%;">
+            <?= App\AuthMiddleware::csrfField() ?>
             <input type="hidden" name="action" value="delete">
             <input type="hidden" name="id" id="deleteMemberId">
             <button type="submit" class="btn-urgent-action">Sim, Excluir Membro</button>

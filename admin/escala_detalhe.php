@@ -21,14 +21,23 @@ if (!$id) {
     exit;
 }
 
+require_once '../includes/classes/ScheduleRepository.php';
+require_once '../includes/classes/NotificationService.php';
+$scheduleRepo = new \App\Repositories\ScheduleRepository($pdo);
+$notificationService = new \App\Services\NotificationService($pdo);
+
 // --- ENGAGEMENT ACTIONS (Check-in & Comments) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    // Validação CSRF (todas as ações POST precisam de token válido)
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
     
     // Toggle Rehearsal
     if ($_POST['action'] === 'toggle_rehearsal') {
         $newState = $_POST['state'] === '1' ? 1 : 0;
-        $stmt = $pdo->prepare("UPDATE schedule_users SET is_rehearsed = ? WHERE schedule_id = ? AND user_id = ?");
-        $stmt->execute([$newState, $id, $_SESSION['user_id']]);
+        $scheduleRepo->toggleRehearsal($id, $_SESSION['user_id'], $newState);
         header("Location: escala_detalhe.php?id=$id");
         exit;
     }
@@ -37,8 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'add_comment') {
         $comment = trim($_POST['comment']);
         if (!empty($comment)) {
-            $stmt = $pdo->prepare("INSERT INTO schedule_comments (schedule_id, user_id, comment) VALUES (?, ?, ?)");
-            $stmt->execute([$id, $_SESSION['user_id'], $comment]);
+            $scheduleRepo->addComment($id, $_SESSION['user_id'], $comment);
         }
         header("Location: escala_detalhe.php?id=$id#comments");
         exit;
@@ -47,13 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // Delete Comment
     if ($_POST['action'] === 'delete_comment') {
         $cmtId = $_POST['comment_id'];
-        $stmt = $pdo->prepare("SELECT user_id FROM schedule_comments WHERE id = ?");
-        $stmt->execute([$cmtId]);
-        $owner = $stmt->fetchColumn();
-        
-        if ($owner == $_SESSION['user_id'] || $_SESSION['user_role'] === 'admin') {
-            $pdo->prepare("DELETE FROM schedule_comments WHERE id = ?")->execute([$cmtId]);
-        }
+        $scheduleRepo->deleteComment($cmtId, $_SESSION['user_id'], $_SESSION['user_role'] === 'admin');
         header("Location: escala_detalhe.php?id=$id#comments");
         exit;
     }
@@ -61,117 +63,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
 // --- LOGICA DE POST/SALVAR MANTIDA (Admin Only) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     if (isset($_POST['delete_schedule']) && $_SESSION['user_role'] === 'admin') {
         try {
-            $pdo->beginTransaction();
-            $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?")->execute([$id]);
-            $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ?")->execute([$id]);
-            $pdo->prepare("DELETE FROM schedules WHERE id = ?")->execute([$id]);
-            $pdo->commit();
+            $scheduleRepo->deleteSchedule($id);
             header("Location: escalas.php?msg=deleted");
             exit;
         } catch (Exception $e) {
-            $pdo->rollBack();
             die($e->getMessage());
         }
     }
 
     if (isset($_POST['save_changes']) && $_SESSION['user_role'] === 'admin') {
         try {
-            $pdo->beginTransaction();
-            // Atualizar Agenda
-            $notes = $_POST['notes'] ?? '';
-            $stmt = $pdo->prepare("UPDATE schedules SET event_type = ?, event_date = ?, event_time = ?, notes = ? WHERE id = ?");
-            $stmt->execute([$_POST['event_type'], $_POST['event_date'], $_POST['event_time'], $notes, $id]);
+            $data = [
+                'event_type' => $_POST['event_type'],
+                'event_date' => $_POST['event_date'],
+                'event_time' => $_POST['event_time'],
+                'notes'      => $_POST['notes'] ?? ''
+            ];
+            $members = $_POST['members'] ?? [];
+            $songs = $_POST['songs'] ?? [];
             
-            // Atualizar Membros
-            $pdo->prepare("DELETE FROM schedule_users WHERE schedule_id = ?")->execute([$id]);
-            if (!empty($_POST['members'])) {
-                $stmt = $pdo->prepare("INSERT INTO schedule_users (schedule_id, user_id, instrument, status, is_rehearsed) VALUES (?, ?, ?, 'pending', 0)");
-                foreach ($_POST['members'] as $uid => $role) {
-                    $roleToSave = (is_string($role) && !empty($role)) ? $role : null;
-                    if(is_numeric($uid) && $uid > 0) {
-                        try {
-                            $stmt->execute([$id, $uid, $roleToSave]);
-                        } catch (PDOException $e) { }
-                    }
-                }
-            }
-
-            // Atualizar Músicas
-            $pdo->prepare("DELETE FROM schedule_songs WHERE schedule_id = ?")->execute([$id]);
-            if (!empty($_POST['songs'])) {
-                $stmt = $pdo->prepare("INSERT INTO schedule_songs (schedule_id, song_id, position) VALUES (?, ?, ?)");
-                foreach ($_POST['songs'] as $pos => $sid) $stmt->execute([$id, $sid, $pos + 1]);
-            }
-
-            $pdo->commit();
+            $scheduleRepo->updateSchedule($id, $data, $members, $songs);
 
             // Push de convocação (D-03) — dispara após commit bem-sucedido
             try {
-                require_once '../includes/web_push_helper.php';
-                $vapidPublic  = defined('VAPID_PUBLIC_KEY')  ? VAPID_PUBLIC_KEY  : (getenv('VAPID_PUBLIC_KEY')  ?: '');
-                $vapidPrivate = defined('VAPID_PRIVATE_KEY') ? VAPID_PRIVATE_KEY : (getenv('VAPID_PRIVATE_KEY') ?: '');
-                if (!empty($vapidPublic) && !empty($vapidPrivate)) {
-                    // Buscar participantes com status=pending desta escala que tenham subscription
-                    $stmtPushUsers = $pdo->prepare("
-                        SELECT su.user_id, ps.endpoint, ps.p256dh, ps.auth
-                        FROM schedule_users su
-                        JOIN push_subscriptions ps ON ps.user_id = su.user_id
-                        WHERE su.schedule_id = ? AND su.status = 'pending'
-                    ");
-                    $stmtPushUsers->execute([$id]);
-                    $pushTargets = $stmtPushUsers->fetchAll(PDO::FETCH_ASSOC);
-                    if (!empty($pushTargets)) {
-                        $pushHelper = new WebPushHelper($vapidPublic, $vapidPrivate, 'mailto:contato@pibolveira.com');
-                        $eventDate = date('d/m', strtotime($_POST['event_date']));
-                        $eventTime = substr($_POST['event_time'], 0, 5);
-                        $convocPayload = [
-                            'title' => 'Nova Escala',
-                            'body'  => "Voce foi escalado para " . htmlspecialchars($_POST['event_type']) . " em $eventDate as $eventTime. Confirme no app!",
-                            'url'   => '/applouvor/admin/escala_detalhe.php?id=' . (int)$id,
-                        ];
-                        foreach ($pushTargets as $target) {
-                            $sub = ['endpoint' => $target['endpoint'], 'p256dh' => $target['p256dh'], 'auth' => $target['auth']];
-                            $pushHelper->sendNotification($sub, $convocPayload);
-                        }
-                    }
+                $pushTargets = $scheduleRepo->getPendingParticipantsPushSubscriptions($id);
+                if (!empty($pushTargets)) {
+                    $notificationService->sendConvocNotification(
+                        $id,
+                        $_POST['event_type'],
+                        $_POST['event_date'],
+                        $_POST['event_time'],
+                        $pushTargets
+                    );
                 }
             } catch (Exception $pushEx) {
-                // Push falhou — não interrompe o fluxo de salvamento (D-02 fallback)
                 error_log('Push convocação falhou: ' . $pushEx->getMessage());
             }
 
             header("Location: escala_detalhe.php?id=$id&success=1");
             exit;
         } catch (Exception $e) {
-            $pdo->rollBack();
             die($e->getMessage());
         }
     }
 }
 
 // --- BUSCAR DADOS ---
-$stmt = $pdo->prepare("SELECT * FROM schedules WHERE id = ?");
-$stmt->execute([$id]);
-$schedule = $stmt->fetch(PDO::FETCH_ASSOC);
-
+$schedule = $scheduleRepo->getById($id);
 if (!$schedule) die("Escala não encontrada.");
 
 $date = new DateTime($schedule['event_date']);
 $diaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][$date->format('w')];
 
-// Buscar Membros (com Status e is_rehearsed)
-$stmtUsers = $pdo->prepare("
-    SELECT su.*, u.id as user_id, u.name, u.instrument, u.avatar, u.avatar_color,
-           su.instrument as assigned_instrument, su.is_rehearsed
-    FROM schedule_users su 
-    JOIN users u ON su.user_id = u.id 
-    WHERE su.schedule_id = ? 
-    ORDER BY u.name
-");
-$stmtUsers->execute([$id]);
-$team = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
+// Buscar Membros
+$team = $scheduleRepo->getParticipants($id);
 $teamIds = array_column($team, 'user_id');
 
 // Verificar se sou membro desta escala
@@ -184,40 +137,13 @@ foreach($team as $m) {
 }
 
 // Buscar Músicas
-$stmtSongs = $pdo->prepare("
-    SELECT ss.*, s.id as song_id, s.title, s.artist, s.tone, s.bpm, 
-           s.link_letra, s.link_cifra, s.link_audio, s.link_video
-    FROM schedule_songs ss 
-    JOIN songs s ON ss.song_id = s.id 
-    WHERE ss.schedule_id = ? 
-    ORDER BY ss.position
-");
-$stmtSongs->execute([$id]);
-$songs = $stmtSongs->fetchAll(PDO::FETCH_ASSOC);
+$songs = $scheduleRepo->getSongs($id);
 
 // Buscar Comentários
-$stmtComments = $pdo->prepare("
-    SELECT sc.*, u.name, u.avatar, u.avatar_color
-    FROM schedule_comments sc
-    JOIN users u ON sc.user_id = u.id
-    WHERE sc.schedule_id = ?
-    ORDER BY sc.created_at ASC
-");
-$stmtComments->execute([$id]);
-$comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
+$comments = $scheduleRepo->getComments($id);
 
 // Buscar Roteiro de Culto
-$stmtRoteiro = $pdo->prepare("
-    SELECT r.id, r.order_position, r.item_type, r.title,
-           r.song_id, r.custom_tone, r.nota_interna,
-           s.title as song_title, s.artist as song_artist, s.tone as song_tone
-    FROM schedule_roteiro r
-    LEFT JOIN songs s ON s.id = r.song_id
-    WHERE r.schedule_id = ?
-    ORDER BY r.order_position ASC, r.id ASC
-");
-$stmtRoteiro->execute([$id]);
-$roteiro = $stmtRoteiro->fetchAll(PDO::FETCH_ASSOC);
+$roteiro = $scheduleRepo->getRoteiro($id);
 
 // Mapa de custom_tone por song_id (para override nos cards de repertório — ROT-05)
 $customToneMap = [];
@@ -301,6 +227,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
     <?php if ($isEditable): ?>
         <!-- EDIT FORM -->
         <form method="POST" id="editForm" class="edit-mode-section">
+            <?= App\AuthMiddleware::csrfField() ?>
             <input type="hidden" name="save_changes" value="1">
             <div class="edit-mode-header">
                 <i data-lucide="edit" width="20"></i> Editando Escala
@@ -469,6 +396,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             </div>
             
             <form method="POST">
+                <?= App\AuthMiddleware::csrfField() ?>
                 <input type="hidden" name="action" value="toggle_rehearsal">
                 <input type="hidden" name="state" value="<?= $myMemberData['is_rehearsed'] ? '0' : '1' ?>">
                 <button type="submit" class="btn-check-in <?= $myMemberData['is_rehearsed'] ? 'checked' : '' ?>">
@@ -703,6 +631,7 @@ renderAppHeader('Detalhes da Escala', 'escalas.php');
             
             <div class="comment-form-container">
                 <form method="POST">
+                    <?= App\AuthMiddleware::csrfField() ?>
                     <input type="hidden" name="action" value="add_comment">
                     <div class="comment-input-row">
                         <input type="text" name="comment" class="form-input" placeholder="Escreva uma mensagem..." required autocomplete="off">

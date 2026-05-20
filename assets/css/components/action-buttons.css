@@ -1,0 +1,146 @@
+/* ==========================================================================
+   ACTION BUTTONS
+   ========================================================================== */
+
+/* === ACTION BUTTON COLOR SYSTEM === */
+
+/* Gold - Add/Create Actions */
+.btn-action-add {
+    background: #D97706 !important;
+    color: white !important;
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.15);
+    border: none;
+}
+
+.btn-action-add:hover {
+    background: #B45309 !important;
+    box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2);
+}
+
+.btn-action-add:active {
+    transform: scale(0.98);
+}
+
+/* Primary - Save/Apply/Confirm Actions - Follows Theme */
+.btn-action-save {
+    background: var(--primary-600) !important;
+    color: white !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.btn-action-save:hover {
+    background: var(--primary-700) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action-save:active {
+    transform: scale(0.98);
+}
+
+/* Yellow - Cancel/Back Actions */
+.btn-action-cancel {
+    background: #CA8A04 !important;
+    color: white !important;
+    box-shadow: 0 1px 3px rgba(202, 138, 4, 0.15);
+    border: none;
+}
+
+.btn-action-cancel:hover {
+    background: #A16207 !important;
+    box-shadow: 0 2px 4px rgba(202, 138, 4, 0.2);
+}
+
+.btn-action-cancel:active {
+    transform: scale(0.98);
+}
+
+/* Red - Delete/Remove Actions */
+.btn-action-delete {
+    background: #B91C1C !important;
+    color: white !important;
+    box-shadow: 0 1px 3px rgba(185, 28, 28, 0.15);
+    border: none;
+}
+
+.btn-action-delete:hover {
+    background: #991B1B !important;
+    box-shadow: 0 2px 4px rgba(185, 28, 28, 0.2);
+}
+
+.btn-action-delete:active {
+    transform: scale(0.98);
+}
+
+/* Icon-only button variants */
+.btn-icon-add,
+.btn-icon-save,
+.btn-icon-cancel,
+.btn-icon-delete {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .btn-action-add,
+body.dark-mode .btn-action-save,
+body.dark-mode .btn-action-cancel,
+body.dark-mode .btn-action-delete {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* === BUTTONS GENERAL === */
+.btn-hero {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: var(--font-body);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.btn-hero:active {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0.96);
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: var(--font-body);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-outline:active {
+    background: var(--bg-tertiary);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 8px 16px;
+}

@@ -11,6 +11,11 @@ $userId = $_SESSION['user_id'] ?? 1;
 
 // --- LÓGICA DE POST (CRUD) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             // --- DEVOCIONAIS ---
@@ -432,6 +437,7 @@ renderAppHeader('Espiritualidade');
                         <?php if ($dev['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
                         <div class="dev-options" onclick="event.stopPropagation()">
                              <form method="POST" onsubmit="return confirm('Excluir este devocional?');" style="display:inline;">
+                                <?= App\AuthMiddleware::csrfField() ?>
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $dev['id'] ?>">
                                 <button type="submit" style="background:none; border:none; color: var(--text-muted); cursor: pointer; padding: 4px;">
@@ -519,6 +525,7 @@ renderAppHeader('Espiritualidade');
                              <?php if ($comment['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
                             <div style="margin-left: 8px;">
                                 <form method="POST" onsubmit="return confirm('Apagar comentário?');">
+                                    <?= App\AuthMiddleware::csrfField() ?>
                                     <input type="hidden" name="action" value="delete_comment">
                                     <input type="hidden" name="comment_id" value="<?= $comment['id'] ?>">
                                     <button type="submit" style="background: none; border: none; color: var(--rose-400); cursor: pointer;">
@@ -531,6 +538,7 @@ renderAppHeader('Espiritualidade');
                         <?php endforeach; ?>
                         
                         <form method="POST" class="comment-form">
+                            <?= App\AuthMiddleware::csrfField() ?>
                             <input type="hidden" name="action" value="comment">
                             <input type="hidden" name="devotional_id" value="<?= $dev['id'] ?>">
                             <input type="text" name="comment" class="comment-input" placeholder="Escreva um comentário..." required>
@@ -620,6 +628,7 @@ renderAppHeader('Espiritualidade');
                         
                         <?php if ($prayer['user_id'] == $userId && !$prayer['is_answered']): ?>
                         <form method="POST" style="margin: 0;" onclick="event.stopPropagation()">
+                            <?= App\AuthMiddleware::csrfField() ?>
                             <input type="hidden" name="action" value="answer_prayer">
                             <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
                             <button type="submit" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
@@ -669,6 +678,7 @@ renderAppHeader('Espiritualidade');
             </button>
         </div>
         <form method="POST" id="devotionalForm" onsubmit="return prepareSubmit()">
+            <?= App\AuthMiddleware::csrfField() ?>
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="content" id="hiddenContent">
             
@@ -743,6 +753,7 @@ renderAppHeader('Espiritualidade');
             </button>
         </div>
         <form method="POST">
+            <?= App\AuthMiddleware::csrfField() ?>
             <input type="hidden" name="action" value="create_prayer">
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Título do Pedido</label>

@@ -71,7 +71,7 @@
 /* === COMUNICAÇÃO BADGES (Amarelo Vibrante) === */
 .badge-comunicacao,
 .badge-yellow,
-.badge-lavender {
+.badge-teal {
     background: var(--yellow-100);
     color: var(--yellow-700);
     border: 1px solid var(--yellow-300);
@@ -88,7 +88,7 @@
 
 .badge-comunicacao-solid,
 .badge-yellow-solid,
-.badge-lavender-solid {
+.badge-teal-solid {
     background: var(--yellow-600);
     color: white;
     border: none;

@@ -10,6 +10,11 @@ $notificationSystem = new NotificationSystem($pdo);
 
 // Processar Salvamento de Preferências
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_preferences') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
     try {
         $preferences = $_POST['prefs'] ?? [];
         
@@ -325,6 +330,7 @@ renderPageHeader('Gestor de Notificações', 'Louvor PIB Oliveira');
             
             <div style="padding: 20px; overflow-y: auto; flex: 1;">
                 <form id="notificationPrefsForm" method="POST">
+                    <?= App\AuthMiddleware::csrfField() ?>
                     <input type="hidden" name="action" value="save_preferences">
                     
                     <?php foreach ($notificationTypes as $category => $types): ?>

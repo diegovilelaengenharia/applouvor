@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sem Conexão | APP Louvor</title>
+    <!-- Usa o CSS em cache se disponível -->
+    <link rel="stylesheet" href="/assets/css/core/variables.css">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #0f172a; /* Slate 900 fallback */
+            background-color: var(--color-background, #0f172a);
+            color: #f8fafc;
+            color: var(--color-text, #f8fafc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+        .offline-container {
+            max-width: 400px;
+            background: #1e293b;
+            background: var(--color-surface, #1e293b);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            color: #64748b;
+            color: var(--color-text-muted, #64748b);
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        p {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            color: var(--color-text-secondary, #94a3b8);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .btn-retry {
+            display: inline-block;
+            background: #10b981;
+            background: var(--color-primary, #10b981);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: opacity 0.2s;
+        }
+        .btn-retry:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <!-- SVG Wi-Fi Off -->
+        <svg class="offline-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 00-12.728 0M12 18v.01M15.536 8.464a5 5 0 010 7.072M8.464 8.464a5 5 0 000 7.072M3 3l18 18" />
+        </svg>
+        
+        <h1>Você está offline</h1>
+        <p>Parece que você perdeu a conexão com a internet. Verifique sua rede e tente novamente.</p>
+        
+        <a href="javascript:window.location.reload();" class="btn-retry">Tentar Novamente</a>
+    </div>
+</body>
+</html>

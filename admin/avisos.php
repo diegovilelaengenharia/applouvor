@@ -12,6 +12,12 @@ $isAdmin = ($_SESSION['user_role'] ?? '') === 'admin';
 
 // --- LÓGICA DE POST (CRUD & REAÇÕES) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validação CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        http_response_code(403);
+        die('Ação não autorizada. Por favor, recarregue a página e tente novamente.');
+    }
+
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'toggle_reaction':
@@ -384,6 +390,7 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
                 <!-- Reactions -->
                 <div class="aviso-reactions">
                     <form method="POST" style="margin:0;">
+                         <?= App\AuthMiddleware::csrfField() ?>
                          <!-- Hidden inputs for preserving filters/search if needed, but for now simple -->
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
@@ -395,6 +402,7 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
                     </form>
                     
                     <form method="POST" style="margin:0;">
+                        <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="confirm">
@@ -426,6 +434,7 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
             </button>
         </div>
         <form method="POST" id="avisoForm">
+            <?= App\AuthMiddleware::csrfField() ?>
             <div class="modal-body">
                 <input type="hidden" name="action" value="create" id="formAction">
                 <input type="hidden" name="id" id="avisoId">

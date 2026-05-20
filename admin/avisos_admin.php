@@ -18,6 +18,18 @@ if (!$isAdmin) {
     exit;
 }
 
+// Validação CSRF para requisições POST (diretas ou AJAX com header)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $csrfFromHeader = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+    $csrfFromPost   = $_POST['csrf_token'] ?? null;
+    $csrfToken      = $csrfFromHeader ?? $csrfFromPost;
+    if (!$csrfToken || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+        http_response_code(403);
+        header('Content-Type: application/json');
+        die(json_encode(['error' => 'Ação não autorizada. Token inválido.']));
+    }
+}
+
 // Buscar todas as tags
 $tags = $pdo->query("SELECT * FROM aviso_tags ORDER BY is_default DESC, name ASC")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -85,6 +97,8 @@ renderAppHeader('Gestão de Avisos');
 <link href="../assets/css/pages/avisos.css?v=<?= time() ?>" rel="stylesheet">
 
 <?php renderPageHeader('Central de Gestão de Avisos', 'Admin'); ?>
+<!-- Meta tag CSRF para fetch() AJAX -->
+<meta name="csrf-token" content="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
 <div class="container aviso-admin-container">
     
@@ -410,9 +424,12 @@ renderAppHeader('Gestão de Avisos');
         formData.append('expires_at', document.getElementById('avisoExpires').value);
         formData.append('tags', JSON.stringify(selectedTags));
         
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        
         try {
             const response = await fetch('avisos.php', {
                 method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
                 body: formData
             });
             
@@ -431,9 +448,12 @@ renderAppHeader('Gestão de Avisos');
         formData.append('action', 'delete');
         formData.append('id', id);
         
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        
         try {
             const response = await fetch('avisos.php', {
                 method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
                 body: formData
             });
             
