@@ -7,8 +7,8 @@
 // Carrega autoloader de classes
 require_once __DIR__ . '/autoload.php';
 
-// Carrega variáveis de ambiente do .env
-$dotenv = new App\DotEnv(__DIR__ . '/..');
+// Carrega variáveis de ambiente do .env (na RAIZ do projeto, conforme CLAUDE.md)
+$dotenv = new App\DotEnv(__DIR__ . '/../..');
 $dotenv->load();
 
 // ======================================
@@ -16,7 +16,7 @@ $dotenv->load();
 // ======================================
 // Se o arquivo .env NÃO existir, assumimos que é PRODUÇÃO
 // (pois no local sempre temos o .env, e no servidor é ignorado pelo git)
-$envPath = __DIR__ . '/../.env';
+$envPath = __DIR__ . '/../../.env';
 $isProduction = !file_exists($envPath);
 
 // Debug (opcional, remova se necessário)
