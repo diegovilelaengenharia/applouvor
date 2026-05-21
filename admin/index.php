@@ -36,7 +36,7 @@ renderAppHeader('Dashboard');
         <h3 class="text-lg font-black text-surface-on-surface font-outfit">Aviso Urgente</h3>
         <p class="text-sm font-extrabold text-red-500 mt-1 mb-4"><?= htmlspecialchars($popupAviso['title']) ?></p>
         <div class="text-left bg-surface-container-lowest p-4 rounded-2xl text-xs text-surface-on-surface leading-relaxed max-h-[180px] overflow-y-auto border border-surface-container-highest mb-5">
-            <?= nl2br(htmlspecialchars($popupAviso['message'] ?? '')) ?>
+            <?= nl2br(htmlspecialchars(trim(strip_tags($popupAviso['message'] ?? '')))) ?>
         </div>
         <button onclick="closeUrgentModal()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-extrabold text-sm rounded-xl shadow-md transition-all active:scale-[0.98] cursor-pointer">Entendido</button>
     </div>
@@ -185,9 +185,10 @@ $shortcuts = [
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 space-y-8">
     
     <!-- HEADER HERO PREMIUM DE BOAS-VINDAS (Bento Card Grande - Bloco Sólido Minimalista) -->
-    <div class="reveal-item relative bg-surface-container-low border border-surface-container-highest rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 group shadow-sm">
-        <!-- Decorativo sutil de fundo -->
-        <div class="absolute -right-16 -top-16 w-64 h-64 bg-primary/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
+    <div class="reveal-item relative bg-surface-container-low border border-surface-container-highest rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 group shadow-sm" style="background-image: linear-gradient(135deg, rgba(46,126,237,0.10) 0%, rgba(46,126,237,0) 45%, rgba(255,193,7,0.07) 100%);">
+        <!-- Decorativos sutis de fundo (Worship Blue + Altar Gold) -->
+        <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-700" style="background-color: rgba(46,126,237,0.18);"></div>
+        <div class="absolute -left-20 -bottom-20 w-56 h-56 rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-700" style="background-color: rgba(255,193,7,0.12);"></div>
         
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <!-- Bloco Info Usuário (Esquerda) -->
@@ -195,7 +196,7 @@ $shortcuts = [
                 <div class="relative flex-shrink-0">
                     <div class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-surface-container-highest shadow-sm">
                         <a href="perfil.php" class="block w-full h-full">
-                            <img src="<?= $userPhoto ?>" alt="Avatar" class="w-full h-full object-cover">
+                            <img src="<?= htmlspecialchars($userPhoto) ?>" alt="Foto de <?= htmlspecialchars($userName) ?>" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($userName) ?>&background=2E7EED&color=fff&bold=true';">
                         </a>
                     </div>
                 </div>
@@ -279,8 +280,12 @@ $shortcuts = [
                                 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-[10px]"><?= htmlspecialchars($quando) ?></span>
                             </div>
                             <div class="font-body-md text-body-md font-semibold text-on-surface"><?= htmlspecialchars($av['title'] ?? '') ?></div>
-                            <?php if (!empty($av['message'])): ?>
-                                <p class="font-body-md text-on-surface-variant mt-0.5 text-xs line-clamp-2 leading-relaxed"><?= htmlspecialchars($av['message']) ?></p>
+                            <?php
+                            // Avisos vêm de editor WYSIWYG (HTML). Limpamos as tags para a prévia em texto puro.
+                            $avisoPreview = trim(preg_replace('/\s+/', ' ', strip_tags($av['message'] ?? '')));
+                            ?>
+                            <?php if ($avisoPreview !== ''): ?>
+                                <p class="font-body-md text-on-surface-variant mt-0.5 text-xs line-clamp-2 leading-relaxed"><?= htmlspecialchars($avisoPreview) ?></p>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
