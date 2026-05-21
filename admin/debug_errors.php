@@ -1,46 +1,40 @@
 <?php
-// admin/debug_errors.php - Verificador de arquivos físicos
+// admin/debug_errors.php - Verificar deploy + admin/index.php response
 header('Content-Type: text/plain; charset=utf-8');
 
 $base = '/home/u884436813/domains/vilela.eng.br/public_html/applouvor/';
 
-$files = [
-    'src/layout/modals/dashboard-modal.php',
-    'src/layout/modals/notification-modal.php',
-    'src/config/config.php',
-    'src/config/db.php',
-    'src/config/autoload.php',
-    'src/helpers/auth.php',
-    'src/classes/DB.php',
-    'src/classes/DotEnv.php',
-    'assets/css/main.css',
-    'assets/js/main.js',
-];
-
-echo "=== VERIFICADOR DE ARQUIVOS (PARTE 2) ===\n";
-echo "Base: $base\n\n";
-foreach ($files as $f) {
-    $full = $base . $f;
-    $exists = file_exists($full);
-    $size   = $exists ? filesize($full) . ' bytes' : 'N/A';
-    $status = $exists ? "OK ($size)" : "!!! AUSENTE !!!";
-    echo "$f => $status\n";
-}
-
-// Verificar hash do último commit no servidor
-echo "\n=== GIT STATUS ===\n";
-$gitMsg = $base . '.git/COMMIT_EDITMSG';
-if (file_exists($gitMsg)) {
-    echo "Último commit msg: " . file_get_contents($gitMsg) . "\n";
-}
+echo "=== GIT HEAD ===\n";
 $gitHead = $base . '.git/refs/heads/main';
 if (file_exists($gitHead)) {
-    echo "HEAD main hash: " . file_get_contents($gitHead) . "\n";
+    echo "HEAD main hash no servidor: " . trim(file_get_contents($gitHead)) . "\n";
+    echo "HEAD esperado (local):      93650d8c1d158c... (ver acima)\n";
+} else {
+    echo ".git/COMMIT_EDITMSG não encontrado!\n";
 }
 
-// Erro fatal do admin/index.php - testar redirecionamento
-echo "\n=== TESTE HTTP SELF ===\n";
-echo "PHP_SELF: " . $_SERVER['PHP_SELF'] . "\n";
-echo "HTTP_HOST: " . ($_SERVER['HTTP_HOST'] ?? 'N/A') . "\n";
+echo "\n=== LENDO admin/index.php (primeiras 20 linhas) ===\n";
+$adminFile = $base . 'admin/index.php';
+if (file_exists($adminFile)) {
+    $lines = file($adminFile);
+    for ($i = 0; $i < min(20, count($lines)); $i++) {
+        echo ($i+1) . ": " . $lines[$i];
+    }
+    echo "\n... total: " . count($lines) . " linhas\n";
+} else {
+    echo "!!! admin/index.php NAO EXISTE !!!\n";
+}
+
+echo "\n=== LENDO src/layout/layout.php (linha 24) ===\n";
+$layoutFile = $base . 'src/layout/layout.php';
+if (file_exists($layoutFile)) {
+    $lines = file($layoutFile);
+    echo "Linha 24: " . ($lines[23] ?? 'não encontrada') . "\n";
+    echo "Versão do arquivo: ";
+    // Buscar "require_once" na área relevante
+    for ($i = 20; $i < min(30, count($lines)); $i++) {
+        echo ($i+1) . ": " . $lines[$i];
+    }
+}
 
 echo "\n=== FIM ===\n";
