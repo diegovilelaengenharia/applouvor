@@ -1,7 +1,9 @@
 <?php
 // admin/membro_detalhe.php
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkAdmin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 if (!isset($_GET['id'])) {
     header('Location: membros.php');

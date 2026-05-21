@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/exportar_musicas.php
 // Exportar músicas para Excel
 
-require_once '../includes/db.php';
+require_once '../src/config/db.php';
 
 // Buscar todas as músicas
 $stmt = $pdo->query("SELECT * FROM songs ORDER BY title ASC");

@@ -1,9 +1,9 @@
 <?php
 // admin/avisos.php - Redesign com visual roxo moderno e Reações
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/notification_system.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/notification_system.php';
 
 checkLogin();
 
@@ -218,39 +218,50 @@ foreach ($avisos as &$aviso) {
         WHERE atr.aviso_id = ?
     ");
     $stmt->execute([$aviso['id']]);
-    $aviso['tags'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    $aviso['tags'] = $stmt->fetchAll(PDO::FETCH_ASSOC);<?php renderAppHeader('Avisos'); ?>
 
-renderAppHeader('Avisos');
-renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
-?>
-
-<!-- Quill CSS -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<link href="../assets/css/pages/avisos.css?v=<?= time() ?>" rel="stylesheet">
-
-<div class="container aviso-container">
+<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 mb-32 space-y-8" id="mural-container">
     
-    <!-- Search and Filter Row -->
-    <div class="search-filter-row">
+    <!-- Hero / Header Section -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1B1F] to-[#2C2E35] text-white p-8 shadow-lg border border-white/10">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#2E7EED]/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-[#FFC107]/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2E7EED]/20 border border-[#2E7EED]/30 text-[#2E7EED] text-xs font-bold uppercase tracking-wider mb-3">
+                    📢 Mural Virtual
+                </span>
+                <h1 class="text-3xl font-extrabold tracking-tight font-sans">Mural de Avisos</h1>
+                <p class="text-gray-400 mt-2 max-w-xl text-sm">Fique por dentro das atualizações, devocionais e avisos importantes da nossa equipe de louvor.</p>
+            </div>
+            
+            <?php if ($isAdmin): ?>
+            <button onclick="openCreateDrawer()" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm shadow-lg active:scale-95 transition-all duration-200">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Novo Comunicado
+            </button>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Header Actions (Search & Filter) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center bg-white p-4 rounded-3xl shadow-sm border border-gray-100">
         <!-- Search Bar -->
-        <div style="flex: 1;">
-            <form method="GET">
+        <div class="relative sm:col-span-2">
+            <form method="GET" class="m-0">
                 <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
                 <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
                 <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
-                <div class="search-wrapper">
-                    <i data-lucide="search" class="search-icon"></i>
-                    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" 
-                           placeholder="Buscar avisos..." class="search-input">
-                </div>
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                <input name="search" value="<?= htmlspecialchars($search) ?>" class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800" placeholder="Buscar avisos ou comunicados..." type="text"/>
             </form>
         </div>
         
         <!-- Filter Dropdown -->
-        <div class="filter-container filter-container-fixed">
-            <button type="button" class="filter-button" id="filterButton" onclick="toggleFilterDropdown()">
-                <span>
+        <div class="relative w-full">
+            <button type="button" class="w-full h-12 px-4 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-2xl text-sm font-semibold text-gray-700 flex items-center justify-between gap-2 transition-colors" id="filterButton" onclick="toggleFilterDropdown()">
+                <span class="flex items-center gap-2">
                     <?php
                         $filterLabels = [
                             'all' => '✨ Todos',
@@ -264,232 +275,243 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
                         echo $filterLabels[$filterType] ?? '✨ Todos';
                     ?>
                 </span>
-                <i data-lucide="chevron-down" class="icon-sm"></i>
+                <span class="material-symbols-outlined text-[20px] text-gray-500">keyboard_arrow_down</span>
             </button>
-            <div class="filter-dropdown" id="filterDropdown">
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'all'])) ?>" 
-                   class="filter-option <?= $filterType === 'all' ? 'active' : '' ?>">
-                    ✨ Todos
-                </a>
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'espiritual'])) ?>" 
-                   class="filter-option <?= $filterType === 'espiritual' ? 'active' : '' ?>">
-                    🙏 Espiritual
-                </a>
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'eventos'])) ?>" 
-                   class="filter-option <?= $filterType === 'eventos' ? 'active' : '' ?>">
-                    🎉 Eventos
-                </a>
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'geral'])) ?>" 
-                   class="filter-option <?= $filterType === 'geral' ? 'active' : '' ?>">
-                    📢 Geral
-                </a>
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'importante'])) ?>" 
-                   class="filter-option <?= $filterType === 'importante' ? 'active' : '' ?>">
-                    ⭐ Importante
-                </a>
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'musica'])) ?>" 
-                   class="filter-option <?= $filterType === 'musica' ? 'active' : '' ?>">
-                    🎵 Música
-                </a>
-                <a href="?<?= http_build_query(array_merge($_GET, ['type' => 'urgente'])) ?>" 
-                   class="filter-option <?= $filterType === 'urgente' ? 'active' : '' ?>">
-                    🚨 Urgente
-                </a>
+            <div class="hidden absolute right-0 left-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 flex-col overflow-hidden divide-y divide-gray-50" id="filterDropdown">
+                <?php foreach ($filterLabels as $key => $label): ?>
+                    <a href="?<?= http_build_query(array_merge($_GET, ['type' => $key])) ?>" class="px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 flex items-center gap-2 transition-colors <?= $filterType === $key ? 'bg-[#2E7EED]/5 text-[#2E7EED] font-bold' : '' ?>">
+                        <?= $label ?>
+                    </a>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
 
-    <!-- Avisos List -->
+    <!-- Timeline Divider -->
+    <div class="flex justify-center items-center py-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-100 px-4 py-1.5 rounded-full">Comunicados Recentes</span>
+    </div>
+
+    <!-- Avisos List (Bento Timeline) -->
     <?php if (empty($avisos)): ?>
-        <div class="empty-state">
-            <i data-lucide="inbox" class="empty-icon"></i>
-            <div class="empty-title">Nenhum aviso encontrado</div>
-            <div class="empty-message">
-                <?= !empty($search) ? 'Tente ajustar sua busca' : 'Não há avisos no momento' ?>
-            </div>
+        <div class="bg-gray-50 border border-dashed border-gray-200 rounded-3xl p-12 text-center">
+            <span class="material-symbols-outlined text-5xl text-gray-300 mb-3" style="font-variation-settings: 'FILL' 1;">inbox</span>
+            <h4 class="text-lg font-bold text-gray-800 mb-1">Nenhum aviso encontrado</h4>
+            <p class="text-sm text-gray-500 mb-6"><?= !empty($search) ? 'Tente ajustar os termos da sua busca.' : 'Não há avisos registrados no momento.' ?></p>
         </div>
     <?php else: ?>
-        <?php foreach ($avisos as $aviso): ?>
-            <div class="aviso-card <?= $aviso['priority'] ?>">
-                <!-- Header -->
-                <!-- Header -->
-                <div class="aviso-header">
-                    <?php 
-                        $avatarPath = $aviso['author_avatar'];
-                        if ($avatarPath && !filter_var($avatarPath, FILTER_VALIDATE_URL) && strpos($avatarPath, 'data:') !== 0) {
-                            // Se não for URL completa nem base64, e não começar com /, adiciona ../ já que estamos em /admin
-                            if (strpos($avatarPath, '/') !== 0) {
-                                $avatarPath = '../' . $avatarPath;
+        <div class="space-y-6">
+        <?php foreach ($avisos as $aviso): 
+            $isMe = ($aviso['created_by'] == $userId);
+            
+            // Setup priority design - STRICT PURPLE BAN
+            $cardBorder = 'border border-gray-100';
+            $leftAccent = '';
+            
+            if ($aviso['priority'] === 'urgent') {
+                $cardBorder = 'border-2 border-[#FFC107]';
+                $leftAccent = 'border-l-4 border-l-[#FFC107]';
+            } elseif ($aviso['priority'] === 'important') {
+                $cardBorder = 'border border-[#2E7EED]/30';
+                $leftAccent = 'border-l-4 border-l-[#2E7EED]';
+            }
+        ?>
+            <!-- Bento Announcement Card -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 <?= $cardBorder ?> <?= $leftAccent ?> relative group">
+                
+                <!-- Card Header -->
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <!-- Avatar -->
+                        <?php 
+                            $avatarPath = $aviso['author_avatar'];
+                            if ($avatarPath && !filter_var($avatarPath, FILTER_VALIDATE_URL) && strpos($avatarPath, 'data:') !== 0) {
+                                if (strpos($avatarPath, '/') !== 0) { $avatarPath = '../' . $avatarPath; }
                             }
-                        }
-                    ?>
-                    <?php if (!empty($avatarPath)): ?>
-                        <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($aviso['author_name']) ?>" class="aviso-avatar">
-                    <?php else: ?>
-                        <div class="aviso-avatar-placeholder">
-                            <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <div class="aviso-author-info">
-                        <div class="aviso-author-name"><?= htmlspecialchars($aviso['author_name'] ?? 'Administrador') ?></div>
-                        <div class="aviso-meta">
-                            <span><?= date('d/m/Y', strtotime($aviso['created_at'])) ?></span>
-                            <span>•</span>
-                            <span class="priority-badge <?= $aviso['priority'] ?>">
-                                <?= $aviso['priority'] === 'urgent' ? '🚨 Urgente' : ($aviso['priority'] === 'important' ? '⭐ Importante' : '📌 Normal') ?>
-                            </span>
+                        ?>
+                        <?php if (!empty($avatarPath)): ?>
+                            <img src="<?= htmlspecialchars($avatarPath) ?>" alt="Avatar" class="w-10 h-10 rounded-full object-cover shadow-sm shrink-0">
+                        <?php else: ?>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#2E7EED]/10 to-[#2E7EED]/20 text-[#2E7EED] flex items-center justify-center font-bold text-sm shrink-0">
+                                <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <div>
+                            <div class="text-sm font-bold text-gray-800"><?= htmlspecialchars($aviso['author_name'] ?? 'Administrador') ?></div>
+                            <div class="text-xs text-gray-400"><?= date('d/m/Y \à\s H:i', strtotime($aviso['created_at'])) ?></div>
                         </div>
                     </div>
 
-                    <?php if ($isAdmin): ?>
-                        <div class="aviso-dropdown">
-                            <button class="dropdown-toggle" onclick="toggleDropdown(this)">
-                                <i data-lucide="more-vertical" style="width: 18px;"></i>
+                    <!-- Badges -->
+                    <div class="flex items-center gap-2">
+                        <?php if ($aviso['priority'] === 'urgent'): ?>
+                            <span class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider bg-[#FFC107]/10 text-[#D97706] px-2.5 py-1 rounded-full">🚨 Urgente</span>
+                        <?php elseif ($aviso['priority'] === 'important'): ?>
+                            <span class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider bg-[#2E7EED]/10 text-[#2E7EED] px-2.5 py-1 rounded-full">⭐ Importante</span>
+                        <?php endif; ?>
+                        
+                        <!-- Admin Action Trigger -->
+                        <?php if ($isAdmin): ?>
+                        <div class="relative shrink-0">
+                            <button class="p-1 rounded-full hover:bg-gray-100 text-gray-400 admin-dropdown-btn active:scale-90 transition-all" onclick="toggleAdminMenu('admin-menu-<?= $aviso['id'] ?>', event)">
+                                <span class="material-symbols-outlined text-[20px]">more_vert</span>
                             </button>
-                            <div class="dropdown-menu">
-                                <button class="dropdown-item" onclick="editAviso(<?= $aviso['id'] ?>)">
-                                    <i data-lucide="edit" style="width: 16px;"></i>
-                                    Editar
+                            
+                            <!-- Admin Dropdown Menu (Sacred style) -->
+                            <div id="admin-menu-<?= $aviso['id'] ?>" class="hidden absolute right-0 mt-1 w-36 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden divide-y divide-gray-50">
+                                <button onclick="editAviso(<?= htmlspecialchars(json_encode($aviso)) ?>)" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-xs font-semibold text-gray-700 flex items-center gap-2 transition-colors">
+                                    <span class="material-symbols-outlined text-[16px]">edit</span> Editar
                                 </button>
-                                <form method="POST" style="margin: 0;">
+                                <form method="POST" class="m-0 w-full">
+                                    <?= App\AuthMiddleware::csrfField() ?>
                                     <input type="hidden" name="action" value="archive">
                                     <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" class="dropdown-item">
-                                        <i data-lucide="archive" style="width: 16px;"></i>
-                                        Arquivar
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-xs font-semibold text-gray-700 flex items-center gap-2 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">archive</span> Arquivar
                                     </button>
                                 </form>
-                                <form method="POST" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja deletar este aviso?')">
+                                <form method="POST" class="m-0 w-full" onsubmit="return confirm('Tem certeza que deseja deletar este aviso?')">
+                                    <?= App\AuthMiddleware::csrfField() ?>
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" class="dropdown-item danger">
-                                        <i data-lucide="trash-2" style="width: 16px;"></i>
-                                        Deletar
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-xs font-semibold text-red-600 flex items-center gap-2 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">delete</span> Deletar
                                     </button>
                                 </form>
                             </div>
                         </div>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
-                <!-- Body -->
-                <div class="aviso-body">
-                    <div class="aviso-title"><?= htmlspecialchars($aviso['title']) ?></div>
-                    <div class="aviso-message"><?= nl2br(htmlspecialchars($aviso['message'])) ?></div>
-                    
-                    <?php if (!empty($aviso['tags'])): ?>
-                        <div class="aviso-tags">
-                            <?php foreach ($aviso['tags'] as $tag): ?>
-                                <span class="aviso-tag"><?= htmlspecialchars($tag['name']) ?></span>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
+                <!-- Card Content -->
+                <div class="mt-4 space-y-3">
+                    <h3 class="text-lg font-bold text-gray-900 leading-tight"><?= htmlspecialchars($aviso['title']) ?></h3>
+                    <p class="text-gray-600 text-sm whitespace-pre-wrap break-words font-sans"><?= htmlspecialchars($aviso['message']) ?></p>
                 </div>
+                
+                <!-- Tags -->
+                <?php if (!empty($aviso['tags'])): ?>
+                    <div class="flex flex-wrap gap-1.5 mt-4">
+                        <?php foreach ($aviso['tags'] as $tag): ?>
+                            <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider text-[#2E7EED] bg-[#2E7EED]/5 px-2.5 py-0.5 rounded-full">#<?= htmlspecialchars($tag['name']) ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
 
-                <!-- Reactions -->
-                <div class="aviso-reactions">
-                    <form method="POST" style="margin:0;">
-                         <?= App\AuthMiddleware::csrfField() ?>
-                         <!-- Hidden inputs for preserving filters/search if needed, but for now simple -->
+                <!-- Elastic Reactions Footer -->
+                <div class="flex items-center gap-4 mt-6 pt-4 border-t border-gray-50">
+                    <form method="POST" class="m-0">
+                        <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="like">
-                        <button type="submit" class="reaction-btn <?= $aviso['user_reacted']['like'] ? 'active like' : '' ?>">
-                            <i data-lucide="heart" width="16" fill="<?= $aviso['user_reacted']['like'] ? 'currentColor' : 'none' ?>"></i>
-                            Curtir <span class="reaction-count"><?= $aviso['reactions']['like'] ?: '' ?></span>
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['like'] ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
+                            <span class="material-symbols-outlined text-[18px]" style="<?= $aviso['user_reacted']['like'] ? 'font-variation-settings: \'FILL\' 1;' : '' ?>">favorite</span>
+                            <span><?= $aviso['reactions']['like'] ?: 'Curtir' ?></span>
                         </button>
                     </form>
                     
-                    <form method="POST" style="margin:0;">
+                    <form method="POST" class="m-0">
                         <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="confirm">
-                        <button type="submit" class="reaction-btn <?= $aviso['user_reacted']['confirm'] ? 'active confirm' : '' ?>">
-                            <i data-lucide="check-circle" width="16"></i>
-                            Confirmar <span class="reaction-count"><?= $aviso['reactions']['confirm'] ?: '' ?></span>
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['confirm'] ? 'bg-emerald-500/10 text-emerald-600' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
+                            <span class="material-symbols-outlined text-[18px]" style="<?= $aviso['user_reacted']['confirm'] ? 'font-variation-settings: \'FILL\' 1;' : '' ?>">check_circle</span>
+                            <span><?= $aviso['reactions']['confirm'] ?: 'Confirmar Leitura' ?></span>
                         </button>
                     </form>
                 </div>
+
             </div>
         <?php endforeach; ?>
+        </div>
     <?php endif; ?>
-</div>
 
-<!-- FAB (Floating Action Button) -->
+</main>
+
+<!-- Floating Admin Trigger for Mobiles -->
 <?php if ($isAdmin): ?>
-    <button class="fab" onclick="openCreateModal()">
-        <i data-lucide="plus"></i>
+<div class="fixed bottom-24 right-6 z-40 sm:hidden">
+    <button onclick="openCreateDrawer()" class="w-14 h-14 rounded-full bg-[#2E7EED] text-white flex items-center justify-center shadow-2xl hover:bg-[#1A6FD6] active:scale-90 transition-all transform duration-200">
+        <span class="material-symbols-outlined text-[24px]">edit_note</span>
     </button>
+</div>
 <?php endif; ?>
 
-<!-- Modal de Criação/Edição -->
-<div id="avisoModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title" id="modalTitle">Novo Aviso</h3>
-            <button class="modal-close" onclick="closeModal()">
-                <i data-lucide="x" style="width: 18px;"></i>
+<!-- Bottom-Sheet Drawer Container -->
+<div id="avisoModal" class="fixed inset-0 bg-[#000]/40 backdrop-blur-sm z-[100] hidden transition-opacity duration-300 opacity-0 flex items-end justify-center" onclick="closeDrawer(event)">
+    
+    <!-- Drawer Panel (slides from bottom) -->
+    <div id="avisoDrawer" class="bg-white w-full max-w-md rounded-t-[32px] shadow-2xl flex flex-col max-h-[90vh] translate-y-full transition-transform duration-300 ease-out" onclick="event.stopPropagation()">
+        
+        <!-- Touch Drag Handle -->
+        <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto my-3 shrink-0"></div>
+        
+        <div class="flex items-center justify-between px-6 pb-4 border-b border-gray-50">
+            <h3 class="text-lg font-bold text-gray-900" id="modalTitle">Novo Aviso</h3>
+            <button onclick="closeDrawerForce()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 text-gray-500 transition-colors">
+                <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
         </div>
-        <form method="POST" id="avisoForm">
+        
+        <form method="POST" id="avisoForm" class="flex flex-col flex-1 overflow-hidden">
             <?= App\AuthMiddleware::csrfField() ?>
-            <div class="modal-body">
+            <div class="p-6 overflow-y-auto space-y-4">
                 <input type="hidden" name="action" value="create" id="formAction">
                 <input type="hidden" name="id" id="avisoId">
                 
-                <div class="form-group">
-                    <label class="form-label">Título</label>
-                    <input type="text" name="title" class="form-input" required id="avisoTitle">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Título</label>
+                    <input type="text" name="title" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 font-sans" required id="avisoTitle" placeholder="Ex: Alteração no repertório de Domingo">
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Mensagem</label>
-                    <textarea name="message" class="form-textarea" required id="avisoMessage"></textarea>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Mensagem</label>
+                    <textarea name="message" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 min-h-[120px] resize-y font-sans" required id="avisoMessage" placeholder="Escreva a sua mensagem aqui..."></textarea>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Prioridade</label>
-                    <select name="priority" class="form-select" id="avisoPriority">
-                        <option value="normal">Normal</option>
-                        <option value="important">Importante</option>
-                        <option value="urgent">Urgente</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Prioridade</label>
+                        <select name="priority" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoPriority">
+                            <option value="normal">Normal</option>
+                            <option value="important">⭐ Importante</option>
+                            <option value="urgent">🚨 Urgente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tipo</label>
+                        <select name="type" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoType">
+                            <option value="geral">Geral</option>
+                            <option value="espiritual">🙏 Espiritual</option>
+                            <option value="eventos">🎉 Eventos</option>
+                            <option value="musica">🎵 Música</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Tipo</label>
-                    <select name="type" class="form-select" id="avisoType">
-                        <option value="geral">Geral</option>
-                        <option value="versiculo">📖 Versículo da Semana</option>
-                        <option value="espiritual">Espiritual</option>
-                        <option value="eventos">Eventos</option>
-                        <option value="musica">Música</option>
-                        <option value="importante">Importante</option>
-                        <option value="urgente">Urgente</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Público-Alvo</label>
-                    <select name="target_audience" class="form-select" id="avisoAudience">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Público-Alvo</label>
+                    <select name="target_audience" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoAudience">
                         <option value="all">Todos</option>
                         <option value="team">Equipe</option>
                         <option value="admins">Administradores</option>
-                        <option value="leaders">Líderes</option>
                     </select>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Data de Expiração (Opcional)</label>
-                    <input type="date" name="expires_at" class="form-input" id="avisoExpires">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Expiração (Opcional)</label>
+                    <input type="date" name="expires_at" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800" id="avisoExpires">
                 </div>
             </div>
             
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Salvar Aviso</button>
+            <div class="p-6 border-t border-gray-50 flex gap-3">
+                <button type="button" class="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-full font-bold text-sm text-gray-700 transition-colors" onclick="closeDrawerForce()">Cancelar</button>
+                <button type="submit" class="flex-1 py-3 px-4 bg-[#2E7EED] text-white rounded-full font-bold text-sm shadow-md hover:bg-[#1A6FD6] transition-colors active:scale-95 transform">Salvar</button>
             </div>
         </form>
     </div>
@@ -499,70 +521,101 @@ renderPageHeader('Mural de Avisos', 'Louvor PIB Oliveira');
     // Toggle Filter Dropdown
     function toggleFilterDropdown() {
         const dropdown = document.getElementById('filterDropdown');
-        const button = document.getElementById('filterButton');
-        dropdown.classList.toggle('show');
-        button.classList.toggle('active');
+        dropdown.classList.toggle('hidden');
+        dropdown.classList.toggle('flex');
     }
 
-    // Toggle Aviso Dropdown
-    function toggleDropdown(btn) {
-        const dropdown = btn.nextElementSibling;
-        const allDropdowns = document.querySelectorAll('.dropdown-menu');
+    // Toggle Admin Menu
+    function toggleAdminMenu(menuId, event) {
+        if (event) event.stopPropagation();
         
-        allDropdowns.forEach(d => {
-            if (d !== dropdown) d.classList.remove('show');
+        // Close others first
+        document.querySelectorAll('.admin-dropdown-btn + div').forEach(m => {
+            if (m.id !== menuId) { m.classList.add('hidden'); }
         });
-        
-        dropdown.classList.toggle('show');
+        const menu = document.getElementById(menuId);
+        if (menu) menu.classList.toggle('hidden');
     }
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', (e) => {
         // Close filter dropdown
-        if (!e.target.closest('.filter-container')) {
+        if (!e.target.closest('#filterButton') && !e.target.closest('#filterDropdown')) {
             const filterDropdown = document.getElementById('filterDropdown');
-            const filterButton = document.getElementById('filterButton');
-            if (filterDropdown) filterDropdown.classList.remove('show');
-            if (filterButton) filterButton.classList.remove('active');
+            if (filterDropdown && !filterDropdown.classList.contains('hidden')) {
+                filterDropdown.classList.add('hidden');
+                filterDropdown.classList.remove('flex');
+            }
         }
         
-        // Close aviso dropdowns
-        if (!e.target.closest('.aviso-dropdown')) {
-            document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+        // Close admin dropdowns
+        if (!e.target.closest('.admin-dropdown-btn') && !e.target.closest('div[id^="admin-menu-"]')) {
+            document.querySelectorAll('div[id^="admin-menu-"]').forEach(m => m.classList.add('hidden'));
         }
     });
 
-    // Modal Functions
-    function openCreateModal() {
+    // Elegant bottom-sheet Drawer functions
+    function openCreateDrawer() {
         document.getElementById('modalTitle').textContent = 'Novo Aviso';
         document.getElementById('formAction').value = 'create';
         document.getElementById('avisoForm').reset();
-        document.getElementById('avisoModal').classList.add('show');
-        lucide.createIcons();
+        
+        showDrawer();
     }
 
-    function editAviso(id) {
-        // Aqui você implementaria a lógica para carregar os dados do aviso
+    function editAviso(aviso) {
         document.getElementById('modalTitle').textContent = 'Editar Aviso';
         document.getElementById('formAction').value = 'update';
-        document.getElementById('avisoId').value = id;
-        document.getElementById('avisoModal').classList.add('show');
-        lucide.createIcons();
+        document.getElementById('avisoId').value = aviso.id;
+        document.getElementById('avisoTitle').value = aviso.title;
+        document.getElementById('avisoMessage').value = aviso.message;
+        document.getElementById('avisoPriority').value = aviso.priority;
+        document.getElementById('avisoType').value = aviso.type;
+        document.getElementById('avisoAudience').value = aviso.target_audience;
+        document.getElementById('avisoExpires').value = aviso.expires_at || '';
+        
+        showDrawer();
     }
 
-    function closeModal() {
-        document.getElementById('avisoModal').classList.remove('show');
+    function showDrawer() {
+        const modal = document.getElementById('avisoModal');
+        const drawer = document.getElementById('avisoDrawer');
+        
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        // Force Reflow
+        modal.offsetHeight;
+        
+        modal.classList.remove('opacity-0');
+        modal.classList.add('opacity-100');
+        
+        drawer.classList.remove('translate-y-full');
+        drawer.classList.add('translate-y-0');
     }
 
-    // Close modal on outside click
-    document.getElementById('avisoModal').addEventListener('click', (e) => {
-        if (e.target.id === 'avisoModal') closeModal();
-    });
+    function closeDrawer(event) {
+        if (event && event.target !== document.getElementById('avisoModal')) return;
+        closeDrawerForce();
+    }
 
-    // Initialize Lucide icons
-    document.addEventListener('DOMContentLoaded', () => {
-        lucide.createIcons();
-    });
+    function closeDrawerForce() {
+        const modal = document.getElementById('avisoModal');
+        const drawer = document.getElementById('avisoDrawer');
+        
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+        
+        drawer.classList.remove('translate-y-0');
+        drawer.classList.add('translate-y-full');
+        
+        // Wait for animation to finish
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 300);
+    }
 </script>
 
 <?php renderAppFooter(); ?>
+

@@ -1,7 +1,9 @@
 <?php
 // admin/musica_editar.php
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // Buscar todas as tags
 $allTags = $pdo->query("SELECT * FROM tags ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -41,6 +43,8 @@ if (!empty($song['custom_fields'])) {
     $customFields = json_decode($song['custom_fields'], true) ?: [];
 }
 
+$errorMessage = null;
+
 // Processar formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validação CSRF
@@ -74,14 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } else {
-        $categoryLegacy = $song['category'];
+        $categoryLegacy = $song['category'] ?? 'Outros';
     }
 
-    // UPDATE - IMPORTANTE: Campos novos (version, streaming) só salvam se existirem no banco.
-    // O código abaixo assume que o usuário rodou as migrations. Se não, campos ignorados silenciosamente ou erro se for PDO estrito.
-    // Removi streaming do UPDATE principal para segurança, e version vou por tentativa.
-
-    // Atualiza campos básicos garantidos
+    // UPDATE - Importante: Fallback se colunas extras não existirem no DB
     $sql = "UPDATE songs SET 
             title = ?, artist = ?, tone = ?, bpm = ?, duration = ?, category = ?,
             link_letra = ?, link_cifra = ?, link_audio = ?, link_video = ?,
@@ -103,25 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $customFieldsJson
     ];
 
-    // Verifica e adiciona versão se enviado (supondo que coluna existe)
-    // Tenta: Se der erro no UPDATE principal por coluna não existir, o usuário precisa rodar migration.
-    // Mas para não quebrar, vamos tentar salvar o básico.
-
-    // Vou incluir version no SQL principal. Se falhar, é porque user não rodou SQL.
-    // Mas para garantir, vou fazer:
     $sql .= ", version = ?";
     $params[] = $_POST['version'] ?? null;
-
-    // Adiciona streaming ao SQL (se user rodou migration funciona, se não, vai dar erro, mas ok, já avisei)
-    // Para evitar erro fatal, vou comentar streaming no UPDATE SQL até o user confirmar, ou deixar e se der erro, ele precisa rodar SQL.
-    // Como ele pediu para inserir, vou assumir responsabilidade de que ele VAI rodar o SQL.
-    /*
-    $sql .= ", link_spotify = ?, link_youtube = ?, link_apple_music = ?, link_deezer = ?";
-    $params[] = $_POST['link_spotify'] ?? null;
-    $params[] = $_POST['link_youtube'] ?? null;
-    $params[] = $_POST['link_apple_music'] ?? null;
-    $params[] = $_POST['link_deezer'] ?? null;
-    */
 
     $sql .= " WHERE id = ?";
     $params[] = $id;
@@ -129,282 +112,426 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
+
+        // Atualizar Tags Relacionadas
+        $pdo->prepare("DELETE FROM song_tags WHERE song_id = ?")->execute([$id]);
+
+        if (!empty($_POST['selected_tags'])) {
+            $stmtTag = $pdo->prepare("INSERT INTO song_tags (song_id, tag_id) VALUES (?, ?)");
+            foreach ($_POST['selected_tags'] as $tagId) {
+                $stmtTag->execute([$id, $tagId]);
+            }
+        }
+
+        header("Location: musica_detalhe.php?id=$id");
+        exit;
     } catch (PDOException $e) {
         // Se der erro de coluna não encontrada (1054), tenta salvar sem os campos novos
         if ($e->getCode() == '42S22') {
-            // Fallback: update apenas campos antigos
-            $fallbackSql = "UPDATE songs SET 
-                title = ?, artist = ?, tone = ?, bpm = ?, duration = ?, category = ?,
-                link_letra = ?, link_cifra = ?, link_audio = ?, link_video = ?,
-                tags = ?, notes = ?, custom_fields = ?
-                WHERE id = ?";
-            $fallbackParams = [
-                $_POST['title'],
-                $_POST['artist'],
-                $_POST['tone'] ?: null,
-                $_POST['bpm'] ?: null,
-                $_POST['duration'] ?: null,
-                $categoryLegacy,
-                $_POST['link_letra'] ?: null,
-                $_POST['link_cifra'] ?: null,
-                $_POST['link_audio'] ?: null,
-                $_POST['link_video'] ?: null,
-                $_POST['tags'] ?: null,
-                $_POST['notes'] ?: null,
-                $customFieldsJson,
-                $id
-            ];
-            $pdo->prepare($fallbackSql)->execute($fallbackParams);
+            try {
+                $fallbackSql = "UPDATE songs SET 
+                    title = ?, artist = ?, tone = ?, bpm = ?, duration = ?, category = ?,
+                    link_letra = ?, link_cifra = ?, link_audio = ?, link_video = ?,
+                    tags = ?, notes = ?, custom_fields = ?
+                    WHERE id = ?";
+                $fallbackParams = [
+                    $_POST['title'],
+                    $_POST['artist'],
+                    $_POST['tone'] ?: null,
+                    $_POST['bpm'] ?: null,
+                    $_POST['duration'] ?: null,
+                    $categoryLegacy,
+                    $_POST['link_letra'] ?: null,
+                    $_POST['link_cifra'] ?: null,
+                    $_POST['link_audio'] ?: null,
+                    $_POST['link_video'] ?: null,
+                    $_POST['tags'] ?: null,
+                    $_POST['notes'] ?: null,
+                    $customFieldsJson,
+                    $id
+                ];
+                $pdo->prepare($fallbackSql)->execute($fallbackParams);
+
+                // Atualizar Tags Relacionadas no fallback
+                $pdo->prepare("DELETE FROM song_tags WHERE song_id = ?")->execute([$id]);
+
+                if (!empty($_POST['selected_tags'])) {
+                    $stmtTag = $pdo->prepare("INSERT INTO song_tags (song_id, tag_id) VALUES (?, ?)");
+                    foreach ($_POST['selected_tags'] as $tagId) {
+                        $stmtTag->execute([$id, $tagId]);
+                    }
+                }
+
+                header("Location: musica_detalhe.php?id=$id&db_legacy=1");
+                exit;
+            } catch (PDOException $ex) {
+                $errorMessage = "Erro ao tentar salvar no modo legado: " . $ex->getMessage();
+            }
         } else {
-            throw $e;
+            $errorMessage = "Erro ao processar atualização no banco de dados: " . $e->getMessage();
         }
-    }
 
-    // Atualizar Tags Relacionadas
-    $pdo->prepare("DELETE FROM song_tags WHERE song_id = ?")->execute([$id]);
-
-    if (!empty($_POST['selected_tags'])) {
-        $stmtTag = $pdo->prepare("INSERT INTO song_tags (song_id, tag_id) VALUES (?, ?)");
-        foreach ($_POST['selected_tags'] as $tagId) {
-            $stmtTag->execute([$id, $tagId]);
+        // UX Robusta: Não perder a digitação em caso de erro real de banco de dados
+        $song = array_merge($song, [
+            'title' => $_POST['title'],
+            'artist' => $_POST['artist'],
+            'tone' => $_POST['tone'],
+            'bpm' => $_POST['bpm'],
+            'duration' => $_POST['duration'],
+            'link_letra' => $_POST['link_letra'],
+            'link_cifra' => $_POST['link_cifra'],
+            'link_audio' => $_POST['link_audio'],
+            'link_video' => $_POST['link_video'],
+            'notes' => $_POST['notes'],
+            'version' => $_POST['version'] ?? ''
+        ]);
+        if (!empty($_POST['selected_tags'])) {
+            $selectedTagIds = $_POST['selected_tags'];
         }
+        $customFields = $newCustomFields;
     }
-
-    header("Location: musica_detalhe.php?id=$id");
-    exit;
 }
 
 renderAppHeader('Editar Música');
 renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 ?>
 
+<!-- Importações e estilos premium inline para override e compatibilidade -->
 <link rel="stylesheet" href="../assets/css/pages/musica-form.css">
+<style>
+    /* Estilos Customizados para o Design System Sacred Minimalist */
+    :root {
+        --primary: #0284C7; /* Worship Blue */
+        --primary-hover: #0369A1;
+        --primary-subtle: rgba(2, 132, 199, 0.08);
+        --radius-3xl: 24px;
+        --bg-surface-glass: rgba(255, 255, 255, 0.8);
+    }
+    
+    .dark {
+        --bg-surface-glass: rgba(15, 23, 42, 0.8);
+    }
+
+    .form-card-bento {
+        background: var(--bg-surface-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-3xl);
+        padding: 24px;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.02), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .form-card-bento:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+        border-color: var(--border-strong);
+    }
+
+    /* Removido indicador de barra clássica para minimalismo real */
+    .form-card-bento::before {
+        display: none;
+    }
+
+    .form-input-premium {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 14px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-size: var(--font-body);
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .form-input-premium:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--bg-surface);
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+    }
+
+    .animate-scale-up {
+        animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes scaleUp {
+        0% { transform: scale(0.92); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+        0% { transform: translate(-50%, -20px); opacity: 0; }
+        100% { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    .animate-fade-in-down {
+        animation: fadeInDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Modal tactile */
+    .modal-card-tactile {
+        background: var(--bg-surface-glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-3xl);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        transform: scale(0.95);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-card-tactile {
+        transform: scale(1);
+        opacity: 1;
+    }
+</style>
+
+<!-- Componente de Notificação Avançada (Toast de Erro de Banco de Dados) -->
+<?php if ($errorMessage): ?>
+<div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4 animate-fade-in-down">
+    <div class="bg-red-500/10 dark:bg-red-950/20 backdrop-blur-xl border border-red-500/20 rounded-2xl p-4 shadow-xl flex items-start gap-3">
+        <div class="p-2 bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h4 class="font-bold text-red-800 dark:text-red-400 text-sm">Problema com Banco de Dados</h4>
+            <p class="text-xs text-red-600/90 dark:text-red-300/90 mt-1 leading-relaxed break-words"><?= htmlspecialchars($errorMessage) ?></p>
+        </div>
+        <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-400 hover:text-red-600 transition-colors p-1 flex-shrink-0">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+</div>
+<?php endif; ?>
 
 <div class="compact-container">
     <form method="POST">
         <?= App\AuthMiddleware::csrfField() ?>
-        <!-- Card 1: Informações Principais -->
-        <div class="form-card" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
-            <div class="card-title">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="music" style="width: 14px;"></i>
-                    Informações Principais
-                </div>
-            </div>
 
-            <div class="form-grid">
-                <!-- Título e Versão lado a lado -->
-                <div class="form-grid form-grid-3-custom" style="display: grid; gap: 12px;">
-                    <div class="form-group">
-                        <label class="form-label">Título *</label>
-                        <input type="text" name="title" class="form-input" value="<?= htmlspecialchars($song['title']) ?>" required style="font-weight: 700;">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Versão</label>
-                        <input type="text" name="version" class="form-input" value="<?= htmlspecialchars($song['version'] ?? '') ?>" placeholder="Ex: Ao Vivo...">
+        <!-- Grid Principal Bento -->
+        <div class="grid grid-cols-1 gap-6">
+
+            <!-- Card 1: Informações Principais -->
+            <div class="form-card-bento" style="--card-color: var(--primary);">
+                <div class="card-title flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3 text-slate-800 dark:text-slate-200">
+                        <div class="p-2 bg-sky-50 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400 rounded-xl">
+                            <i data-lucide="music" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-base tracking-normal normal-case">Informações Principais</span>
                     </div>
                 </div>
 
-                <div class="form-grid form-grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Artista *</label>
-                        <input type="text" name="artist" class="form-input" value="<?= htmlspecialchars($song['artist']) ?>" required>
+                <div class="space-y-4">
+                    <!-- Título e Versão -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-group md:col-span-2">
+                            <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Título *</label>
+                            <input type="text" name="title" class="form-input-premium" value="<?= htmlspecialchars($song['title']) ?>" required style="font-weight: 700;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Versão / Arranjo</label>
+                            <input type="text" name="version" class="form-input-premium" value="<?= htmlspecialchars($song['version'] ?? '') ?>" placeholder="Ex: Ao Vivo, Acústico...">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Tom</label>
-                        <select name="tone" class="form-input" style="appearance: none;">
-                            <option value="">Selecione...</option>
-                            <?php
-                            $tones = [
-                                'C' => 'C (Dó)',
-                                'C#' => 'C# (Dó Sustenido)',
-                                'D' => 'D (Ré)',
-                                'D#' => 'D# (Ré Sustenido)',
-                                'E' => 'E (Mi)',
-                                'F' => 'F (Fá)',
-                                'F#' => 'F# (Fá Sustenido)',
-                                'G' => 'G (Sol)',
-                                'G#' => 'G# (Sol Sustenido)',
-                                'A' => 'A (Lá)',
-                                'A#' => 'A# (Lá Sustenido)',
-                                'B' => 'B (Si)',
-                                'Cm' => 'Cm (Dó Menor)',
-                                'C#m' => 'C#m (Dó Sustenido Menor)',
-                                'Dm' => 'Dm (Ré Menor)',
-                                'D#m' => 'D#m (Ré Sustenido Menor)',
-                                'Em' => 'Em (Mi Menor)',
-                                'Fm' => 'Fm (Fá Menor)',
-                                'F#m' => 'F#m (Fá Sustenido Menor)',
-                                'Gm' => 'Gm (Sol Menor)',
-                                'G#m' => 'G#m (Sol Sustenido Menor)',
-                                'Am' => 'Am (Lá Menor)',
-                                'A#m' => 'A#m (Lá Sustenido Menor)',
-                                'Bm' => 'Bm (Si Menor)'
-                            ];
-                            foreach ($tones as $val => $label) {
-                                $selected = (isset($song['tone']) && $song['tone'] === $val) ? 'selected' : '';
-                                echo "<option value='$val' $selected>$label</option>";
-                            }
-                            ?>
-                        </select>
+                    <!-- Artista e Tom -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Autocomplete Artista -->
+                        <div class="form-group relative" id="artist-autocomplete-container">
+                            <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Artista *</label>
+                            <div class="relative">
+                                <input type="text" id="artist-input" name="artist" class="form-input-premium" value="<?= htmlspecialchars($song['artist']) ?>" required autocomplete="off" placeholder="Ex: Morada, Nívea Soares...">
+                                <div id="artist-suggestions" class="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800 rounded-2xl shadow-xl z-50 hidden max-h-48 overflow-y-auto backdrop-blur-lg bg-opacity-95">
+                                    <!-- Renderizado via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seletor de Tom -->
+                        <div class="form-group">
+                            <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Tom Original</label>
+                            <div class="relative">
+                                <select name="tone" class="form-input-premium appearance-none pr-10">
+                                    <option value="">Selecione...</option>
+                                    <?php
+                                    $tones = [
+                                        'C' => 'C (Dó)',
+                                        'C#' => 'C# (Dó Sustenido)',
+                                        'D' => 'D (Ré)',
+                                        'D#' => 'D# (Ré Sustenido)',
+                                        'E' => 'E (Mi)',
+                                        'F' => 'F (Fá)',
+                                        'F#' => 'F# (Fá Sustenido)',
+                                        'G' => 'G (Sol)',
+                                        'G#' => 'G# (Sol Sustenido)',
+                                        'A' => 'A (Lá)',
+                                        'A#' => 'A# (Lá Sustenido)',
+                                        'B' => 'B (Si)',
+                                        'Cm' => 'Cm (Dó Menor)',
+                                        'C#m' => 'C#m (Dó Sustenido Menor)',
+                                        'Dm' => 'Dm (Ré Menor)',
+                                        'D#m' => 'D#m (Ré Sustenido Menor)',
+                                        'Em' => 'Em (Mi Menor)',
+                                        'Fm' => 'Fm (Fá Menor)',
+                                        'F#m' => 'F#m (Fá Sustenido Menor)',
+                                        'Gm' => 'Gm (Sol Menor)',
+                                        'G#m' => 'G#m (Sol Sustenido Menor)',
+                                        'Am' => 'Am (Lá Menor)',
+                                        'A#m' => 'A#m (Lá Sustenido Menor)',
+                                        'Bm' => 'Bm (Si Menor)'
+                                    ];
+                                    foreach ($tones as $val => $label) {
+                                        $selected = (isset($song['tone']) && $song['tone'] === $val) ? 'selected' : '';
+                                        echo "<option value='$val' $selected>$label</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400">
+                                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-grid form-grid-2">
-                    <div class="form-group">
-                        <label class="form-label">BPM</label>
-                        <input type="number" name="bpm" class="form-input" value="<?= $song['bpm'] ?>" placeholder="120">
-                    </div>
+                    <!-- BPM e Duração -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">BPM (Batidas Por Minuto)</label>
+                            <input type="number" name="bpm" class="form-input-premium" value="<?= $song['bpm'] ?>" placeholder="Ex: 72">
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Duração</label>
-                        <input type="text" name="duration" class="form-input" value="<?= htmlspecialchars($song['duration']) ?>" placeholder="3:45">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 2: Referências e Mídia -->
-        <div class="form-card" style="--card-color: var(--sage-500); --focus-shadow: rgba(34, 197, 94, 0.1);">
-            <div class="card-title">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="link" style="width: 14px;"></i>
-                    Referências e Mídia
-                </div>
-            </div>
-
-            <div class="form-grid form-grid-2">
-                <div class="form-group">
-                    <label class="form-label">Link da Letra</label>
-                    <div class="input-icon-wrapper">
-                        <i data-lucide="file-text"></i>
-                        <input type="url" name="link_letra" class="form-input" value="<?= htmlspecialchars($song['link_letra']) ?>" placeholder="https://...">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Link da Cifra</label>
-                    <div class="input-icon-wrapper">
-                        <i data-lucide="music-2"></i>
-                        <input type="url" name="link_cifra" class="form-input" value="<?= htmlspecialchars($song['link_cifra']) ?>" placeholder="https://...">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Link do Áudio</label>
-                    <div class="input-icon-wrapper">
-                        <i data-lucide="headphones"></i>
-                        <input type="url" name="link_audio" class="form-input" value="<?= htmlspecialchars($song['link_audio']) ?>" placeholder="https://...">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Link do Vídeo</label>
-                    <div class="input-icon-wrapper">
-                        <i data-lucide="video"></i>
-                        <input type="url" name="link_video" class="form-input" value="<?= htmlspecialchars($song['link_video']) ?>" placeholder="https://...">
+                        <div class="form-group">
+                            <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Duração (Min:Seg)</label>
+                            <input type="text" name="duration" class="form-input-premium" value="<?= htmlspecialchars($song['duration']) ?>" placeholder="Ex: 4:35">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Campos Extras -->
-            <div style="border-top: 1px dashed var(--border-color); margin-top: 24px; padding-top: 24px;">
-                <label class="form-label" style="margin-bottom: 12px; color: var(--text-main);">Outras Referências</label>
-
-                <div id="customFieldsList">
-                    <!-- Renderizado via JS -->
+            <!-- Card 2: Referências e Mídia -->
+            <div class="form-card-bento">
+                <div class="card-title flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3 text-slate-800 dark:text-slate-200">
+                        <div class="p-2 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                            <i data-lucide="link" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-base tracking-normal normal-case">Referências e Mídia</span>
+                    </div>
                 </div>
 
-                <button type="button" onclick="addCustomFieldUI()" class="btn-link" style="padding: 0;">
-                    <i data-lucide="plus-circle" style="width: 16px;"></i>
-                    Adicionar Referência Personalizada
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Link da Letra</label>
+                        <div class="input-icon-wrapper">
+                            <i data-lucide="file-text"></i>
+                            <input type="url" name="link_letra" class="form-input-premium" value="<?= htmlspecialchars($song['link_letra']) ?>" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Link da Cifra</label>
+                        <div class="input-icon-wrapper">
+                            <i data-lucide="music-2"></i>
+                            <input type="url" name="link_cifra" class="form-input-premium" value="<?= htmlspecialchars($song['link_cifra']) ?>" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Link do Áudio (Spotify / Deezer)</label>
+                        <div class="input-icon-wrapper">
+                            <i data-lucide="headphones"></i>
+                            <input type="url" name="link_audio" class="form-input-premium" value="<?= htmlspecialchars($song['link_audio']) ?>" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label text-slate-600 dark:text-slate-400 font-semibold mb-2 block">Link do Vídeo (YouTube)</label>
+                        <div class="input-icon-wrapper">
+                            <i data-lucide="video"></i>
+                            <input type="url" name="link_video" class="form-input-premium" value="<?= htmlspecialchars($song['link_video']) ?>" placeholder="https://...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos Extras (Referências Customizadas) -->
+                <div class="mt-6 pt-6 border-t border-dashed border-slate-200 dark:border-slate-800">
+                    <label class="form-label text-slate-800 dark:text-slate-200 font-bold text-sm mb-4 block">Outras Referências Customizadas</label>
+
+                    <div id="customFieldsList" class="space-y-3 mb-4">
+                        <!-- Renderizado via JS -->
+                    </div>
+
+                    <button type="button" onclick="addCustomFieldUI()" class="flex items-center gap-2 py-2.5 px-4 rounded-xl border border-dashed border-slate-250 dark:border-slate-800 hover:border-sky-500 dark:hover:border-sky-500 hover:bg-sky-50/20 text-sky-600 dark:text-sky-400 font-semibold text-sm transition-all duration-300">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        Adicionar Referência Personalizada
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: Classificações (Tags) -->
+            <div class="form-card-bento">
+                <div class="card-title flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3 text-slate-800 dark:text-slate-200">
+                        <div class="p-2 bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 rounded-xl">
+                            <i data-lucide="folder" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-base tracking-normal normal-case">Classificações e Categorias</span>
+                    </div>
+                    <button type="button" onclick="openTagManager()" class="flex items-center gap-1.5 py-1.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold text-xs transition-colors">
+                        <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                        Gerenciar Tags
+                    </button>
+                </div>
+
+                <div class="flex flex-wrap gap-2.5" id="tagsSelectionContainer">
+                    <?php foreach ($allTags as $tag):
+                        $isChecked = in_array($tag['id'], $selectedTagIds);
+                        $tagColor = $tag['color'] ?: '#0EA5E9';
+                    ?>
+                        <label class="tag-pill-compact relative flex items-center gap-2 py-2.5 px-4 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 cursor-pointer font-bold text-xs select-none transition-all duration-300 active:scale-95" 
+                               style="<?= $isChecked ? "background-color: {$tagColor}15; border-color: {$tagColor}; color: {$tagColor};" : '' ?>">
+                            <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?> onchange="updateTagStyle(this, '<?= $tagColor ?>')" class="hidden">
+                            <span class="tag-dot w-2 h-2 rounded-full transition-transform duration-300" style="background-color: <?= $tagColor ?>; <?= $isChecked ? 'transform: scale(1.2);' : '' ?>"></span>
+                            <span><?= htmlspecialchars($tag['name']) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Card 4: Observações -->
+            <div class="form-card-bento">
+                <div class="card-title flex items-center justify-between mb-4 pb-2">
+                    <div class="flex items-center gap-3 text-slate-800 dark:text-slate-200">
+                        <div class="p-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl">
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-base tracking-normal normal-case">Observações Internas</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <textarea name="notes" class="form-input-premium w-full min-h-[100px] py-3 px-4 rounded-2xl resize-y" placeholder="Adicione observações importantes para os ministros ou instrumentistas (ex: andamento, transição)..."><?= htmlspecialchars($song['notes']) ?></textarea>
+                </div>
+            </div>
+
+            <!-- Botões de Ação Principal -->
+            <div class="flex gap-4 items-center pt-2 pb-16">
+                <a href="musica_detalhe.php?id=<?= $id ?>" class="flex-1 text-center py-4 px-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-slate-300 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-bold text-base transition-all duration-300 shadow-sm hover:shadow active:scale-98">
+                    Cancelar
+                </a>
+                <button type="submit" class="flex-[2] py-4 px-6 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-base transition-all duration-300 shadow-lg shadow-sky-600/20 active:scale-98 flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-5 h-5"></i>
+                    Salvar Alterações
                 </button>
             </div>
-        </div>
 
-        <!-- Card 3: Classificações -->
-        <div class="form-card" style="--card-color: var(--yellow-500); --focus-shadow: rgba(245, 158, 11, 0.1);">
-            <div class="card-title">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="folder" style="width: 14px;"></i>
-                    Classificações
-                </div>
-                <button type="button" onclick="openTagManager()" class="btn-link" style="color: var(--card-color);">
-                    <i data-lucide="settings" style="width: 14px;"></i>
-                    Gerenciar
-                </button>
-            </div>
-
-            <div class="tag-pills" id="tagsSelectionContainer">
-                <?php foreach ($allTags as $tag):
-                    $isChecked = in_array($tag['id'], $selectedTagIds);
-                ?>
-                    <label class="tag-pill-compact" style="<?= $isChecked ? 'background: var(--primary-subtle); border-color: var(--primary); color: var(--primary);' : '' ?>">
-                        <input type="checkbox" name="selected_tags[]" value="<?= $tag['id'] ?>" <?= $isChecked ? 'checked' : '' ?> onchange="updateTagStyle(this)">
-                        <span class="tag-dot" style="background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;"></span>
-                        <?= htmlspecialchars($tag['name']) ?>
-                    </label>
-                <?php endforeach; ?>
-            </div>
-        </div>
-
-        <!-- Card 4: Observações -->
-        <div class="form-card" style="--card-color: #6366f1; --focus-shadow: rgba(99, 102, 241, 0.1);">
-            <div class="card-title">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="message-square" style="width: 14px;"></i>
-                    Observações
-                </div>
-            </div>
-
-            <div class="form-group">
-                <textarea name="notes" class="form-input" rows="3" style="resize: vertical;" placeholder="Adicione observações sobre a música..."><?= htmlspecialchars($song['notes']) ?></textarea>
-            </div>
-        </div>
-
-        <!-- Botões de Ação -->
-        <div style="display: flex; gap: 12px; padding-bottom: 80px;">
-            <a href="musica_detalhe.php?id=<?= $id ?>" style="
-                flex: 1; 
-                text-decoration: none; 
-                padding: 14px 20px; 
-                border-radius: 12px; 
-                background: var(--bg-surface); 
-                border: 1px solid var(--border-color); 
-                color: var(--text-main); 
-                font-weight: 600; 
-                font-size: var(--font-body);
-                text-align: center;
-                transition: all 0.2s;
-                box-shadow: var(--shadow-sm);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)'">
-                Cancelar
-            </a>
-            <button type="submit" style="
-                flex: 2; 
-                padding: 14px 20px; 
-                border-radius: 12px; 
-                background: var(--primary); 
-                border: none; 
-                color: white; 
-                font-weight: 700; 
-                font-size: var(--font-body);
-                cursor: pointer;
-                transition: all 0.2s;
-                box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(34, 197, 94, 0.4)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(34, 197, 94, 0.3)'">
-                <i data-lucide="save" style="width: 20px;"></i>
-                Salvar Alterações
-            </button>
         </div>
 
         <!-- Hidden Inputs para Campos Extras -->
@@ -418,34 +545,37 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 </div>
 
 <!-- Modal: Gestão de Tags Completa -->
-<div id="tagManagerModal" class="modal-overlay" onclick="if(event.target === this) closeTagManager()">
-    <div class="modal-card" style="max-height: 85vh; display: flex; flex-direction: column;">
-        <div class="modal-header">
-            <h3 class="modal-title">Gerenciar Classificações</h3>
-            <button type="button" onclick="closeTagManager()" class="modal-close">
-                <i data-lucide="x" width="20"></i>
+<div id="tagManagerModal" class="modal-overlay fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm hidden items-center justify-center p-4 transition-all duration-300" onclick="if(event.target === this) closeTagManager()">
+    <div class="modal-card-tactile w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden">
+        <div class="modal-header p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Gerenciar Classificações</h3>
+            <button type="button" onclick="closeTagManager()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
 
-        <div class="modal-body" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
-            
+        <div class="modal-body flex-1 overflow-hidden flex flex-col">
             <!-- Lista de Tags -->
-            <div id="tagsList" style="flex: 1; overflow-y: auto; padding: 20px;">
-                <?php foreach ($allTags as $tag): ?>
-                    <div class="tag-card-item" data-tag-id="<?= $tag['id'] ?>" style="background: var(--bg-body); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border: 1px solid var(--border-color);">
-                        <div style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; background: <?= $tag['color'] ?: 'var(--sage-500)' ?>;">
-                            <i data-lucide="folder" width="20"></i>
+            <div id="tagsList" class="flex-1 overflow-y-auto p-5 space-y-3">
+                <?php foreach ($allTags as $tag): 
+                    $tColor = $tag['color'] ?: '#0EA5E9';
+                ?>
+                    <div class="tag-card-item bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 flex items-center gap-4 border border-slate-100 dark:border-slate-800">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-sm" style="background-color: <?= $tColor ?>;">
+                            <i data-lucide="folder" class="w-5 h-5"></i>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($tag['name']) ?></div>
-                            <div style="font-size: var(--font-body-sm); color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($tag['description']) ?></div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold text-sm text-slate-800 dark:text-slate-200"><?= htmlspecialchars($tag['name']) ?></div>
+                            <?php if (!empty($tag['description'])): ?>
+                                <div class="text-xs text-slate-450 dark:text-slate-400 mt-0.5 truncate"><?= htmlspecialchars($tag['description']) ?></div>
+                            <?php endif; ?>
                         </div>
-                        <div style="display: flex; gap: 4px;">
-                            <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="btn-close" style="width: 32px; height: 32px;">
-                                <i data-lucide="edit-2" width="16"></i>
+                        <div class="flex gap-1.5 flex-shrink-0">
+                            <button type="button" onclick='editTagInline(<?= json_encode($tag) ?>)' class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-slate-350 bg-white dark:bg-slate-900 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition-all">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
                             </button>
-                            <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="btn-close" style="width: 32px; height: 32px; color: var(--rose-500);">
-                                <i data-lucide="trash-2" width="16"></i>
+                            <button type="button" onclick="deleteTagInline(<?= $tag['id'] ?>)" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-200 bg-white dark:bg-slate-900 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
@@ -453,39 +583,41 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
             </div>
 
             <!-- Formulário de Nova/Editor -->
-            <div style="background: var(--bg-surface); padding: 20px; border-top: 1px solid var(--border-color); box-shadow: 0 -4px 12px rgba(0,0,0,0.05);">
-                <h4 style="font-size: var(--font-body); font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="plus-circle" width="16" class="text-primary"></i>
+            <div class="bg-white dark:bg-slate-900 p-5 border-t border-slate-100 dark:border-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.03)]">
+                <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
                     <span id="tagFormTitle">Nova Classificação</span>
                 </h4>
 
                 <input type="hidden" id="editingTagId" value="">
 
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <input type="text" id="tagNameInput" class="form-input" placeholder="Nome da Pasta (Ex: Adoração)">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <textarea id="tagDescInput" class="form-input" rows="2" placeholder="Descrição (Opcional)"></textarea>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label class="form-label">Cor</label>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <?php
-                        $colors = ['var(--sage-500)', 'var(--yellow-500)', 'var(--rose-500)', 'var(--slate-500)', 'var(--lavender-600)', '#EC4899', '#6366F1'];
-                        foreach ($colors as $c): ?>
-                            <label style="cursor: pointer;">
-                                <input type="radio" name="tagColor" value="<?= $c ?>" style="display: none;" onchange="selectTagColor(this)">
-                                <div class="color-circle" style="width: 28px; height: 28px; background: <?= $c ?>; border-radius: 50%; border: 2px solid transparent; transition: transform 0.2s;"></div>
-                            </label>
-                        <?php endforeach; ?>
+                <div class="space-y-3">
+                    <div class="form-group">
+                        <input type="text" id="tagNameInput" class="form-input-premium py-2.5 text-sm" placeholder="Nome da Tag (Ex: Adoração)">
                     </div>
-                </div>
 
-                <button type="button" onclick="saveTagInline()" class="btn-primary-full">
-                    <span id="saveButtonText">Criar Classificação</span>
-                </button>
+                    <div class="form-group">
+                        <textarea id="tagDescInput" class="form-input-premium py-2 px-3 text-sm min-h-[60px]" rows="2" placeholder="Descrição (Opcional)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label text-slate-500 dark:text-slate-400 font-semibold text-xs mb-2 block">Selecione uma Cor</label>
+                        <div class="flex gap-2 flex-wrap">
+                            <?php
+                            $colors = ['#0EA5E9', '#F59E0B', '#EF4444', '#10B981', '#6366F1', '#EC4899', '#64748B'];
+                            foreach ($colors as $c): ?>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="tagColor" value="<?= $c ?>" class="hidden" onchange="selectTagColor(this)">
+                                    <div class="color-circle w-7 h-7 rounded-full border-2 border-transparent transition-transform duration-200 shadow-sm" style="background-color: <?= $c ?>;"></div>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="saveTagInline()" class="w-full py-3 px-4 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2">
+                        <span id="saveButtonText">Criar Classificação</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -502,16 +634,17 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 
         customFieldsData.forEach((field, index) => {
             const item = document.createElement('div');
-            item.className = 'custom-field-row';
+            // Animação de fade-in elástico
+            item.className = 'custom-field-row flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800/80 hover:border-slate-200 dark:hover:border-slate-700 transition-all duration-300 animate-scale-up';
             item.innerHTML = `
-                <div>
-                    <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input" placeholder="Descrição (Ex: Partitura)">
+                <div class="flex-1">
+                    <input type="text" value="${field.name}" oninput="updateCustomFieldData(${index}, 'name', this.value)" class="form-input-premium py-2 px-3 text-sm font-medium bg-white dark:bg-slate-900" placeholder="Descrição (Ex: Partitura)">
                 </div>
-                <div>
-                    <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input" placeholder="Link (https://...)">
+                <div class="flex-1">
+                    <input type="url" value="${field.link}" oninput="updateCustomFieldData(${index}, 'link', this.value)" class="form-input-premium py-2 px-3 text-sm font-medium bg-white dark:bg-slate-900" placeholder="Link (https://...)">
                 </div>
-                <button type="button" onclick="removeCustomFieldData(${index})" class="btn-close" style="width: 32px; height: 32px; color: var(--rose-500);" title="Remover">
-                    <i data-lucide="trash-2" style="width: 16px;"></i>
+                <button type="button" onclick="removeCustomFieldData(${index})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all duration-200 flex-shrink-0" title="Remover">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
             `;
             list.appendChild(item);
@@ -522,12 +655,22 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         hiddenContainer.innerHTML = '';
         customFieldsData.forEach(field => {
             hiddenContainer.innerHTML += `
-                <input type="hidden" name="custom_field_name[]" value="${field.name}">
-                <input type="hidden" name="custom_field_link[]" value="${field.link}">
+                <input type="hidden" name="custom_field_name[]" value="${escapeHtml(field.name)}">
+                <input type="hidden" name="custom_field_link[]" value="${escapeHtml(field.link)}">
             `;
         });
 
         lucide.createIcons();
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
     function addCustomFieldUI() {
@@ -545,42 +688,62 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
 
     function updateCustomFieldData(index, key, value) {
         customFieldsData[index][key] = value;
-        // Atualizar hidden inputs
-        renderCustomFields();
+        // Atualizar hidden inputs silenciosamente sem re-renderizar todo o HTML para não perder o foco do cursor!
+        const hiddenContainer = document.getElementById('hiddenCustomFields');
+        hiddenContainer.innerHTML = '';
+        customFieldsData.forEach(field => {
+            hiddenContainer.innerHTML += `
+                <input type="hidden" name="custom_field_name[]" value="${escapeHtml(field.name)}">
+                <input type="hidden" name="custom_field_link[]" value="${escapeHtml(field.link)}">
+            `;
+        });
     }
 
     // Modal Functions - Tag Manager ONLY
     function openTagManager() {
-        document.getElementById('tagManagerModal').classList.add('active');
+        const modal = document.getElementById('tagManagerModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
         lucide.createIcons();
     }
 
     function closeTagManager() {
-        document.getElementById('tagManagerModal').classList.remove('active');
+        const modal = document.getElementById('tagManagerModal');
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
     }
 
     // Tag Selection Styles
-    function updateTagStyle(checkbox) {
+    function updateTagStyle(checkbox, color) {
         const label = checkbox.parentElement;
+        const dot = label.querySelector('.tag-dot');
         if (checkbox.checked) {
-            label.style.background = 'var(--primary-subtle)';
-            label.style.borderColor = 'var(--primary)';
-            label.style.color = 'var(--primary)';
+            label.style.backgroundColor = color + '15';
+            label.style.borderColor = color;
+            label.style.color = color;
+            dot.style.transform = 'scale(1.2)';
         } else {
-            label.style.background = 'var(--bg-body)';
-            label.style.borderColor = 'transparent';
-            label.style.color = 'var(--text-muted)';
+            label.style.backgroundColor = '';
+            label.style.borderColor = '';
+            label.style.color = '';
+            dot.style.transform = 'none';
         }
     }
 
-    // SIMULAÇÃO VISUAL DE SELEÇÃO DE COR
+    // Seleção de Cor
     function selectTagColor(radio) {
         document.querySelectorAll('.color-circle').forEach(c => {
             c.style.transform = 'scale(1)';
             c.style.borderColor = 'transparent';
         });
         if (radio.checked) {
-            radio.nextElementSibling.style.transform = 'scale(1.2)';
+            radio.nextElementSibling.style.transform = 'scale(1.15)';
             radio.nextElementSibling.style.borderColor = 'var(--text-main)';
         }
     }
@@ -595,7 +758,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         // Selecionar cor
         const radios = document.getElementsByName('tagColor');
         radios.forEach(r => {
-            if (r.value === tag.color) {
+            if (r.value.toLowerCase() === (tag.color || '#0ea5e9').toLowerCase()) {
                 r.checked = true;
                 selectTagColor(r);
             }
@@ -606,9 +769,9 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         const id = document.getElementById('editingTagId').value;
         const name = document.getElementById('tagNameInput').value;
         const desc = document.getElementById('tagDescInput').value;
-        const color = document.querySelector('input[name="tagColor"]:checked')?.value || '#047857';
+        const color = document.querySelector('input[name="tagColor"]:checked')?.value || '#0EA5E9';
 
-        if (!name) return alert('Nome obrigatório');
+        if (!name) return alert('Por favor, informe o nome da classificação.');
 
         const formData = new FormData();
         formData.append('action', id ? 'update' : 'create');
@@ -626,7 +789,7 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
     }
 
     function deleteTagInline(id) {
-        if (!confirm('Excluir esta tag?')) return;
+        if (!confirm('Tem certeza que deseja excluir esta classificação?')) return;
 
         const formData = new FormData();
         formData.append('action', 'delete');
@@ -640,16 +803,53 @@ renderPageHeader('Editar Música', htmlspecialchars($song['title']));
         });
     }
 
-    // Fechar modais ao clicar fora
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
+    // Autocomplete de Artistas Dinâmico
+    const allArtists = <?= json_encode($artists) ?>;
+    const artistInput = document.getElementById('artist-input');
+    const suggestionsBox = document.getElementById('artist-suggestions');
+
+    artistInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        if (!query) {
+            suggestionsBox.classList.add('hidden');
+            return;
+        }
+
+        const filtered = allArtists.filter(artist => artist.toLowerCase().includes(query));
+        if (filtered.length === 0) {
+            suggestionsBox.classList.add('hidden');
+            return;
+        }
+
+        suggestionsBox.innerHTML = '';
+        filtered.forEach(artist => {
+            const item = document.createElement('div');
+            item.className = 'px-4 py-3 hover:bg-sky-50 dark:hover:bg-slate-800 cursor-pointer font-semibold text-sm text-slate-700 dark:text-slate-350 transition-colors first:rounded-t-2xl last:rounded-b-2xl';
+            item.textContent = artist;
+            item.addEventListener('click', () => {
+                artistInput.value = artist;
+                suggestionsBox.classList.add('hidden');
+            });
+            suggestionsBox.appendChild(item);
         });
+
+        suggestionsBox.classList.remove('hidden');
+    });
+
+    // Fechar sugestões ao clicar fora
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('artist-autocomplete-container');
+        if (container && !container.contains(e.target)) {
+            suggestionsBox.classList.add('hidden');
+        }
     });
 
     lucide.createIcons();
+    renderCustomFields(); // Inicializar campos extras
+</script>
+
+<?php renderAppFooter(); ?>
+s();
     renderCustomFields(); // Inicializar campos extras
 </script>
 

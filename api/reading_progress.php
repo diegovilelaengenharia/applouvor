@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 /**
  * API Endpoint for Reading Progress
  * Manages user reading progress, settings, and notes
  */
 
 header('Content-Type: application/json; charset=utf-8');
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
 
 checkLogin();
 

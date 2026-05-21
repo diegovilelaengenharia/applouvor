@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 // api/toggle_intercession.php - Toggle intercession status for prayer requests
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
 
 header('Content-Type: application/json');
 

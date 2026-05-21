@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Sistema de Notificações - JavaScript
  * Gerencia o dropdown de notificações e interações
  */
@@ -365,7 +365,7 @@ async function requestNotificationPermission() {
         if (permission === 'granted') {
             new Notification('App Louvor PIB', {
                 body: 'Notificações ativadas com sucesso! 🔔',
-                icon: '/assets/img/logo_pib_black.png'
+                icon: '/assets/images/logo_pib_black.png'
             });
         }
     } else {

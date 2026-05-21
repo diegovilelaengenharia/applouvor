@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/stats_equipe.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 checkAdmin();
 
@@ -117,7 +117,7 @@ $members = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 <div class="compact-card" style="position: relative; padding: 16px; border-left: 4px solid <?= $score_color ?>;">
                     <div class="avatar-wrapper" style="width: 48px; height: 48px; min-width: 48px;">
                         <?php if ($member['avatar']): 
-                            $avatarUrl = strpos($member['avatar'], 'http') === 0 ? $member['avatar'] : '../assets/uploads/' . $member['avatar'];
+                            $avatarUrl = strpos($member['avatar'], 'http') === 0 ? $member['avatar'] : '../uploads/' . $member['avatar'];
                         ?>
                             <img src="<?= htmlspecialchars($avatarUrl) ?>" class="avatar-circle" alt="<?= htmlspecialchars($member['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         <?php else: ?>

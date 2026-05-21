@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 // admin/metronomo.php — Metrônomo Pro
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 checkLogin();
 
 $urlBpm = (int)($_GET['bpm'] ?? 120);

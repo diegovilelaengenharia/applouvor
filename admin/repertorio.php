@@ -1,9 +1,11 @@
 <?php
 // admin/repertorio.php
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 require_once 'init_db_suggestions.php';
-require_once '../includes/classes/MusicRepository.php';
+require_once '../src/classes/MusicRepository.php';
 
 $musicRepo = new \App\Repositories\MusicRepository($pdo);
 
@@ -13,351 +15,271 @@ $tab = $_GET['tab'] ?? 'musicas'; // musicas, pastas, artistas
 
 renderAppHeader('Repertório', 'index.php');
 ?>
-<!-- Import CSS -->
-<link rel="stylesheet" href="../assets/css/pages/repertorio.css?v=<?= time() ?>">
 
-<?php
-renderPageHeader('Repertório', 'Gestão de Músicas');
-?>
-<!-- Tabs Navegação com Menu -->
-<div class="repertorio-controls">
-    <div class="tabs-container">
-        <a href="?tab=musicas" class="tab-link <?= $tab == 'musicas' ? 'active' : '' ?>">Músicas</a>
-        <a href="?tab=pastas" class="tab-link <?= $tab == 'pastas' ? 'active' : '' ?>">TAG's</a>
-        <a href="?tab=artistas" class="tab-link <?= $tab == 'artistas' ? 'active' : '' ?>">Artistas</a>
-        <a href="?tab=tons" class="tab-link <?= $tab == 'tons' ? 'active' : '' ?>">Tons</a>
-    </div>
-    
-    <!-- Botão de 3 Pontinhos -->
-    <!-- Botão de 3 Pontinhos -->
-    <div class="relative">
-        <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="btn-options">
-            <i data-lucide="more-vertical" width="20"></i>
-        </button>
+<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-24 animate-fade-in">
+    <!-- Header com Menu de Opções -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface font-bold tracking-tight">Repertório</h1>
+            <p class="text-body-md text-on-surface-variant/80 mt-1">Biblioteca musical e gestão de tons do ministério</p>
+        </div>
         
-        <!-- Dropdown Menu -->
-        <div id="options-menu" class="options-dropdown">
-            <a href="sugerir_musica.php" class="dropdown-item">
-                <i data-lucide="send" width="16"></i> Sugerir Música
-            </a>
-            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-            <a href="musica_adicionar.php" class="dropdown-item">
-                <i data-lucide="plus" width="16"></i> Adicionar Música
-            </a>
-            <a href="classificacoes.php" class="dropdown-item">
-                <i data-lucide="tags" width="16"></i> Gerenciar TAGs
-            </a>
-            <?php endif; ?>
+        <!-- Botão de Ações Rápidas -->
+        <div class="relative">
+            <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="p-3 bg-surface-container hover:bg-surface-container-high active:scale-95 rounded-full transition-all duration-200 border border-surface-container-highest shadow-sm flex items-center justify-center">
+                <span class="material-symbols-outlined text-[24px]">more_vert</span>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="options-menu" class="hidden absolute right-0 mt-3 w-56 bg-surface-container-lowest border border-surface-container-highest rounded-3xl shadow-xl z-50 overflow-hidden transform origin-top-right transition-all">
+                <a href="sugerir_musica.php" class="flex items-center gap-3 px-5 py-4 hover:bg-surface-container-low text-body-md text-on-surface transition-colors">
+                    <span class="material-symbols-outlined text-[20px] text-worship-blue">send</span>
+                    <span>Sugerir Música</span>
+                </a>
+                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                <a href="musica_adicionar.php" class="flex items-center gap-3 px-5 py-4 hover:bg-surface-container-low text-body-md text-on-surface transition-colors border-t border-surface-container-highest">
+                    <span class="material-symbols-outlined text-[20px] text-emerald-500">add</span>
+                    <span>Adicionar Música</span>
+                </a>
+                <a href="classificacoes.php" class="flex items-center gap-3 px-5 py-4 hover:bg-surface-container-low text-body-md text-on-surface transition-colors border-t border-surface-container-highest">
+                    <span class="material-symbols-outlined text-[20px] text-altar-gold">label</span>
+                    <span>Gerenciar TAGs</span>
+                </a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    function toggleOptionsMenu() {
-        const menu = document.getElementById('options-menu');
-        const btn = document.getElementById('options-menu-btn');
-        menu.classList.toggle('active');
-        btn.classList.toggle('active');
-    }
-    
-    // Fechar menu ao clicar fora
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('options-menu');
-        const btn = document.getElementById('options-menu-btn');
-        if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
-            menu.classList.remove('active');
-            btn.classList.remove('active');
+    <script>
+        function toggleOptionsMenu() {
+            const menu = document.getElementById('options-menu');
+            menu.classList.toggle('hidden');
         }
-    });
-</script>
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('options-menu');
+            const btn = document.getElementById('options-menu-btn');
+            if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
 
-<!-- Busca -->
-<div class="search-container">
-    <form method="GET">
-        <?php if($tab != 'musicas'): ?>
-            <input type="hidden" name="tab" value="<?= $tab ?>">
-        <?php endif; ?>
-        <div class="search-wrapper">
-            <i data-lucide="search" class="search-icon"></i>
-            <input type="text" name="q" class="search-input" placeholder="Buscar música, artista..." value="<?= htmlspecialchars($search) ?>">
-        </div>
-    </form>
-</div>
-
-<!-- Conteúdos -->
-<div class="results-layout">
-
-    <?php 
-    // Helper function for tone classes available globally in this scope
-    if (!function_exists('getToneClass')) {
-        function getToneClass($tone) {
-            $toneMap = [
-                'C'=>'tone-C', 'C#'=>'tone-Cs', 'Db'=>'tone-Db',
-                'D'=>'tone-D', 'D#'=>'tone-Ds', 'Eb'=>'tone-Eb',
-                'E'=>'tone-E', 'F'=>'tone-F', 'F#'=>'tone-Fs', 'Gb'=>'tone-Gb',
-                'G'=>'tone-G', 'G#'=>'tone-Gs', 'Ab'=>'tone-Ab',
-                'A'=>'tone-A', 'A#'=>'tone-As', 'Bb'=>'tone-Bb',
-                'B'=>'tone-B'
-            ];
-            return $toneMap[$tone] ?? 'tone-C';
-        }
-    }
-
-    if ($tab === 'musicas'):
-        $tagId = $_GET['tag_id'] ?? null;
-        $tone = $_GET['tone'] ?? null;
-        try {
-            $songs = $musicRepo->getSongs($search, $tagId, $tone, 50);
-        } catch (Exception $e) {
-            $songs = [];
-        }
-    ?>
-
-        <!-- Filter Badge for Tag -->
-        <?php if ($tagId):
-            $currentTag = $musicRepo->getTagById($tagId);
-        ?>
-            <?php if ($currentTag): ?>
-                <div class="active-filter-badge tag-badge" style="--tag-color: <?= $currentTag['color'] ?>;">
-                    <div class="filter-label">
-                        <i data-lucide="folder-open" width="18"></i>
-                        Pasta: <?= htmlspecialchars($currentTag['name']) ?>
-                    </div>
-                    <a href="repertorio.php?tab=musicas" class="btn-clear-filter">
-                        <i data-lucide="x" width="16"></i> Limpar
-                    </a>
-                </div>
+    <!-- Barra de Busca -->
+    <div class="relative w-full mb-8">
+        <form method="GET">
+            <?php if($tab != 'musicas'): ?>
+                <input type="hidden" name="tab" value="<?= $tab ?>">
             <?php endif; ?>
-        <?php endif; ?>
+            <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline">search</span>
+            <input name="q" value="<?= htmlspecialchars($search) ?>" class="w-full h-14 pl-14 pr-5 bg-surface-container border border-surface-container-highest rounded-2xl text-body-md font-body-md focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/10 transition-all placeholder-outline/70 shadow-sm" placeholder="Buscar músicas, artistas ou trechos..." type="text"/>
+        </form>
+    </div>
+    
+    <!-- Navegação por Abas (Pílulas Modernas) -->
+    <div class="flex space-x-3 mb-8 overflow-x-auto hide-scrollbar pb-2">
+        <a href="?tab=musicas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'musicas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+            Músicas
+        </a>
+        <a href="?tab=pastas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'pastas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+            TAGs
+        </a>
+        <a href="?tab=artistas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'artistas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+            Artistas
+        </a>
+        <a href="?tab=tons" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'tons' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+            Tons
+        </a>
+    </div>
 
-        <!-- Filter Badge for Tone -->
-        <?php if ($tone):
-            $toneClass = getToneClass($tone);
+    <!-- Conteúdos Dinâmicos -->
+    <div class="w-full">
+        <?php 
+        if (!function_exists('getToneClass')) {
+            function getToneClass($tone) {
+                return 'tone-C';
+            }
+        }
+
+        if ($tab === 'musicas'):
+            $tagId = $_GET['tag_id'] ?? null;
+            $tone = $_GET['tone'] ?? null;
+            try {
+                $songs = $musicRepo->getSongs($search, $tagId, $tone, 50);
+            } catch (Exception $e) {
+                $songs = [];
+            }
         ?>
-            <div class="active-filter-badge tone-badge <?= $toneClass ?>">
-                 <div class="filter-label">
-                    <i data-lucide="music" width="18"></i>
-                    Tom: <?= htmlspecialchars($tone) ?>
-                </div>
-                <a href="repertorio.php?tab=musicas" class="btn-clear-filter">
-                    <i data-lucide="x" width="16"></i> Limpar
-                </a>
-            </div>
-        <?php endif; ?>
+            <!-- Emblemas de Filtro Ativo -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                <?php if ($tagId): $currentTag = $musicRepo->getTagById($tagId); if ($currentTag): ?>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border shadow-sm transition-all text-sm font-bold bg-surface-container border-surface-container-highest" style="color: <?= $currentTag['color'] ?>;">
+                        <span class="material-symbols-outlined text-[18px]">folder_open</span>
+                        <span>Pasta: <?= htmlspecialchars($currentTag['name']) ?></span>
+                        <a href="repertorio.php?tab=musicas" class="ml-2 hover:opacity-70 flex items-center justify-center"><span class="material-symbols-outlined text-[16px]">close</span></a>
+                    </div>
+                <?php endif; endif; ?>
 
-        <!-- MUSIC LIST (PIB CARDS) -->
-        <div class="results-list" style="display: flex; flex-direction: column; gap: var(--space-md); padding-bottom: 100px;">
-            <?php 
-            $delay = 0.1;
-            foreach ($songs as $song): 
-                $songTags = $musicRepo->getSongTags($song['id']);
-            ?>
-                <!-- PIB MUSIC CARD -->
-                <div class="animate-card" style="animation-delay: <?= $delay ?>s;">
-                    <div class="pib-card" style="border-left: 5px solid <?= !empty($songTags) ? $songTags[0]['color'] : 'var(--color-primary)' ?>;">
-                        <div class="pib-card-header">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <div style="width: 36px; height: 36px; background: var(--color-surface-alt); border-radius: var(--radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--color-border);">
-                                    <span style="font-size: 0.9rem; font-weight: 800; color: var(--color-primary);"><?= $song['tone'] ?: '?' ?></span>
-                                    <span style="font-size: 0.5rem; font-weight: 700; opacity: 0.6;">TOM</span>
+                <?php if ($tone): ?>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-surface-container-highest bg-surface-container shadow-sm text-altar-gold text-sm font-bold">
+                        <span class="material-symbols-outlined text-[18px]">music_note</span>
+                        <span>Tom: <?= htmlspecialchars($tone) ?></span>
+                        <a href="repertorio.php?tab=musicas" class="ml-2 hover:opacity-70 flex items-center justify-center"><span class="material-symbols-outlined text-[16px]">close</span></a>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Bento Grid de Músicas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <?php foreach ($songs as $song): 
+                    $songTags = $musicRepo->getSongTags($song['id']);
+                    $borderHex = !empty($songTags) ? $songTags[0]['color'] : '#2E7EED';
+                ?>
+                    <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="block group">
+                        <div class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col justify-between hover:border-worship-blue/40 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-300 gap-5 relative overflow-hidden">
+                            
+                            <!-- Indicador de Tag Lateral -->
+                            <div class="absolute left-0 top-0 bottom-0 w-[4px]" style="background-color: <?= $borderHex ?>;"></div>
+                            
+                            <div class="flex items-start gap-4">
+                                <!-- Badge de Tom Original -->
+                                <div class="w-12 h-12 rounded-full bg-surface-container flex flex-col items-center justify-center text-worship-blue border border-surface-container-highest shrink-0 shadow-sm font-bold text-sm tracking-tight">
+                                    <?= $song['tone'] ?: '?' ?>
                                 </div>
-                                <div>
-                                    <h3 class="pib-card-title" style="margin: 0; font-size: 1rem;"><?= htmlspecialchars($song['title']) ?></h3>
-                                    <p style="margin: 0; font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;"><?= htmlspecialchars($song['artist']) ?></p>
-                                    <?php if (!empty($song['last_played'])): ?>
-                                    <p style="margin: 0; font-size: 0.68rem; color: var(--color-text-muted); opacity: 0.7;">
-                                        Última: <?= (new DateTime($song['last_played']))->format('d/m/y') ?>
-                                    </p>
-                                    <?php else: ?>
-                                    <p style="margin: 0; font-size: 0.68rem; color: var(--color-text-muted); opacity: 0.4;">Nunca tocada</p>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-body-lg text-body-lg text-on-surface font-bold leading-tight truncate group-hover:text-worship-blue transition-colors"><?= htmlspecialchars($song['title']) ?></h3>
+                                    <p class="font-body-md text-body-md text-on-surface-variant text-sm mt-0.5 truncate"><?= htmlspecialchars($song['artist']) ?></p>
+                                    
+                                    <!-- Tags Internas -->
+                                    <?php if (!empty($songTags)): ?>
+                                    <div class="flex flex-wrap gap-1.5 mt-3">
+                                        <?php foreach ($songTags as $tag): ?>
+                                            <span class="font-label-sm text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full font-bold shadow-sm" style="background: <?= $tag['color'] ?>12; color: <?= $tag['color'] ?>; border: 1px solid <?= $tag['color'] ?>25;">
+                                                <?= htmlspecialchars($tag['name']) ?>
+                                            </span>
+                                        <?php endforeach; ?>
+                                    </div>
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <a href="musica_detalhe.php?id=<?= $song['id'] ?>" style="color: var(--color-primary); opacity: 0.5;">
-                                <i data-lucide="chevron-right" style="width: 20px;"></i>
-                            </a>
-                        </div>
 
-                        <!-- Tags -->
-                        <?php if (!empty($songTags)): ?>
-                        <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;">
-                            <?php foreach ($songTags as $tag): ?>
-                                <span class="pib-badge" style="background: <?= $tag['color'] ?>15; color: <?= $tag['color'] ?>; font-size: 0.6rem; padding: 2px 8px;">
-                                    <?= htmlspecialchars($tag['name']) ?>
+                            <!-- Mídias e Ação -->
+                            <div class="flex items-center justify-between border-t border-surface-container-highest pt-4">
+                                <div class="flex gap-4">
+                                    <?php if ($song['link_cifra']): ?>
+                                        <span class="text-worship-blue/70 hover:text-worship-blue flex items-center gap-1 text-xs font-bold transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">description</span> Cifra
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($song['link_video']): ?>
+                                        <span class="text-error/70 hover:text-error flex items-center gap-1 text-xs font-bold transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">play_circle</span> Vídeo
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($song['link_audio']): ?>
+                                        <span class="text-emerald-500/70 hover:text-emerald-500 flex items-center gap-1 text-xs font-bold transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">headphones</span> Áudio
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                                <span class="text-outline/70 group-hover:text-worship-blue transition-colors">
+                                    <span class="material-symbols-outlined">chevron_right</span>
                                 </span>
-                            <?php endforeach; ?>
+                            </div>
+
                         </div>
-                        <?php endif; ?>
-
-                        <!-- Study Actions -->
-                        <div class="pib-card-footer" style="padding-top: var(--space-sm); margin-top: var(--space-xs); border-top: 1px solid var(--color-border); justify-content: flex-start; gap: var(--space-md);">
-                            <?php if ($song['link_cifra']): ?>
-                                <a href="<?= $song['link_cifra'] ?>" target="_blank" class="pib-card-meta" style="color: var(--color-primary);">
-                                    <i data-lucide="file-text" style="width: 14px;"></i> Cifra
-                                </a>
-                            <?php endif; ?>
-                            <?php if ($song['link_video']): ?>
-                                <a href="<?= $song['link_video'] ?>" target="_blank" class="pib-card-meta" style="color: #ef4444;">
-                                    <i data-lucide="play-circle" style="width: 14px;"></i> Vídeo
-                                </a>
-                            <?php endif; ?>
-                            <?php if ($song['link_audio']): ?>
-                                <a href="<?= $song['link_audio'] ?>" target="_blank" class="pib-card-meta" style="color: #10b981;">
-                                    <i data-lucide="headphones" style="width: 14px;"></i> Áudio
-                                </a>
-                            <?php endif; ?>
-                            
-                            <?php if (!$song['link_cifra'] && !$song['link_video'] && !$song['link_audio']): ?>
-                                <span class="pib-card-meta" style="opacity: 0.4;">
-                                    <i data-lucide="info" style="width: 14px;"></i> Sem links de estudo
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-            <?php 
-                $delay += 0.05;
-            endforeach; ?>
-            
-            <?php if(empty($songs)): ?>
-                <div class="empty-card" style="border: 2px dashed var(--border-medium); border-radius: var(--radius-lg); padding: 40px 20px; text-align: center; margin-top: 20px; width: 100%; box-sizing: border-box; background: var(--bg-surface);">
-                    <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-surface-active); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i data-lucide="music" style="color: var(--text-tertiary); width: 24px; height: 24px;"></i>
-                    </div>
-                    <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 800; color: var(--text-primary);">Sua biblioteca está vazia</h4>
-                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Nenhuma música encontrada no repertório.</p>
-                </div>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Conteúdo: Pastas (Tags) -->
-    <?php if ($tab === 'pastas'):
-        try {
-            $tags = $musicRepo->getTagsWithCount();
-        } catch (Exception $e) { $tags = []; }
-    ?>
-        <div class="results-list">
-            <?php foreach ($tags as $tag): $bgHex = $tag['color'] ?? 'var(--sage-500)'; ?>
-                <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="compact-card tag-card" style="--tag-color: <?= $bgHex ?>;">
-                    
-                    <!-- Ícone -->
-                    <div class="compact-card-icon">
-                        <i data-lucide="folder-heart" width="20"></i>
-                    </div>
-
-                    <!-- Conteúdo -->
-                    <div class="compact-card-content">
-                        <div class="compact-card-title">
-                            <?= htmlspecialchars($tag['name']) ?>
-                        </div>
-                        <div class="compact-card-subtitle">
-                            <?= $tag['count'] ?> música<?= $tag['count'] > 1 ? 's' : '' ?>
-                        </div>
-                    </div>
-
-                    <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Conteúdo: Artistas -->
-    <?php if ($tab === 'artistas'):
-        try {
-            $artists = $musicRepo->getArtistsWithCount();
-        } catch (Exception $e) { $artists = []; }
-    ?>
-        <div class="results-list">
-            <?php foreach ($artists as $artist): 
-                // Buscar tags mais usadas pelo artista
-                try {
-                    $artistTags = $musicRepo->getTopTagsByArtist($artist['name'], 2);
-                } catch (Exception $e) { $artistTags = []; }
+                    </a>
+                <?php endforeach; ?>
                 
-                // Buscar tons mais usados pelo artista
-                try {
-                    $artistTones = $musicRepo->getTopTonesByArtist($artist['name'], 2);
-                } catch (Exception $e) { $artistTones = []; }
-            ?>
-                <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="compact-card">
-                    
-                    <!-- Ícone de Artista -->
-                    <div class="compact-card-icon">
-                        <i data-lucide="user" width="20" style="opacity: 0.5;"></i>
+                <?php if(empty($songs)): ?>
+                    <div class="col-span-full bg-surface-container-lowest border border-dashed border-surface-container-highest rounded-3xl p-12 text-center mt-6 shadow-sm">
+                        <span class="material-symbols-outlined text-5xl text-outline mb-4">music_off</span>
+                        <h4 class="font-headline-md text-headline-md text-on-surface mb-2 font-bold">Sua biblioteca está vazia</h4>
+                        <p class="font-body-md text-body-md text-on-surface-variant/80">Nenhuma música encontrada no repertório.</p>
                     </div>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
-                    <!-- Conteúdo -->
-                    <div class="compact-card-content">
-                        <div class="compact-card-title">
-                            <?= htmlspecialchars($artist['name']) ?>
+        <!-- Conteúdo: Pastas (Tags) -->
+        <?php if ($tab === 'pastas'):
+            try {
+                $tags = $musicRepo->getTagsWithCount();
+            } catch (Exception $e) { $tags = []; }
+        ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
+                <?php foreach ($tags as $tag): $bgHex = $tag['color'] ?? '#2E7EED'; ?>
+                    <a href="repertorio.php?tab=musicas&tag_id=<?= $tag['id'] ?>" class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex items-center justify-between hover:border-worship-blue/40 hover:shadow-md active:scale-[0.99] transition-all duration-300">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm" style="background-color: <?= $bgHex ?>15; color: <?= $bgHex ?>; border: 1px solid <?= $bgHex ?>25;">
+                                <span class="material-symbols-outlined text-[24px]">folder</span>
+                            </div>
+                            <div>
+                                <h3 class="font-body-lg text-body-lg text-on-surface font-bold leading-tight"><?= htmlspecialchars($tag['name']) ?></h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant text-sm mt-0.5"><?= $tag['count'] ?> música<?= $tag['count'] > 1 ? 's' : '' ?></p>
+                            </div>
                         </div>
-                        <div class="compact-card-subtitle">
-                            <span style="font-weight: 600;"><?= $artist['count'] ?> música<?= $artist['count'] > 1 ? 's' : '' ?></span>
-                            
-                            <?php if (!empty($artistTones)): ?>
-                                <span style="opacity: 0.6;">•</span>
-                                <span style="display: inline-flex; align-items: center; gap: 3px;">
-                                    <i data-lucide="music" width="11"></i>
-                                    <?php 
-                                    $tonesList = array_column($artistTones, 'tone');
-                                    echo htmlspecialchars(implode(', ', $tonesList));
-                                    ?>
-                                </span>
-                            <?php endif; ?>
-                            
-                            <?php if (!empty($artistTags)): ?>
-                                <?php foreach ($artistTags as $tag): ?>
-                                    <span style="background: <?= $tag['color'] ?>15; color: <?= $tag['color'] ?>; padding: 1px 5px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
-                                        <?= htmlspecialchars($tag['name']) ?>
-                                    </span>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                        <span class="text-outline/70"><span class="material-symbols-outlined">chevron_right</span></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Conteúdo: Artistas -->
+        <?php if ($tab === 'artistas'):
+            try {
+                $artists = $musicRepo->getArtistsWithCount();
+            } catch (Exception $e) { $artists = []; }
+        ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
+                <?php foreach ($artists as $artist): ?>
+                    <a href="repertorio.php?tab=musicas&q=<?= urlencode($artist['name']) ?>" class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex items-center justify-between hover:border-worship-blue/40 hover:shadow-md active:scale-[0.99] transition-all duration-300">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-2xl bg-surface-container border border-surface-container-highest flex items-center justify-center text-worship-blue shrink-0 shadow-sm">
+                                <span class="material-symbols-outlined text-[24px]">person</span>
+                            </div>
+                            <div>
+                                <h3 class="font-body-lg text-body-lg text-on-surface font-bold leading-tight"><?= htmlspecialchars($artist['name']) ?></h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant text-sm mt-0.5"><?= $artist['count'] ?> música<?= $artist['count'] > 1 ? 's' : '' ?></p>
+                            </div>
                         </div>
-                    </div>
+                        <span class="text-outline/70"><span class="material-symbols-outlined">chevron_right</span></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-                    <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Conteúdo: Tons -->
-    <?php if ($tab === 'tons'):
-        try {
-            $tones = $musicRepo->getTonesWithCount();
-        } catch (Exception $e) { $tones = []; }
-    ?>
-        <div class="results-grid-2col">
-            <?php foreach ($tones as $toneItem):
-                $toneClass = getToneClass($toneItem['name']);
-            ?>
-                <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="compact-card tone-card <?= $toneClass ?>">
-                    
-                    <!-- Ícone Musical -->
-                    <div class="compact-card-icon">
-                        <i data-lucide="music" width="20"></i>
-                    </div>
-
-                    <!-- Conteúdo -->
-                    <div class="compact-card-content">
-                        <div class="compact-card-title">
-                            Tom <?= htmlspecialchars($toneItem['name']) ?>
+        <!-- Conteúdo: Tons -->
+        <?php if ($tab === 'tons'):
+            try {
+                $tones = $musicRepo->getTonesWithCount();
+            } catch (Exception $e) { $tones = []; }
+        ?>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in">
+                <?php foreach ($tones as $toneItem): ?>
+                    <a href="repertorio.php?tab=musicas&tone=<?= urlencode($toneItem['name']) ?>" class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center hover:border-worship-blue/40 hover:shadow-md active:scale-[0.98] transition-all duration-300 text-center relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-full bg-surface-container border border-surface-container-highest flex items-center justify-center text-worship-blue mb-4 shadow-sm">
+                            <span class="font-bold text-xl tracking-tight"><?= htmlspecialchars($toneItem['name']) ?></span>
                         </div>
-                        <div class="compact-card-subtitle">
-                            <?= $toneItem['count'] ?> música<?= $toneItem['count'] > 1 ? 's' : '' ?>
-                        </div>
-                    </div>
+                        <p class="font-body-md text-body-md text-on-surface font-bold leading-tight"><?= htmlspecialchars($toneItem['name']) ?></p>
+                        <p class="text-xs text-on-surface-variant mt-1"><?= $toneItem['count'] ?> música<?= $toneItem['count'] > 1 ? 's' : '' ?></p>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-                    <!-- Seta -->
-                    <i data-lucide="chevron-right" width="18" class="compact-card-arrow"></i>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
+    </div>
+</main>
 
-</div>
+<style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 
 <?php renderAppFooter(); ?>
+
+</style>
+
+<?php renderAppFooter(); ?>
+

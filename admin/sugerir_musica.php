@@ -1,8 +1,9 @@
 <?php
 // admin/sugerir_musica.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 require_once 'init_db_suggestions.php'; // Garantir tabela
 
 renderAppHeader('Sugerir Música');

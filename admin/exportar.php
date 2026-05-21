@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // admin/exportar.php
 // Página de opções de exportação (Painel Admin)
 
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 renderAppHeader('Admin');
 ?>

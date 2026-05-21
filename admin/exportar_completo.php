@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/exportar_completo.php
 // Exportação profissional em Excel com múltiplas abas (CORRIGIDO)
 
-require_once '../includes/db.php';
+require_once '../src/config/db.php';
 
 // Configurar headers corretos para Excel
 header('Content-Type: application/vnd.ms-excel; charset=UTF-8');

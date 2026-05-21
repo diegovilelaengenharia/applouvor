@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/oracao.php - Redesign Premium com funcionalidade completa
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 checkLogin();
 
@@ -246,7 +246,7 @@ renderAppHeader('Mural de Oração');
                 if (!$prayer['is_anonymous'] && !empty($prayer['author_avatar'])) {
                     $authorAvatar = $prayer['author_avatar'];
                     if (strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
-                        $authorAvatar = '../assets/uploads/' . $authorAvatar;
+                        $authorAvatar = '../uploads/' . $authorAvatar;
                     }
                 }
                 
@@ -339,7 +339,7 @@ renderAppHeader('Mural de Oração');
                     <?php foreach ($comments as $comment): 
                         $commentAvatar = !empty($comment['avatar']) ? $comment['avatar'] : null;
                         if ($commentAvatar && strpos($commentAvatar, 'http') === false) {
-                            $commentAvatar = '../assets/uploads/' . $commentAvatar;
+                            $commentAvatar = '../uploads/' . $commentAvatar;
                         }
                     ?>
                     <div class="comment-item">

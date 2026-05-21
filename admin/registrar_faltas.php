@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 // admin/registrar_faltas.php — Registro de presenças e faltas pós-culto (admin only)
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 checkAdmin();
 
 $scheduleId = (int)($_GET['id'] ?? 0);

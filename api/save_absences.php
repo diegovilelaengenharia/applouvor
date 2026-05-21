@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // api/save_absences.php — Persiste status de presença/falta pós-culto (admin only)
 header('Content-Type: application/json');
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
 
 $userId   = $_SESSION['user_id']   ?? 0;
 $userRole = $_SESSION['user_role'] ?? '';

@@ -1,7 +1,9 @@
 <?php
 // admin/artista_detalhe.php
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 if (!isset($_GET['name'])) {
     header('Location: repertorio.php?tab=artistas');

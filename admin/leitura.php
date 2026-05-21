@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 // admin/leitura.php (Refatorado Premium 2026)
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/reading_plans_data.php';
-require_once '../includes/reading_plan.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/reading_plans_data.php';
+require_once '../src/helpers/reading_plan.php';
 
 checkLogin();
 

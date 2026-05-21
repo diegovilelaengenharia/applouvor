@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 /**
  * Cron Job - Relatório Semanal
  * Deve ser executado toda segunda-feira de manhã (ex: 08:00)
  */
 
 // Ajustar caminho se necessário
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/notification_system.php';
+require_once __DIR__ . '/../src/config/db.php';
+require_once __DIR__ . '/../src/helpers/notification_system.php';
 
 // Configurar timezone para garantir datas corretas
 date_default_timezone_set('America/Sao_Paulo');

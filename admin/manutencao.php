@@ -1,6 +1,6 @@
-<?php
-require_once '../includes/auth.php';
-require_once '../includes/layout.php';
+﻿<?php
+require_once '../src/helpers/auth.php';
+require_once '../src/layout/layout.php';
 
 // Check if it's admin or musician to include correct auth check if needed
 // For simplicity, just check login

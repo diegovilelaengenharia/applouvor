@@ -1,7 +1,9 @@
 <?php
 // admin/classificacoes.php
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkAdmin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // --- LOGICA DE POST (CRUD) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

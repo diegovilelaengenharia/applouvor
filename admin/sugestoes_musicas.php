@@ -1,14 +1,11 @@
 <?php
 // admin/sugestoes_musicas.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // Apenas admin
-if (($_SESSION['user_role'] ?? 'user') !== 'admin') {
-    header('Location: repertorio.php');
-    exit;
-}
+checkAdmin();
 
 // Filtros
 $tab = $_GET['tab'] ?? 'pending'; // pending, approved, rejected

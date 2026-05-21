@@ -1,6 +1,6 @@
-<?php
-require_once '../includes/db.php';
-require_once '../includes/auth.php';
+﻿<?php
+require_once '../src/config/db.php';
+require_once '../src/helpers/auth.php';
 
 // Check if admin
 checkAdmin();

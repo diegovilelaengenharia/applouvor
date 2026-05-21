@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/boletim_estatistico.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 checkAdmin();
 
@@ -83,7 +83,7 @@ foreach ($users as $u) {
                     <?php foreach ($users as $u):
                         // Avatar logic simplified for display
                         $initials = substr($u['name'], 0, 2);
-                        $bg = $u['avatar'] ? "url('../assets/uploads/{$u['avatar']}')" : "var(--slate-200)";
+                        $bg = $u['avatar'] ? "url('../uploads/{$u['avatar']}')" : "var(--slate-200)";
 
                         // Tempo decorrido
                         $last_seen = 'Nunca';

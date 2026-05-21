@@ -1,13 +1,14 @@
 <?php
-// admin/devocionais.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/devotional_helpers.php';
+// admin/devocionais.php - Redesign Premium Sacred Minimalist (Tailwind CSS, Bento Grid & GPU transitions)
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/devotional_helpers.php';
 
 checkLogin();
 
 $userId = $_SESSION['user_id'] ?? 1;
+$isAdmin = ($_SESSION['user_role'] ?? '') === 'admin';
 
 // --- LÓGICA DE POST (CRUD) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,11 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($_POST['action']) {
             // --- DEVOCIONAIS ---
             case 'create':
-                // Extrair referências de versículos do conteúdo
                 $verseRefs = extractVerseReferences($_POST['content']);
                 $verseRefsJson = !empty($verseRefs) ? json_encode($verseRefs) : NULL;
                 
-                // Criar devocional
                 $stmt = $pdo->prepare("
                     INSERT INTO devotionals (user_id, title, content, media_type, media_url, series_id, verse_references, order_in_series, created_at) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
@@ -49,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
-                // Enviar notificações
                 $authorName = $_SESSION['user_name'] ?? 'Alguém';
                 notifyNewDevotional($pdo, $devotionalId, $_POST['title'], $authorName);
                 
@@ -80,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
 
             case 'delete':
-                // Apenas o autor pode deletar (ou admin)
                 $stmt = $pdo->prepare("DELETE FROM devotionals WHERE id = ? AND (user_id = ? OR ? = 'admin')");
                 $stmt->execute([$_POST['id'], $userId, $_SESSION['user_role']]);
                 header('Location: devocionais.php?tab=word&success=deleted');
@@ -104,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // --- ORAÇÃO ---
             case 'create_prayer':
-                // Verificar se tabela existe
                 try {
                     $pdo->query("SELECT 1 FROM prayer_requests LIMIT 1");
                     $stmt = $pdo->prepare("INSERT INTO prayer_requests (user_id, title, description, category, is_urgent, is_anonymous, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
@@ -164,7 +160,7 @@ $filterDateFrom = $_GET['date_from'] ?? '';
 $filterDateTo = $_GET['date_to'] ?? '';
 $filterVerse = $_GET['verse'] ?? '';
 $filterSeries = $_GET['series'] ?? '';
-$filterRead = $_GET['read_status'] ?? 'all'; // 'all', 'read', 'unread'
+$filterRead = $_GET['read_status'] ?? 'all';
 
 // Buscar devocionais
 $sql = "SELECT d.*, u.name as author_name, u.avatar as author_avatar,
@@ -183,8 +179,6 @@ if (!empty($filterTag)) {
     $params[] = $filterTag;
 }
 
-
-
 if ($filterType !== 'all') {
     $sql .= " AND d.media_type = ?";
     $params[] = $filterType;
@@ -196,41 +190,33 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
-// Filtro avançado: Autor
 if (!empty($filterAuthor)) {
     $sql .= " AND d.user_id = ?";
     $params[] = $filterAuthor;
 }
 
-// Filtro avançado: Data inicial
 if (!empty($filterDateFrom)) {
     $sql .= " AND DATE(d.created_at) >= ?";
     $params[] = $filterDateFrom;
 }
 
-// Filtro avançado: Data final
 if (!empty($filterDateTo)) {
     $sql .= " AND DATE(d.created_at) <= ?";
     $params[] = $filterDateTo;
 }
 
-// Filtro avançado: Versículos
 if (!empty($filterVerse)) {
     $sql .= " AND (d.verse_references LIKE ? OR d.content LIKE ?)";
     $params[] = "%$filterVerse%";
     $params[] = "%[verso%$filterVerse%]%";
 }
 
-
-
-// Filtro: Status de leitura
 if ($filterRead === 'read') {
     $sql .= " AND dr.id IS NOT NULL";
 } elseif ($filterRead === 'unread') {
     $sql .= " AND dr.id IS NULL";
 }
 
-// Ordenação: Não lidas primeiro, depois por data
 $sql .= " ORDER BY is_read ASC, d.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
@@ -313,75 +299,86 @@ function getPrayerComments($pdo, $prayerId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-renderAppHeader('Espiritualidade');
+renderAppHeader('Espiritualidade', 'index.php');
 ?>
 
 <!-- Quill CSS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<link href="../assets/css/pages/devocionais.css?v=<?= time() ?>" rel="stylesheet">
 
-<?php renderPageHeader('Espiritualidade', 'Louvor PIB Oliveira'); ?>
+<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 mb-32 space-y-8 animate-fade-in" id="espiritualidade-container">
+    
+    <!-- Hero / Header Section -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1B1F] to-[#2C2E35] text-white p-8 shadow-xl border border-white/10">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#2E7EED]/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-[#FFC107]/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2E7EED]/20 border border-[#2E7EED]/30 text-[#2E7EED] text-xs font-bold uppercase tracking-wider mb-3">
+                    📖 Espiritualidade e Devocionais
+                </span>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight font-sans">Vida e Oração em Comunidade</h1>
+                <p class="text-gray-400 mt-2 max-w-xl text-sm font-body">Mantenha a fé ativa compartilhando reflexões da palavra de Deus e intercedendo uns pelos outros.</p>
+            </div>
+        </div>
+    </div>
 
-<div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
-
-    <!-- TABS -->
-    <div class="page-tabs">
-        <button class="tab-btn active" onclick="switchTab('word')" id="btn-tab-word">📖 Palavra</button>
-        <button class="tab-btn" onclick="switchTab('prayer')" id="btn-tab-prayer">🙏 Oração</button>
+    <!-- TABS Flutuantes -->
+    <div class="flex items-center gap-1 p-1 bg-gray-100 rounded-2xl w-fit shadow-sm">
+        <button class="px-5 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-200 active:scale-95 cursor-pointer tab-btn active" onclick="switchTab('word')" id="btn-tab-word">📖 Palavra</button>
+        <button class="px-5 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-200 active:scale-95 cursor-pointer tab-btn" onclick="switchTab('prayer')" id="btn-tab-prayer">🙏 Oração</button>
     </div>
 
     <!-- CONTEÚDO: PALAVRA (DEVOCIONAIS) -->
-    <div id="tab-word" class="tab-content active">
-        <!-- Busca Inteligente Unificada -->
-        <div style="margin-bottom: 20px;">
-            <!-- Campo de Busca Principal -->
-            <div style="position: relative;">
-                <i data-lucide="search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px;"></i>
+    <div id="tab-word" class="tab-content block space-y-6">
+        <!-- Busca e Filtros Bento -->
+        <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
+            <div class="relative w-full">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
                 <input 
                     type="text" 
                     id="smartSearch" 
-                    placeholder="Buscar por título ou conteúdo..." 
+                    placeholder="Buscar devocional por título ou conteúdo... (Ctrl+K)" 
                     value="<?= htmlspecialchars($search) ?>"
-                    style="width: 100%; padding: 14px 14px 14px 48px; border-radius: 14px; border: 1px solid var(--border-medium); font-size: 1rem; outline: none; transition: all 0.2s; background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-sm);"
-                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 3px var(--primary-light)'"
-                    onblur="this.style.borderColor='var(--border-medium)'; this.style.boxShadow='var(--shadow-sm)'"
+                    class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800 font-medium"
                     oninput="handleSmartSearch(this.value)"
                 >
             </div>
 
-            <!-- Filtros Rápidos (Pills) -->
-            <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center;">
-                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Filtros:</span>
+            <!-- Filtros Rápidos (Pills e Selects) -->
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Filtrar:</span>
                 
-                <!-- Status Pills -->
-                <a href="?read_status=all&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>" 
-                   class="filter-pill <?= $filterRead === 'all' ? 'active' : '' ?>">
-                    Todas
-                </a>
-                <a href="?read_status=unread&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>" 
-                   class="filter-pill <?= $filterRead === 'unread' ? 'active' : '' ?>">
-                    Não Lidas
-                </a>
-                <a href="?read_status=read&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>" 
-                   class="filter-pill <?= $filterRead === 'read' ? 'active' : '' ?>">
-                    Lidas
-                </a>
+                <div class="flex gap-1.5 p-0.5 bg-gray-50 rounded-xl border border-gray-100">
+                    <a href="?read_status=all&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>&tab=word" 
+                       class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all <?= $filterRead === 'all' ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 hover:text-gray-800' ?>">
+                        Todas
+                    </a>
+                    <a href="?read_status=unread&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>&tab=word" 
+                       class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all <?= $filterRead === 'unread' ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 hover:text-gray-800' ?>">
+                        Não Lidas
+                    </a>
+                    <a href="?read_status=read&author=<?= $filterAuthor ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>&tab=word" 
+                       class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all <?= $filterRead === 'read' ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 hover:text-gray-800' ?>">
+                        Lidas
+                    </a>
+                </div>
 
-                <span style="width: 1px; height: 20px; background: var(--border-medium); margin: 0 4px;"></span>
+                <span class="w-[1px] h-5 bg-gray-200"></span>
 
-                <!-- Autor Dropdown Compacto -->
-                <select onchange="window.location.href='?author='+this.value+'&read_status=<?= $filterRead ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>'" 
-                        style="padding: 6px 32px 6px 12px; border-radius: 20px; border: 1px solid var(--border-medium); font-size: 0.85rem; font-weight: 600; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748b%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center;">
-                    <option value="">👤 Todos</option>
+                <!-- Autor Select -->
+                <select onchange="window.location.href='?author='+this.value+'&read_status=<?= $filterRead ?>&tag=<?= $filterTag ?>&search=<?= urlencode($search) ?>&tab=word'" 
+                        class="h-8 pl-3 pr-8 bg-gray-50 border border-gray-100 rounded-full text-xs font-bold text-gray-600 focus:outline-none focus:border-[#2E7EED] cursor-pointer appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748b%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_10px_center]">
+                    <option value="">👤 Todos Autores</option>
                     <?php foreach ($allAuthors as $author): ?>
                         <option value="<?= $author['id'] ?>" <?= $filterAuthor == $author['id'] ? 'selected' : '' ?>><?= htmlspecialchars($author['name']) ?></option>
                     <?php endforeach; ?>
                 </select>
 
-                <!-- Tag Dropdown Compacto -->
-                <select onchange="window.location.href='?tag='+this.value+'&read_status=<?= $filterRead ?>&author=<?= $filterAuthor ?>&search=<?= urlencode($search) ?>'" 
-                        style="padding: 6px 32px 6px 12px; border-radius: 20px; border: 1px solid var(--border-medium); font-size: 0.85rem; font-weight: 600; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748b%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center;">
-                    <option value="">🏷️ Todas</option>
+                <!-- Tag Select -->
+                <select onchange="window.location.href='?tag='+this.value+'&read_status=<?= $filterRead ?>&author=<?= $filterAuthor ?>&search=<?= urlencode($search) ?>&tab=word'" 
+                        class="h-8 pl-3 pr-8 bg-gray-50 border border-gray-100 rounded-full text-xs font-bold text-gray-600 focus:outline-none focus:border-[#2E7EED] cursor-pointer appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748b%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27%3E%3C/polyline%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_10px_center]">
+                    <option value="">🏷️ Todas Tags</option>
                     <?php foreach ($allTags as $tag): ?>
                         <option value="<?= $tag['id'] ?>" <?= $filterTag == $tag['id'] ? 'selected' : '' ?>>#<?= htmlspecialchars($tag['name']) ?></option>
                     <?php endforeach; ?>
@@ -389,15 +386,15 @@ renderAppHeader('Espiritualidade');
 
                 <!-- Limpar Filtros -->
                 <?php if (!empty($search) || $filterRead !== 'all' || !empty($filterAuthor) || !empty($filterTag)): ?>
-                <a href="?" style="padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background: var(--red-50); color: var(--red-600); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                    <i data-lucide="x" style="width: 14px;"></i> Limpar
+                <a href="?tab=word" class="h-8 px-3.5 rounded-full text-xs font-bold bg-red-50 hover:bg-red-100 text-red-500 flex items-center gap-1 transition-colors">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i> Limpar
                 </a>
                 <?php endif; ?>
             </div>
         </div>
         
         <!-- Feed de Devocionais -->
-        <div class="devotionals-list">
+        <div class="space-y-4">
             <?php if (count($devotionals) > 0): ?>
                 <?php foreach ($devotionals as $dev): 
                     $tags = getDevotionalTags($pdo, $dev['id']);
@@ -405,43 +402,47 @@ renderAppHeader('Espiritualidade');
                     $authorName = $dev['author_name'] ?? 'Membro';
                     $authorAvatar = $dev['author_avatar'] ?? null;
                     if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
-                        $authorAvatar = '../assets/uploads/' . $authorAvatar;
+                        $authorAvatar = '../uploads/' . $authorAvatar;
                     }
                 ?>
-                <div class="devotional-card collapsed <?= $dev['is_read'] ? 'read' : 'unread' ?>" id="dev-<?= $dev['id'] ?>" onclick="toggleDevotional(<?= $dev['id'] ?>, event)">
+                <div class="devotional-card bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-4 hover:shadow-md transition-all duration-300 <?= $dev['is_read'] ? 'opacity-85' : 'border-l-4 border-l-[#2E7EED]' ?>" id="dev-<?= $dev['id'] ?>">
                     <!-- Header -->
-                    <div class="dev-header">
-                        <?php if ($authorAvatar): ?>
-                            <img src="<?= htmlspecialchars($authorAvatar) ?>" class="dev-avatar" alt="">
-                        <?php else: ?>
-                            <div class="dev-avatar-placeholder"><?= strtoupper(substr($authorName, 0, 1)) ?></div>
-                        <?php endif; ?>
-                        
-                        <div class="dev-author-info">
-                            <div class="dev-author-name">
-                                <?= htmlspecialchars($authorName) ?>
-                                <?php if (!empty($dev['series_title'])): ?>
-                                    <span style="font-weight: 400; color: var(--text-muted); font-size: 0.85rem;">
-                                        em <strong style="color: <?= $dev['series_color'] ?: 'var(--primary)' ?>"><?= htmlspecialchars($dev['series_title']) ?></strong>
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-                            <div class="dev-meta">
-                                <span><?= date('d/m \à\s H:i', strtotime($dev['created_at'])) ?></span>
-                                <?php if (!$dev['is_read']): ?>
-                                    <span style="color: var(--green-600); font-weight: 600;">• Novo</span>
-                                <?php endif; ?>
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <?php if ($authorAvatar): ?>
+                                <img src="<?= htmlspecialchars($authorAvatar) ?>" class="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" alt="">
+                            <?php else: ?>
+                                <div class="w-10 h-10 rounded-full bg-[#2E7EED]/10 text-[#2E7EED] font-extrabold flex items-center justify-center text-sm border border-transparent shadow-sm shrink-0"><?= strtoupper(substr($authorName, 0, 1)) ?></div>
+                            <?php endif; ?>
+                            
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-gray-800 flex items-center flex-wrap gap-1.5 leading-tight">
+                                    <?= htmlspecialchars($authorName) ?>
+                                    <?php if (!empty($dev['series_title'])): ?>
+                                        <span class="text-xs font-bold text-gray-400">em</span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background: <?= $dev['series_color'] ?: '#2E7EED' ?>12; color: <?= $dev['series_color'] ?: '#2E7EED' ?>;">
+                                            📚 <?= htmlspecialchars($dev['series_title']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </span>
+                                <div class="flex items-center gap-1.5 text-[11px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
+                                    <span><?= date('d/m \à\s H:i', strtotime($dev['created_at'])) ?></span>
+                                    <?php if (!$dev['is_read']): ?>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span class="text-emerald-500">Novo</span>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                         
-                        <?php if ($dev['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
-                        <div class="dev-options" onclick="event.stopPropagation()">
-                             <form method="POST" onsubmit="return confirm('Excluir este devocional?');" style="display:inline;">
-                                <?= App\AuthMiddleware::csrfField() ?>
+                        <?php if ($dev['user_id'] == $userId || $isAdmin): ?>
+                        <div class="shrink-0">
+                             <form method="POST" onsubmit="return confirm('Excluir este devocional permanentemente?');" class="m-0">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $dev['id'] ?>">
-                                <button type="submit" style="background:none; border:none; color: var(--text-muted); cursor: pointer; padding: 4px;">
-                                    <i data-lucide="trash-2" style="width: 18px;"></i>
+                                <button type="submit" class="w-8 h-8 rounded-full bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition-colors cursor-pointer">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </form>
                         </div>
@@ -449,24 +450,28 @@ renderAppHeader('Espiritualidade');
                     </div>
                     
                     <!-- Content -->
-                    <div class="dev-content">
-                        <h2 class="dev-title"><?= htmlspecialchars($dev['title']) ?></h2>
-                        <div class="dev-preview"><?= strip_tags($dev['content']) ?></div>
-                        <div class="dev-text"><?= $dev['content'] ?></div>
+                    <div class="space-y-3">
+                        <h2 class="text-xl font-extrabold text-gray-850 leading-snug"><?= htmlspecialchars($dev['title']) ?></h2>
+                        <div class="text-gray-600 text-sm leading-relaxed font-body devotional-text-box">
+                            <?= $dev['content'] ?>
+                        </div>
                         
+                        <!-- Media Embed -->
                         <?php if ($dev['media_type'] === 'video' && !empty($dev['media_url'])): 
                             $embedUrl = str_replace('watch?v=', 'embed/', $dev['media_url']);
                         ?>
-                        <div class="dev-media">
-                            <iframe src="<?= htmlspecialchars($embedUrl) ?>" allowfullscreen></iframe>
+                        <div class="aspect-video w-full rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
+                            <iframe src="<?= htmlspecialchars($embedUrl) ?>" class="w-full h-full" allowfullscreen></iframe>
                         </div>
                         <?php elseif ($dev['media_type'] === 'link' && !empty($dev['media_url'])): ?>
-                        <div class="dev-media">
-                            <a href="<?= htmlspecialchars($dev['media_url']) ?>" target="_blank" class="dev-link-preview" onclick="event.stopPropagation()">
-                                <i data-lucide="external-link" style="width: 24px;"></i>
-                                <div style="flex: 1; overflow: hidden;">
-                                    <div style="font-weight: 600; truncate"><?= htmlspecialchars($dev['media_url']) ?></div>
-                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Clique para acessar o link externo</div>
+                        <div class="pt-2">
+                            <a href="<?= htmlspecialchars($dev['media_url']) ?>" target="_blank" class="flex items-center gap-3 p-4 bg-gray-50 hover:bg-[#2E7EED]/5 border border-gray-100 hover:border-[#2E7EED]/20 rounded-2xl text-slate-800 transition-all duration-200 cursor-pointer">
+                                <div class="w-10 h-10 rounded-xl bg-white text-[#2E7EED] border border-gray-150 flex items-center justify-center shrink-0">
+                                    <i data-lucide="external-link" class="w-5 h-5"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Link Adicional</div>
+                                    <div class="text-xs font-bold text-gray-700 truncate font-body"><?= htmlspecialchars($dev['media_url']) ?></div>
                                 </div>
                             </a>
                         </div>
@@ -475,164 +480,166 @@ renderAppHeader('Espiritualidade');
                     
                     <!-- Tags -->
                     <?php if (!empty($tags)): ?>
-                    <div class="dev-tags">
+                    <div class="flex flex-wrap gap-1.5 pt-2">
                         <?php foreach ($tags as $tag): ?>
-                            <span class="dev-tag">#<?= htmlspecialchars($tag['name']) ?></span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-slate-50 border border-slate-100 text-slate-500 text-xs font-bold">
+                                #<?= htmlspecialchars($tag['name']) ?>
+                            </span>
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
                     
-                    <!-- Expand Indicator -->
-                    <div class="expand-indicator">Lear mais <i data-lucide="chevron-down" style="width: 14px;"></i></div>
-                    
-                    <!-- Footer -->
-                    <div class="dev-footer">
-                        <div class="dev-actions">
-                            <button class="dev-action-btn" onclick="toggleComments('comments-<?= $dev['id'] ?>', event)">
-                                <i data-lucide="message-circle" style="width: 18px;"></i>
-                                <span><?= count($comments) ?> Comments</span>
-                            </button>
-                            <button class="dev-action-btn" onclick="shareDevotional(<?= $dev['id'] ?>, '<?= addslashes($dev['title']) ?>', event)">
-                                <i data-lucide="share-2" style="width: 18px;"></i>
-                                <span>Share</span>
-                            </button>
-                        </div>
+                    <!-- Footer Actions -->
+                    <div class="flex items-center gap-3 pt-3 border-t border-gray-50">
+                        <button class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-[#2E7EED] bg-gray-50 px-3.5 py-2 rounded-xl transition-colors cursor-pointer" onclick="toggleComments('comments-<?= $dev['id'] ?>', event)">
+                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                            <span>Comentários (<?= count($comments) ?>)</span>
+                        </button>
+                        <button class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-emerald-500 bg-gray-50 px-3.5 py-2 rounded-xl transition-colors cursor-pointer" onclick="shareDevotional(<?= $dev['id'] ?>, '<?= addslashes($dev['title']) ?>', event)">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                            <span>Compartilhar</span>
+                        </button>
                     </div>
                     
-                    <!-- Comments -->
-                    <div id="comments-<?= $dev['id'] ?>" class="comments-section" onclick="event.stopPropagation()">
-                        <?php foreach ($comments as $comment): 
-                             $commentAvatar = $comment['author_avatar'];
-                             if ($commentAvatar && strpos($commentAvatar, 'http') === false) {
-                                $commentAvatar = '../assets/uploads/' . $commentAvatar;
-                            }
-                        ?>
-                        <div class="comment-item">
-                            <?php if ($commentAvatar): ?>
-                                <img src="<?= htmlspecialchars($commentAvatar) ?>" class="comment-avatar" alt="">
-                            <?php else: ?>
-                                <div class="comment-avatar" style="background: var(--slate-300); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #555;">
-                                    <?= strtoupper(substr($comment['author_name'], 0, 1)) ?>
-                                </div>
-                            <?php endif; ?>
-                            <div class="comment-content">
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span class="comment-author"><?= htmlspecialchars($comment['author_name']) ?></span>
-                                    <span class="comment-time"><?= date('d/m H:i', strtotime($comment['created_at'])) ?></span>
-                                </div>
-                                <p class="comment-text"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
-                            </div>
-                             <?php if ($comment['user_id'] == $userId || $_SESSION['user_role'] === 'admin'): ?>
-                            <div style="margin-left: 8px;">
-                                <form method="POST" onsubmit="return confirm('Apagar comentário?');">
-                                    <?= App\AuthMiddleware::csrfField() ?>
-                                    <input type="hidden" name="action" value="delete_comment">
-                                    <input type="hidden" name="comment_id" value="<?= $comment['id'] ?>">
-                                    <button type="submit" style="background: none; border: none; color: var(--rose-400); cursor: pointer;">
-                                        <i data-lucide="x" style="width: 14px;"></i>
-                                    </button>
-                                </form>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        <?php endforeach; ?>
+                    <!-- Comments Section -->
+                    <div id="comments-<?= $dev['id'] ?>" class="hidden pt-4 border-t border-gray-50 space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 pl-1 mb-2">Comentários</h4>
                         
-                        <form method="POST" class="comment-form">
-                            <?= App\AuthMiddleware::csrfField() ?>
+                        <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                            <?php foreach ($comments as $comment): 
+                                 $commentAvatar = $comment['author_avatar'];
+                                 if ($commentAvatar && strpos($commentAvatar, 'http') === false) {
+                                    $commentAvatar = '../uploads/' . $commentAvatar;
+                                }
+                            ?>
+                            <div class="flex gap-3 bg-gray-50/50 p-3 rounded-2xl border border-gray-100">
+                                <?php if ($commentAvatar): ?>
+                                    <img src="<?= htmlspecialchars($commentAvatar) ?>" class="w-8 h-8 rounded-full object-cover shrink-0 border border-gray-150 shadow-sm" alt="">
+                                <?php else: ?>
+                                    <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 font-extrabold flex items-center justify-center text-xs shrink-0"><?= strtoupper(substr($comment['author_name'], 0, 1)) ?></div>
+                                <?php endif; ?>
+                                
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span class="text-xs font-bold text-gray-700"><?= htmlspecialchars($comment['author_name']) ?></span>
+                                        <span class="text-[10px] text-gray-400 font-semibold"><?= date('d/m H:i', strtotime($comment['created_at'])) ?></span>
+                                    </div>
+                                    <p class="text-xs text-gray-600 font-body leading-relaxed mt-1"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                                </div>
+                                
+                                <?php if ($comment['user_id'] == $userId || $isAdmin): ?>
+                                <div class="shrink-0">
+                                    <form method="POST" onsubmit="return confirm('Excluir este comentário?');" class="m-0">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                        <input type="hidden" name="action" value="delete_comment">
+                                        <input type="hidden" name="comment_id" value="<?= $comment['id'] ?>">
+                                        <button type="submit" class="w-6 h-6 rounded-full bg-white hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center border border-gray-150 transition-colors cursor-pointer">
+                                            <i data-lucide="x" class="w-3 h-3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- Add Comment Form -->
+                        <form method="POST" class="flex gap-2 pt-2">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                             <input type="hidden" name="action" value="comment">
                             <input type="hidden" name="devotional_id" value="<?= $dev['id'] ?>">
-                            <input type="text" name="comment" class="comment-input" placeholder="Escreva um comentário..." required>
-                            <button type="submit" class="comment-submit">
-                                <i data-lucide="send" style="width: 18px;"></i>
+                            <input type="text" name="comment" class="flex-1 h-10 px-4 bg-gray-50 border border-gray-150 rounded-xl text-xs focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800 font-medium" placeholder="Escreva uma mensagem..." required>
+                            <button type="submit" class="w-10 h-10 rounded-xl bg-[#2E7EED] hover:bg-[#1A6FD6] text-white flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-all cursor-pointer">
+                                <i data-lucide="send" class="w-4 h-4"></i>
                             </button>
                         </form>
                     </div>
                 </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div style="text-align: center; padding: 60px 20px;">
-                    <div style="background: var(--green-50); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                        <i data-lucide="book-open" style="color: var(--green-400); width: 40px; height: 40px;"></i>
+                <div class="bg-gray-50 border border-dashed border-gray-200 rounded-3xl p-12 text-center">
+                    <div class="w-16 h-16 rounded-full bg-[#2E7EED]/10 text-[#2E7EED] flex items-center justify-center mx-auto mb-4 border border-transparent">
+                        <i data-lucide="book-open" class="w-8 h-8"></i>
                     </div>
-                    <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum devocional ainda</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 300px; margin: 0 auto 20px;">Seja o primeiro a compartilhar uma reflexão!</p>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">Nenhum devocional ainda</h3>
+                    <p class="text-sm text-gray-500 max-w-sm mx-auto mb-6">Compartilhe uma reflexão espiritual da palavra de Deus com toda a equipe do louvor!</p>
                 </div>
             <?php endif; ?>
         </div>
     </div>
 
     <!-- CONTEÚDO: ORAÇÃO -->
-    <div id="tab-prayer" class="tab-content">
-        <div class="prayer-list">
+    <div id="tab-prayer" class="tab-content hidden space-y-6">
+        <!-- Feed de Pedidos de Oração (Mural Contemplativo) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <?php if ($prayerTableExists && count($prayers) > 0): ?>
                 <?php foreach ($prayers as $prayer): 
                     $authorAvatar = $prayer['author_avatar'];
-                     if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
-                        $authorAvatar = '../assets/uploads/' . $authorAvatar;
+                    if ($authorAvatar && strpos($authorAvatar, 'http') === false && strpos($authorAvatar, 'assets') === false) {
+                        $authorAvatar = '../uploads/' . $authorAvatar;
                     }
                 ?>
-                <div class="prayer-card <?= ($prayer['is_answered']) ? 'answered' : '' ?> collapsed" onclick="this.classList.toggle('collapsed')">
-                    <div class="prayer-header">
-                        <div class="prayer-user-info">
-                            <?php if ($authorAvatar): ?>
-                                <img src="<?= $authorAvatar ?>" class="prayer-avatar">
-                            <?php else: ?>
-                                <div class="prayer-avatar" style="background: var(--primary-subtle); display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700;">
-                                    <?= strtoupper(substr($prayer['author_name'] ?? 'A', 0, 1)) ?>
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300 <?= $prayer['is_urgent'] ? 'border-l-4 border-l-[#FFC107]' : '' ?>" id="prayer-<?= $prayer['id'] ?>">
+                    <div class="space-y-4 flex-1">
+                        <!-- Top Info -->
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <?php if ($authorAvatar): ?>
+                                    <img src="<?= $authorAvatar ?>" class="w-9 h-9 rounded-full object-cover border border-gray-100 shadow-sm shrink-0">
+                                <?php else: ?>
+                                    <div class="w-9 h-9 rounded-full bg-[#FFC107]/10 text-[#D97706] font-extrabold flex items-center justify-center text-xs shrink-0">
+                                        <?= strtoupper(substr($prayer['author_name'] ?? 'A', 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="flex flex-col">
+                                    <h4 class="text-xs font-bold text-gray-800 leading-tight">
+                                        <?= $prayer['is_anonymous'] ? '🔒 Anônimo' : htmlspecialchars($prayer['author_name'] ?? 'Anônimo') ?>
+                                    </h4>
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-0.5"><?= date('d/m \à\s H:i', strtotime($prayer['created_at'])) ?></span>
                                 </div>
-                            <?php endif; ?>
-                            <div class="prayer-meta">
-                                <h4>
-                                    <?= $prayer['is_anonymous'] ? 'Anônimo' : htmlspecialchars($prayer['author_name'] ?? 'Anônimo') ?>
-                                    <?php if($prayer['is_urgent']): ?>
-                                        <span style="color: var(--rose-500);">🔥</span>
-                                    <?php endif; ?>
-                                </h4>
-                                <span><?= date('d/m \à\s H:i', strtotime($prayer['created_at'])) ?></span>
                             </div>
+                            
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#2E7EED]/10 text-[#2E7EED] uppercase tracking-wider">
+                                <?php
+                                    $cats = [
+                                        'health' => 'Saúde', 'family' => 'Família', 
+                                        'work' => 'Trabalho', 'spiritual' => 'Espiritual',
+                                        'gratitude' => 'Gratidão', 'other' => 'Outros'
+                                    ];
+                                    echo $cats[$prayer['category']] ?? 'Outros';
+                                ?>
+                            </span>
                         </div>
                         
-                        <span class="cat-badge cat-<?= $prayer['category'] ?? 'other' ?>">
-                            <?php
-                                $cats = [
-                                    'health' => 'Saúde', 'family' => 'Família', 
-                                    'work' => 'Trabalho', 'spiritual' => 'Espiritual',
-                                    'gratitude' => 'Gratidão', 'other' => 'Outros'
-                                ];
-                                echo $cats[$prayer['category']] ?? 'Outros';
-                            ?>
-                        </span>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="prayer-content">
-                        <h3 class="prayer-title"><?= htmlspecialchars($prayer['title']) ?></h3>
-                        <?php if (!empty($prayer['description'])): ?>
-                            <div class="prayer-description"><?= nl2br(htmlspecialchars($prayer['description'])) ?></div>
-                        <?php endif; ?>
-                        
-                        <!-- Expand Indicator -->
-                        <div class="expand-indicator">
-                            Ler mais <i data-lucide="chevron-down" style="width: 14px;"></i>
+                        <!-- Content -->
+                        <div class="space-y-2">
+                            <h3 class="text-base font-extrabold text-gray-850 flex items-center gap-1.5 leading-tight">
+                                <?php if($prayer['is_urgent']): ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#FFC107]/20 border border-[#FFC107]/30 text-[#D97706] text-[9px] font-black uppercase tracking-widest shrink-0 animate-pulse">🔥 Urgente</span>
+                                <?php endif; ?>
+                                <?= htmlspecialchars($prayer['title']) ?>
+                            </h3>
+                            <?php if (!empty($prayer['description'])): ?>
+                                <p class="text-xs text-gray-500 font-body leading-relaxed whitespace-pre-line"><?= htmlspecialchars($prayer['description']) ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
-                    <!-- Footer -->
-                    <div class="prayer-footer">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this); event.stopPropagation();" class="pray-action-btn <?= $prayer['is_interceded'] ? 'active' : '' ?>">
-                                <i data-lucide="heart" style="width: 16px; <?= $prayer['is_interceded'] ? 'fill: currentColor;' : '' ?>"></i>
-                                <span><?= $prayer['is_interceded'] ? 'Intercedi' : 'Interceder' ?></span> (<?= $prayer['pray_count'] ?>)
-                            </button>
-                        </div>
+                    <!-- Footer / Intercessão -->
+                    <div class="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-gray-50 shrink-0">
+                        <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this); event.stopPropagation();" class="inline-flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-red-500 bg-gray-50 hover:bg-red-50 border border-gray-150 px-4 py-2.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer <?= $prayer['is_interceded'] ? 'active bg-red-50 border-red-200 text-red-500' : '' ?>">
+                            <i data-lucide="heart" class="w-4 h-4 transition-transform duration-300 <?= $prayer['is_interceded'] ? 'fill-red-500 scale-110' : '' ?>"></i>
+                            <span><?= $prayer['is_interceded'] ? 'Intercedi' : 'Interceder' ?></span>
+                            <span class="font-black font-body opacity-80">(<?= $prayer['pray_count'] ?>)</span>
+                        </button>
                         
                         <?php if ($prayer['user_id'] == $userId && !$prayer['is_answered']): ?>
-                        <form method="POST" style="margin: 0;" onclick="event.stopPropagation()">
-                            <?= App\AuthMiddleware::csrfField() ?>
+                        <form method="POST" class="m-0" onclick="event.stopPropagation()">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                             <input type="hidden" name="action" value="answer_prayer">
                             <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                            <button type="submit" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
-                                ✓ Marcar respondida
+                            <button type="submit" class="inline-flex items-center gap-1 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 text-emerald-600 font-bold text-xs rounded-full active:scale-95 transition-all cursor-pointer">
+                                <i data-lucide="check" class="w-3.5 h-3.5"></i> Respondida
                             </button>
                         </form>
                         <?php endif; ?>
@@ -640,163 +647,180 @@ renderAppHeader('Espiritualidade');
                 </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div style="text-align: center; padding: 60px 20px;">
-                    <div style="background: var(--primary-subtle); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                        <i data-lucide="heart" style="color: var(--primary); width: 40px; height: 40px;"></i>
+                <div class="col-span-1 md:col-span-2 bg-gray-50 border border-dashed border-gray-200 rounded-3xl p-12 text-center">
+                    <div class="w-16 h-16 rounded-full bg-[#FFC107]/10 text-[#D97706] flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="heart" class="w-8 h-8"></i>
                     </div>
-                    <h3 style="color: var(--text-main); margin-bottom: 8px;">Nenhum pedido de oração</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 300px; margin: 0 auto 20px;">
-                        Compartilhe seus pedidos e deixe a igreja orar por você.
-                    </p>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">Nenhum pedido de oração ativo</h3>
+                    <p class="text-sm text-gray-500 max-w-sm mx-auto">Compartilhe suas necessidades de oração com a equipe e deixe todos intercederem por você.</p>
                 </div>
             <?php endif; ?>
         </div>
     </div>
+</main>
 
-    <div style="height: 100px;"></div>
-
-</div>
-
-<!-- DUAL FAB BUTTONS -->
-<div class="fab-container">
-    <button onclick="openCreatePrayerModal()" class="fab-btn fab-prayer" id="fab-prayer">
-        <i data-lucide="heart" style="width: 20px; height: 20px;"></i> Novo Pedido
+<!-- DUAL FAB BUTTONS (Sacred Minimalist Dynamic Fixed Box) -->
+<div class="fixed bottom-6 right-6 flex flex-col sm:flex-row gap-3 z-40">
+    <button onclick="openCreatePrayerModal()" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#FFC107] hover:bg-[#E5B006] text-slate-900 font-extrabold text-sm shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-200 cursor-pointer" id="fab-prayer" style="display: none;">
+        <i data-lucide="heart" class="w-4 h-4 fill-slate-900"></i> Novo Pedido
     </button>
-    <button onclick="openCreateModal()" class="fab-btn fab-devotional" id="fab-word">
-        <i data-lucide="feather" style="width: 20px; height: 20px;"></i> Novo Devocional
+    <button onclick="openCreateModal()" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-extrabold text-sm shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-200 cursor-pointer" id="fab-word">
+        <i data-lucide="feather" class="w-4 h-4"></i> Novo Devocional
     </button>
 </div>
 
 <!-- Modal Create Devotional -->
-<div id="devotionalModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
-    <div onclick="closeModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);"></div>
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 600px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--text-main);">📖 Novo Devocional</h2>
-            <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 8px;">
-                <i data-lucide="x" style="width: 20px;"></i>
+<div id="devotionalModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+    <div id="devotionalModalContent" class="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl transition-all transform scale-95 duration-300 max-h-[90vh] overflow-y-auto border border-gray-100">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <h2 class="text-xl font-bold text-gray-850 flex items-center gap-2">📖 Novo Devocional</h2>
+            <button onclick="closeModalForce('devotionalModal')" class="w-8 h-8 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-500 transition-colors cursor-pointer border border-transparent hover:border-gray-200">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
-        <form method="POST" id="devotionalForm" onsubmit="return prepareSubmit()">
-            <?= App\AuthMiddleware::csrfField() ?>
+        
+        <form method="POST" id="devotionalForm" onsubmit="return prepareSubmit()" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="hidden" name="action" value="create">
             <input type="hidden" name="content" id="hiddenContent">
             
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Título</label>
-                <input type="text" name="title" required placeholder="Ex: A paz que excede todo entendimento">
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Título</label>
+                <input type="text" name="title" required placeholder="Ex: A paz que excede todo entendimento" class="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800 font-semibold">
             </div>
             
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Conteúdo</label>
-                <div id="editor"></div>
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Mensagem/Conteúdo</label>
+                <div class="border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+                    <div id="editor" style="height: 180px; background: white;" class="font-sans text-sm"></div>
+                </div>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                <div>
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Tipo de Mídia</label>
-                    <select name="media_type" onchange="toggleMediaInput(this.value)">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Tipo de Mídia</label>
+                    <select name="media_type" onchange="toggleMediaInput(this.value)" class="w-full h-11 px-3 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-2xl text-sm font-semibold text-gray-700 focus:outline-none focus:border-[#2E7EED] transition-all">
                         <option value="text">Apenas Texto</option>
                         <option value="video">Vídeo (YouTube)</option>
                         <option value="link">Link Externo</option>
                     </select>
                 </div>
                 <!-- URL Media Group -->
-                 <div id="mediaUrlGroup" style="display: none;">
-                    <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">URL da Mídia</label>
-                    <input type="url" name="media_url" placeholder="https://...">
+                <div id="mediaUrlGroup" class="hidden flex flex-col gap-1.5 animate-fade-in">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">URL da Mídia</label>
+                    <input type="url" name="media_url" placeholder="https://youtube.com/watch?v=..." class="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800 font-semibold">
                 </div>
             </div>
-             <div style="margin-bottom: 24px; position: relative;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Tags (Assuntos)</label>
-                
-                <div class="custom-dropdown" style="position: relative;">
-                    <button type="button" onclick="toggleTagDropdown()" id="tagDropdownBtn" style="width: 100%; text-align: left; padding: 14px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            
+            <!-- Tags Selection Multi-Select -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Tags (Assuntos)</label>
+                <div class="relative w-full custom-dropdown">
+                    <div onclick="toggleTagDropdownForm()" id="tagDropdownBtn" class="w-full h-11 px-4 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-2xl text-sm font-semibold text-gray-700 flex items-center justify-between gap-2 transition-colors cursor-pointer">
                         <span>Selecionar Tags...</span>
-                        <i data-lucide="chevron-down" style="width: 16px;"></i>
-                    </button>
-                    
-                    <div id="tagDropdownList" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 10; padding: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 8px;">
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+                    </div>
+                    <div id="tagDropdownList" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 flex flex-col max-h-[180px] overflow-y-auto divide-y divide-gray-50">
                         <?php foreach ($allTags as $tag): ?>
-                        <label style="display: flex; align-items: center; padding: 10px; cursor: pointer; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
-                            <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" style="margin-right: 12px; width: 18px; height: 18px; accent-color: var(--primary);" onchange="updateTagButton()">
-                            <span style="color: var(--text-main); font-weight: 500; font-size: 0.95rem;"><?= htmlspecialchars($tag['name']) ?></span>
-                        </label>
+                        <div onclick="toggleTagCheckboxForm(<?= $tag['id'] ?>, event)" class="px-4 py-2.5 hover:bg-gray-50 text-sm text-gray-700 flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" class="tag-form-checkbox w-4 h-4 rounded border-gray-300 text-[#2E7EED] focus:ring-[#2E7EED]">
+                            <span class="flex-1 font-semibold text-gray-700">#<?= htmlspecialchars($tag['name']) ?></span>
+                        </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">Cancelar</button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">Publicar</button>
+            
+            <div class="flex gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeModalForce('devotionalModal')" class="flex-1 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-100 text-gray-700 font-bold text-sm rounded-2xl active:scale-95 transition-all cursor-pointer">Cancelar</button>
+                <button type="submit" class="flex-[2] py-3 bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm rounded-2xl shadow-md active:scale-95 transition-all cursor-pointer">Publicar</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Modal Create Prayer -->
-<div id="prayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
-    <div onclick="closePrayerModal()" style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);"></div>
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; background: var(--bg-surface); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--primary-subtle); display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 1.5rem;">🙏</span>
+<div id="prayerModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+    <div id="prayerModalContent" class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl transition-all transform scale-95 duration-300 max-h-[85vh] overflow-y-auto border border-gray-100">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-[#FFC107]/10 text-[#D97706] flex items-center justify-center shrink-0 border border-transparent">
+                    <span class="text-xl">🙏</span>
                 </div>
                 <div>
-                    <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Novo Pedido</h2>
-                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Compartilhe com a igreja</p>
+                    <h2 class="text-lg font-bold text-gray-850 leading-tight">Novo Pedido</h2>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Compartilhe na central de oração</p>
                 </div>
             </div>
-            <button onclick="closePrayerModal()" style="background: var(--bg-body); border: none; color: var(--text-muted); cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
-                <i data-lucide="x" style="width: 18px;"></i>
+            <button onclick="closeModalForce('prayerModal')" class="w-8 h-8 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-500 transition-colors cursor-pointer border border-transparent hover:border-gray-200">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
-        <form method="POST">
-            <?= App\AuthMiddleware::csrfField() ?>
+        
+        <form method="POST" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="hidden" name="action" value="create_prayer">
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Título do Pedido</label>
-                <input type="text" name="title" required placeholder="Ex: Oração pela saúde do meu pai">
+            
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Título do Pedido</label>
+                <input type="text" name="title" required placeholder="Ex: Oração pela saúde do meu pai" class="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800 font-semibold">
             </div>
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 6px; font-size: 0.95rem;">Descrição (opcional)</label>
-                <textarea name="description" rows="4" style="width: 100%; border-radius: 12px; border: 1px solid var(--border-color); padding: 12px; resize: none;" placeholder="Detalhes do pedido..."></textarea>
+            
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Descrição detalhada</label>
+                <textarea name="description" rows="4" placeholder="Adicione detalhes adicionais se desejar..." class="w-full border-gray-100 bg-gray-50 border rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-850 p-4 resize-none font-body leading-relaxed"></textarea>
             </div>
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-weight: 700; color: var(--text-main); margin-bottom: 8px; font-size: 0.95rem;">Categoria</label>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                     <!-- Options (simplified for brevity) -->
-                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color);">
-                        <input type="radio" name="category" value="health" style="display: none;">
-                        <span style="font-size: 1.5rem;">❤️</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Saúde</span>
+            
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Categoria</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <label class="cat-option border border-gray-150 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-all text-center select-none" onclick="selectFormCategory(this)">
+                        <input type="radio" name="category" value="health" class="hidden">
+                        <span class="text-lg">❤️</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Saúde</span>
                     </label>
-                     <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color);">
-                        <input type="radio" name="category" value="family" style="display: none;">
-                        <span style="font-size: 1.5rem;">👨‍👩‍👧</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Família</span>
+                    <label class="cat-option border border-gray-150 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-all text-center select-none" onclick="selectFormCategory(this)">
+                        <input type="radio" name="category" value="family" class="hidden">
+                        <span class="text-lg">👨‍👩‍👧</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Família</span>
                     </label>
-                    <label class="cat-option" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color);">
-                        <input type="radio" name="category" value="other" checked style="display: none;">
-                        <span style="font-size: 1.5rem;">🙏</span>
-                        <span style="font-size: 0.75rem; font-weight: 600;">Outros</span>
+                    <label class="cat-option border border-gray-150 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-all text-center select-none" onclick="selectFormCategory(this)">
+                        <input type="radio" name="category" value="work" class="hidden">
+                        <span class="text-lg">💼</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Trabalho</span>
+                    </label>
+                    <label class="cat-option border border-gray-150 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-all text-center select-none" onclick="selectFormCategory(this)">
+                        <input type="radio" name="category" value="spiritual" class="hidden">
+                        <span class="text-lg">🙏</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Fé</span>
+                    </label>
+                    <label class="cat-option border border-gray-150 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-all text-center select-none" onclick="selectFormCategory(this)">
+                        <input type="radio" name="category" value="gratitude" class="hidden">
+                        <span class="text-lg">🎉</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Gratidão</span>
+                    </label>
+                    <label class="cat-option border border-gray-150 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-all text-center select-none border-[#2E7EED] bg-[#2E7EED]/5 text-[#2E7EED]" onclick="selectFormCategory(this)">
+                        <input type="radio" name="category" value="other" checked class="hidden">
+                        <span class="text-lg">✨</span>
+                        <span class="text-[10px] font-bold text-[#2E7EED] uppercase tracking-wider">Outros</span>
                     </label>
                 </div>
             </div>
-            <div style="margin-bottom: 20px; display: flex; gap: 16px; flex-wrap: wrap;">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" name="is_urgent" style="width: 18px; height: 18px; accent-color: var(--rose-600);">
-                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">🔥 Urgente</span>
+            
+            <div class="flex gap-4 pt-1 pb-2">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" name="is_urgent" class="w-4.5 h-4.5 rounded border-gray-300 text-[#FFC107] focus:ring-[#FFC107]">
+                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wider">🔥 Urgente</span>
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" name="is_anonymous" style="width: 18px; height: 18px; accent-color: var(--slate-500);">
-                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">🔒 Anônimo</span>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" name="is_anonymous" class="w-4.5 h-4.5 rounded border-gray-300 text-slate-500 focus:ring-slate-500">
+                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wider">🔒 Anônimo</span>
                 </label>
             </div>
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closePrayerModal()" style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); font-weight: 600; cursor: pointer; color: var(--text-muted);">Cancelar</button>
-                <button type="submit" style="flex: 2; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer;">Enviar Pedido</button>
+            
+            <div class="flex gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeModalForce('prayerModal')" class="flex-1 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-100 text-gray-700 font-bold text-sm rounded-2xl active:scale-95 transition-all cursor-pointer">Cancelar</button>
+                <button type="submit" class="flex-[2] py-3 bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm rounded-2xl shadow-md active:scale-95 transition-all cursor-pointer">Enviar Pedido</button>
             </div>
         </form>
     </div>
@@ -804,13 +828,18 @@ renderAppHeader('Espiritualidade');
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Quill
     var quill;
     document.addEventListener('DOMContentLoaded', function() {
         quill = new Quill('#editor', {
             theme: 'snow',
-            placeholder: 'Compartilhe sua reflexão... Use [verso Romanos 8:28] para citar Bíblia.',
-            modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean']] }
+            placeholder: 'Compartilhe sua reflexão... Use [verso Romanos 8:28] para citar a Bíblia.',
+            modules: { 
+                toolbar: [
+                    ['bold', 'italic', 'underline'], 
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }], 
+                    ['link', 'clean']
+                ] 
+            }
         });
         
         // CHECK URL PARAMS FOR TAB
@@ -818,51 +847,113 @@ renderAppHeader('Espiritualidade');
         const tab = urlParams.get('tab');
         if (tab === 'prayer') {
             switchTab('prayer');
+        } else {
+            switchTab('word');
         }
     });
 
     function switchTab(tabName) {
         // Hide all
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(el => {
+            el.classList.add('hidden');
+            el.classList.remove('block');
+        });
+        document.querySelectorAll('.tab-btn').forEach(el => {
+            el.classList.remove('active', 'bg-white', 'text-gray-800', 'shadow-sm');
+            el.classList.add('text-gray-500');
+        });
         
         // Show target
-        document.getElementById('tab-' + tabName).classList.add('active');
-        document.getElementById('btn-tab-' + tabName).classList.add('active');
+        const activeTab = document.getElementById('tab-' + tabName);
+        activeTab.classList.remove('hidden');
+        activeTab.classList.add('block');
         
+        const activeBtn = document.getElementById('btn-tab-' + tabName);
+        activeBtn.classList.add('active', 'bg-white', 'text-gray-800', 'shadow-sm');
+        activeBtn.classList.remove('text-gray-500');
+        
+        // Toggle FABs visibility
+        const fabWord = document.getElementById('fab-word');
+        const fabPrayer = document.getElementById('fab-prayer');
+        if (tabName === 'prayer') {
+            fabWord.style.display = 'none';
+            fabPrayer.style.display = 'flex';
+        } else {
+            fabWord.style.display = 'flex';
+            fabPrayer.style.display = 'none';
+        }
+
         // Update URL without reload
         const url = new URL(window.location);
         url.searchParams.set('tab', tabName);
         window.history.pushState({}, '', url);
     }
 
-    // Modal Functions
-    function openCreateModal() { document.getElementById('devotionalModal').style.display = 'block'; }
-    function closeModal() { document.getElementById('devotionalModal').style.display = 'none'; }
-    function openCreatePrayerModal() { document.getElementById('prayerModal').style.display = 'block'; }
-    function closePrayerModal() { document.getElementById('prayerModal').style.display = 'none'; }
+    // Modal Control with smooth animations
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        const content = document.getElementById(id + 'Content');
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        document.body.style.overflow = 'hidden';
+        
+        // Reflow force
+        modal.offsetHeight;
+        
+        modal.classList.remove('opacity-0');
+        modal.classList.add('opacity-100');
+        
+        if (content) {
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+    }
+    
+    function closeModalForce(id) {
+        const modal = document.getElementById(id);
+        const content = document.getElementById(id + 'Content');
+        
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+        
+        if (content) {
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+        
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    function openCreateModal() { openModal('devotionalModal'); }
+    function openCreatePrayerModal() { openModal('prayerModal'); }
     
     // Form prep
     function prepareSubmit() {
-        var content = document.querySelector('input[name=content]');
+        var content = document.getElementById('hiddenContent');
         content.value = quill.root.innerHTML;
         return true;
     }
 
     function toggleMediaInput(type) {
         const group = document.getElementById('mediaUrlGroup');
-        group.style.display = (type === 'text') ? 'none' : 'block';
-    }
-    
-    // Interactions
-    function toggleDevotional(id, event) {
-        if (event.target.closest('button') || event.target.closest('a') || event.target.closest('input') || event.target.closest('.comments-section')) return;
-        document.getElementById('dev-' + id).classList.toggle('collapsed');
+        if (type === 'text') {
+            group.classList.add('hidden');
+        } else {
+            group.classList.remove('hidden');
+        }
     }
     
     function toggleComments(id, event) {
         if(event) event.stopPropagation();
-        document.getElementById(id).classList.toggle('open');
+        const section = document.getElementById(id);
+        section.classList.toggle('hidden');
+        section.classList.toggle('animate-fade-in');
     }
     
     function shareDevotional(id, title, event) {
@@ -870,18 +961,20 @@ renderAppHeader('Espiritualidade');
         if (navigator.share) {
             navigator.share({ title: title, text: 'Devocional: ' + title, url: window.location.href.split('?')[0] + '?id=' + id });
         } else {
-            alert('Copie o link!');
+            // Fallback copy
+            const dummy = document.createElement('input');
+            const text = window.location.href.split('?')[0] + '?id=' + id;
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert('Link copiado para a área de transferência!');
         }
-    }
-    
-    function toggleAdvancedFilters() {
-        const panel = document.getElementById('advanced-filters-panel');
-        panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
     }
     
     // Prayer Interactions
     function toggleIntercessionStatus(prayerId, btn) {
-        // Optimistic UI
         const icon = btn.querySelector('svg');
         const textSpan = btn.querySelector('span');
         const isActive = btn.classList.contains('active');
@@ -889,55 +982,94 @@ renderAppHeader('Espiritualidade');
         btn.classList.toggle('active');
         if (isActive) {
            textSpan.innerText = 'Interceder';
-           icon.style.fill = 'none';
+           icon.classList.remove('fill-red-500', 'scale-110');
+           btn.classList.remove('bg-red-50', 'border-red-200', 'text-red-500');
         } else {
            textSpan.innerText = 'Intercedi';
-           icon.style.fill = 'currentColor';
+           icon.classList.add('fill-red-500', 'scale-110');
+           btn.classList.add('bg-red-50', 'border-red-200', 'text-red-500');
         }
         
         const form = document.createElement('form');
         form.method = 'POST';
         form.style.display = 'none';
+        
+        const csrfInput = document.createElement('input');
+        csrfInput.name = 'csrf_token';
+        csrfInput.value = '<?= htmlspecialchars($_SESSION['csrf_token']) ?>';
+        
         const inputAction = document.createElement('input');
         inputAction.name = 'action';
         inputAction.value = 'pray';
+        
         const inputId = document.createElement('input');
         inputId.name = 'prayer_id';
         inputId.value = prayerId;
+        
+        form.appendChild(csrfInput);
         form.appendChild(inputAction);
         form.appendChild(inputId);
         document.body.appendChild(form);
         form.submit();
     }
     
-    // Tag Dropdown Logic
-    function toggleTagDropdown() {
+    // Tag Dropdown Logic in Form
+    function toggleTagDropdownForm() {
         const list = document.getElementById('tagDropdownList');
-        const isOpen = list.style.display === 'block';
-        list.style.display = isOpen ? 'none' : 'block';
+        list.classList.toggle('hidden');
     }
 
-    function updateTagButton() {
+    function toggleTagCheckboxForm(id, event) {
+        event.stopPropagation();
+        const list = document.getElementById('tagDropdownList');
+        const cb = list.querySelector(`input[value="${id}"]`);
+        cb.checked = !cb.checked;
+        updateTagButtonLabel();
+    }
+
+    function updateTagButtonLabel() {
         const checkboxes = document.querySelectorAll('#tagDropdownList input[name="tags[]"]:checked');
         const btnSpan = document.querySelector('#tagDropdownBtn span');
         
         if (checkboxes.length === 0) {
             btnSpan.innerText = 'Selecionar Tags...';
-            btnSpan.style.color = 'var(--text-muted)';
+            btnSpan.style.color = '#9ca3af'; // gray-400
         } else {
             btnSpan.innerText = checkboxes.length + ' tag(s) selecionada(s)';
-            btnSpan.style.color = 'var(--text-main)';
+            btnSpan.style.color = '#1f2937'; // gray-800
         }
     }
 
+    // Close tag list on click outside
     document.addEventListener('click', function(e) {
         const container = document.querySelector('.custom-dropdown');
         const list = document.getElementById('tagDropdownList');
         
-        if (container && !container.contains(e.target) && list && list.style.display === 'block') {
-            list.style.display = 'none';
+        if (container && !container.contains(e.target) && list && !list.classList.contains('hidden')) {
+            list.classList.add('hidden');
         }
     });
+    
+    // Category Selector style logic in Form
+    function selectFormCategory(element) {
+        document.querySelectorAll('.cat-option').forEach(el => {
+            el.classList.remove('border-[#2E7EED]', 'bg-[#2E7EED]/5', 'text-[#2E7EED]');
+            el.classList.add('border-gray-150', 'bg-white', 'text-gray-500');
+            const text = el.querySelector('span:last-child');
+            text.classList.remove('text-[#2E7EED]');
+            text.classList.add('text-gray-500');
+        });
+        
+        element.classList.remove('border-gray-150', 'bg-white', 'text-gray-500');
+        element.classList.add('border-[#2E7EED]', 'bg-[#2E7EED]/5', 'text-[#2E7EED]');
+        
+        const text = element.querySelector('span:last-child');
+        text.classList.remove('text-gray-500');
+        text.classList.add('text-[#2E7EED]');
+        
+        const radio = element.querySelector('input[type="radio"]');
+        radio.checked = true;
+    }
     
     // Smart Search com Debounce
     let searchTimeout;
@@ -954,14 +1086,15 @@ renderAppHeader('Espiritualidade');
             }
             
             window.location.href = '?' + params.toString();
-        }, 800); // Aguarda 800ms após o usuário parar de digitar
+        }, 800);
     }
     
-    // Atalho de teclado para busca (Ctrl+K ou Cmd+K)
+    // Ctrl+K to Search shortcut
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
-            document.getElementById('smartSearch').focus();
+            const input = document.getElementById('smartSearch');
+            if (input) input.focus();
         }
     });
 </script>

@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 // admin/export_diary.php
-require_once '../includes/auth.php';
+require_once '../src/helpers/auth.php';
 checkLogin();
 
 $userId = $_SESSION['user_id'];

@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 /**
  * API para marcar devocionais como lidos
  */
 
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
 
 checkLogin();
 

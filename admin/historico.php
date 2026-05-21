@@ -1,7 +1,9 @@
 <?php
 // admin/historico.php
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // Configurações e Filtros
 $period = $_GET['period'] ?? '90'; // 90 dias padrão para análise

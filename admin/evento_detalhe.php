@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/evento_detalhe.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 $eventId = $_GET['id'] ?? 0;
 
@@ -218,7 +218,7 @@ renderPageHeader($event['title'], '');
                     $statusClass = $p['status']; // confirmed, pending, declined
                     $photo = !empty($p['avatar']) ? $p['avatar'] : null;
                     if($photo && strpos($photo, 'uploads') === false && strpos($photo, 'http') === false) {
-                        $photo = '../assets/uploads/' . $photo;
+                        $photo = '../uploads/' . $photo;
                     }
                     $initials = strtoupper(substr($p['name'], 0, 1));
                 ?>

@@ -1,15 +1,15 @@
-<?php
+﻿<?php
 /**
  * API Endpoint for Reading Plans
  * Serves reading plan data and bible book mappings.
  * 
  * Helper Logic:
- * - Loads data from `includes/reading_plan_data.json`.
+ * - Loads data from `src/helpers/reading_plan_data.json`.
  * - Supports filtering by plan ID and day.
  */
 
 header('Content-Type: application/json; charset=utf-8');
-require_once '../includes/auth.php';
+require_once '../src/helpers/auth.php';
 
 // Optional: Require login if needed (referenced from avisos_api.php pattern)
 // checkLogin(); // Un-comment if this should be protected
@@ -17,7 +17,7 @@ require_once '../includes/auth.php';
 $action = $_GET['action'] ?? '';
 
 try {
-    $jsonFile = __DIR__ . '/../includes/reading_plan_data.json';
+    $jsonFile = __DIR__ . '/../src/helpers/reading_plan_data.json';
     if (!file_exists($jsonFile)) {
         throw new Exception('Data file not found.');
     }

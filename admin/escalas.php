@@ -1,5 +1,7 @@
 <?php
 // admin/escalas.php
+require_once '../src/helpers/auth.php';
+checkLogin();
 require_once '../includes/db.php';
 require_once '../includes/layout.php';
 

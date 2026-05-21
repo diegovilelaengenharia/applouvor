@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // admin/google_calendar_config.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/google_calendar.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/google_calendar.php';
 
 $googleCal = new GoogleCalendarIntegration($pdo, $_SESSION['user_id']);
 $isConnected = $googleCal->isConnected();
@@ -85,7 +85,7 @@ renderPageHeader('Integração Google Calendar', 'Sincronize eventos automaticam
         <?php else: ?>
             <div class="warning-box">
                 <strong>⚠️ Credenciais não configuradas</strong>
-                <p>Para ativar a sincronização com Google Calendar, você precisa configurar as credenciais OAuth2 no arquivo `includes/config.php`:</p>
+                <p>Para ativar a sincronização com Google Calendar, você precisa configurar as credenciais OAuth2 no arquivo `src/config/config.php`:</p>
                 <ul style="margin-top: 8px;">
                     <li>GOOGLE_CLIENT_ID</li>
                     <li>GOOGLE_CLIENT_SECRET</li>

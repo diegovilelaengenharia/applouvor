@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 /**
  * API Endpoint para Reações de Devocionais
  * Handles AJAX requests for devotional reactions
  */
 
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/devotional_helpers.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/helpers/devotional_helpers.php';
 
 checkLogin();
 

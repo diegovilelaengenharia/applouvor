@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // admin/criar_playlist.php
 // Página simples mostrando músicas selecionadas com links do YouTube
 
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 if (!isset($_GET['songs']) || empty($_GET['songs'])) {
     header('Location: repertorio.php');

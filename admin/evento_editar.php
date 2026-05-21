@@ -1,9 +1,10 @@
 <?php
 // admin/evento_editar.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/notification_system.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/notification_system.php';
 
 $eventId = $_GET['id'] ?? 0;
 

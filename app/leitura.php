@@ -1,8 +1,8 @@
 <?php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/reading_plan.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/reading_plan.php';
 
 checkLogin();
 
@@ -148,40 +148,25 @@ renderAppHeader('Leitura Bíblica');
 <!-- Import JSON Data -->
 <script src="../assets/js/reading_plan_data.js"></script>
 
-<div class="compact-container">
+<div class="max-w-md mx-auto px-4 py-6 pb-24 space-y-6">
     
-    <!-- Stats Cards -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
-        <div class="form-card" style="margin:0; padding: 18px 16px; text-align: center; border-left: 4px solid var(--primary); box-shadow: var(--shadow-sm); border-radius: var(--radius-lg);">
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-extrabold); color: var(--primary);"><?= $percentage ?>%</div>
-            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Concluído</div>
+    <!-- Stats Cards (Bento Grid) -->
+    <div class="grid grid-cols-2 gap-4">
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-5 text-center shadow-sm border-l-4 border-l-primary transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
+            <div class="text-3xl font-extrabold text-primary font-outfit"><?= $percentage ?>%</div>
+            <div class="text-[10px] text-muted font-bold tracking-wider uppercase mt-1">Concluído</div>
         </div>
-        <div class="form-card" style="margin:0; padding: 18px 16px; text-align: center; border-left: 4px solid <?= $delay > 0 ? 'var(--red-500)' : 'var(--success)' ?>; box-shadow: var(--shadow-sm); border-radius: var(--radius-lg);">
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-extrabold); color: <?= $delay > 0 ? 'var(--red-500)' : 'var(--success)' ?>;"><?= $delay ?></div>
-            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Dias de Atraso</div>
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-5 text-center shadow-sm border-l-4 <?= $delay > 0 ? 'border-l-error' : 'border-l-success' ?> transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
+            <div class="text-3xl font-extrabold <?= $delay > 0 ? 'text-error' : 'text-success' ?> font-outfit"><?= $delay ?></div>
+            <div class="text-[10px] text-muted font-bold tracking-wider uppercase mt-1">Dias de Atraso</div>
         </div>
         
         <?php if ($delay > 0): ?>
             <!-- Botão de Ajuste Rápido de Atraso -->
-            <form method="POST" style="grid-column: span 2; margin-top: -8px;">
+            <form method="POST" class="col-span-2 -mt-1">
                 <input type="hidden" name="action" value="catch_up_today">
-                <button type="submit" class="ripple" style="
-                    width: 100%;
-                    padding: 12px;
-                    background: rgba(239, 68, 68, 0.08);
-                    color: var(--red-500);
-                    border: 1px solid rgba(239, 68, 68, 0.2);
-                    border-radius: var(--radius-md);
-                    font-size: var(--font-size-xs);
-                    font-weight: var(--font-weight-bold);
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 6px;
-                    transition: all 0.2s;
-                ">
-                    <i data-lucide="zap" style="width: 14px;"></i>
+                <button type="submit" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-xs font-bold transition-all duration-300 hover:bg-red-500/15 active:scale-[0.98]">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
                     Ajustar Leitura para Hoje
                 </button>
             </form>
@@ -189,111 +174,63 @@ renderAppHeader('Leitura Bíblica');
     </div>
 
     <!-- Today's Reading (or Next Pending) -->
-    <div id="today-reading-card" class="form-card animate-card" style="background: var(--primary-gradient); color: white; border: none; box-shadow: var(--shadow-md); border-radius: var(--radius-xl); padding: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 18px;">
+    <div id="today-reading-card" class="bg-gradient-to-br from-primary to-blue-700 text-white rounded-3xl p-6 shadow-lg border border-white/10 transition-all duration-300 hover:shadow-xl relative overflow-hidden">
+        <!-- Decorativo sutil de fundo para dar sensação premium -->
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+        
+        <div class="flex justify-between items-start mb-5 relative z-10">
             <div>
-                <div style="font-size: var(--font-size-xs); opacity: 0.85; text-transform: uppercase; font-weight: var(--font-weight-bold); letter-spacing: 0.05em;">Leitura de Hoje</div>
-                <h2 style="font-size: 1.5rem; margin: 4px 0 0 0; font-weight: var(--font-weight-extrabold);" id="today-date-display">Dia <?= $currentDay ?>/<?= $currentMonth ?></h2>
+                <div class="text-[10px] opacity-80 uppercase font-bold tracking-widest">Leitura de Hoje</div>
+                <h2 class="text-2xl font-extrabold tracking-tight mt-1 font-outfit" id="today-date-display">Dia <?= $currentDay ?>/<?= $currentMonth ?></h2>
             </div>
-            <div style="background: rgba(255,255,255,0.15); padding: 8px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center;">
-                <i data-lucide="book-open" style="color:white; width: 22px; height: 22px;"></i>
+            <div class="bg-white/15 p-2.5 rounded-xl border border-white/20 flex items-center justify-center">
+                <i data-lucide="book-open" class="text-white w-5 h-5"></i>
             </div>
         </div>
         
-        <div id="today-verses-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+        <div id="today-verses-list" class="flex flex-col gap-2.5 mb-5 relative z-10">
             <!-- JS Populated -->
-            <div class="skeleton" style="height: 20px; background: rgba(255,255,255,0.1);"></div>
-            <div class="skeleton" style="height: 20px; background: rgba(255,255,255,0.1);"></div>
+            <div class="h-6 bg-white/10 rounded-lg animate-pulse"></div>
+            <div class="h-6 bg-white/10 rounded-lg animate-pulse w-3/4"></div>
         </div>
 
-        <button id="btn-mark-today" class="ripple" style="
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: none;
-            background: white;
-            color: var(--blue-900);
-            font-weight: var(--font-weight-bold);
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            font-size: var(--font-size-base);
-            box-shadow: var(--shadow-sm);
-        ">
-            <i data-lucide="check-circle"></i>
+        <button id="btn-mark-today" class="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold transition-all duration-300 shadow-md active:scale-[0.98] relative z-10">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
             Marcar como Lido
         </button>
         
-        <!-- Comment Area (Hidden until expanded or if exists) -->
-        <div id="today-comment-box" style="margin-top: 16px; display: none;">
-            <textarea id="today-comment" placeholder="Adicione uma anotação sobre a leitura de hoje..." style="
-                width: 100%;
-                background: rgba(255,255,255,0.12);
-                border: 1px solid rgba(255,255,255,0.2);
-                border-radius: var(--radius-md);
-                padding: 12px;
-                color: white;
-                font-family: inherit;
-                resize: vertical;
-                min-height: 80px;
-                outline: none;
-            "></textarea>
-            <button onclick="saveTodayComment()" style="
-                margin-top: 8px;
-                background: rgba(255,255,255,0.25);
-                border: 1px solid rgba(255,255,255,0.3);
-                padding: 8px 16px;
-                border-radius: var(--radius-md);
-                color: white;
-                font-size: var(--font-size-xs);
-                font-weight: var(--font-weight-semibold);
-                cursor: pointer;
-            ">Salvar Anotação</button>
+        <!-- Comment Area -->
+        <div id="today-comment-box" class="mt-5 space-y-3 hidden relative z-10">
+            <textarea id="today-comment" placeholder="Adicione uma anotação sobre a leitura de hoje..." class="w-full bg-white/10 border border-white/20 rounded-xl p-3.5 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 resize-y min-h-[80px] transition-all"></textarea>
+            <button onclick="saveTodayComment()" class="bg-white/20 border border-white/30 py-2 px-4 rounded-xl text-white text-xs font-semibold hover:bg-white/30 active:scale-[0.97] transition-all">Salvar Anotação</button>
         </div>
-        <div id="today-comment-toggle" onclick="toggleCommentBox()" style="
-            text-align: center; 
-            margin-top: 14px; 
-            font-size: var(--font-size-xs); 
-            opacity: 0.8; 
-            cursor: pointer; 
-            text-decoration: underline;
-            font-weight: 500;
-        ">Adicionar anotação</div>
+        <div id="today-comment-toggle" onclick="toggleCommentBox()" class="text-center mt-4 text-xs opacity-80 hover:opacity-100 cursor-pointer underline font-medium tracking-wide relative z-10">Adicionar anotação</div>
     </div>
 
     <!-- Config Notification -->
-    <div class="form-card" style="box-shadow: var(--shadow-sm); border-radius: var(--radius-lg);">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; gap: 12px; align-items: center;">
-                <div style="background: var(--bg-surface-alt); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="bell" style="width: 20px; color: var(--primary);"></i>
+    <div class="bg-surface border border-surface-container-highest rounded-2xl p-5 shadow-sm transition-all duration-300 hover:shadow-md">
+        <div class="flex justify-between items-center">
+            <div class="flex gap-3.5 items-center">
+                <div class="bg-surface-container-lowest p-2.5 rounded-xl border border-surface-container-highest flex items-center justify-center">
+                    <i data-lucide="bell" class="w-5 h-5 text-primary"></i>
                 </div>
                 <div>
-                    <h4 style="margin: 0; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary);">Lembrete Diário</h4>
-                    <p style="margin: 2px 0 0 0; font-size: var(--font-size-xs); color: var(--text-secondary);">Receba um aviso para ler</p>
+                    <h4 class="text-sm font-bold text-surface-on-surface font-outfit">Lembrete Diário</h4>
+                    <p class="text-xs text-muted mt-0.5">Receba um aviso para ler</p>
                 </div>
             </div>
-            <form method="POST" id="form-notif" style="display: flex; gap: 8px; align-items: center;">
+            <form method="POST" id="form-notif" class="flex gap-2 items-center">
                 <input type="hidden" name="action" value="save_settings">
-                <input type="time" name="notification_time" value="<?= htmlspecialchars($notifTime) ?>" onchange="this.form.submit()" style="
-                    padding: 8px 12px;
-                    border: 1px solid var(--border-subtle);
-                    border-radius: var(--radius-md);
-                    background: var(--bg-surface-alt);
-                    color: var(--text-primary);
-                    font-size: var(--font-size-sm);
-                    font-weight: 600;
-                ">
+                <input type="time" name="notification_time" value="<?= htmlspecialchars($notifTime) ?>" onchange="this.form.submit()" class="py-2 px-3 border border-surface-container-highest rounded-xl bg-surface-container-lowest text-surface-on-surface text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/20">
             </form>
         </div>
     </div>
 
     <!-- Full Plan Accordion -->
-    <div style="margin-top: 24px;">
-        <h3 style="font-size: 1.1rem; margin-bottom: 12px; padding-left: 4px;">Plano Completo</h3>
+    <div class="space-y-3">
+        <h3 class="text-base font-bold text-surface-on-surface pl-1 font-outfit">Plano Completo</h3>
         
-        <div id="months-container">
+        <div id="months-container" class="space-y-2.5">
             <!-- JS will populate -->
         </div>
     </div>
@@ -313,8 +250,6 @@ function isRead(m, d) {
 }
 
 // Logic to determine "Today's" View
-// If today > 25, we could show "Catch up" or "Rest".
-// Let's assume day index is min(currentDay, 25)
 const targetDayIndex = Math.min(currentDay, 25);
 const targetMonth = currentMonth;
 
@@ -338,15 +273,13 @@ function renderTodayCard() {
 
     // Get Data
     if (!bibleReadingPlan[targetMonth]) {
-        list.innerHTML = '<div>Plano não disponível para este mês.</div>';
+        list.innerHTML = '<div class="text-sm opacity-80 text-center py-4">Plano não disponível para este mês.</div>';
         return;
     }
     
-    // Arrays are 0-indexed, Days are 1-indexed in UI
     const todayVerses = bibleReadingPlan[targetMonth][targetDayIndex - 1]; 
     if (!todayVerses) {
-        // Day > 25 or invalid
-        list.innerHTML = '<div>Hoje é dia de descanso ou revisão! (Dia ' + currentDay + ')</div>';
+        list.innerHTML = '<div class="text-sm opacity-90 text-center py-4 font-medium">Hoje é dia de descanso ou revisão! (Dia ' + currentDay + ')</div>';
         btn.style.display = 'none';
         return;
     }
@@ -355,8 +288,7 @@ function renderTodayCard() {
     list.innerHTML = '';
     todayVerses.forEach(verse => {
         const d = document.createElement('div');
-        d.className = 'verse-pill';
-        d.style.cssText = 'background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: var(--radius-md); font-weight: 500; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.1);';
+        d.className = 'bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl p-3 font-semibold text-sm transition-all duration-200';
         d.textContent = verse;
         list.appendChild(d);
     });
@@ -366,23 +298,18 @@ function renderTodayCard() {
     // Check status
     const read = isRead(targetMonth, targetDayIndex);
     if (read) {
-        btn.innerHTML = '<i data-lucide="check-circle" style="width:20px;"></i> Leitura Concluída!';
-        btn.style.background = 'rgba(255,255,255,0.2)'; 
-        btn.style.color = 'white';
-        btn.style.border = '1px solid rgba(255,255,255,0.4)';
+        btn.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i> Leitura Concluída!';
+        btn.className = 'w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold bg-white/20 text-white border border-white/30 cursor-default';
         btn.onclick = null;
         
-        // Show comment if exists
         if (read.comment) {
             commentField.value = read.comment;
             commentBox.style.display = 'block';
             toggle.style.display = 'none';
         }
     } else {
-        btn.innerHTML = '<i data-lucide="circle" style="width:20px;"></i> Marcar como Lido';
-        btn.style.background = 'white';
-        btn.style.color = 'var(--blue-900)';
-        btn.style.border = 'none';
+        btn.innerHTML = '<i data-lucide="circle" class="w-5 h-5"></i> Marcar como Lido';
+        btn.className = 'w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold bg-white text-primary hover:bg-white/90 active:scale-[0.98] transition-all cursor-pointer';
         btn.onclick = () => markRead(targetMonth, targetDayIndex, true);
     }
 }
@@ -413,8 +340,7 @@ function markRead(m, d, reload = true, comment = null) {
     .then(data => {
         if(reload) window.location.reload();
         else {
-             alert('Salvo!'); 
-             // Ideally update local state without reload
+             alert('Anotação salva com sucesso!'); 
         }
     })
     .catch(err => console.error(err));
@@ -430,9 +356,8 @@ function renderFullList() {
 
         // Month Header
         const monthHeader = document.createElement('div');
-        monthHeader.style.cssText = 'padding: 14px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm); transition: all 0.2s;';
+        monthHeader.className = 'p-4 bg-surface border border-surface-container-highest rounded-2xl cursor-pointer flex justify-between items-center shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300';
         
-        // Calculate progress for month
         let completedCount = 0;
         for(let d=1; d<=25; d++) {
              if(isRead(m, d)) completedCount++;
@@ -441,24 +366,28 @@ function renderFullList() {
         const icon = isCurrent ? 'chevron-down' : 'chevron-right';
         
         monthHeader.innerHTML = `
-            <div style="display:flex; gap:12px; align-items:center;">
-                <div style="font-weight: var(--font-weight-bold); font-size: var(--font-size-sm); color: var(--text-primary);">${getMonthName(m)}</div>
-                <div style="font-size: var(--font-size-xs); background: var(--bg-surface-alt); padding: 2px 8px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); color: var(--text-secondary); font-weight: 600;">${completedCount}/25</div>
+            <div class="flex gap-3 items-center">
+                <div class="font-bold text-sm text-surface-on-surface font-outfit">${getMonthName(m)}</div>
+                <div class="text-[10px] bg-surface-container-lowest px-2 py-0.5 rounded-full border border-surface-container-highest text-muted font-bold">${completedCount}/25</div>
             </div>
-            <i data-lucide="${icon}" style="width: 18px; color: var(--text-secondary);"></i>
+            <i data-lucide="${icon}" class="w-4 h-4 text-muted"></i>
         `;
 
         // Days Container
         const daysContainer = document.createElement('div');
-        daysContainer.style.display = isCurrent ? 'block' : 'none'; // Only open current month default
-        daysContainer.style.padding = '0 0 16px 16px';
-        daysContainer.style.borderLeft = '2px solid var(--border-subtle)';
-        daysContainer.style.marginLeft = '14px';
+        daysContainer.style.display = isCurrent ? 'block' : 'none';
+        daysContainer.className = 'pl-4 border-l-2 border-l-surface-container-highest ml-3.5 pb-4 space-y-4';
 
         monthHeader.onclick = () => {
             const isHidden = daysContainer.style.display === 'none';
             daysContainer.style.display = isHidden ? 'block' : 'none';
-            // Update icon needs traverse or simple toggle logic
+            // Simple chevron toggle logic
+            const iconEl = monthHeader.querySelector('i');
+            if (isHidden) {
+                iconEl.setAttribute('data-lucide', 'chevron-down');
+            } else {
+                iconEl.setAttribute('data-lucide', 'chevron-right');
+            }
             lucide.createIcons();
         };
 
@@ -467,25 +396,25 @@ function renderFullList() {
             const read = isRead(m, dayNum);
             
             const dayRow = document.createElement('div');
-            dayRow.style.cssText = 'display: flex; gap: 14px; align-items: flex-start; margin-top: 14px; position: relative;';
+            dayRow.className = 'flex gap-3.5 items-start relative mt-4 transition-all duration-200';
             
-            const checkColor = read ? 'var(--success)' : 'var(--border-subtle)';
+            const checkColor = read ? 'text-success' : 'text-muted';
             const checkIcon = read ? 'check-circle' : 'circle';
-            const textColor = read ? 'var(--text-secondary)' : 'var(--text-primary)';
+            const textColor = read ? 'text-muted line-through font-medium' : 'text-surface-on-surface font-bold';
 
             dayRow.innerHTML = `
-                <div onclick="markRead(${m}, ${dayNum}, true)" style="cursor: pointer; padding-top: 2px;">
-                    <i data-lucide="${checkIcon}" style="width: 20px; color: ${checkColor};"></i>
+                <div onclick="markRead(${m}, ${dayNum}, true)" class="cursor-pointer pt-0.5 select-none transition-transform active:scale-[0.85] hover:scale-[1.1]">
+                    <i data-lucide="${checkIcon}" class="w-5 h-5 ${checkColor}"></i>
                 </div>
-                <div style="flex: 1;">
-                    <div style="font-weight: 600; font-size: 0.9rem; color: ${textColor}; display: flex; justify-content:space-between;">
+                <div class="flex-1">
+                    <div class="text-sm ${textColor} flex justify-between items-center font-outfit">
                         <span>Dia ${dayNum}</span>
-                        ${read && read.comment ? '<i data-lucide="message-square" style="width: 14px; color: var(--text-secondary);"></i>' : ''}
+                        ${read && read.comment ? '<i data-lucide="message-square" class="w-3.5 h-3.5 text-muted"></i>' : ''}
                     </div>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; margin-top: 2px;">
+                    <div class="text-xs text-muted leading-relaxed mt-0.5">
                         ${verses.join(', ')}
                     </div>
-                    ${read && read.comment ? `<div style="font-size: var(--font-size-xs); background: var(--bg-surface-alt); border: 1px solid var(--border-subtle); padding: 8px 12px; border-radius: var(--radius-md); margin-top: 6px; color: var(--text-primary); font-style: italic;">"${read.comment}"</div>` : ''}
+                    ${read && read.comment ? `<div class="text-xs bg-surface-container-lowest border border-surface-container-highest p-3 rounded-xl mt-2 text-surface-on-surface italic">"${read.comment}"</div>` : ''}
                 </div>
             `;
             daysContainer.appendChild(dayRow);
@@ -502,10 +431,7 @@ function getMonthName(m) {
     return names[m];
 }
 
-// Run
 window.addEventListener('load', init);
-
-// Register Service Worker Notification if needed (Optional for now)
 </script>
 
 <?php renderAppFooter(); ?>

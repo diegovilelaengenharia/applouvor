@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/repertorio_stats.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 renderAppHeader('Estatísticas do Repertório');
 renderPageHeader('Estatísticas do Repertório', 'Análise de Músicas');

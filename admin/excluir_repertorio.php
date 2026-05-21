@@ -1,8 +1,9 @@
 <?php
 // admin/excluir_repertorio.php
 // Excluir todas as músicas do repertório
-
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+checkAdmin();
+require_once '../src/config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
     // Excluir todas as músicas
@@ -13,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
     exit;
 }
 
-require_once '../includes/layout.php';
+require_once '../src/layout/layout.php';
 renderAppHeader('Excluir Repertório');
 ?>
 

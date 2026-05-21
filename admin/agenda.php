@@ -1,8 +1,9 @@
 <?php
 // admin/agenda.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+checkLogin();
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // Parâmetros de visualização
 // Detectar Mobile
@@ -89,7 +90,7 @@ $eventsByDay = [];
 foreach ($events as $event) {
     $dayKey = date('Y-m-d', strtotime($event['start_datetime']));
     if (!isset($eventsByDay[$dayKey])) $eventsByDay[$dayKey] = [];
-    $image = '../assets/img/event_placeholder.png'; // Placeholder
+    $image = '../assets/images/event_placeholder.png'; // Placeholder
     $eventsByDay[$dayKey][] = array_merge($event, ['source' => 'event']);
 }
 
@@ -113,36 +114,43 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
 <!-- Estilos movidos para assets/css/pages/agenda.css -->
 
 
-
-<div class="agenda-container">
-    <div class="agenda-controls">
-        <div class="nav-group">
-            <button class="calendar-nav-btn" onclick="navigate(-1)">
-                <i data-lucide="chevron-left" width="20"></i>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 space-y-6">
+    
+    <!-- CONTROLES DA AGENDA (Bento Box Horizontal) -->
+    <div class="bg-surface-container-low border border-surface-container-highest rounded-3xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+        
+        <!-- Navegação de Período -->
+        <div class="flex items-center gap-4 bg-surface rounded-2xl p-2 border border-surface-container-highest shadow-sm self-start md:self-auto">
+            <button class="p-2 rounded-xl text-muted hover:text-surface-on-surface hover:bg-surface-container-lowest transition-all duration-200 active:scale-95 cursor-pointer" onclick="navigate(-1)" title="Anterior">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
             </button>
-            <div class="current-display"><?= $displayTitle ?></div>
-            <button class="calendar-nav-btn" onclick="navigate(1)">
-                <i data-lucide="chevron-right" width="20"></i>
+            <div class="text-base font-extrabold text-surface-on-surface font-outfit px-2 min-w-[140px] text-center">
+                <?= $displayTitle ?>
+            </div>
+            <button class="p-2 rounded-xl text-muted hover:text-surface-on-surface hover:bg-surface-container-lowest transition-all duration-200 active:scale-95 cursor-pointer" onclick="navigate(1)" title="Próximo">
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
             </button>
         </div>
         
-        <div class="view-toggle">
-            <button class="view-btn <?= $viewMode === 'month' ? 'active' : '' ?>" onclick="switchView('month')">
-                <i data-lucide="calendar" width="16"></i> Mês
+        <!-- Alternador de Visualização -->
+        <div class="flex items-center bg-surface border border-surface-container-highest p-1 rounded-2xl shadow-sm self-start md:self-auto">
+            <button class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer <?= $viewMode === 'month' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-surface-on-surface hover:bg-surface-container-lowest' ?>" onclick="switchView('month')">
+                <i data-lucide="calendar" class="w-4 h-4"></i> Mês
             </button>
-            <button class="view-btn <?= $viewMode === 'week' ? 'active' : '' ?>" onclick="switchView('week')">
-                <i data-lucide="columns" width="16"></i> Semana
+            <button class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer <?= $viewMode === 'week' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-surface-on-surface hover:bg-surface-container-lowest' ?>" onclick="switchView('week')">
+                <i data-lucide="columns" class="w-4 h-4"></i> Semana
             </button>
-            <button class="view-btn <?= $viewMode === 'list' ? 'active' : '' ?>" onclick="switchView('list')">
-                <i data-lucide="list" width="16"></i> Lista
+            <button class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer <?= $viewMode === 'list' ? 'bg-primary text-white shadow-sm' : 'text-muted hover:text-surface-on-surface hover:bg-surface-container-lowest' ?>" onclick="switchView('list')">
+                <i data-lucide="list" class="w-4 h-4"></i> Lista
             </button>
         </div>
     </div>
 
+    <!-- MODO LISTA -->
     <?php if ($viewMode === 'list'): ?>
-        <div class="list-wrapper">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <?php 
-            // merge and sort all events for list
+            // mescla e ordena todos os eventos para a listagem
             $allItems = [];
             foreach ($eventsByDay as $day => $evts) {
                 foreach ($evts as $e) {
@@ -154,105 +162,110 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
             });
             
             if (empty($allItems)): ?>
-                <div class="empty-state">Nenhum evento neste período.</div>
+                <div class="col-span-full bg-surface-container-low border border-surface-container-highest rounded-3xl p-12 text-center text-muted font-bold">
+                    <i data-lucide="calendar-off" class="w-12 h-12 mx-auto mb-4 text-muted/60"></i>
+                    Nenhum evento neste período.
+                </div>
             <?php else: 
                 foreach ($allItems as $item): 
-                    $color = $item['color'] ?? '#047857';
+                    $isSchedule = $item['source'] === 'schedule';
+                    $colorClass = $isSchedule ? 'border-l-primary' : 'border-l-emerald-500';
+                    $badgeBg = $isSchedule ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20';
+                    $url = $isSchedule ? 'escala_detalhe.php?id='.$item['id'] : 'evento_detalhe.php?id='.$item['id'];
             ?>
-                <a href="<?= $item['source'] === 'schedule' ? 'escala_detalhe.php?id='.$item['id'] : 'evento_detalhe.php?id='.$item['id'] ?>" class="list-item">
-                    <div class="date-badge">
-                        <div class="day"><?= date('d', strtotime($item['start_datetime'])) ?></div>
-                        <div class="month"><?= date('M', strtotime($item['start_datetime'])) ?></div>
+                <a href="<?= $url ?>" class="bg-surface-container-lowest border border-surface-container-highest border-l-4 <?= $colorClass ?> rounded-2xl p-4 flex items-center gap-4 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 group">
+                    <div class="bg-surface-container-low border border-surface-container-highest rounded-xl p-2.5 text-center min-w-[55px] flex flex-col justify-center shadow-sm">
+                        <div class="text-lg font-black text-surface-on-surface font-outfit leading-none"><?= date('d', strtotime($item['start_datetime'])) ?></div>
+                        <div class="text-[10px] font-extrabold uppercase tracking-wider text-muted mt-1 leading-none"><?= date('M', strtotime($item['start_datetime'])) ?></div>
                     </div>
-                    <div>
-                        <div class="list-item-title"><?= htmlspecialchars($item['title']) ?></div>
-                        <div class="list-item-meta">
-                            <span><i data-lucide="clock" width="14" class="align-middle"></i> <?= date('H:i', strtotime($item['start_datetime'])) ?></span>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-extrabold text-surface-on-surface font-outfit truncate group-hover:text-primary transition-colors"><?= htmlspecialchars($item['title']) ?></div>
+                        <div class="flex items-center gap-3 text-xs text-muted font-semibold mt-1">
+                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i> <?= date('H:i', strtotime($item['start_datetime'])) ?></span>
                             <?php if(!empty($item['participant_count'])): ?>
-                                <span><i data-lucide="users" width="14" class="align-middle"></i> <?= $item['participant_count'] ?></span>
+                                <span class="flex items-center gap-1"><i data-lucide="users" class="w-3.5 h-3.5"></i> <?= $item['participant_count'] ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="ml-auto">
-                        <span class="source-badge" style="background: <?= $color ?>20; color: <?= $color ?>;">
-                            <?= $item['source'] === 'schedule' ? 'Escala' : 'Evento' ?>
-                        </span>
-                    </div>
+                    <span class="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full <?= $badgeBg ?> flex-shrink-0">
+                        <?= $isSchedule ? 'Escala' : 'Evento' ?>
+                    </span>
                 </a>
             <?php endforeach; endif; ?>
         </div>
     
-    <?php else: // Calendar/Week View Grid ?>
-        <div class="calendar-wrapper">
-            <div class="week-header">
-                <div class="week-header-day">Dom</div>
-                <div class="week-header-day">Seg</div>
-                <div class="week-header-day">Ter</div>
-                <div class="week-header-day">Qua</div>
-                <div class="week-header-day">Qui</div>
-                <div class="week-header-day">Sex</div>
-                <div class="week-header-day">Sáb</div>
+    <!-- MODO CALENDÁRIO / SEMANA GRID -->
+    <?php else: ?>
+        <div class="bg-surface-container-low border border-surface-container-highest rounded-3xl p-4 sm:p-5 shadow-sm overflow-hidden">
+            
+            <!-- Dias da Semana Header -->
+            <div class="grid grid-cols-7 text-center border-b border-surface-container-highest pb-3 mb-3">
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-red-500">Dom</div>
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-muted">Seg</div>
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-muted">Ter</div>
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-muted">Qua</div>
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-muted">Qui</div>
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-muted">Sex</div>
+                <div class="text-[11px] font-extrabold uppercase tracking-widest text-muted">Sáb</div>
             </div>
             
-            <div class="calendar-body">
+            <!-- Corpo do Calendário -->
+            <div class="grid grid-cols-7 gap-2">
                 <?php
                 if ($viewMode === 'month') {
-                    // Logic to fill empty cells before 1st of month
                     $firstDayMonth = date('w', strtotime($startDate));
                     $daysInMonth = date('t', strtotime($startDate));
                     
-                    // Previous month pad
+                    // Dias do mês anterior (padding)
                     for($i=0; $i < $firstDayMonth; $i++) {
-                        echo '<div class="calendar-day other-month"></div>';
+                        echo '<div class="aspect-square bg-surface/30 rounded-2xl border border-surface-container-highest/40 opacity-40"></div>';
                     }
                     
-                    // Days
+                    // Dias do mês atual
                     for($d=1; $d <= $daysInMonth; $d++) {
                         $currentDate = sprintf('%s-%02d', date('Y-m', strtotime($startDate)), $d);
                         $isToday = ($currentDate === date('Y-m-d'));
                         $dayEvents = $eventsByDay[$currentDate] ?? [];
                         
-                        echo '<div class="calendar-day '.($isToday?'today':'').'">';
-                        echo '<div class="day-num">'.$d.'</div>';
+                        $todayClass = $isToday ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-surface-container-highest bg-surface-container-lowest';
                         
+                        echo '<div class="min-h-[75px] sm:min-h-[105px] border rounded-2xl p-1.5 sm:p-2 flex flex-col justify-between transition-all duration-200 hover:bg-surface hover:shadow-sm '.$todayClass.'">';
+                        
+                        // Número do dia
+                        $numColor = $isToday ? 'text-primary font-black bg-primary/10' : 'text-surface-on-surface font-extrabold';
+                        echo '<div class="text-xs sm:text-sm '.$numColor.' w-6 h-6 rounded-full flex items-center justify-center font-outfit">'.$d.'</div>';
+                        
+                        // Lista de Chips de Eventos
+                        echo '<div class="space-y-1 mt-1 sm:mt-2 overflow-y-auto max-h-[48px] sm:max-h-[70px] pr-0.5 custom-scrollbar">';
                         foreach($dayEvents as $evt) {
-                            $typeClass = $evt['source'] === 'schedule' ? 'type-escala' : 'type-evento';
-                            $iconName = $evt['source'] === 'schedule' ? 'music' : 'calendar';
-                            $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
+                            $isSchedule = $evt['source'] === 'schedule';
+                            $chipBg = $isSchedule ? 'bg-primary/10 text-primary border-primary/15 hover:bg-primary/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/15 hover:bg-emerald-500/20';
+                            $iconName = $isSchedule ? 'music' : 'calendar';
+                            $url = $isSchedule ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass' title=\"".htmlspecialchars($evt['title'])."\">";
-                            echo "<i data-lucide='$iconName' width='12'></i>";
-                            echo "<span>".htmlspecialchars($evt['title'])."</span>";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-bold border truncate transition-colors cursor-pointer $chipBg' title=\"".htmlspecialchars($evt['title'])."\">";
+                            echo "<i data-lucide='$iconName' class='w-2.5 h-2.5 flex-shrink-0'></i>";
+                            echo "<span class='truncate leading-none'>".htmlspecialchars($evt['title'])."</span>";
                             echo "</div>";
                         }
+                        echo '</div>'; // chips
                         
-                        echo '</div>';
+                        echo '</div>'; // dia
                     }
                     
-                    // Next month pad
+                    // Dias do próximo mês (padding)
                     $totalCells = $firstDayMonth + $daysInMonth;
                     $remaining = 7 - ($totalCells % 7);
                     if($remaining < 7) {
                         for($i=0; $i < $remaining; $i++){
-                            echo '<div class="calendar-day other-month"></div>';
+                            echo '<div class="aspect-square bg-surface/30 rounded-2xl border border-surface-container-highest/40 opacity-40"></div>';
                         }
                     }
                 } 
                 elseif ($viewMode === 'week') {
-                    // 7 days fixed for current week
-                    $current = new DateTime($startDate); // Start of week (Monday or Sunday?) 
-                    // Note: In PHP logic above we used ISO (Monday start). 
-                    // But calendar header shows Dom..Sab (Sunday start). 
-                    // Let's adjust $startDate to be SUNDAY for the grid if ISO gave Monday.
-                    
-                    // If ISODate gives Monday, and we want Sunday start for visual consistency with header:
-                    // Only if user prefers Sunday Start. Let's assume standard Brazilian calendars often start on Sunday.
-                    // Let's adjust the PHP logic loop to start from Sunday.
-                    
-                    // Re-adjusting start date for loop:
                     $loopDate = new DateTime($startDate);
-                    if ($loopDate->format('w') == 1) { // If Monday
-                         $loopDate->modify('-1 day'); // Go to Sunday
+                    if ($loopDate->format('w') == 1) { // Ajuste visual para iniciar no Domingo se a ISO deu Segunda
+                         $loopDate->modify('-1 day');
                     }
                     
                     for($i=0; $i<7; $i++) {
@@ -261,20 +274,31 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
                         $isToday = ($dStr === date('Y-m-d'));
                         $dayEvents = $eventsByDay[$dStr] ?? [];
                         
-                        echo '<div class="calendar-day week-view-day '.($isToday?'today':'').'">';
-                        echo '<div class="day-num">'.$dayNum.'</div>';
+                        $todayClass = $isToday ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-surface-container-highest bg-surface-container-lowest';
+                        
+                        echo '<div class="min-h-[140px] border rounded-2xl p-2 flex flex-col justify-between transition-all duration-200 hover:bg-surface hover:shadow-sm '.$todayClass.'">';
+                        
+                        $numColor = $isToday ? 'text-primary font-black bg-primary/10' : 'text-surface-on-surface font-extrabold';
+                        echo '<div class="text-sm '.$numColor.' w-7 h-7 rounded-full flex items-center justify-center font-outfit">'.$dayNum.'</div>';
+                        
+                        echo '<div class="space-y-1.5 mt-2 overflow-y-auto max-h-[100px] custom-scrollbar">';
                         foreach($dayEvents as $evt) {
-                            $typeClass = $evt['source'] === 'schedule' ? 'type-escala' : 'type-evento';
-                            $iconName = $evt['source'] === 'schedule' ? 'music' : 'calendar';
-                            $url = $evt['source'] === 'schedule' ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
+                            $isSchedule = $evt['source'] === 'schedule';
+                            $chipBg = $isSchedule ? 'bg-primary/10 text-primary border-primary/15 hover:bg-primary/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/15 hover:bg-emerald-500/20';
+                            $iconName = $isSchedule ? 'music' : 'calendar';
+                            $url = $isSchedule ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             $startTime = date('H:i', strtotime($evt['start_datetime']));
                             
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip $typeClass' title=\"".htmlspecialchars($evt['title'])."\">";
-                            echo "<div class='event-time'>$startTime</div>";
-                            echo "<i data-lucide='$iconName' width='12'></i>";
-                            echo "<span>".htmlspecialchars($evt['title'])."</span>";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip flex flex-col gap-0.5 p-1.5 rounded-xl text-[9px] font-bold border transition-colors cursor-pointer $chipBg' title=\"".htmlspecialchars($evt['title'])."\">";
+                            echo "<div class='text-[8px] font-extrabold opacity-75'>$startTime</div>";
+                            echo "<div class='flex items-center gap-1 mt-0.5'>";
+                            echo "<i data-lucide='$iconName' class='w-2.5 h-2.5 flex-shrink-0'></i>";
+                            echo "<span class='truncate leading-none'>".htmlspecialchars($evt['title'])."</span>";
+                            echo "</div>";
                             echo "</div>";
                         }
+                        echo '</div>';
+                        
                         echo '</div>';
                         
                         $loopDate->modify('+1 day');
@@ -286,24 +310,22 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     <?php endif; ?>
 </div>
 
-<!-- FAB -->
-<a href="evento_adicionar.php" class="fab">
-    <i data-lucide="plus" width="28"></i>
+<!-- BOTÃO ADICIONAR (FAB Premium) -->
+<?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+<a href="evento_adicionar.php" class="fixed bottom-8 right-8 z-40 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full p-4.5 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center border border-white/10 group cursor-pointer" title="Adicionar Evento">
+    <i data-lucide="plus" class="w-6 h-6 group-hover:rotate-90 transition-transform duration-300"></i>
 </a>
+<?php endif; ?>
 
 <script>
     const currentView = '<?= $viewMode ?>';
-    const currentDateParam = '<?= $currentDateParam ?>'; // Month 'YYYY-MM' or Week 'YYYY-Www'
+    const currentDateParam = '<?= $currentDateParam ?>';
 
     function switchView(view) {
-        // When switching, keep current date rough context
         const url = new URL(window.location);
         url.searchParams.set('view', view);
-        
-        // Reset specific params to avoid mismatch
         url.searchParams.delete('month');
         url.searchParams.delete('week');
-        
         window.location.href = url.toString();
     }
 
@@ -311,40 +333,16 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
         const url = new URL(window.location);
         
         if (currentView === 'week') {
-            // Parse YYYY-Www
             const [year, week] = currentDateParam.split('-W').map(Number);
             let newYear = year;
             let newWeek = week + direction;
             
-            // Simple logic for week rollover (ISO weeks max 52/53)
-            // It's safer to use Date logic
-            // But JS handling of ISO weeks is tricky without libraries.
-            // Let's rely on server side PHP to handle empty/default params or pass calculated dates?
-            // Better: Let's do simple math here assuming 52 weeks roughly, server handles fix?
-            // Actually, best is to calculate date from week, add 7 days, get new ISO week.
-            
-            // Helper to get ISO week from Date
-            function getISOWeek(d) {
-                const date = new Date(d.getTime());
-                date.setHours(0, 0, 0, 0);
-                // Thursday in current week decides the year.
-                date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-                // January 4 is always in week 1.
-                const week1 = new Date(date.getFullYear(), 0, 4);
-                return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-            }
-            
-            // Get current week start date logic in JS is messy.
-            // Simplified approach: Parsing the string manually.
             if (newWeek > 52) { newWeek = 1; newYear++; }
             if (newWeek < 1) { newWeek = 52; newYear--; }
             
-            // Padding
             const wStr = newWeek.toString().padStart(2, '0');
             url.searchParams.set('week', `${newYear}-W${wStr}`);
-            
         } else {
-            // Month navigation 'YYYY-MM'
             const [year, month] = currentDateParam.split('-').map(Number);
             let d = new Date(year, month - 1 + direction, 1);
             const mStr = String(d.getMonth() + 1).padStart(2, '0');
@@ -357,12 +355,12 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     
     lucide.createIcons();
     
-    // Mobile Swipe Gestures
+    // Swipe Gestures para Dispositivos Móveis
     let touchStartX = 0;
     let touchEndX = 0;
-    let isNavigating = false; // Debounce flag
+    let isNavigating = false;
     
-    const calendarWrapper = document.querySelector('.calendar-wrapper, .list-wrapper');
+    const calendarWrapper = document.querySelector('.calendar-body, .grid');
     if (calendarWrapper && window.innerWidth <= 768) {
         calendarWrapper.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
@@ -375,17 +373,14 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
         
         function handleSwipe() {
             if(isNavigating) return;
-            
-            const swipeThreshold = 50;
+            const swipeThreshold = 60;
             const diff = touchStartX - touchEndX;
             
             if (Math.abs(diff) > swipeThreshold) {
-                isNavigating = true; // Trava novos swipes até recarregar
+                isNavigating = true;
                 if (diff > 0) {
-                    // Swipe left - next
                     navigate(1);
                 } else {
-                    // Swipe right - previous
                     navigate(-1);
                 }
             }
@@ -393,4 +388,4 @@ renderPageHeader('Agenda', 'Calendário e eventos do ministério');
     }
 </script>
 
-<?php renderAppFooter(); ?>
+<?php renderAppFooter(); ?>

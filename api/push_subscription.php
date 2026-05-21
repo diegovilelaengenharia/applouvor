@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 // api/push_subscription.php
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../src/config/db.php';
+require_once __DIR__ . '/../src/helpers/auth.php';
 
 header('Content-Type: application/json');
 
 // Check authentication
-// Note: includes/auth.php might redirect if not logged in. 
+// Note: src/helpers/auth.php might redirect if not logged in. 
 // For API, we might want to check session directly to avoid HTML redirect, 
 // but auth.php usually handles session start.
 

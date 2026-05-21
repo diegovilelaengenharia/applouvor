@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // admin/notificacoes.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
-require_once '../includes/notification_system.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
+require_once '../src/helpers/notification_system.php';
 
 $userId = $_SESSION['user_id'];
 $notificationSystem = new NotificationSystem($pdo);

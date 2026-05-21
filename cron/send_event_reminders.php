@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Script Cron: Enviar Lembretes de Eventos
  * 
@@ -6,8 +6,8 @@
  * Exemplo crontab: 0 * * * * php /path/to/send_event_reminders.php
  */
 
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/notification_system.php';
+require_once __DIR__ . '/../src/config/db.php';
+require_once __DIR__ . '/../src/helpers/notification_system.php';
 
 $notificationSystem = new NotificationSystem($pdo);
 

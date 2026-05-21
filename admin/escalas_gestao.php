@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // admin/escalas_gestao.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 checkAdmin();
 

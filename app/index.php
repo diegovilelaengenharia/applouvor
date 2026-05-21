@@ -1,7 +1,7 @@
 <?php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // Check if user is logged in
 checkLogin();
@@ -41,7 +41,7 @@ if (empty($userPhoto)) {
     $userPhoto = 'https://ui-avatars.com/api/?name=' . urlencode($userName) . '&background=dbeafe&color=1e40af';
 } elseif (strpos($userPhoto, 'http') === false) {
     if (strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
-        $userPhoto = '../assets/uploads/' . $userPhoto;
+        $userPhoto = '../uploads/' . $userPhoto;
     } else {
         $userPhoto = '../' . $userPhoto;
     }
@@ -289,90 +289,83 @@ renderAppHeader('Início');
     .shortcut-comunicacao:hover { border-color: rgba(245, 158, 11, 0.35); }
 </style>
 
-<div class="dashboard-container" style="padding: var(--space-md) var(--space-md) 100px;">
+<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-8">
+    <div class="mb-8">
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>! 👋</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Pronto para servir e adorar hoje?</p>
+    </div>
     
-    <!-- HEADER HERO PREMIUM DE BOAS-VINDAS -->
-    <div class="dashboard-hero animate-card">
-        <!-- Elementos decorativos de fundo para premium feel -->
-        <div class="hero-glow-1"></div>
-        <div class="hero-glow-2"></div>
-        
-        <div class="hero-main-content">
-            <!-- Bloco Info Usuário (Esquerda) -->
-            <div class="hero-user-section">
-                <div class="hero-avatar-wrapper">
-                    <div class="hero-avatar-ring"></div>
-                    <a href="perfil.php" style="display: block;">
-                        <img src="<?= $userPhoto ?>" alt="Avatar" class="hero-avatar">
+    <div class="bento-grid">
+        <!-- Schedule Card -->
+        <div class="bento-schedule bg-surface-container-lowest border border-surface-container-highest rounded-xl p-6 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-worship-blue fill">event</span>
+                    Próxima Escala
+                </h2>
+                <?php if (!empty($nextSchedule)): ?>
+                    <span class="font-label-sm text-label-sm text-worship-blue bg-primary-fixed px-3 py-1 rounded-full uppercase tracking-wider">
+                        <?= date('d/m', strtotime($nextSchedule['event_date'])) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            
+            <?php if (!empty($nextSchedule)): ?>
+                <div class="space-y-4 flex-grow">
+                    <div class="flex items-start gap-4 p-4 rounded-lg bg-ghost-gray border border-surface-container-high">
+                        <div class="text-altar-gold font-label-sm text-label-sm w-16 pt-1">Evento</div>
+                        <div>
+                            <div class="font-body-md text-body-md font-semibold text-on-surface"><?= htmlspecialchars($nextSchedule['event_type']) ?></div>
+                            <div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Função: <?= htmlspecialchars($nextSchedule['my_role'] ?? 'Músico') ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-surface-container-highest">
+                    <a href="../admin/escalas.php" class="w-full bg-worship-blue text-on-primary font-body-md text-body-md py-3 rounded-lg hover:bg-primary-fixed-variant transition-colors flex items-center justify-center gap-2" style="text-decoration: none;">
+                        Ver Escala Completa
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                     </a>
                 </div>
-                <div class="hero-welcome-text">
-                    <div class="hero-badge">
-                        <i data-lucide="sparkles" width="12" height="12"></i> PIB Oliveira Louvor
-                    </div>
-                    <h2 class="hero-title"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>! 👋</h2>
-                    <p class="hero-subtitle">Pronto para servir e adorar hoje?</p>
+            <?php else: ?>
+                <div class="flex flex-col items-center justify-center py-8 opacity-60">
+                    <span class="material-symbols-outlined text-4xl mb-2">calendar_month</span>
+                    <span class="font-body-md text-body-md font-semibold">Nenhuma escala próxima</span>
                 </div>
-            </div>
+            <?php endif; ?>
+        </div>
 
-            <!-- Bloco Próxima Escala (Direita) -->
-            <div class="hero-info-section">
-                <?php if (!empty($nextSchedule)): ?>
-                    <div class="hero-scale-card">
-                        <div class="scale-card-header">
-                            <span class="scale-label"><i data-lucide="calendar" width="13" height="13"></i> Próxima Escala</span>
-                            <?php 
-                            $statusClass = 'status-pending';
-                            $statusText = 'Pendente';
-                            if (($nextSchedule['my_status'] ?? '') === 'confirmed') {
-                                $statusClass = 'status-confirmed';
-                                $statusText = 'Confirmada';
-                            } elseif (($nextSchedule['my_status'] ?? '') === 'declined') {
-                                $statusClass = 'status-declined';
-                                $statusText = 'Recusada';
-                            }
-                            ?>
-                            <span class="scale-status <?= $statusClass ?>"><?= $statusText ?></span>
-                        </div>
-                        <div class="scale-card-body">
-                            <span class="scale-date"><?= date('d/m', strtotime($nextSchedule['event_date'])) ?></span>
-                            <div class="scale-details">
-                                <span class="scale-event"><?= htmlspecialchars($nextSchedule['event_type']) ?></span>
-                                <span class="scale-role"><?= htmlspecialchars($nextSchedule['my_role'] ?? 'Músico') ?></span>
-                            </div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <div class="hero-scale-card empty-scale">
-                        <i data-lucide="calendar-heart" width="20" height="20" style="flex-shrink: 0;"></i>
-                        <div class="scale-details">
-                            <span class="scale-event" style="font-size: 0.8rem; font-weight: 700;">Nenhuma escala próxima</span>
-                            <span class="scale-role" style="font-size: 0.68rem; white-space: normal;">Acompanhe os cultos no menu Escalas.</span>
-                        </div>
-                    </div>
-                <?php endif; ?>
+        <!-- Shortcuts Card (Acesso Rápido) -->
+        <div class="bento-announcements bg-surface-container-lowest border border-surface-container-highest rounded-xl p-6 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-worship-blue">apps</span>
+                    Acesso Rápido
+                </h2>
+            </div>
+            <div class="grid grid-cols-2 gap-3 flex-grow overflow-y-auto pr-2">
+                <?php foreach (array_slice($shortcuts, 0, 4) as $sc): ?>
+                    <a href="<?= $sc['url'] ?>" class="flex flex-col items-center justify-center p-3 rounded-xl border border-surface-container-high hover:bg-ghost-gray transition-colors text-center" style="text-decoration: none;">
+                        <i data-lucide="<?= $sc['icon'] ?>" style="color: <?= $sc['color'] ?>; margin-bottom: 8px;"></i>
+                        <span class="font-label-sm text-label-sm text-on-surface"><?= htmlspecialchars($sc['title']) ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Avisos Card -->
+        <div class="bento-birthdays bg-surface-container-lowest border border-surface-container-highest rounded-xl p-6 shadow-sm">
+            <div class="flex items-center mb-6">
+                <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-altar-gold">campaign</span>
+                    Avisos Recentes
+                </h2>
+            </div>
+            <div class="flex flex-col gap-4 overflow-x-auto pb-2">
+                <div class="font-label-sm text-label-sm text-on-surface-variant">Confira o menu de avisos para ficar por dentro das novidades do ministério.</div>
             </div>
         </div>
     </div>
-
-    <!-- SEÇÃO ATALHOS RÁPIDOS TÁTEIS -->
-    <div class="dashboard-section-title animate-card">
-        <i data-lucide="layout-grid" width="16" height="16" style="color: var(--primary);"></i>
-        Acesso Rápido
-    </div>
-    <div class="shortcuts-grid">
-        <?php foreach ($shortcuts as $sc): ?>
-            <a href="<?= $sc['url'] ?>" class="shortcut-btn shortcut-<?= $sc['category'] ?> animate-card" style="text-decoration: none;">
-                <div class="shortcut-icon-box" style="background: <?= $sc['bg'] ?>; color: <?= $sc['color'] ?>;">
-                    <i data-lucide="<?= $sc['icon'] ?>"></i>
-                </div>
-                <span class="shortcut-title"><?= htmlspecialchars($sc['title']) ?></span>
-                <div class="shortcut-hover-dot" style="background: <?= $sc['color'] ?>;"></div>
-            </a>
-        <?php endforeach; ?>
-    </div>
-
-</div>
+</main>
 
 <script>
     // Reading Popup Logic

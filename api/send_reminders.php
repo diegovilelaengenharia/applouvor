@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // api/send_reminders.php — Envia push de lembrete para participantes 'pending' de escalas nos próximos 2 dias
 header('Content-Type: application/json');
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
-require_once '../includes/classes/NotificationService.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
+require_once '../src/classes/NotificationService.php';
 
 // Apenas admin pode enviar lembretes
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {

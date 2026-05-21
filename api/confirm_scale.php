@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // api/confirm_scale.php
 header('Content-Type: application/json');
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
 
 $userId = $_SESSION['user_id'] ?? 0;
 $data = json_decode(file_get_contents('php://input'), true);

@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 // api/public_key.php
 header('Content-Type: application/json');
 
-$configFile = __DIR__ . '/../includes/vapid_config.php';
+$configFile = __DIR__ . '/../src/config/vapid_config.php';
 
 if (file_exists($configFile)) {
     $config = require $configFile;

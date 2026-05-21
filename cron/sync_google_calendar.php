@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Script Cron: Sincronização com Google Calendar
  * 
@@ -6,8 +6,8 @@
  * Exemplo crontab: */30 * * * * php /path/to/sync_google_calendar.php
  */
 
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/google_calendar.php';
+require_once __DIR__ . '/../src/config/db.php';
+require_once __DIR__ . '/../src/helpers/google_calendar.php';
 
 echo "🔄 Iniciando sincronização com Google Calendar...\n\n";
 

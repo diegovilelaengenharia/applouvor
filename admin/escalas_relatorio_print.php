@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 // admin/escalas_relatorio_print.php
-require_once '../includes/auth.php';
-require_once '../includes/db.php';
+require_once '../src/helpers/auth.php';
+require_once '../src/config/db.php';
 
 checkAdmin();
 

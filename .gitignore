@@ -57,3 +57,20 @@ includes/*_secret.php
 # Backups locais e pastas temporárias pesadas
 site todo/
 site todo/**
+
+# Dados locais (não vão para produção)
+banco de dados/
+database/data/
+scratch/
+
+# Arquivos sensíveis que nunca devem ser versionados
+**/senha*.txt
+**/password*.txt
+paleta-cores.html
+
+# IA e Ferramentas locais de desenvolvimento
+.agent/
+.agents/
+.claude/
+.planning/
+skills-lock.json
