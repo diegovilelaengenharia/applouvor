@@ -74,3 +74,6 @@ paleta-cores.html
 .claude/
 .planning/
 skills-lock.json
+
+# Referências de design do Stitch (não deploy)
+.stitch/

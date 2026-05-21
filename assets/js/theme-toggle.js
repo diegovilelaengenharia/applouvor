@@ -31,6 +31,8 @@
         document.body.classList.toggle('dark-mode');
 
         var isDark = document.body.classList.contains('dark-mode');
+        // Sincroniza a classe `dark` no <html> para ativar as variantes `dark:` do Tailwind
+        document.documentElement.classList.toggle('dark', isDark);
         console.log('[THEME] Is dark after toggle:', isDark);
 
         // Save to localStorage
@@ -64,6 +66,8 @@
 
         // Sync toggles
         var isDark = document.body.classList.contains('dark-mode');
+        // Mantém a classe `dark` do <html> em sincronia (variantes Tailwind `dark:`)
+        document.documentElement.classList.toggle('dark', isDark);
         var toggles = document.querySelectorAll('input[type="checkbox"][id*="darkMode"]');
         for (var i = 0; i < toggles.length; i++) {
             toggles[i].checked = isDark;

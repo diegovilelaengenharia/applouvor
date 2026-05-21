@@ -288,7 +288,7 @@ $shortcuts = [
                 $colors = $catColors[$sc['category']] ?? $catColors['gestao'];
                 ?>
                 
-                <a href="<?= $sc['url'] ?>" class="bg-surface border border-surface-container-highest rounded-2xl p-3.5 flex items-center gap-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md <?= $colors['hover'] ?> group select-none">
+                <a href="<?= $sc['url'] ?>" class="bg-surface-container-lowest dark:bg-surface-container border border-surface-container-highest rounded-2xl p-3.5 flex items-center gap-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md <?= $colors['hover'] ?> group select-none">
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform <?= $colors['icon'] ?>">
                         <i data-lucide="<?= $sc['icon'] ?>" class="w-5 h-5"></i>
                     </div>
