@@ -170,7 +170,7 @@ $musicTones = [
 renderAppHeader('Detalhes da Música', 'repertorio.php');
 ?>
 
-<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-24 animate-fade-in">
+<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-24 reveal-item">
     <!-- Header with Actions (Sacred Bento Style) -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 relative">
         <div class="flex gap-5 items-center">
@@ -200,7 +200,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
         
         <!-- Menu Contextual (Modern Touch) -->
         <div class="relative self-end md:self-center">
-            <button onclick="toggleMenu()" id="menu-btn" class="p-3 bg-surface-container hover:bg-surface-container-high active:scale-95 rounded-full border border-surface-container-highest shadow-sm transition-all duration-200 flex items-center justify-center">
+            <button onclick="toggleMenu()" id="menu-btn" class="interactive-scale p-3 bg-surface-container hover:bg-surface-container-high active:scale-95 rounded-full border border-surface-container-highest shadow-sm transition-all duration-200 flex items-center justify-center">
                 <span class="material-symbols-outlined text-[24px]">more_vert</span>
             </button>
             
@@ -219,13 +219,13 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
 
     <!-- Tabs Navigation (Modern Floating Pills) -->
     <div class="flex space-x-3 mb-8 overflow-x-auto hide-scrollbar pb-2">
-        <button class="tab-btn px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102" data-target="tab-info">
+        <button class="interactive-scale tab-btn px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102" data-target="tab-info">
             Visão Geral
         </button>
-        <button class="tab-btn px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-target="tab-tones">
+        <button class="interactive-scale tab-btn px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-target="tab-tones">
             Tons por Voz
         </button>
-        <button class="tab-btn px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-target="tab-refs">
+        <button class="interactive-scale tab-btn px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-target="tab-refs">
             Referências
         </button>
     </div>
@@ -238,7 +238,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
             <!-- Bento Grid de Metadados -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <!-- Tom Original -->
-                <div class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md hover:border-worship-blue/20 transition-all duration-300 relative overflow-hidden group">
+                <div class="reveal-item reveal-stagger-1 bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md hover:border-worship-blue/20 transition-all duration-300 relative overflow-hidden group">
                     <div class="absolute right-4 top-4 text-worship-blue/10 group-hover:scale-110 transition-transform duration-300">
                         <span class="material-symbols-outlined text-4xl">music_note</span>
                     </div>
@@ -247,7 +247,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
                 </div>
                 
                 <!-- BPM -->
-                <div class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md hover:border-altar-gold/20 transition-all duration-300 relative overflow-hidden group">
+                <div class="reveal-item reveal-stagger-2 bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md hover:border-altar-gold/20 transition-all duration-300 relative overflow-hidden group">
                     <div class="absolute right-4 top-4 text-altar-gold/10 group-hover:scale-110 transition-transform duration-300">
                         <span class="material-symbols-outlined text-4xl">speed</span>
                     </div>
@@ -256,7 +256,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
                 </div>
                 
                 <!-- Duração -->
-                <div class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md hover:border-emerald-500/20 transition-all duration-300 relative overflow-hidden group">
+                <div class="reveal-item reveal-stagger-3 bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md hover:border-emerald-500/20 transition-all duration-300 relative overflow-hidden group">
                     <div class="absolute right-4 top-4 text-emerald-500/10 group-hover:scale-110 transition-transform duration-300">
                         <span class="material-symbols-outlined text-4xl">schedule</span>
                     </div>
@@ -268,7 +268,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
             <!-- Metrônomo Ação -->
             <?php if (!empty($song['bpm'])): ?>
             <div class="flex justify-center mb-8">
-                <a href="metronomo.php?bpm=<?= (int)$song['bpm'] ?>" class="inline-flex items-center gap-2 px-8 py-3.5 bg-worship-blue/10 text-worship-blue border border-worship-blue/20 hover:bg-worship-blue/20 rounded-full font-bold font-body-md transition-all duration-300 hover:scale-102 shadow-sm">
+                <a href="metronomo.php?bpm=<?= (int)$song['bpm'] ?>" class="interactive-scale inline-flex items-center gap-2 px-8 py-3.5 bg-worship-blue/10 text-worship-blue border border-worship-blue/20 hover:bg-worship-blue/20 rounded-full font-bold font-body-md transition-all duration-300 hover:scale-102 shadow-sm">
                     <span class="material-symbols-outlined text-[20px] animate-pulse">speed</span>
                     Abrir no Metrônomo (<?= (int)$song['bpm'] ?> BPM)
                 </a>
@@ -276,7 +276,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
             <?php endif; ?>
 
             <!-- Seção de Classificações Bento -->
-            <div class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-8 shadow-sm">
+            <div class="reveal-item reveal-stagger-4 bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-8 shadow-sm">
                 <h3 class="font-headline-md text-headline-md text-on-surface mb-5 font-bold flex items-center gap-2">
                     <span class="material-symbols-outlined text-worship-blue">label</span>
                     Classificações & TAGs
@@ -315,7 +315,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
                 <?php if (!empty($personalTones)): ?>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <?php foreach ($personalTones as $pt): ?>
-                            <div class="flex justify-between items-center p-5 bg-surface-container-lowest border border-surface-container-highest rounded-2xl hover:border-worship-blue/30 hover:shadow-md transition-all duration-300">
+                            <div class="reveal-item flex justify-between items-center p-5 bg-surface-container-lowest border border-surface-container-highest rounded-2xl hover:border-worship-blue/30 hover:shadow-md transition-all duration-300">
                                 <div class="flex items-center gap-4">
                                     <div class="w-12 h-12 bg-worship-blue/10 rounded-full flex items-center justify-center font-bold text-worship-blue overflow-hidden border border-worship-blue/25 shrink-0 shadow-sm">
                                         <?php if ($pt['avatar']): 
@@ -382,7 +382,7 @@ renderAppHeader('Detalhes da Música', 'repertorio.php');
                         $opacity = $hasUrl ? 'opacity-100 border-surface-container-highest hover:scale-[1.01] hover:shadow-md' : 'opacity-40 border-dashed border-surface-container-highest cursor-default';
                     ?>
                         <a href="<?= $href ?>" <?= $hasUrl ? 'target="_blank" rel="noopener"' : 'onclick="return false"' ?>
-                           class="flex items-center gap-5 p-5 rounded-2xl border transition-all duration-300 relative group overflow-hidden <?= $opacity ?>"
+                           class="interactive-scale flex items-center gap-5 p-5 rounded-2xl border transition-all duration-300 relative group overflow-hidden <?= $opacity ?>"
                            style="background-color: <?= $bg ?>;">
                             
                             <div class="w-12 h-12 flex items-center justify-center rounded-full bg-white border shrink-0 shadow-sm" style="border-color: <?= $color ?>20;">

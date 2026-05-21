@@ -18,7 +18,7 @@ renderAppHeader('Repertório', 'index.php');
 
 <main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-24 animate-fade-in">
     <!-- Header com Menu de Opções -->
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex justify-between items-center mb-8 reveal-item reveal-stagger-1">
         <div>
             <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface font-bold tracking-tight">Repertório</h1>
             <p class="text-body-md text-on-surface-variant/80 mt-1">Biblioteca musical e gestão de tons do ministério</p>
@@ -26,7 +26,7 @@ renderAppHeader('Repertório', 'index.php');
         
         <!-- Botão de Ações Rápidas -->
         <div class="relative">
-            <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="p-3 bg-surface-container hover:bg-surface-container-high active:scale-95 rounded-full transition-all duration-200 border border-surface-container-highest shadow-sm flex items-center justify-center">
+            <button onclick="toggleOptionsMenu()" id="options-menu-btn" class="p-3 bg-surface-container hover:bg-surface-container-high active:scale-95 rounded-full transition-all duration-200 border border-surface-container-highest shadow-sm flex items-center justify-center interactive-scale">
                 <span class="material-symbols-outlined text-[24px]">more_vert</span>
             </button>
             
@@ -67,7 +67,7 @@ renderAppHeader('Repertório', 'index.php');
     </script>
 
     <!-- Barra de Busca -->
-    <div class="relative w-full mb-8">
+    <div class="relative w-full mb-8 reveal-item reveal-stagger-2">
         <form method="GET">
             <?php if($tab != 'musicas'): ?>
                 <input type="hidden" name="tab" value="<?= $tab ?>">
@@ -78,17 +78,17 @@ renderAppHeader('Repertório', 'index.php');
     </div>
     
     <!-- Navegação por Abas (Pílulas Modernas) -->
-    <div class="flex space-x-3 mb-8 overflow-x-auto hide-scrollbar pb-2">
-        <a href="?tab=musicas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'musicas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+    <div class="flex space-x-3 mb-8 overflow-x-auto hide-scrollbar pb-2 reveal-item reveal-stagger-2">
+        <a href="?tab=musicas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all interactive-scale <?= $tab == 'musicas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
             Músicas
         </a>
-        <a href="?tab=pastas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'pastas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+        <a href="?tab=pastas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all interactive-scale <?= $tab == 'pastas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
             TAGs
         </a>
-        <a href="?tab=artistas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'artistas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+        <a href="?tab=artistas" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all interactive-scale <?= $tab == 'artistas' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
             Artistas
         </a>
-        <a href="?tab=tons" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all <?= $tab == 'tons' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
+        <a href="?tab=tons" class="px-5 py-3 rounded-full whitespace-nowrap text-body-md font-bold transition-all interactive-scale <?= $tab == 'tons' ? 'bg-worship-blue text-white shadow-md shadow-worship-blue/10 scale-102' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high' ?>">
             Tons
         </a>
     </div>
@@ -132,11 +132,15 @@ renderAppHeader('Repertório', 'index.php');
 
             <!-- Bento Grid de Músicas -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <?php foreach ($songs as $song): 
+                <?php 
+                $songIndex = 1;
+                foreach ($songs as $song): 
                     $songTags = $musicRepo->getSongTags($song['id']);
                     $borderHex = !empty($songTags) ? $songTags[0]['color'] : '#2E7EED';
+                    $staggerClass = 'reveal-stagger-' . min($songIndex, 4);
+                    $songIndex++;
                 ?>
-                    <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="block group">
+                    <a href="musica_detalhe.php?id=<?= $song['id'] ?>" class="block group <?= $staggerClass ?> reveal-item interactive-scale">
                         <div class="bg-surface-container-lowest border border-surface-container-highest rounded-3xl p-6 flex flex-col justify-between hover:border-worship-blue/40 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-300 gap-5 relative overflow-hidden">
                             
                             <!-- Indicador de Tag Lateral -->

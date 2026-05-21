@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/oracao.php - Redesign Premium com funcionalidade completa
 require_once '../src/helpers/auth.php';
 require_once '../src/config/db.php';
@@ -150,7 +150,7 @@ renderAppHeader('Mural de Oração');
 <link href="../assets/css/pages/oracao.css?v=<?= time() ?>" rel="stylesheet">
 <?php renderPageHeader('Mural de Oração', 'Louvor PIB Oliveira'); ?>
 
-<div class="container" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
+<div class="container reveal-item" style="padding-top: 10px; max-width: 700px; margin: 0 auto;">
     
     <?php if (!$tableExists): ?>
     <!-- Setup Required Message -->
@@ -182,7 +182,7 @@ renderAppHeader('Mural de Oração');
         </div>
         
         <!-- Botão Filtros Avançados -->
-        <button onclick="toggleAdvancedFilters()" class="btn-advanced-filter <?= ($filterCategory !== 'all' || $showAnswered) ? 'active' : '' ?>" title="Filtros Avançados">
+        <button onclick="toggleAdvancedFilters()" class="btn-advanced-filter interactive-scale <?= ($filterCategory !== 'all' || $showAnswered) ? 'active' : '' ?>" title="Filtros Avançados">
             <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
             <?php if ($filterCategory !== 'all' || $showAnswered): ?>
                 <span style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: var(--yellow-500); border-radius: 50%;"></span>
@@ -191,7 +191,7 @@ renderAppHeader('Mural de Oração');
         
         <!-- Botão Limpar Filtros -->
         <?php if ($filterCategory !== 'all' || $showAnswered): ?>
-        <button onclick="window.location.href='oracao.php'" class="btn-advanced-filter" style="color: var(--rose-500); border-color: var(--rose-200); background: var(--rose-50);" title="Limpar Filtros">
+        <button onclick="window.location.href='oracao.php'" class="btn-advanced-filter interactive-scale" style="color: var(--rose-500); border-color: var(--rose-200); background: var(--rose-50);" title="Limpar Filtros">
             <i data-lucide="x" style="width: 20px; height: 20px;"></i>
         </button>
         <?php endif; ?>
@@ -262,7 +262,7 @@ renderAppHeader('Mural de Oração');
                 $cat = $catConfig[$prayer['category']] ?? $catConfig['other'];
                 $intercessionClass = $prayer['is_interceded'] ? 'interceded' : 'not-interceded';
             ?>
-            <div class="prayer-card collapsed <?= $intercessionClass ?> <?= $prayer['is_urgent'] ? 'urgent' : '' ?> <?= $prayer['is_answered'] ? 'answered' : '' ?>" 
+            <div class="prayer-card collapsed reveal-item interactive-scale <?= $intercessionClass ?> <?= $prayer['is_urgent'] ? 'urgent' : '' ?> <?= $prayer['is_answered'] ? 'answered' : '' ?>" 
                  id="prayer-<?= $prayer['id'] ?>" 
                  onclick="togglePrayerCard(<?= $prayer['id'] ?>, event)"
                  data-is-interceded="<?= $prayer['is_interceded'] ?>">
@@ -311,7 +311,7 @@ renderAppHeader('Mural de Oração');
                 <!-- Footer -->
                 <div class="prayer-footer">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this); event.stopPropagation();" class="pray-btn <?= $prayer['is_interceded'] ? 'prayed' : 'not-prayed' ?>" id="intercession-btn-<?= $prayer['id'] ?>">
+                        <button onclick="toggleIntercessionStatus(<?= $prayer['id'] ?>, this); event.stopPropagation();" class="pray-btn interactive-scale <?= $prayer['is_interceded'] ? 'prayed' : 'not-prayed' ?>" id="intercession-btn-<?= $prayer['id'] ?>">
                             <i data-lucide="heart" style="width: 16px;"></i>
                             <span><?= $prayer['is_interceded'] ? 'Intercedi' : 'Interceder' ?></span> (<?= $prayer['pray_count'] ?>)
                         </button>
@@ -327,7 +327,7 @@ renderAppHeader('Mural de Oração');
                         <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="answered">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
-                        <button type="submit" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                        <button type="submit" class="interactive-scale" style="background: var(--primary-subtle); color: var(--primary); border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
                             ✓ Marcar respondida
                         </button>
                     </form>
@@ -363,7 +363,7 @@ renderAppHeader('Mural de Oração');
                         <input type="hidden" name="action" value="comment">
                         <input type="hidden" name="prayer_id" value="<?= $prayer['id'] ?>">
                         <input type="text" name="comment" placeholder="Deixe uma palavra..." required style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 24px; font-size: 0.9rem; outline: none;">
-                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
+                        <button type="submit" class="interactive-scale" style="background: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 24px; font-weight: 600; cursor: pointer;">
                             <i data-lucide="send" style="width: 16px;"></i>
                         </button>
                     </form>
@@ -395,7 +395,7 @@ renderAppHeader('Mural de Oração');
 </div>
 
 <!-- FAB Button -->
-<button onclick="openCreateModal()" class="fab-create">
+<button onclick="openCreateModal()" class="fab-create interactive-scale">
     <i data-lucide="plus" style="width: 28px; height: 28px;"></i>
 </button>
 
@@ -488,10 +488,10 @@ renderAppHeader('Mural de Oração');
             
             <!-- Buttons -->
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" class="btn btn-secondary" style="flex: 1;">
+                <button type="button" onclick="closeModal()" class="btn btn-secondary interactive-scale" style="flex: 1;">
                     Cancelar
                 </button>
-                <button type="submit" class="btn btn-success" style="flex: 2;">
+                <button type="submit" class="btn btn-success interactive-scale" style="flex: 2;">
                     Enviar Pedido
                 </button>
             </div>

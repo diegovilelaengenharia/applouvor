@@ -87,7 +87,9 @@ foreach ($users as &$user) {
 }
 unset($user);
 
-renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-24 space-y-8">
+renderAppHeader('Equipe');
+?>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-24 space-y-8">
     
     <!-- Hero / Status Banner -->
     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1B1F] to-[#2C2E35] text-white p-8 md:p-10 shadow-xl border border-white/10">
@@ -136,13 +138,13 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
         <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
             <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mr-2 whitespace-nowrap">Ordenar por:</span>
             
-            <a href="?sort=name" class="px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all <?= $sort === 'name' ? 'bg-[#2E7EED] text-white shadow-md shadow-[#2E7EED]/20' : 'bg-[#F4F4F5] text-gray-600 border border-[#EDEDED] hover:bg-gray-100' ?>">
+            <a href="?sort=name" class="px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all interactive-scale <?= $sort === 'name' ? 'bg-[#2E7EED] text-white shadow-md shadow-[#2E7EED]/20' : 'bg-[#F4F4F5] text-gray-600 border border-[#EDEDED] hover:bg-gray-100' ?>">
                 Nome
             </a>
-            <a href="?sort=taxa" class="px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all <?= $sort === 'taxa' ? 'bg-[#2E7EED] text-white shadow-md shadow-[#2E7EED]/20' : 'bg-[#F4F4F5] text-gray-600 border border-[#EDEDED] hover:bg-gray-100' ?>">
+            <a href="?sort=taxa" class="px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all interactive-scale <?= $sort === 'taxa' ? 'bg-[#2E7EED] text-white shadow-md shadow-[#2E7EED]/20' : 'bg-[#F4F4F5] text-gray-600 border border-[#EDEDED] hover:bg-gray-100' ?>">
                 Taxa de Presença
             </a>
-            <a href="?sort=escalas" class="px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all <?= $sort === 'escalas' ? 'bg-[#2E7EED] text-white shadow-md shadow-[#2E7EED]/20' : 'bg-[#F4F4F5] text-gray-600 border border-[#EDEDED] hover:bg-gray-100' ?>">
+            <a href="?sort=escalas" class="px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all interactive-scale <?= $sort === 'escalas' ? 'bg-[#2E7EED] text-white shadow-md shadow-[#2E7EED]/20' : 'bg-[#F4F4F5] text-gray-600 border border-[#EDEDED] hover:bg-gray-100' ?>">
                 Total de Escalas
             </a>
         </div>
@@ -178,7 +180,7 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
             $gradIndex = hexdec(substr($hash, 0, 1)) % count($gradients);
             $grad = $gradients[$gradIndex];
         ?>
-            <div class="member-card group bg-white border border-[#EDEDED] rounded-3xl p-5 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between relative overflow-hidden animate-fade-in" 
+            <div class="member-card group bg-white border border-[#EDEDED] rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden reveal-item" 
                  style="animation-delay: <?= $delay ?>ms;" 
                  data-name="<?= strtolower($user['name']) ?>" 
                  data-role="<?= strtolower($user['instrument'] ?? '') ?>">
@@ -200,7 +202,7 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
                                  <?php endif; ?>
                              </div>
                              
-                             <?php if ($user['role'] === 'admin'): ?>
+                             <?php if (isset($user['role']) && $user['role'] === 'admin'): ?>
                                  <span class="absolute -bottom-1.5 -right-1.5 bg-[#FFC107] text-[#1A1B1F] text-[9px] font-extrabold px-2 py-0.5 rounded-full border-2 border-white shadow-sm" title="Administrador">ADM</span>
                              <?php endif; ?>
                          </div>
@@ -209,7 +211,7 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
                          <div class="flex items-center gap-1.5">
                              <?php if (!empty($user['phone'])): ?>
                              <a href="https://wa.me/55<?= preg_replace('/\D/', '', $user['phone']) ?>" target="_blank" 
-                                class="w-9 h-9 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center transition-all shadow-sm" 
+                                class="w-9 h-9 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center transition-all shadow-sm interactive-scale" 
                                 title="Falar no WhatsApp">
                                  <span class="material-symbols-outlined text-[18px]">chat</span>
                              </a>
@@ -217,7 +219,7 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
                              
                              <?php if ($isAdmin): ?>
                                  <div class="relative dropdown-container">
-                                     <button onclick="toggleDropdown(event, this)" class="w-9 h-9 bg-gray-50 border border-gray-100 text-gray-500 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all" title="Mais Opções">
+                                     <button onclick="toggleDropdown(event, this)" class="w-9 h-9 bg-gray-50 border border-gray-100 text-gray-500 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all interactive-scale" title="Mais Opções">
                                          <span class="material-symbols-outlined text-[18px]">more_vert</span>
                                      </button>
                                      
@@ -233,7 +235,7 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
                                      </div>
                                  </div>
                              <?php else: ?>
-                                 <a href="perfil.php?id=<?= $user['id'] ?>" class="w-9 h-9 bg-gray-50 border border-gray-100 text-gray-500 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all" title="Ver Perfil">
+                                 <a href="perfil.php?id=<?= $user['id'] ?>" class="w-9 h-9 bg-gray-50 border border-gray-100 text-gray-500 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all interactive-scale" title="Ver Perfil">
                                      <span class="material-symbols-outlined text-[18px]">person</span>
                                  </a>
                              <?php endif; ?>
@@ -322,7 +324,7 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
 
 <!-- FAB (Admin Only) -->
 <?php if ($isAdmin): ?>
-    <a href="perfil.php?new=1" class="fixed bottom-8 right-8 w-14 h-14 bg-[#2E7EED] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-[#2E7EED]/30 hover:bg-[#1a6ad4] hover:scale-105 hover:shadow-xl transition-all duration-200 z-40" title="Adicionar Novo Membro">
+    <a href="perfil.php?new=1" class="fixed bottom-8 right-8 w-14 h-14 bg-[#2E7EED] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-[#2E7EED]/30 hover:bg-[#1a6ad4] hover:scale-105 hover:shadow-xl transition-all duration-200 interactive-scale z-40" title="Adicionar Novo Membro">
         <span class="material-symbols-outlined text-3xl">person_add</span>
     </a>
 <?php endif; ?>
@@ -352,12 +354,12 @@ renderAppHeader('Equipe')<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-
             </p>
             
             <div class="mt-8 flex gap-3">
-                <button type="button" class="flex-1 py-3 px-5 border border-gray-200 rounded-2xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all" onclick="closeDeleteModal()">Cancelar</button>
+                <button type="button" class="flex-1 py-3 px-5 border border-gray-200 rounded-2xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all interactive-scale" onclick="closeDeleteModal()">Cancelar</button>
                 <form method="POST" id="deleteForm" class="m-0 flex-1">
                     <?= App\AuthMiddleware::csrfField() ?>
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="id" id="deleteMemberId">
-                    <button type="submit" class="w-full py-3 px-5 bg-red-600 text-white rounded-2xl text-sm font-bold shadow-md shadow-red-200 hover:bg-red-700 transition-all">Sim, Excluir</button>
+                    <button type="submit" class="w-full py-3 px-5 bg-red-600 text-white rounded-2xl text-sm font-bold shadow-md shadow-red-200 hover:bg-red-700 transition-all interactive-scale">Sim, Excluir</button>
                 </form>
             </div>
         </div>

@@ -109,3 +109,37 @@
     .bento-announcements { grid-column: span 4; grid-row: span 2; }
     .bento-birthdays { grid-column: span 12; grid-row: span 1; }
 }
+
+/* Stitch Refined Custom Layout & Animation Utilities */
+.reveal-item {
+    opacity: 0;
+    animation: reveal 0.6s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+}
+.reveal-stagger-1 { animation-delay: 0.1s; }
+.reveal-stagger-2 { animation-delay: 0.2s; }
+.reveal-stagger-3 { animation-delay: 0.3s; }
+.reveal-stagger-4 { animation-delay: 0.4s; }
+
+@keyframes reveal {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.interactive-scale {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.interactive-scale:active {
+    transform: scale(0.98);
+}
+
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

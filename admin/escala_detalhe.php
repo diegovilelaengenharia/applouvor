@@ -188,91 +188,161 @@ $isEditable = isset($_GET['edit']) && $_GET['edit'] == '1' && $_SESSION['user_ro
 renderAppHeader('Detalhes da Escala');
 ?>
 
-<!-- Minimalist Styling -->
-<main class="max-w-[800px] mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-32 <?= ($myMemberData && $myMemberData['status'] === 'pending') ? 'pb-40' : '' ?>">
+
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#eeeeee",
+                      "on-error": "#ffffff",
+                      "tertiary": "#755700",
+                      "ghost-gray": "#F4F4F5",
+                      "surface-container-low": "#f3f3f3",
+                      "on-background": "#1a1c1c",
+                      "outline-variant": "#c1c6d6",
+                      "inverse-surface": "#2f3131",
+                      "altar-gold": "#FFC107",
+                      "on-primary-fixed-variant": "#004590",
+                      "tertiary-fixed": "#ffdf9e",
+                      "primary-fixed-dim": "#abc7ff",
+                      "secondary-fixed-dim": "#c7c6cb",
+                      "on-secondary-fixed": "#1a1b1f",
+                      "background": "#f9f9f9",
+                      "worship-blue": "#2E7EED",
+                      "on-secondary-fixed-variant": "#46464b",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e2e2e2",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#5b4300",
+                      "surface-tint": "#005cbc",
+                      "on-primary-fixed": "#001b3f",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#f9f9f9",
+                      "primary": "#0059b8",
+                      "surface": "#f9f9f9",
+                      "surface-container-high": "#e8e8e8",
+                      "inverse-primary": "#abc7ff",
+                      "tertiary-fixed-dim": "#fabd00",
+                      "deep-navy": "#1A1B1F",
+                      "primary-container": "#1872e0",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#1a1c1c",
+                      "outline": "#727785",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#414753",
+                      "secondary": "#5e5e63",
+                      "surface-dim": "#dadada",
+                      "tertiary-container": "#946f00",
+                      "on-primary-container": "#fefcff",
+                      "secondary-container": "#e0dfe4",
+                      "on-tertiary-container": "#fffbff",
+                      "on-secondary-container": "#626267",
+                      "primary-fixed": "#d7e2ff",
+                      "inverse-on-surface": "#f0f1f1",
+                      "secondary-fixed": "#e3e2e7",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "max-width": "1200px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "64px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Open Sans"],
+                      "body-md": ["Open Sans"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "label-sm": ["Open Sans"],
+                      "display-lg-mobile": ["Hanken Grotesk"],
+                      "lyric-focus": ["Open Sans"],
+                      "display-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "lyric-focus": ["28px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+</script>
+
+<style>
+    .bento-border-top {
+        border-top: 4px solid #2E7EED;
+    }
+    .timeline-line::before {
+        content: '';
+        position: absolute;
+        left: 11px;
+        top: 24px;
+        bottom: 0;
+        width: 2px;
+        background: #E2E2E2;
+    }
+    .timeline-item:last-child .timeline-line::before {
+        display: none;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<!-- Worship Progress Bar at top -->
+<div class="fixed top-0 left-0 w-full h-1 bg-ghost-gray z-[60]">
+    <div class="h-full bg-worship-blue transition-all duration-1000" style="width: 100%;"></div>
+</div>
+
+<main class="mt-8 pb-32 max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop space-y-8 pt-4 <?= ($myMemberData && $myMemberData['status'] === 'pending') ? 'pb-40' : '' ?>">
     
-    <div class="flex items-center justify-between mb-8">
-        <div>
-            <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface font-bold">Detalhes da Escala</h1>
-            <p class="font-body-lg text-body-lg text-on-surface-variant mt-2"><?= htmlspecialchars($schedule['event_type']) ?></p>
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="escalas.php" class="active:scale-95 transition-transform p-2 rounded-full hover:bg-surface-container-low text-on-surface">
+                <span class="material-symbols-outlined">close</span>
+            </a>
+            <div class="flex flex-col">
+                <h1 class="font-headline-md text-headline-md font-bold text-deep-navy">Detalhes da Escala</h1>
+                <span class="text-label-sm text-secondary uppercase tracking-widest"><?= htmlspecialchars($schedule['event_type']) ?></span>
+            </div>
         </div>
-        <a href="escalas.php" class="w-10 h-10 bg-surface-container border border-surface-container-highest text-on-surface rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors">
-            <span class="material-symbols-outlined text-[18px]">close</span>
-        </a>
+        
+        <?php if ($_SESSION['user_role'] === 'admin' && !$isEditable): ?>
+        <div class="flex gap-2">
+            <a href="?id=<?= $id ?>&edit=1" class="w-10 h-10 bg-surface-container-lowest border border-surface-variant hover:border-worship-blue hover:text-worship-blue text-on-surface rounded-full flex items-center justify-center hover:bg-surface-container-low transition-all active:scale-95 shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">edit</span>
+            </a>
+        </div>
+        <?php endif; ?>
     </div>
 
     <?php if (isset($_GET['success'])): ?>
-        <div class="bg-primary-fixed/30 border border-primary-fixed text-primary-fixed-variant px-4 py-3 rounded-xl mb-6 flex items-center gap-3">
+        <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl flex items-center gap-3 shadow-sm animate-fade-in">
             <span class="material-symbols-outlined">check_circle</span>
             <span class="font-body-md font-bold">Alterações salvas com sucesso!</span>
         </div>
     <?php endif; ?>
 
-    <!-- HERO HEADER CARD -->
-    <div class="bg-surface border border-surface-container-highest rounded-[2rem] p-6 shadow-sm mb-8 overflow-hidden relative group">
-        <!-- Top accent line -->
-        <div class="absolute top-0 left-0 w-full h-1.5 bg-primary"></div>
-        
-        <div class="flex flex-col md:flex-row md:items-center gap-6">
-            
-            <div class="w-20 h-20 bg-primary-container rounded-2xl flex flex-col items-center justify-center text-on-primary-container border-2 border-primary/20 flex-shrink-0 shadow-inner">
-                <div class="font-display-lg text-3xl font-bold leading-none bg-clip-text text-transparent bg-primary"><?= $date->format('d') ?></div>
-                <div class="font-label-sm text-[10px] font-bold uppercase tracking-widest mt-1"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></div>
-            </div>
-            
-            <div class="flex-1">
-                <h2 class="font-display-md text-2xl font-bold text-on-surface mb-2"><?= htmlspecialchars($schedule['event_type']) ?></h2>
-                <div class="flex flex-wrap items-center gap-3">
-                    <span class="inline-flex items-center gap-1.5 bg-surface-container-low border border-surface-container-highest px-3 py-1.5 rounded-full font-label-sm font-bold text-on-surface-variant">
-                        <span class="material-symbols-outlined text-[16px] text-primary">calendar_month</span>
-                        <?= $diaSemana ?>
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 bg-surface-container-low border border-surface-container-highest px-3 py-1.5 rounded-full font-label-sm font-bold text-on-surface-variant">
-                        <span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
-                        <?= substr($schedule['event_time'], 0, 5) ?>
-                    </span>
-                </div>
-            </div>
-            
-            <?php if ($_SESSION['user_role'] === 'admin' && !$isEditable): ?>
-            <div class="hidden md:block">
-                <a href="?id=<?= $id ?>&edit=1" class="w-12 h-12 bg-surface-container border border-surface-container-highest text-on-surface rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors">
-                    <span class="material-symbols-outlined text-[20px]">edit</span>
-                </a>
-            </div>
-            <?php endif; ?>
-            
-        </div>
-
-        <div class="mt-6 flex flex-wrap items-center gap-3">
-            <a href="escala_setlist.php?id=<?= (int)$id ?>" class="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 text-primary px-4 py-2 rounded-xl font-label-sm font-bold hover:bg-primary/20 transition-colors">
-                <span class="material-symbols-outlined text-[18px]">queue_music</span>
-                Acessar Setlist (Modo Escuro/Impressão)
-            </a>
-            <?php if ($_SESSION['user_role'] === 'admin' && !$isEditable): ?>
-            <a href="?id=<?= $id ?>&edit=1" class="md:hidden inline-flex items-center gap-2 bg-surface-container text-on-surface px-4 py-2 rounded-xl font-label-sm font-bold hover:bg-surface-container-high transition-colors">
-                <span class="material-symbols-outlined text-[18px]">edit</span>
-                Editar Escala
-            </a>
-            <?php endif; ?>
-        </div>
-        
-        <?php if($schedule['notes']): ?>
-        <div class="mt-6 bg-surface-container-lowest border-t border-surface-container-highest -mx-6 -mb-6 p-6">
-            <p class="font-body-md text-on-surface-variant leading-relaxed">
-                <span class="font-bold text-on-surface">Observações:</span><br>
-                <?= nl2br(htmlspecialchars($schedule['notes'])) ?>
-            </p>
-        </div>
-        <?php endif; ?>
-    </div>
-
     <!-- ================= EDIT MODE ================= -->
     <?php if ($isEditable): ?>
         
-        <form method="POST" id="editForm" class="bg-surface border border-primary/30 rounded-3xl p-6 shadow-lg shadow-primary/5 space-y-8 animate-fade-in relative overflow-hidden">
+        <form method="POST" id="editForm" class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 md:p-8 space-y-8 shadow-sm relative overflow-hidden">
             <!-- Edit mode indicator -->
-            <div class="absolute top-0 right-0 bg-primary text-on-primary px-4 py-1 rounded-bl-xl font-label-sm font-bold text-[10px] tracking-wider uppercase flex items-center gap-1">
+            <div class="absolute top-0 right-0 bg-worship-blue text-white px-4 py-1.5 rounded-bl-xl font-label-sm font-bold text-[10px] tracking-wider uppercase flex items-center gap-1">
                 <span class="material-symbols-outlined text-[12px]">edit</span> Modo Edição
             </div>
 
@@ -280,23 +350,23 @@ renderAppHeader('Detalhes da Escala');
             <input type="hidden" name="save_changes" value="1">
             
             <!-- 1. Event Info Editor -->
-            <div>
-                <div class="flex items-center justify-between mb-4 border-b border-surface-container-highest pb-2">
-                    <h3 class="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">info</span>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-surface-variant pb-2">
+                    <h3 class="font-headline-md text-lg font-bold text-deep-navy flex items-center gap-2">
+                        <span class="material-symbols-outlined text-worship-blue">info</span>
                         Info Básica
                     </h3>
-                    <button type="button" class="text-primary font-label-sm font-bold hover:underline" onclick="openInfoModal()">Editar Tudo</button>
+                    <button type="button" class="text-worship-blue font-label-sm font-bold hover:underline" onclick="openInfoModal()">Editar Tudo</button>
                 </div>
                 
-                <div class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4 cursor-pointer hover:bg-surface-container-low transition-colors" onclick="openInfoModal()">
-                    <div id="summary-type" class="font-headline-md font-bold text-on-surface"><?= htmlspecialchars($schedule['event_type']) ?></div>
-                    <div class="flex items-center gap-4 mt-2 font-body-sm text-on-surface-variant">
+                <div class="bg-ghost-gray border border-outline-variant rounded-xl p-4 cursor-pointer hover:bg-surface-container-low transition-colors" onclick="openInfoModal()">
+                    <div id="summary-type" class="font-headline-md font-bold text-deep-navy"><?= htmlspecialchars($schedule['event_type']) ?></div>
+                    <div class="flex items-center gap-4 mt-2 font-body-sm text-secondary">
                         <span id="summary-date" class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calendar_month</span> <?= date('d/m/Y', strtotime($schedule['event_date'])) ?></span>
                         <span id="summary-time" class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> <?= substr($schedule['event_time'], 0, 5) ?></span>
                     </div>
                     <?php if($schedule['notes']): ?>
-                    <div id="summary-notes" class="mt-3 pt-3 border-t border-surface-container-highest font-body-sm text-on-surface-variant italic flex gap-2">
+                    <div id="summary-notes" class="mt-3 pt-3 border-t border-outline-variant font-body-sm text-secondary italic flex gap-2">
                         <span class="material-symbols-outlined text-[14px] mt-0.5">sticky_note_2</span> 
                         <span><?= htmlspecialchars($schedule['notes']) ?></span>
                     </div>
@@ -305,22 +375,22 @@ renderAppHeader('Detalhes da Escala');
             </div>
 
             <!-- 2. Members Editor -->
-            <div>
-                <div class="flex items-center justify-between mb-4 border-b border-surface-container-highest pb-2">
-                    <h3 class="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">groups</span>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-surface-variant pb-2">
+                    <h3 class="font-headline-md text-lg font-bold text-deep-navy flex items-center gap-2">
+                        <span class="material-symbols-outlined text-worship-blue">groups</span>
                         Participantes
                     </h3>
-                    <button type="button" class="text-primary font-label-sm font-bold hover:underline" onclick="document.getElementById('modalMembers').classList.remove('hidden'); document.getElementById('modalMembers').classList.add('flex');">Gerenciar</button>
+                    <button type="button" class="text-worship-blue font-label-sm font-bold hover:underline" onclick="document.getElementById('modalMembers').classList.remove('hidden'); document.getElementById('modalMembers').classList.add('flex');">Gerenciar</button>
                 </div>
                 
-                <div id="members-bag" class="flex flex-wrap gap-2 min-h-[60px] bg-surface-container-lowest border border-surface-container-highest border-dashed rounded-2xl p-4">
+                <div id="members-bag" class="flex flex-wrap gap-2 min-h-[60px] bg-ghost-gray border border-outline-variant border-dashed rounded-xl p-4">
                     <?php foreach($teamIds as $tid): 
                         $uName = ''; foreach($allUsers as $u) if($u['id']==$tid) $uName=$u['name'];
                     ?>
-                        <span class="inline-flex items-center gap-2 bg-surface-container border border-surface-container-highest px-3 py-1.5 rounded-full font-label-sm font-bold text-on-surface" id="m-badge-<?= $tid ?>">
+                        <span class="inline-flex items-center gap-2 bg-white border border-outline-variant px-3 py-1.5 rounded-full font-label-sm font-bold text-deep-navy" id="m-badge-<?= $tid ?>">
                             <?= htmlspecialchars($uName) ?> 
-                            <button type="button" class="text-on-surface-variant hover:text-error transition-colors" onclick="removeMember(<?= $tid ?>)">
+                            <button type="button" class="text-secondary hover:text-error transition-colors" onclick="removeMember(<?= $tid ?>)">
                                 <span class="material-symbols-outlined text-[16px]">close</span>
                             </button>
                             <input type="hidden" name="members[]" value="<?= $tid ?>">
@@ -330,22 +400,22 @@ renderAppHeader('Detalhes da Escala');
             </div>
 
             <!-- 3. Songs Editor -->
-            <div>
-                <div class="flex items-center justify-between mb-4 border-b border-surface-container-highest pb-2">
-                    <h3 class="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">queue_music</span>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-surface-variant pb-2">
+                    <h3 class="font-headline-md text-lg font-bold text-deep-navy flex items-center gap-2">
+                        <span class="material-symbols-outlined text-worship-blue">queue_music</span>
                         Repertório
                     </h3>
-                    <button type="button" class="text-primary font-label-sm font-bold hover:underline" onclick="document.getElementById('modalSongs').classList.remove('hidden'); document.getElementById('modalSongs').classList.add('flex');">Gerenciar</button>
+                    <button type="button" class="text-worship-blue font-label-sm font-bold hover:underline" onclick="document.getElementById('modalSongs').classList.remove('hidden'); document.getElementById('modalSongs').classList.add('flex');">Gerenciar</button>
                 </div>
                 
-                <div id="songs-bag" class="space-y-2 min-h-[60px] bg-surface-container-lowest border border-surface-container-highest border-dashed rounded-2xl p-4">
+                <div id="songs-bag" class="space-y-2 min-h-[60px] bg-ghost-gray border border-outline-variant border-dashed rounded-xl p-4">
                     <?php foreach($songs as $sg): ?>
-                        <div class="flex items-center justify-between bg-surface-container border border-surface-container-highest p-3 rounded-xl" id="s-badge-<?= $sg['song_id'] ?>">
-                            <span class="font-label-sm font-bold text-on-surface"><?= htmlspecialchars($sg['title']) ?> <span class="text-on-surface-variant font-normal">- <?= htmlspecialchars($sg['artist']) ?></span></span>
+                        <div class="flex items-center justify-between bg-white border border-outline-variant p-3 rounded-lg" id="s-badge-<?= $sg['song_id'] ?>">
+                            <span class="font-label-sm font-bold text-deep-navy"><?= htmlspecialchars($sg['title']) ?> <span class="text-secondary font-normal">- <?= htmlspecialchars($sg['artist']) ?></span></span>
                             <div class="flex items-center gap-2">
                                 <input type="hidden" name="songs[]" value="<?= $sg['song_id'] ?>">
-                                <button type="button" class="text-on-surface-variant hover:text-error transition-colors p-1" onclick="removeSong(<?= $sg['song_id'] ?>)">
+                                <button type="button" class="text-secondary hover:text-error transition-colors p-1" onclick="removeSong(<?= $sg['song_id'] ?>)">
                                     <span class="material-symbols-outlined text-[18px]">close</span>
                                 </button>
                             </div>
@@ -355,29 +425,29 @@ renderAppHeader('Detalhes da Escala');
             </div>
 
             <!-- 4. Roteiro Editor -->
-            <div>
-                <div class="flex items-center justify-between mb-4 border-b border-surface-container-highest pb-2">
-                    <h3 class="font-headline-md text-lg font-bold text-on-surface flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">list_alt</span>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-surface-variant pb-2">
+                    <h3 class="font-headline-md text-lg font-bold text-deep-navy flex items-center gap-2">
+                        <span class="material-symbols-outlined text-worship-blue">list_alt</span>
                         Roteiro de Culto
                     </h3>
-                    <button type="button" class="text-primary font-label-sm font-bold hover:underline flex items-center gap-1" onclick="openRoteiroModal()">
+                    <button type="button" class="text-worship-blue font-label-sm font-bold hover:underline flex items-center gap-1" onclick="openRoteiroModal()">
                         <span class="material-symbols-outlined text-[16px]">add</span> Adicionar Item
                     </button>
                 </div>
                 
                 <div id="roteiro-list" class="space-y-2">
-                    <div id="roteiro-empty-state" class="text-center p-8 bg-surface-container-lowest border border-surface-container-highest border-dashed rounded-2xl font-body-sm text-on-surface-variant">
+                    <div id="roteiro-empty-state" class="text-center p-8 bg-ghost-gray border border-outline-variant border-dashed rounded-xl font-body-sm text-secondary">
                         Nenhum item no roteiro. Clique em "Adicionar Item".
                     </div>
                 </div>
             </div>
 
             <!-- Actions -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-surface-container-highest">
-                 <a href="?id=<?= $id ?>" class="py-3 px-4 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold text-center hover:bg-surface-container-high transition-colors">Cancelar</a>
-                 <button type="button" onclick="if(confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.')) document.getElementById('delForm').submit()" class="py-3 px-4 bg-error-container text-error rounded-full font-label-sm font-bold hover:bg-error hover:text-on-error transition-colors text-center">Excluir Escala</button>
-                 <button type="submit" class="py-3 px-4 bg-primary text-on-primary rounded-full font-label-sm font-bold shadow-md hover:bg-primary-container hover:text-on-primary-container transition-colors transform active:scale-95 text-center">Salvar Alterações</button>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-surface-variant">
+                 <a href="?id=<?= $id ?>" class="py-3 px-4 bg-ghost-gray border border-outline-variant text-deep-navy rounded-lg font-label-sm font-bold text-center hover:bg-surface-container transition-colors">Cancelar</a>
+                 <button type="button" onclick="if(confirm('Tem certeza que deseja excluir esta escala? Esta ação não pode ser desfeita.')) document.getElementById('delForm').submit()" class="py-3 px-4 bg-error-container/20 text-error rounded-lg font-label-sm font-bold hover:bg-error hover:text-white transition-colors text-center">Excluir Escala</button>
+                 <button type="submit" class="py-3 px-4 bg-worship-blue text-white rounded-lg font-label-sm font-bold shadow-md hover:bg-primary-container transition-all transform active:scale-95 text-center">Salvar Alterações</button>
             </div>
         </form>
         <form id="delForm" method="POST" class="hidden"><input type="hidden" name="delete_schedule" value="1"></form>
@@ -385,34 +455,79 @@ renderAppHeader('Detalhes da Escala');
     <!-- ================= VIEW MODE ================= -->
     <?php else: ?>
         
-        <!-- REHEARSAL CHECK-IN -->
-        <?php if ($myMemberData): ?>
-        <div class="bg-surface border border-surface-container-highest rounded-[2rem] p-6 shadow-sm mb-8 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <?php if ($myMemberData['is_rehearsed']): ?>
-                    <div class="w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span class="material-symbols-outlined text-[24px]">task_alt</span>
+        <!-- Hero Bento Card -->
+        <section class="bg-surface-container-lowest rounded-xl border border-surface-variant bento-border-top overflow-hidden shadow-sm">
+            <div class="p-6 md:p-8 flex flex-col md:flex-row gap-6 md:items-center">
+                <div class="flex flex-col items-center justify-center bg-ghost-gray rounded-lg w-24 h-24 flex-shrink-0 border border-outline-variant shadow-inner">
+                    <span class="text-label-sm text-secondary uppercase font-bold"><?= strtoupper(strftime('%b', $date->getTimestamp())) ?></span>
+                    <span class="text-display-lg-mobile font-bold text-worship-blue leading-none"><?= $date->format('d') ?></span>
+                </div>
+                <div class="flex-grow space-y-3">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-ghost-gray border border-outline-variant rounded-full text-label-sm font-bold text-secondary flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px] text-worship-blue">calendar_month</span>
+                            <?= $diaSemana ?>
+                        </span>
+                        <span class="px-3 py-1 bg-ghost-gray border border-outline-variant rounded-full text-label-sm font-bold text-secondary flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px] text-worship-blue">schedule</span>
+                            <?= substr($schedule['event_time'], 0, 5) ?>
+                        </span>
                     </div>
-                    <div>
-                        <h3 class="font-headline-md font-bold text-green-700">Repertório estudado!</h3>
-                        <p class="font-body-sm text-on-surface-variant">Você está pronto para o ensaio.</p>
+                    <h2 class="font-display-lg-mobile md:text-headline-md font-bold text-deep-navy"><?= htmlspecialchars($schedule['event_type']) ?></h2>
+                    
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="escala_setlist.php?id=<?= (int)$id ?>" class="bg-worship-blue text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 active:scale-95 transition-all shadow-sm hover:bg-primary-container">
+                            <span class="material-symbols-outlined text-[20px]">queue_music</span>
+                            Acessar Setlist
+                        </a>
+                        <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                        <a href="?id=<?= $id ?>&edit=1" class="border border-deep-navy text-deep-navy px-6 py-2.5 rounded-lg font-bold active:scale-95 transition-colors hover:bg-ghost-gray">
+                            Editar Escala
+                        </a>
+                        <?php endif; ?>
                     </div>
-                <?php else: ?>
-                    <div class="w-12 h-12 bg-surface-container-highest text-on-surface-variant rounded-full flex items-center justify-center flex-shrink-0">
-                        <span class="material-symbols-outlined text-[24px]">headphones</span>
-                    </div>
-                    <div>
-                        <h3 class="font-headline-md font-bold text-on-surface">Prepare-se para ouvir</h3>
-                        <p class="font-body-sm text-on-surface-variant">Marque quando tiver estudado as músicas.</p>
-                    </div>
-                <?php endif; ?>
+                </div>
             </div>
             
-            <form method="POST">
+            <?php if($schedule['notes']): ?>
+            <div class="border-t border-surface-variant p-6 bg-surface-bright">
+                <details class="group" open>
+                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                        <span class="text-label-sm font-bold text-secondary flex items-center gap-2 uppercase">
+                            <span class="material-symbols-outlined text-[18px]">info</span>
+                            Observações Gerais
+                        </span>
+                        <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="mt-4 text-body-md text-on-surface-variant leading-relaxed font-body-md whitespace-pre-wrap">
+                        <?= htmlspecialchars($schedule['notes']) ?>
+                    </div>
+                </details>
+            </div>
+            <?php endif; ?>
+        </section>
+
+        <!-- Check-in Action Card -->
+        <?php if ($myMemberData): ?>
+        <section class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-worship-blue/10 text-worship-blue rounded-full flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined">headphones</span>
+                </div>
+                <div>
+                    <h3 class="font-bold text-body-lg text-deep-navy">
+                        <?= $myMemberData['is_rehearsed'] ? 'Repertório estudado!' : 'Prepare-se para ouvir' ?>
+                    </h3>
+                    <p class="text-on-surface-variant text-body-md">
+                        <?= $myMemberData['is_rehearsed'] ? 'Você está pronto para o ensaio ministerial.' : 'Marque quando tiver estudado as músicas.' ?>
+                    </p>
+                </div>
+            </div>
+            <form method="POST" class="w-full md:w-auto">
                 <?= App\AuthMiddleware::csrfField() ?>
                 <input type="hidden" name="action" value="toggle_rehearsal">
                 <input type="hidden" name="state" value="<?= $myMemberData['is_rehearsed'] ? '0' : '1' ?>">
-                <button type="submit" class="px-6 py-3 rounded-full font-label-sm font-bold flex items-center gap-2 transition-all transform active:scale-95 <?= $myMemberData['is_rehearsed'] ? 'bg-surface-container border border-surface-container-highest text-on-surface hover:bg-surface-container-high' : 'bg-primary text-on-primary shadow-md hover:bg-primary-container hover:text-on-primary-container' ?>">
+                <button type="submit" class="w-full md:w-auto bg-white border border-outline-variant hover:border-worship-blue hover:text-worship-blue text-on-surface font-bold px-8 py-3 rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2">
                     <?php if ($myMemberData['is_rehearsed']): ?>
                         <span class="material-symbols-outlined text-[20px]">undo</span> Desfazer
                     <?php else: ?>
@@ -420,42 +535,35 @@ renderAppHeader('Detalhes da Escala');
                     <?php endif; ?>
                 </button>
             </form>
-        </div>
+        </section>
         <?php endif; ?>
 
-        <!-- PARTICIPANTS SECTION -->
-        <div class="mb-10">
-            <div class="flex items-center justify-between mb-4 px-2">
-                <h3 class="font-headline-md text-xl font-bold text-on-surface flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">groups</span> Equipe & Ministérios
-                </h3>
-                <span class="bg-surface-container-highest text-on-surface-variant font-label-sm font-bold px-3 py-1 rounded-full"><?= count($team) ?></span>
-            </div>
-
-            <?php if(empty($groupedTeam)): ?>
-                <div class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-6 text-center font-body-sm text-on-surface-variant">Nenhum participante definido.</div>
-            <?php else: ?>
-                <div class="space-y-4">
-                <?php 
-                $ministryIcons = [
-                    'Vocal / Vozes' => 'mic',
-                    'Harmonia / Cordas' => 'nightlight', // usando icone proximo a guitarra
-                    'Ritmo / Percussão' => 'album', // bateria
-                    'Som & Apoio' => 'tune' // sliders
-                ];
-                foreach($groupedTeam as $ministryName => $members): 
-                    $minIcon = $ministryIcons[$ministryName] ?? 'groups';
-                ?>
-                    <div class="bg-surface border border-surface-container-highest rounded-2xl p-5 shadow-sm transition-transform hover:-translate-y-1">
-                        <div class="flex items-center justify-between mb-4 border-b border-surface-container-highest pb-3">
-                            <h4 class="font-label-md font-bold text-on-surface uppercase tracking-wider flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-[20px]"><?= $minIcon ?></span>
+        <!-- Team Grid -->
+        <section class="space-y-4">
+            <h3 class="font-headline-md text-deep-navy">Equipe Ministerial</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php if(empty($groupedTeam)): ?>
+                    <div class="col-span-full bg-surface-container-lowest border border-surface-variant rounded-xl p-6 text-center font-body-sm text-secondary">Nenhum participante definido nesta escala.</div>
+                <?php else: ?>
+                    <?php 
+                    $ministryIcons = [
+                        'Vocal / Vozes' => 'mic',
+                        'Harmonia / Cordas' => 'nightlight', // violão/guitarra
+                        'Ritmo / Percussão' => 'album', // bateria
+                        'Som & Apoio' => 'tune' // sliders
+                    ];
+                    foreach($groupedTeam as $ministryName => $members): 
+                        $minIcon = $ministryIcons[$ministryName] ?? 'groups';
+                    ?>
+                    <div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-5 space-y-4 shadow-sm hover:border-worship-blue/40 transition-all">
+                        <div class="flex justify-between items-center border-b border-ghost-gray pb-2">
+                            <h4 class="font-bold text-label-sm uppercase text-secondary flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[18px] text-worship-blue"><?= $minIcon ?></span>
                                 <?= htmlspecialchars($ministryName) ?>
                             </h4>
-                            <span class="bg-surface-container-high text-on-surface-variant font-label-sm font-bold text-[10px] px-2 py-0.5 rounded-full border border-surface-container-highest"><?= count($members) ?></span>
+                            <span class="text-label-sm bg-ghost-gray px-2 py-0.5 rounded border border-outline-variant font-bold text-secondary"><?= count($members) ?></span>
                         </div>
-                        
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        <div class="space-y-3">
                             <?php foreach($members as $member):
                                 $memberStatus = $member['status'] ?? 'pending';
                                 $statusColors = [
@@ -464,8 +572,15 @@ renderAppHeader('Detalhes da Escala');
                                     'absent' => 'bg-red-500',
                                     'pending' => 'bg-yellow-500'
                                 ];
+                                $statusLabels = [
+                                    'confirmed' => 'Confirmado',
+                                    'declined' => 'Recusado',
+                                    'absent' => 'Ausente',
+                                    'pending' => 'Pendente'
+                                ];
                                 $sColor = $statusColors[$memberStatus] ?? 'bg-yellow-500';
-                                $initials = strtoupper(substr($member['name'], 0, 1));
+                                $sLabel = $statusLabels[$memberStatus] ?? 'Pendente';
+                                $initials = strtoupper(substr($member['name'], 0, 2));
                                 $instr = $member['assigned_instrument'] ?: $member['instrument'] ?: 'Vocal';
                                 
                                 $avatarPath = $member['avatar'];
@@ -473,172 +588,143 @@ renderAppHeader('Detalhes da Escala');
                                     $avatarPath = '../uploads/' . $avatarPath;
                                 }
                             ?>
-                            <div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-3 flex items-center gap-3 hover:bg-surface-container-low transition-colors">
-                                <div class="relative">
-                                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-display-md text-lg font-bold text-white shadow-sm overflow-hidden" style="background: <?= $member['avatar_color'] ?: '#3b82f6' ?>;">
-                                        <?php if($avatarPath): ?>
-                                            <img src="<?= htmlspecialchars($avatarPath) ?>" alt="<?= htmlspecialchars($member['name']) ?>" class="w-full h-full object-cover">
-                                        <?php else: ?>
-                                            <?= $initials ?>
-                                        <?php endif; ?>
+                            <div class="flex items-center justify-between group-hover:bg-ghost-gray p-1 rounded transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <?php if($avatarPath): ?>
+                                        <img alt="<?= htmlspecialchars($member['name']) ?>" class="w-8 h-8 rounded-full object-cover border border-outline-variant shadow-sm" src="<?= htmlspecialchars($avatarPath) ?>"/>
+                                    <?php else: ?>
+                                        <div class="w-8 h-8 rounded-full bg-ghost-gray border border-outline-variant text-deep-navy flex items-center justify-center font-bold text-xs shadow-sm"><?= $initials ?></div>
+                                    <?php endif; ?>
+                                    <div class="flex flex-col">
+                                        <span class="text-body-md font-semibold text-deep-navy"><?= htmlspecialchars($member['name']) ?></span>
+                                        <span class="text-[10px] text-secondary font-bold"><?= htmlspecialchars($instr) ?></span>
                                     </div>
-                                    <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-surface <?= $sColor ?>"></div>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-label-sm font-bold text-on-surface truncate" title="<?= htmlspecialchars($member['name']) ?>"><?= htmlspecialchars($member['name']) ?></div>
-                                    <div class="font-body-sm text-[10px] text-on-surface-variant truncate" title="<?= htmlspecialchars($instr) ?>"><?= htmlspecialchars($instr) ?></div>
+                                <div class="flex items-center gap-2">
+                                    <?php if(isset($member['is_leader']) && $member['is_leader']): ?>
+                                        <span class="text-[9px] bg-altar-gold/20 text-tertiary-container px-1.5 py-0.5 rounded font-bold uppercase">Líder</span>
+                                    <?php endif; ?>
+                                    <div class="w-2.5 h-2.5 rounded-full <?= $sColor ?> shadow-sm" title="<?= $sLabel ?>"></div>
                                 </div>
                             </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
-                <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </div>
-
-        <!-- REPERTOIRE SECTION -->
-        <div class="mb-10">
-            <div class="flex items-center justify-between mb-4 px-2">
-                <h3 class="font-headline-md text-xl font-bold text-on-surface flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">queue_music</span> Repertório
-                </h3>
-                <span class="bg-surface-container-highest text-on-surface-variant font-label-sm font-bold px-3 py-1 rounded-full"><?= count($songs) ?></span>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
+        </section>
 
-            <div class="bg-surface border border-surface-container-highest rounded-2xl p-4 shadow-sm flex flex-col gap-2">
+        <!-- Repertoire Section -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-end px-2">
+                <h3 class="font-headline-md text-deep-navy">Repertório</h3>
+                <span class="text-label-sm text-secondary uppercase font-bold"><?= count($songs) ?> Músicas</span>
+            </div>
+            <div class="space-y-3">
                 <?php if (empty($songs)): ?>
-                    <div class="text-center p-4 font-body-sm text-on-surface-variant">Nenhuma música selecionada.</div>
+                    <div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 text-center font-body-sm text-secondary">Nenhuma música adicionada a esta escala.</div>
                 <?php else: ?>
                     <?php foreach ($songs as $index => $song):
                         $resolvedTone = $customToneMap[(int)$song['song_id']] ?? null;
                         $isCustomTone = !empty($resolvedTone);
                         $toneDisplay  = $isCustomTone ? $resolvedTone : ($song['tone'] ?? '');
+                        $initial = strtoupper(substr($song['title'], 0, 1));
                     ?>
-                    <div class="flex items-center gap-4 p-3 bg-surface-container-lowest border border-surface-container-highest rounded-xl hover:bg-surface-container-low transition-all">
-                        <div class="font-display-md text-on-surface-variant font-bold w-6 text-center shrink-0"><?= $index + 1 ?></div>
-                        
-                        <div class="w-12 h-12 bg-surface-container-highest rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-surface-container shadow-inner">
-                            <span class="font-display-md text-primary font-bold text-xl drop-shadow-sm"><?= strtoupper(substr($song['title'], 0, 1)) ?></span>
+                    <div class="group bg-surface-container-lowest border border-surface-variant rounded-xl p-4 flex items-center gap-4 hover:border-worship-blue transition-all shadow-sm">
+                        <div class="w-6 text-label-sm font-bold text-secondary text-center"><?= str_pad($index + 1, 2, '0', STR_PAD_LEFT) ?></div>
+                        <div class="w-12 h-12 bg-deep-navy text-white rounded flex items-center justify-center font-bold text-xl shadow-sm select-none"><?= $initial ?></div>
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-bold text-body-md text-deep-navy leading-tight truncate">
+                                <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="hover:text-worship-blue transition-colors"><?= htmlspecialchars($song['title']) ?></a>
+                            </h4>
+                            <p class="text-on-surface-variant text-[14px] truncate"><?= htmlspecialchars($song['artist']) ?></p>
                         </div>
-
-                        <div class="flex-1 min-w-0">
-                            <a href="musica_detalhe.php?id=<?= $song['song_id'] ?>" class="font-label-sm font-bold text-on-surface hover:text-primary transition-colors block truncate"><?= htmlspecialchars($song['title']) ?></a>
-                            <div class="font-body-sm text-[11px] text-on-surface-variant flex items-center gap-2 mt-0.5">
-                                <span class="truncate max-w-[120px] sm:max-w-[200px] inline-block"><?= htmlspecialchars($song['artist']) ?></span>
-                                <?php if ($toneDisplay): ?>
-                                    <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded font-bold text-[10px] <?= $isCustomTone ? 'bg-primary/20 text-primary-fixed-variant' : 'bg-surface-container-highest text-on-surface-variant' ?>">
-                                        <?= htmlspecialchars($toneDisplay) ?>
-                                    </span>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <?php if ($toneDisplay): ?>
+                                <span class="px-2 py-1 bg-ghost-gray border border-outline-variant rounded text-label-sm font-bold text-deep-navy <?= $isCustomTone ? 'border-worship-blue text-worship-blue bg-worship-blue/5' : '' ?>"><?= htmlspecialchars($toneDisplay) ?></span>
+                            <?php endif; ?>
+                            <div class="flex gap-1">
+                                <?php if(!empty($song['link_letra'])): ?>
+                                    <a href="<?= htmlspecialchars($song['link_letra']) ?>" target="_blank" class="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors" title="Letra"><span class="material-symbols-outlined text-[20px]">lyrics</span></a>
                                 <?php endif; ?>
+                                <?php if(!empty($song['link_cifra'])): ?>
+                                    <a href="<?= htmlspecialchars($song['link_cifra']) ?>" target="_blank" class="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors" title="Cifra"><span class="material-symbols-outlined text-[20px]">queue_music</span></a>
+                                <?php endif; ?>
+                                <a href="<?= $song['link_video'] ?: ($song['link_audio'] ?: 'https://www.youtube.com/results?search_query='.urlencode($song['title'].' '.$song['artist'])) ?>" target="_blank" class="p-2 hover:bg-worship-blue/10 hover:text-worship-blue rounded-full text-on-surface-variant transition-colors" title="Ouvir"><span class="material-symbols-outlined text-[20px]">play_arrow</span></a>
                             </div>
-                        </div>
-
-                        <div class="flex items-center gap-1 shrink-0">
-                            <a href="<?= $song['link_letra'] ?: '#' ?>" target="_blank" class="w-8 h-8 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface hover:text-primary border border-transparent hover:border-surface-container-highest transition-all <?= empty($song['link_letra']) ? 'opacity-30 pointer-events-none' : '' ?>" title="Letra">
-                                <span class="material-symbols-outlined text-[18px]">format_align_left</span>
-                            </a>
-                            <a href="<?= $song['link_cifra'] ?: '#' ?>" target="_blank" class="w-8 h-8 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface hover:text-primary border border-transparent hover:border-surface-container-highest transition-all <?= empty($song['link_cifra']) ? 'opacity-30 pointer-events-none' : '' ?>" title="Cifra">
-                                <span class="material-symbols-outlined text-[18px]">description</span>
-                            </a>
-                            <a href="<?= $song['link_video'] ?: ($song['link_audio'] ?: 'https://www.youtube.com/results?search_query='.urlencode($song['title'].' '.$song['artist'])) ?>" target="_blank" class="w-8 h-8 flex items-center justify-center rounded-full text-white bg-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm" title="Ouvir">
-                                <span class="material-symbols-outlined text-[18px]">play_arrow</span>
-                            </a>
                         </div>
                     </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
-        </div>
+        </section>
 
-        <!-- ROTEIRO DE CULTO -->
+        <!-- Service Timeline (Roteiro) -->
         <?php if (!empty($roteiro)): ?>
-        <div class="mb-10">
-            <div class="flex items-center justify-between mb-4 px-2">
-                <h3 class="font-headline-md text-xl font-bold text-on-surface flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">list_alt</span> Roteiro de Culto
-                </h3>
-                <span class="bg-surface-container-highest text-on-surface-variant font-label-sm font-bold px-3 py-1 rounded-full"><?= count($roteiro) ?></span>
-            </div>
-
-            <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm">
-                <div class="relative before:absolute before:inset-y-0 before:left-[19px] before:w-0.5 before:bg-surface-container-highest space-y-6">
-                    <?php
-                    $roteiroIcons = [
-                        'musica'    => 'music_note',
-                        'oracao'    => 'pan_tool',
-                        'palavra'   => 'menu_book',
-                        'anuncio'   => 'campaign',
-                        'intervalo' => 'local_cafe',
-                        'livre'     => 'more_horiz',
-                    ];
-                    $roteiroLabels = [
-                        'musica'    => 'Música',
-                        'oracao'    => 'Oração',
-                        'palavra'   => 'Palavra',
-                        'anuncio'   => 'Anúncio',
-                        'intervalo' => 'Intervalo',
-                        'livre'     => 'Livre',
-                    ];
-                    foreach ($roteiro as $idx => $item):
-                        $icon  = $roteiroIcons[$item['item_type']]  ?? 'more_horiz';
-                        $label = $roteiroLabels[$item['item_type']] ?? $item['item_type'];
-                        $isMusic = $item['item_type'] === 'musica';
-
-                        $displayTitle = ($isMusic && $item['song_title']) ? $item['song_title'] : ($item['title'] ?: $label);
-
-                        $displayTone = null;
-                        if ($isMusic) {
-                            $displayTone = (!empty($item['custom_tone'])) ? $item['custom_tone'] : ($item['song_tone'] ?? null);
-                        }
-                    ?>
-                    <div class="relative flex gap-4 items-start">
-                        <!-- Number / Icon -->
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 z-10 border-4 border-surface <?= $isMusic ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant' ?>">
-                            <span class="material-symbols-outlined text-[20px]"><?= $icon ?></span>
-                        </div>
-                        
-                        <!-- Content -->
-                        <div class="flex-1 bg-surface-container-lowest border border-surface-container-highest rounded-xl p-4 shadow-sm relative top-1">
-                            <h4 class="font-label-md font-bold text-on-surface mb-1"><?= htmlspecialchars($displayTitle) ?></h4>
-                            <div class="flex flex-wrap items-center gap-2 font-body-sm text-[11px] text-on-surface-variant font-bold uppercase tracking-wider">
-                                <span><?= htmlspecialchars($label) ?></span>
-                                <?php if ($isMusic && $item['song_artist']): ?>
-                                    <span class="w-1 h-1 bg-on-surface-variant/30 rounded-full"></span>
-                                    <span><?= htmlspecialchars($item['song_artist']) ?></span>
-                                <?php endif; ?>
-                                <?php if ($displayTone): ?>
-                                    <span class="bg-primary/10 text-primary px-1.5 py-0.5 rounded"><?= htmlspecialchars($displayTone) ?></span>
-                                <?php endif; ?>
-                            </div>
-                            
-                            <?php if (!empty($item['nota_interna']) && $_SESSION['user_role'] === 'admin'): ?>
-                            <div class="mt-3 p-3 bg-secondary-container/20 border border-secondary-container text-secondary font-body-sm rounded-lg flex gap-2 italic">
-                                <span class="material-symbols-outlined text-[16px]">visibility_off</span>
-                                <span><?= htmlspecialchars($item['nota_interna']) ?></span>
-                            </div>
+        <section class="space-y-4">
+            <h3 class="font-headline-md text-deep-navy px-2">Roteiro do Culto</h3>
+            <div class="space-y-0 relative">
+                <?php
+                $roteiroIcons = [
+                    'musica'    => 'music_note',
+                    'oracao'    => 'pan_tool',
+                    'palavra'   => 'menu_book',
+                    'anuncio'   => 'campaign',
+                    'intervalo' => 'local_cafe',
+                    'livre'     => 'more_horiz',
+                ];
+                $roteiroColors = [
+                    'musica'    => 'bg-worship-blue',
+                    'oracao'    => 'bg-altar-gold',
+                    'palavra'   => 'bg-deep-navy',
+                    'anuncio'   => 'bg-orange-500',
+                    'intervalo' => 'bg-amber-700',
+                    'livre'     => 'bg-secondary',
+                ];
+                foreach ($roteiro as $idx => $item):
+                    $icon  = $roteiroIcons[$item['item_type']]  ?? 'more_horiz';
+                    $color = $roteiroColors[$item['item_type']] ?? 'bg-secondary';
+                    $isMusic = $item['item_type'] === 'musica';
+                    $displayTitle = ($isMusic && $item['song_title']) ? $item['song_title'] : ($item['title'] ?: $item['item_type']);
+                    $displayTone = $isMusic ? ((!empty($item['custom_tone'])) ? $item['custom_tone'] : ($item['song_tone'] ?? null)) : null;
+                ?>
+                <div class="relative pl-10 pb-8 timeline-item">
+                    <div class="timeline-line"></div>
+                    <div class="absolute left-0 top-0 w-6 h-6 <?= $color ?> rounded-full flex items-center justify-center z-10 shadow-sm">
+                        <span class="material-symbols-outlined text-[14px] text-white"><?= $icon ?></span>
+                    </div>
+                    <div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-5 shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-label-sm font-bold text-worship-blue uppercase tracking-wider text-[10px]"><?= htmlspecialchars($item['item_type']) ?></span>
+                            <?php if ($displayTone): ?>
+                                <span class="text-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded font-bold"><?= htmlspecialchars($displayTone) ?></span>
                             <?php endif; ?>
                         </div>
+                        <p class="text-body-md font-bold text-deep-navy"><?= htmlspecialchars($displayTitle) ?></p>
+                        <?php if ($isMusic && $item['song_artist']): ?>
+                            <p class="text-body-md text-on-surface-variant text-xs mt-0.5 font-bold"><?= htmlspecialchars($item['song_artist']) ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($item['nota_interna']) && $_SESSION['user_role'] === 'admin'): ?>
+                        <div class="mt-3 p-3 bg-secondary-container/20 border border-secondary-container text-secondary font-body-sm rounded-lg flex gap-2 italic">
+                            <span class="material-symbols-outlined text-[16px] shrink-0">visibility_off</span>
+                            <span><?= htmlspecialchars($item['nota_interna']) ?></span>
+                        </div>
+                        <?php endif; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
+                <?php endforeach; ?>
             </div>
-        </div>
+        </section>
         <?php endif; ?>
 
-        <!-- COMMENTS SECTION -->
-        <div class="mb-10" id="comments">
-            <div class="flex items-center justify-between mb-4 px-2">
-                <h3 class="font-headline-md text-xl font-bold text-on-surface flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">chat</span> Comentários
-                </h3>
-            </div>
-            
-            <div class="bg-surface border border-surface-container-highest rounded-[2rem] p-6 shadow-sm">
-                
-                <div class="space-y-6 mb-6">
+        <!-- Comments Thread -->
+        <section class="space-y-4" id="comments">
+            <h3 class="font-headline-md text-deep-navy px-2">Conversas</h3>
+            <div class="bg-surface-container-lowest border border-surface-variant rounded-xl overflow-hidden flex flex-col h-[400px] shadow-sm">
+                <div class="flex-grow p-6 space-y-6 overflow-y-auto no-scrollbar" id="chat-container">
                     <?php if(empty($comments)): ?>
-                        <div class="text-center py-10 font-body-md text-on-surface-variant">Seja o primeiro a comentar!</div>
+                        <div class="text-center py-10 font-body-md text-on-surface-variant">Nenhuma mensagem publicada. Seja o primeiro!</div>
                     <?php else: ?>
                         <?php foreach($comments as $cmt): 
                             $isMe = $cmt['user_id'] == $_SESSION['user_id'];
@@ -647,68 +733,68 @@ renderAppHeader('Detalhes da Escala');
                                 $avatar = '../uploads/' . $avatar;
                             }
                         ?>
-                        <div class="flex gap-4 group">
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center font-display-md text-white font-bold shrink-0 overflow-hidden" style="background: <?= $cmt['avatar_color'] ?: '#64748b' ?>;">
-                                <?php if($avatar): ?>
-                                    <img src="<?= htmlspecialchars($avatar) ?>" alt="<?= htmlspecialchars($cmt['name']) ?>" class="w-full h-full object-cover">
-                                <?php else: ?>
-                                    <?= strtoupper(substr($cmt['name'], 0, 1)) ?>
-                                <?php endif; ?>
-                            </div>
-                            <div class="flex-1 bg-surface-container-lowest border border-surface-container-highest p-4 rounded-2xl rounded-tl-none relative">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div>
-                                        <span class="font-label-sm font-bold text-on-surface block"><?= htmlspecialchars($cmt['name']) ?></span>
-                                        <span class="font-body-sm text-[10px] text-on-surface-variant"><?= date('d/m H:i', strtotime($cmt['created_at'])) ?></span>
-                                    </div>
-                                    <?php if($isMe || $_SESSION['user_role'] === 'admin'): ?>
-                                        <form method="POST" onsubmit="return confirm('Apagar comentário?');" class="opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <input type="hidden" name="action" value="delete_comment">
-                                            <input type="hidden" name="comment_id" value="<?= $cmt['id'] ?>">
-                                            <button type="submit" class="text-on-surface-variant hover:text-error p-1">
-                                                <span class="material-symbols-outlined text-[16px]">delete</span>
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
+                        <div class="flex gap-4 <?= $isMe ? 'flex-row-reverse' : '' ?>">
+                            <?php if($avatar): ?>
+                                <img alt="Avatar" class="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant shadow-sm" src="<?= htmlspecialchars($avatar) ?>"/>
+                            <?php else: ?>
+                                <div class="w-10 h-10 rounded-full bg-ghost-gray border border-outline-variant text-deep-navy flex items-center justify-center font-bold text-xs shrink-0 shadow-sm"><?= strtoupper(substr($cmt['name'], 0, 2)) ?></div>
+                            <?php endif; ?>
+                            <div class="space-y-1 max-w-[80%] <?= $isMe ? 'flex flex-col items-end' : '' ?>">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-body-md text-deep-navy"><?= $isMe ? 'Você' : htmlspecialchars($cmt['name']) ?></span>
+                                    <span class="text-label-sm text-secondary font-bold text-[10px]"><?= date('d/m H:i', strtotime($cmt['created_at'])) ?></span>
                                 </div>
-                                <div class="font-body-md text-on-surface leading-relaxed whitespace-pre-wrap"><?= htmlspecialchars($cmt['comment']) ?></div>
+                                <div class="p-3 rounded-xl border border-surface-variant shadow-sm <?= $isMe ? 'bg-worship-blue text-white rounded-tr-none' : 'bg-ghost-gray text-deep-navy rounded-tl-none' ?>">
+                                    <p class="text-body-md leading-relaxed whitespace-pre-wrap font-body-md"><?= htmlspecialchars($cmt['comment']) ?></p>
+                                </div>
+                                <?php if($isMe || $_SESSION['user_role'] === 'admin'): ?>
+                                    <form method="POST" onsubmit="return confirm('Deseja realmente apagar este comentário?');" class="mt-1">
+                                        <?= App\AuthMiddleware::csrfField() ?>
+                                        <input type="hidden" name="action" value="delete_comment">
+                                        <input type="hidden" name="comment_id" value="<?= $cmt['id'] ?>">
+                                        <button type="submit" class="text-secondary hover:text-error text-xs flex items-center gap-1 active:scale-95 transition-transform">
+                                            <span class="material-symbols-outlined text-[14px]">delete</span> Excluir
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-                
-                <form method="POST" class="flex gap-3 items-end">
-                    <?= App\AuthMiddleware::csrfField() ?>
-                    <input type="hidden" name="action" value="add_comment">
-                    <div class="flex-1">
-                        <input type="text" name="comment" class="w-full bg-surface-container border border-surface-container-highest rounded-full px-5 py-3.5 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="Escreva uma mensagem..." required autocomplete="off">
-                    </div>
-                    <button type="submit" class="w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center shrink-0 hover:bg-primary-container hover:text-on-primary-container transition-transform transform active:scale-95 shadow-md">
-                        <span class="material-symbols-outlined text-[20px] ml-1">send</span>
-                    </button>
-                </form>
+                <!-- Input Bar -->
+                <div class="p-4 bg-surface-bright border-t border-surface-variant">
+                    <form method="POST" class="flex items-center gap-3 bg-white border border-outline-variant rounded-full px-4 py-2 focus-within:border-worship-blue transition-all">
+                        <?= App\AuthMiddleware::csrfField() ?>
+                        <input type="hidden" name="action" value="add_comment">
+                        <input class="flex-grow border-none focus:ring-0 text-body-md bg-transparent focus:outline-none" name="comment" placeholder="Escreva uma mensagem..." type="text" required autocomplete="off"/>
+                        <button type="submit" class="text-worship-blue hover:scale-110 transition-transform active:scale-95">
+                            <span class="material-symbols-outlined">send</span>
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </section>
 
     <?php endif; ?>
 
 </main>
 
 
+
 <!-- MODALS FOR EDIT MODE -->
 <?php if($isEditable): ?>
 <!-- Modal Members -->
-<div id="modalMembers" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center px-4">
-    <div class="bg-surface w-full max-w-md rounded-[2rem] overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-        <div class="px-6 py-4 border-b border-surface-container-highest flex justify-between items-center bg-surface-container-lowest">
-            <h3 class="font-headline-md font-bold text-on-surface">Selecionar Participantes</h3>
-            <button onclick="document.getElementById('modalMembers').classList.add('hidden'); document.getElementById('modalMembers').classList.remove('flex');" class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+<div id="modalMembers" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 hidden items-center justify-center px-4 transition-all duration-300">
+    <div class="bg-white dark:bg-[#1A1B1F] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh] border border-[#E2E2E2] dark:border-[#2C2C2E] animate-scale-up">
+        <div class="px-6 py-4 border-b border-[#F4F4F5] dark:border-[#2C2C2E] flex justify-between items-center bg-white dark:bg-[#1A1B1F]">
+            <h3 class="text-lg font-bold text-deep-navy dark:text-white font-headline-md">Selecionar Participantes</h3>
+            <button onclick="document.getElementById('modalMembers').classList.add('hidden'); document.getElementById('modalMembers').classList.remove('flex');" class="text-[#71717A] hover:text-deep-navy dark:hover:text-white hover:bg-ghost-gray dark:hover:bg-[#27272A] p-2 rounded-full transition-all duration-200 active:scale-95">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
         
-        <div class="p-4 overflow-y-auto flex-1 bg-surface" id="listMembers">
+        <div class="p-5 overflow-y-auto flex-1 bg-white dark:bg-[#1A1B1F] space-y-4 no-scrollbar" id="listMembers">
             <?php 
             $groupedUsers = [];
             foreach($allUsers as $u) {
@@ -739,11 +825,11 @@ renderAppHeader('Detalhes da Escala');
             foreach($groupedUsers as $role => $users): 
                 $icon = getInstrumentIcon($role);
             ?>
-            <div class="mb-4 bg-surface-container-lowest rounded-xl overflow-hidden border border-surface-container-highest">
-                <div class="px-4 py-2 bg-surface-container border-b border-surface-container-highest font-label-sm font-bold text-on-surface flex items-center gap-2 sticky top-0 z-10">
-                    <span class="material-symbols-outlined text-[16px] text-primary"><?= $icon ?></span> <?= htmlspecialchars($role) ?>
+            <div class="bg-white dark:bg-[#1E1E24] rounded-2xl overflow-hidden border border-[#E2E2E2] dark:border-[#2C2C2E] shadow-sm">
+                <div class="px-4 py-3 bg-ghost-gray dark:bg-[#27272A] border-b border-[#E2E2E2] dark:border-[#27272A] text-xs font-bold text-deep-navy dark:text-white uppercase tracking-wider flex items-center gap-2 sticky top-0 z-10 font-body-md">
+                    <span class="material-symbols-outlined text-[16px] text-worship-blue font-bold"><?= $icon ?></span> <?= htmlspecialchars($role) ?>
                 </div>
-                <div class="divide-y divide-surface-container-highest">
+                <div class="divide-y divide-[#F4F4F5] dark:divide-[#2C2C2E]">
                 <?php foreach($users as $u): 
                     $isChecked = false;
                     if(in_array($u['id'], $teamIds)) {
@@ -757,18 +843,18 @@ renderAppHeader('Detalhes da Escala');
                          }
                     }
                 ?>
-                <label class="flex items-center gap-3 p-3 hover:bg-surface-container-low cursor-pointer transition-colors group">
+                <label class="flex items-center gap-3 p-3.5 hover:bg-ghost-gray dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 group active:scale-[0.99]">
                     <div class="relative flex items-center">
                         <input type="checkbox" name="temp_members[<?= $u['id'] ?>]" value="<?= htmlspecialchars($role) ?>" 
                                data-user-id="<?= $u['id'] ?>" data-role="<?= htmlspecialchars($role) ?>"
                                <?= $isChecked ? 'checked' : '' ?> onchange="toggleMemberSelection(this)"
-                               class="peer w-5 h-5 appearance-none border-2 border-on-surface-variant/30 rounded checked:bg-primary checked:border-primary transition-colors cursor-pointer">
-                        <span class="material-symbols-outlined absolute text-white text-[16px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity">check</span>
+                               class="peer w-5 h-5 appearance-none border-2 border-[#E2E2E2] dark:border-[#3F3F46] rounded-lg checked:bg-worship-blue checked:border-worship-blue transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-worship-blue/20">
+                        <span class="material-symbols-outlined absolute text-white text-[16px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity font-bold">check</span>
                     </div>
-                    <div class="flex flex-col">
-                        <span class="font-body-md font-bold text-on-surface group-hover:text-primary transition-colors"><?= htmlspecialchars($u['name']) ?></span>
+                    <div class="flex flex-col min-w-0">
+                        <span class="font-bold text-sm text-[#1A1B1F] dark:text-white group-hover:text-worship-blue transition-colors font-body-md"><?= htmlspecialchars($u['name']) ?></span>
                         <?php if($role === 'Outros' && $u['instrument']): ?>
-                            <span class="font-body-sm text-[10px] text-on-surface-variant"><?= htmlspecialchars($u['instrument']) ?></span>
+                            <span class="text-[10px] text-[#71717A] dark:text-[#A1A1AA] mt-0.5"><?= htmlspecialchars($u['instrument']) ?></span>
                         <?php endif; ?>
                     </div>
                 </label>
@@ -778,37 +864,37 @@ renderAppHeader('Detalhes da Escala');
             <?php endforeach; ?>
         </div>
         
-        <div class="p-4 border-t border-surface-container-highest flex gap-3 bg-surface-container-lowest">
-            <button type="button" class="flex-1 py-3 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold hover:bg-surface-container-high transition-colors" onclick="document.getElementById('modalMembers').classList.add('hidden'); document.getElementById('modalMembers').classList.remove('flex');">Cancelar</button>
-            <button type="button" class="flex-1 py-3 bg-primary text-on-primary rounded-full font-label-sm font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md" onclick="confirmMemberSelection()">Confirmar</button>
+        <div class="p-4 border-t border-[#F4F4F5] dark:border-[#2C2C2E] flex gap-3 bg-white dark:bg-[#1A1B1F]">
+            <button type="button" class="flex-1 py-3 bg-ghost-gray hover:bg-[#E4E4E7] dark:bg-[#27272A] dark:hover:bg-[#3F3F46] text-deep-navy dark:text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 text-sm" onclick="document.getElementById('modalMembers').classList.add('hidden'); document.getElementById('modalMembers').classList.remove('flex');">Cancelar</button>
+            <button type="button" class="flex-1 py-3 bg-worship-blue hover:bg-[#1C6ED7] text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(46,126,237,0.3)] text-sm" onclick="confirmMemberSelection()">Confirmar</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Songs -->
-<div id="modalSongs" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center px-4">
-    <div class="bg-surface w-full max-w-md rounded-[2rem] overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-        <div class="px-6 py-4 border-b border-surface-container-highest flex justify-between items-center bg-surface-container-lowest">
-            <h3 class="font-headline-md font-bold text-on-surface">Selecionar Músicas</h3>
-            <button onclick="document.getElementById('modalSongs').classList.add('hidden'); document.getElementById('modalSongs').classList.remove('flex');" class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+<div id="modalSongs" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 hidden items-center justify-center px-4 transition-all duration-300">
+    <div class="bg-white dark:bg-[#1A1B1F] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh] border border-[#E2E2E2] dark:border-[#2C2C2E] animate-scale-up">
+        <div class="px-6 py-4 border-b border-[#F4F4F5] dark:border-[#2C2C2E] flex justify-between items-center bg-white dark:bg-[#1A1B1F]">
+            <h3 class="text-lg font-bold text-deep-navy dark:text-white font-headline-md">Selecionar Músicas</h3>
+            <button onclick="document.getElementById('modalSongs').classList.add('hidden'); document.getElementById('modalSongs').classList.remove('flex');" class="text-[#71717A] hover:text-deep-navy dark:hover:text-white hover:bg-ghost-gray dark:hover:bg-[#27272A] p-2 rounded-full transition-all duration-200 active:scale-95">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
         
-        <div class="p-4 bg-surface-container border-b border-surface-container-highest">
-            <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
-                <input type="text" id="searchSongs" placeholder="Buscar músicas..." onkeyup="filterSongList(this.value)" class="w-full bg-surface border border-surface-container-highest rounded-xl pl-10 pr-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+        <div class="p-4 bg-ghost-gray dark:bg-[#27272A] border-b border-[#E2E2E2] dark:border-[#27272A]">
+            <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-4 text-[#71717A] dark:text-[#A1A1AA] text-[20px] font-bold">search</span>
+                <input type="text" id="searchSongs" placeholder="Buscar músicas pelo título ou artista..." onkeyup="filterSongList(this.value)" class="w-full bg-white dark:bg-[#1A1B1F] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl pl-12 pr-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white placeholder-[#71717A] focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200">
             </div>
         </div>
 
-        <div class="overflow-y-auto flex-1 bg-surface p-2" id="listSongs">
-            <div id="emptySongsState" class="text-center py-10 hidden">
-                <span class="material-symbols-outlined text-[48px] text-surface-container-highest mb-2">music_off</span>
-                <p class="font-body-sm text-on-surface-variant">Nenhuma música encontrada</p>
+        <div class="overflow-y-auto flex-1 bg-white dark:bg-[#1A1B1F] p-3 no-scrollbar" id="listSongs">
+            <div id="emptySongsState" class="text-center py-12 hidden">
+                <span class="material-symbols-outlined text-[48px] text-[#A1A1AA] mb-2 font-bold">music_off</span>
+                <p class="text-sm font-semibold text-[#71717A] dark:text-[#A1A1AA]">Nenhuma música encontrada</p>
             </div>
             
-            <div class="divide-y divide-surface-container-highest">
+            <div class="divide-y divide-[#F4F4F5] dark:divide-[#2C2C2E]">
                 <?php 
                 $selectedSongIds = array_column($songs, 'song_id');
                 usort($allSongs, function($a, $b) use ($selectedSongIds) {
@@ -823,85 +909,85 @@ renderAppHeader('Detalhes da Escala');
                     $isSelected = in_array($s['id'], $selectedSongIds);
                     $displayStyle = $isSelected ? 'flex' : 'none';
                 ?>
-                <label style="display: <?= $displayStyle ?>;" class="items-center gap-3 p-3 hover:bg-surface-container-low cursor-pointer transition-colors group" data-song-search="<?= strtolower(htmlspecialchars($s['title'].' '.$s['artist'])) ?>">
-                    <div class="relative flex items-center">
+                <label style="display: <?= $displayStyle ?>;" class="items-center gap-4 p-3.5 hover:bg-ghost-gray dark:hover:bg-[#27272A] rounded-xl cursor-pointer transition-all duration-200 group active:scale-[0.99]" data-song-search="<?= strtolower(htmlspecialchars($s['title'].' '.$s['artist'])) ?>">
+                    <div class="relative flex items-center shrink-0">
                         <input type="checkbox" value="<?= $s['id'] ?>" data-title="<?= htmlspecialchars($s['title'].' - '.$s['artist']) ?>" 
                             <?= $isSelected ? 'checked' : '' ?> onchange="toggleSong(this)"
-                            class="peer w-5 h-5 appearance-none border-2 border-on-surface-variant/30 rounded checked:bg-primary checked:border-primary transition-colors cursor-pointer">
-                        <span class="material-symbols-outlined absolute text-white text-[16px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity">check</span>
+                            class="peer w-5 h-5 appearance-none border-2 border-[#E2E2E2] dark:border-[#3F3F46] rounded-lg checked:bg-worship-blue checked:border-worship-blue transition-all cursor-pointer focus:outline-none">
+                        <span class="material-symbols-outlined absolute text-white text-[16px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity font-bold">check</span>
                     </div>
-                    <div class="flex flex-col min-w-0">
-                        <span class="font-body-md font-bold text-on-surface group-hover:text-primary transition-colors truncate"><?= htmlspecialchars($s['title']) ?></span>
-                        <span class="font-body-sm text-[10px] text-on-surface-variant truncate"><?= htmlspecialchars($s['artist']) ?></span>
+                    <div class="flex flex-col min-w-0 flex-1">
+                        <span class="font-bold text-sm text-[#1A1B1F] dark:text-white group-hover:text-worship-blue transition-colors truncate font-body-md"><?= htmlspecialchars($s['title']) ?></span>
+                        <span class="text-[10px] text-[#71717A] dark:text-[#A1A1AA] truncate mt-0.5"><?= htmlspecialchars($s['artist']) ?></span>
                     </div>
                 </label>
                 <?php endforeach; ?>
             </div>
         </div>
         
-        <div class="p-4 border-t border-surface-container-highest flex gap-3 bg-surface-container-lowest">
-            <button type="button" class="flex-1 py-3 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold hover:bg-surface-container-high transition-colors" onclick="document.getElementById('modalSongs').classList.add('hidden'); document.getElementById('modalSongs').classList.remove('flex');">Cancelar</button>
-            <button type="button" class="flex-1 py-3 bg-primary text-on-primary rounded-full font-label-sm font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md" onclick="confirmSongSelection()">Confirmar</button>
+        <div class="p-4 border-t border-[#F4F4F5] dark:border-[#2C2C2E] flex gap-3 bg-white dark:bg-[#1A1B1F]">
+            <button type="button" class="flex-1 py-3 bg-ghost-gray hover:bg-[#E4E4E7] dark:bg-[#27272A] dark:hover:bg-[#3F3F46] text-deep-navy dark:text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 text-sm" onclick="document.getElementById('modalSongs').classList.add('hidden'); document.getElementById('modalSongs').classList.remove('flex');">Cancelar</button>
+            <button type="button" class="flex-1 py-3 bg-worship-blue hover:bg-[#1C6ED7] text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(46,126,237,0.3)] text-sm" onclick="confirmSongSelection()">Confirmar</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Info -->
-<div id="modalInfo" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center px-4">
-    <div class="bg-surface w-full max-w-md rounded-[2rem] overflow-hidden shadow-2xl flex flex-col">
-        <div class="px-6 py-4 border-b border-surface-container-highest flex justify-between items-center bg-surface-container-lowest">
-            <h3 class="font-headline-md font-bold text-on-surface">Editar Informações</h3>
-            <button onclick="closeInfoModal(false)" class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+<div id="modalInfo" class="fixed inset-0 bg-black/50 backdrop-blur-md z-50 hidden items-center justify-center px-4 transition-all duration-300">
+    <div class="bg-white dark:bg-[#1A1B1F] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-[#E2E2E2] dark:border-[#2C2C2E] animate-scale-up">
+        <div class="px-6 py-4 border-b border-[#F4F4F5] dark:border-[#2C2C2E] flex justify-between items-center bg-white dark:bg-[#1A1B1F]">
+            <h3 class="text-lg font-bold text-deep-navy dark:text-white font-headline-md">Editar Informações</h3>
+            <button onclick="closeInfoModal(false)" class="text-[#71717A] hover:text-deep-navy dark:hover:text-white hover:bg-ghost-gray dark:hover:bg-[#27272A] p-2 rounded-full transition-all duration-200 active:scale-95">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
         
-        <div class="p-6 space-y-4">
-            <div>
-                <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Tipo do Evento</label>
-                <input type="text" name="event_type" id="input_event_type" form="editForm" value="<?= htmlspecialchars($schedule['event_type']) ?>" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+        <div class="p-6 space-y-5 bg-white dark:bg-[#1A1B1F]">
+            <div class="flex flex-col gap-1.5">
+                <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Tipo do Evento</label>
+                <input type="text" name="event_type" id="input_event_type" form="editForm" value="<?= htmlspecialchars($schedule['event_type']) ?>" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white placeholder-[#A1A1AA] focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200">
             </div>
             
             <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Data</label>
-                    <input type="date" name="event_date" id="input_event_date" form="editForm" value="<?= $schedule['event_date'] ?>" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+                <div class="flex flex-col gap-1.5">
+                    <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Data</label>
+                    <input type="date" name="event_date" id="input_event_date" form="editForm" value="<?= $schedule['event_date'] ?>" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200">
                 </div>
-                <div>
-                    <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Horário</label>
-                    <input type="time" name="event_time" id="input_event_time" form="editForm" value="<?= $schedule['event_time'] ?>" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+                <div class="flex flex-col gap-1.5">
+                    <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Horário</label>
+                    <input type="time" name="event_time" id="input_event_time" form="editForm" value="<?= $schedule['event_time'] ?>" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200">
                 </div>
             </div>
             
-            <div>
-                <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Observações</label>
-                <textarea name="notes" id="input_notes" form="editForm" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors resize-none" rows="3"><?= htmlspecialchars($schedule['notes']) ?></textarea>
+            <div class="flex flex-col gap-1.5">
+                <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Observações</label>
+                <textarea name="notes" id="input_notes" form="editForm" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white placeholder-[#A1A1AA] focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200 resize-none font-body-md" rows="3"><?= htmlspecialchars($schedule['notes']) ?></textarea>
             </div>
         </div>
         
-        <div class="p-4 border-t border-surface-container-highest flex gap-3 bg-surface-container-lowest">
-            <button type="button" class="flex-1 py-3 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold hover:bg-surface-container-high transition-colors" onclick="closeInfoModal(false)">Cancelar</button>
-            <button type="button" class="flex-1 py-3 bg-primary text-on-primary rounded-full font-label-sm font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md" onclick="closeInfoModal(true)">Salvar</button>
+        <div class="p-4 border-t border-[#F4F4F5] dark:border-[#2C2C2E] flex gap-3 bg-white dark:bg-[#1A1B1F]">
+            <button type="button" class="flex-1 py-3 bg-ghost-gray hover:bg-[#E4E4E7] dark:bg-[#27272A] dark:hover:bg-[#3F3F46] text-deep-navy dark:text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 text-sm" onclick="closeInfoModal(false)">Cancelar</button>
+            <button type="button" class="flex-1 py-3 bg-worship-blue hover:bg-[#1C6ED7] text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(46,126,237,0.3)] text-sm" onclick="closeInfoModal(true)">Salvar</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Roteiro -->
-<div id="modalRoteiro" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden items-center justify-center px-4">
-    <div class="bg-surface w-full max-w-md rounded-[2rem] overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-        <div class="px-6 py-4 border-b border-surface-container-highest flex justify-between items-center bg-surface-container-lowest">
-            <h3 class="font-headline-md font-bold text-on-surface flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">format_list_numbered</span> Adicionar Item
+<div id="modalRoteiro" class="fixed inset-0 bg-black/50 backdrop-blur-md z-[60] hidden items-center justify-center px-4 transition-all duration-300">
+    <div class="bg-white dark:bg-[#1A1B1F] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh] border border-[#E2E2E2] dark:border-[#2C2C2E] animate-scale-up">
+        <div class="px-6 py-4 border-b border-[#F4F4F5] dark:border-[#2C2C2E] flex justify-between items-center bg-white dark:bg-[#1A1B1F]">
+            <h3 class="text-lg font-bold text-deep-navy dark:text-white font-headline-md flex items-center gap-2">
+                <span class="material-symbols-outlined text-worship-blue font-bold">format_list_numbered</span> Adicionar Item
             </h3>
-            <button onclick="closeRoteiroModal()" class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+            <button onclick="closeRoteiroModal()" class="text-[#71717A] hover:text-deep-navy dark:hover:text-white hover:bg-ghost-gray dark:hover:bg-[#27272A] p-2 rounded-full transition-all duration-200 active:scale-95">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
         
-        <div class="p-6 overflow-y-auto space-y-4">
-            <div>
-                <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Tipo do Item</label>
-                <select id="roteiro-type" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors appearance-none" onchange="handleRoteiroTypeChange(this.value)">
+        <div class="p-6 overflow-y-auto space-y-5 bg-white dark:bg-[#1A1B1F] no-scrollbar">
+            <div class="flex flex-col gap-1.5">
+                <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Tipo do Item</label>
+                <select id="roteiro-type" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200 cursor-pointer" onchange="handleRoteiroTypeChange(this.value)">
                     <option value="musica">🎵 Música</option>
                     <option value="oracao">🙏 Oração</option>
                     <option value="palavra">📖 Palavra</option>
@@ -911,9 +997,9 @@ renderAppHeader('Detalhes da Escala');
                 </select>
             </div>
 
-            <div id="roteiro-song-group">
-                <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Música da Escala</label>
-                <select id="roteiro-song" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors appearance-none" onchange="onRoteiroSongChange(this)">
+            <div id="roteiro-song-group" class="flex flex-col gap-1.5">
+                <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Música da Escala</label>
+                <select id="roteiro-song" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200 cursor-pointer" onchange="onRoteiroSongChange(this)">
                     <option value="">— selecione uma música —</option>
                     <?php foreach ($songs as $sg): ?>
                     <option value="<?= $sg['song_id'] ?>"
@@ -925,25 +1011,25 @@ renderAppHeader('Detalhes da Escala');
                 </select>
             </div>
 
-            <div id="roteiro-tone-group">
-                <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Tom customizado <span class="font-normal text-[10px]">(deixe vazio para usar o tom padrão)</span></label>
-                <input type="text" id="roteiro-custom-tone" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="Ex: D, Em, F#m..." maxlength="10">
+            <div id="roteiro-tone-group" class="flex flex-col gap-1.5">
+                <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Tom customizado <span class="font-normal text-[10px] lowercase">(deixe vazio para o padrão)</span></label>
+                <input type="text" id="roteiro-custom-tone" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white placeholder-[#A1A1AA] focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200" placeholder="Ex: D, Em, F#m..." maxlength="10">
             </div>
 
-            <div id="roteiro-title-group">
-                <label id="roteiro-title-label" class="block font-label-sm text-on-surface-variant mb-1 font-bold">Título / Descrição</label>
-                <input type="text" id="roteiro-title" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="Ex: Momento de intercessão" maxlength="255">
+            <div id="roteiro-title-group" class="flex flex-col gap-1.5">
+                <label id="roteiro-title-label" class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Título / Descrição</label>
+                <input type="text" id="roteiro-title" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white placeholder-[#A1A1AA] focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200" placeholder="Ex: Momento de intercessão" maxlength="255">
             </div>
 
-            <div>
-                <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Nota interna <span class="font-normal text-[10px]">(só você vê)</span></label>
-                <textarea id="roteiro-nota" class="w-full bg-surface-container border border-surface-container-highest rounded-xl px-4 py-2.5 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors resize-none" rows="2" placeholder="Ex: Aqui Diego prega os pedidos de oração"></textarea>
+            <div class="flex flex-col gap-1.5">
+                <label class="block text-xs font-bold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider pl-1 font-body-md">Nota interna <span class="font-normal text-[10px] lowercase">(só você vê)</span></label>
+                <textarea id="roteiro-nota" class="w-full bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] rounded-2xl px-4 py-3 font-semibold text-sm text-[#1A1B1F] dark:text-white placeholder-[#A1A1AA] focus:outline-none focus:border-worship-blue focus:ring-2 focus:ring-worship-blue/20 transition-all duration-200 resize-none font-body-md" rows="2" placeholder="Ex: Informações adicionais do item..."></textarea>
             </div>
         </div>
         
-        <div class="p-4 border-t border-surface-container-highest flex gap-3 bg-surface-container-lowest">
-            <button type="button" class="flex-1 py-3 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold hover:bg-surface-container-high transition-colors" onclick="closeRoteiroModal()">Cancelar</button>
-            <button type="button" class="flex-1 py-3 bg-primary text-on-primary rounded-full font-label-sm font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md" onclick="submitRoteiroItem()">Adicionar</button>
+        <div class="p-4 border-t border-[#F4F4F5] dark:border-[#2C2C2E] flex gap-3 bg-white dark:bg-[#1A1B1F]">
+            <button type="button" class="flex-1 py-3 bg-ghost-gray hover:bg-[#E4E4E7] dark:bg-[#27272A] dark:hover:bg-[#3F3F46] text-deep-navy dark:text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 text-sm" onclick="closeRoteiroModal()">Cancelar</button>
+            <button type="button" class="flex-1 py-3 bg-worship-blue hover:bg-[#1C6ED7] text-white rounded-2xl font-bold transition-all duration-200 active:scale-95 shadow-[0_4px_14px_rgba(46,126,237,0.3)] text-sm" onclick="submitRoteiroItem()">Adicionar</button>
         </div>
     </div>
 </div>
@@ -999,9 +1085,9 @@ function confirmMemberSelection() {
         const role = cb.getAttribute('data-role');
         const name = cb.nextElementSibling.querySelector('span').textContent;
         const sp = document.createElement('span');
-        sp.className = 'inline-flex items-center gap-2 bg-surface-container border border-surface-container-highest px-3 py-1.5 rounded-full font-label-sm font-bold text-on-surface';
+        sp.className = 'inline-flex items-center gap-2 bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] px-3 py-1.5 rounded-full text-xs font-bold text-deep-navy dark:text-white transition-all duration-200 active:scale-95';
         sp.id = 'm-badge-'+userId;
-        sp.innerHTML = `${name} <span class="font-normal text-[10px] text-on-surface-variant">(${role})</span> <button type="button" class="text-on-surface-variant hover:text-error transition-colors ml-1" onclick="removeMember(${userId})"><span class="material-symbols-outlined text-[16px]">close</span></button><input type="hidden" name="members[]" value="${userId}">`;
+        sp.innerHTML = `${name} <span class="font-normal text-[10px] text-[#71717A] dark:text-[#A1A1AA]">(${role})</span> <button type="button" class="text-[#71717A] hover:text-error transition-colors ml-1" onclick="removeMember(${userId})"><span class="material-symbols-outlined text-[16px] font-bold">close</span></button><input type="hidden" name="members[]" value="${userId}">`;
         bag.appendChild(sp);
     });
     document.getElementById('modalMembers').classList.add('hidden');
@@ -1028,9 +1114,9 @@ function confirmSongSelection() {
         const artist = titleData[1] || '';
         
         const div = document.createElement('div');
-        div.className = 'flex items-center justify-between bg-surface-container border border-surface-container-highest p-3 rounded-xl';
+        div.className = 'flex items-center justify-between bg-ghost-gray dark:bg-[#27272A] border border-[#E2E2E2] dark:border-[#2C2C2E] p-3 rounded-2xl transition-all duration-200 hover:border-worship-blue';
         div.id = 's-badge-'+id;
-        div.innerHTML = `<span class="font-label-sm font-bold text-on-surface">${title} <span class="text-on-surface-variant font-normal">- ${artist}</span></span><div class="flex items-center gap-2"><input type="hidden" name="songs[]" value="${id}"><button type="button" class="text-on-surface-variant hover:text-error transition-colors p-1" onclick="removeSong(${id})"><span class="material-symbols-outlined text-[18px]">close</span></button></div>`;
+        div.innerHTML = `<span class="text-xs font-bold text-[#1A1B1F] dark:text-white">${title} <span class="text-[#71717A] dark:text-[#A1A1AA] font-normal">- ${artist}</span></span><div class="flex items-center gap-2"><input type="hidden" name="songs[]" value="${id}"><button type="button" class="text-[#71717A] hover:text-error transition-colors p-1" onclick="removeSong(${id})"><span class="material-symbols-outlined text-[18px] font-bold">close</span></button></div>`;
         bag.appendChild(div);
     });
     document.getElementById('modalSongs').classList.add('hidden');
@@ -1064,11 +1150,11 @@ function closeInfoModal(save) {
         const d = document.getElementById('input_event_date').value;  
         if(d) {
              const parts = d.split('-');
-             document.getElementById('summary-date').innerHTML = `<span class="material-symbols-outlined text-[16px]">calendar_month</span> ${parts[2]}/${parts[1]}/${parts[0]}`;
+             document.getElementById('summary-date').innerHTML = `<span class="material-symbols-outlined text-[16px] text-worship-blue font-bold">calendar_month</span> ${parts[2]}/${parts[1]}/${parts[0]}`;
         }
         const t = document.getElementById('input_event_time').value;
         if(t) {
-            document.getElementById('summary-time').innerHTML = `<span class="material-symbols-outlined text-[16px]">schedule</span> ${t.substring(0,5)}`;
+            document.getElementById('summary-time').innerHTML = `<span class="material-symbols-outlined text-[16px] text-worship-blue font-bold">schedule</span> ${t.substring(0,5)}`;
         }
         const n = document.getElementById('input_notes').value;
         const noteDiv = document.getElementById('summary-notes');
@@ -1076,11 +1162,11 @@ function closeInfoModal(save) {
             if(!noteDiv) {
                 const newDiv = document.createElement('div');
                 newDiv.id = 'summary-notes';
-                newDiv.className = "mt-3 pt-3 border-t border-surface-container-highest font-body-sm text-on-surface-variant italic flex gap-2";
-                newDiv.innerHTML = `<span class="material-symbols-outlined text-[14px] mt-0.5">sticky_note_2</span> <span>${n}</span>`;
+                newDiv.className = "mt-3 pt-3 border-t border-[#E2E2E2] dark:border-[#2C2C2E] text-xs text-[#71717A] dark:text-[#A1A1AA] italic flex gap-2";
+                newDiv.innerHTML = `<span class="material-symbols-outlined text-[14px] mt-0.5 text-worship-blue font-bold">sticky_note_2</span> <span>${n}</span>`;
                 document.querySelector('#summary-type').parentElement.appendChild(newDiv);
             } else {
-                noteDiv.innerHTML = `<span class="material-symbols-outlined text-[14px] mt-0.5">sticky_note_2</span> <span>${n}</span>`;
+                noteDiv.innerHTML = `<span class="material-symbols-outlined text-[14px] mt-0.5 text-worship-blue font-bold">sticky_note_2</span> <span>${n}</span>`;
             }
         } else if (noteDiv) {
             noteDiv.remove();

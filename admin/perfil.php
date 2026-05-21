@@ -243,7 +243,7 @@ renderAppHeader($page_title);
         <?php endif; ?>
 
         <!-- Avatar Section -->
-        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-sm">
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-sm reveal-item reveal-stagger-1">
             <div class="relative group">
                 <div class="w-24 h-24 rounded-full bg-primary-fixed/20 border-4 border-surface shadow-md flex items-center justify-center overflow-hidden">
                     <?php if (!empty($user['avatar'])): ?>
@@ -254,7 +254,7 @@ renderAppHeader($page_title);
                         </span>
                     <?php endif; ?>
                 </div>
-                <label for="avatar_upload" class="absolute bottom-0 right-0 w-8 h-8 bg-primary text-on-primary rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-container hover:text-on-primary-container transition-colors transform active:scale-95">
+                <label for="avatar_upload" class="absolute bottom-0 right-0 w-8 h-8 bg-primary text-on-primary rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-container hover:text-on-primary-container transition-colors interactive-scale">
                     <span class="material-symbols-outlined text-[16px]">photo_camera</span>
                 </label>
                 <input type="file" id="avatar_upload" name="avatar" class="hidden" accept="image/*" onchange="previewImage(this)">
@@ -272,7 +272,7 @@ renderAppHeader($page_title);
         </div>
 
         <!-- Personal Data -->
-        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm">
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm reveal-item reveal-stagger-2">
             <div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-4">
                 <span class="material-symbols-outlined text-primary">person</span>
                 <h3 class="font-headline-md text-lg font-bold text-on-surface">Dados Pessoais</h3>
@@ -300,7 +300,7 @@ renderAppHeader($page_title);
 
         <?php if (($_SESSION['user_role'] ?? '') === 'admin'): ?>
         <!-- Access & Permissions -->
-        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm">
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm reveal-item reveal-stagger-3">
             <div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-4">
                 <span class="material-symbols-outlined text-primary">shield</span>
                 <h3 class="font-headline-md text-lg font-bold text-on-surface">Permissões e Acesso</h3>
@@ -318,7 +318,7 @@ renderAppHeader($page_title);
                     <label class="block font-label-sm text-on-surface-variant mb-1 font-bold">Senha de Acesso</label>
                     <div class="relative">
                         <input type="password" id="passwordInput" name="password" <?= $is_creating_new ? 'required' : '' ?> class="w-full bg-surface-container border border-surface-container-highest rounded-xl pl-4 pr-12 py-3 font-body-md text-on-surface tracking-[0.2em] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="<?= $is_creating_new ? 'Crie uma senha' : '•••••••• (Deixe em branco para manter)' ?>">
-                        <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center" onclick="togglePassword()" title="Ver/Ocultar Senha">
+                        <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors interactive-scale flex items-center justify-center" onclick="togglePassword()" title="Ver/Ocultar Senha">
                             <span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
                         </button>
                     </div>
@@ -331,7 +331,7 @@ renderAppHeader($page_title);
         </div>
 
         <!-- Ministerial Functions -->
-        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm">
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm reveal-item reveal-stagger-4">
             <div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-4">
                 <span class="material-symbols-outlined text-primary">music_note</span>
                 <h3 class="font-headline-md text-lg font-bold text-on-surface">Atuação Ministerial (Funções)</h3>
@@ -339,15 +339,15 @@ renderAppHeader($page_title);
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <?php foreach ($allRoles as $role): ?>
-                    <label class="flex items-center justify-between p-4 border border-surface-container-highest rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group">
+                    <label class="flex items-center justify-between p-4 border border-surface-container-highest rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group interactive-scale">
                         <div class="flex items-center gap-3">
                             <span class="text-xl"><?= $role['icon'] ?></span>
                             <span class="font-body-md font-bold text-on-surface group-hover:text-primary transition-colors"><?= $role['name'] ?></span>
                         </div>
-                        <!-- Custom Toggle -->
-                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" <?= in_array($role['id'], $user_roles) ? 'checked' : '' ?> class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out">
-                            <label class="toggle-label block overflow-hidden h-5 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-200 ease-in-out"></label>
+                        <!-- Custom Toggle (Sacred Minimalist GPU Switch) -->
+                        <div class="relative inline-block w-[40px] h-[22px] align-middle select-none">
+                            <input type="checkbox" id="role_<?= $role['id'] ?>" name="roles[]" value="<?= $role['id'] ?>" <?= in_array($role['id'], $user_roles) ? 'checked' : '' ?> class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white appearance-none cursor-pointer z-10 opacity-0">
+                            <label class="toggle-label block overflow-hidden h-[22px] rounded-full cursor-pointer" for="role_<?= $role['id'] ?>"></label>
                         </div>
                     </label>
                 <?php endforeach; ?>
@@ -356,7 +356,7 @@ renderAppHeader($page_title);
         <?php endif; ?>
 
         <!-- Address -->
-        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm">
+        <div class="bg-surface border border-surface-container-highest rounded-2xl p-6 shadow-sm reveal-item">
             <div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-4">
                 <span class="material-symbols-outlined text-primary">map</span>
                 <h3 class="font-headline-md text-lg font-bold text-on-surface">Endereço</h3>
@@ -383,14 +383,14 @@ renderAppHeader($page_title);
         </div>
 
         <!-- Submit Actions -->
-        <div class="flex gap-4 pt-4">
+        <div class="flex gap-4 pt-4 reveal-item">
             <?php if (($_SESSION['user_role'] ?? '') === 'admin' && !$is_creating_new && $editing_user_id != $_SESSION['user_id']): ?>
-            <a href="membros.php" class="flex-1 md:flex-none py-3 px-6 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold text-center hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2">
+            <a href="membros.php" class="flex-1 md:flex-none py-3 px-6 bg-surface-container border border-surface-container-highest text-on-surface rounded-full font-label-sm font-bold text-center hover:bg-surface-container-high transition-colors interactive-scale flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">arrow_back</span> Voltar
             </a>
             <?php endif; ?>
             
-            <button type="submit" class="flex-[2] py-3 px-6 bg-primary text-on-primary rounded-full font-label-sm font-bold shadow-md hover:bg-primary-container hover:text-on-primary-container transition-colors transform active:scale-95 flex items-center justify-center gap-2">
+            <button type="submit" class="flex-[2] py-3 px-6 bg-primary text-on-primary rounded-full font-label-sm font-bold shadow-md hover:bg-primary-container hover:text-on-primary-container transition-colors interactive-scale flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined text-[20px]"><?= $is_creating_new ? 'person_add' : 'save' ?></span>
                 <?= $is_creating_new ? 'Criar Membro' : 'Salvar Alterações' ?>
             </button>
@@ -400,19 +400,36 @@ renderAppHeader($page_title);
 </main>
 
 <style>
-/* Custom Toggle Checkbox */
-.toggle-checkbox:checked {
-    right: 0;
-    border-color: var(--primary);
+/* Sacred Minimalist Toggle Switch - Optimized for GPU & Vertical Density */
+.toggle-checkbox:checked + .toggle-label {
     background-color: var(--primary);
 }
-.toggle-checkbox:checked + .toggle-label {
-    background-color: var(--primary-fixed);
+.toggle-checkbox:checked + .toggle-label:after {
+    transform: translateX(18px) translateZ(0);
 }
-.toggle-checkbox {
-    right: 50%;
-    z-index: 1;
-    border-color: #e5e7eb;
+.toggle-label {
+    width: 40px;
+    height: 22px;
+    background-color: var(--surface-dim);
+    border-radius: 9999px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: background-color;
+}
+.toggle-label:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    transform: translateZ(0); /* Force GPU acceleration */
 }
 </style>
 

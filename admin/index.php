@@ -185,7 +185,7 @@ $shortcuts = [
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 space-y-8">
     
     <!-- HEADER HERO PREMIUM DE BOAS-VINDAS (Bento Card Grande - Bloco Sólido Minimalista) -->
-    <div class="relative bg-surface-container-low border border-surface-container-highest rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 group shadow-sm">
+    <div class="reveal-item relative bg-surface-container-low border border-surface-container-highest rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 group shadow-sm">
         <!-- Decorativo sutil de fundo -->
         <div class="absolute -right-16 -top-16 w-64 h-64 bg-primary/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
         
@@ -254,7 +254,7 @@ $shortcuts = [
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         <!-- Card Avisos -->
-        <div class="lg:col-span-2 bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4.5 shadow-sm flex flex-col">
+        <div class="reveal-item reveal-stagger-1 lg:col-span-2 bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4 sm:p-4.5 shadow-sm flex flex-col">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 font-bold tracking-tight">
                     <span class="text-worship-blue flex items-center"><i data-lucide="megaphone" class="w-5 h-5"></i></span>
@@ -273,7 +273,7 @@ $shortcuts = [
                             ? 'Hoje, ' . date('H:i', $ts)
                             : date('d/m', $ts) . ' às ' . date('H:i', $ts);
                         ?>
-                        <div class="pb-3.5 border-b border-surface-container-highest last:border-0 last:pb-0">
+                        <div class="reveal-item pb-3 border-b border-surface-container-highest last:border-0 last:pb-0">
                             <div class="flex items-center gap-2 mb-0.5">
                                 <span class="w-2 h-2 rounded-full <?= $prioDot ?> flex-shrink-0"></span>
                                 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-[10px]"><?= htmlspecialchars($quando) ?></span>
@@ -294,7 +294,7 @@ $shortcuts = [
         </div>
 
         <!-- Card Aniversariantes -->
-        <div class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4.5 shadow-sm flex flex-col">
+        <div class="reveal-item reveal-stagger-2 bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4 sm:p-4.5 shadow-sm flex flex-col">
             <div class="flex items-center mb-4">
                 <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 font-bold tracking-tight">
                     <span class="text-altar-gold flex items-center"><i data-lucide="cake" class="w-5 h-5"></i></span>
@@ -308,7 +308,7 @@ $shortcuts = [
                         $nomeCurto = explode(' ', trim($niver['name']))[0];
                         $avatar = 'https://ui-avatars.com/api/?name=' . urlencode($niver['name']) . '&background=eef2ff&color=2E7EED&bold=true';
                         ?>
-                        <div class="flex flex-col items-center min-w-[60px]">
+                        <div class="reveal-item flex flex-col items-center min-w-[60px] transition-transform active:scale-95 duration-150">
                             <div class="w-11 h-11 rounded-full overflow-hidden mb-1.5 border border-surface-container-highest">
                                 <img alt="<?= htmlspecialchars($niver['name']) ?>" class="w-full h-full object-cover" src="<?= $avatar ?>">
                             </div>
@@ -336,7 +336,7 @@ $shortcuts = [
             <h3 class="text-sm font-bold text-surface-on-surface font-outfit tracking-tight">Acesso Rápido</h3>
         </div>
         
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
+        <div class="reveal-item reveal-stagger-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
             <?php foreach ($shortcuts as $sc): ?>
                 <?php if ($sc['admin_only'] && $userRole !== 'admin') continue; ?>
                 
@@ -359,7 +359,7 @@ $shortcuts = [
                 $colors = $catColors[$sc['category']] ?? $catColors['gestao'];
                 ?>
                 
-                <a href="<?= $sc['url'] ?>" class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-2.5 flex items-center gap-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-container-low group select-none shadow-sm">
+                <a href="<?= $sc['url'] ?>" class="interactive-scale bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-2.5 flex items-center gap-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-container-low group select-none shadow-sm">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform <?= $colors['icon'] ?>">
                         <i data-lucide="<?= $sc['icon'] ?>" class="w-4 h-4"></i>
                     </div>

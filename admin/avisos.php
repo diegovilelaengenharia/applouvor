@@ -223,7 +223,7 @@ foreach ($avisos as &$aviso) {
 <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 mb-32 space-y-8" id="mural-container">
     
     <!-- Hero / Header Section -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1B1F] to-[#2C2E35] text-white p-8 shadow-lg border border-white/10">
+    <div class="reveal-item relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1B1F] to-[#2C2E35] text-white p-8 shadow-lg border border-white/10">
         <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#2E7EED]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-[#FFC107]/5 rounded-full blur-3xl pointer-events-none"></div>
         
@@ -237,7 +237,7 @@ foreach ($avisos as &$aviso) {
             </div>
             
             <?php if ($isAdmin): ?>
-            <button onclick="openCreateDrawer()" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm shadow-lg active:scale-95 transition-all duration-200">
+            <button onclick="openCreateDrawer()" class="interactive-scale shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm shadow-lg active:scale-95 transition-all duration-200">
                 <span class="material-symbols-outlined text-[20px]">add</span>
                 Novo Comunicado
             </button>
@@ -260,7 +260,7 @@ foreach ($avisos as &$aviso) {
         
         <!-- Filter Dropdown -->
         <div class="relative w-full">
-            <button type="button" class="w-full h-12 px-4 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-2xl text-sm font-semibold text-gray-700 flex items-center justify-between gap-2 transition-colors" id="filterButton" onclick="toggleFilterDropdown()">
+            <button type="button" class="interactive-scale w-full h-12 px-4 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-2xl text-sm font-semibold text-gray-700 flex items-center justify-between gap-2 transition-colors" id="filterButton" onclick="toggleFilterDropdown()">
                 <span class="flex items-center gap-2">
                     <?php
                         $filterLabels = [
@@ -301,7 +301,9 @@ foreach ($avisos as &$aviso) {
         </div>
     <?php else: ?>
         <div class="space-y-6">
-        <?php foreach ($avisos as $aviso): 
+        <?php 
+        $index = 0;
+        foreach ($avisos as $aviso): 
             $isMe = ($aviso['created_by'] == $userId);
             
             // Setup priority design - STRICT PURPLE BAN
@@ -315,9 +317,11 @@ foreach ($avisos as &$aviso) {
                 $cardBorder = 'border border-[#2E7EED]/30';
                 $leftAccent = 'border-l-4 border-l-[#2E7EED]';
             }
+            
+            $staggerClass = 'reveal-stagger-' . min(4, max(1, ++$index));
         ?>
             <!-- Bento Announcement Card -->
-            <div class="bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 <?= $cardBorder ?> <?= $leftAccent ?> relative group">
+            <div class="reveal-item <?= $staggerClass ?> bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 <?= $cardBorder ?> <?= $leftAccent ?> relative group">
                 
                 <!-- Card Header -->
                 <div class="flex items-start justify-between gap-4">
@@ -407,7 +411,7 @@ foreach ($avisos as &$aviso) {
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="like">
-                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['like'] ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
+                        <button type="submit" class="interactive-scale inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['like'] ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
                             <span class="material-symbols-outlined text-[18px]" style="<?= $aviso['user_reacted']['like'] ? 'font-variation-settings: \'FILL\' 1;' : '' ?>">favorite</span>
                             <span><?= $aviso['reactions']['like'] ?: 'Curtir' ?></span>
                         </button>
@@ -418,7 +422,7 @@ foreach ($avisos as &$aviso) {
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="confirm">
-                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['confirm'] ? 'bg-emerald-500/10 text-emerald-600' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
+                        <button type="submit" class="interactive-scale inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['confirm'] ? 'bg-emerald-500/10 text-emerald-600' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
                             <span class="material-symbols-outlined text-[18px]" style="<?= $aviso['user_reacted']['confirm'] ? 'font-variation-settings: \'FILL\' 1;' : '' ?>">check_circle</span>
                             <span><?= $aviso['reactions']['confirm'] ?: 'Confirmar Leitura' ?></span>
                         </button>
