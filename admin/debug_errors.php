@@ -5,14 +5,6 @@ header('Content-Type: text/plain; charset=utf-8');
 $base = '/home/u884436813/domains/vilela.eng.br/public_html/applouvor/';
 
 $files = [
-    'admin/index.php',
-    'admin/sidebar.php',
-    'admin/lider.php',
-    'src/layout/layout.php',
-    'src/layout/dashboard_cards.php',
-    'src/layout/dashboard_render.php',
-    'src/layout/head.php',
-    'src/layout/bottom-nav.php',
     'src/layout/modals/dashboard-modal.php',
     'src/layout/modals/notification-modal.php',
     'src/config/config.php',
@@ -25,7 +17,7 @@ $files = [
     'assets/js/main.js',
 ];
 
-echo "=== VERIFICADOR DE ARQUIVOS FÍSICOS ===\n";
+echo "=== VERIFICADOR DE ARQUIVOS (PARTE 2) ===\n";
 echo "Base: $base\n\n";
 foreach ($files as $f) {
     $full = $base . $f;
@@ -37,11 +29,18 @@ foreach ($files as $f) {
 
 // Verificar hash do último commit no servidor
 echo "\n=== GIT STATUS ===\n";
-$gitDir = $base . '.git/COMMIT_EDITMSG';
-if (file_exists($gitDir)) {
-    echo "Último commit: " . file_get_contents($gitDir);
-} else {
-    echo ".git/COMMIT_EDITMSG não encontrado!\n";
+$gitMsg = $base . '.git/COMMIT_EDITMSG';
+if (file_exists($gitMsg)) {
+    echo "Último commit msg: " . file_get_contents($gitMsg) . "\n";
 }
+$gitHead = $base . '.git/refs/heads/main';
+if (file_exists($gitHead)) {
+    echo "HEAD main hash: " . file_get_contents($gitHead) . "\n";
+}
+
+// Erro fatal do admin/index.php - testar redirecionamento
+echo "\n=== TESTE HTTP SELF ===\n";
+echo "PHP_SELF: " . $_SERVER['PHP_SELF'] . "\n";
+echo "HTTP_HOST: " . ($_SERVER['HTTP_HOST'] ?? 'N/A') . "\n";
 
 echo "\n=== FIM ===\n";
