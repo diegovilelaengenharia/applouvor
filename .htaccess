@@ -4,6 +4,29 @@
 Options -Indexes
 ServerSignature Off
 
+# Bloquear acesso direto ao painel de desenvolvimento
+<Files "dev-dashboard.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Proteger diretório de banco de dados
+<Directory "database">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# Proteger arquivos sensíveis
+<FilesMatch "\.(env|sql|log|bak|backup|dump)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Forçar HTTPS (ativar quando disponível no servidor)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 # === VARIÁVEIS DE AMBIENTE (Banco de Dados) ===
 # IMPORTANTE: Configurar estes valores no painel Hostinger ou aqui:
 SetEnv DB_HOST srv1074.hstgr.io

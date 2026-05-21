@@ -104,4 +104,4 @@ php -S localhost:8080
 ```
 
 ---
-*Última atualização: 2026-05-18 (Phase 9 — Deploy Final)*
+*Última atualização: 2026-05-21 (v5.0 — Sacred Minimalist + Stitch + Schema Completo)*

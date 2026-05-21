@@ -1,4 +1,4 @@
-Ôªø<?php
+<?php
 // admin/relatorios_gerais.php
 require_once '../src/helpers/auth.php';
 require_once '../src/config/db.php';
@@ -17,16 +17,16 @@ $isPrintMode = isset($_GET['print']) && $_GET['print'] === 'true';
 if ($period === 'month') {
     $startDate = "$year-$month-01";
     $endDate = date('Y-m-t', strtotime($startDate));
-    $titlePeriod = "M√™s: " . date('m/Y', strtotime($startDate));
+    $titlePeriod = "MÍs: " . date('m/Y', strtotime($startDate));
 } elseif ($period === 'semester') {
     if ($semester == 1) {
         $startDate = "$year-01-01";
         $endDate = "$year-06-30";
-        $titlePeriod = "1¬∫ Sem. $year";
+        $titlePeriod = "1∫ Sem. $year";
     } else {
         $startDate = "$year-07-01";
         $endDate = "$year-12-31";
-        $titlePeriod = "2¬∫ Sem. $year";
+        $titlePeriod = "2∫ Sem. $year";
     }
 } else { // year
     $startDate = "$year-01-01";
@@ -106,7 +106,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $topDeclines = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 3. Taxa de Confirma√ß√£o por Membro
+// 3. Taxa de ConfirmaÁ„o por Membro
 $stmt = $pdo->prepare("
     SELECT u.name, u.avatar_color,
            COUNT(*) as total_invites,
@@ -135,7 +135,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $memberScaleCount = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 5. Tend√™ncia Temporal (Escalas por M√™s)
+// 5. TendÍncia Temporal (Escalas por MÍs)
 $stmt = $pdo->prepare("
     SELECT DATE_FORMAT(s.event_date, '%Y-%m') as month, COUNT(*) as qtd
     FROM schedules s
@@ -146,7 +146,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $scaleTrend = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 6. An√°lise de Substitui√ß√µes
+// 6. An·lise de SubstituiÁıes
 $stmt = $pdo->prepare("
     SELECT u.name as substituido, r.name as substituto, COUNT(*) as vezes
     FROM user_unavailability ua
@@ -220,7 +220,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $topTags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 5. Rota√ß√£o de M√∫sicas (Distribui√ß√£o)
+// 5. RotaÁ„o de M˙sicas (DistribuiÁ„o)
 $stmt = $pdo->prepare("
     SELECT 
         CASE 
@@ -243,7 +243,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $songRotation = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 6. M√∫sicas Esquecidas (N√£o tocadas h√° muito tempo)
+// 6. M˙sicas Esquecidas (N„o tocadas h· muito tempo)
 $stmt = $pdo->prepare("
     SELECT sg.title, sg.artist, MAX(s.event_date) as ultima_vez,
            DATEDIFF(CURDATE(), MAX(s.event_date)) as dias_atras
@@ -259,7 +259,7 @@ $stmt = $pdo->prepare("
 $stmt->execute();
 $forgottenSongs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 7. BPM M√©dio
+// 7. BPM MÈdio
 $stmt = $pdo->prepare("
     SELECT AVG(sg.bpm) as bpm_medio, MIN(sg.bpm) as bpm_min, MAX(sg.bpm) as bpm_max
     FROM schedule_songs ss
@@ -271,7 +271,7 @@ $stmt->execute($params);
 $bpmStats = $stmt->fetch(PDO::FETCH_ASSOC);
 $avgBpm = $bpmStats['bpm_medio'] ?? 0;
 
-// 8. Completude do Repert√≥rio (Links)
+// 8. Completude do RepertÛrio (Links)
 $stmt = $pdo->prepare("
     SELECT 
         COUNT(*) as total,
@@ -340,7 +340,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $topReaders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 4. Taxa de Ades√£o ao Plano
+// 4. Taxa de Ades„o ao Plano
 $stmt = $pdo->prepare("
     SELECT 
         (SELECT COUNT(DISTINCT user_id) FROM reading_progress WHERE completed_at BETWEEN :start AND :end) as leitores_ativos,
@@ -350,7 +350,7 @@ $stmt->execute($params);
 $adherenceData = $stmt->fetch(PDO::FETCH_ASSOC);
 $adherenceRate = $adherenceData['total_usuarios'] > 0 ? round(($adherenceData['leitores_ativos'] / $adherenceData['total_usuarios']) * 100) : 0;
 
-// 5. Compara√ß√£o entre Planos
+// 5. ComparaÁ„o entre Planos
 $stmt = $pdo->prepare("
     SELECT 
         IFNULL((SELECT setting_value FROM user_settings WHERE user_id = u.id AND setting_key = 'reading_plan_type' LIMIT 1), 'nenhum') as plano,
@@ -371,11 +371,11 @@ $stmt = $pdo->prepare("
         CASE DAYOFWEEK(completed_at)
             WHEN 1 THEN 'Domingo'
             WHEN 2 THEN 'Segunda'
-            WHEN 3 THEN 'Ter√ßa'
+            WHEN 3 THEN 'TerÁa'
             WHEN 4 THEN 'Quarta'
             WHEN 5 THEN 'Quinta'
             WHEN 6 THEN 'Sexta'
-            WHEN 7 THEN 'S√°bado'
+            WHEN 7 THEN 'S·bado'
         END as dia_semana,
         COUNT(*) as qtd
     FROM reading_progress
@@ -389,7 +389,7 @@ $weekdayReading = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // E. ABSENCE ANALYSIS (NEW SECTION)
 // ----------------------------------
-// 1. Total de Aus√™ncias
+// 1. Total de AusÍncias
 $stmt = $pdo->prepare("
     SELECT COUNT(*) as total_ausencias
     FROM user_unavailability
@@ -398,7 +398,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $totalAbsences = $stmt->fetchColumn();
 
-// 2. Membros com Mais Aus√™ncias
+// 2. Membros com Mais AusÍncias
 $stmt = $pdo->prepare("
     SELECT u.name, u.avatar_color, COUNT(*) as qtd
     FROM user_unavailability ua
@@ -423,7 +423,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $topAbsenceReasons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 4. Taxa de Substitui√ß√£o
+// 4. Taxa de SubstituiÁ„o
 $stmt = $pdo->prepare("
     SELECT 
         COUNT(*) as total,
@@ -448,7 +448,7 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $topSubstitutes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 6. Aus√™ncias com √Åudio
+// 6. AusÍncias com ¡udio
 $stmt = $pdo->prepare("
     SELECT 
         COUNT(*) as total,
@@ -463,7 +463,7 @@ $audioRate = $audioData['total'] > 0 ? round(($audioData['com_audio'] / $audioDa
 
 // F. CROSS ANALYSIS (NEW SECTION)
 // --------------------------------
-// 1. Correla√ß√£o Participa√ß√£o x Leitura (Engagement Score)
+// 1. CorrelaÁ„o ParticipaÁ„o x Leitura (Engagement Score)
 $crossParams = [
     'start' => $startDate,
     'end' => $endDate,
@@ -500,7 +500,7 @@ $maxChapters = (!empty($chapters_col) ? max($chapters_col) : 1) ?: 1;
 foreach($engagementData as &$member) {
     $scaleScore = ($member['escalas_confirmadas'] / $maxScales) * 40;
     $readingScore = ($member['capitulos_lidos'] / $maxChapters) * 40;
-    $absencePenalty = min($member['ausencias'] * 5, 20); // M√°ximo -20 pontos
+    $absencePenalty = min($member['ausencias'] * 5, 20); // M·ximo -20 pontos
     $member['engagement_score'] = max(0, round($scaleScore + $readingScore - $absencePenalty));
 }
 unset($member);
@@ -522,7 +522,7 @@ if ($isPrintMode) {
     <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
-        <title>Relat√≥rio Anal√≠tico Ultra Completo</title>
+        <title>RelatÛrio AnalÌtico Ultra Completo</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
         <script src="https://unpkg.com/lucide@latest"></script>
         <link rel="stylesheet" href="../assets/css/pages/relatorios.css?v=<?= time() ?>">
@@ -537,8 +537,8 @@ if ($isPrintMode) {
 
         <!-- HEADER -->
         <div style="margin-bottom: 30px;">
-            <h1>Relat√≥rio Anal√≠tico Ultra Completo</h1>
-            <p style="margin: 4px 0 0; color: var(--slate-500); font-size: 11px; font-weight: 600;">PIB Oliveira ‚Ä¢ Minist√©rio de Louvor ‚Ä¢ <?= $titlePeriod ?></p>
+            <h1>RelatÛrio AnalÌtico Ultra Completo</h1>
+            <p style="margin: 4px 0 0; color: var(--slate-500); font-size: 11px; font-weight: 600;">PIB Oliveira ï MinistÈrio de Louvor ï <?= $titlePeriod ?></p>
         </div>
 
         <!-- KPIs PRINCIPAIS -->
@@ -546,9 +546,9 @@ if ($isPrintMode) {
             <?php 
                 $kpis = [
                     ['Escalas', $kpi_scales, 'var(--slate-500)'],
-                    ['Ades√£o', $rate_confirmed . '%', 'var(--sage-500)'],
-                    ['M√∫sicas', $kpi_songs, '#ec4899'],
-                    ['Cap√≠tulos', number_format($kpi_chapters), 'var(--lavender-600)']
+                    ['Ades„o', $rate_confirmed . '%', 'var(--sage-500)'],
+                    ['M˙sicas', $kpi_songs, '#ec4899'],
+                    ['CapÌtulos', number_format($kpi_chapters), '#2E7EED']
                 ];
                 foreach($kpis as $k): ?>
                 <div class="kpi-card" style="border-left: 3px solid <?= $k[2] ?>;">
@@ -558,14 +558,14 @@ if ($isPrintMode) {
             <?php endforeach; ?>
         </div>
 
-        <!-- SE√á√ÉO 1: AN√ÅLISE DE ESCALAS -->
+        <!-- SE«√O 1: AN¡LISE DE ESCALAS -->
         <div class="section">
-            <h2>üìà An√°lise de Escalas</h2>
+            <h2>?? An·lise de Escalas</h2>
             
             <div class="grid-2">
-                <!-- Taxa de Confirma√ß√£o -->
+                <!-- Taxa de ConfirmaÁ„o -->
                 <div>
-                    <h3>Taxa de Confirma√ß√£o por Membro</h3>
+                    <h3>Taxa de ConfirmaÁ„o por Membro</h3>
                     <table>
                         <thead><tr><th>Membro</th><th style="text-align: center;">Confirmadas</th><th style="text-align: center;">Taxa</th></tr></thead>
                         <tbody>
@@ -613,13 +613,13 @@ if ($isPrintMode) {
                     <?php endforeach; ?>
                 </div>
 
-                <!-- Substitui√ß√µes Frequentes -->
+                <!-- SubstituiÁıes Frequentes -->
                 <?php if(!empty($substitutions)): ?>
                 <div>
-                    <h3>Substitui√ß√µes Mais Frequentes</h3>
+                    <h3>SubstituiÁıes Mais Frequentes</h3>
                     <?php foreach(array_slice($substitutions, 0, 8) as $s): ?>
                     <div class="stat-box">
-                        <span style="font-size: 9px;"><?= $s['substituido'] ?> ‚Üí <?= $s['substituto'] ?></span>
+                        <span style="font-size: 9px;"><?= $s['substituido'] ?> ? <?= $s['substituto'] ?></span>
                         <b style="color: var(--slate-500);"><?= $s['vezes'] ?>x</b>
                     </div>
                     <?php endforeach; ?>
@@ -627,10 +627,10 @@ if ($isPrintMode) {
                 <?php endif; ?>
             </div>
 
-            <!-- Tend√™ncia Temporal -->
+            <!-- TendÍncia Temporal -->
             <?php if(!empty($scaleTrend)): ?>
             <div>
-                <h3>Tend√™ncia Temporal (Escalas por M√™s)</h3>
+                <h3>TendÍncia Temporal (Escalas por MÍs)</h3>
                 <div style="display: flex; align-items: flex-end; gap: 4px; height: 60px; border-bottom: 1px solid var(--slate-300);">
                     <?php 
                     $maxTrend = max(array_column($scaleTrend, 'qtd')) ?: 1;
@@ -651,16 +651,16 @@ if ($isPrintMode) {
             <?php endif; ?>
         </div>
 
-        <!-- SE√á√ÉO 2: AN√ÅLISE DE REPERT√ìRIO -->
+        <!-- SE«√O 2: AN¡LISE DE REPERT”RIO -->
         <div class="section" style="page-break-before: always;">
-            <h2>üéµ An√°lise de Repert√≥rio</h2>
+            <h2>?? An·lise de RepertÛrio</h2>
             
             <div class="grid-2">
-                <!-- Top 10 M√∫sicas -->
+                <!-- Top 10 M˙sicas -->
                 <div>
-                    <h3>Top 10 M√∫sicas Mais Tocadas</h3>
+                    <h3>Top 10 M˙sicas Mais Tocadas</h3>
                     <table>
-                        <thead><tr><th>#</th><th>M√∫sica</th><th style="text-align: center;">Vezes</th></tr></thead>
+                        <thead><tr><th>#</th><th>M˙sica</th><th style="text-align: center;">Vezes</th></tr></thead>
                         <tbody>
                         <?php foreach($topSongs as $idx => $s): ?>
                             <tr>
@@ -676,12 +676,12 @@ if ($isPrintMode) {
                     </table>
                 </div>
 
-                <!-- Rota√ß√£o & BPM -->
+                <!-- RotaÁ„o & BPM -->
                 <div>
-                    <h3>Rota√ß√£o de M√∫sicas</h3>
+                    <h3>RotaÁ„o de M˙sicas</h3>
                     <?php if(!empty($songRotation)): ?>
                     <table>
-                        <thead><tr><th>Frequ√™ncia</th><th style="text-align: center;">M√∫sicas</th></tr></thead>
+                        <thead><tr><th>FrequÍncia</th><th style="text-align: center;">M˙sicas</th></tr></thead>
                         <tbody>
                         <?php foreach($songRotation as $sr): ?>
                             <tr>
@@ -695,7 +695,7 @@ if ($isPrintMode) {
 
                     <?php if($bpmStats && $bpmStats['bpm_medio']): ?>
                     <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 6px; border: 1px solid #bae6fd; text-align: center;">
-                        <div style="font-size: 8px; color: #0369a1; font-weight: 600; margin-bottom: 3px;">BPM M√âDIO</div>
+                        <div style="font-size: 8px; color: #0369a1; font-weight: 600; margin-bottom: 3px;">BPM M…DIO</div>
                         <div style="font-size: 18px; font-weight: 800; color: #0c4a6e;"><?= round($bpmStats['bpm_medio']) ?></div>
                         <div style="font-size: 8px; color: #0369a1;">Min: <?= $bpmStats['bpm_min'] ?> | Max: <?= $bpmStats['bpm_max'] ?></div>
                     </div>
@@ -738,17 +738,17 @@ if ($isPrintMode) {
                 </div>
             </div>
 
-            <!-- Completude do Repert√≥rio -->
+            <!-- Completude do RepertÛrio -->
             <?php if($repertoireCompleteness && $repertoireCompleteness['total'] > 0): ?>
             <div>
-                <h3>Completude do Repert√≥rio (Links Dispon√≠veis)</h3>
+                <h3>Completude do RepertÛrio (Links DisponÌveis)</h3>
                 <div class="grid-4">
                     <?php 
                     $links = [
                         ['label' => 'Cifra', 'count' => $repertoireCompleteness['com_cifra'], 'color' => 'var(--slate-500)'],
                         ['label' => 'Letra', 'count' => $repertoireCompleteness['com_letra'], 'color' => 'var(--sage-500)'],
-                        ['label' => '√Åudio', 'count' => $repertoireCompleteness['com_audio'], 'color' => 'var(--yellow-500)'],
-                        ['label' => 'V√≠deo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
+                        ['label' => '¡udio', 'count' => $repertoireCompleteness['com_audio'], 'color' => 'var(--yellow-500)'],
+                        ['label' => 'VÌdeo', 'count' => $repertoireCompleteness['com_video'], 'color' => '#ec4899']
                     ];
                     foreach($links as $link):
                         $pct = round(($link['count'] / $repertoireCompleteness['total']) * 100);
@@ -763,10 +763,10 @@ if ($isPrintMode) {
             </div>
             <?php endif; ?>
 
-            <!-- M√∫sicas Esquecidas -->
+            <!-- M˙sicas Esquecidas -->
             <?php if(!empty($forgottenSongs)): ?>
             <div class="alert-box" style="background: var(--rose-50); border: 1px solid var(--rose-100);">
-                <h3 style="color: var(--rose-600); margin-top: 0;">‚ö†Ô∏è M√∫sicas Esquecidas (N√£o tocadas h√° 90+ dias)</h3>
+                <h3 style="color: var(--rose-600); margin-top: 0;">?? M˙sicas Esquecidas (N„o tocadas h· 90+ dias)</h3>
                 <div class="grid-2">
                     <?php foreach(array_slice($forgottenSongs, 0, 10) as $fs): ?>
                     <div class="stat-box">
@@ -782,24 +782,24 @@ if ($isPrintMode) {
             <?php endif; ?>
         </div>
 
-        <!-- SE√á√ÉO 3: AN√ÅLISE DE LEITURAS B√çBLICAS -->
+        <!-- SE«√O 3: AN¡LISE DE LEITURAS BÕBLICAS -->
         <div class="section" style="page-break-before: always;">
-            <h2>üìñ An√°lise de Leituras B√≠blicas</h2>
+            <h2>?? An·lise de Leituras BÌblicas</h2>
             
             <div class="grid-3">
                 <!-- KPIs de Leitura -->
-                <div class="kpi-card" style="border-left: 3px solid var(--lavender-600);">
-                    <div class="kpi-value" style="color: var(--lavender-600);"><?= $adherenceRate ?>%</div>
-                    <div class="kpi-label">Taxa de Ades√£o</div>
+                <div class="kpi-card" style="border-left: 3px solid #2E7EED;">
+                    <div class="kpi-value" style="color: #2E7EED;"><?= $adherenceRate ?>%</div>
+                    <div class="kpi-label">Taxa de Ades„o</div>
                     <div style="font-size: 8px; color: var(--slate-400); margin-top: 2px;"><?= $adherenceData['leitores_ativos'] ?>/<?= $adherenceData['total_usuarios'] ?> membros</div>
                 </div>
 
                 <?php if(!empty($planComparison)): ?>
                 <?php foreach($planComparison as $pc): ?>
-                <div class="kpi-card" style="border-left: 3px solid var(--lavender-600);">
-                    <div class="kpi-value" style="color: var(--lavender-600);"><?= $pc['capitulos'] ?></div>
+                <div class="kpi-card" style="border-left: 3px solid #2E7EED;">
+                    <div class="kpi-value" style="color: #2E7EED;"><?= $pc['capitulos'] ?></div>
                     <div class="kpi-label"><?= $pc['plano'] ?></div>
-                    <div style="font-size: 8px; color: var(--slate-400); margin-top: 2px;">cap√≠tulos lidos</div>
+                    <div style="font-size: 8px; color: var(--slate-400); margin-top: 2px;">capÌtulos lidos</div>
                 </div>
                 <?php endforeach; ?>
                 <?php endif; ?>
@@ -808,15 +808,15 @@ if ($isPrintMode) {
             <div class="grid-2">
                 <!-- Ranking de Leitores -->
                 <div>
-                    <h3>üèÜ Top 10 Leitores</h3>
+                    <h3>?? Top 10 Leitores</h3>
                     <table>
-                        <thead><tr><th>#</th><th>Membro</th><th style="text-align: center;">Cap√≠tulos</th></tr></thead>
+                        <thead><tr><th>#</th><th>Membro</th><th style="text-align: center;">CapÌtulos</th></tr></thead>
                         <tbody>
                         <?php foreach($topReaders as $idx => $r): ?>
                             <tr>
                                 <td style="font-weight: 700; color: <?= $idx < 3 ? 'var(--yellow-500)' : 'var(--slate-400)' ?>;"><?= $idx+1 ?></td>
                                 <td><b><?= $r['name'] ?></b></td>
-                                <td style="text-align: center; font-weight: 700; color: var(--lavender-600);"><?= $r['total_capitulos'] ?></td>
+                                <td style="text-align: center; font-weight: 700; color: #2E7EED;"><?= $r['total_capitulos'] ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -841,17 +841,17 @@ if ($isPrintMode) {
                 </div>
             </div>
 
-            <!-- Hor√°rios e Dias -->
+            <!-- Hor·rios e Dias -->
             <div class="grid-2">
                 <div>
-                    <h3>Hor√°rios Mais Comuns de Leitura</h3>
+                    <h3>Hor·rios Mais Comuns de Leitura</h3>
                     <?php 
                     $hoursSorted = $readingHours; 
                     arsort($hoursSorted);
                     $i=0;
                     foreach($hoursSorted as $h => $q): 
                         if($i++ >= 8) break;
-                        $periodo = $h >= 6 && $h < 12 ? 'Manh√£' : ($h >= 12 && $h < 18 ? 'Tarde' : ($h >= 18 && $h < 23 ? 'Noite' : 'Madrugada'));
+                        $periodo = $h >= 6 && $h < 12 ? 'Manh„' : ($h >= 12 && $h < 18 ? 'Tarde' : ($h >= 18 && $h < 23 ? 'Noite' : 'Madrugada'));
                     ?>
                     <div class="stat-box">
                         <span><?= str_pad($h, 2, '0', STR_PAD_LEFT) ?>:00 - <?= str_pad($h+1, 2, '0', STR_PAD_LEFT) ?>:00 (<?= $periodo ?>)</span>
@@ -874,16 +874,16 @@ if ($isPrintMode) {
             </div>
         </div>
 
-        <!-- SE√á√ÉO 4: AN√ÅLISE DE AUS√äNCIAS -->
+        <!-- SE«√O 4: AN¡LISE DE AUS NCIAS -->
         <?php if($totalAbsences > 0): ?>
         <div class="section" style="page-break-before: always;">
-            <h2>‚ö†Ô∏è An√°lise de Aus√™ncias</h2>
+            <h2>?? An·lise de AusÍncias</h2>
             
-            <!-- KPIs de Aus√™ncias -->
+            <!-- KPIs de AusÍncias -->
             <div class="grid-3">
                 <div class="kpi-card" style="border-left: 3px solid var(--yellow-500);">
                     <div class="kpi-value" style="color: var(--yellow-500);"><?= $totalAbsences ?></div>
-                    <div class="kpi-label">Total de Aus√™ncias</div>
+                    <div class="kpi-label">Total de AusÍncias</div>
                 </div>
 
                 <div class="kpi-card" style="border-left: 3px solid var(--sage-500);">
@@ -893,14 +893,14 @@ if ($isPrintMode) {
 
                 <div class="kpi-card" style="border-left: 3px solid var(--slate-500);">
                     <div class="kpi-value" style="color: var(--slate-500);"><?= $audioRate ?>%</div>
-                    <div class="kpi-label">Com √Åudio Explicativo</div>
+                    <div class="kpi-label">Com ¡udio Explicativo</div>
                 </div>
             </div>
 
             <div class="grid-3">
-                <!-- Membros com Mais Aus√™ncias -->
+                <!-- Membros com Mais AusÍncias -->
                 <div>
-                    <h3>Membros com Mais Aus√™ncias</h3>
+                    <h3>Membros com Mais AusÍncias</h3>
                     <?php foreach(array_slice($topAbsentMembers, 0, 10) as $m): ?>
                     <div class="stat-box">
                         <span><?= $m['name'] ?></span>
@@ -925,7 +925,7 @@ if ($isPrintMode) {
                 <!-- Membros que Mais Substituem -->
                 <?php if(!empty($topSubstitutes)): ?>
                 <div>
-                    <h3>ü¶∏ Membros que Mais Substituem</h3>
+                    <h3>?? Membros que Mais Substituem</h3>
                     <?php foreach($topSubstitutes as $s): ?>
                     <div class="stat-box">
                         <span><?= $s['name'] ?></span>
@@ -938,18 +938,18 @@ if ($isPrintMode) {
         </div>
         <?php endif; ?>
 
-        <!-- SE√á√ÉO 5: AN√ÅLISES CRUZADAS & MVPs -->
+        <!-- SE«√O 5: AN¡LISES CRUZADAS & MVPs -->
         <div class="section" style="page-break-before: always;">
-            <h2>üèÜ An√°lises Cruzadas & Membros MVP</h2>
+            <h2>?? An·lises Cruzadas & Membros MVP</h2>
             
-            <!-- P√≥dio MVP -->
+            <!-- PÛdio MVP -->
             <div>
                 <h3 style="text-align: center; margin-bottom: 15px;">Top 5 Membros MVP (Maior Engajamento)</h3>
                 <div class="podium">
                     <?php foreach($mvpMembers as $idx => $mvp): 
                         $heights = [90, 110, 80, 70, 60];
                         $colors = ['#fbbf24', 'var(--yellow-500)', 'var(--yellow-600)', '#b45309', '#92400e'];
-                        $medals = ['ü•á', 'ü•à', 'ü•â', '4¬∫', '5¬∫'];
+                        $medals = ['??', '??', '??', '4∫', '5∫'];
                     ?>
                     <div class="podium-item">
                         <div class="podium-bar" style="width: 50px; height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>;">
@@ -973,8 +973,8 @@ if ($isPrintMode) {
                             <th>Membro</th>
                             <th>Instrumento</th>
                             <th style="text-align: center;">Escalas</th>
-                            <th style="text-align: center;">Cap√≠tulos</th>
-                            <th style="text-align: center;">Aus√™ncias</th>
+                            <th style="text-align: center;">CapÌtulos</th>
+                            <th style="text-align: center;">AusÍncias</th>
                             <th style="text-align: center;">Score</th>
                         </tr>
                     </thead>
@@ -984,7 +984,7 @@ if ($isPrintMode) {
                             <td><b><?= $member['name'] ?></b></td>
                             <td style="font-size: 8px; color: var(--slate-500);"><?= $member['instrument'] ?></td>
                             <td style="text-align: center; font-weight: 700; color: var(--slate-500);"><?= $member['escalas_confirmadas'] ?></td>
-                            <td style="text-align: center; font-weight: 700; color: var(--lavender-600);"><?= $member['capitulos_lidos'] ?></td>
+                            <td style="text-align: center; font-weight: 700; color: #2E7EED;"><?= $member['capitulos_lidos'] ?></td>
                             <td style="text-align: center; font-weight: 700; color: <?= $member['ausencias'] > 0 ? 'var(--yellow-500)' : 'var(--sage-500)' ?>;"><?= $member['ausencias'] ?></td>
                             <td style="text-align: center;">
                                 <span class="badge" style="background: <?= $member['engagement_score'] >= 70 ? 'var(--sage-500)' : ($member['engagement_score'] >= 40 ? 'var(--yellow-500)' : 'var(--rose-500)') ?>; color: white; font-size: 9px; padding: 3px 8px;">
@@ -999,12 +999,12 @@ if ($isPrintMode) {
 
             <!-- Legenda do Score -->
             <div style="margin-top: 15px; padding: 10px; background: var(--slate-50); border-radius: 6px; border: 1px solid var(--slate-200);">
-                <div style="font-size: 9px; font-weight: 700; margin-bottom: 5px; color: var(--slate-500);">COMO √â CALCULADO O SCORE DE ENGAJAMENTO:</div>
+                <div style="font-size: 9px; font-weight: 700; margin-bottom: 5px; color: var(--slate-500);">COMO … CALCULADO O SCORE DE ENGAJAMENTO:</div>
                 <div style="font-size: 8px; line-height: 1.6; color: var(--slate-600);">
-                    ‚Ä¢ <b>40 pontos</b> baseados em escalas confirmadas (proporcional ao membro mais escalado)<br>
-                    ‚Ä¢ <b>40 pontos</b> baseados em cap√≠tulos lidos (proporcional ao maior leitor)<br>
-                    ‚Ä¢ <b>-5 pontos</b> por aus√™ncia (m√°ximo -20 pontos)<br>
-                    ‚Ä¢ <span style="color: var(--sage-500); font-weight: 700;">70-100 pts</span> = Excelente | 
+                    ï <b>40 pontos</b> baseados em escalas confirmadas (proporcional ao membro mais escalado)<br>
+                    ï <b>40 pontos</b> baseados em capÌtulos lidos (proporcional ao maior leitor)<br>
+                    ï <b>-5 pontos</b> por ausÍncia (m·ximo -20 pontos)<br>
+                    ï <span style="color: var(--sage-500); font-weight: 700;">70-100 pts</span> = Excelente | 
                     <span style="color: var(--yellow-500); font-weight: 700;">40-69 pts</span> = Moderado | 
                     <span style="color: var(--rose-500); font-weight: 700;">0-39 pts</span> = Precisa melhorar
                 </div>
@@ -1013,8 +1013,8 @@ if ($isPrintMode) {
 
         <!-- FOOTER -->
         <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid var(--slate-200); text-align: center; font-size: 8px; color: var(--slate-400);">
-            <p style="margin: 0;">Relat√≥rio gerado em <?= date('d/m/Y \√†\s H:i') ?> ‚Ä¢ PIB Oliveira - Minist√©rio de Louvor</p>
-            <p style="margin: 4px 0 0;">Sistema de Gest√£o de Escalas e Repert√≥rio v2.0</p>
+            <p style="margin: 0;">RelatÛrio gerado em <?= date('d/m/Y \‡\s H:i') ?> ï PIB Oliveira - MinistÈrio de Louvor</p>
+            <p style="margin: 4px 0 0;">Sistema de Gest„o de Escalas e RepertÛrio v2.0</p>
         </div>
 
         <script>lucide.createIcons();</script>
@@ -1026,8 +1026,8 @@ if ($isPrintMode) {
 
 
 // --- STANDARD VIEW ---
-renderAppHeader('Indicadores Avan√ßados');
-renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
+renderAppHeader('Indicadores AvanÁados');
+renderPageHeader('RelatÛrios', 'An·lise Profunda e Indicadores');
 ?>
 
 <link rel="stylesheet" href="../assets/css/pages/relatorios.css?v=<?= time() ?>">
@@ -1038,7 +1038,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
     <div class="filter-bar">
         <div>
             <h2 class="report-title">Painel de Indicadores</h2>
-            <p class="report-subtitle">An√°lise Profunda: <strong><?= $titlePeriod ?></strong></p>
+            <p class="report-subtitle">An·lise Profunda: <strong><?= $titlePeriod ?></strong></p>
         </div>
         
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
@@ -1069,12 +1069,12 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
         
-        <!-- SE√á√ÉO 1: AN√ÅLISE DE ESCALAS (EXPANDIDA) -->
-        <!-- SE√á√ÉO 1: AN√ÅLISE DE ESCALAS (EXPANDIDA) -->
+        <!-- SE«√O 1: AN¡LISE DE ESCALAS (EXPANDIDA) -->
+        <!-- SE«√O 1: AN¡LISE DE ESCALAS (EXPANDIDA) -->
         <div class="content-card" style="grid-column: 1 / -1;">
             <div class="stat-title" onclick="toggleSection('scales')">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    üìà <span>AN√ÅLISE DE ESCALAS</span>
+                    ?? <span>AN¡LISE DE ESCALAS</span>
                 </div>
                 <i data-lucide="chevron-down" id="icon-scales" style="width: 20px;"></i>
             </div>
@@ -1089,7 +1089,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                         <canvas id="chartMemberScales" style="max-height: 200px;"></canvas>
                     </div>
 
-                    <!-- Duplas & Substitui√ß√µes -->
+                    <!-- Duplas & SubstituiÁıes -->
                     <div>
                         <h5 style="font-size: 13px; margin: 0 0 10px 0; color: var(--slate-500);">Duplas Mais Frequentes</h5>
                         <?php foreach($topPairs as $p): ?>
@@ -1100,10 +1100,10 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                         <?php endforeach; ?>
                         
                         <?php if(!empty($substitutions)): ?>
-                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">Substitui√ß√µes Frequentes</h5>
+                        <h5 style="font-size: 13px; margin: 20px 0 10px 0; color: var(--slate-500);">SubstituiÁıes Frequentes</h5>
                         <?php foreach(array_slice($substitutions, 0, 3) as $s): ?>
                         <div class="list-item">
-                            <div style="font-size: 12px;"><?= $s['substituido'] ?> ‚Üí <?= $s['substituto'] ?></div>
+                            <div style="font-size: 12px;"><?= $s['substituido'] ?> ? <?= $s['substituto'] ?></div>
                             <div style="font-weight: 700; color: var(--slate-500);"><?= $s['vezes'] ?>x</div>
                         </div>
                         <?php endforeach; ?>
@@ -1115,11 +1115,11 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
             </div>
         </div>
 
-        <!-- SE√á√ÉO 2: AN√ÅLISE DE REPERT√ìRIO -->
+        <!-- SE«√O 2: AN¡LISE DE REPERT”RIO -->
         <div class="content-card" style="grid-column: 1 / -1;">
             <div class="stat-title" onclick="toggleSection('repertoire')">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    üéµ <span>AN√ÅLISE DE REPERT√ìRIO</span>
+                    ?? <span>AN¡LISE DE REPERT”RIO</span>
                 </div>
                 <i data-lucide="chevron-down" id="icon-repertoire" style="width: 20px;"></i>
             </div>
@@ -1127,9 +1127,9 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
                     
-                    <!-- Coluna 1: Top M√∫sicas -->
+                    <!-- Coluna 1: Top M˙sicas -->
                     <div>
-                        <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">Top 10 M√∫sicas</h5>
+                        <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">Top 10 M˙sicas</h5>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             <?php foreach($topSongs as $idx => $s): ?>
                             <div class="song-list-item">
@@ -1146,21 +1146,21 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                         </div>
                     </div>
 
-                    <!-- Coluna 2: Gr√°ficos e Artistas -->
+                    <!-- Coluna 2: Gr·ficos e Artistas -->
                     <div style="display: flex; flex-direction: column; gap: 32px;">
                         
-                        <!-- Rota√ß√£o e BPM -->
+                        <!-- RotaÁ„o e BPM -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                             
                             <div style="background: var(--bg-body); padding: 16px; border-radius: 12px; text-align: center; border: 1px solid var(--border-color);">
-                                <h5 style="font-size: 0.8rem; margin: 0 0 12px 0; color: var(--text-secondary);">Rota√ß√£o</h5>
+                                <h5 style="font-size: 0.8rem; margin: 0 0 12px 0; color: var(--text-secondary);">RotaÁ„o</h5>
                                 <div style="height: 120px; position: relative; display: flex; justify-content: center;">
                                     <canvas id="chartSongRotation"></canvas>
                                 </div>
                             </div>
 
                             <div style="background: var(--bg-body); padding: 16px; border-radius: 12px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center;">
-                                <h5 style="font-size: 0.8rem; margin: 0 0 8px 0; color: var(--text-secondary);">BPM M√©dio</h5>
+                                <h5 style="font-size: 0.8rem; margin: 0 0 8px 0; color: var(--text-secondary);">BPM MÈdio</h5>
                                 <div style="font-size: 2.5rem; font-weight: 800; color: var(--slate-700); line-height: 1;"><?= round($avgBpm) ?></div>
                                 <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
                                     Min: <?= $bpmStats['bpm_min'] ?? 0 ?> | Max: <?= $bpmStats['bpm_max'] ?? 0 ?>
@@ -1225,14 +1225,14 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
 
                 <!-- Completude (Cards) -->
                 <div style="margin-top: 32px;">
-                    <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Completude do Repert√≥rio (Links Dispon√≠veis)</h5>
+                    <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Completude do RepertÛrio (Links DisponÌveis)</h5>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px;">
                         <?php 
                         $types = [
                             ['label' => 'Cifra', 'val' => $completeness['cifra'], 'icon' => 'file-text', 'missing' => $missingData['cifra'] ?? [], 'color' => 'var(--slate-600)'],
                             ['label' => 'Letra', 'val' => $completeness['letra'], 'icon' => 'align-left', 'missing' => $missingData['letra'] ?? [], 'color' => 'var(--slate-600)'],
-                            ['label' => '√Åudio', 'val' => $completeness['audio'], 'icon' => 'music', 'missing' => $missingData['audio'] ?? [], 'color' => 'var(--yellow-600)'],
-                            ['label' => 'V√≠deo', 'val' => $completeness['video'], 'icon' => 'video', 'missing' => $missingData['video'] ?? [], 'color' => 'var(--rose-600)']
+                            ['label' => '¡udio', 'val' => $completeness['audio'], 'icon' => 'music', 'missing' => $missingData['audio'] ?? [], 'color' => 'var(--yellow-600)'],
+                            ['label' => 'VÌdeo', 'val' => $completeness['video'], 'icon' => 'video', 'missing' => $missingData['video'] ?? [], 'color' => 'var(--rose-600)']
                         ];
                         foreach($types as $t): 
                             $pct = $t['val'];
@@ -1245,11 +1245,11 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                             <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);"><?= $pct ?>%</div>
                             <?php if(!$isComplete): ?>
                             <div onclick="showMissingSongs('<?= $t['label'] ?>', '<?= strtolower($t['label']) ?>')" style="font-size: 0.7rem; color: var(--rose-600); cursor: pointer; font-weight: 600; text-decoration: underline;">
-                                Ver pend√™ncias ‚Üí
+                                Ver pendÍncias ?
                             </div>
                             <?php else: ?>
                             <div style="font-size: 0.7rem; color: var(--sage-600); font-weight: 600;">
-                                Tudo certo! ‚ú®
+                                Tudo certo! ?
                             </div>
                             <?php endif; ?>
                         </div>
@@ -1260,11 +1260,11 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
             </div>
         </div>
 
-        <!-- SE√á√ÉO 3: AN√ÅLISE DE LEITURAS B√çBLICAS -->
+        <!-- SE«√O 3: AN¡LISE DE LEITURAS BÕBLICAS -->
         <div class="content-card" style="grid-column: 1 / -1;">
             <div class="stat-title" onclick="toggleSection('reading')">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    üìñ <span>AN√ÅLISE DE LEITURAS B√çBLICAS</span>
+                    ?? <span>AN¡LISE DE LEITURAS BÕBLICAS</span>
                 </div>
                 <i data-lucide="chevron-down" id="icon-reading" style="width: 20px;"></i>
             </div>
@@ -1273,10 +1273,10 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                 <!-- KPIs de Leitura -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
                     
-                    <div style="background: var(--lavender-50); border: 1px solid var(--lavender-200); padding: 20px; border-radius: 12px; text-align: center;">
-                         <div style="font-size: 0.8rem; color: var(--lavender-700); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Taxa de Ades√£o</div>
-                         <div style="font-size: 3rem; font-weight: 800; color: var(--lavender-600); line-height: 1;"><?= $adherenceRate ?>%</div>
-                         <div style="font-size: 0.8rem; color: var(--lavender-700); margin-top: 4px;"><?= $adherenceData['leitores_ativos'] ?> de <?= $adherenceData['total_usuarios'] ?> membros</div>
+                    <div style="background: #EBF3FD; border: 1px solid #BED7F8; padding: 20px; border-radius: 12px; text-align: center;">
+                         <div style="font-size: 0.8rem; color: #1A6FD6; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Taxa de Ades„o</div>
+                         <div style="font-size: 3rem; font-weight: 800; color: #2E7EED; line-height: 1;"><?= $adherenceRate ?>%</div>
+                         <div style="font-size: 0.8rem; color: #1A6FD6; margin-top: 4px;"><?= $adherenceData['leitores_ativos'] ?> de <?= $adherenceData['total_usuarios'] ?> membros</div>
                     </div>
 
                     <div style="background: var(--bg-body); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px;">
@@ -1291,7 +1291,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                                     <span style="color: var(--text-secondary);"><?= $pc['usuarios'] ?> (<?= $pct ?>%)</span>
                                 </div>
                                 <div style="width: 100%; height: 6px; background: var(--slate-100); border-radius: 3px; overflow: hidden;">
-                                    <div style="width: <?= $pct ?>%; background: var(--lavender-500); height: 100%;"></div>
+                                    <div style="width: <?= $pct ?>%; background: #4A90E2; height: 100%;"></div>
                                 </div>
                             <?php endforeach; ?>
                             </div>
@@ -1304,7 +1304,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                     
                     <!-- Ranking de Leitores -->
                     <div>
-                        <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">üèÜ Top 10 Leitores</h5>
+                        <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">?? Top 10 Leitores</h5>
                         <div style="display: flex; flex-direction: column; gap: 10px;">
                             <?php foreach($topReaders as $idx => $r): ?>
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px;">
@@ -1315,7 +1315,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                                     <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><?= $r['name'] ?></span>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="font-weight: 800; color: var(--lavender-600); font-size: 1rem;"><?= $r['total_capitulos'] ?></div>
+                                    <div style="font-weight: 800; color: #2E7EED; font-size: 1rem;"><?= $r['total_capitulos'] ?></div>
                                     <div style="font-size: 0.7rem; color: var(--text-secondary);">caps</div>
                                 </div>
                             </div>
@@ -1323,11 +1323,11 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                         </div>
                     </div>
 
-                    <!-- Hor√°rios e Heatmap -->
+                    <!-- Hor·rios e Heatmap -->
                     <div>
-                        <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">Hor√°rios Mais Comuns</h5>
+                        <h5 style="font-size: 0.9rem; margin: 0 0 16px 0; color: var(--text-secondary); font-weight: 700;">Hor·rios Mais Comuns</h5>
                         <div style="background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); padding: 20px; text-align: center; margin-bottom: 24px;">
-                             <i data-lucide="clock" style="width: 24px; height: 24px; color: var(--lavender-600); margin-bottom: 8px;"></i>
+                             <i data-lucide="clock" style="width: 24px; height: 24px; color: #2E7EED; margin-bottom: 8px;"></i>
                              <?php 
                                 $hoursSorted = $readingHours; 
                                 arsort($hoursSorted);
@@ -1335,7 +1335,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                                 $peakQtd = current($hoursSorted);
                              ?>
                              <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);"><?= str_pad($peakHour, 2, '0', STR_PAD_LEFT) ?>:00 - <?= str_pad($peakHour+1, 2, '0', STR_PAD_LEFT) ?>:00</div>
-                             <div style="font-size: 0.85rem; color: var(--text-secondary);">Hor√°rio de Pico (<?= $peakQtd ?> leituras)</div>
+                             <div style="font-size: 0.85rem; color: var(--text-secondary);">Hor·rio de Pico (<?= $peakQtd ?> leituras)</div>
                         </div>
                         
                         <h5 style="font-size: 0.9rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 700;">Heatmap de Leituras (24h)</h5>
@@ -1345,7 +1345,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                             for($h=0; $h<24; $h++): 
                                $val = $readingHours[$h] ?? 0;
                                $height = ($val / $maxRead) * 100;
-                               $color = $height > 0 ? 'var(--lavender-600)' : 'var(--slate-200)';
+                               $color = $height > 0 ? '#2E7EED' : 'var(--slate-200)';
                             ?>
                             <div class="heat-bar" style="height: <?= max($height, 5) ?>%; background: <?= $color ?>; min-width: 8px;" title="<?= $h ?>h: <?= $val ?> leituras"></div>
                             <?php endfor; ?>
@@ -1362,20 +1362,20 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
             </div>
         </div>
 
-        <!-- SE√á√ÉO 4: AN√ÅLISE DE AUS√äNCIAS (NOVA) -->
+        <!-- SE«√O 4: AN¡LISE DE AUS NCIAS (NOVA) -->
         <?php if($totalAbsences > 0): ?>
         <div class="content-card" style="grid-column: 1 / -1;">
             <div class="stat-title" onclick="toggleSection('absences')">
-                <span>‚ö†Ô∏è AN√ÅLISE DE AUS√äNCIAS</span>
+                <span>?? AN¡LISE DE AUS NCIAS</span>
                 <i data-lucide="chevron-down" id="icon-absences" style="width: 20px;"></i>
             </div>
             <div id="section-absences">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 20px;">
                     
-                    <!-- KPIs de Aus√™ncias -->
+                    <!-- KPIs de AusÍncias -->
                     <div class="kpi-card" style="background: var(--yellow-50); border-color: var(--yellow-100); justify-content: center; flex-direction: column; text-align: center;">
                         <div style="font-size: 2.5rem; font-weight: 800; color: var(--yellow-600); line-height: 1;"><?= $totalAbsences ?></div>
-                        <div style="font-size: 0.85rem; color: var(--yellow-700); font-weight: 600;">Total de Aus√™ncias</div>
+                        <div style="font-size: 0.85rem; color: var(--yellow-700); font-weight: 600;">Total de AusÍncias</div>
                     </div>
 
                     <div class="kpi-card" style="background: var(--sage-50); border-color: var(--sage-100); justify-content: center; flex-direction: column; text-align: center;">
@@ -1385,15 +1385,15 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
 
                     <div class="kpi-card" style="background: var(--slate-100); border-color: var(--slate-200); justify-content: center; flex-direction: column; text-align: center;">
                         <div style="font-size: 2.5rem; font-weight: 800; color: var(--slate-600); line-height: 1;"><?= $audioRate ?>%</div>
-                        <div style="font-size: 0.85rem; color: var(--slate-700); font-weight: 600;">Com √Åudio Explicativo</div>
+                        <div style="font-size: 0.85rem; color: var(--slate-700); font-weight: 600;">Com ¡udio Explicativo</div>
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 24px;">
                     
-                    <!-- Membros com Mais Aus√™ncias -->
+                    <!-- Membros com Mais AusÍncias -->
                     <div>
-                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Membros com Mais Aus√™ncias</h5>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">Membros com Mais AusÍncias</h5>
                         <div style="background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
                             <?php foreach($topAbsentMembers as $m): ?>
                             <div class="list-item" style="padding: 10px 14px;">
@@ -1420,7 +1420,7 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                     <!-- Membros que Mais Substituem -->
                     <?php if(!empty($topSubstitutes)): ?>
                     <div>
-                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">ü¶∏ Membros que Mais Substituem</h5>
+                        <h5 style="font-size: 0.85rem; margin: 0 0 12px 0; color: var(--text-secondary); font-weight: 600;">?? Membros que Mais Substituem</h5>
                         <div style="background: var(--bg-body); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
                             <?php foreach($topSubstitutes as $s): ?>
                             <div class="list-item" style="padding: 10px 14px;">
@@ -1441,23 +1441,23 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
         </div>
         <?php endif; ?>
 
-        <!-- SE√á√ÉO 5: AN√ÅLISES CRUZADAS & MVPs (NOVA) -->
+        <!-- SE«√O 5: AN¡LISES CRUZADAS & MVPs (NOVA) -->
         <div class="content-card" style="grid-column: 1 / -1;">
             <div class="stat-title" onclick="toggleSection('mvp')">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    üèÜ <span>AN√ÅLISES CRUZADAS & MEMBROS MVP</span>
+                    ?? <span>AN¡LISES CRUZADAS & MEMBROS MVP</span>
                 </div>
                 <i data-lucide="chevron-down" id="icon-mvp" style="width: 20px;"></i>
             </div>
             <div id="section-mvp">
-                <!-- P√≥dio MVP -->
+                <!-- PÛdio MVP -->
                 <div style="margin-top: 20px;">
-                    <h5 style="font-size: 0.9rem; margin: 0 0 24px 0; color: var(--text-primary); text-align: center; font-weight: 700;">ü•á Top 5 Membros MVP (Maior Engajamento)</h5>
+                    <h5 style="font-size: 0.9rem; margin: 0 0 24px 0; color: var(--text-primary); text-align: center; font-weight: 700;">?? Top 5 Membros MVP (Maior Engajamento)</h5>
                     <div class="podium-scroll-container">
                         <?php foreach($mvpMembers as $idx => $mvp): 
                             $heights = [180, 220, 160, 140, 120];
                             $colors = ['#fbbf24', 'var(--yellow-500)', '#d97706', '#b45309', '#92400e'];
-                            $medals = ['ü•á', 'ü•à', 'ü•â', '4¬∫', '5¬∫'];
+                            $medals = ['??', '??', '??', '4∫', '5∫'];
                         ?>
                         <div style="text-align: center; min-width: 80px;">
                             <div class="podium-bar-card" style="height: <?= $heights[$idx] ?>px; background: <?= $colors[$idx] ?>;">
@@ -1481,8 +1481,8 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
                                 <tr>
                                     <th>Membro</th>
                                     <th style="text-align: center;">Escalas</th>
-                                    <th style="text-align: center;">Cap√≠tulos</th>
-                                    <th style="text-align: center;">Aus√™ncias</th>
+                                    <th style="text-align: center;">CapÌtulos</th>
+                                    <th style="text-align: center;">AusÍncias</th>
                                     <th style="text-align: center;">Score</th>
                                 </tr>
                             </thead>
@@ -1520,17 +1520,17 @@ renderPageHeader('Relat√≥rios', 'An√°lise Profunda e Indicadores');
     </div>
 </div>
 
-<!-- Modal M√∫sicas Pendentes -->
+<!-- Modal M˙sicas Pendentes -->
 <div id="modalMissingSongs" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
     <div class="modal-card" style="width: 90%; max-width: 500px; padding: 20px; max-height: 80vh; display: flex; flex-direction: column;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--slate-100); padding-bottom: 10px;">
-            <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--slate-900);">M√∫sicas Pendentes</h3>
+            <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--slate-900);">M˙sicas Pendentes</h3>
             <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="background: none; border: none; cursor: pointer; color: var(--slate-500);">
                 <i data-lucide="x" style="width: 20px;"></i>
             </button>
         </div>
         <div id="modalContent" style="overflow-y: auto; flex: 1;">
-            <!-- Lista ser√° injetada aqui -->
+            <!-- Lista ser· injetada aqui -->
         </div>
         <div style="margin-top: 15px; text-align: right;">
             <button onclick="document.getElementById('modalMissingSongs').style.display='none'" style="padding: 8px 16px; background: var(--slate-200); border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--slate-600);">Fechar</button>
@@ -1561,7 +1561,7 @@ foreach ($types as $label => $col) {
         // Normalize type key
         const key = label.toLowerCase();
         
-        title.innerText = `M√∫sicas sem ${label}`;
+        title.innerText = `M˙sicas sem ${label}`;
         content.innerHTML = '';
 
         if (missingSongsData[key] && missingSongsData[key].length > 0) {
@@ -1588,14 +1588,14 @@ foreach ($types as $label => $col) {
                             border-radius: 6px; 
                             text-decoration: none;
                             display: inline-block;
-                        ">Resolver ‚Üí</a>
+                        ">Resolver ?</a>
                     </div>
                 `;
                 list.appendChild(item);
             });
             content.appendChild(list);
         } else {
-            content.innerHTML = '<div style="text-align: center; color: var(--slate-500); padding: 20px;">Nenhuma pend√™ncia encontrada! üéâ</div>';
+            content.innerHTML = '<div style="text-align: center; color: var(--slate-500); padding: 20px;">Nenhuma pendÍncia encontrada! ??</div>';
         }
 
         modal.style.display = 'flex';
@@ -1644,14 +1644,14 @@ foreach ($types as $label => $col) {
     });
     <?php endif; ?>
 
-    // Chart: Tend√™ncia Temporal
+    // Chart: TendÍncia Temporal
     <?php if(!empty($scaleTrend)): ?>
     new Chart(document.getElementById('chartScaleTrend'), {
         type: 'line',
         data: {
             labels: <?= json_encode(array_column($scaleTrend, 'month')) ?>,
             datasets: [{
-                label: 'Escalas por M√™s',
+                label: 'Escalas por MÍs',
                 data: <?= json_encode(array_column($scaleTrend, 'qtd')) ?>,
                 borderColor: 'var(--slate-500)',
                 backgroundColor: 'var(--slate-500)20',
@@ -1668,7 +1668,7 @@ foreach ($types as $label => $col) {
     });
     <?php endif; ?>
 
-    // Chart: Rota√ß√£o de M√∫sicas
+    // Chart: RotaÁ„o de M˙sicas
     <?php if(!empty($songRotation)): ?>
     new Chart(document.getElementById('chartSongRotation'), {
         type: 'doughnut',
@@ -1687,16 +1687,16 @@ foreach ($types as $label => $col) {
     });
     <?php endif; ?>
 
-    // Chart: Compara√ß√£o de Planos
+    // Chart: ComparaÁ„o de Planos
     <?php if(!empty($planComparison)): ?>
     new Chart(document.getElementById('chartPlanComparison'), {
         type: 'bar',
         data: {
             labels: <?= json_encode(array_column($planComparison, 'plano')) ?>,
             datasets: [{
-                label: 'Cap√≠tulos Lidos',
+                label: 'CapÌtulos Lidos',
                 data: <?= json_encode(array_column($planComparison, 'capitulos')) ?>,
-                backgroundColor: 'var(--lavender-600)'
+                backgroundColor: '#2E7EED'
             }]
         },
         options: {
@@ -1717,7 +1717,7 @@ foreach ($types as $label => $col) {
             datasets: [{
                 label: 'Leituras',
                 data: <?= json_encode(array_column($weekdayReading, 'qtd')) ?>,
-                backgroundColor: 'var(--lavender-600)'
+                backgroundColor: '#2E7EED'
             }]
         },
         options: {
@@ -1729,7 +1729,7 @@ foreach ($types as $label => $col) {
     });
     <?php endif; ?>
 
-    // Chart: Motivos de Aus√™ncia
+    // Chart: Motivos de AusÍncia
     <?php if(!empty($topAbsenceReasons)): ?>
     new Chart(document.getElementById('chartAbsenceReasons'), {
         type: 'pie',

@@ -2,8 +2,8 @@
 // admin/escalas.php
 require_once '../src/helpers/auth.php';
 checkLogin();
-require_once '../includes/db.php';
-require_once '../includes/layout.php';
+require_once '../src/config/db.php';
+require_once '../src/layout/layout.php';
 
 // --- Lógica de Filtros ---
 $filterMine = isset($_GET['mine']) && $_GET['mine'] == '1';
@@ -91,18 +91,18 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
 <!-- TOP CONTROLS -->
 <div class="page-controls-container">
     <div class="toggle-switch-container">
-        <button onclick="switchTab('future')" id="btn-future" class="btn-toggle active">Próximas</button>
-        <button onclick="switchTab('past')" id="btn-past" class="btn-toggle">Anteriores</button>
+        <button onclick="switchTab('future')" id="btn-future" class="interactive-scale btn-toggle active">Próximas</button>
+        <button onclick="switchTab('past')" id="btn-past" class="interactive-scale btn-toggle">Anteriores</button>
     </div>
 
     <div class="controls-right">
         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-        <a href="escala_adicionar.php" class="btn-control-icon btn-add-new" title="Nova Escala">
+        <a href="escala_adicionar.php" class="interactive-scale btn-control-icon btn-add-new" title="Nova Escala">
             <i data-lucide="plus"></i>
         </a>
         <?php endif; ?>
 
-        <button onclick="openSheet('filterSheet')" class="btn-control-icon btn-filter-trigger">
+        <button onclick="openSheet('filterSheet')" class="interactive-scale btn-control-icon btn-filter-trigger">
             <i data-lucide="filter" width="18"></i>
             <?php if($activeFilters > 0): ?>
             <span class="badge-dot"></span>
@@ -138,7 +138,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     if ($monthYear !== $currentMonth):
                         $currentMonth = $monthYear;
                 ?>
-                        <div class="animate-card" style="animation-delay: <?= $delay ?>s; margin: var(--space-md) 0 var(--space-xs);">
+                        <div class="reveal-item" style="margin: var(--space-md) 0 var(--space-xs);">
                             <span style="font-size: 0.75rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px;"><?= $monthYear ?></span>
                         </div>
                 <?php 
@@ -171,7 +171,10 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     }
                 ?>
 
-                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="scale-card animate-card <?= $isToday ? 'today' : '' ?>" style="animation-delay: <?= $delay ?>s; --card-accent-color: <?= getThemeColor($schedule['event_type']) ?>;">
+                    <?php 
+                    $staggerClass = 'reveal-stagger-' . min(4, max(1, (int)($delay * 10)));
+                    ?>
+                    <a href="escala_detalhe.php?id=<?= $schedule['id'] ?>" class="interactive-scale scale-card reveal-item <?= $staggerClass ?> <?= $isToday ? 'today' : '' ?>" style="--card-accent-color: <?= getThemeColor($schedule['event_type']) ?>;">
                         <div class="scale-card-main">
                             <!-- Bloco de Data Premium -->
                             <div class="date-box-premium">
