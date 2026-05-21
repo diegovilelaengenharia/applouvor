@@ -735,7 +735,7 @@ renderAppHeader('Detalhes da Escala');
                         ?>
                         <div class="flex gap-4 <?= $isMe ? 'flex-row-reverse' : '' ?>">
                             <?php if($avatar): ?>
-                                <img alt="Avatar" class="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant shadow-sm" src="<?= htmlspecialchars($avatar) ?>"/>
+                                <img alt="Foto de <?= htmlspecialchars($cmt['name']) ?>" class="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant shadow-sm" src="<?= htmlspecialchars($avatar) ?>" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($cmt['name']) ?>&background=2E7EED&color=fff&bold=true';"/>
                             <?php else: ?>
                                 <div class="w-10 h-10 rounded-full bg-ghost-gray border border-outline-variant text-deep-navy flex items-center justify-center font-bold text-xs shrink-0 shadow-sm"><?= strtoupper(substr($cmt['name'], 0, 2)) ?></div>
                             <?php endif; ?>

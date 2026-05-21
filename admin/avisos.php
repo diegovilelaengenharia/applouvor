@@ -334,7 +334,7 @@ foreach ($avisos as &$aviso) {
                             }
                         ?>
                         <?php if (!empty($avatarPath)): ?>
-                            <img src="<?= htmlspecialchars($avatarPath) ?>" alt="Avatar" class="w-10 h-10 rounded-full object-cover shadow-sm shrink-0">
+                            <img src="<?= htmlspecialchars($avatarPath) ?>" alt="Foto de <?= htmlspecialchars($aviso['author_name'] ?? 'Autor') ?>" class="w-10 h-10 rounded-full object-cover shadow-sm shrink-0" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($aviso['author_name'] ?? 'A') ?>&background=2E7EED&color=fff&bold=true';">
                         <?php else: ?>
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#2E7EED]/10 to-[#2E7EED]/20 text-[#2E7EED] flex items-center justify-center font-bold text-sm shrink-0">
                                 <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
@@ -392,7 +392,12 @@ foreach ($avisos as &$aviso) {
                 <!-- Card Content -->
                 <div class="mt-4 space-y-3">
                     <h3 class="text-lg font-bold text-gray-900 leading-tight"><?= htmlspecialchars($aviso['title']) ?></h3>
-                    <p class="text-gray-600 text-sm whitespace-pre-wrap break-words font-sans"><?= htmlspecialchars($aviso['message']) ?></p>
+                    <?php
+                    // Mensagem vem de editor WYSIWYG. Permitimos só tags de formatação seguras (sem <a>, <script>, etc).
+                    $msgSafe = trim(strip_tags($aviso['message'] ?? '', '<p><br><strong><em><b><i><u><ul><ol><li>'));
+                    if ($msgSafe === '') { $msgSafe = htmlspecialchars(trim(strip_tags($aviso['message'] ?? ''))); }
+                    ?>
+                    <div class="text-gray-600 dark:text-gray-300 text-sm break-words font-sans leading-relaxed [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"><?= $msgSafe ?></div>
                 </div>
                 
                 <!-- Tags -->
