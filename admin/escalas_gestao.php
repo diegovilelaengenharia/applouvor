@@ -297,9 +297,9 @@ renderPageHeader('Gestão de Escalas', 'Controle, Análise e Dispoinibilidade');
         
         <!-- KPIs Globais -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-            <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid var(--lavender-600);">
+            <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid #2E7EED;">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total de Escalas</div>
-                <div style="font-size: 1.8rem; font-weight: 800; color: var(--lavender-600);"><?= $totalEscalas ?></div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #2E7EED;"><?= $totalEscalas ?></div>
             </div>
             <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid #10b981;">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Taxa de Confirmação</div>

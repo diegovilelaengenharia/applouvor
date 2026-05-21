@@ -186,7 +186,7 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                     <div class="type-box">🎂 Aniversário</div>
                 </label>
                 <label class="type-option">
-                    <input type="radio" name="event_type" value="treinamento" onchange="updateColor('var(--lavender-600)')">
+                    <input type="radio" name="event_type" value="treinamento" onchange="updateColor('#2E7EED')">
                     <div class="type-box">📚 Treinamento</div>
                 </label>
                 <label class="type-option">
@@ -215,8 +215,8 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
                         <div class="color-swatch" style="background: #ec4899;"></div>
                     </label>
                     <label class="color-option">
-                        <input type="radio" name="color" value="var(--lavender-600)">
-                        <div class="color-swatch" style="background: var(--lavender-600);"></div>
+                        <input type="radio" name="color" value="#2E7EED">
+                        <div class="color-swatch" style="background: #2E7EED;"></div>
                     </label>
                     <label class="color-option">
                         <input type="radio" name="color" value="var(--rose-500)">

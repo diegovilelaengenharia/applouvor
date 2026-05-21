@@ -53,7 +53,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
 
 <!-- Header Card -->
 <div style="max-width: 800px; margin: 0 auto 20px; padding: 0 16px;">
-    <div style="background: var(--lavender-600); border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+    <div style="background: #2E7EED; border-radius: 16px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(46, 126, 237, 0.3);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="flex: 1;">
                 <div style="
@@ -125,7 +125,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
                     <div style="display: flex; gap: 12px; align-items: flex-start;">
                         <div style="
                             width: 48px; height: 48px; border-radius: 10px;
-                            background: var(--lavender-600);
+                            background: #2E7EED;
                             color: white; display: flex; align-items: center; justify-content: center;
                             font-weight: 700; font-size: var(--font-h2); flex-shrink: 0;
                         ">
@@ -190,7 +190,7 @@ renderPageHeader($artistName, 'Perfil do Artista');
             
             <div style="display: flex; gap: 12px;">
                 <button type="button" onclick="closeEditModal()" style="flex: 1; padding: 12px; background: white; border: 1px solid #d1d5db; color: #374151; border-radius: 12px; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" style="flex: 1; padding: 12px; background: var(--lavender-600); border: none; color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">Salvar</button>
+                <button type="submit" style="flex: 1; padding: 12px; background: #2E7EED; border: none; color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">Salvar</button>
             </div>
         </form>
     </div>

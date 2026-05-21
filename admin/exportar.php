@@ -43,7 +43,7 @@ renderAppHeader('Admin');
 
         <!-- Exportar Repertório -->
         <a href="exportar_completo.php?tipo=repertorio" class="dash-card ripple" style="text-decoration: none;">
-            <div class="dash-icon-bg" style="background: rgba(147, 51, 234, 0.1); color: var(--lavender-600);">
+            <div class="dash-icon-bg" style="background: rgba(46, 126, 237, 0.1); color: #2E7EED;">
                 <i data-lucide="music" style="width: 24px;"></i>
             </div>
             <div class="dash-title">Apenas Repertório</div>

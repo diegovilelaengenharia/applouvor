@@ -177,8 +177,8 @@ try {
             <div class="kpi-label">Adicionadas (30d)</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 4px solid var(--lavender-600);">
-            <div class="kpi-value" style="color: var(--lavender-600);"><?= $avgBpm ?: '--' ?></div>
+        <div class="kpi-card" style="border-left: 4px solid #2E7EED;">
+            <div class="kpi-value" style="color: #2E7EED;"><?= $avgBpm ?: '--' ?></div>
             <div class="kpi-label">BPM Médio</div>
         </div>
     </div>

@@ -214,7 +214,7 @@ renderPageHeader('Editar Evento', $event['title']);
                 <label class="form-label">Cor do Evento</label>
                 <div class="color-options">
                     <?php
-                    $colors = ['var(--slate-500)', '#047857', 'var(--yellow-500)', '#ec4899', 'var(--lavender-600)', 'var(--rose-500)'];
+                    $colors = ['var(--slate-500)', '#047857', 'var(--yellow-500)', '#ec4899', '#2E7EED', 'var(--rose-500)'];
                     foreach ($colors as $color):
                     ?>
                         <label class="color-option">

@@ -150,8 +150,8 @@ try {
 
     <!-- KPIs Grid -->
     <div class="kpi-grid">
-        <div class="kpi-card" style="border-left: 4px solid var(--lavender-600);">
-            <div class="kpi-value" style="color: var(--lavender-600);"><?= $totalEscalas ?></div>
+        <div class="kpi-card" style="border-left: 4px solid #2E7EED;">
+            <div class="kpi-value" style="color: #2E7EED;"><?= $totalEscalas ?></div>
             <div class="kpi-label">Total de Escalas</div>
         </div>
 

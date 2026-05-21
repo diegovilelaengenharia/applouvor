@@ -112,7 +112,7 @@ renderPageHeader('Gestão de Tags', 'Crie pastas para organizar o repertório');
                             '#F43F5E', // Rose
                             '#EC4899', // Pink
                             '#D946EF', // Fuchsia
-                            'var(--lavender-600)', // Violet
+                            '#2E7EED', // Worship Blue
                             '#6366F1', // Indigo
                             'var(--slate-500)', // Blue
                             '#0EA5E9', // Sky

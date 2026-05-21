@@ -55,7 +55,7 @@ foreach ($users as $u) {
         </div>
         <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid var(--slate-200); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
             <div style="color: var(--slate-500); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Total Logins</div>
-            <div style="font-size: 2rem; font-weight: 800; color: var(--lavender-600); margin-top: 8px;"><?= $total_logins ?></div>
+            <div style="font-size: 2rem; font-weight: 800; color: #2E7EED; margin-top: 8px;"><?= $total_logins ?></div>
         </div>
     </div>
 

@@ -38,7 +38,7 @@ renderAppHeader('Artista');
 
 <!-- Hero Header Compacto -->
 <div style="
-    background: var(--lavender-600); 
+    background: #2E7EED;
     margin: -16px -16px 20px -16px; 
     padding: 16px 16px 40px 16px; 
     border-radius: 0 0 20px 20px; 
