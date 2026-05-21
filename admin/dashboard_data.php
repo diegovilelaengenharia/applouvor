@@ -110,12 +110,15 @@ try {
     $leituraData['percentYear'] = round(($readCount / 365) * 100);
 } catch (Exception $e) {}
 
-// 8. Avisos (Contagem de não lidos)
+// 8. Avisos (Contagem de não lidos + lista para o dashboard)
 $unreadCount = 0;
 $ultimoAviso = "Nenhum aviso novo";
+$avisos = [];
 try {
     $unreadCount = $pdo->query("SELECT COUNT(*) FROM avisos WHERE created_at > DATE_SUB(NOW(), INTERVAL 3 DAY)")->fetchColumn();
     $ultimoAviso = $pdo->query("SELECT title FROM avisos ORDER BY created_at DESC LIMIT 1")->fetchColumn() ?: $ultimoAviso;
+    $stmtAvisos = $pdo->query("SELECT id, title, message, priority, created_at FROM avisos ORDER BY created_at DESC LIMIT 5");
+    $avisos = $stmtAvisos->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {}
 
 // 9. Histórico
@@ -166,6 +169,8 @@ return [
     'leituraData' => $leituraData,
     'unreadCount' => $unreadCount,
     'ultimoAviso' => $ultimoAviso,
+    'avisos' => $avisos,
+    'aniversariantes' => $aniversariantes ?? [],
     'historicoData' => $historicoData,
     'oracaoCount' => $oracaoCount,
     'pendingSuggestions' => $pendingSuggestions

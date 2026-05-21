@@ -252,6 +252,83 @@ $shortcuts = [
         </div>
     </div>
 
+    <!-- BENTO STITCH: AVISOS + ANIVERSARIANTES -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!-- Card Avisos -->
+        <div class="lg:col-span-2 bg-surface-container-lowest dark:bg-surface-container border border-surface-container-highest rounded-xl p-6 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 font-bold tracking-tight">
+                    <span class="text-worship-blue flex items-center"><i data-lucide="megaphone" class="w-5 h-5"></i></span>
+                    Avisos
+                </h2>
+                <a href="avisos.php" class="font-label-sm text-label-sm text-worship-blue uppercase tracking-wider hover:opacity-75 transition-opacity">Ver todos</a>
+            </div>
+            <div class="space-y-4 flex-grow">
+                <?php if (!empty($avisos)): ?>
+                    <?php foreach (array_slice($avisos, 0, 3) as $av): ?>
+                        <?php
+                        $prio = $av['priority'] ?? 'info';
+                        $prioDot = $prio === 'urgent' ? 'bg-red-500' : ($prio === 'important' ? 'bg-amber-500' : 'bg-worship-blue');
+                        $ts = !empty($av['created_at']) ? strtotime($av['created_at']) : time();
+                        $quando = (date('Y-m-d', $ts) === date('Y-m-d'))
+                            ? 'Hoje, ' . date('H:i', $ts)
+                            : date('d/m', $ts) . ' às ' . date('H:i', $ts);
+                        ?>
+                        <div class="pb-4 border-b border-surface-container-highest last:border-0 last:pb-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="w-2 h-2 rounded-full <?= $prioDot ?> flex-shrink-0"></span>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider"><?= htmlspecialchars($quando) ?></span>
+                            </div>
+                            <div class="font-body-md text-body-md font-semibold text-on-surface"><?= htmlspecialchars($av['title'] ?? '') ?></div>
+                            <?php if (!empty($av['message'])): ?>
+                                <p class="font-body-md text-on-surface-variant mt-1 text-sm line-clamp-2"><?= htmlspecialchars($av['message']) ?></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="flex flex-col items-center justify-center text-center py-8 text-on-surface-variant">
+                        <i data-lucide="inbox" class="w-8 h-8 mb-2 opacity-60"></i>
+                        <span class="font-body-md text-sm">Nenhum aviso no momento.</span>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Card Aniversariantes -->
+        <div class="bg-surface-container-lowest dark:bg-surface-container border border-surface-container-highest rounded-xl p-6 shadow-sm flex flex-col">
+            <div class="flex items-center mb-5">
+                <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 font-bold tracking-tight">
+                    <span class="text-altar-gold flex items-center"><i data-lucide="cake" class="w-5 h-5"></i></span>
+                    Aniversariantes
+                </h2>
+            </div>
+            <?php if (!empty($aniversariantes)): ?>
+                <div class="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1 flex-grow items-start">
+                    <?php foreach (array_slice($aniversariantes, 0, 8) as $niver): ?>
+                        <?php
+                        $nomeCurto = explode(' ', trim($niver['name']))[0];
+                        $avatar = 'https://ui-avatars.com/api/?name=' . urlencode($niver['name']) . '&background=eef2ff&color=2E7EED&bold=true';
+                        ?>
+                        <div class="flex flex-col items-center min-w-[68px]">
+                            <div class="w-14 h-14 rounded-full overflow-hidden mb-2 border-2 border-surface-container-highest">
+                                <img alt="<?= htmlspecialchars($niver['name']) ?>" class="w-full h-full object-cover" src="<?= $avatar ?>">
+                            </div>
+                            <span class="font-label-sm text-label-sm text-on-surface text-center truncate w-full"><?= htmlspecialchars($nomeCurto) ?></span>
+                            <span class="font-label-sm text-on-surface-variant text-[10px]">Dia <?= (int)$niver['dia'] ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="flex flex-col items-center justify-center text-center py-8 text-on-surface-variant flex-grow">
+                    <i data-lucide="party-popper" class="w-8 h-8 mb-2 opacity-60"></i>
+                    <span class="font-body-md text-sm">Nenhum aniversário este mês.</span>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    </div>
+
     <!-- SEÇÃO ATALHOS RÁPIDOS TÁTEIS -->
     <div class="space-y-4">
         <div class="flex items-center gap-2 px-1">
