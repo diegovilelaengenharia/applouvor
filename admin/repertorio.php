@@ -279,7 +279,3 @@ renderAppHeader('Repertório', 'index.php');
 
 <?php renderAppFooter(); ?>
 
-</style>
-
-<?php renderAppFooter(); ?>
-

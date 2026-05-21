@@ -258,7 +258,7 @@ renderPageHeader('Escalas', 'Louvor PIB Oliveira');
                     // Month Divider
                     if ($monthYear !== $currentMonth) {
                         echo '<div class="month-divider-container">
-                                <span class="month-divider-label" style="background: var(--slate-100); color: var(--text-muted); border-color: transparent;">' . $monthYear . '</span>
+                                <span class="month-divider-label">' . $monthYear . '</span>
                                 <div class="month-divider-line"></div>
                               </div>';
                         $currentMonth = $monthYear;

@@ -184,67 +184,65 @@ $shortcuts = [
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 space-y-8">
     
-    <!-- HEADER HERO PREMIUM DE BOAS-VINDAS (Bento Card Grande) -->
-    <div class="relative bg-gradient-to-br from-primary to-blue-800 text-white rounded-3xl p-6 sm:p-8 shadow-lg overflow-hidden border border-white/10 transition-all duration-300 hover:shadow-xl group">
-        <!-- Decorativos sutis de fundo -->
-        <div class="absolute -right-16 -top-16 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
-        <div class="absolute -left-16 -bottom-16 w-48 h-48 bg-blue-600/20 rounded-full blur-2xl pointer-events-none"></div>
+    <!-- HEADER HERO PREMIUM DE BOAS-VINDAS (Bento Card Grande - Bloco Sólido Minimalista) -->
+    <div class="relative bg-surface-container-low border border-surface-container-highest rounded-2xl p-4 sm:p-5 overflow-hidden transition-all duration-300 group shadow-sm">
+        <!-- Decorativo sutil de fundo -->
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-primary/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
         
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <!-- Bloco Info Usuário (Esquerda) -->
-            <div class="flex items-center gap-4 sm:gap-5">
+            <div class="flex items-center gap-4">
                 <div class="relative flex-shrink-0">
-                    <div class="absolute inset-0 bg-white/20 rounded-full animate-ping opacity-75 pointer-events-none scale-105"></div>
-                    <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-white shadow-md">
+                    <div class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-surface-container-highest shadow-sm">
                         <a href="perfil.php" class="block w-full h-full">
                             <img src="<?= $userPhoto ?>" alt="Avatar" class="w-full h-full object-cover">
                         </a>
                     </div>
                 </div>
-                <div class="space-y-1 sm:space-y-1.5">
-                    <div class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white/15 rounded-full text-[10px] font-bold tracking-wider uppercase border border-white/10">
+                <div class="space-y-0.5">
+                    <div class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[9px] font-bold tracking-wider uppercase border border-primary/15">
                         <i data-lucide="sparkles" class="w-3 h-3"></i> PIB Oliveira Louvor
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight font-outfit"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>! 👋</h2>
-                    <p class="text-sm text-white/80 font-medium">Pronto para servir e adorar hoje?</p>
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight font-outfit text-on-surface"><?= $salutation ?>, <?= explode(' ', $userName)[0] ?>! 👋</h2>
+                    <p class="text-xs text-on-surface-variant font-medium">Pronto para servir e adorar hoje?</p>
                 </div>
             </div>
 
             <!-- Bloco Próxima Escala (Direita) -->
-            <div class="w-full md:w-auto md:min-w-[280px]">
+            <div class="w-full md:w-auto md:min-w-[260px]">
                 <?php if (!empty($nextSchedule)): ?>
-                    <div class="bg-white/10 border border-white/20 rounded-2xl p-4.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-white/90 flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> Próxima Escala</span>
+                    <div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-3 shadow-sm hover:bg-surface-container transition-all duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5 text-primary"></i> Próxima Escala</span>
                             <?php 
-                            $statusClass = 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30';
+                            $statusClass = 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/20';
                             $statusText = 'Pendente';
                             if (($nextSchedule['my_status'] ?? '') === 'confirmed') {
-                                $statusClass = 'bg-green-500/20 text-green-300 border border-green-500/30';
+                                $statusClass = 'bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20';
                                 $statusText = 'Confirmada';
                             } elseif (($nextSchedule['my_status'] ?? '') === 'declined') {
-                                $statusClass = 'bg-red-500/20 text-red-300 border border-red-500/30';
+                                $statusClass = 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20';
                                 $statusText = 'Recusada';
                             }
                             ?>
-                            <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md <?= $statusClass ?>"><?= $statusText ?></span>
+                            <span class="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded <?= $statusClass ?>"><?= $statusText ?></span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-3xl font-extrabold font-outfit tracking-tight"><?= date('d/m', strtotime($nextSchedule['event_date'])) ?></span>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-2xl font-extrabold font-outfit tracking-tight text-on-surface"><?= date('d/m', strtotime($nextSchedule['event_date'])) ?></span>
                             <div class="flex flex-col overflow-hidden">
-                                <span class="text-sm font-bold truncate leading-tight"><?= htmlspecialchars($nextSchedule['event_type']) ?></span>
-                                <span class="text-xs text-white/80 font-medium mt-0.5 truncate"><?= htmlspecialchars($nextSchedule['my_role'] ?? 'Músico') ?></span>
+                                <span class="text-xs font-bold text-on-surface truncate leading-tight"><?= htmlspecialchars($nextSchedule['event_type']) ?></span>
+                                <span class="text-[10px] text-on-surface-variant font-medium mt-0.5 truncate"><?= htmlspecialchars($nextSchedule['my_role'] ?? 'Músico') ?></span>
                             </div>
                         </div>
                     </div>
                 <?php else: ?>
-                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3.5 backdrop-blur-sm">
-                        <div class="p-2.5 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center flex-shrink-0 text-white/80">
-                            <i data-lucide="calendar-heart" class="w-5 h-5"></i>
+                    <div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-3 flex items-center gap-2.5">
+                        <div class="p-2 rounded-lg bg-surface-container text-on-surface-variant flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="calendar-heart" class="w-4 h-4 text-primary"></i>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs font-bold leading-tight">Nenhuma escala próxima</span>
-                            <span class="text-[10px] text-white/70 font-semibold mt-0.5 leading-tight">Acompanhe os cultos no menu Escalas.</span>
+                            <span class="text-[11px] font-bold text-on-surface leading-tight">Nenhuma escala próxima</span>
+                            <span class="text-[9px] text-on-surface-variant font-semibold mt-0.5 leading-tight">Acompanhe os cultos no menu Escalas.</span>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -256,15 +254,15 @@ $shortcuts = [
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         <!-- Card Avisos -->
-        <div class="lg:col-span-2 bg-surface-container-lowest dark:bg-surface-container border border-surface-container-highest rounded-xl p-6 shadow-sm flex flex-col">
-            <div class="flex items-center justify-between mb-5">
+        <div class="lg:col-span-2 bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4.5 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-4">
                 <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 font-bold tracking-tight">
                     <span class="text-worship-blue flex items-center"><i data-lucide="megaphone" class="w-5 h-5"></i></span>
                     Avisos
                 </h2>
                 <a href="avisos.php" class="font-label-sm text-label-sm text-worship-blue uppercase tracking-wider hover:opacity-75 transition-opacity">Ver todos</a>
             </div>
-            <div class="space-y-4 flex-grow">
+            <div class="space-y-3.5 flex-grow">
                 <?php if (!empty($avisos)): ?>
                     <?php foreach (array_slice($avisos, 0, 3) as $av): ?>
                         <?php
@@ -275,54 +273,54 @@ $shortcuts = [
                             ? 'Hoje, ' . date('H:i', $ts)
                             : date('d/m', $ts) . ' às ' . date('H:i', $ts);
                         ?>
-                        <div class="pb-4 border-b border-surface-container-highest last:border-0 last:pb-0">
-                            <div class="flex items-center gap-2 mb-1">
+                        <div class="pb-3.5 border-b border-surface-container-highest last:border-0 last:pb-0">
+                            <div class="flex items-center gap-2 mb-0.5">
                                 <span class="w-2 h-2 rounded-full <?= $prioDot ?> flex-shrink-0"></span>
-                                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider"><?= htmlspecialchars($quando) ?></span>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-[10px]"><?= htmlspecialchars($quando) ?></span>
                             </div>
                             <div class="font-body-md text-body-md font-semibold text-on-surface"><?= htmlspecialchars($av['title'] ?? '') ?></div>
                             <?php if (!empty($av['message'])): ?>
-                                <p class="font-body-md text-on-surface-variant mt-1 text-sm line-clamp-2"><?= htmlspecialchars($av['message']) ?></p>
+                                <p class="font-body-md text-on-surface-variant mt-0.5 text-xs line-clamp-2 leading-relaxed"><?= htmlspecialchars($av['message']) ?></p>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <div class="flex flex-col items-center justify-center text-center py-8 text-on-surface-variant">
-                        <i data-lucide="inbox" class="w-8 h-8 mb-2 opacity-60"></i>
-                        <span class="font-body-md text-sm">Nenhum aviso no momento.</span>
+                    <div class="flex flex-col items-center justify-center text-center py-6 text-on-surface-variant">
+                        <i data-lucide="inbox" class="w-7 h-7 mb-1.5 opacity-60"></i>
+                        <span class="font-body-md text-xs">Nenhum aviso no momento.</span>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
 
         <!-- Card Aniversariantes -->
-        <div class="bg-surface-container-lowest dark:bg-surface-container border border-surface-container-highest rounded-xl p-6 shadow-sm flex flex-col">
-            <div class="flex items-center mb-5">
+        <div class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-4.5 shadow-sm flex flex-col">
+            <div class="flex items-center mb-4">
                 <h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 font-bold tracking-tight">
                     <span class="text-altar-gold flex items-center"><i data-lucide="cake" class="w-5 h-5"></i></span>
                     Aniversariantes
                 </h2>
             </div>
             <?php if (!empty($aniversariantes)): ?>
-                <div class="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1 flex-grow items-start">
+                <div class="flex gap-3 overflow-x-auto pb-1.5 -mx-1 px-1 flex-grow items-start">
                     <?php foreach (array_slice($aniversariantes, 0, 8) as $niver): ?>
                         <?php
                         $nomeCurto = explode(' ', trim($niver['name']))[0];
                         $avatar = 'https://ui-avatars.com/api/?name=' . urlencode($niver['name']) . '&background=eef2ff&color=2E7EED&bold=true';
                         ?>
-                        <div class="flex flex-col items-center min-w-[68px]">
-                            <div class="w-14 h-14 rounded-full overflow-hidden mb-2 border-2 border-surface-container-highest">
+                        <div class="flex flex-col items-center min-w-[60px]">
+                            <div class="w-11 h-11 rounded-full overflow-hidden mb-1.5 border border-surface-container-highest">
                                 <img alt="<?= htmlspecialchars($niver['name']) ?>" class="w-full h-full object-cover" src="<?= $avatar ?>">
                             </div>
-                            <span class="font-label-sm text-label-sm text-on-surface text-center truncate w-full"><?= htmlspecialchars($nomeCurto) ?></span>
-                            <span class="font-label-sm text-on-surface-variant text-[10px]">Dia <?= (int)$niver['dia'] ?></span>
+                            <span class="font-label-sm text-label-sm text-on-surface text-center truncate w-full text-[11px]"><?= htmlspecialchars($nomeCurto) ?></span>
+                            <span class="font-label-sm text-on-surface-variant text-[9px]">Dia <?= (int)$niver['dia'] ?></span>
                         </div>
                     <?php endforeach; ?>
                 </div>
             <?php else: ?>
-                <div class="flex flex-col items-center justify-center text-center py-8 text-on-surface-variant flex-grow">
-                    <i data-lucide="party-popper" class="w-8 h-8 mb-2 opacity-60"></i>
-                    <span class="font-body-md text-sm">Nenhum aniversário este mês.</span>
+                <div class="flex flex-col items-center justify-center text-center py-6 text-on-surface-variant flex-grow">
+                    <i data-lucide="party-popper" class="w-7 h-7 mb-1.5 opacity-60"></i>
+                    <span class="font-body-md text-xs">Nenhum aniversário este mês.</span>
                 </div>
             <?php endif; ?>
         </div>
@@ -330,15 +328,15 @@ $shortcuts = [
     </div>
 
     <!-- SEÇÃO ATALHOS RÁPIDOS TÁTEIS -->
-    <div class="space-y-4">
+    <div class="space-y-3">
         <div class="flex items-center gap-2 px-1">
             <div class="bg-primary/10 p-1.5 rounded-lg text-primary flex items-center justify-center">
                 <i data-lucide="layout-grid" class="w-4 h-4"></i>
             </div>
-            <h3 class="text-base font-bold text-surface-on-surface font-outfit tracking-tight">Acesso Rápido</h3>
+            <h3 class="text-sm font-bold text-surface-on-surface font-outfit tracking-tight">Acesso Rápido</h3>
         </div>
         
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
             <?php foreach ($shortcuts as $sc): ?>
                 <?php if ($sc['admin_only'] && $userRole !== 'admin') continue; ?>
                 
@@ -346,30 +344,26 @@ $shortcuts = [
                 // Mapeamento de Cores para Tailwind
                 $catColors = [
                     'gestao' => [
-                        'icon' => 'bg-blue-500/10 text-blue-500 border border-blue-500/10 dark:text-blue-400',
-                        'hover' => 'hover:border-blue-500/30'
+                        'icon' => 'bg-blue-500/10 text-blue-600 border border-blue-500/10 dark:text-blue-400',
                     ],
                     'espiritualidade' => [
-                        'icon' => 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/10 dark:text-emerald-400',
-                        'hover' => 'hover:border-emerald-500/30'
+                        'icon' => 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/10 dark:text-emerald-400',
                     ],
                     'comunicacao' => [
-                        'icon' => 'bg-amber-500/10 text-amber-500 border border-amber-500/10 dark:text-amber-400',
-                        'hover' => 'hover:border-amber-500/30'
+                        'icon' => 'bg-amber-500/10 text-amber-600 border border-amber-500/10 dark:text-amber-400',
                     ],
                     'admin' => [
-                        'icon' => 'bg-red-500/10 text-red-500 border border-red-500/10 dark:text-red-400',
-                        'hover' => 'hover:border-red-500/30'
+                        'icon' => 'bg-red-500/10 text-red-600 border border-red-500/10 dark:text-red-400',
                     ]
                 ];
                 $colors = $catColors[$sc['category']] ?? $catColors['gestao'];
                 ?>
                 
-                <a href="<?= $sc['url'] ?>" class="bg-surface-container-lowest dark:bg-surface-container border border-surface-container-highest rounded-2xl p-3.5 flex items-center gap-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md <?= $colors['hover'] ?> group select-none">
-                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform <?= $colors['icon'] ?>">
-                        <i data-lucide="<?= $sc['icon'] ?>" class="w-5 h-5"></i>
+                <a href="<?= $sc['url'] ?>" class="bg-surface-container-lowest border border-surface-container-highest rounded-2xl p-2.5 flex items-center gap-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-container-low group select-none shadow-sm">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform <?= $colors['icon'] ?>">
+                        <i data-lucide="<?= $sc['icon'] ?>" class="w-4 h-4"></i>
                     </div>
-                    <span class="text-xs font-bold text-surface-on-surface font-outfit leading-tight leading-3 truncate group-hover:text-primary transition-colors"><?= htmlspecialchars($sc['title']) ?></span>
+                    <span class="text-xs font-bold text-surface-on-surface font-outfit leading-tight truncate group-hover:text-primary transition-colors"><?= htmlspecialchars($sc['title']) ?></span>
                 </a>
             <?php endforeach; ?>
         </div>

@@ -269,10 +269,10 @@ Plans:
 4. Auditoria visual de todas as páginas (admin + músico) confirmando consistência em viewport 375px e desktop, sem regressões funcionais
 
 **Plans:** 4 plans (4 waves)
-- [ ] 10-01-PLAN.md — Kill 5 :root override blocks (cascade safety) [UI-03]
-- [ ] 10-02-PLAN.md — Typography token swap across 8 high-traffic files [UI-01]
-- [ ] 10-03-PLAN.md — Button matrix states + radius tokens + dashboard header hide + FAB dedup [UI-02, UI-03]
-- [ ] 10-04-PLAN.md — Full visual + non-regression audit (24 screenshots) + Diego sign-off [UI-04]
+- [x] 10-01-PLAN.md — Kill 5 :root override blocks (cascade safety) [UI-03]
+- [x] 10-02-PLAN.md — Typography token swap across 8 high-traffic files [UI-01]
+- [x] 10-03-PLAN.md — Button matrix states + radius tokens + dashboard header hide + FAB dedup [UI-02, UI-03]
+- [x] 10-04-PLAN.md — Full visual + non-regression audit (24 screenshots) + Diego sign-off [UI-04]
 
 ---
 
@@ -306,7 +306,8 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 7 | Histórico Membro | Presença + alerta pastoral | 3 | ✅ Concluída |
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ✅ Concluída |
 | 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ✅ Concluída |
-| 10 | Harmonização Visual | Tipografia + botões + espaçamentos consistentes (desktop + mobile) | 4 | ⬜ |
+| 10 | Harmonização Visual | Tipografia + botões + espaçamentos consistentes (desktop + mobile) | 4 | ✅ Concluída |
+
 
 ---
 *Criado: 2026-05-16 | v1.1 — Atualizado 2026-05-17 com gaps da auditoria profissional*

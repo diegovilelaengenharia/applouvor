@@ -89,8 +89,8 @@ function renderAppHeader($title, $backUrl = null)
             <?php /* Header Mobile Logic moved to renderPageHeader (Unification) */ ?>
             
             <!-- TopAppBar -->
-            <header class="fixed top-0 flex justify-between items-center px-margin-mobile h-16 w-full z-50 bg-surface dark:bg-deep-navy border-b border-outline-variant dark:border-on-surface-variant transition-colors duration-200">
-                <button class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-variant p-2 rounded-full flex items-center justify-center" onclick="toggleSidebarMobile ? toggleSidebarMobile() : (window.toggleSidebar && window.toggleSidebar())">
+            <header class="fixed top-0 flex justify-between items-center px-margin-mobile h-16 w-full z-40 lg:left-64 lg:w-[calc(100%-16rem)] bg-surface dark:bg-deep-navy border-b border-outline-variant dark:border-on-surface-variant transition-colors duration-200">
+                <button class="lg:hidden text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-variant p-2 rounded-full flex items-center justify-center" onclick="toggleSidebarMobile ? toggleSidebarMobile() : (window.toggleSidebar && window.toggleSidebar())">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
                 <div class="font-headline-md-mobile text-headline-md-mobile font-bold text-primary dark:text-primary-fixed">WorshipFlow</div>

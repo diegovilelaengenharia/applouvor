@@ -61,7 +61,7 @@ try {
 
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-40 lg:hidden hidden opacity-0 transition-opacity duration-300" onclick="toggleSidebarMobile()"></div>
 
-<aside id="app-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-surface border-r border-surface-container-highest flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-lg lg:shadow-none">
+<aside id="app-sidebar" class="sidebar fixed inset-y-0 left-0 z-50 w-64 bg-surface border-r border-surface-container-highest flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-lg lg:shadow-none">
     
     <!-- 1. Cabeçalho Sidebar com Logo -->
     <div class="h-16 flex items-center justify-between px-6 border-b border-surface-container-highest flex-shrink-0">

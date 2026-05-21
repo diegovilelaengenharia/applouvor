@@ -63,25 +63,25 @@
     --radius-full: 9999px;
 }
 
-body.dark-mode {
+.dark {
     /* Mapping dark mode equivalents based on Deep Navy and Worship Blue focus */
-    --surface: #1A1B1F;
-    --surface-bright: #2f3131;
-    --surface-container-lowest: #000000;
-    --surface-container-low: #1a1b1f;
-    --surface-container: #2f3131;
-    --surface-container-high: #46464b;
-    --surface-container-highest: #626267;
-    --on-surface: #ffffff;
-    --on-surface-variant: #c1c6d6;
-    --background: #1A1B1F;
+    --surface: #0F1012;
+    --surface-bright: #1F2025;
+    --surface-container-lowest: #16171B;
+    --surface-container-low: #1A1B1F; /* Deep Navy do Stitch! */
+    --surface-container: #222429;
+    --surface-container-high: #2A2C33;
+    --surface-container-highest: #33363F;
+    --on-surface: #F3F4F6;
+    --on-surface-variant: #9CA3AF;
+    --background: #0F1012;
     --on-background: #ffffff;
-    --primary: #abc7ff;
-    --on-primary: #001b3f;
-    --primary-container: #004590;
-    --on-primary-container: #d7e2ff;
-    --outline: #727785;
-    --outline-variant: #414753;
+    --primary: #2E7EED; /* Worship Blue oficial! */
+    --on-primary: #ffffff;
+    --primary-container: #1872e0;
+    --on-primary-container: #fefcff;
+    --outline: #3E414B;
+    --outline-variant: #222429;
 }
 
 
