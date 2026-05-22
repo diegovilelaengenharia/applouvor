@@ -16,6 +16,20 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// Auto-login seguro no ambiente de desenvolvimento local
+// Facilita testes locais na SPA React em localhost:5173 sem depender de login prévio na porta 8080
+$isLocalDev = ($_SERVER['HTTP_HOST'] ?? '') === 'localhost:8080' 
+           || ($_SERVER['HTTP_HOST'] ?? '') === '127.0.0.1:8080'
+           || ($_SERVER['SERVER_ADDR'] ?? '') === '127.0.0.1'
+           || ($_SERVER['SERVER_ADDR'] ?? '') === '::1';
+
+if ($isLocalDev && !isset($_SESSION['user_id'])) {
+    $_SESSION['user_id'] = 1;
+    $_SESSION['user_name'] = 'Líder (Mock Dev)';
+    $_SESSION['user_role'] = 'admin';
+    $_SESSION['user_avatar'] = 'https://ui-avatars.com/api/?name=Lider+Mock&background=2e7eed&color=fff';
+}
+
 // Verifica se o usuário está logado
 function checkLogin()
 {
