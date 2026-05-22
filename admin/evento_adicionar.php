@@ -86,167 +86,267 @@ renderAppHeader('Novo Evento');
 renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
 ?>
 
-<!-- Import CSS -->
-<link rel="stylesheet" href="../assets/css/pages/evento-form.css?v=<?= time() ?>">
+<!-- Estilos Customizados Dinâmicos -->
+<style>
+.form-card {
+    display: none;
+}
+.form-card.active {
+    display: block;
+    animation: cardFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.step-dot {
+    transition: all 0.2s ease-out;
+}
+.step-dot.active {
+    background-color: #2E7EED !important;
+    border-color: #2E7EED !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(46, 126, 237, 0.3);
+}
+.step-dot.completed {
+    background-color: #047857 !important;
+    border-color: #047857 !important;
+    color: #ffffff !important;
+}
+.step-item.active .step-label {
+    color: #ffffff;
+    font-weight: 600;
+}
+.member-item {
+    transition: all 0.15s ease;
+}
+.member-item.selected {
+    background-color: rgba(46, 126, 237, 0.06);
+    border-color: #2E7EED !important;
+}
+.member-item.selected .checkbox-custom {
+    background-color: #2E7EED;
+    border-color: #2E7EED;
+}
+.hidden-btn {
+    display: none !important;
+}
 
-<!-- Wizard Specific Styles moved to evento-form.css -->
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 
-<div class="event-container wizard-mode">
+<div class="max-w-3xl mx-auto px-4 py-8">
     <?php if (isset($error)): ?>
-        <div class="feedback-message feedback-error">
-            <?= htmlspecialchars($error) ?>
+        <div class="mb-6 p-4 bg-red-950/30 border border-red-900/50 text-red-200 text-sm rounded-[2px] flex items-center gap-3">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500 shrink-0"></i>
+            <span><?= htmlspecialchars($error) ?></span>
         </div>
     <?php endif; ?>
     
     <!-- Wizard Progress -->
-    <div class="wizard-progress">
-        <div class="step-item active" id="dot-container-1">
-            <div class="step-dot active" id="dot-1">1</div>
-            <span class="step-label">Informações</span>
+    <div class="relative flex justify-between items-center max-w-md mx-auto mb-10 px-4">
+        <!-- Linha de fundo contínua -->
+        <div class="absolute left-0 right-0 top-1/2 h-[1px] bg-[#26272B] -translate-y-1/2 z-0"></div>
+        
+        <!-- Step 1 -->
+        <div class="relative z-10 flex flex-col items-center gap-2 bg-[#121316] px-3 step-item active" id="dot-container-1">
+            <div class="step-dot active w-8 h-8 rounded-[2px] border border-[#26272B] bg-[#18191D] flex items-center justify-center text-xs font-semibold text-gray-400" id="dot-1">1</div>
+            <span class="step-label text-[10px] uppercase tracking-wider text-gray-500 transition-colors">Informações</span>
         </div>
-        <div class="step-item" id="dot-container-2">
-            <div class="step-dot" id="dot-2">2</div>
-            <span class="step-label">Tipo</span>
+        
+        <!-- Step 2 -->
+        <div class="relative z-10 flex flex-col items-center gap-2 bg-[#121316] px-3 step-item" id="dot-container-2">
+            <div class="step-dot w-8 h-8 rounded-[2px] border border-[#26272B] bg-[#18191D] flex items-center justify-center text-xs font-semibold text-gray-400" id="dot-2">2</div>
+            <span class="step-label text-[10px] uppercase tracking-wider text-gray-500 transition-colors">Tipo</span>
         </div>
-        <div class="step-item" id="dot-container-3">
-            <div class="step-dot" id="dot-3">3</div>
-            <span class="step-label">Participantes</span>
+        
+        <!-- Step 3 -->
+        <div class="relative z-10 flex flex-col items-center gap-2 bg-[#121316] px-3 step-item" id="dot-container-3">
+            <div class="step-dot w-8 h-8 rounded-[2px] border border-[#26272B] bg-[#18191D] flex items-center justify-center text-xs font-semibold text-gray-400" id="dot-3">3</div>
+            <span class="step-label text-[10px] uppercase tracking-wider text-gray-500 transition-colors">Participantes</span>
         </div>
     </div>
     
     <form method="POST" id="eventForm">
         <!-- Step 1: Informações Básicas -->
-        <div class="form-card active" id="step-1" style="--card-color: var(--slate-500);">
-            <div class="card-title">
-                <i data-lucide="info" width="16"></i>
+        <div class="form-card active bg-[#18191D] border border-[#26272B] rounded-[2px] p-6 md:p-8 shadow-xl" id="step-1">
+            <div class="flex items-center gap-2 text-md font-semibold text-white uppercase tracking-wider mb-6 pb-3 border-b border-[#26272B]">
+                <i data-lucide="info" class="w-4 h-4 text-[#2E7EED]"></i>
                 Informações Básicas
             </div>
             
-            <div class="form-group">
-                <label class="form-label">Título do Evento *</label>
-                <input type="text" name="title" class="form-input" placeholder="Ex: Reunião de Planejamento" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Descrição</label>
-                <textarea name="description" class="form-input" placeholder="Detalhes sobre o evento..."></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Data *</label>
-                <input type="date" name="start_date" id="start_date" class="form-input" value="<?= date('Y-m-d') ?>" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="checkbox-group">
-                    <input type="checkbox" name="all_day" id="all_day" onchange="toggleAllDay()">
-                    <span class="checkbox-label">Evento de dia inteiro</span>
-                </label>
-            </div>
-            
-            <div class="time-grid-container" id="time-fields">
-                <div class="form-group">
-                    <label class="form-label">Hora Início</label>
-                    <input type="time" name="start_time" class="form-input" value="19:00">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Título do Evento *</label>
+                    <input type="text" name="title" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] px-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm" placeholder="Ex: Reunião de Planejamento" required>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Hora Fim</label>
-                    <input type="time" name="end_time" class="form-input" value="21:00">
+                
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Descrição</label>
+                    <textarea name="description" rows="4" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] px-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm resize-none" placeholder="Detalhes sobre o evento..."></textarea>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Local</label>
-                <input type="text" name="location" class="form-input" placeholder="Ex: Sala de Reuniões">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Data *</label>
+                        <input type="date" name="start_date" id="start_date" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] px-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm" value="<?= date('Y-m-d') ?>" required>
+                    </div>
+                    
+                    <div class="flex items-end pb-3.5">
+                        <label class="flex items-center gap-3 cursor-pointer group select-none">
+                            <input type="checkbox" name="all_day" id="all_day" onchange="toggleAllDay()" class="rounded-none border border-[#26272B] bg-[#121316] text-[#2E7EED] focus:ring-0 focus:ring-offset-0 w-4 h-4 cursor-pointer">
+                            <span class="text-xs text-gray-300 group-hover:text-white transition-colors">Evento de dia inteiro</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4" id="time-fields">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Hora Início</label>
+                        <input type="time" name="start_time" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] px-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm" value="19:00">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Hora Fim</label>
+                        <input type="time" name="end_time" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] px-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm" value="21:00">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Local</label>
+                    <input type="text" name="location" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] px-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm" placeholder="Ex: Sala de Reuniões">
+                </div>
             </div>
         </div>
         
         <!-- Step 2: Tipo e Categoria -->
-        <div class="form-card" id="step-2" style="--card-color: #10b981;">
-            <div class="card-title">
-                <i data-lucide="tag" width="16"></i>
+        <div class="form-card bg-[#18191D] border border-[#26272B] rounded-[2px] p-6 md:p-8 shadow-xl" id="step-2">
+            <div class="flex items-center gap-2 text-md font-semibold text-white uppercase tracking-wider mb-6 pb-3 border-b border-[#26272B]">
+                <i data-lucide="tag" class="w-4 h-4 text-[#047857]"></i>
                 Tipo de Evento
             </div>
             
-            <div class="type-grid">
-                <label class="type-option">
-                    <input type="radio" name="event_type" value="reuniao" checked onchange="updateColor('var(--slate-500)')">
-                    <div class="type-box">📋 Reunião</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="event_type" value="reuniao" checked onchange="updateColor('#64748b')" class="peer sr-only">
+                    <div class="w-full h-full bg-[#121316] border border-[#26272B] hover:border-[#64748b]/40 rounded-[2px] py-4 px-3 flex flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-gray-400 transition-all active:scale-[0.97] will-change-transform peer-checked:border-[#64748b] peer-checked:bg-[#64748b]/5 peer-checked:text-white">
+                        <span>📋</span> Reunião
+                    </div>
                 </label>
-                <label class="type-option">
-                    <input type="radio" name="event_type" value="ensaio_extra" onchange="updateColor('#047857')">
-                    <div class="type-box">🎵 Ensaio Extra</div>
+                
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="event_type" value="ensaio_extra" onchange="updateColor('#047857')" class="peer sr-only">
+                    <div class="w-full h-full bg-[#121316] border border-[#26272B] hover:border-[#047857]/40 rounded-[2px] py-4 px-3 flex flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-gray-400 transition-all active:scale-[0.97] will-change-transform peer-checked:border-[#047857] peer-checked:bg-[#047857]/5 peer-checked:text-white">
+                        <span>🎵</span> Ensaio Extra
+                    </div>
                 </label>
-                <label class="type-option">
-                    <input type="radio" name="event_type" value="confraternizacao" onchange="updateColor('var(--yellow-500)')">
-                    <div class="type-box">🎉 Confraternização</div>
+                
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="event_type" value="confraternizacao" onchange="updateColor('#d97706')" class="peer sr-only">
+                    <div class="w-full h-full bg-[#121316] border border-[#26272B] hover:border-[#d97706]/40 rounded-[2px] py-4 px-3 flex flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-gray-400 transition-all active:scale-[0.97] will-change-transform peer-checked:border-[#d97706] peer-checked:bg-[#d97706]/5 peer-checked:text-white">
+                        <span>🎉</span> Confraternização
+                    </div>
                 </label>
-                <label class="type-option">
-                    <input type="radio" name="event_type" value="aniversario" onchange="updateColor('#ec4899')">
-                    <div class="type-box">🎂 Aniversário</div>
+                
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="event_type" value="aniversario" onchange="updateColor('#db2777')" class="peer sr-only">
+                    <div class="w-full h-full bg-[#121316] border border-[#26272B] hover:border-[#db2777]/40 rounded-[2px] py-4 px-3 flex flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-gray-400 transition-all active:scale-[0.97] will-change-transform peer-checked:border-[#db2777] peer-checked:bg-[#db2777]/5 peer-checked:text-white">
+                        <span>🎂</span> Aniversário
+                    </div>
                 </label>
-                <label class="type-option">
-                    <input type="radio" name="event_type" value="treinamento" onchange="updateColor('#2E7EED')">
-                    <div class="type-box">📚 Treinamento</div>
+                
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="event_type" value="treinamento" onchange="updateColor('#2E7EED')" class="peer sr-only">
+                    <div class="w-full h-full bg-[#121316] border border-[#26272B] hover:border-[#2E7EED]/40 rounded-[2px] py-4 px-3 flex flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-gray-400 transition-all active:scale-[0.97] will-change-transform peer-checked:border-[#2E7EED] peer-checked:bg-[#2E7EED]/5 peer-checked:text-white">
+                        <span>📚</span> Treinamento
+                    </div>
                 </label>
-                <label class="type-option">
-                    <input type="radio" name="event_type" value="outro" onchange="updateColor('var(--slate-500)')">
-                    <div class="type-box">📌 Outro</div>
+                
+                <label class="relative cursor-pointer group">
+                    <input type="radio" name="event_type" value="outro" onchange="updateColor('#64748b')" class="peer sr-only">
+                    <div class="w-full h-full bg-[#121316] border border-[#26272B] hover:border-[#64748b]/40 rounded-[2px] py-4 px-3 flex flex-col items-center justify-center gap-2 text-center text-xs font-semibold text-gray-400 transition-all active:scale-[0.97] will-change-transform peer-checked:border-[#64748b] peer-checked:bg-[#64748b]/5 peer-checked:text-white">
+                        <span>📌</span> Outro
+                    </div>
                 </label>
             </div>
             
-            <div class="form-group mt-4">
-                <label class="form-label">Cor do Evento</label>
-                <div class="color-options">
-                    <label class="color-option">
-                        <input type="radio" name="color" value="var(--slate-500)" checked>
-                        <div class="color-swatch" style="background: var(--slate-500);"></div>
+            <div>
+                <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Cor de Identificação</label>
+                <div class="flex flex-wrap gap-3">
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="color" value="#64748b" checked class="peer sr-only">
+                        <div class="w-8 h-8 rounded-[2px] bg-[#64748b] border border-[#26272B] flex items-center justify-center text-white font-bold transition-all group-active:scale-[0.90] peer-checked:border-white peer-checked:scale-110">
+                            <i data-lucide="check" class="w-3.5 h-3.5 hidden group-has-[:checked]:block"></i>
+                        </div>
                     </label>
-                    <label class="color-option">
-                        <input type="radio" name="color" value="#047857">
-                        <div class="color-swatch" style="background: #047857;"></div>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="color" value="#047857" class="peer sr-only">
+                        <div class="w-8 h-8 rounded-[2px] bg-[#047857] border border-[#26272B] flex items-center justify-center text-white font-bold transition-all group-active:scale-[0.90] peer-checked:border-white peer-checked:scale-110">
+                            <i data-lucide="check" class="w-3.5 h-3.5 hidden group-has-[:checked]:block"></i>
+                        </div>
                     </label>
-                    <label class="color-option">
-                        <input type="radio" name="color" value="var(--yellow-500)">
-                        <div class="color-swatch" style="background: var(--yellow-500);"></div>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="color" value="#d97706" class="peer sr-only">
+                        <div class="w-8 h-8 rounded-[2px] bg-[#d97706] border border-[#26272B] flex items-center justify-center text-white font-bold transition-all group-active:scale-[0.90] peer-checked:border-white peer-checked:scale-110">
+                            <i data-lucide="check" class="w-3.5 h-3.5 hidden group-has-[:checked]:block"></i>
+                        </div>
                     </label>
-                    <label class="color-option">
-                        <input type="radio" name="color" value="#ec4899">
-                        <div class="color-swatch" style="background: #ec4899;"></div>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="color" value="#db2777" class="peer sr-only">
+                        <div class="w-8 h-8 rounded-[2px] bg-[#db2777] border border-[#26272B] flex items-center justify-center text-white font-bold transition-all group-active:scale-[0.90] peer-checked:border-white peer-checked:scale-110">
+                            <i data-lucide="check" class="w-3.5 h-3.5 hidden group-has-[:checked]:block"></i>
+                        </div>
                     </label>
-                    <label class="color-option">
-                        <input type="radio" name="color" value="#2E7EED">
-                        <div class="color-swatch" style="background: #2E7EED;"></div>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="color" value="#2E7EED" class="peer sr-only">
+                        <div class="w-8 h-8 rounded-[2px] bg-[#2E7EED] border border-[#26272B] flex items-center justify-center text-white font-bold transition-all group-active:scale-[0.90] peer-checked:border-white peer-checked:scale-110">
+                            <i data-lucide="check" class="w-3.5 h-3.5 hidden group-has-[:checked]:block"></i>
+                        </div>
                     </label>
-                    <label class="color-option">
-                        <input type="radio" name="color" value="var(--rose-500)">
-                        <div class="color-swatch" style="background: var(--rose-500);"></div>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="color" value="#e11d48" class="peer sr-only">
+                        <div class="w-8 h-8 rounded-[2px] bg-[#e11d48] border border-[#26272B] flex items-center justify-center text-white font-bold transition-all group-active:scale-[0.90] peer-checked:border-white peer-checked:scale-110">
+                            <i data-lucide="check" class="w-3.5 h-3.5 hidden group-has-[:checked]:block"></i>
+                        </div>
                     </label>
                 </div>
             </div>
         </div>
         
         <!-- Step 3: Participantes -->
-        <div class="form-card" id="step-3" style="--card-color: var(--yellow-500);">
-            <div class="card-title">
-                <i data-lucide="users" width="16"></i>
+        <div class="form-card bg-[#18191D] border border-[#26272B] rounded-[2px] p-6 md:p-8 shadow-xl" id="step-3">
+            <div class="flex items-center gap-2 text-md font-semibold text-white uppercase tracking-wider mb-6 pb-3 border-b border-[#26272B]">
+                <i data-lucide="users" class="w-4 h-4 text-[#d97706]"></i>
                 Selecionar Participantes
             </div>
             
-            <div class="search-container">
-                <i data-lucide="search" class="search-icon"></i>
-                <input type="text" onkeyup="filterMembers(this.value)" class="form-input search-input-padded" placeholder="Buscar membro...">
+            <!-- Campo de Busca Minimalista -->
+            <div class="relative mb-4">
+                <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4"></i>
+                <input type="text" onkeyup="filterMembers(this.value)" class="w-full bg-[#121316] border border-[#26272B] focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] rounded-[2px] pl-10 pr-4 py-3 text-white placeholder-gray-600 transition-all outline-none text-sm" placeholder="Buscar membro por nome ou instrumento...">
             </div>
             
-            <div class="member-list" id="memberList">
+            <!-- Lista com Divisores Finos e Rolagem Otimizada -->
+            <div class="max-h-[320px] overflow-y-auto divide-y divide-[#26272B]/70 border border-[#26272B] rounded-[2px] bg-[#121316] custom-scrollbar" id="memberList">
                 <?php foreach ($allUsers as $user): ?>
-                    <label class="member-item" data-search="<?= strtolower($user['name']) ?>">
-                        <input type="checkbox" name="participants[]" value="<?= $user['id'] ?>">
-                        <div class="member-info">
-                            <div class="member-name">
+                    <label class="member-item flex items-center gap-4 p-3.5 cursor-pointer border border-transparent border-l-2 hover:bg-[#18191D] select-none" data-search="<?= strtolower($user['name'] . ' ' . ($user['instrument'] ?: 'membro')) ?>">
+                        <!-- Checkbox Invisível para estilizar o container pai via JS -->
+                        <input type="checkbox" name="participants[]" value="<?= $user['id'] ?>" class="sr-only">
+                        
+                        <!-- Caixa Customizada de Checkbox -->
+                        <div class="checkbox-custom w-4.5 h-4.5 border border-[#26272B] bg-[#18191D] flex items-center justify-center transition-all shrink-0 rounded-[1px]">
+                            <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                        </div>
+                        
+                        <div class="member-info flex-1">
+                            <div class="text-xs font-semibold text-gray-200">
                                 <?= htmlspecialchars($user['name']) ?>
                             </div>
-                            <div class="member-role">
+                            <div class="text-[10px] text-gray-500 font-medium uppercase tracking-wider mt-0.5">
                                 <?= htmlspecialchars($user['instrument'] ?: 'Membro') ?>
                             </div>
                         </div>
@@ -256,14 +356,14 @@ renderPageHeader('Novo Evento', 'Adicionar compromisso à agenda');
         </div>
         
         <!-- Navigation Buttons -->
-        <div class="actions-bar">
-            <button type="button" id="btn-back" onclick="changeStep(-1)" class="btn-secondary flex-1 hidden-btn">
+        <div class="flex gap-4 justify-end mt-8">
+            <button type="button" id="btn-back" onclick="changeStep(-1)" class="btn-secondary flex-1 md:flex-none md:w-32 bg-transparent border border-[#26272B] hover:bg-[#18191D] text-gray-300 font-semibold text-sm rounded-[2px] py-3 transition-all active:scale-[0.97] will-change-transform hidden-btn">
                 Voltar
             </button>
-            <button type="button" id="btn-next" onclick="changeStep(1)" class="btn-primary flex-2">
+            <button type="button" id="btn-next" onclick="changeStep(1)" class="btn-primary flex-2 md:flex-none md:w-44 bg-[#2E7EED] hover:bg-[#1e66c9] text-white font-semibold text-sm rounded-[2px] py-3 shadow-lg shadow-[#2E7EED]/10 transition-all active:scale-[0.97] will-change-transform text-center">
                 Próximo
             </button>
-            <button type="submit" id="btn-finish" class="btn-success flex-2 hidden-btn">
+            <button type="submit" id="btn-finish" class="btn-success flex-2 md:flex-none md:w-44 bg-[#047857] hover:bg-[#035f45] text-white font-semibold text-sm rounded-[2px] py-3 shadow-lg shadow-[#047857]/10 transition-all active:scale-[0.97] will-change-transform text-center hidden-btn">
                 Criar Evento
             </button>
         </div>
@@ -319,20 +419,24 @@ function updateButtons() {
     const btnNext = document.getElementById('btn-next');
     const btnFinish = document.getElementById('btn-finish');
     
-    btnBack.style.display = currentStep > 1 ? 'block' : 'none';
+    if (currentStep > 1) {
+        btnBack.classList.remove('hidden-btn');
+    } else {
+        btnBack.classList.add('hidden-btn');
+    }
     
     if (currentStep === totalSteps) {
-        btnNext.style.display = 'none';
-        btnFinish.style.display = 'block';
+        btnNext.classList.add('hidden-btn');
+        btnFinish.classList.remove('hidden-btn');
     } else {
-        btnNext.style.display = 'block';
-        btnFinish.style.display = 'none';
+        btnNext.classList.remove('hidden-btn');
+        btnFinish.classList.add('hidden-btn');
     }
 }
 
 function toggleAllDay() {
     const allDay = document.getElementById('all_day').checked;
-    document.getElementById('time-fields').style.display = allDay ? 'none' : 'block';
+    document.getElementById('time-fields').style.display = allDay ? 'none' : 'grid';
 }
 
 function updateColor(color) {
@@ -349,7 +453,7 @@ function filterMembers(term) {
 }
 
 // Highlight selected
-document.querySelectorAll('.member-item input').forEach(input => {
+document.querySelectorAll('.member-item input[type="checkbox"]').forEach(input => {
     input.addEventListener('change', function() {
         this.parentElement.classList.toggle('selected', this.checked);
     });
@@ -359,4 +463,5 @@ lucide.createIcons();
 </script>
 
 <?php renderAppFooter(); ?>
+
 

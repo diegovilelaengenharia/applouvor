@@ -78,105 +78,98 @@
 
 /* === CLASSES DE ANIMAÇÃO === */
 
-/* Fade In Up com delays escalonados */
+/* Fade In Up com delays escalonados e curvas de mola premium */
 .animate-fade-in-up {
-    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     opacity: 0;
+    will-change: transform, opacity;
 }
 
-.animate-fade-in-up:nth-child(1) {
-    animation-delay: 0.05s;
-}
-
-.animate-fade-in-up:nth-child(2) {
-    animation-delay: 0.1s;
-}
-
-.animate-fade-in-up:nth-child(3) {
-    animation-delay: 0.15s;
-}
-
-.animate-fade-in-up:nth-child(4) {
-    animation-delay: 0.2s;
-}
-
-.animate-fade-in-up:nth-child(5) {
-    animation-delay: 0.25s;
-}
-
-.animate-fade-in-up:nth-child(6) {
-    animation-delay: 0.3s;
-}
+.animate-fade-in-up:nth-child(1) { animation-delay: 0.05s; }
+.animate-fade-in-up:nth-child(2) { animation-delay: 0.1s; }
+.animate-fade-in-up:nth-child(3) { animation-delay: 0.15s; }
+.animate-fade-in-up:nth-child(4) { animation-delay: 0.2s; }
+.animate-fade-in-up:nth-child(5) { animation-delay: 0.25s; }
+.animate-fade-in-up:nth-child(6) { animation-delay: 0.3s; }
 
 /* Fade In simples */
 .animate-fade-in {
-    animation: fadeIn 0.3s ease-out forwards;
+    animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     opacity: 0;
+    will-change: opacity;
 }
 
 /* Slide In Right */
 .animate-slide-in-right {
-    animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     opacity: 0;
+    will-change: transform, opacity;
 }
 
 /* Scale In */
 .animate-scale-in {
-    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     opacity: 0;
+    will-change: transform, opacity;
 }
 
 /* Pulse */
 .animate-pulse {
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* Shimmer Loading */
 .animate-shimmer {
-    background: var(--gray-100);
+    background: var(--surface-container-low);
     background-size: 1000px 100%;
-    animation: shimmer 2s infinite;
+    animation: shimmer 2s infinite linear;
 }
 
 /* === TRANSIÇÕES SUAVES === */
 
 .transition-all {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .transition-fast {
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .transition-slow {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.transition-spring {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* === HOVER EFFECTS === */
 
 .hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, box-shadow;
 }
 
 .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transform: translate3d(0, -4px, 0);
+    box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.15);
 }
 
 .hover-scale {
-    transition: transform 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
 }
 
 .hover-scale:hover {
-    transform: scale(1.05);
+    transform: scale3d(1.04, 1.04, 1);
 }
 
 /* === LOADING STATES === */
 
 .loading-skeleton {
-    background: var(--gray-100);
+    background: var(--surface-container-low);
     background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+    animation: shimmer 1.5s infinite linear;
     border-radius: var(--radius-md);
 }
 
@@ -185,35 +178,48 @@
 /* Botões */
 button,
 .btn {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    will-change: transform;
 }
 
 button:active,
 .btn:active {
-    transform: scale(0.98);
+    transform: scale3d(0.96, 0.96, 1);
 }
 
 /* Exceção para botões de gravação de áudio */
 #btnStartRecord:active,
 #btnStopRecord:active {
-    transform: scale(0.98);
-    /* A cor de fundo é definida em cada página específica */
+    transform: scale3d(0.96, 0.96, 1);
 }
 
 /* Links */
 a {
-    transition: color 0.2s ease;
+    transition: color 0.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
 }
 
 /* Inputs */
 input,
 textarea,
 select {
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-    animation: fadeIn 0.2s ease-out;
+    box-shadow: 0 0 0 2px rgba(46, 126, 237, 0.15);
+}
+
+/* Support for prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: scroll !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+    }
 }

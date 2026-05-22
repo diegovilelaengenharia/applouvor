@@ -205,7 +205,7 @@ if (!empty($avisos)) {
             }
         }
     }
-    unset($av); // break ref
+    unset($av); // Quebrar a referência
 }
 
 
@@ -218,49 +218,53 @@ foreach ($avisos as &$aviso) {
         WHERE atr.aviso_id = ?
     ");
     $stmt->execute([$aviso['id']]);
-    $aviso['tags'] = $stmt->fetchAll(PDO::FETCH_ASSOC);<?php renderAppHeader('Avisos'); ?>
+    $aviso['tags'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+unset($aviso); // Quebrar a referência
+
+renderAppHeader('Avisos');
+?>
 
 <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 mb-32 space-y-8" id="mural-container">
     
-    <!-- Hero / Header Section -->
-    <div class="reveal-item relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1B1F] to-[#2C2E35] text-white p-8 shadow-lg border border-white/10">
-        <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#2E7EED]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-[#FFC107]/5 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Hero / Header Section (Sacred Minimalist) -->
+    <div class="reveal-item relative overflow-hidden rounded-[2px] bg-[#121316] text-white p-8 shadow-sm border border-neutral-800">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#2E7EED]/5 rounded-full blur-3xl pointer-events-none"></div>
         
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2E7EED]/20 border border-[#2E7EED]/30 text-[#2E7EED] text-xs font-bold uppercase tracking-wider mb-3">
-                    📢 Mural Virtual
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[2px] bg-[#2E7EED]/10 border border-[#2E7EED]/20 text-[#2E7EED] text-[10px] font-bold uppercase tracking-wider mb-3">
+                    <i data-lucide="megaphone" class="w-3.5 h-3.5"></i> Mural Virtual
                 </span>
-                <h1 class="text-3xl font-extrabold tracking-tight font-sans">Mural de Avisos</h1>
-                <p class="text-gray-400 mt-2 max-w-xl text-sm">Fique por dentro das atualizações, devocionais e avisos importantes da nossa equipe de louvor.</p>
+                <h1 class="text-3xl font-bold tracking-tight font-sans">Mural de Avisos</h1>
+                <p class="text-neutral-400 mt-2 max-w-xl text-sm font-body leading-relaxed">Fique por dentro das atualizações, devocionais e avisos importantes da nossa equipe de louvor.</p>
             </div>
             
             <?php if ($isAdmin): ?>
-            <button onclick="openCreateDrawer()" class="interactive-scale shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm shadow-lg active:scale-95 transition-all duration-200">
-                <span class="material-symbols-outlined text-[20px]">add</span>
+            <button onclick="openCreateDrawer()" class="active:scale-[0.97] shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-[2px] bg-[#2E7EED] hover:bg-[#1A6FD6] text-white font-bold text-sm shadow-sm transition-all duration-150 will-change-transform">
+                <i data-lucide="plus" class="w-4 h-4 shrink-0"></i>
                 Novo Comunicado
             </button>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- Header Actions (Search & Filter) -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center bg-white p-4 rounded-3xl shadow-sm border border-gray-100">
+    <!-- Header Actions (Search & Filter - Sharp Bento style) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center bg-[#18191D] p-4 rounded-[2px] border border-neutral-850 shadow-sm">
         <!-- Search Bar -->
         <div class="relative sm:col-span-2">
             <form method="GET" class="m-0">
                 <?php if ($showArchived): ?><input type="hidden" name="archived" value="1"><?php endif; ?>
                 <?php if ($showHistory): ?><input type="hidden" name="history" value="1"><?php endif; ?>
                 <?php if ($filterType !== 'all'): ?><input type="hidden" name="type" value="<?= $filterType ?>"><?php endif; ?>
-                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                <input name="search" value="<?= htmlspecialchars($search) ?>" class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED] transition-all placeholder-gray-400 text-gray-800" placeholder="Buscar avisos ou comunicados..." type="text"/>
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 w-4 h-4"></i>
+                <input name="search" value="<?= htmlspecialchars($search) ?>" class="w-full h-12 pl-12 pr-4 bg-[#121316] border border-neutral-800 rounded-[2px] text-sm focus:outline-none focus:border-[#2E7EED] transition-all placeholder-neutral-500 text-neutral-200" placeholder="Buscar avisos ou comunicados..." type="text"/>
             </form>
         </div>
         
         <!-- Filter Dropdown -->
         <div class="relative w-full">
-            <button type="button" class="interactive-scale w-full h-12 px-4 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-2xl text-sm font-semibold text-gray-700 flex items-center justify-between gap-2 transition-colors" id="filterButton" onclick="toggleFilterDropdown()">
+            <button type="button" class="active:scale-[0.98] w-full h-12 px-4 bg-[#121316] hover:bg-[#1C1D22] border border-neutral-800 rounded-[2px] text-sm font-semibold text-neutral-300 flex items-center justify-between gap-2 transition-all will-change-transform" id="filterButton" onclick="toggleFilterDropdown()">
                 <span class="flex items-center gap-2">
                     <?php
                         $filterLabels = [
@@ -275,11 +279,11 @@ foreach ($avisos as &$aviso) {
                         echo $filterLabels[$filterType] ?? '✨ Todos';
                     ?>
                 </span>
-                <span class="material-symbols-outlined text-[20px] text-gray-500">keyboard_arrow_down</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-neutral-500 transition-transform duration-200" id="filterArrow"></i>
             </button>
-            <div class="hidden absolute right-0 left-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 flex-col overflow-hidden divide-y divide-gray-50" id="filterDropdown">
+            <div class="hidden absolute right-0 left-0 mt-2 bg-[#18191D] border border-neutral-800 rounded-[2px] shadow-xl z-50 flex-col overflow-hidden divide-y divide-neutral-850" id="filterDropdown">
                 <?php foreach ($filterLabels as $key => $label): ?>
-                    <a href="?<?= http_build_query(array_merge($_GET, ['type' => $key])) ?>" class="px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 flex items-center gap-2 transition-colors <?= $filterType === $key ? 'bg-[#2E7EED]/5 text-[#2E7EED] font-bold' : '' ?>">
+                    <a href="?<?= http_build_query(array_merge($_GET, ['type' => $key])) ?>" class="px-4 py-3 hover:bg-[#1E2026] text-sm text-neutral-350 flex items-center gap-2 transition-colors <?= $filterType === $key ? 'bg-[#2E7EED]/10 text-[#2E7EED] font-bold' : '' ?>">
                         <?= $label ?>
                     </a>
                 <?php endforeach; ?>
@@ -289,15 +293,15 @@ foreach ($avisos as &$aviso) {
 
     <!-- Timeline Divider -->
     <div class="flex justify-center items-center py-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-100 px-4 py-1.5 rounded-full">Comunicados Recentes</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 bg-neutral-900 border border-neutral-800 px-4 py-1.5 rounded-[2px]">Comunicados Recentes</span>
     </div>
 
     <!-- Avisos List (Bento Timeline) -->
     <?php if (empty($avisos)): ?>
-        <div class="bg-gray-50 border border-dashed border-gray-200 rounded-3xl p-12 text-center">
-            <span class="material-symbols-outlined text-5xl text-gray-300 mb-3" style="font-variation-settings: 'FILL' 1;">inbox</span>
-            <h4 class="text-lg font-bold text-gray-800 mb-1">Nenhum aviso encontrado</h4>
-            <p class="text-sm text-gray-500 mb-6"><?= !empty($search) ? 'Tente ajustar os termos da sua busca.' : 'Não há avisos registrados no momento.' ?></p>
+        <div class="bg-[#121316] border border-dashed border-neutral-850 rounded-[2px] p-12 text-center">
+            <i data-lucide="inbox" class="w-12 h-12 text-neutral-600 mx-auto mb-3"></i>
+            <h4 class="text-base font-bold text-neutral-300 mb-1">Nenhum aviso encontrado</h4>
+            <p class="text-xs text-neutral-500 mb-6"><?= !empty($search) ? 'Tente ajustar os termos da sua busca.' : 'Não há avisos registrados no momento.' ?></p>
         </div>
     <?php else: ?>
         <div class="space-y-6">
@@ -306,27 +310,28 @@ foreach ($avisos as &$aviso) {
         foreach ($avisos as $aviso): 
             $isMe = ($aviso['created_by'] == $userId);
             
-            // Setup priority design - STRICT PURPLE BAN
-            $cardBorder = 'border border-gray-100';
+            // Setup priority design - STRICT PURPLE BAN & RUBI URGENCY
+            $cardBorder = 'border border-neutral-850';
             $leftAccent = '';
             
             if ($aviso['priority'] === 'urgent') {
-                $cardBorder = 'border-2 border-[#FFC107]';
-                $leftAccent = 'border-l-4 border-l-[#FFC107]';
+                // Rubi sóbria para urgência
+                $cardBorder = 'border border-[#B32424]';
+                $leftAccent = 'border-l-[3px] border-l-[#B32424]';
             } elseif ($aviso['priority'] === 'important') {
                 $cardBorder = 'border border-[#2E7EED]/30';
-                $leftAccent = 'border-l-4 border-l-[#2E7EED]';
+                $leftAccent = 'border-l-[3px] border-l-[#2E7EED]';
             }
             
             $staggerClass = 'reveal-stagger-' . min(4, max(1, ++$index));
         ?>
             <!-- Bento Announcement Card -->
-            <div class="reveal-item <?= $staggerClass ?> bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 <?= $cardBorder ?> <?= $leftAccent ?> relative group">
+            <div class="reveal-item <?= $staggerClass ?> bg-[#18191D] rounded-[2px] p-6 shadow-sm hover:shadow-md transition-all duration-300 <?= $cardBorder ?> <?= $leftAccent ?> relative group">
                 
                 <!-- Card Header -->
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <!-- Avatar -->
+                        <!-- Avatar (Sharp geometry) -->
                         <?php 
                             $avatarPath = $aviso['author_avatar'];
                             if ($avatarPath && !filter_var($avatarPath, FILTER_VALIDATE_URL) && strpos($avatarPath, 'data:') !== 0) {
@@ -334,53 +339,53 @@ foreach ($avisos as &$aviso) {
                             }
                         ?>
                         <?php if (!empty($avatarPath)): ?>
-                            <img src="<?= htmlspecialchars($avatarPath) ?>" alt="Foto de <?= htmlspecialchars($aviso['author_name'] ?? 'Autor') ?>" class="w-10 h-10 rounded-full object-cover shadow-sm shrink-0" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($aviso['author_name'] ?? 'A') ?>&background=2E7EED&color=fff&bold=true';">
+                            <img src="<?= htmlspecialchars($avatarPath) ?>" alt="Foto de <?= htmlspecialchars($aviso['author_name'] ?? 'Autor') ?>" class="w-10 h-10 rounded-[2px] object-cover shadow-sm shrink-0" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($aviso['author_name'] ?? 'A') ?>&background=2E7EED&color=fff&bold=true';">
                         <?php else: ?>
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#2E7EED]/10 to-[#2E7EED]/20 text-[#2E7EED] flex items-center justify-center font-bold text-sm shrink-0">
+                            <div class="w-10 h-10 rounded-[2px] bg-[#2E7EED]/10 text-[#2E7EED] flex items-center justify-center font-bold text-sm shrink-0">
                                 <?= strtoupper(substr($aviso['author_name'] ?? 'A', 0, 1)) ?>
                             </div>
                         <?php endif; ?>
                         
                         <div>
-                            <div class="text-sm font-bold text-gray-800"><?= htmlspecialchars($aviso['author_name'] ?? 'Administrador') ?></div>
-                            <div class="text-xs text-gray-400"><?= date('d/m/Y \à\s H:i', strtotime($aviso['created_at'])) ?></div>
+                            <div class="text-sm font-bold text-neutral-200"><?= htmlspecialchars($aviso['author_name'] ?? 'Administrador') ?></div>
+                            <div class="text-[10px] text-neutral-500 font-bold uppercase tracking-wider"><?= date('d/m/Y \à\s H:i', strtotime($aviso['created_at'])) ?></div>
                         </div>
                     </div>
 
                     <!-- Badges -->
                     <div class="flex items-center gap-2">
                         <?php if ($aviso['priority'] === 'urgent'): ?>
-                            <span class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider bg-[#FFC107]/10 text-[#D97706] px-2.5 py-1 rounded-full">🚨 Urgente</span>
+                            <span class="inline-flex items-center gap-1 text-[9px] uppercase font-bold tracking-widest bg-[#B32424]/10 border border-[#B32424]/20 text-[#FF4D4D] px-2.5 py-1 rounded-[2px]">🚨 Urgente</span>
                         <?php elseif ($aviso['priority'] === 'important'): ?>
-                            <span class="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider bg-[#2E7EED]/10 text-[#2E7EED] px-2.5 py-1 rounded-full">⭐ Importante</span>
+                            <span class="inline-flex items-center gap-1 text-[9px] uppercase font-bold tracking-widest bg-[#2E7EED]/10 border border-[#2E7EED]/20 text-[#2E7EED] px-2.5 py-1 rounded-[2px]">⭐ Importante</span>
                         <?php endif; ?>
                         
                         <!-- Admin Action Trigger -->
                         <?php if ($isAdmin): ?>
                         <div class="relative shrink-0">
-                            <button class="p-1 rounded-full hover:bg-gray-100 text-gray-400 admin-dropdown-btn active:scale-90 transition-all" onclick="toggleAdminMenu('admin-menu-<?= $aviso['id'] ?>', event)">
-                                <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                            <button class="p-1.5 rounded-[2px] hover:bg-neutral-850 text-neutral-450 admin-dropdown-btn active:scale-90 transition-all" onclick="toggleAdminMenu('admin-menu-<?= $aviso['id'] ?>', event)">
+                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
                             </button>
                             
-                            <!-- Admin Dropdown Menu (Sacred style) -->
-                            <div id="admin-menu-<?= $aviso['id'] ?>" class="hidden absolute right-0 mt-1 w-36 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden divide-y divide-gray-50">
-                                <button onclick="editAviso(<?= htmlspecialchars(json_encode($aviso)) ?>)" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-xs font-semibold text-gray-700 flex items-center gap-2 transition-colors">
-                                    <span class="material-symbols-outlined text-[16px]">edit</span> Editar
+                            <!-- Admin Dropdown Menu (Sacred sharp style) -->
+                            <div id="admin-menu-<?= $aviso['id'] ?>" class="hidden absolute right-0 mt-1 w-36 bg-[#1C1D22] border border-neutral-800 rounded-[2px] shadow-xl z-50 overflow-hidden divide-y divide-neutral-850">
+                                <button onclick="editAviso(<?= htmlspecialchars(json_encode($aviso)) ?>)" class="w-full text-left px-4 py-2.5 hover:bg-neutral-800 text-xs font-semibold text-neutral-300 flex items-center gap-2 transition-colors">
+                                    <i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Editar
                                 </button>
                                 <form method="POST" class="m-0 w-full">
                                     <?= App\AuthMiddleware::csrfField() ?>
                                     <input type="hidden" name="action" value="archive">
                                     <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-xs font-semibold text-gray-700 flex items-center gap-2 transition-colors">
-                                        <span class="material-symbols-outlined text-[16px]">archive</span> Arquivar
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 hover:bg-neutral-800 text-xs font-semibold text-neutral-300 flex items-center gap-2 transition-colors">
+                                        <i data-lucide="archive" class="w-3.5 h-3.5"></i> Arquivar
                                     </button>
                                 </form>
                                 <form method="POST" class="m-0 w-full" onsubmit="return confirm('Tem certeza que deseja deletar este aviso?')">
                                     <?= App\AuthMiddleware::csrfField() ?>
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= $aviso['id'] ?>">
-                                    <button type="submit" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-xs font-semibold text-red-600 flex items-center gap-2 transition-colors">
-                                        <span class="material-symbols-outlined text-[16px]">delete</span> Deletar
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 hover:bg-red-950/20 text-xs font-semibold text-[#FF4D4D] flex items-center gap-2 transition-colors">
+                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Deletar
                                     </button>
                                 </form>
                             </div>
@@ -391,33 +396,33 @@ foreach ($avisos as &$aviso) {
 
                 <!-- Card Content -->
                 <div class="mt-4 space-y-3">
-                    <h3 class="text-lg font-bold text-gray-900 leading-tight"><?= htmlspecialchars($aviso['title']) ?></h3>
+                    <h3 class="text-base font-bold text-neutral-100 leading-tight tracking-tight"><?= htmlspecialchars($aviso['title']) ?></h3>
                     <?php
-                    // Mensagem vem de editor WYSIWYG. Permitimos só tags de formatação seguras (sem <a>, <script>, etc).
-                    $msgSafe = trim(strip_tags($aviso['message'] ?? '', '<p><br><strong><em><b><i><u><ul><ol><li>'));
+                    // Mensagem segura do editor WYSIWYG
+                    $msgSafe = trim(strip_tags($aviso['message'] ?? '', '<p><br><strong><em><b><i><ul><ol><li>'));
                     if ($msgSafe === '') { $msgSafe = htmlspecialchars(trim(strip_tags($aviso['message'] ?? ''))); }
                     ?>
-                    <div class="text-gray-600 dark:text-gray-300 text-sm break-words font-sans leading-relaxed [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"><?= $msgSafe ?></div>
+                    <div class="text-neutral-400 text-sm break-words font-sans leading-relaxed [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"><?= $msgSafe ?></div>
                 </div>
                 
                 <!-- Tags -->
                 <?php if (!empty($aviso['tags'])): ?>
                     <div class="flex flex-wrap gap-1.5 mt-4">
                         <?php foreach ($aviso['tags'] as $tag): ?>
-                            <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider text-[#2E7EED] bg-[#2E7EED]/5 px-2.5 py-0.5 rounded-full">#<?= htmlspecialchars($tag['name']) ?></span>
+                            <span class="inline-flex items-center text-[9px] uppercase font-bold tracking-widest text-[#2E7EED] bg-[#2E7EED]/10 border border-[#2E7EED]/20 px-2.5 py-0.5 rounded-[2px]">#<?= htmlspecialchars($tag['name']) ?></span>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
 
-                <!-- Elastic Reactions Footer -->
-                <div class="flex items-center gap-4 mt-6 pt-4 border-t border-gray-50">
+                <!-- Elastic Reactions Footer (Spring Scale active:scale-[0.96]) -->
+                <div class="flex items-center gap-4 mt-6 pt-4 border-t border-neutral-850">
                     <form method="POST" class="m-0">
                         <?= App\AuthMiddleware::csrfField() ?>
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="like">
-                        <button type="submit" class="interactive-scale inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['like'] ? 'bg-[#2E7EED]/10 text-[#2E7EED]' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
-                            <span class="material-symbols-outlined text-[18px]" style="<?= $aviso['user_reacted']['like'] ? 'font-variation-settings: \'FILL\' 1;' : '' ?>">favorite</span>
+                        <button type="submit" class="active:scale-[0.96] inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-[2px] transition-all duration-150 transform will-change-transform <?= $aviso['user_reacted']['like'] ? 'bg-[#2E7EED]/10 border border-[#2E7EED]/20 text-[#2E7EED]' : 'text-neutral-400 bg-neutral-900 border border-neutral-800 hover:bg-neutral-850' ?>">
+                            <i data-lucide="heart" class="w-4 h-4 shrink-0 <?= $aviso['user_reacted']['like'] ? 'fill-current' : '' ?>"></i>
                             <span><?= $aviso['reactions']['like'] ?: 'Curtir' ?></span>
                         </button>
                     </form>
@@ -427,8 +432,8 @@ foreach ($avisos as &$aviso) {
                         <input type="hidden" name="action" value="toggle_reaction">
                         <input type="hidden" name="aviso_id" value="<?= $aviso['id'] ?>">
                         <input type="hidden" name="reaction_type" value="confirm">
-                        <button type="submit" class="interactive-scale inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 transform active:scale-95 <?= $aviso['user_reacted']['confirm'] ? 'bg-emerald-500/10 text-emerald-600' : 'text-gray-500 bg-gray-50 hover:bg-gray-100' ?>">
-                            <span class="material-symbols-outlined text-[18px]" style="<?= $aviso['user_reacted']['confirm'] ? 'font-variation-settings: \'FILL\' 1;' : '' ?>">check_circle</span>
+                        <button type="submit" class="active:scale-[0.96] inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-[2px] transition-all duration-150 transform will-change-transform <?= $aviso['user_reacted']['confirm'] ? 'bg-emerald-500/10 border border-emerald-500/20 text-[#10B981]' : 'text-neutral-400 bg-neutral-900 border border-neutral-800 hover:bg-neutral-850' ?>">
+                            <i data-lucide="check-circle" class="w-4 h-4 shrink-0 <?= $aviso['user_reacted']['confirm'] ? 'fill-current' : '' ?>"></i>
                             <span><?= $aviso['reactions']['confirm'] ?: 'Confirmar Leitura' ?></span>
                         </button>
                     </form>
@@ -441,28 +446,28 @@ foreach ($avisos as &$aviso) {
 
 </main>
 
-<!-- Floating Admin Trigger for Mobiles -->
+<!-- Floating Admin Trigger for Mobiles (Sharp geometry) -->
 <?php if ($isAdmin): ?>
 <div class="fixed bottom-24 right-6 z-40 sm:hidden">
-    <button onclick="openCreateDrawer()" class="w-14 h-14 rounded-full bg-[#2E7EED] text-white flex items-center justify-center shadow-2xl hover:bg-[#1A6FD6] active:scale-90 transition-all transform duration-200">
-        <span class="material-symbols-outlined text-[24px]">edit_note</span>
+    <button onclick="openCreateDrawer()" class="active:scale-90 w-14 h-14 rounded-[2px] bg-[#2E7EED] text-white flex items-center justify-center shadow-2xl hover:bg-[#1A6FD6] transition-all transform duration-150 will-change-transform border border-white/10">
+        <i data-lucide="edit-3" class="w-6 h-6"></i>
     </button>
 </div>
 <?php endif; ?>
 
 <!-- Bottom-Sheet Drawer Container -->
-<div id="avisoModal" class="fixed inset-0 bg-[#000]/40 backdrop-blur-sm z-[100] hidden transition-opacity duration-300 opacity-0 flex items-end justify-center" onclick="closeDrawer(event)">
+<div id="avisoModal" class="fixed inset-0 bg-[#000]/60 backdrop-blur-sm z-[100] hidden transition-opacity duration-300 opacity-0 flex items-end justify-center" onclick="closeDrawer(event)">
     
-    <!-- Drawer Panel (slides from bottom) -->
-    <div id="avisoDrawer" class="bg-white w-full max-w-md rounded-t-[32px] shadow-2xl flex flex-col max-h-[90vh] translate-y-full transition-transform duration-300 ease-out" onclick="event.stopPropagation()">
+    <!-- Drawer Panel (slides from bottom - Sharp geometry) -->
+    <div id="avisoDrawer" class="bg-[#18191D] border-t border-l border-r border-neutral-800 w-full max-w-md rounded-t-[4px] shadow-2xl flex flex-col max-h-[90vh] translate-y-full transition-transform duration-300 ease-out" onclick="event.stopPropagation()">
         
         <!-- Touch Drag Handle -->
-        <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto my-3 shrink-0"></div>
+        <div class="w-12 h-1 bg-neutral-800 rounded-full mx-auto my-3 shrink-0"></div>
         
-        <div class="flex items-center justify-between px-6 pb-4 border-b border-gray-50">
-            <h3 class="text-lg font-bold text-gray-900" id="modalTitle">Novo Aviso</h3>
-            <button onclick="closeDrawerForce()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 text-gray-500 transition-colors">
-                <span class="material-symbols-outlined text-[18px]">close</span>
+        <div class="flex items-center justify-between px-6 pb-4 border-b border-neutral-850">
+            <h3 class="text-base font-bold text-neutral-100" id="modalTitle">Novo Aviso</h3>
+            <button onclick="closeDrawerForce()" class="w-8 h-8 flex items-center justify-center rounded-[2px] bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-neutral-400 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
         
@@ -473,54 +478,54 @@ foreach ($avisos as &$aviso) {
                 <input type="hidden" name="id" id="avisoId">
                 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Título</label>
-                    <input type="text" name="title" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 font-sans" required id="avisoTitle" placeholder="Ex: Alteração no repertório de Domingo">
+                    <label class="text-[10px] font-bold text-neutral-450 uppercase tracking-widest">Título</label>
+                    <input type="text" name="title" class="w-full px-4 py-3 bg-[#121316] border border-neutral-800 rounded-[2px] focus:border-[#2E7EED] outline-none transition-all text-sm text-neutral-200 font-sans" required id="avisoTitle" placeholder="Ex: Alteração no repertório de Domingo">
                 </div>
                 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Mensagem</label>
-                    <textarea name="message" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 min-h-[120px] resize-y font-sans" required id="avisoMessage" placeholder="Escreva a sua mensagem aqui..."></textarea>
+                    <label class="text-[10px] font-bold text-neutral-450 uppercase tracking-widest">Mensagem</label>
+                    <textarea name="message" class="w-full px-4 py-3 bg-[#121316] border border-neutral-800 rounded-[2px] focus:border-[#2E7EED] outline-none transition-all text-sm text-neutral-200 min-h-[120px] resize-y font-sans" required id="avisoMessage" placeholder="Escreva a sua mensagem aqui..."></textarea>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Prioridade</label>
-                        <select name="priority" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoPriority">
-                            <option value="normal">Normal</option>
-                            <option value="important">⭐ Importante</option>
-                            <option value="urgent">🚨 Urgente</option>
+                        <label class="text-[10px] font-bold text-neutral-450 uppercase tracking-widest">Prioridade</label>
+                        <select name="priority" class="w-full px-4 py-3 bg-[#121316] border border-neutral-800 rounded-[2px] focus:border-[#2E7EED] outline-none transition-all text-sm text-neutral-300 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoPriority">
+                            <option value="normal" class="bg-[#18191D]">Normal</option>
+                            <option value="important" class="bg-[#18191D]">⭐ Importante</option>
+                            <option value="urgent" class="bg-[#18191D]">🚨 Urgente</option>
                         </select>
                     </div>
                     
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tipo</label>
-                        <select name="type" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoType">
-                            <option value="geral">Geral</option>
-                            <option value="espiritual">🙏 Espiritual</option>
-                            <option value="eventos">🎉 Eventos</option>
-                            <option value="musica">🎵 Música</option>
+                        <label class="text-[10px] font-bold text-neutral-450 uppercase tracking-widest">Tipo</label>
+                        <select name="type" class="w-full px-4 py-3 bg-[#121316] border border-neutral-800 rounded-[2px] focus:border-[#2E7EED] outline-none transition-all text-sm text-neutral-300 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoType">
+                            <option value="geral" class="bg-[#18191D]">Geral</option>
+                            <option value="espiritual" class="bg-[#18191D]">🙏 Espiritual</option>
+                            <option value="eventos" class="bg-[#18191D]">🎉 Eventos</option>
+                            <option value="musica" class="bg-[#18191D]">🎵 Música</option>
                         </select>
                     </div>
                 </div>
                 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Público-Alvo</label>
-                    <select name="target_audience" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoAudience">
-                        <option value="all">Todos</option>
-                        <option value="team">Equipe</option>
-                        <option value="admins">Administradores</option>
+                    <label class="text-[10px] font-bold text-neutral-450 uppercase tracking-widest">Público-Alvo</label>
+                    <select name="target_audience" class="w-full px-4 py-3 bg-[#121316] border border-neutral-800 rounded-[2px] focus:border-[#2E7EED] outline-none transition-all text-sm text-neutral-300 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5%22%20stroke%3D%22%23727785%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]" id="avisoAudience">
+                        <option value="all" class="bg-[#18191D]">Todos</option>
+                        <option value="team" class="bg-[#18191D]">Equipe</option>
+                        <option value="admins" class="bg-[#18191D]">Administradores</option>
                     </select>
                 </div>
                 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Expiração (Opcional)</label>
-                    <input type="date" name="expires_at" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-1 focus:ring-[#2E7EED] focus:border-[#2E7EED] outline-none transition-all text-sm text-gray-800" id="avisoExpires">
+                    <label class="text-[10px] font-bold text-neutral-450 uppercase tracking-widest">Expiração (Opcional)</label>
+                    <input type="date" name="expires_at" class="w-full px-4 py-3 bg-[#121316] border border-neutral-800 rounded-[2px] focus:border-[#2E7EED] outline-none transition-all text-sm text-neutral-200" id="avisoExpires">
                 </div>
             </div>
             
-            <div class="p-6 border-t border-gray-50 flex gap-3">
-                <button type="button" class="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-full font-bold text-sm text-gray-700 transition-colors" onclick="closeDrawerForce()">Cancelar</button>
-                <button type="submit" class="flex-1 py-3 px-4 bg-[#2E7EED] text-white rounded-full font-bold text-sm shadow-md hover:bg-[#1A6FD6] transition-colors active:scale-95 transform">Salvar</button>
+            <div class="p-6 border-t border-neutral-850 flex gap-3">
+                <button type="button" class="flex-1 py-3 px-4 bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 rounded-[2px] font-bold text-sm text-neutral-400 transition-colors" onclick="closeDrawerForce()">Cancelar</button>
+                <button type="submit" class="flex-1 py-3 px-4 bg-[#2E7EED] hover:bg-[#1A6FD6] text-white rounded-[2px] font-bold text-sm shadow-sm transition-colors active:scale-[0.97] transform will-change-transform">Salvar</button>
             </div>
         </form>
     </div>
@@ -530,8 +535,13 @@ foreach ($avisos as &$aviso) {
     // Toggle Filter Dropdown
     function toggleFilterDropdown() {
         const dropdown = document.getElementById('filterDropdown');
+        const arrow = document.getElementById('filterArrow');
         dropdown.classList.toggle('hidden');
         dropdown.classList.toggle('flex');
+        
+        if (arrow) {
+            arrow.classList.toggle('rotate-180');
+        }
     }
 
     // Toggle Admin Menu
@@ -551,9 +561,11 @@ foreach ($avisos as &$aviso) {
         // Close filter dropdown
         if (!e.target.closest('#filterButton') && !e.target.closest('#filterDropdown')) {
             const filterDropdown = document.getElementById('filterDropdown');
+            const arrow = document.getElementById('filterArrow');
             if (filterDropdown && !filterDropdown.classList.contains('hidden')) {
                 filterDropdown.classList.add('hidden');
                 filterDropdown.classList.remove('flex');
+                if (arrow) arrow.classList.remove('rotate-180');
             }
         }
         
@@ -563,7 +575,7 @@ foreach ($avisos as &$aviso) {
         }
     });
 
-    // Elegant bottom-sheet Drawer functions
+    // Elegant bottom-sheet Drawer functions (Spring dynamic feel)
     function openCreateDrawer() {
         document.getElementById('modalTitle').textContent = 'Novo Aviso';
         document.getElementById('formAction').value = 'create';
@@ -601,6 +613,12 @@ foreach ($avisos as &$aviso) {
         
         drawer.classList.remove('translate-y-full');
         drawer.classList.add('translate-y-0');
+        
+        setTimeout(() => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }, 50);
     }
 
     function closeDrawer(event) {
@@ -624,7 +642,13 @@ foreach ($avisos as &$aviso) {
             document.body.style.overflow = '';
         }, 300);
     }
+    
+    // Incializar ícones
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    });
 </script>
 
 <?php renderAppFooter(); ?>
-

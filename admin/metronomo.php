@@ -1,6 +1,7 @@
-﻿<?php
+<?php
 // admin/metronomo.php — Metrônomo Pro
 require_once '../src/config/db.php';
+require_once '../src/helpers/auth.php';
 require_once '../src/layout/layout.php';
 checkLogin();
 

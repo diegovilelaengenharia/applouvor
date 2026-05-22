@@ -21,7 +21,9 @@ function toggleProfileDropdown(event, dropdownId = 'headerProfileDropdown') {
     if (dropdown.classList.contains('active')) {
         setTimeout(() => {
             document.addEventListener('click', function closeProfileDropdown(e) {
-                if (!dropdown.contains(e.target) && !e.target.closest('.profile-avatar-btn')) {
+                if (!dropdown.contains(e.target) && 
+                    !e.target.closest('.profile-avatar-btn') && 
+                    !e.target.closest('.user-profile-pill')) {
                     dropdown.classList.remove('active');
                     document.removeEventListener('click', closeProfileDropdown);
                 }

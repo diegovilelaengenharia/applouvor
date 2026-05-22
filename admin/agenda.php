@@ -110,117 +110,154 @@ renderAppHeader('Agenda');
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 space-y-6">
     
-    <!-- Hero Section (Bento Card Destaque) -->
-    <div class="bg-white dark:bg-[#1A1B1F] border border-gray-100 dark:border-white/5 rounded-3xl p-6 sm:p-8 text-center shadow-sm relative overflow-hidden group reveal-item">
-        <div class="absolute -right-12 -top-12 w-48 h-48 bg-[#2E7EED]/5 dark:bg-[#2E7EED]/10 rounded-full blur-xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
-        <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-[#FFC107]/5 dark:bg-[#FFC107]/10 rounded-full blur-xl pointer-events-none"></div>
+    <!-- Hero Section (Bento Card Destaque - Sacred Minimalist) -->
+    <div class="bg-white dark:bg-[#18191D] border border-gray-100 dark:border-[#26272B] rounded-[2px] p-6 sm:p-8 text-center shadow-sm relative overflow-hidden group reveal-item">
+        <div class="absolute -right-12 -top-12 w-48 h-48 bg-[#2E7EED]/5 rounded-none blur-xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
         
-        <div class="bg-gradient-to-br from-[#2E7EED] to-[#1A5BB8] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg border border-[#2E7EED]/20 group-hover:rotate-6 transition-transform duration-300">
-            <i data-lucide="calendar" class="text-white w-8 h-8"></i>
+        <div class="bg-[#121316] border border-gray-100 dark:border-[#26272B] w-14 h-14 rounded-[2px] flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:border-[#2E7EED] transition-colors duration-300">
+            <i data-lucide="calendar" class="text-[#2E7EED] w-6 h-6"></i>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-black text-gray-800 dark:text-white font-outfit tracking-tight">Agenda do Ministério 📅</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto mt-2 font-medium">
-            Acompanhe os ensaios, cultos, escalas e eventos do nosso ministério de louvor. Organize seu tempo para adorar ao Senhor!
+        <h2 class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white font-outfit tracking-tight uppercase">Agenda do Ministério</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mt-2 font-medium leading-relaxed">
+            Acompanhe ensaios, cultos, escalas e eventos do nosso ministério de louvor. Organize seu tempo para servir ao Senhor com excelência.
         </p>
     </div>
     
-    <!-- CONTROLES DA AGENDA (Bento Box Horizontal) -->
-    <div class="bg-white dark:bg-[#1A1B1F] border border-gray-100 dark:border-white/5 rounded-3xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm reveal-item reveal-stagger-1">
+    <!-- CONTROLES DA AGENDA (Bento Box Horizontal - Sacred Minimalist) -->
+    <div class="bg-white dark:bg-[#18191D] border border-gray-100 dark:border-[#26272B] rounded-[2px] p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm reveal-item">
         
         <!-- Navegação de Período -->
-        <div class="flex items-center gap-2 bg-gray-50 dark:bg-[#121316] rounded-2xl p-1.5 border border-gray-100 dark:border-white/5 shadow-sm justify-between sm:justify-start w-full sm:w-auto">
-            <button class="p-2.5 rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#1A1B1F] hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer interactive-scale" onclick="navigate(-1)" title="Anterior">
-                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        <div class="flex items-center gap-1 bg-gray-50 dark:bg-[#121316] rounded-[2px] p-1 border border-gray-100 dark:border-[#26272B] shadow-inner justify-between sm:justify-start w-full sm:w-auto">
+            <button class="p-2 rounded-[2px] text-gray-500 dark:text-gray-400 hover:text-[#2E7EED] dark:hover:text-white hover:bg-white dark:hover:bg-[#18191D] border border-transparent hover:border-gray-100 dark:hover:border-[#26272B] transition-all duration-200 active:scale-[0.97] will-change-transform cursor-pointer" onclick="navigate(-1)" title="Anterior">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
             </button>
-            <div class="text-sm sm:text-base font-extrabold text-gray-800 dark:text-white font-outfit px-4 min-w-[140px] text-center">
+            <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-gray-800 dark:text-white font-outfit px-4 min-w-[140px] text-center">
                 <?= $displayTitle ?>
             </div>
-            <button class="p-2.5 rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#1A1B1F] hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer interactive-scale" onclick="navigate(1)" title="Próximo">
-                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            <button class="p-2 rounded-[2px] text-gray-500 dark:text-gray-400 hover:text-[#2E7EED] dark:hover:text-white hover:bg-white dark:hover:bg-[#18191D] border border-transparent hover:border-gray-100 dark:hover:border-[#26272B] transition-all duration-200 active:scale-[0.97] will-change-transform cursor-pointer" onclick="navigate(1)" title="Próximo">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
             </button>
         </div>
         
         <!-- Alternador de Visualização -->
-        <div class="flex items-center bg-gray-50 dark:bg-[#121316] border border-gray-100 dark:border-white/5 p-1.5 rounded-2xl shadow-sm justify-center w-full sm:w-auto">
-            <button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer interactive-scale <?= $viewMode === 'month' ? 'bg-[#2E7EED] text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#1A1B1F] hover:shadow-sm' ?>" onclick="switchView('month')">
-                <i data-lucide="calendar" class="w-4 h-4"></i> Mês
+        <div class="flex items-center bg-gray-50 dark:bg-[#121316] border border-gray-100 dark:border-[#26272B] p-1 rounded-[2px] shadow-inner justify-center w-full sm:w-auto">
+            <button class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer active:scale-[0.97] will-change-transform <?= $viewMode === 'month' ? 'bg-[#2E7EED] text-white shadow-sm border border-[#2E7EED]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#18191D] border border-transparent hover:border-gray-100 dark:hover:border-[#26272B]' ?>" onclick="switchView('month')">
+                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Mês
             </button>
-            <button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer interactive-scale <?= $viewMode === 'week' ? 'bg-[#2E7EED] text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#1A1B1F] hover:shadow-sm' ?>" onclick="switchView('week')">
-                <i data-lucide="columns" class="w-4 h-4"></i> Semana
+            <button class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer active:scale-[0.97] will-change-transform <?= $viewMode === 'week' ? 'bg-[#2E7EED] text-white shadow-sm border border-[#2E7EED]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#18191D] border border-transparent hover:border-gray-100 dark:hover:border-[#26272B]' ?>" onclick="switchView('week')">
+                <i data-lucide="columns" class="w-3.5 h-3.5"></i> Semana
             </button>
-            <button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer interactive-scale <?= $viewMode === 'list' ? 'bg-[#2E7EED] text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#1A1B1F] hover:shadow-sm' ?>" onclick="switchView('list')">
-                <i data-lucide="list" class="w-4 h-4"></i> Lista
+            <button class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-[2px] text-[10px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer active:scale-[0.97] will-change-transform <?= $viewMode === 'list' ? 'bg-[#2E7EED] text-white shadow-sm border border-[#2E7EED]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-white dark:hover:bg-[#18191D] border border-transparent hover:border-gray-100 dark:hover:border-[#26272B]' ?>" onclick="switchView('list')">
+                <i data-lucide="list" class="w-3.5 h-3.5"></i> Lista
             </button>
         </div>
     </div>
 
-    <!-- MODO LISTA -->
+    <!-- MODO LISTA / LINHA DO TEMPO CONTÍNUA ASSIMÉTRICA -->
     <?php if ($viewMode === 'list'): ?>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <?php 
-            // mescla e ordena todos os eventos para a listagem
-            $allItems = [];
-            foreach ($eventsByDay as $day => $evts) {
-                foreach ($evts as $e) {
-                    $allItems[] = $e;
-                }
+        <?php 
+        // Mescla e ordena todos os eventos para a listagem
+        $allItems = [];
+        foreach ($eventsByDay as $day => $evts) {
+            foreach ($evts as $e) {
+                $allItems[] = $e;
             }
-            usort($allItems, function($a, $b) {
-                return strtotime($a['start_datetime']) - strtotime($b['start_datetime']);
-            });
-            
-            if (empty($allItems)): ?>
-                <div class="col-span-full bg-white dark:bg-[#1A1B1F] border border-gray-100 dark:border-white/5 rounded-3xl p-12 text-center text-gray-400 dark:text-gray-500 font-bold reveal-item">
-                    <i data-lucide="calendar-off" class="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-600"></i>
-                    Nenhum evento neste período.
-                </div>
-            <?php else: 
+        }
+        usort($allItems, function($a, $b) {
+            return strtotime($a['start_datetime']) - strtotime($b['start_datetime']);
+        });
+        
+        if (empty($allItems)): ?>
+            <div class="bg-white dark:bg-[#18191D] border border-gray-100 dark:border-[#26272B] rounded-[2px] p-12 text-center text-gray-400 dark:text-gray-500 font-bold reveal-item">
+                <i data-lucide="calendar-off" class="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-gray-600"></i>
+                Nenhum evento registrado para este período.
+            </div>
+        <?php else: ?>
+            <!-- Eixo Vertical da Linha do Tempo -->
+            <div class="relative border-l border-gray-100 dark:border-[#26272B] ml-3.5 sm:ml-7 my-6 pl-6 sm:pl-10 space-y-6">
+                <?php 
                 $index = 0;
                 foreach ($allItems as $item): 
                     $isSchedule = $item['source'] === 'schedule';
-                    $colorClass = $isSchedule ? 'border-l-[#2E7EED]' : 'border-l-[#FFC107]';
-                    $badgeBg = $isSchedule ? 'bg-[#2E7EED]/10 text-[#2E7EED] border border-[#2E7EED]/20' : 'bg-[#FFC107]/10 text-amber-600 dark:text-[#FFC107] border border-[#FFC107]/20';
+                    $badgeBg = $isSchedule 
+                        ? 'bg-[#2E7EED]/10 text-[#2E7EED] border border-[#2E7EED]/20' 
+                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20';
                     $url = $isSchedule ? 'escala_detalhe.php?id='.$item['id'] : 'evento_detalhe.php?id='.$item['id'];
                     $index++;
-            ?>
-                <a href="<?= $url ?>" class="bg-white dark:bg-[#1A1B1F] border border-gray-100 dark:border-[#2C2C2E] border-l-4 <?= $colorClass ?> rounded-2xl p-4 flex items-center gap-4 transition-all duration-300 hover:shadow-lg dark:hover:shadow-black/30 hover:scale-[1.01] group reveal-item interactive-scale" style="animation-delay: <?= $index * 0.05 ?>s">
-                    <div class="bg-gray-50 dark:bg-[#121316] border border-gray-100 dark:border-white/5 rounded-xl p-2.5 text-center min-w-[55px] flex flex-col justify-center shadow-sm">
-                        <div class="text-lg font-black text-gray-800 dark:text-white font-outfit leading-none"><?= date('d', strtotime($item['start_datetime'])) ?></div>
-                        <div class="text-[9px] font-extrabold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1 leading-none"><?= substr($monthNames[(int)date('m', strtotime($item['start_datetime']))], 0, 3) ?></div>
+                    $itemDate = strtotime($item['start_datetime']);
+                ?>
+                    <div class="relative group reveal-item" style="animation-delay: <?= $index * 0.05 ?>s">
+                        <!-- Ponto Sharp no Eixo (Sacred Style) -->
+                        <div class="absolute -left-[31px] sm:-left-[47px] top-4 w-2 h-2 bg-gray-300 dark:bg-[#26272B] group-hover:bg-[#2E7EED] border-2 border-white dark:border-[#121316] rounded-none transition-all duration-300 group-hover:scale-125"></div>
+                        
+                        <!-- Bento Card de Conteúdo -->
+                        <a href="<?= $url ?>" class="block bg-white dark:bg-[#18191D] border border-gray-100 dark:border-[#26272B] rounded-[2px] p-4.5 hover:border-[#2E7EED]/50 transition-all duration-200 active:scale-[0.97] will-change-transform shadow-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex items-start gap-4">
+                                    <!-- Data Brutalista -->
+                                    <div class="bg-gray-50 dark:bg-[#121316] border border-gray-100 dark:border-[#26272B] rounded-[2px] p-2 text-center min-w-[55px] flex flex-col justify-center shadow-inner">
+                                        <div class="text-base font-black text-gray-800 dark:text-white font-outfit leading-none"><?= date('d', $itemDate) ?></div>
+                                        <div class="text-[9px] font-extrabold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1 leading-none"><?= substr($monthNames[(int)date('m', $itemDate)], 0, 3) ?></div>
+                                    </div>
+                                    
+                                    <!-- Informações Textuais -->
+                                    <div>
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span class="text-[8px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-[2px] <?= $badgeBg ?>">
+                                                <?= $isSchedule ? 'Escala' : 'Evento' ?>
+                                            </span>
+                                            <?php if ($item['is_urgent'] ?? false): ?>
+                                                <span class="text-[8px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-[2px] bg-red-950/20 text-red-500 border border-red-900/30">
+                                                    🔥 Urgente
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <h4 class="text-sm sm:text-base font-extrabold text-gray-800 dark:text-white font-outfit tracking-tight mt-1.5 group-hover:text-[#2E7EED] transition-colors">
+                                            <?= htmlspecialchars($item['title']) ?>
+                                        </h4>
+                                        <p class="text-xs text-gray-400 dark:text-gray-500 font-medium mt-1">
+                                            <?= htmlspecialchars($item['description'] ?? 'Clique para conferir os detalhes desta atividade.') ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Meta Informações Assimétricas -->
+                                <div class="flex md:flex-col items-center md:items-end gap-3 md:gap-1.5 text-xs text-gray-400 dark:text-gray-500 font-bold border-t md:border-t-0 border-gray-100 dark:border-[#26272B] pt-3 md:pt-0">
+                                    <span class="flex items-center gap-1.5">
+                                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                                        <?= date('H:i', $itemDate) ?>
+                                    </span>
+                                    <?php if(!empty($item['participant_count'])): ?>
+                                        <span class="flex items-center gap-1.5">
+                                            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                                            <?= $item['participant_count'] ?> <?= $isSchedule ? 'escalados' : 'participantes' ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="text-sm font-extrabold text-gray-800 dark:text-white font-outfit truncate group-hover:text-[#2E7EED] transition-colors"><?= htmlspecialchars($item['title']) ?></div>
-                        <div class="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500 font-bold mt-1">
-                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"></i> <?= date('H:i', strtotime($item['start_datetime'])) ?></span>
-                            <?php if(!empty($item['participant_count'])): ?>
-                                <span class="flex items-center gap-1"><i data-lucide="users" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"></i> <?= $item['participant_count'] ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <span class="text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full <?= $badgeBg ?> flex-shrink-0">
-                        <?= $isSchedule ? 'Escala' : 'Evento' ?>
-                    </span>
-                </a>
-            <?php endforeach; endif; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     
     <!-- MODO CALENDÁRIO / SEMANA GRID -->
     <?php else: ?>
-        <div class="bg-white dark:bg-[#1A1B1F] border border-gray-100 dark:border-white/5 rounded-3xl p-4 sm:p-5 shadow-sm overflow-hidden reveal-item reveal-stagger-2">
+        <div class="bg-white dark:bg-[#18191D] border border-gray-100 dark:border-[#26272B] rounded-[2px] p-4 shadow-sm overflow-hidden reveal-item">
             
-            <!-- Dias da Semana Header -->
-            <div class="grid grid-cols-7 text-center border-b border-gray-100 dark:border-[#2C2C2E] pb-3 mb-3">
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#FFC107]">Dom</div>
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-gray-400 dark:text-gray-500">Seg</div>
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-gray-400 dark:text-gray-500">Ter</div>
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-gray-400 dark:text-gray-500">Qua</div>
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-gray-400 dark:text-gray-500">Qui</div>
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-gray-400 dark:text-gray-500">Sex</div>
-                <div class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-gray-400 dark:text-gray-500">Sáb</div>
+            <!-- Dias da Semana Header (Brutalista Sharp) -->
+            <div class="grid grid-cols-7 text-center border-b border-gray-100 dark:border-[#26272B] pb-3 mb-3">
+                <div class="text-[9px] font-black uppercase tracking-widest text-[#2E7EED]">Dom</div>
+                <div class="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Seg</div>
+                <div class="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Ter</div>
+                <div class="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Qua</div>
+                <div class="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Qui</div>
+                <div class="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Sex</div>
+                <div class="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Sáb</div>
             </div>
             
-            <!-- Corpo do Calendário -->
-            <div class="grid grid-cols-7 gap-2">
+            <!-- Corpo do Calendário (Grid afiado) -->
+            <div class="grid grid-cols-7 gap-1.5">
                 <?php
                 if ($viewMode === 'month') {
                     $firstDayMonth = date('w', strtotime($startDate));
@@ -228,7 +265,7 @@ renderAppHeader('Agenda');
                     
                     // Dias do mês anterior (padding)
                     for($i=0; $i < $firstDayMonth; $i++) {
-                        echo '<div class="aspect-square bg-gray-50/20 dark:bg-[#121316]/20 rounded-2xl border border-gray-100/10 dark:border-white/2 opacity-30"></div>';
+                        echo '<div class="aspect-square bg-gray-50/20 dark:bg-[#121316]/10 rounded-[2px] border border-gray-100/10 dark:border-[#26272B]/20 opacity-25"></div>';
                     }
                     
                     // Dias do mês atual
@@ -237,24 +274,30 @@ renderAppHeader('Agenda');
                         $isToday = ($currentDate === date('Y-m-d'));
                         $dayEvents = $eventsByDay[$currentDate] ?? [];
                         
-                        $todayClass = $isToday ? 'border-[#2E7EED] bg-[#2E7EED]/5 dark:bg-[#2E7EED]/10 ring-1 ring-[#2E7EED]' : 'border-gray-100 dark:border-[#2C2C2E] bg-white dark:bg-[#1A1B1F]';
+                        $todayClass = $isToday 
+                            ? 'border-[#2E7EED] bg-[#2E7EED]/5 dark:bg-[#2E7EED]/5 ring-1 ring-[#2E7EED]' 
+                            : 'border-gray-100 dark:border-[#26272B] bg-white dark:bg-[#18191D]';
                         
-                        echo '<div class="min-h-[75px] sm:min-h-[105px] border rounded-2xl p-1.5 sm:p-2 flex flex-col justify-between transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#121316] hover:shadow-sm '.$todayClass.'">';
+                        echo '<div class="min-h-[75px] sm:min-h-[105px] border rounded-[2px] p-1.5 flex flex-col justify-between transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#121316] hover:border-gray-300 dark:hover:border-[#26272B] '.$todayClass.'">';
                         
                         // Número do dia
-                        $numColor = $isToday ? 'text-white font-black bg-[#2E7EED] shadow-sm shadow-[#2E7EED]/20' : 'text-gray-800 dark:text-gray-200 font-extrabold';
-                        echo '<div class="text-xs sm:text-sm '.$numColor.' w-6 h-6 rounded-full flex items-center justify-center font-outfit">'.$d.'</div>';
+                        $numColor = $isToday 
+                            ? 'text-white font-black bg-[#2E7EED] shadow-sm' 
+                            : 'text-gray-800 dark:text-gray-200 font-extrabold';
+                        echo '<div class="text-[10px] sm:text-xs '.$numColor.' w-5 h-5 rounded-none flex items-center justify-center font-outfit">'.$d.'</div>';
                         
                         // Lista de Chips de Eventos
                         echo '<div class="space-y-1 mt-1 sm:mt-2 overflow-y-auto max-h-[48px] sm:max-h-[70px] pr-0.5 custom-scrollbar">';
                         foreach($dayEvents as $evt) {
                             $isSchedule = $evt['source'] === 'schedule';
-                            $chipBg = $isSchedule ? 'bg-[#2E7EED]/10 text-[#2E7EED] border-[#2E7EED]/15 hover:bg-[#2E7EED]/20 dark:bg-[#2E7EED]/15 dark:border-[#2E7EED]/20' : 'bg-[#FFC107]/10 text-amber-600 dark:text-[#FFC107] border-[#FFC107]/15 hover:bg-[#FFC107]/20 dark:bg-[#FFC107]/15 dark:border-[#FFC107]/20';
+                            $chipBg = $isSchedule 
+                                ? 'bg-[#2E7EED]/10 text-[#2E7EED] border-[#2E7EED]/15 hover:bg-[#2E7EED]/20 dark:border-[#2E7EED]/20' 
+                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/15 hover:bg-amber-500/20 dark:border-amber-500/20';
                             $iconName = $isSchedule ? 'music' : 'calendar';
                             $url = $isSchedule ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-bold border truncate transition-colors cursor-pointer $chipBg' title=\"".htmlspecialchars($evt['title'])."\">";
-                            echo "<i data-lucide='$iconName' class='w-2.5 h-2.5 flex-shrink-0'></i>";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip flex items-center gap-1 px-1 py-0.5 rounded-[2px] text-[8px] font-bold border truncate transition-colors cursor-pointer $chipBg' title=\"".htmlspecialchars($evt['title'])."\">";
+                            echo "<i data-lucide='$iconName' class='w-2 h-2 flex-shrink-0'></i>";
                             echo "<span class='truncate leading-none'>".htmlspecialchars($evt['title'])."</span>";
                             echo "</div>";
                         }
@@ -268,7 +311,7 @@ renderAppHeader('Agenda');
                     $remaining = 7 - ($totalCells % 7);
                     if($remaining < 7) {
                         for($i=0; $i < $remaining; $i++){
-                            echo '<div class="aspect-square bg-gray-50/20 dark:bg-[#121316]/20 rounded-2xl border border-gray-100/10 dark:border-white/2 opacity-30"></div>';
+                            echo '<div class="aspect-square bg-gray-50/20 dark:bg-[#121316]/10 rounded-[2px] border border-gray-100/10 dark:border-[#26272B]/20 opacity-25"></div>';
                         }
                     }
                 } 
@@ -284,26 +327,32 @@ renderAppHeader('Agenda');
                         $isToday = ($dStr === date('Y-m-d'));
                         $dayEvents = $eventsByDay[$dStr] ?? [];
                         
-                        $todayClass = $isToday ? 'border-[#2E7EED] bg-[#2E7EED]/5 dark:bg-[#2E7EED]/10 ring-1 ring-[#2E7EED]' : 'border-gray-100 dark:border-[#2C2C2E] bg-white dark:bg-[#1A1B1F]';
+                        $todayClass = $isToday 
+                            ? 'border-[#2E7EED] bg-[#2E7EED]/5 dark:bg-[#2E7EED]/5 ring-1 ring-[#2E7EED]' 
+                            : 'border-gray-100 dark:border-[#26272B] bg-white dark:bg-[#18191D]';
                         
-                        echo '<div class="min-h-[140px] border rounded-2xl p-2 flex flex-col justify-between transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#121316] hover:shadow-sm '.$todayClass.'">';
+                        echo '<div class="min-h-[140px] border rounded-[2px] p-2 flex flex-col justify-between transition-all duration-200 hover:bg-gray-50 dark:hover:bg-[#121316] '.$todayClass.'">';
                         
-                        $numColor = $isToday ? 'text-white font-black bg-[#2E7EED] shadow-sm shadow-[#2E7EED]/20' : 'text-gray-800 dark:text-gray-200 font-extrabold';
-                        echo '<div class="text-sm '.$numColor.' w-7 h-7 rounded-full flex items-center justify-center font-outfit">'.$dayNum.'</div>';
+                        $numColor = $isToday 
+                            ? 'text-white font-black bg-[#2E7EED] shadow-sm' 
+                            : 'text-gray-800 dark:text-gray-200 font-extrabold';
+                        echo '<div class="text-xs '.$numColor.' w-6 h-6 rounded-none flex items-center justify-center font-outfit">'.$dayNum.'</div>';
                         
                         echo '<div class="space-y-1.5 mt-2 overflow-y-auto max-h-[100px] custom-scrollbar">';
                         foreach($dayEvents as $evt) {
                             $isSchedule = $evt['source'] === 'schedule';
-                            $chipBg = $isSchedule ? 'bg-[#2E7EED]/10 text-[#2E7EED] border-[#2E7EED]/15 hover:bg-[#2E7EED]/20 dark:bg-[#2E7EED]/15 dark:border-[#2E7EED]/20' : 'bg-[#FFC107]/10 text-amber-600 dark:text-[#FFC107] border-[#FFC107]/15 hover:bg-[#FFC107]/20 dark:bg-[#FFC107]/15 dark:border-[#FFC107]/20';
+                            $chipBg = $isSchedule 
+                                ? 'bg-[#2E7EED]/10 text-[#2E7EED] border-[#2E7EED]/15 hover:bg-[#2E7EED]/20 dark:border-[#2E7EED]/20' 
+                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/15 hover:bg-amber-500/20 dark:border-amber-500/20';
                             $iconName = $isSchedule ? 'music' : 'calendar';
                             $url = $isSchedule ? 'escala_detalhe.php?id='.$evt['id'] : 'evento_detalhe.php?id='.$evt['id'];
                             $startTime = date('H:i', strtotime($evt['start_datetime']));
                             
-                            echo "<div onclick=\"window.location='$url'\" class='event-chip flex flex-col gap-0.5 p-1.5 rounded-xl text-[9px] font-bold border transition-colors cursor-pointer $chipBg' title=\"".htmlspecialchars($evt['title'])."\">";
+                            echo "<div onclick=\"window.location='$url'\" class='event-chip flex flex-col gap-0.5 p-1.5 rounded-[2px] text-[8px] font-bold border transition-colors cursor-pointer $chipBg' title=\"".htmlspecialchars($evt['title'])."\">";
                             echo "<div class='text-[8px] font-extrabold opacity-75'>$startTime</div>";
                             echo "<div class='flex items-center gap-1 mt-0.5'>";
-                            echo "<i data-lucide='$iconName' class='w-2.5 h-2.5 flex-shrink-0'></i>";
-                            echo "<span class='truncate leading-none'>".htmlspecialchars($evt['title'])."</span>";
+                            echo "<i data-lucide='$iconName' class='w-2 h-2 flex-shrink-0'></i>";
+                            echo "<span class='truncate leading-none text-[8px]'>".htmlspecialchars($evt['title'])."</span>";
                             echo "</div>";
                             echo "</div>";
                         }
@@ -320,10 +369,10 @@ renderAppHeader('Agenda');
     <?php endif; ?>
 </div>
 
-<!-- BOTÃO ADICIONAR (FAB Premium) -->
+<!-- BOTÃO ADICIONAR (FAB Premium - Sacred Minimalist) -->
 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-<a href="evento_adicionar.php" class="fixed bottom-8 right-8 z-40 bg-gradient-to-r from-[#2E7EED] to-[#1A5BB8] hover:from-[#1A5BB8] hover:to-[#12448A] text-white rounded-full p-4.5 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center border border-white/10 group cursor-pointer interactive-scale animate-bounce" title="Adicionar Evento">
-    <i data-lucide="plus" class="w-6 h-6 group-hover:rotate-90 transition-transform duration-300"></i>
+<a href="evento_adicionar.php" class="fixed bottom-8 right-8 z-40 bg-[#2E7EED] hover:bg-[#1A6FD6] text-white rounded-[2px] p-4 shadow-lg transition-all duration-300 hover:scale-105 active:scale-[0.97] will-change-transform flex items-center justify-center border border-white/10 group cursor-pointer" title="Adicionar Evento">
+    <i data-lucide="plus" class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300"></i>
 </a>
 <?php endif; ?>
 

@@ -4,6 +4,23 @@
    Estilo: Tab bar moderna, iOS/Android feel
    ========================================================================== */
 
+/* ==========================================================================
+   REGRA DE VISIBILIDADE (markup atual = <nav id="bottom-nav">)
+   Desktop (>=1025px): SOMENTE sidebar, sem barra inferior.
+   App/mobile/tablet (<=1024px): barra inferior visível.
+   CSS real (não utilitário Tailwind do CDN) para não depender do compilador
+   assíncrono e evitar a barra "piscando" no desktop. Especificidade de #id
+   vence as classes utilitárias (.flex / .md:hidden) sem !important.
+   Breakpoint 1024px = mesmo da sidebar (sidebar.css). ========================= */
+#bottom-nav {
+    display: none;
+}
+@media (max-width: 1024px) {
+    #bottom-nav {
+        display: flex;
+    }
+}
+
 /* ===== BOTTOM NAV CONTAINER ===== */
 .bottom-nav {
     display: none;

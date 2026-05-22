@@ -28,6 +28,7 @@
    4. COMPONENTS (Reutilizáveis)
    ===================== */
 @import url('components/header-complete.css');
+@import url('components/page-sub-header.css');
 @import url('components/buttons.css');
 @import url('components/cards.css');
 @import url('components/notifications.css');
@@ -42,6 +43,8 @@
 @import url('components/tables.css');
 @import url('components/layout.css');
 @import url('components/action-buttons.css');
+@import url('components/pib-cards.css');
+@import url('components/dashboard-hero.css');
 
 /* =====================
    5. PAGES (Última prioridade — mais específico)

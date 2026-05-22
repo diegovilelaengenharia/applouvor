@@ -150,96 +150,96 @@
        ===================================================================== */
 
     /* Primary */
-    --primary: var(--blue-500);
-    --primary-hover: var(--blue-600);
-    --primary-active: var(--blue-700);
-    --primary-light: var(--blue-100);
-    --primary-dark: var(--blue-700);
-    --primary-subtle: var(--blue-50);
-    --primary-gradient: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-    --primary-rgb: 59, 130, 246;
+    --primary: var(--primary, #2E7EED);
+    --primary-hover: var(--primary-container, #1b6fd6);
+    --primary-active: var(--primary-container, #1872e0);
+    --primary-light: var(--outline-variant, #c1c6d6);
+    --primary-dark: var(--primary-container, #1872e0);
+    --primary-subtle: var(--surface-container-low, #f3f3f3);
+    --primary-gradient: linear-gradient(135deg, var(--primary, #2E7EED) 0%, var(--primary-container, #1872e0) 100%);
+    --primary-rgb: 46, 126, 237;
 
     /* Primary numbered aliases */
-    --primary-100: var(--blue-100);
-    --primary-300: var(--blue-300);
-    --primary-400: var(--blue-400);
-    --primary-500: var(--blue-500);
-    --primary-600: var(--blue-600);
-    --primary-700: var(--blue-700);
-    --primary-900: var(--blue-900);
+    --primary-100: var(--surface-container-low, #f3f3f3);
+    --primary-300: var(--outline-variant, #c1c6d6);
+    --primary-400: var(--outline, #727785);
+    --primary-500: var(--primary, #2E7EED);
+    --primary-600: var(--primary-container, #1872e0);
+    --primary-700: var(--primary-container, #1b6fd6);
+    --primary-900: var(--deep-navy, #1A1B1F);
 
     /* Legacy color aliases (compatibility) */
-    --primary-blue: var(--blue-500);
-    --primary-blue-light: var(--blue-400);
-    --primary-green: var(--blue-500);
-    --primary-green-dark: var(--blue-700);
-    --primary-gray: var(--slate-500);
-    --primary-orange: var(--orange-500);
-    --accent-interactive: var(--blue-500);
+    --primary-blue: var(--primary, #2E7EED);
+    --primary-blue-light: var(--outline-variant, #c1c6d6);
+    --primary-green: var(--primary, #2E7EED);
+    --primary-green-dark: var(--primary-container, #1872e0);
+    --primary-gray: var(--outline, #727785);
+    --primary-orange: var(--altar-gold, #FFC107);
+    --accent-interactive: var(--primary, #2E7EED);
 
     /* Secondary / Accent */
     --accent-blue: var(--cyan-500);
     --accent-teal: var(--teal-500);
-    --accent-orange: var(--orange-500);
+    --accent-orange: var(--altar-gold, #FFC107);
     --accent-teal: var(--teal-500);
 
     /* Backgrounds */
-    --bg-body: var(--slate-50);
-    --bg-app: var(--slate-50);
-    --bg-surface: #ffffff;
-    --bg-surface-alt: var(--slate-100);
-    --bg-surface-active: var(--slate-100);
-    --bg-surface-hover: var(--slate-50);
-    --bg-glass: rgba(255, 255, 255, 0.8);
+    --bg-body: var(--background, #f9f9f9);
+    --bg-app: var(--background, #f9f9f9);
+    --bg-surface: var(--surface-container-lowest, #ffffff);
+    --bg-surface-alt: var(--surface-container-low, #f3f3f3);
+    --bg-surface-active: var(--surface-container, #eeeeee);
+    --bg-surface-hover: var(--surface-container-low, #f3f3f3);
+    --bg-glass: rgba(249, 249, 249, 0.85);
 
     /* Legacy background aliases */
-    --bg-primary: #ffffff;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: var(--slate-100);
+    --bg-primary: var(--surface-container-lowest, #ffffff);
+    --bg-secondary: var(--surface-container-lowest, #ffffff);
+    --bg-tertiary: var(--surface-container-low, #f3f3f3);
 
     /* Text */
-    --text-primary: var(--slate-900);
-    --text-main: var(--slate-900);
-    --text-secondary: var(--slate-600);
-    --text-tertiary: var(--slate-500);
-    --text-muted: var(--slate-400);
-    --text-light: var(--slate-400);
-    --text-body: var(--slate-700);
+    --text-primary: var(--on-surface, #1a1c1c);
+    --text-main: var(--on-surface, #1a1c1c);
+    --text-secondary: var(--on-surface-variant, #414753);
+    --text-tertiary: var(--on-surface-variant, #414753);
+    --text-muted: var(--outline, #727785);
+    --text-light: var(--outline-variant, #c1c6d6);
+    --text-body: var(--on-surface, #1a1c1c);
 
     /* Borders */
-    --border-subtle: var(--slate-200);
-    --border-medium: var(--slate-300);
-    --border-strong: var(--slate-400);
-    --border-light: var(--slate-200);
-    --border-color: var(--slate-200);
+    --border-subtle: var(--outline-variant, #c1c6d6);
+    --border-medium: var(--outline, #727785);
+    --border-strong: var(--outline, #727785);
+    --border-light: var(--outline-variant, #c1c6d6);
+    --border-color: var(--outline-variant, #c1c6d6);
 
     /* Category Colors */
-    --color-gestao: var(--blue-500);
-    --color-gestao-light: var(--blue-100);
+    --color-gestao: var(--primary, #2E7EED);
+    --color-gestao-light: var(--outline-variant, #c1c6d6);
     --color-espiritual: var(--cyan-500);
     --color-espiritual-light: var(--cyan-100);
-    --color-comunicacao: var(--yellow-500);
+    --color-comunicacao: var(--altar-gold, #FFC107);
     --color-comunicacao-light: var(--yellow-100);
 
     /* Color-* aliases (from variables.css) */
-    --color-primary: var(--blue-500);
-    --color-primary-dark: var(--blue-700);
-    --color-primary-light: var(--blue-100);
-    --color-primary-bg: var(--blue-50);
-    --color-primary-text: var(--blue-700);
-    --color-secondary: var(--blue-400);
-    --color-accent: var(--yellow-500);
-    --color-accent-dark: var(--yellow-700);
-    --color-background: var(--slate-50);
-    --color-surface: #ffffff;
-    --color-surface-alt: var(--slate-100);
-    --color-text: var(--slate-900);
-    --color-text-muted: var(--slate-500);
-    --color-text-secondary: var(--slate-600);
-    --color-border: var(--slate-200);
-    --color-border-medium: var(--slate-300);
-    --color-border-strong: var(--slate-400);
-    --color-bg: var(--slate-50);
+    --color-primary: var(--primary, #2E7EED);
+    --color-primary-dark: var(--primary-container, #1872e0);
+    --color-primary-light: var(--outline-variant, #c1c6d6);
+    --color-primary-bg: var(--surface-container-low, #f3f3f3);
+    --color-primary-text: var(--primary-container, #1872e0);
+    --color-secondary: var(--secondary, #5e5e63);
+    --color-accent: var(--altar-gold, #FFC107);
+    --color-accent-dark: var(--altar-gold, #FFC107);
+    --color-background: var(--background, #f9f9f9);
+    --color-surface: var(--surface-container-lowest, #ffffff);
+    --color-surface-alt: var(--surface-container-low, #f3f3f3);
+    --color-text: var(--on-surface, #1a1c1c);
+    --color-text-muted: var(--on-surface-variant, #414753);
+    --color-text-secondary: var(--on-surface-variant, #414753);
+    --color-border: var(--outline-variant, #c1c6d6);
+    --color-border-medium: var(--outline, #727785);
+    --color-border-strong: var(--outline, #727785);
+    --color-bg: var(--background, #f9f9f9);
 
     /* Semantic Status */
     --success: var(--green-500);
@@ -247,7 +247,7 @@
     --color-warning: var(--amber-500);
     --color-danger: var(--red-500);
     --color-danger-light: var(--red-100);
-    --color-info: var(--blue-500);
+    --color-info: var(--primary, #2E7EED);
     --danger: var(--red-500);
     --danger-bg: var(--red-50);
     --danger-text: var(--red-700);
@@ -258,7 +258,7 @@
     --info-text: var(--blue-700);
     --status-error: var(--red-500);
     --status-warning: var(--amber-500);
-    --status-info: var(--blue-500);
+    --status-info: var(--primary, #2E7EED);
 
     /* Teal-specific aliases */
     --teal-primary: var(--teal-500);
@@ -272,9 +272,9 @@
        3. TIPOGRAFIA
        ===================================================================== */
 
-    --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Hanken Grotesk', 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Hanken Grotesk', 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
     --font-sans: var(--font-body);
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 

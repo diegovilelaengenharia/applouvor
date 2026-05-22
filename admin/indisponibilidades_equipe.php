@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/indisponibilidades_equipe.php
 require_once '../src/helpers/auth.php';
 require_once '../src/config/db.php';
@@ -9,7 +9,7 @@ checkAdmin();
 $success = '';
 $error = '';
 
-// --- PROCESSAR FORMULÁRIO (ADD/EDIT/DELETE) ---
+// --- PROCESSAR FORMULÁRIO (ADD/DELETE) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         // ADICIONAR (Admin adicionando para outro usuário)
@@ -25,12 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     $stmt = $pdo->prepare("INSERT INTO user_unavailability (user_id, start_date, end_date, reason, observation, replacement_id) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->execute([$user_id, $start_date, $end_date, $reason, $observation, $replacement_id]);
-                    $_SESSION['success'] = "Ausência registrada com sucesso!";
+                    $_SESSION['success'] = "Ausência registrada com sucesso pela liderança!";
                 } catch (Exception $e) {
                     $_SESSION['error'] = "Erro ao registrar: " . $e->getMessage();
                 }
             } else {
-                $_SESSION['error'] = "Preencha os campos obrigatórios.";
+                $_SESSION['error'] = "Por favor, preencha todos os campos obrigatórios.";
             }
         }
         // EXCLUIR
@@ -39,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("DELETE FROM user_unavailability WHERE id = ?");
                 $stmt->execute([$id]);
-                $_SESSION['success'] = "Ausência removida.";
+                $_SESSION['success'] = "Registro de ausência removido com sucesso.";
             } catch (Exception $e) {
-                $_SESSION['error'] = "Erro ao remover: " . $e->getMessage();
+                $_SESSION['error'] = "Erro ao remover ausência: " . $e->getMessage();
             }
         }
         
@@ -59,7 +59,7 @@ $userFilter = $_GET['user_id'] ?? '';
 
 // Construir Query
 $sql = "
-    SELECT u.*, us.name as user_name, us.avatar_color, r.name as replacement_name 
+    SELECT u.*, us.name as user_name, us.avatar, r.name as replacement_name 
     FROM user_unavailability u
     JOIN users us ON u.user_id = us.id
     LEFT JOIN users r ON u.replacement_id = r.id
@@ -90,222 +90,325 @@ try {
     // Graceful degradation
 }
 
-renderAppHeader('Gerenciar Ausências');
-renderPageHeader('Ausências da Equipe', 'Gestão de Indisponibilidades');
+renderAppHeader('Ausências da Equipe');
 ?>
 
-<div class="container fade-in-up">
+<div class="min-h-screen bg-[#121316] text-[#E2E8F0] px-4 py-8 md:px-8">
+    <div class="max-w-5xl mx-auto space-y-8">
 
-    <?php if ($success): ?>
-        <div style="background:var(--sage-100); color:var(--sage-800); padding:12px; border-radius:12px; margin-bottom:20px; border:1px solid var(--sage-200); display:flex; gap:10px; align-items:center; font-weight:700;">
-            <i data-lucide="check-circle" width="18"></i> <?= $success ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Controles Superiores -->
-    <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; box-shadow: var(--shadow-sm);">
-        <form method="GET" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: end;">
-            <div style="flex: 1; min-width: 180px;">
-                <label style="display: block; font-size: 0.8rem; color: var(--slate-500); margin-bottom: 6px; font-weight: 600;">Mês de Referência</label>
-                <input type="month" name="month" value="<?= $monthFilter ?>" onchange="this.form.submit()" 
-                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
-            </div>
+        <!-- Top Navigation -->
+        <div class="flex items-center justify-between border-b border-neutral-800/80 pb-4">
+            <a href="lider.php" class="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm font-medium group active:scale-[0.97]">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                Voltar para Liderança
+            </a>
             
-            <div style="flex: 1; min-width: 180px;">
-                <label style="display: block; font-size: 0.8rem; color: var(--slate-500); margin-bottom: 6px; font-weight: 600;">Filtrar Membro</label>
-                <select name="user_id" onchange="this.form.submit()" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
-                    <option value="">Mostrar Todos</option>
-                    <?php foreach ($users as $u): ?>
-                        <option value="<?= $u['id'] ?>" <?= $userFilter == $u['id'] ? 'selected' : '' ?>><?= htmlspecialchars($u['name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+            <div class="flex items-center gap-2">
+                <a href="index.php" title="Painel Admin" class="w-9 h-9 rounded-lg bg-[#1A1B1F] border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white transition-colors active:scale-[0.95]">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                </a>
+                <a href="../app/index.php" title="Painel do Músico" class="w-9 h-9 rounded-lg bg-[#1A1B1F] border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white transition-colors active:scale-[0.95]">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i>
+                </a>
             </div>
-            
-            <button type="button" onclick="openModal()" class="ripple" 
-                style="padding: 12px 20px; background: #e11d48; color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.2);">
-                <i data-lucide="plus-circle" width="18"></i> Nova Ausência
-            </button>
-        </form>
-    </div>
-
-    <!-- Lista -->
-    <?php if (empty($absences)): ?>
-        <div style="text-align: center; padding: 48px; background: white; border-radius: 16px; border: 1px dashed var(--slate-300);">
-            <div style="background: var(--slate-100); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-                <i data-lucide="calendar-check" style="color:var(--slate-400)" width="32"></i>
-            </div>
-            <p style="color: var(--slate-500); margin: 0; font-weight: 500;">Nenhuma ausência encontrada para este filtro.</p>
         </div>
-    <?php else: ?>
-        <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
-            <?php foreach ($absences as $item): 
-                $startObj = new DateTime($item['start_date']);
-                $endObj = new DateTime($item['end_date']);
+
+        <!-- Title -->
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-white font-sans">
+                Ausências da Equipe
+            </h1>
+            <p class="text-sm text-neutral-400 mt-2">
+                Gerencie e visualize as indisponibilidades cadastradas pelos voluntários para organizar as escalas com tranquilidade.
+            </p>
+        </div>
+
+        <!-- Alerts -->
+        <?php if ($success): ?>
+            <div class="p-4 rounded-xl bg-[#10B981]/10 border border-[#10B981]/20 text-[#10B981] text-sm font-semibold flex items-center gap-2 shadow-lg">
+                <i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0"></i>
+                <?= $success ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($error): ?>
+            <div class="p-4 rounded-xl bg-[#F43F5E]/10 border border-[#F43F5E]/20 text-[#F43F5E] text-sm font-semibold flex items-center gap-2 shadow-lg">
+                <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0"></i>
+                <?= $error ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Bento Grid: Filtros e Controles -->
+        <div class="rounded-xl bg-[#1A1B1F] border border-neutral-800 p-6 shadow-xl relative overflow-hidden">
+            <!-- Decorative blur -->
+            <div class="absolute -right-24 -bottom-24 w-48 h-48 rounded-full bg-[#2E7EED]/5 blur-3xl pointer-events-none"></div>
+
+            <form method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-5 items-end relative">
                 
-                // Formatar Mês e Dia manualmente (sem depender do IntlDateFormatter)
-                $months_pt = [
-                    '01' => 'JAN', '02' => 'FEV', '03' => 'MAR', '04' => 'ABR',
-                    '05' => 'MAI', '06' => 'JUN', '07' => 'JUL', '08' => 'AGO',
-                    '09' => 'SET', '10' => 'OUT', '11' => 'NOV', '12' => 'DEZ'
-                ];
-                $monthStr = $months_pt[$startObj->format('m')];
-                $dayStr = $startObj->format('d');
-                
-                $periodo = $startObj->format('d/m');
-                if ($item['start_date'] != $item['end_date']) {
-                    $periodo .= ' a ' . $endObj->format('d/m');
-                }
-            ?>
-                <!-- CARD TEAM -->
-                <div style="background: white; border-radius: 16px; border: 1px solid var(--border-color); display: flex; overflow: hidden; box-shadow: var(--shadow-sm); position: relative;">
-                    
-                    <!-- ID Color Bar (based on avatar color or default) -->
-                    <div style="width: 6px; background: <?= $item['avatar_color'] ?: 'var(--slate-500)' ?>;"></div>
-
-                    <div style="flex: 1; padding: 16px; display: flex; gap: 16px; align-items: flex-start;">
-                        
-                        <!-- Date Block -->
-                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; height: 60px; background: var(--slate-50); border-radius: 12px; color: var(--slate-500); border: 1px solid var(--slate-200);">
-                            <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;"><?= $monthStr ?></span>
-                            <span style="font-size: 1.4rem; font-weight: 800; line-height: 1; margin-top: 2px;"><?= $dayStr ?></span>
-                        </div>
-
-                        <!-- Content -->
-                        <div style="flex: 1;">
-                            
-                            <!-- Header: Name & Role -->
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-                                <div style="width: 24px; height: 24px; border-radius: 50%; background: <?= $item['avatar_color'] ?: 'var(--slate-300)' ?>; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">
-                                    <?= strtoupper(substr($item['user_name'], 0, 1)) ?>
-                                </div>
-                                <span style="font-weight: 700; color: var(--slate-800); font-size: 0.95rem;"><?= htmlspecialchars($item['user_name']) ?></span>
-                            </div>
-
-                            <!-- Reason & Sub -->
-                            <h4 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: var(--text-primary);">
-                                <?= htmlspecialchars($item['reason']) ?>
-                            </h4>
-
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
-                                <span style="font-size: 0.75rem; font-weight: 700; background: var(--slate-100); color: var(--slate-600); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--slate-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 4px;">
-                                    <i data-lucide="calendar" width="12"></i> <?= $periodo ?>
-                                </span>
-                                <?php if ($item['replacement_name']): ?>
-                                    <span style="font-size: 0.75rem; color: var(--blue-700); background: var(--blue-50); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--blue-200); box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15); display: flex; align-items: center; gap: 4px; font-weight: 700;">
-                                        <i data-lucide="user-check" width="12"></i> Subs: <?= htmlspecialchars($item['replacement_name']) ?>
-                                    </span>
-                                <?php else: ?>
-                                    <span style="font-size: 0.75rem; color: var(--rose-700); background: var(--rose-50); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--rose-200); box-shadow: 0 2px 6px rgba(225, 29, 72, 0.15); display: flex; align-items: center; gap: 4px; font-weight: 700;">
-                                        <i data-lucide="alert-circle" width="12"></i> Sem substituto
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- Obs/Audio -->
-                            <?php if (!empty($item['observation'])): ?>
-                                <div style="font-size: 0.85rem; color: var(--slate-500); background: var(--slate-50); padding: 8px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--slate-100);">
-                                    <?= nl2br(htmlspecialchars($item['observation'])) ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if (!empty($item['audio_path'])): ?>
-                                <div style="background: #f0f9ff; padding: 6px; border-radius: 8px; border: 1px dashed #bae6fd; display: inline-flex; align-items: center; gap: 6px;">
-                                    <div style="background: #0ea5e9; color: white; padding: 4px; border-radius: 50%;">
-                                        <i data-lucide="mic" width="12"></i>
-                                    </div>
-                                    <audio controls style="height: 28px; width: 200px;">
-                                        <source src="../<?= htmlspecialchars($item['audio_path']) ?>" type="audio/webm">
-                                        <source src="../<?= htmlspecialchars($item['audio_path']) ?>" type="audio/mp4">
-                                    </audio>
-                                </div>
-                            <?php endif; ?>
-
-                        </div>
-
-                        <!-- Action -->
-                        <div>
-                            <form method="POST" onsubmit="return confirm('Remover esta ausência?');">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                                <button type="submit" title="Excluir" style="background: #fff1f2; color: #e11d48; border: 1px solid var(--rose-200); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
-                                    <i data-lucide="trash-2" width="14"></i>
-                                </button>
-                            </form>
-                        </div>
-
-                    </div>
+                <!-- Mês de Referência -->
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Mês de Referência</label>
+                    <input type="month" name="month" value="<?= $monthFilter ?>" onchange="this.form.submit()" class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all font-semibold">
                 </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
 
+                <!-- Filtrar por Membro -->
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Filtrar por Membro</label>
+                    <select name="user_id" onchange="this.form.submit()" class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all font-semibold appearance-none cursor-pointer">
+                        <option value="">Mostrar Todos os Membros</option>
+                        <?php foreach ($users as $u): ?>
+                            <option value="<?= $u['id'] ?>" <?= $userFilter == $u['id'] ? 'selected' : '' ?>><?= htmlspecialchars($u['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Botão Adicionar -->
+                <button type="button" onclick="openModal()" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-[#2E7EED] hover:bg-[#1C66CE] text-white text-xs font-bold transition-all duration-200 shadow-md shadow-[#2E7EED]/10 active:scale-[0.98]">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    Lançar Ausência
+                </button>
+
+            </form>
+        </div>
+
+        <!-- Seção Principal de Listagem -->
+        <div class="space-y-5">
+            <h3 class="text-sm font-bold tracking-wider uppercase text-neutral-300 flex items-center gap-2">
+                <span class="w-1.5 h-3 bg-[#2E7EED] rounded-full"></span>
+                Ausências da Equipe Identificadas
+            </h3>
+
+            <?php if (empty($absences)): ?>
+                <div class="text-center py-16 bg-[#1A1B1F] border border-neutral-800 rounded-xl space-y-4 shadow-xl">
+                    <div class="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-500 mx-auto">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                    <p class="text-sm text-neutral-400">Nenhuma ausência futura ou registrada para este filtro e mês.</p>
+                </div>
+            <?php else: ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <?php foreach ($absences as $item): 
+                        $startObj = new DateTime($item['start_date']);
+                        $endObj = new DateTime($item['end_date']);
+                        
+                        $months_pt = [
+                            '01' => 'JAN', '02' => 'FEV', '03' => 'MAR', '04' => 'ABR',
+                            '05' => 'MAI', '06' => 'JUN', '07' => 'JUL', '08' => 'AGO',
+                            '09' => 'SET', '10' => 'OUT', '11' => 'NOV', '12' => 'DEZ'
+                        ];
+                        $monthStr = $months_pt[$startObj->format('m')] ?? 'MÊS';
+                        $dayStr = $startObj->format('d');
+                        
+                        $periodo = $startObj->format('d/m');
+                        if ($item['start_date'] != $item['end_date']) {
+                            $periodo .= ' a ' . $endObj->format('d/m');
+                        }
+
+                        // Cor baseada nas iniciais do avatar
+                        $initial = strtoupper(substr($item['user_name'], 0, 1));
+                        $colors = [
+                            'A' => '#2E7EED', 'B' => '#10B981', 'C' => '#FFC107', 'D' => '#F43F5E',
+                            'E' => '#2E7EED', 'F' => '#10B981', 'G' => '#FFC107', 'H' => '#F43F5E',
+                            'I' => '#2E7EED', 'J' => '#10B981', 'K' => '#FFC107', 'L' => '#F43F5E',
+                            'M' => '#2E7EED', 'N' => '#10B981', 'O' => '#FFC107', 'P' => '#F43F5E',
+                            'Q' => '#2E7EED', 'R' => '#10B981', 'S' => '#FFC107', 'T' => '#F43F5E',
+                            'U' => '#2E7EED', 'V' => '#10B981', 'W' => '#FFC107', 'X' => '#F43F5E',
+                            'Y' => '#2E7EED', 'Z' => '#10B981'
+                        ];
+                        $avatarColor = $colors[$initial] ?? '#2E7EED';
+                    ?>
+                        <!-- Card Bento de Ausência de Voluntário -->
+                        <div class="rounded-xl bg-[#1A1B1F] border border-neutral-800 p-5 shadow-xl hover:border-neutral-750 transition-all duration-300 flex items-start gap-4 relative overflow-hidden">
+                            
+                            <!-- Indicador lateral -->
+                            <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: <?= $avatarColor ?>;"></div>
+
+                            <!-- Bloco de Data Bento -->
+                            <div class="w-14 h-14 bg-[#121316] border border-neutral-800 rounded-lg flex flex-col items-center justify-center flex-shrink-0 text-center shadow-md">
+                                <span class="text-[9px] font-extrabold tracking-wider uppercase" style="color: <?= $avatarColor ?>;"><?= $monthStr ?></span>
+                                <span class="text-lg font-extrabold text-white leading-tight mt-0.5"><?= $dayStr ?></span>
+                            </div>
+
+                            <!-- Dados e Justificativa -->
+                            <div class="flex-1 min-w-0 space-y-3">
+                                
+                                <!-- Nome e Detalhes do Membro -->
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center gap-2">
+                                            <!-- Avatar Circle -->
+                                            <div class="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] text-white flex-shrink-0" style="background-color: <?= $avatarColor ?>;">
+                                                <?= $initial ?>
+                                            </div>
+                                            <span class="font-extrabold text-[#E2E8F0] text-sm truncate"><?= htmlspecialchars($item['user_name']) ?></span>
+                                        </div>
+                                        
+                                        <h4 class="font-bold text-white text-sm leading-snug">
+                                            <?= htmlspecialchars($item['reason']) ?>
+                                        </h4>
+                                    </div>
+
+                                    <!-- Excluir Ausência -->
+                                    <form method="POST" onsubmit="return confirm('Tem certeza de que deseja remover esta ausência cadastrada?');" class="m-0 flex-shrink-0">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                                        <button type="submit" title="Excluir Registro" class="w-7 h-7 rounded bg-[#F43F5E]/10 hover:bg-[#F43F5E]/20 border border-[#F43F5E]/20 text-[#F43F5E] flex items-center justify-center transition-colors active:scale-[0.9]">
+                                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <!-- Badges de Período e Substituto -->
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-neutral-800 text-neutral-400 border border-neutral-750 text-[10px] font-bold">
+                                        <i data-lucide="calendar" class="w-3 h-3 text-[#2E7EED]"></i>
+                                        Período: <?= $periodo ?>
+                                    </span>
+                                    
+                                    <?php if ($item['replacement_name']): ?>
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20 text-[10px] font-bold">
+                                            <i data-lucide="user-check" class="w-3 h-3"></i>
+                                            Substituto: <?= htmlspecialchars($item['replacement_name']) ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#F43F5E]/10 text-[#F43F5E] border border-[#F43F5E]/20 text-[10px] font-bold">
+                                            <i data-lucide="alert-circle" class="w-3 h-3"></i>
+                                            Sem substituto!
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Observações e Player de Justificativa -->
+                                <?php if (!empty($item['observation']) || !empty($item['audio_path'])): ?>
+                                    <div class="space-y-2 pt-2 border-t border-neutral-850">
+                                        <?php if (!empty($item['observation'])): ?>
+                                            <p class="text-xs text-neutral-400 leading-relaxed bg-[#121316]/50 border-l border-neutral-700/50 pl-3 py-1.5 rounded-r">
+                                                <?= nl2br(htmlspecialchars($item['observation'])) ?>
+                                            </p>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($item['audio_path'])): ?>
+                                            <div class="inline-flex items-center gap-2.5 bg-[#2E7EED]/5 border border-[#2E7EED]/20 p-1.5 rounded-lg w-full max-w-xs">
+                                                <div class="w-7 h-7 rounded-full bg-[#2E7EED]/20 flex items-center justify-center text-[#2E7EED] flex-shrink-0 animate-pulse">
+                                                    <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+                                                </div>
+                                                <audio controls class="h-6 flex-1 max-w-[200px] opacity-80 hover:opacity-100 transition-opacity">
+                                                    <source src="../<?= htmlspecialchars($item['audio_path']) ?>" type="audio/webm">
+                                                    <source src="../<?= htmlspecialchars($item['audio_path']) ?>" type="audio/mp4">
+                                                </audio>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    </div>
 </div>
 
-<!-- MODAL ADD (Mantido mas com estilo atualizado) -->
-<div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-    <div class="fade-in-up" style="background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
+<!-- Modal Glassmorphic de Lançamento de Ausência (Admin) -->
+<div id="addModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-md transition-all duration-300">
+    <div class="bg-[#1A1B1F] border border-neutral-850 w-[92%] max-w-md max-h-[85vh] overflow-y-auto rounded-2xl p-6 shadow-2xl relative space-y-5 animate-in fade-in zoom-in-95 duration-200">
         
-        <button onclick="closeModal()" style="position: absolute; right: 16px; top: 16px; border: none; background: none; color: var(--slate-400); cursor: pointer;">
-            <i data-lucide="x" width="24"></i>
+        <!-- Botão Fechar -->
+        <button onclick="closeModal()" class="absolute right-4 top-4 text-neutral-400 hover:text-white transition-colors active:scale-[0.9]">
+            <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
-        <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-main);">Registrar Ausência (Admin)</h3>
-        
-        <form method="POST">
+        <!-- Título -->
+        <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-neutral-850 pb-3">
+            <i data-lucide="calendar-plus" class="w-5 h-5 text-[#2E7EED]"></i>
+            Lançar Ausência
+        </h3>
+
+        <!-- Formulário -->
+        <form method="POST" class="space-y-4">
             <input type="hidden" name="action" value="add">
-            
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Membro</label>
-                <select name="user_id" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
-                    <option value="">Selecione...</option>
+
+            <!-- Seleção do Membro -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Membro Voluntário</label>
+                <select name="user_id" required class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all font-semibold appearance-none cursor-pointer">
+                    <option value="">Selecione o membro da equipe...</option>
                     <?php foreach ($users as $u): ?>
                         <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                <div>
-                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">De</label>
-                    <input type="date" name="start_date" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
+            <!-- Datas Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Data de Início</label>
+                    <input type="date" name="start_date" required class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all font-semibold">
                 </div>
-                <div>
-                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Até</label>
-                    <input type="date" name="end_date" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
+                
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Data de Fim</label>
+                    <input type="date" name="end_date" class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all font-semibold">
                 </div>
             </div>
 
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Motivo</label>
-                <input type="text" name="reason" placeholder="Ex: Viagem" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
+            <!-- Motivo -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Motivo Resumido</label>
+                <input type="text" name="reason" placeholder="Ex: Viagem de trabalho, Escala profissional" required class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all">
             </div>
 
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Observação</label>
-                <textarea name="observation" rows="2" placeholder="Detalhes..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); resize: vertical; outline:none;"></textarea>
+            <!-- Observações -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Observações adicionais</label>
+                <textarea name="observation" rows="2" placeholder="Detalhes ou anotações extras da liderança..." class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3.5 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all"></textarea>
             </div>
 
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Substituto (Opcional)</label>
-                <select name="replacement_id" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--slate-300); outline:none;">
-                    <option value="">Sem substituto definido</option>
+            <!-- Seleção do Substituto -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider">Substituto Definido</label>
+                <select name="replacement_id" class="w-full bg-[#121316] border border-neutral-800 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-[#2E7EED] focus:ring-1 focus:ring-[#2E7EED]/20 transition-all font-semibold appearance-none cursor-pointer">
+                    <option value="">Sem substituto definido (Deixar em aberto)</option>
                     <?php foreach ($users as $u): ?>
                         <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['name']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="closeModal()" style="flex: 1; padding: 12px; background: var(--slate-200); border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" style="flex: 2; padding: 12px; background: #e11d48; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Salvar</button>
+            <!-- Botões -->
+            <div class="flex items-center gap-3 pt-3 border-t border-neutral-850">
+                <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg border border-neutral-800 text-neutral-400 hover:text-white hover:bg-neutral-800/40 text-xs font-bold transition-all duration-250 text-center active:scale-[0.96]">
+                    Cancelar
+                </button>
+                <button type="submit" class="flex-[2] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#2E7EED] hover:bg-[#1C66CE] text-white text-xs font-bold transition-all duration-200 shadow-md shadow-[#2E7EED]/10 active:scale-[0.98]">
+                    Registrar Ausência
+                </button>
             </div>
+
         </form>
     </div>
 </div>
 
 <script>
-    function openModal() { document.getElementById('addModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('addModal').style.display = 'none'; }
+    function openModal() {
+        const modal = document.getElementById('addModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+    
+    function closeModal() {
+        const modal = document.getElementById('addModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    });
 </script>
 
 <?php renderAppFooter(); ?>

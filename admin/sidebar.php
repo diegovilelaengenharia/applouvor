@@ -100,17 +100,17 @@ try {
     </div>
 
     <!-- 2. Menu de Navegação -->
-    <div class="flex-1 overflow-y-auto px-4 py-6 space-y-7">
-        <nav class="space-y-6">
+    <div class="flex-1 overflow-y-auto px-4 py-6 space-y-7 sidebar-scroll-area">
+        <nav class="space-y-6 sidebar-nav">
             
             <!-- SEÇÃO: PRINCIPAL -->
             <div class="space-y-2">
-                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block">Principal</span>
+                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block section-title-label">Principal</span>
                 
-                <a href="<?= $baseAdmin ?>index.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>index.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Visão Geral</span>
                     </div>
@@ -119,12 +119,12 @@ try {
 
             <!-- SEÇÃO: GESTÃO DE ENSAIOS -->
             <div class="space-y-2">
-                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block">Gestão de Ensaios</span>
+                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block section-title-label">Gestão de Ensaios</span>
                 
-                <a href="<?= $baseAdmin ?>escalas.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>escalas.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'escalas.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="calendar" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Escalas</span>
                     </div>
@@ -133,47 +133,47 @@ try {
                     <?php endif; ?>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>repertorio.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>repertorio.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'repertorio.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="music-2" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="music-2" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Repertório</span>
                     </div>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>historico.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>historico.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'historico.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="history" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="history" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Histórico</span>
                     </div>
                 </a>
                 <?php if ($sideUserRole === 'admin'): ?>
-                <a href="<?= $baseAdmin ?>membros.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>membros.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'membros.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="users" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="users" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Membros</span>
                     </div>
                 </a>
                 <?php endif; ?>
                 
-                <a href="<?= $baseAdmin ?>indisponibilidade.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>indisponibilidade.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'indisponibilidade.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="calendar-off" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="calendar-off" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Ausências</span>
                     </div>
                 </a>
 
-                <a href="<?= $baseAdmin ?>agenda.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>agenda.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'agenda.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="calendar-range" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="calendar-range" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Agenda</span>
                     </div>
@@ -182,30 +182,30 @@ try {
 
             <!-- SEÇÃO: ESPIRITUAL -->
             <div class="space-y-2">
-                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block">Espiritual</span>
+                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block section-title-label">Espiritual</span>
                 
-                <a href="<?= $baseAdmin ?>devocionais.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>devocionais.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'devocionais.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="book-heart" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="book-heart" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Devocional</span>
                     </div>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>oracao.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>oracao.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'oracao.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="heart" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Oração</span>
                     </div>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>leitura.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>leitura.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'leitura.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="book-open" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Leitura Bíblica</span>
                     </div>
@@ -214,12 +214,12 @@ try {
 
             <!-- SEÇÃO: COMUNICAÇÃO -->
             <div class="space-y-2">
-                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block">Comunicação</span>
+                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block section-title-label">Comunicação</span>
                 
-                <a href="<?= $baseAdmin ?>avisos.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>avisos.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="megaphone" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="megaphone" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Avisos</span>
                     </div>
@@ -228,10 +228,10 @@ try {
                     <?php endif; ?>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>aniversarios.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>aniversarios.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'aniversarios.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="cake" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="cake" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Aniversariantes</span>
                     </div>
@@ -241,12 +241,12 @@ try {
             <!-- SEÇÃO: ADMINISTRAÇÃO (Apenas Líderes) -->
             <?php if ($sideUserRole === 'admin'): ?>
             <div class="space-y-2">
-                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block">Administração</span>
+                <span class="px-3 text-[10px] font-bold text-muted uppercase tracking-widest block section-title-label">Administração</span>
                 
-                <a href="<?= $baseAdmin ?>escalas_gestao.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'escalas_gestao.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>escalas_gestao.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'escalas_gestao.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="sliders" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="sliders" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Gestão de Escalas</span>
                     </div>
@@ -255,19 +255,19 @@ try {
                     <?php endif; ?>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>relatorios_gerais.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'relatorios_gerais.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>relatorios_gerais.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'relatorios_gerais.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="trending-up" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="trending-up" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Relatórios</span>
                     </div>
                 </a>
                 
-                <a href="<?= $baseAdmin ?>manutencao.php" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'manutencao.php' ? 'bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
+                <a href="<?= $baseAdmin ?>manutencao.php" class="flex items-center justify-between px-3 py-2 text-sm font-bold transition-all duration-200 group <?= basename($_SERVER['PHP_SELF']) == 'manutencao.php' ? 'active bg-primary/10 text-primary' : 'text-surface-on-surface hover:bg-surface-container-lowest' ?>">
                     <div class="flex items-center gap-3">
-                        <div class="p-1 rounded-lg group-hover:scale-110 transition-transform">
-                            <i data-lucide="database" class="w-5 h-5"></i>
+                        <div class="p-1 rounded-lg group-hover:scale-105 transition-transform">
+                            <i data-lucide="database" class="w-4 h-4"></i>
                         </div>
                         <span class="font-outfit">Manutenção</span>
                     </div>

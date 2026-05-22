@@ -3,24 +3,24 @@
  * Platform: Mobile-first (Stitch Export)
  */
 :root {
-    /* Colors */
-    --surface: #f9f9f9;
+    /* Colors (Sacred Minimalist — Pure Stitch Theme) */
+    --surface: #f9f9f9; /* Fundo cinza ultrassuave purista */
     --surface-dim: #dadada;
     --surface-bright: #f9f9f9;
-    --surface-container-lowest: #ffffff;
-    --surface-container-low: #f3f3f3;
-    --surface-container: #eeeeee;
+    --surface-container-lowest: #ffffff; /* Branco puro dos cards flutuantes */
+    --surface-container-low: #f3f3f3; /* Sidebar e fundos sutilmente contrastados */
+    --surface-container: #eeeeee; /* Linhas e divisores */
     --surface-container-high: #e8e8e8;
     --surface-container-highest: #e2e2e2;
-    --on-surface: #1a1c1c;
-    --on-surface-variant: #414753;
+    --on-surface: #1a1c1c; /* Texto principal escuro elegante */
+    --on-surface-variant: #414753; /* Texto secundário suavizado */
     --inverse-surface: #2f3131;
     --inverse-on-surface: #f0f1f1;
-    --outline: #727785;
+    --outline: #727785; /* Linha de borda de contraste sutil */
     --outline-variant: #c1c6d6;
-    --primary: #0059b8;
+    --primary: #0059b8; /* Azul clássico principal */
     --on-primary: #ffffff;
-    --primary-container: #1872e0;
+    --primary-container: #1872e0; /* Hover/active */
     --on-primary-container: #fefcff;
     --inverse-primary: #abc7ff;
     --secondary: #5e5e63;
@@ -29,7 +29,7 @@
     --on-secondary-container: #626267;
     --tertiary: #755700;
     --on-tertiary: #ffffff;
-    --tertiary-container: #946f00;
+    --tertiary-container: #fffbff;
     --on-tertiary-container: #fffbff;
     --error: #ba1a1a;
     --on-error: #ffffff;
@@ -38,8 +38,8 @@
     
     /* Core Custom Palette */
     --deep-navy: #1A1B1F;
-    --worship-blue: #2E7EED;
-    --altar-gold: #FFC107;
+    --worship-blue: #2E7EED; /* Worship Blue oficial do Stitch */
+    --altar-gold: #FFC107; /* Altar Gold oficial do Stitch */
     --ghost-gray: #F4F4F5;
     --background: #f9f9f9;
     --on-background: #1a1c1c;
@@ -55,33 +55,35 @@
     --margin-desktop: 64px;
     --max-width: 1200px;
     
-    /* Radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
+    /* Precision Geometry (0px to 8px max - High-end premium feel) */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
     --radius-full: 9999px;
 }
 
 .dark {
     /* Mapping dark mode equivalents based on Deep Navy and Worship Blue focus */
     --surface: #0F1012;
-    --surface-bright: #1F2025;
-    --surface-container-lowest: #16171B;
-    --surface-container-low: #1A1B1F; /* Deep Navy do Stitch! */
-    --surface-container: #222429;
-    --surface-container-high: #2A2C33;
-    --surface-container-highest: #33363F;
-    --on-surface: #F3F4F6;
-    --on-surface-variant: #9CA3AF;
-    --background: #0F1012;
+    --surface-bright: #16171a;
+    --surface-container-lowest: #0b0c0e;
+    --surface-container-low: #131417; /* Deep Navy do Stitch! */
+    --surface-container: #1b1c21;
+    --surface-container-high: #24262c;
+    --surface-container-highest: #2f323a;
+    --on-surface: #f3f4f6;
+    --on-surface-variant: #9ca3af;
+    --inverse-surface: #f3f4f6;
+    --inverse-on-surface: #0f1012;
+    --background: #08090a;
     --on-background: #ffffff;
     --primary: #2E7EED; /* Worship Blue oficial! */
     --on-primary: #ffffff;
-    --primary-container: #1872e0;
+    --primary-container: #1b6fd6;
     --on-primary-container: #fefcff;
-    --outline: #3E414B;
-    --outline-variant: #222429;
+    --outline: #222429;
+    --outline-variant: #1a1b1f;
 }
 
 

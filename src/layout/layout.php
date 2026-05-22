@@ -89,16 +89,144 @@ function renderAppHeader($title, $backUrl = null)
             <?php /* Header Mobile Logic moved to renderPageHeader (Unification) */ ?>
             
             <!-- TopAppBar -->
-            <header class="fixed top-0 flex justify-between items-center px-margin-mobile h-16 w-full z-40 lg:left-64 lg:w-[calc(100%-16rem)] bg-surface dark:bg-deep-navy border-b border-outline-variant dark:border-on-surface-variant transition-colors duration-200">
+            <?php 
+            $isHome = basename($_SERVER['PHP_SELF']) === 'index.php'; 
+            $inAdmin = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
+            $inApp   = strpos($_SERVER['PHP_SELF'], '/app/')   !== false;
+            $liderLink = $inAdmin ? 'lider.php' : ($inApp ? '../admin/lider.php' : 'admin/lider.php');
+            $notifLink = $inAdmin ? 'notificacoes.php' : ($inApp ? '../admin/notificacoes.php' : 'admin/notificacoes.php');
+            ?>
+            <header class="<?= $isHome ? 'flex' : 'hidden lg:flex' ?> fixed top-0 justify-between items-center px-margin-mobile h-16 w-full z-40 lg:left-64 lg:w-[calc(100%-16rem)] bg-surface dark:bg-deep-navy border-b border-outline-variant dark:border-on-surface-variant transition-colors duration-200">
                 <button class="lg:hidden text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-variant p-2 rounded-full flex items-center justify-center" onclick="toggleSidebarMobile ? toggleSidebarMobile() : (window.toggleSidebar && window.toggleSidebar())">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
-                <div class="font-headline-md-mobile text-headline-md-mobile font-bold text-primary dark:text-primary-fixed">WorshipFlow</div>
-                <button onclick="toggleProfileDropdown(event,'headerProfileDropdown')" class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-variant p-2 rounded-full flex items-center justify-center relative">
-                    <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
-                        <img alt="Avatar" class="w-full h-full object-cover" src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U' ?>" />
+                
+                <div class="flex items-center gap-2">
+                    <?php 
+                    $pathPrefix = '';
+                    if (file_exists('assets/images/logo_pib_black.png')) {
+                        $pathPrefix = '';
+                    } elseif (file_exists('../assets/images/logo_pib_black.png')) {
+                        $pathPrefix = '../';
+                    } elseif (file_exists('../../assets/images/logo_pib_black.png')) {
+                        $pathPrefix = '../../';
+                    }
+                    
+                    $logoBlack = $pathPrefix . 'assets/images/logo_pib_black.png';
+                    $logoWhite = $pathPrefix . 'assets/images/logo_pib_white.png';
+
+                    if (file_exists($logoBlack) || file_exists(__DIR__ . '/../assets/images/logo_pib_black.png')): 
+                    ?>
+                        <img src="<?= $logoBlack ?>" alt="PIB Oliveira" class="h-8 w-auto block dark:hidden">
+                        <img src="<?= $logoWhite ?>" alt="PIB Oliveira" class="h-8 w-auto hidden dark:block">
+                    <?php else: ?>
+                        <div class="text-lg font-black tracking-tight text-primary dark:text-primary-fixed" style="font-family: var(--font-display); letter-spacing: -0.03em;">WorshipFlow</div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="flex items-center gap-2 relative">
+                    <!-- Bell Button for Mobile/Header -->
+                    <button onclick="toggleNotifications('headerNotificationDropdown')" class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-variant p-2 rounded-full flex items-center justify-center relative" id="notificationBtn" title="Notificações">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="badge-dot" id="notificationBadge" style="display:none;"></span>
+                    </button>
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="headerNotificationDropdown">
+                        <div class="notification-header">
+                            <div class="notification-title">
+                                Notificações
+                                <button onclick="requestNotificationPermission()" class="notification-enable-btn">
+                                    <i data-lucide="bell-ring" style="width:12px;"></i> Ativar
+                                </button>
+                            </div>
+                            <button class="mark-all-read" onclick="markAllAsRead()">Marcar lidas</button>
+                        </div>
+                        <div class="notification-list">
+                            <div class="empty-state">
+                                <i data-lucide="bell-off" style="width:24px;"></i>
+                                <p>Carregando...</p>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="<?= $notifLink ?>">Ver todas <i data-lucide="arrow-right" style="width:14px;"></i></a>
+                        </div>
                     </div>
-                </button>
+
+                    <!-- Avatar Button -->
+                    <button onclick="toggleProfileDropdown(event,'headerProfileDropdown')" class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-variant p-2 rounded-full flex items-center justify-center relative profile-avatar-btn">
+                        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+                            <img alt="Avatar" class="w-full h-full object-cover" src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U' ?>" />
+                        </div>
+                    </button>
+                    <!-- Profile Dropdown -->
+                    <div id="headerProfileDropdown" class="profile-dropdown">
+                        <div class="profile-header">
+                            <div class="profile-avatar-container" style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2); flex-shrink: 0;">
+                                <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" style="width: 100%; height: 100%; object-fit: cover;" alt="Avatar">
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-name"><?= htmlspecialchars($_layoutUser['name'] ?? '') ?></div>
+                                <div class="profile-role">Membro da Equipe</div>
+                            </div>
+                        </div>
+                        <div style="padding:8px;">
+                            <?php
+                            $qsLink     = $inAdmin ? '../app/quem_somos.php' : ($inApp ? 'quem_somos.php' : 'app/quem_somos.php');
+                            $perfilLink = $inAdmin ? 'perfil.php' : ($inApp ? '../admin/perfil.php' : 'admin/perfil.php');
+                            $logoutPath = $inAdmin ? '../logout.php' : ($inApp ? '../../logout.php' : 'logout.php');
+                            ?>
+                            <a href="<?= $qsLink ?>" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background:var(--primary-light);color:var(--primary);">
+                                    <i data-lucide="circle-help" width="16"></i>
+                                </div>
+                                <span>Quem somos nós?</span>
+                            </a>
+                            <a href="<?= $perfilLink ?>" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background:var(--bg-surface-alt);color:var(--text-muted);">
+                                    <i data-lucide="user" width="16"></i>
+                                </div>
+                                <span>Meu Perfil</span>
+                            </a>
+                            <a href="#" onclick="openDashboardCustomization();return false;" class="profile-menu-item">
+                                <div class="icon-wrapper" style="background:var(--info-bg);color:var(--info-text);">
+                                    <i data-lucide="layout" width="16"></i>
+                                </div>
+                                <span>Acesso Rápido</span>
+                            </a>
+                            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                                <a href="<?= $liderLink ?>" class="profile-menu-item">
+                                    <div class="icon-wrapper" style="background:var(--warning-bg);color:var(--warning-text);">
+                                        <i data-lucide="crown" width="16"></i>
+                                    </div>
+                                    <span>Painel do Líder</span>
+                                </a>
+                            <?php endif; ?>
+
+                            <!-- Dark Mode Toggle -->
+                            <div onclick="toggleThemeMode()" class="profile-menu-item" style="cursor:pointer;">
+                                <div class="icon-wrapper" style="background:var(--bg-surface-alt);color:var(--text-muted);">
+                                    <i data-lucide="moon" width="16"></i>
+                                </div>
+                                <span>Modo Escuro</span>
+                                <div style="margin-left:auto;">
+                                    <label class="toggle-switch-mini">
+                                        <input type="checkbox" id="darkModeToggleDropdown" onchange="toggleThemeMode()">
+                                        <span class="slider-mini round"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style="height:1px;background:var(--border-color);margin:6px 12px;"></div>
+
+                            <a href="<?= $logoutPath ?>" class="profile-menu-item" style="color:var(--danger);">
+                                <div class="icon-wrapper" style="background:var(--danger-bg);color:var(--danger);">
+                                    <i data-lucide="log-out" width="16"></i>
+                                </div>
+                                <span style="font-weight:600;">Sair da Conta</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </header>
         <?php
     }
@@ -322,7 +450,7 @@ function renderAppHeader($title, $backUrl = null)
 
                 <!-- Profile Avatar Pill + Dropdown -->
                 <div style="position:relative;">
-                    <button onclick="toggleProfileDropdown(event,'headerProfileDropdown')" class="user-profile-pill" title="Opções de Perfil">
+                    <button onclick="toggleProfileDropdown(event,'pageProfileDropdown')" class="user-profile-pill" title="Opções de Perfil">
                         <?php if (!empty($_layoutUser['photo'])): ?>
                             <img class="user-pill-avatar" src="<?= $_layoutUser['photo'] ?>" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); flex-shrink: 0;" alt="<?= htmlspecialchars($_layoutUser['name'] ?? 'User') ?>">
                         <?php else: ?>
@@ -338,7 +466,7 @@ function renderAppHeader($title, $backUrl = null)
                     </button>
  
                     <!-- Profile Dropdown -->
-                    <div id="headerProfileDropdown" class="profile-dropdown">
+                    <div id="pageProfileDropdown" class="profile-dropdown">
                         <div class="profile-header">
                             <div class="profile-avatar-container" style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2); flex-shrink: 0;">
                                 <img src="<?= $_layoutUser['photo'] ?? 'https://ui-avatars.com/api/?name=U&background=cbd5e1&color=fff' ?>" style="width: 100%; height: 100%; object-fit: cover;" alt="Avatar">

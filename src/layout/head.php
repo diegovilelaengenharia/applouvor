@@ -45,16 +45,37 @@ $verMain = file_exists($pathMain) ? filemtime($pathMain) : time();
 <!-- APP URL for JS logic -->
 <script>const APP_URL = '<?= APP_URL ?>';</script>
 
-<!-- Anti-flash: aplica a classe `dark` no <html> antes da pintura (Tailwind dark: + variáveis CSS) -->
+<!-- Dark mode auto-detect: aplica o tema salvo no localStorage no first-paint para evitar FOUC -->
 <script>
     (function () {
         try {
-            if (localStorage.getItem('theme') === 'dark') {
+            var theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
             }
         } catch (e) {}
     })();
 </script>
+
+<!-- CSS crítico anti-FOUC: pinta fundo/superfície antes do Tailwind CDN compilar -->
+<style>
+    html { background-color: #f9f9f9; }
+    html.dark { background-color: #0F1012; }
+    body { background-color: inherit; color: #1a1c1c; font-family: 'Open Sans', sans-serif; }
+    html.dark body { color: #F3F4F6; }
+
+    /* Home no desktop (>=1025px): sidebar já traz marca + perfil, então
+       ocultamos a barra superior (menu + WorshipFlow + avatar) e zeramos
+       o espaço reservado por ela. No mobile a barra permanece. */
+    @media (min-width: 1025px) {
+        body.page-is-dashboard > #app-content > header { display: none; }
+        body.page-is-dashboard { padding-top: 0; }
+    }
+
+    /* Dark mode ativado por padrão */
+</style>
 
 <!-- Tailwind CSS (Stitch Theme) -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -120,6 +141,7 @@ tailwind.config = {
                 "on-error": "var(--on-error, #ffffff)"
             },
             "fontFamily": {
+                "outfit": ["Hanken Grotesk", "Open Sans", "sans-serif"],
                 "lyric-focus": ["Open Sans"],
                 "display-lg-mobile": ["Hanken Grotesk"],
                 "body-lg": ["Open Sans"],
@@ -160,19 +182,13 @@ tailwind.config = {
 }
 </script>
 
-<!-- Design System V3 — Fonte única de variáveis -->
+<!-- Design System V3 — Fonte única de variáveis do Stitch -->
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/stitch-theme.css?v=<?= time() ?>">
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/design-system.css?v=<?= $verDS ?>">
-<!-- Main CSS -->
+<!-- Main CSS (Ponto de entrada centralizado de componentes e páginas) -->
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/app-main.css?v=<?= $verMain ?>">
-<!-- Barra Superior Global (Cache Busting direto para evitar cache antigo de importação) -->
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/page-sub-header.css?v=<?= time() ?>">
-<!-- Mobile Bottom Nav + Sidebar -->
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/mobile-bottom-nav.css?v=<?= $verMain ?>">
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/sidebar.css?v=<?= $verMain ?>">
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/pib-cards.css?v=<?= time() ?>">
-<link rel="stylesheet" href="<?= APP_URL ?>/assets/css/components/dashboard-hero.css?v=<?= time() ?>">
 
 <!-- Scripts Globais Críticos -->
 <script src="<?= APP_URL ?>/assets/js/theme-toggle.js?v=<?= time() ?>"></script>
 <script src="<?= APP_URL ?>/assets/js/layout.js?v=<?= time() ?>"></script>
+
+<!-- Dark mode ativado e sincronizado com o theme-toggle.js -->

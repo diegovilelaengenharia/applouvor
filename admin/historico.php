@@ -10,6 +10,121 @@ $period = $_GET['period'] ?? '90'; // 90 dias padrão para análise
 $dateLimit = date('Y-m-d', strtotime("-{$period} days"));
 $currentTab = $_GET['tab'] ?? 'visageral';
 
+// =============================================================
+// DADOS: Raio-X de todas as músicas (base para KPIs e listagem)
+// =============================================================
+try {
+    $stmtXRay = $pdo->prepare("
+        SELECT
+            s.id,
+            s.title,
+            s.artist,
+            s.tone,
+            MAX(sch.event_date) AS last_played,
+            COALESCE(DATEDIFF(CURDATE(), MAX(sch.event_date)), 9999) AS days_since_last,
+            COUNT(DISTINCT sch.id) AS freq_total,
+            SUM(CASE WHEN sch.event_date >= :dateLimit THEN 1 ELSE 0 END) AS freq_period
+        FROM songs s
+        LEFT JOIN schedule_songs ss ON ss.song_id = s.id
+        LEFT JOIN schedules sch ON sch.id = ss.schedule_id
+        GROUP BY s.id, s.title, s.artist, s.tone
+        ORDER BY freq_period DESC, freq_total DESC, s.title ASC
+    ");
+    $stmtXRay->execute([':dateLimit' => $dateLimit]);
+    $musicasXRay = $stmtXRay->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $musicasXRay = [];
+}
+
+// =============================================================
+// DADOS: KPI Cards — construídos a partir do Raio-X
+// =============================================================
+$totalMusicas   = count($musicasXRay);
+$ativas         = count(array_filter($musicasXRay, fn($m) => $m['freq_period'] > 0));
+$altaRotativ    = count(array_filter($musicasXRay, fn($m) => $m['freq_period'] >= 3));
+$geladeira      = count(array_filter($musicasXRay, fn($m) => $m['freq_total'] > 0 && $m['days_since_last'] > 90 && $m['days_since_last'] <= 180));
+$taxaUso        = $totalMusicas > 0 ? round(($ativas / $totalMusicas) * 100) : 0;
+
+$kpiCards = [
+    [
+        'title' => 'Músicas Ativas',
+        'value' => $ativas,
+        'desc'  => "de {$totalMusicas} no acervo",
+        'icon'  => 'music',
+        'style' => 'green',
+    ],
+    [
+        'title' => 'Taxa de Uso',
+        'value' => "{$taxaUso}%",
+        'desc'  => "do acervo nos últimos {$period} dias",
+        'icon'  => 'percent',
+        'style' => 'blue',
+    ],
+    [
+        'title' => 'Alta Rotatividade',
+        'value' => $altaRotativ,
+        'desc'  => '≥ 3 execuções no período',
+        'icon'  => 'flame',
+        'style' => 'rose',
+    ],
+    [
+        'title' => 'Na Geladeira',
+        'value' => $geladeira,
+        'desc'  => 'entre 90 e 180 dias sem tocar',
+        'icon'  => 'snowflake',
+        'style' => 'yellow',
+    ],
+];
+
+// =============================================================
+// DADOS: Top Tags mais executadas no período
+// =============================================================
+try {
+    $stmtTags = $pdo->prepare("
+        SELECT
+            t.name,
+            t.color,
+            SUM(CASE WHEN sch.event_date >= :dateLimit THEN 1 ELSE 0 END) AS uses_period,
+            COUNT(DISTINCT sch.id) AS uses_total
+        FROM tags t
+        JOIN song_tags st ON st.tag_id = t.id
+        JOIN songs s ON s.id = st.song_id
+        LEFT JOIN schedule_songs ss ON ss.song_id = s.id
+        LEFT JOIN schedules sch ON sch.id = ss.schedule_id
+        GROUP BY t.id, t.name, t.color
+        HAVING uses_period > 0
+        ORDER BY uses_period DESC
+        LIMIT 10
+    ");
+    $stmtTags->execute([':dateLimit' => $dateLimit]);
+    $topTags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $topTags = [];
+}
+
+// =============================================================
+// DADOS: Distribuição de Tons no período
+// =============================================================
+try {
+    $stmtTons = $pdo->prepare("
+        SELECT
+            s.tone,
+            COUNT(DISTINCT sch.id) AS uses_period
+        FROM songs s
+        JOIN schedule_songs ss ON ss.song_id = s.id
+        JOIN schedules sch ON sch.id = ss.schedule_id
+        WHERE sch.event_date >= :dateLimit
+          AND s.tone IS NOT NULL
+          AND s.tone != ''
+        GROUP BY s.tone
+        ORDER BY uses_period DESC
+    ");
+    $stmtTons->execute([':dateLimit' => $dateLimit]);
+    $usoTons = $stmtTons->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $usoTons = [];
+}
+
 // Helper para Links Externos
 function getExternalLinks($title, $artist) {
     $searchQuery = urlencode("$title $artist");

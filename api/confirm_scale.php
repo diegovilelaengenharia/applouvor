@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/confirm_scale.php
 header('Content-Type: application/json');
 require_once '../src/helpers/auth.php';
@@ -9,6 +9,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 $scheduleId = $data['schedule_id'] ?? 0;
 $status = $data['status'] ?? ''; // 'confirmed' or 'declined'
+$absenceNote = $data['absence_note'] ?? null;
 
 if (!$userId || !$scheduleId || !in_array($status, ['confirmed', 'declined'])) {
     echo json_encode(['success' => false, 'message' => 'Dados inválidos']);
@@ -18,12 +19,13 @@ if (!$userId || !$scheduleId || !in_array($status, ['confirmed', 'declined'])) {
 try {
     $stmt = $pdo->prepare("
         UPDATE schedule_users 
-        SET status = ? 
+        SET status = ?, absence_note = ? 
         WHERE schedule_id = ? AND user_id = ?
     ");
-    $stmt->execute([$status, $scheduleId, $userId]);
+    $stmt->execute([$status, $absenceNote, $scheduleId, $userId]);
 
     echo json_encode(['success' => true, 'message' => 'Status atualizado com sucesso']);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => 'Erro no banco de dados: ' . $e->getMessage()]);
 }
+

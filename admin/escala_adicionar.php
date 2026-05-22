@@ -73,89 +73,124 @@ renderAppHeader('Nova Escala');
 renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
 ?>
 
-<link rel="stylesheet" href="../assets/css/pages/escala-adicionar.css">
+<!-- SACRED MINIMALIST WIZARD FOR ADDING SCHEDULES -->
+<main class="max-w-[800px] mx-auto px-margin-mobile md:px-margin-desktop py-6 mb-24 animate-in duration-300">
+    
+    <!-- Wizard Progress bar and Dots -->
+    <div class="flex items-center justify-between mb-10 max-w-[500px] mx-auto relative px-4">
+        <!-- Progress track behind dots -->
+        <div class="absolute top-[15px] left-0 right-0 h-[2px] bg-outline-variant/30 dark:bg-outline-variant/10 -translate-y-1/2 z-0"></div>
+        <div id="progress-bar-line" class="absolute top-[15px] left-0 h-[2px] bg-worship-blue -translate-y-1/2 z-0 transition-all duration-300" style="width: 0%;"></div>
 
-<div class="compact-container">
-    <!-- Header removido, usando padrão renderPageHeader -->
+        <!-- Step 1 -->
+        <div class="relative z-10 flex flex-col items-center gap-2 cursor-pointer select-none" onclick="goToStep(1)" id="dot-container-1">
+            <div id="dot-1" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 bg-worship-blue text-white border-worship-blue shadow-[0_0_15px_rgba(46,126,237,0.3)]">1</div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-worship-blue" id="label-step-1">Detalhes</span>
+        </div>
 
-    <!-- Wizard Progress -->
-    <div class="wizard-progress">
-        <div class="step-item active" id="dot-container-1">
-            <div class="step-dot active" id="dot-1">1</div>
-            <span class="step-label">Detalhes</span>
+        <!-- Step 2 -->
+        <div class="relative z-10 flex flex-col items-center gap-2 cursor-pointer select-none" onclick="goToStep(2)" id="dot-container-2">
+            <div id="dot-2" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 bg-white dark:bg-deep-navy text-secondary dark:text-on-surface-variant border-outline-variant/60">2</div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-secondary dark:text-on-surface-variant" id="label-step-2">Participantes</span>
         </div>
-        <div class="step-item" id="dot-container-2">
-            <div class="step-dot" id="dot-2">2</div>
-            <span class="step-label">Participantes</span>
-        </div>
-        <div class="step-item" id="dot-container-3">
-            <div class="step-dot" id="dot-3">3</div>
-            <span class="step-label">Músicas</span>
+
+        <!-- Step 3 -->
+        <div class="relative z-10 flex flex-col items-center gap-2 cursor-pointer select-none" onclick="goToStep(3)" id="dot-container-3">
+            <div id="dot-3" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 bg-white dark:bg-deep-navy text-secondary dark:text-on-surface-variant border-outline-variant/60">3</div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-secondary dark:text-on-surface-variant" id="label-step-3">Músicas</span>
         </div>
     </div>
 
-    <form method="POST" id="wizardForm">
+    <form method="POST" id="wizardForm" class="space-y-6">
         <?= App\AuthMiddleware::csrfField() ?>
 
         <!-- PASSO 1: Detalhes -->
-        <div class="form-card active" id="step-1" style="--card-color: var(--slate-500); --focus-shadow: rgba(59, 130, 246, 0.1);">
-            <div class="card-title"><i data-lucide="calendar" style="width: 16px;"></i> Informações</div>
+        <div class="bg-white dark:bg-deep-navy border border-outline-variant/60 dark:border-outline-variant/10 rounded-2xl p-6 md:p-8 space-y-6 shadow-sm transition-all duration-300 block" id="step-1">
+            <div class="flex items-center gap-2 pb-4 border-b border-outline-variant/40 dark:border-outline-variant/10">
+                <i data-lucide="calendar" class="w-5 h-5 text-worship-blue"></i>
+                <h2 class="font-headline-md text-lg font-bold text-on-background">Informações do Evento</h2>
+            </div>
             
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: var(--font-body-sm); color: var(--text-secondary);">Data do Evento</label>
-                <div style="position: relative;">
-                    <input type="date" name="event_date" id="event_date" class="input-clean" value="<?= date('Y-m-d') ?>" required>
-                    <i data-lucide="calendar-days" style="position: absolute; right: 12px; top: 12px; color: var(--text-muted); width: 18px; pointer-events: none;"></i>
+            <div class="space-y-2">
+                <label for="event_date" class="block text-xs font-bold text-secondary dark:text-on-surface-variant uppercase tracking-wider">Data do Evento</label>
+                <div class="relative">
+                    <input type="date" name="event_date" id="event_date" class="w-full bg-ghost-gray dark:bg-black/20 text-on-background border border-outline-variant/60 dark:border-outline-variant/15 rounded-xl px-4 py-3.5 focus:outline-none focus:border-worship-blue focus:ring-1 focus:ring-worship-blue transition-all" value="<?= date('Y-m-d') ?>" required>
+                    <i data-lucide="calendar-days" class="absolute right-4 top-3.5 text-secondary dark:text-on-surface-variant w-5 h-5 pointer-events-none"></i>
                 </div>
             </div>
 
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: var(--font-body-sm); color: var(--text-secondary);">Tipo de Evento</label>
-                <div class="radio-grid">
-                    <label class="radio-option">
-                        <input type="radio" name="event_type" value="Culto Domingo a Noite" checked onchange="toggleCustomEventType()">
-                        <div class="radio-box">Domingo (Noite)</div>
+            <div class="space-y-3">
+                <label class="block text-xs font-bold text-secondary dark:text-on-surface-variant uppercase tracking-wider">Tipo de Evento</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="event_type" value="Culto Domingo a Noite" checked onchange="toggleCustomEventType()" class="sr-only peer">
+                        <div class="h-full flex items-center justify-center text-center p-3.5 text-xs font-bold uppercase tracking-wider border rounded-xl bg-transparent text-secondary dark:text-on-surface-variant border-outline-variant/60 hover:border-worship-blue/40 peer-checked:border-worship-blue peer-checked:bg-worship-blue/5 peer-checked:text-worship-blue transition-all">
+                            Domingo (Noite)
+                        </div>
                     </label>
-                    <label class="radio-option">
-                        <input type="radio" name="event_type" value="Culto Tema Especial" onchange="toggleCustomEventType()">
-                        <div class="radio-box">Tema Especial</div>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="event_type" value="Culto Tema Especial" onchange="toggleCustomEventType()" class="sr-only peer">
+                        <div class="h-full flex items-center justify-center text-center p-3.5 text-xs font-bold uppercase tracking-wider border rounded-xl bg-transparent text-secondary dark:text-on-surface-variant border-outline-variant/60 hover:border-worship-blue/40 peer-checked:border-worship-blue peer-checked:bg-worship-blue/5 peer-checked:text-worship-blue transition-all">
+                            Tema Especial
+                        </div>
                     </label>
-                    <label class="radio-option">
-                        <input type="radio" name="event_type" value="Ensaio" onchange="toggleCustomEventType()">
-                        <div class="radio-box">Ensaio</div>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="event_type" value="Ensaio" onchange="toggleCustomEventType()" class="sr-only peer">
+                        <div class="h-full flex items-center justify-center text-center p-3.5 text-xs font-bold uppercase tracking-wider border rounded-xl bg-transparent text-secondary dark:text-on-surface-variant border-outline-variant/60 hover:border-worship-blue/40 peer-checked:border-worship-blue peer-checked:bg-worship-blue/5 peer-checked:text-worship-blue transition-all">
+                            Ensaio
+                        </div>
                     </label>
-                    <label class="radio-option">
-                        <input type="radio" name="event_type" value="Outro" onchange="toggleCustomEventType()">
-                        <div class="radio-box">Outro</div>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="event_type" value="Outro" onchange="toggleCustomEventType()" class="sr-only peer">
+                        <div class="h-full flex items-center justify-center text-center p-3.5 text-xs font-bold uppercase tracking-wider border rounded-xl bg-transparent text-secondary dark:text-on-surface-variant border-outline-variant/60 hover:border-worship-blue/40 peer-checked:border-worship-blue peer-checked:bg-worship-blue/5 peer-checked:text-worship-blue transition-all">
+                            Outro
+                        </div>
                     </label>
                 </div>
-                <div id="customTypeBox" style="display: none; margin-top: 12px;">
-                    <input type="text" name="custom_event_type" id="custom_event_input" class="input-clean" placeholder="Digite o nome do evento...">
+                <div id="customTypeBox" class="hidden animate-in fade-in zoom-in-95 duration-200 mt-3">
+                    <input type="text" name="custom_event_type" id="custom_event_input" class="w-full bg-ghost-gray dark:bg-black/20 text-on-background border border-outline-variant/60 dark:border-outline-variant/15 rounded-xl px-4 py-3.5 focus:outline-none focus:border-worship-blue focus:ring-1 focus:ring-worship-blue transition-all" placeholder="Digite o nome do evento...">
                 </div>
             </div>
 
-            <div>
-                 <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: var(--font-body-sm); color: var(--text-secondary);">Observações</label>
-                <textarea name="notes" class="input-clean" rows="3" placeholder="Ex: Ceia, Visitante Especial..."></textarea>
+            <div class="space-y-2">
+                <label for="notes" class="block text-xs font-bold text-secondary dark:text-on-surface-variant uppercase tracking-wider">Observações</label>
+                <textarea name="notes" id="notes" class="w-full bg-ghost-gray dark:bg-black/20 text-on-background border border-outline-variant/60 dark:border-outline-variant/15 rounded-xl px-4 py-3.5 focus:outline-none focus:border-worship-blue focus:ring-1 focus:ring-worship-blue transition-all" rows="4" placeholder="Ex: Culto com Ceia, Visitante Especial..."></textarea>
             </div>
         </div>
 
         <!-- PASSO 2: Equipe -->
-        <div class="form-card" id="step-2" style="--card-color: var(--sage-500); --focus-shadow: rgba(34, 197, 94, 0.1);">
-            <div class="card-title"><i data-lucide="users" style="width: 16px;"></i> Selecionar Equipe</div>
+        <div class="bg-white dark:bg-deep-navy border border-outline-variant/60 dark:border-outline-variant/10 rounded-2xl p-6 md:p-8 space-y-6 shadow-sm transition-all duration-300 hidden" id="step-2">
+            <div class="flex items-center justify-between pb-4 border-b border-outline-variant/40 dark:border-outline-variant/10">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="users" class="w-5 h-5 text-worship-blue"></i>
+                    <h2 class="font-headline-md text-lg font-bold text-on-background">Selecionar Equipe</h2>
+                </div>
+                <span class="text-xs font-bold bg-worship-blue/10 text-worship-blue dark:bg-worship-blue/20 dark:text-primary-fixed px-3 py-1 rounded-full uppercase tracking-wider" id="members-selected-badge">0 Selecionados</span>
+            </div>
             
-            <div style="position: relative; margin-bottom: 16px;">
-                <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px;"></i>
-                <input type="text" onkeyup="filterList('list-members', this.value)" class="input-clean" style="padding-left: 40px;" placeholder="Buscar membro...">
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-4 top-3.5 text-secondary dark:text-on-surface-variant w-5 h-5"></i>
+                <input type="text" onkeyup="filterList('list-members', this.value)" class="w-full bg-ghost-gray dark:bg-black/20 text-on-background border border-outline-variant/60 dark:border-outline-variant/15 rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-worship-blue focus:ring-1 focus:ring-worship-blue transition-all" placeholder="Buscar membro por nome ou instrumento...">
             </div>
 
-            <div id="list-members" style="max-height: 400px; overflow-y: auto;">
-                <?php foreach ($allUsers as $user): ?>
-                    <label class="select-item" data-search="<?= strtolower($user['name']) ?>">
-                        <input type="checkbox" name="members[]" value="<?= $user['id'] ?>">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($user['name']) ?></div>
-                            <div style="font-size: var(--font-body-sm); color: var(--text-muted);"><?= htmlspecialchars($user['instrument'] ?: 'Vocal') ?></div>
+            <div id="list-members" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[380px] overflow-y-auto pr-1">
+                <?php foreach ($allUsers as $user): 
+                    $uPhoto = 'https://ui-avatars.com/api/?name='.urlencode($user['name']).'&background=random';
+                    $uInstrument = htmlspecialchars($user['instrument'] ?: 'Vocal');
+                ?>
+                    <label class="select-item cursor-pointer flex items-center gap-3 p-3.5 border border-outline-variant/60 dark:border-outline-variant/10 rounded-xl bg-transparent hover:border-worship-blue/40 dark:hover:bg-black/10 transition-all select-none" data-search="<?= strtolower($user['name'] . ' ' . $uInstrument) ?>">
+                        <input type="checkbox" name="members[]" value="<?= $user['id'] ?>" class="sr-only peer" onchange="updateSelectedCount('list-members', 'members-selected-badge')">
+                        
+                        <!-- Custom indicator checkbox -->
+                        <div class="w-5 h-5 rounded-md border border-outline-variant/80 dark:border-outline-variant/30 flex items-center justify-center peer-checked:bg-worship-blue peer-checked:border-worship-blue text-white transition-all shrink-0">
+                            <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                        </div>
+
+                        <img src="<?= $uPhoto ?>" class="w-9 h-9 rounded-full object-cover ring-1 ring-outline-variant/20 shrink-0" alt="<?= htmlspecialchars($user['name']) ?>">
+
+                        <div class="min-w-0 flex-1">
+                            <div class="font-bold text-sm text-on-background truncate"><?= htmlspecialchars($user['name']) ?></div>
+                            <div class="text-xs text-secondary truncate"><?= $uInstrument ?></div>
                         </div>
                     </label>
                 <?php endforeach; ?>
@@ -163,51 +198,67 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         </div>
 
         <!-- PASSO 3: Músicas -->
-        <div class="form-card" id="step-3" style="--card-color: var(--yellow-500); --focus-shadow: rgba(245, 158, 11, 0.1);">
-            <div class="card-title"><i data-lucide="music" style="width: 16px;"></i> Selecionar Repertório</div>
-
-            <div style="position: relative; margin-bottom: 16px;">
-                <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px;"></i>
-                <input type="text" onkeyup="filterList('list-songs', this.value)" class="input-clean" style="padding-left: 40px;" placeholder="Buscar música...">
+        <div class="bg-white dark:bg-deep-navy border border-outline-variant/60 dark:border-outline-variant/10 rounded-2xl p-6 md:p-8 space-y-6 shadow-sm transition-all duration-300 hidden" id="step-3">
+            <div class="flex items-center justify-between pb-4 border-b border-outline-variant/40 dark:border-outline-variant/10">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="music" class="w-5 h-5 text-worship-blue"></i>
+                    <h2 class="font-headline-md text-lg font-bold text-on-background">Selecionar Repertório</h2>
+                </div>
+                <span class="text-xs font-bold bg-worship-blue/10 text-worship-blue dark:bg-worship-blue/20 dark:text-primary-fixed px-3 py-1 rounded-full uppercase tracking-wider" id="songs-selected-badge">0 Selecionadas</span>
             </div>
 
-            <div id="list-songs" style="max-height: 400px; overflow-y: auto;">
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-4 top-3.5 text-secondary dark:text-on-surface-variant w-5 h-5"></i>
+                <input type="text" onkeyup="filterList('list-songs', this.value)" class="w-full bg-ghost-gray dark:bg-black/20 text-on-background border border-outline-variant/60 dark:border-outline-variant/15 rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-worship-blue focus:ring-1 focus:ring-worship-blue transition-all" placeholder="Buscar música por título ou artista...">
+            </div>
+
+            <div id="list-songs" class="grid grid-cols-1 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
                 <?php foreach ($allSongs as $song): ?>
-                    <label class="select-item" data-search="<?= strtolower($song['title'] . ' ' . $song['artist']) ?>">
-                        <input type="checkbox" name="songs[]" value="<?= $song['id'] ?>">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: var(--font-body); color: var(--text-main);"><?= htmlspecialchars($song['title']) ?></div>
-                            <div style="font-size: var(--font-body-sm); color: var(--text-muted);"><?= htmlspecialchars($song['artist']) ?> <span style="margin: 0 4px; color: var(--border-color);">|</span> <strong style="color:var(--primary);"><?= $song['tone'] ?></strong></div>
+                    <label class="select-item cursor-pointer flex items-center justify-between p-3.5 border border-outline-variant/60 dark:border-outline-variant/10 rounded-xl bg-transparent hover:border-worship-blue/40 dark:hover:bg-black/10 transition-all select-none" data-search="<?= strtolower($song['title'] . ' ' . $song['artist']) ?>">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <input type="checkbox" name="songs[]" value="<?= $song['id'] ?>" class="sr-only peer" onchange="updateSelectedCount('list-songs', 'songs-selected-badge')">
+                            
+                            <!-- Custom indicator checkbox -->
+                            <div class="w-5 h-5 rounded-md border border-outline-variant/80 dark:border-outline-variant/30 flex items-center justify-center peer-checked:bg-worship-blue peer-checked:border-worship-blue text-white transition-all shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+
+                            <div class="min-w-0">
+                                <div class="font-bold text-sm text-on-background truncate"><?= htmlspecialchars($song['title']) ?></div>
+                                <div class="text-xs text-secondary truncate"><?= htmlspecialchars($song['artist']) ?></div>
+                            </div>
                         </div>
+
+                        <span class="text-[10px] font-bold bg-altar-gold/10 text-altar-gold border border-altar-gold/20 px-2 py-0.5 rounded uppercase tracking-wider shrink-0"><?= $song['tone'] ?></span>
                     </label>
                 <?php endforeach; ?>
             </div>
         </div>
 
-        <!-- Navegação Bottom -->
-        <div class="actions-bar">
-            <button type="button" id="btn-back" onclick="changeStep(-1)" style="
-                flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-surface); color: var(--text-main); font-weight: 600; cursor: pointer; display: none; font-size: 0.95rem;
-            ">Voltar</button>
+        <!-- Bottom Action buttons -->
+        <div class="flex items-center gap-4 pt-4 border-t border-outline-variant/30 dark:border-outline-variant/10">
+            <button type="button" id="btn-back" onclick="changeStep(-1)" class="flex-1 py-3.5 px-6 rounded-full font-bold text-sm text-secondary dark:text-on-surface-variant hover:bg-ghost-gray dark:hover:bg-surface-variant/40 border border-outline-variant/60 transition-all duration-200 hidden select-none">
+                Voltar
+            </button>
 
-            <button type="button" id="btn-next" onclick="changeStep(1)" style="
-                flex: 2; padding: 12px; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); font-size: 0.95rem;
-            ">Próximo</button>
+            <button type="button" id="btn-next" onclick="changeStep(1)" class="flex-1 py-3.5 px-6 rounded-full font-bold text-sm text-white bg-worship-blue hover:brightness-110 shadow-sm active:scale-[0.98] transition-all duration-200 select-none">
+                Avançar
+            </button>
 
-            <button type="submit" id="btn-finish" style="
-                flex: 2; padding: 12px; border: none; border-radius: 12px; background: var(--sage-600); color: white; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); font-size: var(--font-body);
-            ">Finalizar Escala</button>
+            <button type="submit" id="btn-finish" class="flex-1 py-3.5 px-6 rounded-full font-bold text-sm text-white bg-emerald-600 hover:brightness-110 shadow-sm active:scale-[0.98] transition-all duration-200 hidden select-none">
+                Finalizar Escala
+            </button>
         </div>
 
     </form>
-</div>
+</main>
 
 <script>
     let currentStep = 1;
     const totalSteps = 3;
 
     function changeStep(direction) {
-        // Validação Passo 1
+        // Validation for step 1 date selection
         if (currentStep === 1 && direction === 1) {
             if (!document.getElementById('event_date').value) {
                 alert('Selecione uma data para continuar.');
@@ -218,30 +269,53 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         const nextStep = currentStep + direction;
         if (nextStep < 1 || nextStep > totalSteps) return;
 
-        // Atualizar Dots
-        if (direction === 1) {
-            document.getElementById('dot-' + currentStep).classList.remove('active');
-            document.getElementById('dot-' + currentStep).classList.add('completed');
-            document.getElementById('dot-container-' + currentStep).classList.remove('active');
-            
-            document.getElementById('dot-' + nextStep).classList.add('active');
-            document.getElementById('dot-container-' + nextStep).classList.add('active');
-        } else {
-            document.getElementById('dot-' + currentStep).classList.remove('active');
-            document.getElementById('dot-container-' + currentStep).classList.remove('active');
-            
-            document.getElementById('dot-' + nextStep).classList.remove('completed');
-            document.getElementById('dot-' + nextStep).classList.add('active');
-            document.getElementById('dot-container-' + nextStep).classList.add('active');
+        goToStep(nextStep);
+    }
+
+    function goToStep(step) {
+        // Prevent going forward without completing step 1 date validation
+        if (step > 1 && !document.getElementById('event_date').value) {
+            alert('Selecione uma data para continuar.');
+            return;
         }
 
-        // Trocar tela
-        document.getElementById('step-' + currentStep).classList.remove('active');
-        document.getElementById('step-' + nextStep).classList.add('active');
-        
-        currentStep = nextStep;
+        const progressLine = document.getElementById('progress-bar-line');
+        const percentage = ((step - 1) / (totalSteps - 1)) * 100;
+        progressLine.style.width = percentage + '%';
+
+        // Update progress Dots and Labels
+        for (let i = 1; i <= totalSteps; i++) {
+            const dot = document.getElementById('dot-' + i);
+            const label = document.getElementById('label-step-' + i);
+            
+            if (i === step) {
+                dot.className = "w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 bg-worship-blue text-white border-worship-blue shadow-[0_0_15px_rgba(46,126,237,0.3)]";
+                label.className = "text-[10px] font-bold uppercase tracking-wider text-worship-blue";
+                dot.innerHTML = i;
+            } else if (i < step) {
+                dot.className = "w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 bg-emerald-500 text-white border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.2)]";
+                label.className = "text-[10px] font-bold uppercase tracking-wider text-emerald-500";
+                dot.innerHTML = '<i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>';
+            } else {
+                dot.className = "w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border transition-all duration-300 bg-white dark:bg-deep-navy text-secondary dark:text-on-surface-variant border-outline-variant/60";
+                label.className = "text-[10px] font-bold uppercase tracking-wider text-secondary dark:text-on-surface-variant";
+                dot.innerHTML = i;
+            }
+        }
+
+        // Switch panels with sliding fade animation
+        const currentPanel = document.getElementById('step-' + currentStep);
+        const nextPanel = document.getElementById('step-' + step);
+
+        currentPanel.classList.add('hidden');
+        currentPanel.classList.remove('block');
+        nextPanel.classList.remove('hidden');
+        nextPanel.classList.add('block', 'animate-in', 'fade-in', 'zoom-in-95', 'duration-200');
+
+        currentStep = step;
         updateButtons();
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lucide.createIcons();
     }
 
     function updateButtons() {
@@ -249,14 +323,18 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         const btnNext = document.getElementById('btn-next');
         const btnFinish = document.getElementById('btn-finish');
 
-        btnBack.style.display = currentStep > 1 ? 'block' : 'none';
+        if (currentStep === 1) {
+            btnBack.classList.add('hidden');
+        } else {
+            btnBack.classList.remove('hidden');
+        }
 
         if (currentStep === totalSteps) {
-            btnNext.style.display = 'none';
-            btnFinish.style.display = 'block';
+            btnNext.classList.add('hidden');
+            btnFinish.classList.remove('hidden');
         } else {
-            btnNext.style.display = 'block';
-            btnFinish.style.display = 'none';
+            btnNext.classList.remove('hidden');
+            btnFinish.classList.add('hidden');
         }
     }
 
@@ -265,8 +343,16 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         const customInput = document.getElementById('custom_event_input');
         const isOutro = document.querySelector('input[name="event_type"]:checked').value === 'Outro';
 
-        customBox.style.display = isOutro ? 'block' : 'none';
-        if (isOutro) customInput.focus();
+        if (isOutro) {
+            customBox.classList.remove('hidden');
+            customBox.classList.add('block');
+            customInput.focus();
+            customInput.required = true;
+        } else {
+            customBox.classList.remove('block');
+            customBox.classList.add('hidden');
+            customInput.required = false;
+        }
     }
 
     function filterList(listId, term) {
@@ -274,19 +360,39 @@ renderPageHeader('Nova Escala', 'Configure os detalhes do evento');
         const items = document.querySelectorAll(`#${listId} .select-item`);
         items.forEach(item => {
             const text = item.getAttribute('data-search');
-            item.style.display = text.includes(term) ? 'flex' : 'none';
+            if (text.includes(term)) {
+                item.classList.remove('hidden');
+                item.classList.add('flex');
+            } else {
+                item.classList.remove('flex');
+                item.classList.add('hidden');
+            }
         });
     }
 
-    // Highlight selected checkboxes
-    document.querySelectorAll('.select-item input').forEach(input => {
-        input.addEventListener('change', function() {
-            if (this.checked) this.parentElement.classList.add('selected');
-            else this.parentElement.classList.remove('selected');
+    function updateSelectedCount(listId, badgeId) {
+        const checkedCount = document.querySelectorAll(`#${listId} input[type="checkbox"]:checked`).length;
+        const badge = document.getElementById(badgeId);
+        badge.textContent = checkedCount + (listId.includes('members') ? ' Selecionados' : ' Selecionadas');
+        
+        // Dynamic card styling based on checked status
+        document.querySelectorAll(`#${listId} .select-item`).forEach(card => {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                card.classList.add('border-worship-blue', 'bg-worship-blue/5', 'dark:bg-worship-blue/10');
+                card.classList.remove('border-outline-variant/60', 'dark:border-outline-variant/10');
+            } else {
+                card.classList.remove('border-worship-blue', 'bg-worship-blue/5', 'dark:bg-worship-blue/10');
+                card.classList.add('border-outline-variant/60', 'dark:border-outline-variant/10');
+            }
         });
+    }
+
+    // Initialize counts on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        updateSelectedCount('list-members', 'members-selected-badge');
+        updateSelectedCount('list-songs', 'songs-selected-badge');
     });
-    
-    lucide.createIcons();
 </script>
 
 <?php renderAppFooter(); ?>

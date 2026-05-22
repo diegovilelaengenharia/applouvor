@@ -64,98 +64,188 @@ renderAppHeader('Gestão de Sugestões');
 renderPageHeader('Gestão de Sugestões', 'Aprove ou rejeite músicas sugeridas');
 ?>
 
-<!-- Estilos Compartilhados com Repertório (Compact Cards) -->
+<style>
+    .bento-suggestion-card {
+        background: var(--surface-bright, #ffffff);
+        border: 1px solid var(--outline-variant, rgba(224, 226, 231, 0.4));
+        box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark .bento-suggestion-card {
+        background: var(--bg-surface, #1A1B1F);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .bento-suggestion-card:hover {
+        border-color: var(--worship-blue, #2E7EED);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        transform: translateY(-1.5px);
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 
-
-<div style="max-width: 800px; margin: 0 auto; padding: 16px;">
-
-    <!-- Tabs Navegação (Igual Repertório) -->
-    <div class="repertorio-controls" style="margin-bottom: 24px;">
-        <div class="tabs-container">
-            <a href="?tab=pending" class="tab-link <?= $tab == 'pending' ? 'active' : '' ?>">Pendentes</a>
-            <a href="?tab=approved" class="tab-link <?= $tab == 'approved' ? 'active' : '' ?>">Aprovadas</a>
-            <a href="?tab=rejected" class="tab-link <?= $tab == 'rejected' ? 'active' : '' ?>">Rejeitadas</a>
+<main class="max-w-[800px] mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-24 font-hanken">
+    
+    <!-- Feedbacks de erro ou sucesso -->
+    <?php if (isset($error)): ?>
+        <div class="flex items-center gap-3 bg-rose-500/10 border border-rose-500/30 text-rose-500 p-4 rounded-2xl mb-6 animate-fade-in">
+            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+            <span class="text-xs font-semibold"><?= htmlspecialchars($error) ?></span>
         </div>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['success'])): ?>
+        <div class="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 p-4 rounded-2xl mb-6 animate-fade-in">
+            <i data-lucide="check-circle" class="w-5 h-5 shrink-0"></i>
+            <span class="text-xs font-semibold">Ação processada e registrada com sucesso!</span>
+        </div>
+    <?php endif; ?>
+
+    <!-- Navegação por Abas (Pílulas Modernas) -->
+    <div class="flex bg-ghost-gray dark:bg-surface-variant/10 p-1.5 rounded-full border border-outline-variant/30 w-fit mb-8 overflow-x-auto max-w-full gap-1 hide-scrollbar shadow-sm">
+        <a href="?tab=pending" class="px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-200 <?= $tab == 'pending' ? 'bg-worship-blue text-white shadow-sm' : 'text-secondary hover:text-worship-blue' ?>">
+            Pendentes
+        </a>
+        <a href="?tab=approved" class="px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-200 <?= $tab == 'approved' ? 'bg-worship-blue text-white shadow-sm' : 'text-secondary hover:text-worship-blue' ?>">
+            Aprovadas
+        </a>
+        <a href="?tab=rejected" class="px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-200 <?= $tab == 'rejected' ? 'bg-worship-blue text-white shadow-sm' : 'text-secondary hover:text-worship-blue' ?>">
+            Rejeitadas
+        </a>
     </div>
 
     <!-- Lista de Sugestões -->
-    <div class="results-list">
+    <div class="flex flex-col gap-4">
         <?php if (empty($suggestions)): ?>
-            <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">
-                <i data-lucide="<?= $tab == 'pending' ? 'inbox' : ($tab == 'approved' ? 'check-circle' : 'x-circle') ?>" 
-                   style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.2;"></i>
-                <p>Nenhuma sugestão <?= $tab == 'pending' ? 'pendente' : ($tab == 'approved' ? 'aprovada' : 'rejeitada') ?>.</p>
+            <div class="flex flex-col items-center justify-center text-center p-12 bg-white dark:bg-deep-navy border border-outline-variant/20 rounded-2xl shadow-sm">
+                <div class="w-16 h-16 rounded-full bg-ghost-gray dark:bg-surface-variant/10 flex items-center justify-center mb-4 text-secondary/40">
+                    <i data-lucide="<?= $tab == 'pending' ? 'inbox' : ($tab == 'approved' ? 'check-circle' : 'x-circle') ?>" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-extrabold text-sm text-on-background">Nenhuma sugestão encontrada</h3>
+                <p class="text-xs text-secondary mt-1 max-w-xs">Não existem sugestões marcadas como <?= $tab == 'pending' ? 'pendentes de moderação' : ($tab == 'approved' ? 'aprovadas pelo ministério' : 'rejeitadas atualmente') ?>.</p>
             </div>
         <?php else: ?>
             <?php foreach ($suggestions as $sug): 
-                $userPhoto = $sug['user_photo'] ?: 'https://ui-avatars.com/api/?name='.urlencode($sug['user_name']).'&background=random';
+                $userName = $sug['user_name'] ?: 'Membro';
+                $userPhoto = $sug['user_photo'];
+                if ($userPhoto) {
+                    if (strpos($userPhoto, 'http') === false && strpos($userPhoto, 'assets') === false && strpos($userPhoto, 'uploads') === false) {
+                        $userPhoto = '../uploads/' . $userPhoto;
+                    }
+                } else {
+                    $userPhoto = 'https://ui-avatars.com/api/?name='.urlencode($userName).'&background=dbeafe&color=1e40af';
+                }
             ?>
-                <div class="compact-card" style="display: block;"> <!-- Block to allow multiline content -->
-                    <div style="display: flex; align-items: start; gap: 12px;">
-                        
-                        <!-- Ícone / Avatar -->
-                        <div class="compact-card-icon" style="background: var(--bg-surface-active);">
-                            <?php if ($sug['youtube_link']): ?>
-                                <i data-lucide="youtube" style="width: 20px; color: #ef4444;"></i>
-                            <?php else: ?>
-                                <i data-lucide="music" style="width: 20px; color: var(--text-tertiary);"></i>
-                            <?php endif; ?>
+                <div class="bento-suggestion-card rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+                    
+                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                        <!-- Avatar do Proponente -->
+                        <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-outline-variant/30 shadow-sm relative">
+                            <img src="<?= $userPhoto ?>" alt="<?= htmlspecialchars($userName) ?>" class="w-full h-full object-cover">
                         </div>
-
-                        <div class="compact-card-content">
-                            <div class="compact-card-title"><?= htmlspecialchars($sug['title']) ?></div>
-                            <div class="compact-card-subtitle">
-                                <span><?= htmlspecialchars($sug['artist']) ?></span>
-                                <?php if($sug['tone']): ?>
-                                    <span style="background: var(--bg-surface-active); padding: 1px 6px; border-radius: 4px; font-weight: 700; font-size: 0.7rem;"><?= htmlspecialchars($sug['tone']) ?></span>
+                        
+                        <div class="flex-1 min-w-0">
+                            <!-- Título e Tom -->
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="font-extrabold text-base text-on-background leading-tight truncate">
+                                    <?= htmlspecialchars($sug['title']) ?>
+                                </h3>
+                                <?php if ($sug['tone']): ?>
+                                    <span class="px-2.5 py-0.5 rounded-md bg-ghost-gray dark:bg-surface-variant/20 text-altar-gold border border-outline-variant/20 text-[10px] font-extrabold tracking-tight shrink-0 shadow-sm">
+                                        <?= htmlspecialchars($sug['tone']) ?>
+                                    </span>
                                 <?php endif; ?>
                             </div>
                             
-                            <div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-tertiary); display: flex; limit-items: center; gap: 6px;">
-                                <img src="<?= $userPhoto ?>" class="user-avatar-mini">
-                                <?= htmlspecialchars($sug['user_name']) ?> • <?= date('d/m/Y', strtotime($sug['created_at'])) ?>
-                            </div>
+                            <p class="text-xs text-secondary mt-1 font-bold">
+                                por <?= htmlspecialchars($sug['artist']) ?>
+                            </p>
+                            
+                            <!-- Proponente e data -->
+                            <p class="text-[10px] text-secondary/60 mt-1">
+                                Sugerida por <span class="font-bold text-on-background/70"><?= htmlspecialchars($userName) ?></span> em <?= date('d/m/Y', strtotime($sug['created_at'])) ?>
+                            </p>
 
-                            <!-- User Reason -->
+                            <!-- Justificativa (Reason) -->
                             <?php if ($sug['reason']): ?>
-                                <div style="margin-top: 6px; font-style: italic; font-size: 0.8rem; color: var(--text-secondary); background: var(--bg-main); padding: 6px 10px; border-radius: 6px;">
+                                <div class="mt-4 text-xs italic text-secondary bg-ghost-gray/40 dark:bg-surface-variant/5 border border-outline-variant/10 rounded-xl p-3 leading-relaxed relative pl-8">
+                                    <i data-lucide="quote-left" class="w-3.5 h-3.5 text-worship-blue/40 absolute left-3 top-3.5"></i>
                                     "<?= htmlspecialchars($sug['reason']) ?>"
                                 </div>
                             <?php endif; ?>
-
-                            <!-- Botões de Ação (Apenas Pendentes) -->
-                            <?php if ($tab == 'pending'): ?>
-                                <div class="btn-action-group">
-                                    <form method="POST" style="display:inline;">
-                                        <input type="hidden" name="id" value="<?= $sug['id'] ?>">
-                                        <input type="hidden" name="action" value="approve">
-                                        <button type="submit" class="btn-xs btn-approve">
-                                            <i data-lucide="check" width="14"></i> Aprovar
-                                        </button>
-                                    </form>
-                                    <form method="POST" style="display:inline;">
-                                        <input type="hidden" name="id" value="<?= $sug['id'] ?>">
-                                        <input type="hidden" name="action" value="reject">
-                                        <button type="submit" class="btn-xs btn-reject">
-                                            <i data-lucide="x" width="14"></i> Rejeitar
-                                        </button>
-                                    </form>
-                                </div>
-                            <?php endif; ?>
                         </div>
+                    </div>
 
-                        <!-- Links Externos -->
-                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <?php if($sug['youtube_link']): ?>
-                                <a href="<?= $sug['youtube_link'] ?>" target="_blank" style="color: var(--text-tertiary);"><i data-lucide="external-link" width="16"></i></a>
-                            <?php endif; ?>
-                         </div>
+                    <div class="flex flex-wrap md:flex-col items-start md:items-end gap-3 shrink-0 border-t md:border-t-0 border-outline-variant/10 pt-4 md:pt-0">
+                        <!-- Links Externos de Mídia -->
+                        <?php if ($sug['youtube_link']): 
+                            $mediaLink = $sug['youtube_link'];
+                            $isYoutube = strpos(strtolower($mediaLink), 'youtube.com') !== false || strpos(strtolower($mediaLink), 'youtu.be') !== false;
+                            $isSpotify = strpos(strtolower($mediaLink), 'spotify.com') !== false;
+                        ?>
+                            <a href="<?= htmlspecialchars($mediaLink) ?>" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase transition-all duration-200 active:scale-95 border shadow-sm <?php
+                                if ($isYoutube) {
+                                    echo 'bg-rose-500/10 border-rose-500/30 text-rose-500 hover:bg-rose-500/20';
+                                } elseif ($isSpotify) {
+                                    echo 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/20';
+                                } else {
+                                    echo 'bg-slate-500/10 border-slate-500/30 text-slate-500 hover:bg-slate-500/20';
+                                }
+                            ?>">
+                                <?php if ($isYoutube): ?>
+                                    <i data-lucide="youtube" class="w-3.5 h-3.5"></i>
+                                    <span>YouTube</span>
+                                <?php elseif ($isSpotify): ?>
+                                    <i data-lucide="music" class="w-3.5 h-3.5"></i>
+                                    <span>Spotify</span>
+                                <?php else: ?>
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                    <span>Mídia</span>
+                                <?php endif; ?>
+                            </a>
+                        <?php endif; ?>
 
+                        <!-- Botões de Ação de Moderação -->
+                        <?php if ($tab == 'pending'): ?>
+                            <div class="flex items-center gap-2 mt-1 w-full md:w-auto">
+                                <!-- Aprovar (Emerald) -->
+                                <form method="POST" class="inline-block flex-1 md:flex-initial">
+                                    <input type="hidden" name="id" value="<?= $sug['id'] ?>">
+                                    <input type="hidden" name="action" value="approve">
+                                    <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-4 h-9 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.97] text-white text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-all duration-200 shadow-sm">
+                                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                        <span>Aprovar</span>
+                                    </button>
+                                </form>
+                                
+                                <!-- Rejeitar (Rose) -->
+                                <form method="POST" class="inline-block flex-1 md:flex-initial">
+                                    <input type="hidden" name="id" value="<?= $sug['id'] ?>">
+                                    <input type="hidden" name="action" value="reject">
+                                    <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-3.5 h-9 border border-rose-500/30 hover:bg-rose-500/10 active:scale-[0.97] text-rose-500 text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-all duration-200">
+                                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                                        <span>Rejeitar</span>
+                                    </button>
+                                </form>
+                            </div>
+                        <?php else: ?>
+                            <!-- Tag de Status (Aprovada/Rejeitada) -->
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border <?php
+                                if ($tab == 'approved') {
+                                    echo 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500';
+                                } else {
+                                    echo 'bg-rose-500/10 border-rose-500/20 text-rose-500';
+                                }
+                            ?>">
+                                <i data-lucide="<?= $tab == 'approved' ? 'check' : 'x' ?>" class="w-3 h-3"></i>
+                                <span><?= $tab == 'approved' ? 'Aprovada' : 'Rejeitada' ?></span>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-</div>
+</main>
 
 <?php renderAppFooter(); ?>
