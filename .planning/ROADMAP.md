@@ -276,6 +276,25 @@ Plans:
 
 ---
 
+### Phase 11: Migração do Painel Administrativo para React
+**Goal:** Configurar o ambiente do projeto React com Vite + TypeScript + Tailwind CSS do zero e migrar a tela principal (Dashboard) do Painel Administrativo, integrando-a de forma assíncrona com as APIs JSON PHP existentes de forma otimizada para a Hostinger.
+**Mode:** mvp
+
+**Requirements:** REA-01, REA-02, REA-03, REA-04
+
+**Success Criteria:**
+1. Projeto React configurado com Vite, TypeScript e Tailwind CSS v4 na raiz ou em pasta dedicada, gerando build estático otimizado.
+2. Layout autoral premium criado em React (Sidebar, TopBar unificado, Dark Mode reativo e Auth Context para cookies de sessão PHP).
+3. Dashboard Administrativo principal migrado para React (`admin/index.php` -> React) exibindo os dados em tempo real da API `api/admin/dashboard_data.php`.
+4. Transições de página instantâneas e animações Spring de alta qualidade em todos os cliques e hovers.
+
+**Plans:**
+- [ ] 11A-PLAN.md — Setup do Ambiente React (Vite + TypeScript + Tailwind v4 + Estrutura de Pastas)
+- [ ] 11B-PLAN.md — Layout Autoral & Sistema de Temas (Sidebar, TopBar, Dark Mode, Cookies/Auth)
+- [ ] 11C-PLAN.md — Dashboard em React (Migração de admin/index.php, Cards Bento Autoriais, Fetch de API PHP)
+
+---
+
 ## Dependencies
 
 ```
@@ -288,6 +307,8 @@ Phase 6 (Metrônomo) → independente
 Phase 7 (Histórico) → depende de Phase 4
 Phase 8 (Devocional) → independente
 Phase 9 (Deploy) → todas as fases anteriores
+Phase 10 (Harmonização) → todas as fases visuais PHP
+Phase 11 (React Migration) → depende do setup das APIs PHP existentes (Phase 2-9)
 ```
 
 ---
@@ -307,8 +328,7 @@ Phase 9 (Deploy) → todas as fases anteriores
 | 8 | Devocional+ | Streak + versículo + orações da equipe | 3 | ✅ Concluída |
 | 9 | Deploy Final | Deploy documentado + SW offline + PWA | 3 | ✅ Concluída |
 | 10 | Harmonização Visual | Tipografia + botões + espaçamentos consistentes (desktop + mobile) | 4 | ✅ Concluída |
-
+| 11 | Migração React | Painel Principal em Vite + React + Tailwind v4 Autoral | 3 | ⬜ Planejado |
 
 ---
-*Criado: 2026-05-16 | v1.1 — Atualizado 2026-05-17 com gaps da auditoria profissional*
-*v1.2 — Adicionada Phase 10 (Harmonização Visual) em 2026-05-20*
+*Criado: 2026-05-16 | v1.3 — Atualizado 2026-05-22 para migração do painel para React*

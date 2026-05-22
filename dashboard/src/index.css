@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-bg-dark: var(--bg-dark);
+  --color-surface: var(--surface);
+  --color-border-custom: var(--border-custom);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --font-hanken: "Hanken Grotesk", sans-serif;
+  --font-sans: "Open Sans", sans-serif;
+}
+
+:root {
+  /* Tema Claro (tons de papel premium / minimalismo litúrgico) */
+  --primary: #2E7EED;
+  --primary-hover: #1C67D2;
+  --accent: #D4A017; /* Ouro fosco para light */
+  --bg-dark: #F5F7FA; /* Off-white papel */
+  --surface: #FFFFFF; /* Branco puro */
+  --border-custom: #E4E8EE;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+}
+
+.dark {
+  /* Tema Escuro Solene */
+  --primary: #2E7EED;
+  --primary-hover: #4C94F6;
+  --accent: #FFC107;
+  --bg-dark: #121316;
+  --surface: #1C1E22;
+  --border-custom: #2A2E35;
+  --text-main: #F1F5F9;
+  --text-muted: #94A3B8;
+}
+
+/* Regras Globais de Reset Baseadas em Sacred Minimalist */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-main);
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-hanken);
+    font-weight: 800;
+  }
+}

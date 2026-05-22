@@ -3,8 +3,10 @@
 # ======================================
 
 # Dependências
-/vendor/
-/node_modules/
+vendor/
+node_modules/
+dashboard/node_modules/
+dashboard/dist/
 
 # Arquivos de configuração sensíveis
 # Diego: .htaccess versionado intencionalmente para o webhook deployar (decisão explícita).

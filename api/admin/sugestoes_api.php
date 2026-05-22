@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/admin/sugestoes_api.php
 header('Content-Type: application/json');
 require_once '../src/config/db.php';
@@ -85,6 +85,15 @@ try {
             $suggestion = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$suggestion) throw new Exception("Sugestão não encontrada.");
+
+            // Verificar duplicidade na tabela de músicas (songs) antes de aprovar
+            $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM songs WHERE LOWER(TRIM(title)) = LOWER(TRIM(?)) AND LOWER(TRIM(artist)) = LOWER(TRIM(?))");
+            $stmtCheck->execute([$suggestion['title'], $suggestion['artist']]);
+            $exists = $stmtCheck->fetchColumn();
+
+            if ($exists > 0) {
+                throw new Exception("Esta música (" . $suggestion['title'] . " - " . $suggestion['artist'] . ") já existe no Repertório oficial!");
+            }
 
             $pdo->beginTransaction();
 

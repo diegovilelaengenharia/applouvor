@@ -72,6 +72,13 @@
 - [ ] **UI-03**: Espaçamentos e densidade padronizados por tokens (paddings de página, gaps, `.pib-card` uniforme) — visual harmônico em desktop e mobile
 - [ ] **UI-04**: Auditoria visual de todas as páginas (admin + músico) confirmando consistência em 375px e desktop, sem regressões funcionais
 
+### REACT — Migração do Painel (Phase 11)
+
+- [ ] **REA-01**: Projeto React configurado com Vite, TypeScript e Tailwind CSS v4 na subpasta `/dashboard` gerando build estático otimizado
+- [ ] **REA-02**: Layout autoral premium criado em React (Sidebar, TopBar unificado, Dark Mode reativo e Auth Context para cookies de sessão PHP)
+- [ ] **REA-03**: Dashboard Administrativo principal migrado para React (`admin/index.php` -> React) exibindo os dados em tempo real da API `api/admin/dashboard_data.php`
+- [ ] **REA-04**: Transições de página instantâneas e animações Spring de alta qualidade em todos os cliques e hovers
+
 ---
 
 ## v2 Requirements (próximo milestone)
@@ -109,6 +116,7 @@
 | DEV-01..02 | Phase 8 | — |
 | PWA-01..03 | Phase 9 | — |
 | UI-01..04 | Phase 10 | — |
+| REA-01..04 | Phase 11 | — |
 
 ---
 *Gerado: 2026-05-16 | Milestone 1 — Modernização & Features Faltantes*
