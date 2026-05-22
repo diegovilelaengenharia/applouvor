@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * API para Gerenciar Push Subscriptions
  */

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/helpers/reading_plan.php
 // Dados do Plano de Leitura Anual (Duplicado de reading_plan_data.js para SSR)
 

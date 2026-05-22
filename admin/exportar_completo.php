@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/exportar_completo.php
 // Exportação profissional em Excel com múltiplas abas (CORRIGIDO)
 

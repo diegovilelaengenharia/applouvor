@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/leitura.php (Refatorado Premium 2026)
 require_once '../src/helpers/auth.php';
 require_once '../src/config/db.php';

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/migrate_avisos.php
 require_once '../src/config/db.php';
 

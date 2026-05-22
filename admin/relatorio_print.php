@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once '../src/config/db.php';
 require_once '../src/helpers/auth.php';
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Script de Setup e Migração Automatizada de Banco de Dados
  * Executa todas as migrações estruturais necessárias para sanar os erros das páginas de Membros e Oração.

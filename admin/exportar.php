@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/exportar.php
 // Página de opções de exportação (Painel Admin)
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/export_diary.php
 require_once '../src/helpers/auth.php';
 checkLogin();

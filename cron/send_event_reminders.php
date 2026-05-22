@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Script Cron: Enviar Lembretes de Eventos
  * 

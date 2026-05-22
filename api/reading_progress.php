@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * API Endpoint for Reading Progress
  * Manages user reading progress, settings, and notes

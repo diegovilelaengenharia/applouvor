@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // run_migration.php - Executar migration 005
 require_once __DIR__ . '/../../src/config/db.php';
 

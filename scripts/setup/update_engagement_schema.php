@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/update_engagement_schema.php
 require_once '../src/config/db.php';
 

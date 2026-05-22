@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/public_key.php
 header('Content-Type: application/json');
 

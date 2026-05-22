@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * API Endpoint for Reading Plans
  * Serves reading plan data and bible book mappings.

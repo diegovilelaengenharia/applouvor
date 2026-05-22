@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/admin/dashboard_data.php
 // Controlador robusto que alimenta o Dashboard Premium preservando TODAS as funcionalidades originais.
 

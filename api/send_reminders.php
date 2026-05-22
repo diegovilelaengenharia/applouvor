@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/send_reminders.php — Envia push de lembrete para participantes 'pending' de escalas nos próximos 2 dias
 header('Content-Type: application/json');
 require_once '../src/helpers/auth.php';

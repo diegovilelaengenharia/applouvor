@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/config/no-cache.php
 // Configurações para prevenir cache do navegador
 

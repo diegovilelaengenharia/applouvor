@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/repertorio_stats.php
 require_once '../src/helpers/auth.php';
 require_once '../src/config/db.php';

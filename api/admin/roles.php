@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/api/roles.php
 // API para gerenciar funções dos membros
 

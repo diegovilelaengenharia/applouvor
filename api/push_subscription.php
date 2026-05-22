@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/push_subscription.php
 require_once __DIR__ . '/../src/config/db.php';
 require_once __DIR__ . '/../src/helpers/auth.php';

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/pasta_detalhe.php
 require_once '../src/config/db.php';
 require_once '../src/layout/layout.php';

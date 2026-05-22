@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Script Cron: Sincronização com Google Calendar
  * 

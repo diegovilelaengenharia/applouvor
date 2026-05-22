@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/config/db.php
 
 require_once 'config.php';

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * MIGRATION DE RESTAURAÇÃO - App Louvor
  * Garante que todas as tabelas e colunas originais existam.

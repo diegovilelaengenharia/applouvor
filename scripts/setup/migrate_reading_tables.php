@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Migration Script - Create Reading Tables
  * Run this once to create the necessary database tables for the reading module

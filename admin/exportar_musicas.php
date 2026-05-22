@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/exportar_musicas.php
 // Exportar músicas para Excel
 

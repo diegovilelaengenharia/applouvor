@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/roteiro.php — CRUD para itens do roteiro de culto
 header('Content-Type: application/json');
 require_once '../src/helpers/auth.php';

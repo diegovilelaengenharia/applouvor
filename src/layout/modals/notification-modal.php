@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/layout/modals/notification-modal.php
 ?>
 <!-- MODAL DETALHES NOTIFICAÇÃO -->

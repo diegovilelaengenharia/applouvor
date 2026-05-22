@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/update_avatar_correto.php
 // Script definitivo para rodar na raiz do admin
 require_once '../src/config/db.php';

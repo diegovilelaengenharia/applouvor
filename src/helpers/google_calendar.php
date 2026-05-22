@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/helpers/google_calendar.php
 
 /**

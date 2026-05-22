@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/api/reset_dashboard_cache.php
 // Script temporário para limpar cache do dashboard
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * API Endpoint para Reações de Devocionais
  * Handles AJAX requests for devotional reactions

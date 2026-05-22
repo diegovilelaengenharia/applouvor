@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/clear_cache.php
 // Script para limpar cache de OPcache do servidor
 

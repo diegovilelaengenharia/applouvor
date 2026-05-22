@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // api/save_absences.php — Persiste status de presença/falta pós-culto (admin only)
 header('Content-Type: application/json');
 require_once '../src/helpers/auth.php';

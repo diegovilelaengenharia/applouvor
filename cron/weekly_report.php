@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Cron Job - Relatório Semanal
  * Deve ser executado toda segunda-feira de manhã (ex: 08:00)

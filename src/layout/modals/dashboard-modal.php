@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/layout/modals/dashboard-modal.php
 ?>
 <!-- Dashboard Customization Modal -->

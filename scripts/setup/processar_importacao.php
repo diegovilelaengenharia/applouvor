@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/processar_importacao.php
 // Processar importação de músicas do Excel
 

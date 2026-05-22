@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // src/helpers/reading_plans_data.php
 // Dados completos dos 3 planos de leitura bíblica
 

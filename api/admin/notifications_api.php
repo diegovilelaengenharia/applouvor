@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * API de Notificações
  * Endpoints para gerenciar notificações

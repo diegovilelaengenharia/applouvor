@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/criar_playlist.php
 // Página simples mostrando músicas selecionadas com links do YouTube
 
