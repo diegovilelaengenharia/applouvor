@@ -193,8 +193,27 @@ export const MetronomeWidget: React.FC = () => {
           <Minus className="w-4 h-4" />
         </button>
 
-        {/* BPM Número Gigante */}
-        <div className="text-center">
+        {/* BPM Número Gigante com Onda Reativa */}
+        <div className="text-center flex flex-col items-center gap-1">
+          {/* Onda Sonora Reativa */}
+          <div className="flex items-end justify-center gap-[3px] h-6 min-w-[36px] mb-1 select-none">
+            {[1, 2, 3, 4, 5].map((i) => {
+              const delay = [0, -0.4, -0.2, -0.6, -0.1][i - 1];
+              const height = ['h-3.5', 'h-5.5', 'h-6', 'h-4.5', 'h-3'][i - 1];
+              return (
+                <div
+                  key={i}
+                  className={`w-[3px] rounded-t-full bg-primary transition-all duration-300 ${
+                    isPlaying ? 'wave-bar' : 'wave-bar-paused'
+                  } ${height}`}
+                  style={{
+                    animationDelay: `${delay}s`,
+                    animationDuration: isPlaying ? `${60 / bpm}s` : '0s',
+                  }}
+                />
+              );
+            })}
+          </div>
           <div className="text-4xl font-black text-text-main font-hanken leading-none tracking-tight">
             {bpm}
           </div>

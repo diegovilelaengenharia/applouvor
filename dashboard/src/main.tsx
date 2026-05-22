@@ -8,3 +8,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>
 );
+
+// Registrar Service Worker para suporte PWA Offline no escopo do dashboard
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/dashboard/sw.js', { scope: '/dashboard/' })
+      .then(registration => {
+        console.log('Service Worker do Dashboard registrado com sucesso:', registration.scope);
+      })
+      .catch(error => {
+        console.error('Falha ao registrar o Service Worker do Dashboard:', error);
+      });
+  });
+}
+

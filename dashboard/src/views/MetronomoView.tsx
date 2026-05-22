@@ -294,7 +294,26 @@ export const MetronomoView: React.FC = () => {
               </button>
 
               <div className="w-36 h-36 rounded-full border border-border-custom/80 bg-bg-dark flex flex-col items-center justify-center shadow-inner relative group select-none">
-                <span className="text-5xl font-black font-display text-text-main tracking-tight select-none">
+                {/* Onda Reativa Interna de Console */}
+                <div className="flex items-end justify-center gap-[2.5px] h-5 min-w-[50px] mb-1.5 select-none">
+                  {[1, 2, 3, 4, 5, 6, 7].map((i) => {
+                    const delay = [0, -0.4, -0.2, -0.6, -0.1, -0.5, -0.3][i - 1];
+                    const height = ['h-2.5', 'h-4', 'h-5', 'h-4.5', 'h-3', 'h-4', 'h-2.5'][i - 1];
+                    return (
+                      <div
+                        key={i}
+                        className={`w-[2.5px] rounded-t-full bg-primary transition-all duration-300 ${
+                          isPlaying ? 'wave-bar' : 'wave-bar-paused'
+                        } ${height}`}
+                        style={{
+                          animationDelay: `${delay}s`,
+                          animationDuration: isPlaying ? `${60 / bpm}s` : '0s',
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+                <span className="text-5xl font-black font-display text-text-main tracking-tight select-none leading-none">
                   {bpm}
                 </span>
                 <span className="text-[9px] font-black text-text-muted uppercase tracking-widest select-none block mt-1">
