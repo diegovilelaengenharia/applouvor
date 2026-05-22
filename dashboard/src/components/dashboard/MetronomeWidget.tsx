@@ -216,7 +216,14 @@ export const MetronomeWidget: React.FC = () => {
 
       {/* Controle Deslizante */}
       <div className="mb-4">
+        <label 
+          htmlFor="metronome-bpm-slider" 
+          style={{ position: 'absolute', width: '1px', height: '1px', padding: '0', margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', border: '0' }}
+        >
+          Ajustar BPM do Metrônomo
+        </label>
         <input
+          id="metronome-bpm-slider"
           type="range"
           min="40"
           max="240"

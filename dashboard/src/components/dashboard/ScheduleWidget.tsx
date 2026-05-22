@@ -91,7 +91,7 @@ export const ScheduleWidget: React.FC<ScheduleWidgetProps> = ({ schedule, totalS
       {/* Fundo decorativo */}
       <div className="absolute top-0 right-0 w-36 h-36 bg-primary/3 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-primary/6" />
 
-      {/* Header do card */}
+      {/* Header do painel */}
       <div className="flex items-start justify-between relative z-10">
         <div className="flex gap-4">
           {/* Data Badge de Alto Impacto */}

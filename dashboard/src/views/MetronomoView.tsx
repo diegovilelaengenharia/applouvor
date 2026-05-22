@@ -320,7 +320,14 @@ export const MetronomoView: React.FC = () => {
 
             {/* Slider de Andamento */}
             <div className="w-64 max-w-xs mt-6 select-none">
+              <label 
+                htmlFor="metronome-bpm-slider-full" 
+                style={{ position: 'absolute', width: '1px', height: '1px', padding: '0', margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', border: '0' }}
+              >
+                Ajustar BPM do Metrônomo
+              </label>
               <input 
+                id="metronome-bpm-slider-full"
                 type="range" 
                 min="40" 
                 max="250" 

@@ -127,7 +127,7 @@ export const DashboardView: React.FC = () => {
       {/* LINHA 1: Bento Superior (Boas-vindas + Estatísticas Rápidas) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        {/* Card Boas-vindas Gigante */}
+        {/* Painel Boas-vindas Gigante */}
         <div className="md:col-span-2 bg-surface border border-border-custom rounded-[4px] p-6 relative overflow-hidden flex flex-col justify-between min-h-[176px] transition-all hover:border-primary/30 group">
           {/* Decorações do Design */}
           <div className="absolute top-0 right-0 w-48 h-48 bg-primary/3 rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:bg-primary/5" />
@@ -162,7 +162,7 @@ export const DashboardView: React.FC = () => {
           </div>
         </div>
 
-        {/* Card Estatísticas Rápidas de Equipe */}
+        {/* Painel Estatísticas Rápidas de Equipe */}
         <div className="bg-surface border border-border-custom rounded-[4px] p-6 flex flex-col justify-between transition-all hover:border-primary/30 group relative">
           <div className="flex items-center justify-between select-none">
             <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">
