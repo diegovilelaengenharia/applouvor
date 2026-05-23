@@ -80,6 +80,29 @@ def deploy():
                 print(f" [ERRO: {e}]")
                 error_count += 1
 
+    # Envia arquivos adicionais de controle da raiz da pasta dashboard
+    # (index.php de ponte e o .htaccess) para garantir o carregamento correto em produção
+    additional_files = {
+        "index.php": os.path.abspath(os.path.join(local_dist, '../index.php')),
+        ".htaccess": os.path.abspath(os.path.join(local_dist, '../.htaccess'))
+    }
+    
+    print("\n=== Enviando Arquivos Adicionais de Controle ===")
+    for filename, local_path in additional_files.items():
+        if os.path.exists(local_path):
+            remote_path = f"{REMOTE_BASE_PATH}/{filename}"
+            print(f"Enviando controle: {filename} -> {remote_path} ...", end="", flush=True)
+            try:
+                with open(local_path, 'rb') as f:
+                    ftp.storbinary(f"STOR {remote_path}", f)
+                print(" [OK]")
+                success_count += 1
+            except Exception as e:
+                print(f" [ERRO: {e}]")
+                error_count += 1
+        else:
+            print(f"[AVISO] Arquivo local de controle nao encontrado: {local_path}")
+
     try:
         ftp.quit()
     except Exception:
