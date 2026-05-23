@@ -1,7 +1,7 @@
 const CACHE_NAME = 'pib-louvor-dashboard-v1.0.0';
 const PRECACHE_ASSETS = [
-  '/dashboard/',
-  '/dashboard/index.html'
+  '/applouvor/dashboard/',
+  '/applouvor/dashboard/index.html'
 ];
 
 // Instalação do Service Worker - Pre-cache da casca do SPA (Shell)
@@ -80,12 +80,12 @@ self.addEventListener('fetch', event => {
 
   // --- ESTRATÉGIA 2: SPA NAVIGATION - CACHE FIRST / NETWORK-FALLBACK ---
   // Para requisições de navegação direta do React (rotas amigáveis como /dashboard/metronomo)
-  if (request.mode === 'navigate' || (request.destination === 'document' && url.pathname.startsWith('/dashboard/'))) {
+  if (request.mode === 'navigate' || (request.destination === 'document' && url.pathname.startsWith('/applouvor/dashboard/'))) {
     event.respondWith(
       fetch(request)
         .catch(() => {
           // Se falhar (offline), serve o index.html do SPA que gerencia a rota no client-side
-          return caches.match('/dashboard/index.html') || caches.match('/dashboard/');
+          return caches.match('/applouvor/dashboard/index.html') || caches.match('/applouvor/dashboard/');
         })
     );
     return;

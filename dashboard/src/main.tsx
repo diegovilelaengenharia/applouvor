@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 // Registrar Service Worker para suporte PWA Offline no escopo do dashboard
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/dashboard/sw.js', { scope: '/dashboard/' })
+    navigator.serviceWorker.register('/applouvor/dashboard/sw.js', { scope: '/applouvor/dashboard/' })
       .then(registration => {
         console.log('Service Worker do Dashboard registrado com sucesso:', registration.scope);
       })

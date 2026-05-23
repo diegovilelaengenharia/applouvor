@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  base: '/dashboard/',
+  base: '/applouvor/dashboard/',
   server: {
     port: 5173,
     proxy: {
