@@ -36,9 +36,8 @@ SetEnv DB_PASS Diego@159753
 
 # HTTPS: configurado no painel Hostinger (nao necessario aqui)
 
-# === CACHE INTELIGENTE ===
-# PHP/CSS/JS: sem cache (para garantir atualizações)
-<FilesMatch "\.(php|css|js)$">
+# PHP/CSS/JS/HTML: sem cache (para garantir atualizações)
+<FilesMatch "\.(php|css|js|html)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
     Header set Expires 0
