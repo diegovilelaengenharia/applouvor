@@ -25,7 +25,7 @@ export const DashboardView: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('/api/admin/dashboard_data_api.php');
+        const response = await fetch('../api/admin/dashboard_data_api.php');
         
         if (response.status === 401) {
           // AuthContext já cuida do redirecionamento, mas por segurança paramos aqui

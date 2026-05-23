@@ -24,7 +24,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       // Como rodamos em /dashboard/, a API está em ../api/admin/... em produção
       // No ambiente de desenvolvimento, o proxy do Vite redirecionará /api/admin para o backend
-      const response = await fetch('/api/admin/dashboard_data_api.php');
+      const response = await fetch('../api/admin/dashboard_data_api.php');
       
       if (response.status === 401) {
         // Sessão expirou ou usuário não está logado
