@@ -57,7 +57,13 @@ def deploy():
             local_file_path = os.path.join(root, file)
             # Determina o caminho relativo em relação à pasta dist
             rel_path = os.path.relpath(local_file_path, local_dist).replace('\\', '/')
-            remote_file_path = f"{REMOTE_BASE_PATH}/{rel_path}"
+            
+            # Se for o index.html gerado pelo build do Vite, salvamos no servidor como index.prod.html
+            # Isso impede que o git pull do webhook da Hostinger o sobrescreva com a versão de desenvolvimento.
+            if rel_path == "index.html":
+                remote_file_path = f"{REMOTE_BASE_PATH}/index.prod.html"
+            else:
+                remote_file_path = f"{REMOTE_BASE_PATH}/{rel_path}"
 
             # Garante o diretório do arquivo remoto (caso existam subpastas profundas)
             remote_file_dir = os.path.dirname(remote_file_path)

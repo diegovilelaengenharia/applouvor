@@ -1,0 +1,15 @@
+# .htaccess - Configurações do subdiretório Dashboard
+
+# Define index.php como prioridade máxima para carregamento da SPA React
+DirectoryIndex index.php index.html
+
+# Ativa regravação do Apache para suportar rotas virtuais da SPA (se necessário no futuro)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /applouvor/dashboard/
+    
+    # Se a requisição não for para um arquivo real ou diretório real, direciona para index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . index.php [L]
+</IfModule>
