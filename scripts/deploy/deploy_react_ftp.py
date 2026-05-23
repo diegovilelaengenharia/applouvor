@@ -5,7 +5,7 @@ from ftplib import FTP
 FTP_HOST = "147.93.64.217"
 FTP_USER = "u884436813"
 FTP_PASS = "Diego@159753"
-REMOTE_BASE_PATH = "/applouvor/dashboard"
+REMOTE_BASE_PATH = "/domains/vilela.eng.br/public_html/applouvor/dashboard"
 
 def ensure_remote_dir(ftp, remote_dir):
     """
