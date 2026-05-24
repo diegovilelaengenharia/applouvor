@@ -22,6 +22,36 @@ def ensure_remote_dir(ftp, remote_dir):
             # Diretório provavelmente já existe
             pass
 
+def delete_remote_dir_recursive(ftp, remote_dir):
+    """
+    Remove uma pasta e todo o seu conteudo recursivamente do servidor FTP sem alterar o diretorio de trabalho.
+    """
+    try:
+        names = ftp.nlst(remote_dir)
+    except Exception:
+        return
+
+    for name in names:
+        if '/' in name:
+            full_path = name
+        else:
+            full_path = f"{remote_dir}/{name}"
+            
+        if full_path.endswith('/.') or full_path.endswith('/..') or name in ('.', '..'):
+            continue
+            
+        try:
+            ftp.delete(full_path)
+            print(f"Limpeza de arquivo no FTP: {full_path}")
+        except Exception:
+            delete_remote_dir_recursive(ftp, full_path)
+            
+    try:
+        ftp.rmd(remote_dir)
+        print(f"Limpeza de pasta no FTP: {remote_dir}")
+    except Exception:
+        pass
+
 def deploy():
     # Caminho local da pasta dist
     local_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../dashboard/dist'))
@@ -102,6 +132,24 @@ def deploy():
                 error_count += 1
         else:
             print(f"[AVISO] Arquivo local de controle nao encontrado: {local_path}")
+
+    # Realiza a limpeza de todos os arquivos e pastas de desenvolvimento do FTP
+    # deixando estritamente a build compilada para extrema seguranca e otimizacao
+    print("\n=== Iniciando Limpeza de Codigo-Fonte de Dev no FTP Remoto ===")
+    
+    # Apagar pastas de desenvolvimento
+    delete_remote_dir_recursive(ftp, f"{REMOTE_BASE_PATH}/src")
+    delete_remote_dir_recursive(ftp, f"{REMOTE_BASE_PATH}/public")
+    
+    # Apagar arquivos soltos de configuracao de desenvolvimento
+    files_to_delete = ["vite.config.ts", "tsconfig.json", "package.json", "package-lock.json"]
+    for file in files_to_delete:
+        remote_file_path = f"{REMOTE_BASE_PATH}/{file}"
+        try:
+            ftp.delete(remote_file_path)
+            print(f"Limpeza de arquivo no FTP: {remote_file_path}")
+        except Exception:
+            pass
 
     try:
         ftp.quit()
