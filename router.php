@@ -4,6 +4,11 @@
 // 1. Carrega banco de dados e autoloader
 require_once __DIR__ . '/src/config/db.php';
 
+// Carrega os helpers globais de segurança (Fase 2)
+require_once __DIR__ . '/src/helpers/auth.php';
+require_once __DIR__ . '/src/helpers/csrf.php';
+require_once __DIR__ . '/src/helpers/rate_limit.php';
+
 // 2. Instancia o roteador
 $router = new App\Router();
 
@@ -29,16 +34,15 @@ $method = $_SERVER['REQUEST_METHOD'];
 // REGISTRO DE ROTAS
 // ============================================================
 
-// Rota raiz temporária
-$router->get('/', function() {
-    header('Content-Type: text/html; charset=utf-8');
-    echo "<div style='font-family:sans-serif;text-align:center;padding-top:100px;'>";
-    echo "<h1 style='color:#2E7EED;'>APP Louvor Novíssimo</h1>";
-    echo "<p>Fundação do projeto estruturada com sucesso sob metodologia GSD! 🚀</p>";
-    echo "<p>Banco de dados conectado: <b>" . DB_NAME . "</b></p>";
-    echo "<a href='api/ping' style='color:#2E7EED;text-decoration:none;'>Testar API Ping</a>";
-    echo "</div>";
-});
+// Tela de Login e Processamento
+$router->get('/', [App\Controllers\LoginController::class, 'index']);
+$router->post('/login', [App\Controllers\LoginController::class, 'login']);
+
+// Logout
+$router->get('/logout', [App\Controllers\LoginController::class, 'logout']);
+
+// Dashboard
+$router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
 
 // Rota de teste da API
 $router->get('/api/ping', function() {

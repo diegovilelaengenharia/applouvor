@@ -1,0 +1,152 @@
+/*
+ * Design System: Sacred Minimalist
+ * Platform: Mobile-first (Stitch Export)
+ */
+:root {
+    /* Colors (Sacred Minimalist — Pure Stitch Theme) */
+    --surface: #f9f9f9; /* Fundo cinza ultrassuave purista */
+    --surface-dim: #dadada;
+    --surface-bright: #f9f9f9;
+    --surface-container-lowest: #ffffff; /* Branco puro dos cards flutuantes */
+    --surface-container-low: #f3f3f3; /* Sidebar e fundos sutilmente contrastados */
+    --surface-container: #eeeeee; /* Linhas e divisores */
+    --surface-container-high: #e8e8e8;
+    --surface-container-highest: #e2e2e2;
+    --on-surface: #1a1c1c; /* Texto principal escuro elegante */
+    --on-surface-variant: #414753; /* Texto secundário suavizado */
+    --inverse-surface: #2f3131;
+    --inverse-on-surface: #f0f1f1;
+    --outline: #727785; /* Linha de borda de contraste sutil */
+    --outline-variant: #c1c6d6;
+    --primary: #2E7EED; /* Worship Blue oficial do Stitch (customColor #2e7eed) — alinhado light/dark */
+    --on-primary: #ffffff;
+    --primary-container: #1b6fd6; /* Hover/active (Worship Blue escurecido) */
+    --on-primary-container: #fefcff;
+    --inverse-primary: #abc7ff;
+    --secondary: #5e5e63;
+    --on-secondary: #ffffff;
+    --secondary-container: #e0dfe4;
+    --on-secondary-container: #626267;
+    --tertiary: #755700;
+    --on-tertiary: #ffffff;
+    --tertiary-container: #fffbff;
+    --on-tertiary-container: #fffbff;
+    --error: #ba1a1a;
+    --on-error: #ffffff;
+    --error-container: #ffdad6;
+    --on-error-container: #93000a;
+    
+    /* Core Custom Palette */
+    --deep-navy: #1A1B1F;
+    --worship-blue: #2E7EED; /* Worship Blue oficial do Stitch */
+    --altar-gold: #FFC107; /* Altar Gold oficial do Stitch */
+    --ghost-gray: #F4F4F5;
+    --background: #f9f9f9;
+    --on-background: #1a1c1c;
+    
+    /* Typography */
+    --font-display: 'Hanken Grotesk', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    
+    /* Spacing */
+    --spacing-unit: 8px;
+    --spacing-gutter: 16px;
+    --margin-mobile: 20px;
+    --margin-desktop: 64px;
+    --max-width: 1200px;
+    
+    /* Precision Geometry (0px to 8px max - High-end premium feel) */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    /* Whisper-soft shadows (Sacred Minimalist — DESIGN.md §4) */
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+    /* Mapping dark mode equivalents based on Deep Navy and Worship Blue focus */
+    --surface: #0F1012;
+    --surface-bright: #16171a;
+    --surface-container-lowest: #0b0c0e;
+    --surface-container-low: #131417; /* Deep Navy do Stitch! */
+    --surface-container: #1b1c21;
+    --surface-container-high: #24262c;
+    --surface-container-highest: #2f323a;
+    --on-surface: #f3f4f6;
+    --on-surface-variant: #9ca3af;
+    --inverse-surface: #f3f4f6;
+    --inverse-on-surface: #0f1012;
+    --background: #08090a;
+    --on-background: #ffffff;
+    --primary: #2E7EED; /* Worship Blue oficial! */
+    --on-primary: #ffffff;
+    --primary-container: #1b6fd6;
+    --on-primary-container: #fefcff;
+    --outline: #222429;
+    --outline-variant: #1a1b1f;
+    --primary-light: rgba(46, 126, 237, 0.15);
+}
+
+
+/* Material Symbols config */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.material-symbols-outlined.fill {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Bento Grid System */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+}
+@media (min-width: 768px) {
+    .bento-grid {
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: minmax(150px, auto);
+        gap: 24px;
+    }
+    .bento-schedule { grid-column: span 8; grid-row: span 2; }
+    .bento-announcements { grid-column: span 4; grid-row: span 2; }
+    .bento-birthdays { grid-column: span 12; grid-row: span 1; }
+}
+
+/* Stitch Refined Custom Layout & Animation Utilities */
+.reveal-item {
+    opacity: 0;
+    animation: reveal 0.6s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+}
+.reveal-stagger-1 { animation-delay: 0.1s; }
+.reveal-stagger-2 { animation-delay: 0.2s; }
+.reveal-stagger-3 { animation-delay: 0.3s; }
+.reveal-stagger-4 { animation-delay: 0.4s; }
+
+@keyframes reveal {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.interactive-scale {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.interactive-scale:active {
+    transform: scale(0.98);
+}
+
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
