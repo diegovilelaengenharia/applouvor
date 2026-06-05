@@ -1,13 +1,14 @@
 -- ============================================================
--- App Louvor PIB Oliveira — Schema Completo v5.0
--- Gerado em: 2026-06-05
+-- App Louvor PIB Oliveira — Schema Producao v6.0
+-- Para uso no Hostinger: nao contem CREATE DATABASE nem USE.
+-- Rodar no banco: u884436813_applouvor
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS `pibo_louvor` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `pibo_louvor`;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ============================================================
--- 1. USUÁRIOS
+-- 1. USUARIOS
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `users` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,10 +25,10 @@ CREATE TABLE IF NOT EXISTS `users` (
     `last_login` DATETIME NULL,
     `login_count` INT DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 2. CONFIGURAÇÕES DO USUÁRIO (chave-valor)
+-- 2. CONFIGURACOES DO USUARIO (chave-valor)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `user_settings` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,10 +37,10 @@ CREATE TABLE IF NOT EXISTS `user_settings` (
     `setting_value` TEXT,
     UNIQUE KEY `unique_user_setting` (`user_id`, `setting_key`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 3. MÚSICAS (Repertório Geral)
+-- 3. MUSICAS (Repertorio Geral)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `songs` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,24 +55,22 @@ CREATE TABLE IF NOT EXISTS `songs` (
     `link_video` VARCHAR(500),
     `notes` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3.1 Tags
 CREATE TABLE IF NOT EXISTS `tags` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(50) NOT NULL,
     `color` VARCHAR(7) DEFAULT '#047857',
     `description` TEXT
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3.2 Musica-Tags
 CREATE TABLE IF NOT EXISTS `song_tags` (
     `song_id` INT NOT NULL,
     `tag_id` INT NOT NULL,
     PRIMARY KEY (`song_id`, `tag_id`),
     FOREIGN KEY (`song_id`) REFERENCES `songs`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 4. ESCALAS
@@ -83,9 +82,8 @@ CREATE TABLE IF NOT EXISTS `schedules` (
     `event_type` VARCHAR(50) DEFAULT 'Culto de Domingo',
     `notes` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4.1 Participantes da Escala
 CREATE TABLE IF NOT EXISTS `schedule_users` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `schedule_id` INT NOT NULL,
@@ -96,9 +94,8 @@ CREATE TABLE IF NOT EXISTS `schedule_users` (
     `is_rehearsed` TINYINT(1) DEFAULT 0,
     FOREIGN KEY (`schedule_id`) REFERENCES `schedules`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4.2 Músicas da Escala
 CREATE TABLE IF NOT EXISTS `schedule_songs` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `schedule_id` INT NOT NULL,
@@ -106,9 +103,8 @@ CREATE TABLE IF NOT EXISTS `schedule_songs` (
     `presentation_order` INT DEFAULT 0,
     FOREIGN KEY (`schedule_id`) REFERENCES `schedules`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`song_id`) REFERENCES `songs`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4.3 Roteiro de Culto
 CREATE TABLE IF NOT EXISTS `schedule_roteiro` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `schedule_id` INT NOT NULL,
@@ -120,9 +116,8 @@ CREATE TABLE IF NOT EXISTS `schedule_roteiro` (
     `nota_interna` TEXT NULL,
     FOREIGN KEY (`schedule_id`) REFERENCES `schedules`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`song_id`) REFERENCES `songs`(`id`) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4.4 Comentários da Escala
 CREATE TABLE IF NOT EXISTS `schedule_comments` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `schedule_id` INT NOT NULL,
@@ -131,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `schedule_comments` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`schedule_id`) REFERENCES `schedules`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 5. INDISPONIBILIDADE
@@ -147,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `user_unavailability` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`replacement_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 6. AVISOS
@@ -163,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `avisos` (
     `user_id` INT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 7. NOTIFICACOES PUSH
@@ -176,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `push_subscriptions` (
     `auth` VARCHAR(255) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `notifications` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -188,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
     `is_read` TINYINT(1) DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 8. DEVOCIONAIS
@@ -205,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `devotionals` (
     `order_in_series` INT DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `devotional_comments` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -215,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `devotional_comments` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`devotional_id`) REFERENCES `devotionals`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `devotional_tags` (
     `devotional_id` INT NOT NULL,
@@ -223,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `devotional_tags` (
     PRIMARY KEY (`devotional_id`, `tag_id`),
     FOREIGN KEY (`devotional_id`) REFERENCES `devotionals`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `devotional_reads` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -233,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `devotional_reads` (
     UNIQUE KEY `unique_read` (`devotional_id`, `user_id`),
     FOREIGN KEY (`devotional_id`) REFERENCES `devotionals`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 9. PEDIDOS DE ORACAO
@@ -251,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `prayer_requests` (
     `answered_at` DATETIME NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `prayer_interactions` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -262,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `prayer_interactions` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`prayer_id`) REFERENCES `prayer_requests`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 10. PLANO DE LEITURA BIBLICA
@@ -275,7 +270,7 @@ CREATE TABLE IF NOT EXISTS `reading_progress` (
     `verses_read` JSON NULL,
     `completed_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 11. SUGESTOES DE MUSICAS
@@ -290,13 +285,26 @@ CREATE TABLE IF NOT EXISTS `song_suggestions` (
     `status` ENUM('pending','approved','rejected') DEFAULT 'pending',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- SEED - Dados Minimos Obrigatorios
+-- 12. TENTATIVAS DE LOGIN (rate limiting)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `login_attempts` (
+    `ip`       VARCHAR(45)  NOT NULL,
+    `attempts` TINYINT      NOT NULL DEFAULT 1,
+    `since`    INT UNSIGNED NOT NULL,
+    `blocked`  INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ============================================================
+-- SEED — Dados minimos obrigatorios
 -- ============================================================
 
--- Admin padrao (senha: applouvor) — hash bcrypt gerado com password_hash()
+-- Admin padrao: usuario=Diego Vilela, senha=applouvor
 INSERT IGNORE INTO `users` (`id`, `name`, `role`, `instrument`, `phone`, `password`) VALUES
 (1, 'Diego Vilela', 'admin', 'Lider', '35984529577', '$2y$10$zi1WViTPmfiO.BRFwGxx9eIBc3wC.t.QPghXQqBD1Oyi4Tj6PTLZ2');
 
