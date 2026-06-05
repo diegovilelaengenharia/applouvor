@@ -19,7 +19,11 @@ $isProduction = !file_exists($envPath);
 // ======================================
 if ($isProduction) {
     // Credenciais de produção: lidas de db_credentials.php (gerado no deploy) ou do ambiente
+    // Tenta __DIR__ primeiro; se não encontrar, usa DOCUMENT_ROOT (Hostinger usa symlinks)
     $credFile = __DIR__ . '/db_credentials.php';
+    if (!is_file($credFile) && !empty($_SERVER['DOCUMENT_ROOT'])) {
+        $credFile = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/src/config/db_credentials.php';
+    }
     $creds = is_file($credFile) ? (require $credFile) : [];
 
     define('DB_HOST', $creds['DB_HOST'] ?? (getenv('DB_HOST') ?: 'srv1074.hstgr.io'));

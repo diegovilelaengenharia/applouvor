@@ -25,6 +25,8 @@ try {
     if ($e->getCode() == 2002) {
         die("<div style='font-family:sans-serif;padding:20px;text-align:center'><h3>MySQL Parado</h3><p>Inicie o serviço MySQL no XAMPP Control Panel.</p></div>");
     }
-    // TEMP DEBUG — remover apos diagnostico
-    die("DB_ERR [" . $e->getCode() . "]: " . $e->getMessage());
+    if (defined('APP_DEBUG') && APP_DEBUG) {
+        die("Erro de conexão: " . $e->getMessage());
+    }
+    die("Erro de conexão com o banco de dados. Tente novamente mais tarde.");
 }
