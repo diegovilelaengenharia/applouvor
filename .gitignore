@@ -15,3 +15,8 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# Ferramentas e UI do Stitch legadas
+.stitch/
+fetch_stitch.mjs
+.mcp.json

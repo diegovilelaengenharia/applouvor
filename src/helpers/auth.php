@@ -54,10 +54,11 @@ function login($name, $password, $pdo)
         }
 
         if ($isPasswordCorrect) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_role'] = $user['role'];
-            $_SESSION['user_avatar'] = $user['avatar'] ?? null;
+            $_SESSION['user_id']         = $user['id'];
+            $_SESSION['user_name']       = $user['name'];
+            $_SESSION['user_role']       = $user['role'];
+            $_SESSION['user_avatar']     = $user['avatar'] ?? null;
+            $_SESSION['user_instrument'] = $user['instrument'] ?? null;
     
             // Atualizar logs de login
             App\DB::table('users')

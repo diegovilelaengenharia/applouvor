@@ -38,6 +38,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $router->get('/', [App\Controllers\LoginController::class, 'index']);
 $router->post('/login', [App\Controllers\LoginController::class, 'login']);
 
+// Recuperar Senha (público)
+$router->get('/recuperar-senha', [App\Controllers\LoginController::class, 'recover']);
+
 // Logout
 $router->get('/logout', [App\Controllers\LoginController::class, 'logout']);
 
@@ -54,6 +57,138 @@ $router->get('/api/ping', function() {
         'version' => APP_VERSION
     ]);
 });
+
+// ============================================================
+// ESCALAS (Phase 4)
+// ============================================================
+$router->get('/escalas', [App\Controllers\ScheduleController::class, 'index']);
+$router->get('/escalas/(?P<id>\d+)', [App\Controllers\ScheduleController::class, 'show']);
+$router->get('/escalas/nova', [App\Controllers\ScheduleController::class, 'create']);
+$router->post('/escalas/nova', [App\Controllers\ScheduleController::class, 'store']);
+$router->get('/escalas/(?P<id>\d+)/editar', [App\Controllers\ScheduleController::class, 'edit']);
+$router->post('/escalas/(?P<id>\d+)/editar', [App\Controllers\ScheduleController::class, 'update']);
+$router->post('/escalas/(?P<id>\d+)/status', [App\Controllers\ScheduleController::class, 'updateStatus']);
+$router->get('/escalas/(?P<id>\d+)/faltas', [App\Controllers\ScheduleController::class, 'attendance']);
+$router->post('/escalas/(?P<id>\d+)/faltas', [App\Controllers\ScheduleController::class, 'storeAttendance']);
+
+// ============================================================
+// REPERTÓRIO (Phase 5)
+// ============================================================
+$router->get('/repertorio', [App\Controllers\SongController::class, 'index']);
+$router->get('/musicas/(?P<id>\d+)', [App\Controllers\SongController::class, 'show']);
+$router->get('/musicas/nova', [App\Controllers\SongController::class, 'create']);
+$router->post('/musicas/nova', [App\Controllers\SongController::class, 'store']);
+$router->get('/musicas/(?P<id>\d+)/editar', [App\Controllers\SongController::class, 'edit']);
+$router->post('/musicas/(?P<id>\d+)/editar', [App\Controllers\SongController::class, 'update']);
+$router->post('/musicas/(?P<id>\d+)/deletar', [App\Controllers\SongController::class, 'destroy']);
+$router->get('/musicas/(?P<id>\d+)/cifra', [App\Controllers\SongController::class, 'cifra']);
+
+// ============================================================
+// PERFIL (Wave 3)
+// ============================================================
+$router->get('/perfil', [App\Controllers\ProfileController::class, 'index']);
+$router->get('/perfil/editar', [App\Controllers\ProfileController::class, 'edit']);
+$router->post('/perfil/editar', [App\Controllers\ProfileController::class, 'update']);
+$router->get('/perfil/senha', [App\Controllers\ProfileController::class, 'password']);
+$router->post('/perfil/senha', [App\Controllers\ProfileController::class, 'updatePassword']);
+
+// ============================================================
+// CONFIGURAÇÕES & NOTIFICAÇÕES (Wave 3)
+// ============================================================
+$router->get('/configuracoes', [App\Controllers\SettingsController::class, 'index']);
+$router->get('/configuracoes/notificacoes', [App\Controllers\SettingsController::class, 'notifications']);
+$router->post('/configuracoes/notificacoes', [App\Controllers\SettingsController::class, 'updateNotifications']);
+
+// ============================================================
+// INDISPONIBILIDADES (Wave 3)
+// ============================================================
+$router->get('/indisponibilidades', [App\Controllers\UnavailabilityController::class, 'index']);
+$router->post('/indisponibilidades', [App\Controllers\UnavailabilityController::class, 'store']);
+$router->post('/indisponibilidades/(?P<id>\d+)/remover', [App\Controllers\UnavailabilityController::class, 'destroy']);
+
+// ============================================================
+// PÁGINAS UTILITÁRIAS (Wave 3)
+// ============================================================
+$router->get('/ajuda', [App\Controllers\PageController::class, 'ajuda']);
+$router->get('/onboarding', [App\Controllers\PageController::class, 'onboarding']);
+$router->get('/offline', [App\Controllers\PageController::class, 'offline']);
+
+// ============================================================
+// AVISOS (Wave 4)
+// ============================================================
+$router->get('/avisos', [App\Controllers\AvisoController::class, 'index']);
+$router->get('/avisos/novo', [App\Controllers\AvisoController::class, 'create']);
+$router->post('/avisos/novo', [App\Controllers\AvisoController::class, 'store']);
+$router->get('/avisos/(?P<id>\d+)', [App\Controllers\AvisoController::class, 'show']);
+$router->post('/avisos/(?P<id>\d+)/excluir', [App\Controllers\AvisoController::class, 'destroy']);
+
+// ============================================================
+// NOTIFICAÇÕES (Wave 4)
+// ============================================================
+$router->get('/notificacoes', [App\Controllers\NotificationController::class, 'index']);
+$router->post('/notificacoes/ler-todas', [App\Controllers\NotificationController::class, 'markAllRead']);
+$router->post('/notificacoes/(?P<id>\d+)/ler', [App\Controllers\NotificationController::class, 'markRead']);
+
+// ============================================================
+// DASHBOARD — Confirmação de presença (Wave 4)
+// ============================================================
+$router->post('/dashboard/presenca/(?P<id>\d+)', [App\Controllers\DashboardController::class, 'updatePresence']);
+
+// ============================================================
+// VIDA ESPIRITUAL — Oração (Wave 4)
+// ============================================================
+$router->get('/oracao', [App\Controllers\PrayerController::class, 'index']);
+$router->get('/oracao/novo', [App\Controllers\PrayerController::class, 'create']);
+$router->post('/oracao/novo', [App\Controllers\PrayerController::class, 'store']);
+$router->get('/oracao/(?P<id>\d+)', [App\Controllers\PrayerController::class, 'show']);
+$router->post('/oracao/(?P<id>\d+)/orar', [App\Controllers\PrayerController::class, 'pray']);
+$router->post('/oracao/(?P<id>\d+)/comentar', [App\Controllers\PrayerController::class, 'storeComment']);
+
+// ============================================================
+// VIDA ESPIRITUAL — Devocionais (Wave 4)
+// ============================================================
+$router->get('/devocionais', [App\Controllers\DevotionalController::class, 'index']);
+$router->get('/devocionais/(?P<id>\d+)', [App\Controllers\DevotionalController::class, 'show']);
+$router->post('/devocionais/(?P<id>\d+)/ler', [App\Controllers\DevotionalController::class, 'markRead']);
+$router->post('/devocionais/(?P<id>\d+)/comentarios', [App\Controllers\DevotionalController::class, 'storeComment']);
+
+// ============================================================
+// MEMBROS (Wave 4)
+// ============================================================
+$router->get('/membros', [App\Controllers\MemberController::class, 'index']);
+$router->get('/membros/convidar', [App\Controllers\MemberController::class, 'invite']);
+$router->post('/membros/convidar', [App\Controllers\MemberController::class, 'storeInvite']);
+$router->get('/membros/(?P<id>\d+)', [App\Controllers\MemberController::class, 'show']);
+
+// ============================================================
+// RELATÓRIOS & ANIVERSARIANTES (Wave 4)
+// ============================================================
+$router->get('/relatorios', [App\Controllers\ReportController::class, 'index']);
+$router->get('/aniversariantes', [App\Controllers\ReportController::class, 'birthdays']);
+
+// ============================================================
+// MINISTÉRIO (Wave 4)
+// ============================================================
+$router->get('/ministerio', [App\Controllers\MinisterioController::class, 'index']);
+
+// ============================================================
+// SUGESTÕES DE MÚSICA (Wave 4)
+// ============================================================
+$router->get('/sugestoes', [App\Controllers\SuggestionController::class, 'index']);
+$router->get('/sugestoes/nova', [App\Controllers\SuggestionController::class, 'create']);
+$router->post('/sugestoes/nova', [App\Controllers\SuggestionController::class, 'store']);
+$router->post('/sugestoes/(?P<id>\d+)/aprovar', [App\Controllers\SuggestionController::class, 'approve']);
+$router->post('/sugestoes/(?P<id>\d+)/recusar', [App\Controllers\SuggestionController::class, 'reject']);
+
+// ============================================================
+// PAINEL DO LÍDER (Wave 4)
+// ============================================================
+$router->get('/lider', [App\Controllers\LiderController::class, 'index']);
+
+// ============================================================
+// MENSAGENS (Wave 4)
+// ============================================================
+$router->get('/mensagens', [App\Controllers\MessageController::class, 'index']);
 
 // 4. Despacha a requisição
 $router->dispatch($route, $method);

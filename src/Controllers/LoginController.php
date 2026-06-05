@@ -16,7 +16,7 @@ class LoginController extends Controller
             $this->redirect('/dashboard');
         }
 
-        $this->render('login', ['error' => '']);
+        $this->render('auth/login', ['error' => '']);
     }
 
     /**
@@ -33,7 +33,7 @@ class LoginController extends Controller
         $rateCheck = rateLimitCheck($this->pdo, $ip);
         if ($rateCheck['blocked']) {
             $wait = $rateCheck['wait'] ?? 60;
-            $this->render('login', ['error' => "Muitas tentativas de login de forma consecutiva. Aguarde {$wait} segundo(s) antes de tentar novamente."]);
+            $this->render('auth/login', ['error' => "Muitas tentativas de login de forma consecutiva. Aguarde {$wait} segundo(s) antes de tentar novamente."]);
             return;
         }
 
@@ -46,7 +46,7 @@ class LoginController extends Controller
         $validator->required($password, 'Senha');
 
         if ($validator->hasErrors()) {
-            $this->render('login', ['error' => $validator->getFirstError()]);
+            $this->render('auth/login', ['error' => $validator->getFirstError()]);
             return;
         }
 
@@ -73,8 +73,24 @@ class LoginController extends Controller
                 $error .= " (IP bloqueado temporariamente)";
             }
 
-            $this->render('login', ['error' => $error]);
+            $this->render('auth/login', ['error' => $error]);
         }
+    }
+
+    /**
+     * Tela 33: Recuperar Senha (GET /recuperar-senha) — público.
+     *
+     * NOTA: ainda não há infraestrutura de e-mail/token de redefinição.
+     * Por ora, orienta o usuário a acionar a liderança/suporte (um admin
+     * pode redefinir a senha). Trocar por fluxo self-service quando houver
+     * envio de e-mail + tabela de tokens.
+     */
+    public function recover()
+    {
+        if (AuthMiddleware::check()) {
+            $this->redirect('/dashboard');
+        }
+        $this->render('auth/recuperar-senha');
     }
 
     /**

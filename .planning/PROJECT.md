@@ -54,6 +54,13 @@ O projeto é uma reconstrução completa do zero, motivada pela necessidade de s
 |---------|---------------|-----------|
 | PHP Puro com MVC manual | Facilidade de deploy na Hostinger e controle total da stack | — Pendente |
 | Uso do GSD (Get Shit Done) | Metodologia estruturada para garantir a qualidade de cada entrega e evitar bagunça no código | — Pendente |
+| Norte de produto = LouveApp, mas superá-lo | Mesmo público; ir além em cifras, modo palco e inteligência de escala/repertório | ✓ Travada (2026-06-05) |
+| Sem dependências externas (IA paga/SaaS) | Inteligência via algoritmos próprios em PHP; custo zero e 100% offline-capaz (Web Push nativo/VAPID é permitido) | ✓ Travada (2026-06-05) |
+| Modo culto = stage mode individual | Cada músico controla a própria tela; sem servidor de tempo real na Hostinger | ✓ Travada (2026-06-05) |
+| Cifras importadas do Cifra Club | Diego já baixa cifras de lá; colar/importar texto → ChordPro próprio + transposição | ✓ Travada (2026-06-05) |
+| Fechar o MVP e publicar antes dos diferenciais | Validar cedo com a equipe; diferenciais (v2.0+) vêm depois do app no ar | ✓ Travada (2026-06-05) |
+
+> **Visão de produto completa, milestones (v1.0→v5.0) e os 5 diferenciais:** ver `.planning/ROADMAP.md`.
 
 ## Evolução
 
