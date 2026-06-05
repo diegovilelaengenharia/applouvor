@@ -1,0 +1,17 @@
+# Arquivos de Ambiente
+.env
+src/config/db_credentials.php
+
+# Uploads do usuário
+uploads/
+
+# Pastas de dependência e build
+node_modules/
+vendor/
+
+# OS e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

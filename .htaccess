@@ -1,0 +1,29 @@
+# .htaccess - APP Louvor Novíssimo
+
+# === SEGURANÇA ===
+Options -Indexes
+ServerSignature Off
+
+# Proteger arquivos sensíveis
+<FilesMatch "\.(env|sql|log|bak|backup|dump)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# PHP/HTML: nunca cachear (conteúdo dinâmico)
+<FilesMatch "\.(php|html)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</FilesMatch>
+
+# CSS/JS: cache longo (URLs versionadas via ?v=filemtime mudam quando o arquivo muda)
+<FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# === ROTEADOR FRONT CONTROLLER (MVC) ===
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ router.php?route=$1 [QSA,L]
