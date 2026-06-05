@@ -60,8 +60,8 @@ Planos:
 **Planos**: 2 planos
 
 Planos:
-- [ ] 03-01: Configuração de variáveis CSS do Design System, componentes (cards, botões, formulários) e base layout.
-- [ ] 03-02: Configuração do manifest.json, Service Worker (`sw.js`) e fluxos de instalação Android/iOS.
+- [x] 03-01: Configuração de variáveis CSS do Design System, componentes (cards, botões, formulários) e base layout.
+- [x] 03-02: Configuração do manifest.json, Service Worker (`sw.js`) e fluxos de instalação Android/iOS.
 
 ---
 
@@ -116,7 +116,7 @@ Planos:
 |-------|----------------|--------|-----------|
 | 1. Arquitetura Core | 2/2 | Complete | 2026-06-05 |
 | 2. Autenticação | 2/2 | Complete | 2026-06-05 |
-| 3. Design System e Base Visual | 0/2 | Not started | - |
+| 3. Design System e Base Visual | 2/2 | Complete | 2026-06-05 |
 | 4. Gestão de Escalas | 0/2 | Not started | - |
 | 5. Repertório e Músicas | 0/2 | Not started | - |
 | 6. Deploy e Testes de Aceitação (UAT) | 0/1 | Not started | - |
