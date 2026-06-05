@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: MVP Operacional
 status: executing
-last_updated: "2026-06-05T21:30:00.000Z"
-last_activity: 2026-06-05 (Wave 4 completa). Adicionalmente, o repositório local foi sincronizado, chaves sensíveis de API foram removidas do histórico do git e movidas para o .gitignore, templates de issues profissionais foram criados e o projeto foi integrado ao quadro Kanban unificado do GitHub.
+last_updated: "2026-06-05T23:30:00.000Z"
+last_activity: 2026-06-05 (Wave 6 completa — Busca Global + Agenda, lint 5/5 OK. MVP funcional pronto para deploy.)
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 7
   total_plans: 12
-  completed_plans: 11
-  percent: 90
+  completed_plans: 12
+  percent: 99
 ---
 
 # Estado do Projeto — APP Louvor Novíssimo
@@ -26,9 +26,9 @@ Ver: [.planning/PROJECT.md](PROJECT.md) | [.planning/PLAN-STITCH-TO-PHP.md](PLAN
 
 ## ▶️ POSIÇÃO ATUAL
 
-**Próxima tarefa:** Wave 5 — Funcionalidades Avançadas (Auto-escalação, Ao Vivo, Ensaio, Setlist, Metrônomo, Estatísticas, Leitura Bíblica, Busca Global).
+**Próxima tarefa:** Deploy Hostinger — configurar `.env` de produção, testar CI/CD, publicar MVP.
 
-Progresso: [██████████] ~90%
+Progresso: [██████████] ~99% — MVP funcional completo!
 
 ---
 
@@ -107,21 +107,58 @@ Progresso: [██████████] ~90%
 
 ---
 
-## ⬜ O QUE FALTA (Wave 5)
+## ✅ Wave 5 — Funcionalidades Avançadas (COMPLETA)
 
 ### Wave 5 — Funcionalidades Avançadas
 | # | Tela | Rota | Stitch | Status |
 |---|------|------|--------|--------|
-| 40 | Auto-escalação | `/escalas/auto` | `1b6b9230` | ⬜ pendente |
-| 41 | Sugerir Setlist | `/escalas/{id}/setlist-sugerida` | `b365c356` | ⬜ pendente |
-| 43 | Ao Vivo | `/escalas/{id}/ao-vivo` | `25bae697` | ⬜ pendente |
-| 44 | Modo Ensaio | `/escalas/{id}/ensaio` | `33203941` | ⬜ pendente |
-| 45 | Compartilhar Setlist | `/escalas/{id}/setlist` | `0647c160` | ⬜ pendente |
-| 42 | Estatísticas Repertório | `/repertorio/stats` | `57dc9502` | ⬜ pendente |
-| 18 | Metrônomo | `/metronomo` | `efcc2c36` | ⬜ pendente |
-| 25 | Leitura Bíblica | `/leitura` | `b2875c65` | ⬜ pendente |
-| 51 | Agenda/Eventos | `/agenda` | — | ⬜ pendente |
-| 53 | Busca Global | `/busca` | — | ⬜ pendente |
+| 40 | Auto-escalação | `/escalas/auto` | `1b6b9230` | ✅ completo |
+| 41 | Sugerir Setlist | `/escalas/{id}/setlist-sugerida` | `b365c356` | ✅ completo |
+| 43 | Ao Vivo | `/escalas/{id}/ao-vivo` | `25bae697` | ✅ completo |
+| 44 | Modo Ensaio | `/escalas/{id}/ensaio` | `33203941` | ✅ completo |
+| 45 | Compartilhar Setlist | `/escalas/{id}/setlist` | `0647c160` | ✅ completo |
+| 42 | Estatísticas Repertório | `/repertorio/stats` | `57dc9502` | ✅ completo |
+| 18 | Metrônomo | `/metronomo` | `efcc2c36` | ✅ completo |
+| 25 | Leitura Bíblica | `/leitura` | `b2875c65` | ✅ completo |
+| 26 | Escolher Plano | `/leitura/planos` | `f2f7e523` | ✅ completo |
+
+**Arquivos criados (Wave 5):**
+- `src/Controllers/MetronomeController.php`
+- `src/Controllers/LiveController.php` (live, rehearsal, setlist, suggestSetlist, saveSetlist)
+- `src/Controllers/AutoScheduleController.php` (index, generate, confirm)
+- `src/Controllers/StatsController.php` (repertorio)
+- `src/Controllers/ReadingController.php` (index, markRead, plans, setPlan)
+- `src/Views/app/metronomo.php` — Web Audio API, TAP, compassos, setlist integrado
+- `src/Views/escalas/ao-vivo.php` — modo dark, prev/next, setlist completo
+- `src/Views/escalas/ensaio.php` — tabs Setlist/Metrônomo/Cifras, timer elapsed
+- `src/Views/escalas/setlist.php` — Web Share API, WhatsApp, copy text
+- `src/Views/escalas/setlist-sugerida.php` — algoritmo PHP, checkboxes, salvar na escala
+- `src/Views/escalas/auto.php` — parâmetros + roster gerado com checkboxes
+- `src/Views/repertorio/stats.php` — KPIs, Top 10, distribuição por tom, músicas esquecidas
+- `src/Views/vida-espiritual/leitura.php` — progresso, streak, passagens, reflexão localStorage
+- `src/Views/vida-espiritual/leitura-planos.php` — 4 planos, Confirmar plano
+
+## ✅ Wave 6 — MVP Final (COMPLETA)
+
+| # | Tela/Feature | Rota | Status |
+|---|-------------|------|--------|
+| 51 | Agenda/Eventos | `/agenda` | ✅ completo |
+| 53 | Busca Global | `/busca` | ✅ completo |
+
+**Arquivos criados (Wave 6):**
+- `src/Controllers/SearchController.php` — busca songs+members+schedules, highlight de termos, buscas recentes localStorage
+- `src/Controllers/AgendaController.php` — lista de escalas agrupadas por mês, filtro próximos/passados
+- `src/Views/app/busca.php` — input com auto-submit debounced, resultados por categoria, chips de buscas recentes
+- `src/Views/app/agenda.php` — cards de evento com data bubble, indicador "Hoje", contadores de músicas e membros
+
+## ⬜ O QUE FALTA (Pós-MVP)
+
+| Feature | Status |
+|---------|--------|
+| Deploy Hostinger (`.env` produção + CI/CD) | ⬜ pendente |
+| Mensagens real (tabela `messages`) | ⬜ futuro |
+| Cifra integrada (importar do Cifra Club) | ⬜ futuro |
+| Modo palco individual (stage mode) | ⬜ futuro |
 
 ---
 
@@ -136,14 +173,12 @@ Progresso: [██████████] ~90%
 ---
 
 ## Continuidade da Sessão
-Última sessão: 2026-06-05 (sessão 5 — Wave 4 completa)
+Última sessão: 2026-06-05 (sessão 6 — Wave 5 + Wave 6 completas, lint 20/20 OK. MVP pronto.)
 
-**Começar por Wave 5:**
-1. Metrônomo `/metronomo` — buscar tela `efcc2c36` (já gerada no Stitch)
-2. Auto-escalação `/escalas/auto` — buscar tela `1b6b9230`
-3. Ao Vivo `/escalas/{id}/ao-vivo` — buscar tela `25bae697`
-4. Ensaio `/escalas/{id}/ensaio` — buscar tela `33203941`
-
-Padrão: `get_screen` → `WebFetch HTML URL` → escrever Controller + Model + Views → adicionar rota → lint.
+**Próximo passo: Deploy Hostinger**
+1. Verificar `.env` de produção com credenciais reais do MySQL
+2. Testar CI/CD via GitHub Actions → FTPS → Hostinger
+3. Rodar `schema.sql` no banco de produção (`u884436813_cliente`)
+4. Testar login, escalas, repertório, metrônomo no browser
 
 Ver: [HANDOFF.md](HANDOFF.md) para guia completo de onboarding (Claude Code + Gemini).

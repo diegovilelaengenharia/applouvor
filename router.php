@@ -190,5 +190,49 @@ $router->get('/lider', [App\Controllers\LiderController::class, 'index']);
 // ============================================================
 $router->get('/mensagens', [App\Controllers\MessageController::class, 'index']);
 
+// ============================================================
+// METRÔNOMO (Wave 5)
+// ============================================================
+$router->get('/metronomo', [App\Controllers\MetronomeController::class, 'index']);
+
+// ============================================================
+// ESCALAS — Ao Vivo / Ensaio / Setlist / Sugestão (Wave 5)
+// ============================================================
+$router->get('/escalas/(?P<id>\d+)/ao-vivo',              [App\Controllers\LiveController::class, 'live']);
+$router->get('/escalas/(?P<id>\d+)/ensaio',               [App\Controllers\LiveController::class, 'rehearsal']);
+$router->get('/escalas/(?P<id>\d+)/setlist',              [App\Controllers\LiveController::class, 'setlist']);
+$router->get('/escalas/(?P<id>\d+)/setlist-sugerida',     [App\Controllers\LiveController::class, 'suggestSetlist']);
+$router->post('/escalas/(?P<id>\d+)/setlist-sugerida/salvar', [App\Controllers\LiveController::class, 'saveSetlist']);
+
+// ============================================================
+// AUTO-ESCALAÇÃO (Wave 5)
+// ============================================================
+$router->get('/escalas/auto',             [App\Controllers\AutoScheduleController::class, 'index']);
+$router->post('/escalas/auto/gerar',      [App\Controllers\AutoScheduleController::class, 'generate']);
+$router->post('/escalas/auto/confirmar',  [App\Controllers\AutoScheduleController::class, 'confirm']);
+
+// ============================================================
+// ESTATÍSTICAS DO REPERTÓRIO (Wave 5)
+// ============================================================
+$router->get('/repertorio/stats', [App\Controllers\StatsController::class, 'repertorio']);
+
+// ============================================================
+// LEITURA BÍBLICA (Wave 5)
+// ============================================================
+$router->get('/leitura',          [App\Controllers\ReadingController::class, 'index']);
+$router->post('/leitura/ler',     [App\Controllers\ReadingController::class, 'markRead']);
+$router->get('/leitura/planos',   [App\Controllers\ReadingController::class, 'plans']);
+$router->post('/leitura/planos',  [App\Controllers\ReadingController::class, 'setPlan']);
+
+// ============================================================
+// BUSCA GLOBAL (Wave 6)
+// ============================================================
+$router->get('/busca', [App\Controllers\SearchController::class, 'index']);
+
+// ============================================================
+// AGENDA (Wave 6)
+// ============================================================
+$router->get('/agenda', [App\Controllers\AgendaController::class, 'index']);
+
 // 4. Despacha a requisição
 $router->dispatch($route, $method);
