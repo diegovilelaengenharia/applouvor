@@ -53,12 +53,14 @@ jobs:
         run: |
           sudo apt-get install -y lftp -q
           lftp -c "
+            set cmd:fail-exit true;
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate false;
             set net:timeout 30;
             open -u '${FTP_USER}','${FTP_PASS}' ${FTP_HOST};
-            put src/config/db_credentials.php -o /domains/louvor.vilela.eng.br/public_html/src/config/db_credentials.php;
+            cd /domains/louvor.vilela.eng.br/public_html/src/config/;
+            put src/config/db_credentials.php;
             bye;
           "
 
