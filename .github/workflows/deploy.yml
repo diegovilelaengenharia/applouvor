@@ -45,6 +45,19 @@ jobs:
             file_put_contents("src/config/db_credentials.php", $hdr . var_export($data, true) . ";\n");
           '
 
+      - name: Upload db_credentials.php via FTPS
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: |
+          curl --ftp-ssl \
+               --insecure \
+               --ftp-pasv \
+               -u "${FTP_USER}:${FTP_PASS}" \
+               -T src/config/db_credentials.php \
+               "ftp://${FTP_HOST}/domains/louvor.vilela.eng.br/public_html/src/config/db_credentials.php"
+
       - name: Deploy via FTP para Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
