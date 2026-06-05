@@ -45,18 +45,22 @@ jobs:
             file_put_contents("src/config/db_credentials.php", $hdr . var_export($data, true) . ";\n");
           '
 
-      - name: Upload db_credentials.php via FTPS
+      - name: Upload db_credentials.php via lftp
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
         run: |
-          curl --ftp-ssl \
-               --insecure \
-               --ftp-pasv \
-               -u "${FTP_USER}:${FTP_PASS}" \
-               -T src/config/db_credentials.php \
-               "ftp://${FTP_HOST}/domains/louvor.vilela.eng.br/public_html/src/config/db_credentials.php"
+          sudo apt-get install -y lftp -q
+          lftp -c "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate false;
+            set net:timeout 30;
+            open -u '${FTP_USER}','${FTP_PASS}' ${FTP_HOST};
+            put src/config/db_credentials.php -o /domains/louvor.vilela.eng.br/public_html/src/config/db_credentials.php;
+            bye;
+          "
 
       - name: Deploy via FTP para Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
