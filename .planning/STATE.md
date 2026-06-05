@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: MVP Operacional
 status: executing
-last_updated: "2026-06-05T21:00:00.000Z"
-last_activity: 2026-06-05 (Wave 4 completa — Membros/Relatórios/Aniversariantes/Ministério/Sugestões/Líder/Mensagens)
+last_updated: "2026-06-05T21:30:00.000Z"
+last_activity: 2026-06-05 (Wave 4 completa). Adicionalmente, o repositório local foi sincronizado, chaves sensíveis de API foram removidas do histórico do git e movidas para o .gitignore, templates de issues profissionais foram criados e o projeto foi integrado ao quadro Kanban unificado do GitHub.
 progress:
   total_phases: 7
   completed_phases: 5
