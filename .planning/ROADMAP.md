@@ -28,8 +28,8 @@ Este roadmap guiará o desenvolvimento do APP Louvor Novíssimo do zero absoluto
 **Planos**: 2 planos
 
 Planos:
-- [ ] 01-01: Configuração do autoloader, roteador e do Front Controller (index.php, router.php, .htaccess).
-- [ ] 01-02: Criação da classe de acesso ao banco de dados e importação da base de dados local (`database/schema.sql`).
+- [x] 01-01: Configuração do autoloader, roteador e do Front Controller (index.php, router.php, .htaccess).
+- [x] 01-02: Criação da classe de acesso ao banco de dados e importação da base de dados local (`database/schema.sql`).
 
 ---
 
@@ -44,8 +44,8 @@ Planos:
 **Planos**: 2 planos
 
 Planos:
-- [ ] 02-01: Criação dos helpers de login, sessão, CSRF, rate limit e controller da tela de login.
-- [ ] 02-02: Criação de rotas protegidas (Middlewares de autenticação para restringir acesso a páginas de administração).
+- [x] 02-01: Criação dos helpers de login, sessão, CSRF, rate limit e controller da tela de login.
+- [x] 02-02: Criação de rotas protegidas (Middlewares de autenticação para restringir acesso a páginas de administração).
 
 ---
 
@@ -114,8 +114,8 @@ Planos:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Arquitetura Core | 0/2 | Not started | - |
-| 2. Autenticação | 0/2 | Not started | - |
+| 1. Arquitetura Core | 2/2 | Complete | 2026-06-05 |
+| 2. Autenticação | 2/2 | Complete | 2026-06-05 |
 | 3. Design System e Base Visual | 0/2 | Not started | - |
 | 4. Gestão de Escalas | 0/2 | Not started | - |
 | 5. Repertório e Músicas | 0/2 | Not started | - |

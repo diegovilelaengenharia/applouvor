@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#f9f9f9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="manifest.json" onerror="this.href='';">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +20,9 @@
     <!-- Tailwind CSS (CDN para utilitários de layout) -->
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <link rel="stylesheet" href="assets/css/stitch-theme.css">
+    
+    <!-- Theme Manager (Fase 3) -->
+    <script src="assets/js/theme.js"></script>
     
     <style>
         body {
@@ -114,5 +117,7 @@
         </div>
     </div>
 
+    <!-- PWA Registration -->
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

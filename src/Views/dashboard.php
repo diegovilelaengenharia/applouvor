@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Louvor PIB - Dashboard</title>
 
+    <!-- PWA Config -->
+    <meta name="theme-color" content="#f9f9f9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.json">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +20,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <link rel="stylesheet" href="assets/css/stitch-theme.css">
+    
+    <!-- Theme Manager (Fase 3) -->
+    <script src="assets/js/theme.js"></script>
     
     <style>
         body {
@@ -84,5 +93,7 @@
         <p><?= APP_COPYRIGHT ?></p>
     </footer>
 
+    <!-- PWA Registration -->
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
