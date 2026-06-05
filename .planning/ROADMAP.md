@@ -96,6 +96,20 @@ Planos:
 
 ---
 
+### Phase 6: Deploy e Testes de Aceitação (UAT)
+**Objetivo**: Preparar e executar o deploy em produção na Hostinger, realizar auditorias de segurança e validar todas as funcionalidades integradas.
+**Depende de**: Phase 5
+**Requisitos**: Nenhum (fase de fechamento e validação de deploy)
+**Critérios de Sucesso**:
+  1. O aplicativo está publicado e operando sob HTTPS na Hostinger.
+  2. Todos os fluxos de login, escala, repertório e instalação PWA foram testados e validados pelo usuário final (UAT).
+**Planos**: 1 plano
+
+Planos:
+- [ ] 06-01: Deploy de produção, importação do banco de dados e execução do roteiro de testes de aceitação (UAT).
+
+---
+
 ## Progresso
 
 | Phase | Plans Complete | Status | Completed |
@@ -105,3 +119,4 @@ Planos:
 | 3. Design System e Base Visual | 0/2 | Not started | - |
 | 4. Gestão de Escalas | 0/2 | Not started | - |
 | 5. Repertório e Músicas | 0/2 | Not started | - |
+| 6. Deploy e Testes de Aceitação (UAT) | 0/1 | Not started | - |

@@ -6,6 +6,18 @@ Aplicativo web móvel (PWA) projetado para a gestão e comunicação interna do 
 ## Valor Principal
 Simplificar e centralizar a gestão de escalas e repertórios do ministério, garantindo que os músicos tenham acesso imediato e fácil a todas as informações e recursos de que precisam para o culto.
 
+## Current Milestone: v1.0 MVP Operacional
+
+**Goal:** MVP funcional de escalas e repertório para a PIB Oliveira com layout Sacred Minimalist e deploy na Hostinger.
+
+**Target features:**
+- Estrutura base MVC com Front Controller e Autoloader PSR-4.
+- Login seguro com senhas criptografadas, rate limiting e CSRF.
+- Visual Sacred Minimalist dark-first móvel integrado ao PWA instalável.
+- Painel líder para criação de escalas e designação de músicos.
+- Agenda do músico com visualização de repertório e respostas de presença.
+- Cadastro e acesso de cifras no aplicativo móvel.
+
 ## Requisitos
 
 ### Validados
