@@ -24,3 +24,9 @@ fetch_stitch.mjs
 # Data
 .dados/
 
+# Grafo de código (graphify) — regenerável, local por máquina
+# Índice AST p/ reduzir tokens em consultas de código. Reconstruído pelo hook
+# pós-commit; não versionar. Ver skill vilela-grafo.
+graphify-out/
+**/graphify-out/
+
