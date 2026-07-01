@@ -1,8 +1,12 @@
 <?php
 // src/config/config.php
 
-// Carrega autoloader de classes
-require_once __DIR__ . '/../autoload.php';
+// Carrega autoloader de classes (Composer ou Fallback local)
+if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+    require_once __DIR__ . '/../../vendor/autoload.php';
+} else {
+    require_once __DIR__ . '/../autoload.php';
+}
 
 // Carrega variáveis de ambiente do .env na raiz do projeto
 $dotenv = new App\DotEnv(__DIR__ . '/../..');
