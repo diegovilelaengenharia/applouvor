@@ -29,4 +29,7 @@ fetch_stitch.mjs
 # pós-commit; não versionar. Ver skill vilela-grafo.
 graphify-out/
 **/graphify-out/
+# MAPA.md — índice de orientação barato (governanca/gerar_mapa.py). Cache local. Ver vilela-grafo.
+MAPA.md
+**/MAPA.md
 
