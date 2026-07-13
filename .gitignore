@@ -7,7 +7,13 @@ uploads/
 
 # Pastas de dependência e build
 node_modules/
-vendor/
+site/vendor/          # composer (PHP) do PWA público; o vendor JS da gestao/ é versionado
+
+# Python (app da gestao/ + ferramentas)
+__pycache__/
+*.pyc
+.venv/
+venv/
 
 # OS e editores
 .DS_Store
