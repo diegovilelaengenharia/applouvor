@@ -1,0 +1,5 @@
+# App da gestão do Louvor (porta 8020) — dependências mínimas.
+fastapi
+uvicorn
+Pillow          # gerar_imagem_louvor.py (imagem semanal do WhatsApp)
+pytest          # smoke test (gestao/tests/)
