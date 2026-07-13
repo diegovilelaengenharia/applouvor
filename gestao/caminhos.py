@@ -7,14 +7,16 @@ pode estar em `Transmissão no Google Drive\\Meu Drive`, `~\\Meu Drive` ou numa 
 de unidade `G:\\Meu Drive`):
 
   - a RAIZ do Google Drive (por env, junction ou marcador-âncora);
-  - o `louvor.db` (SSOT do ministério) — via env `LOUVOR_DB`, com destino canônico
-    novo (`Vilela Igreja/0. Máquina`) e fallback legado (`3. Igreja/00. _Gestão`);
-  - a pasta de ASSETS do Ministério (logo + saída dos PNGs da escala) — via env
-    `LOUVOR_ASSETS`, com destino novo e fallback legado.
+  - o `louvor.db` (SSOT do ministério) — via env `LOUVOR_DB`, com home LOCAL
+    (`C:\\vilela\\Vilela Igreja\\0. Máquina`, FORA do Drive — já migrado na F4) e
+    fallback legado no Drive (`3. Igreja/00. _Gestão`);
+  - a pasta de ASSETS do Ministério (logo + saída dos PNGs) — via env `LOUVOR_ASSETS`,
+    com home local (quando o conteúdo migrar) e fallback legado no Drive (ainda lá).
 
-Este é o único arquivo a editar quando a F6 da cirurgia renomear as pastas do Drive
-(`3. Igreja` → `Vilela Igreja`): a resolução por env + fallback já sobrevive à
-transição, e o app não precisa saber onde o Drive está montado.
+A cirurgia MONTA os ecossistemas em `C:\\vilela` (fora do Drive, sem churn de sync) e
+sobe pro Drive só no FIM. Este é o único arquivo a editar quando essa localização
+mudar: a resolução por env + fallback sobrevive à transição, e o app não precisa
+saber onde as pastas estão montadas.
 
 Env (escape hatches, 1 vence):
     LOUVOR_DB       caminho explícito do louvor.db
@@ -38,12 +40,14 @@ _BASES = (
     Path.home() / "Meu Drive",
 )
 
-# louvor.db — destino canônico (pós-F6) e legado (pré-F6).
-_DB_NOVO = Path("Vilela Igreja") / "0. Máquina" / "louvor.db"
-_DB_LEGADO = Path("3. Igreja") / "00. _Gestão" / "louvor.db"
+# Ecossistema Igreja — a cirurgia MONTA os dados FORA do Drive (em C:\vilela, sem
+# churn de sync) e sobe pro Drive só no fim. O nome da pasta é o mesmo nos dois lugares.
+_ECO = "Vilela Igreja"
+_DB_SUB = Path("0. Máquina") / "louvor.db"
+_ASSETS_SUB = Path("01. PIB Oliveira") / "Ministério de Louvor"
 
-# assets do Ministério — destino canônico (pós-F6) e legado (pré-F6).
-_ASSETS_NOVO = Path("Vilela Igreja") / "01. PIB Oliveira" / "Ministério de Louvor"
+# Legado (Drive, de onde viemos) — fallback enquanto a migração não terminou.
+_DB_LEGADO = Path("3. Igreja") / "00. _Gestão" / "louvor.db"
 _ASSETS_LEGADO = Path("3. Igreja") / "01. PIB Oliveira" / "Ministério de Louvor"
 
 _SAIDA_IMG = "Escalas Semanais (geradas)"
@@ -96,6 +100,12 @@ def raiz_drive() -> Path:
     return _BASES[0] / "Diego (Notebook ACER)"   # padrão (Drive vivo)
 
 
+def vilela_local() -> Path:
+    """Raiz local FORA do Drive (`C:\\vilela`) — onde a cirurgia MONTA os ecossistemas
+    antes de subir pro Drive no fim (anti-churn de sync). Env `VILELA_ROOT` sobrepõe."""
+    return Path(os.environ.get("VILELA_ROOT") or r"C:\vilela")
+
+
 # ── louvor.db (SSOT) ─────────────────────────────────────────────────────────────
 def louvor_db_path(criar_dir: bool = False) -> Path:
     """Caminho canônico do louvor.db. Ordem: env LOUVOR_DB → novo (se existir) →
@@ -106,8 +116,8 @@ def louvor_db_path(criar_dir: bool = False) -> Path:
     if env:
         cam = Path(env)
     else:
-        raiz = raiz_drive()
-        novo, legado = raiz / _DB_NOVO, raiz / _DB_LEGADO
+        novo = vilela_local() / _ECO / _DB_SUB       # C:\vilela\Vilela Igreja\0. Máquina\louvor.db
+        legado = raiz_drive() / _DB_LEGADO           # fallback no Drive (pré-migração)
         cam = novo if novo.exists() else (legado if legado.exists() else novo)
     if criar_dir:
         cam.parent.mkdir(parents=True, exist_ok=True)
@@ -127,11 +137,10 @@ def ministerio_dir() -> Path:
     env = os.environ.get("LOUVOR_ASSETS")
     if env:
         return Path(env)
-    raiz = raiz_drive()
-    novo, legado = raiz / _ASSETS_NOVO, raiz / _ASSETS_LEGADO
+    novo = vilela_local() / _ECO / _ASSETS_SUB
     if novo.exists():
         return novo
-    return legado if legado.exists() else legado
+    return raiz_drive() / _ASSETS_LEGADO   # assets ainda no Drive (só o db migrou na F4)
 
 
 def saida_imagens() -> Path:
