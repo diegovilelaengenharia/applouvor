@@ -158,3 +158,14 @@ def sistema_ferramentas_dir() -> Path | None:
     compartilhado da Google Agenda (`calendario_painel`). Usado só pela sync de agenda."""
     d = raiz_drive() / "0. Sistema" / "ferramentas"
     return d if d.is_dir() else None
+
+
+def repo_raiz() -> Path:
+    """Raiz do repo applouvor (gestao/ = filha direta)."""
+    return Path(__file__).resolve().parent.parent
+
+
+def resumos() -> Path:
+    """Caixa de entrada da Central (ponte de mão única): `Vilela Sistema/_central/resumos/`.
+    A Central LÊ este JSON; nunca importa código da igreja. Criada sob demanda (F6)."""
+    return raiz_drive() / "Vilela Sistema" / "_central" / "resumos"
