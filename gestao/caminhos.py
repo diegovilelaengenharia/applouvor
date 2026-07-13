@@ -190,5 +190,9 @@ def repo_raiz() -> Path:
 
 def resumos() -> Path:
     """Caixa de entrada da Central (ponte de mão única): `Vilela Sistema/_central/resumos/`.
-    A Central LÊ este JSON; nunca importa código da igreja. Criada sob demanda (F6)."""
-    return raiz_drive() / "Vilela Sistema" / "_central" / "resumos"
+    A Central LÊ este JSON; nunca importa código da igreja. Vive em `C:\\vilela`
+    (refinamento 2026-07-13: montar local, subir pro Drive só no FIM da cirurgia)."""
+    env = os.environ.get("VILELA_RESUMOS")
+    if env:
+        return Path(env)
+    return vilela_local() / "Vilela Sistema" / "_central" / "resumos"
