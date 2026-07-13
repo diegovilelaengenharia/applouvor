@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Louvor — Gestão · PIB Oliveira</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <script src="/assets/vendor/apexcharts-3.54.1.min.js"></script>
+  <script defer src="/assets/vendor/alpinejs-focus-3.15.12.min.js"></script>
+  <script defer src="/assets/vendor/alpinejs-3.15.12.min.js"></script>
+  <style>
+    /* Shell enxuto da gestão: sem o sidebar da Central — só o centro de comando do louvor. */
+    .gestao-wrap { max-width: 1180px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+    .gestao-top { background: #172a46; color: #fff; padding: 16px 30px; display: flex; align-items: center;
+                  gap: 14px; border-bottom: 4px solid #d4af37; }
+    .gestao-top .marca { font-weight: 800; font-size: 1.15rem; letter-spacing: .3px; }
+    .gestao-top .sub { color: #d4af37; font-weight: 600; font-size: .9rem; }
+    .gestao-top .porta { margin-left: auto; font-size: .72rem; opacity: .7; }
+    .main { flex: 1; }
+  </style>
+</head>
+<body x-data="gestao()" x-init="iniciar()">
+  <div class="gestao-wrap">
+    <header class="gestao-top">
+      <span class="marca">🎵 App Louvor — Gestão</span>
+      <span class="sub">PIB Oliveira</span>
+      <span class="porta">porta 8020 · lado líder</span>
+    </header>
+    <main class="main"></main>
+  </div>
+
+  <!-- núcleo modular (mesmo motor da Central): registry → módulo → composer -->
+  <script src="/assets/js/charts.js"></script>
+  <script src="/assets/js/registry.js"></script>
+  <script src="/assets/js/modules/louvor.js"></script>
+  <script src="/assets/js/app-gestao.js"></script>
+</body>
+</html>

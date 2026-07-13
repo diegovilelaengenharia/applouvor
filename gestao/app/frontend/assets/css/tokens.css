@@ -1,0 +1,106 @@
+/* Copyright (c) 2026 Vilela Engenharia. Ver LICENSE. */
+/* ============================================================================
+   TOKENS — fonte única de design da Central (CT-2026-020, Onda 2)
+   Carregar ANTES do base.css. Tema: [data-theme="light"|"dark"] no <html>,
+   definido pelo bootstrap no index.html (localStorage 'central.tema':
+   auto = segue o Windows | light | dark).
+   Regra: cor NOVA entra AQUI como token; nunca hardcoded nos componentes.
+   ========================================================================== */
+
+:root{
+  /* identidade (não muda com o tema) */
+  --area:#27634F;                 /* cor da ÁREA ativa — pinta a casca toda */
+  --vilela-accent:#E8960F;
+  --radius:14px; --side:260px; --topbar:60px;
+
+  /* escalas (PLANO-VISUAL F1 — add-only; adotar ao tocar, nunca replace em massa) */
+  --fs-xs:.72rem; --fs-sm:.8rem; --fs-md:.9rem; --fs-lg:1rem; --fs-xl:1.3rem; --fs-2xl:1.7rem;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --radius-sm:8px; --radius-lg:18px; --radius-full:999px;
+  --t-fast:.12s; --t-med:.2s;
+
+  /* camadas — z-index SÓ daqui (nunca número mágico) */
+  --z-topbar:30; --z-pop:40; --z-overlay:60; --z-toast:70; --z-palco:80;
+
+  /* cores das ÁREAS — fonte única (paleta travada no PLANO-FRONTEND §5.1;
+     não mudam com o tema: identidade) */
+  --area-tudo:#27634F; --area-pessoal:#5F7E78; --area-trabalho:#197E63;
+  --area-igreja:#79738F; --area-prefeitura:#1F6FB2; --area-casa:#9C7A5C;
+  --area-sistema:#5A6B7B;
+
+  /* modo palco (louvor): palco é escuro SEMPRE, nos dois temas (decisão) */
+  --palco-a:#241f3f; --palco-b:#0b0a14;
+
+  /* superfícies e texto — TEMA CLARO */
+  color-scheme:light;
+  --bg:#f4f6f5;        /* fundo da página */
+  --card:#ffffff;      /* superfície principal */
+  --card-2:#f8fafc;    /* superfície sutilmente elevada (resumo IA, não-lido) */
+  --hover:#f1f5f9;     /* hover de listas/menus */
+  --line:#e3e8e6;      /* borda padrão */
+  --line-2:#cbd5e1;    /* borda mais marcada */
+  --input-bg:#fbfdfc;  /* fundo de inputs/textarea/dropzone */
+  --input-line:#d7ddda;
+  --ink:#1F2933;       /* texto principal */
+  --ink-2:#475569;     /* texto secundário */
+  --muted:#6b7785;     /* texto apagado */
+
+  /* semânticos (estado) */
+  --ok-bg:#eef8f4;   --ok-line:#b7e0d2;  --ok-ink:#197E63;
+  --warn-bg:#fdf6e5; --warn-line:#f0dcae; --warn-ink:#9a6b00;
+  --bad-bg:#fdefec;  --bad-line:#f2c4bd;  --bad-ink:#c0392b;
+  --pos:#197E63;     /* dinheiro entrando */
+  --neg:#c0392b;     /* dinheiro saindo / erro */
+  --u3:#c0392b; --u2:#E8960F; --u1:#197E63;   /* urgência (semântica) */
+
+  /* dataviz — paleta categórica única (ordem fixa, NUNCA ciclar; gráficos leem
+     via CentralCharts. Séries SEMÂNTICAS usam --pos/--neg, não esta).
+     VALIDADA em 2026-07-12 (script da skill dataviz): banda OKLCH, croma ≥.1,
+     CVD adjacente ΔE ≥13, contraste ≥3:1 — nos DOIS temas. Famílias:
+     1 verde · 2 azul · 3 âmbar · 4 teal · 5 rosa · 6 oliva · 7 violeta · 8 bronze */
+  --viz-1:#0B8759; --viz-2:#2569C0; --viz-3:#BF7300; --viz-4:#0F7F9E;
+  --viz-5:#C74E79; --viz-6:#6B8F2E; --viz-7:#8A5FBF; --viz-8:#8F6A1D;
+
+  /* superfícies especiais */
+  --toast-bg:#1F2933; --toast-ink:#ffffff;      /* toast = superfície invertida */
+  --grad-sombra:#0c1f19;                        /* âncora p/ escurecer --area (sidebar) */
+  --hero-sombra:#15101f;                        /* âncora do hero do louvor */
+
+  /* profundidade */
+  --shadow-1:0 4px 14px rgba(0,0,0,.05);
+  --shadow-2:0 12px 34px rgba(0,0,0,.16);
+  --overlay:rgba(20,30,26,.38);
+}
+
+[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#12171a;
+  --card:#1c2326;
+  --card-2:#20282c;
+  --hover:#242d31;
+  --line:#2c363a;
+  --line-2:#3b474c;
+  --input-bg:#161d20;
+  --input-line:#3b474c;
+  --ink:#e8edeb;
+  --ink-2:#b8c4c0;
+  --muted:#8b9a94;
+
+  --ok-bg:#15271f;   --ok-line:#2b5c49;  --ok-ink:#5fc39a;
+  --warn-bg:#2a2210; --warn-line:#6b5620; --warn-ink:#e2b64e;
+  --bad-bg:#2b1a17;  --bad-line:#6e352c;  --bad-ink:#e2766a;
+  --pos:#4fc08d;
+  --neg:#e2766a;
+  --u3:#e2766a; --u2:#ecab3e; --u1:#4fc08d;
+
+  /* dataviz — par escuro (mesma ordem/famílias; banda OKLCH do dark é MAIS
+     escura, 0.48–0.67 — meio-tom, não pastel. Validada como o par claro) */
+  --viz-1:#2E9E74; --viz-2:#4E8CD0; --viz-3:#B8821F; --viz-4:#1899B4;
+  --viz-5:#C06283; --viz-6:#7BA23F; --viz-7:#9C77CC; --viz-8:#A6853B;
+
+  --toast-bg:#2c363a; --toast-ink:#e8edeb;      /* no escuro: card elevado */
+
+  --shadow-1:0 4px 14px rgba(0,0,0,.35);
+  --shadow-2:0 12px 34px rgba(0,0,0,.55);
+  --overlay:rgba(4,8,7,.6);
+}

@@ -1,0 +1,99 @@
+/* Copyright (c) 2026 Vilela Engenharia. Ver LICENSE. */
+/* ============================================================================
+   COMPONENTS — primitivas do design system (PLANO-VISUAL F2).
+   Carregar DEPOIS do tokens.css e ANTES do base.css: as classes legadas são
+   ALIASES das primitivas (o bloco agrupado é a base comum); o que resta delas
+   no base.css são só os DESVIOS legítimos, que vencem por vir depois.
+   Regra: código NOVO usa somente os nomes canônicos —
+     .btn.solid (CTA) · .btn.line (secundário) · .btn.ghost (sobre cor)
+       ⚠️ `<button class="btn">` cru ainda é SOLID pelo legado `button.btn`
+          do base.css — código novo SEMPRE com a variante explícita.
+     .pill (+.on)  — filtro/aba; cor via --c / --g / --area
+     .badge        — selo estático
+     .overlay/.modal · .skeleton · .estado-vazio · .num
+   ========================================================================== */
+
+/* ---------- BOTÃO (base comum + aliases legados) ---------- */
+.btn,.tbtn,.email-action-btn,.menu-btn,.lv-btn,.chip-frescor,
+.lv-ico a,.lv-ico .ib,.agora-acoes .acao{
+  display:inline-flex;align-items:center;gap:7px;
+  font:inherit;font-size:.86rem;font-weight:500;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  padding:8px 12px;cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:background var(--t-fast),border-color var(--t-fast),
+             color var(--t-fast),box-shadow var(--t-fast)}
+.btn:hover{border-color:var(--area);color:var(--area)}
+.btn.solid{background:var(--area);border-color:var(--area);color:#fff;font-weight:600}
+.btn.solid:hover{color:#fff;filter:brightness(.95)}
+.btn.line{background:var(--card);color:var(--ink-2);border-color:var(--line-2)}
+.btn.line:hover{border-color:var(--area);color:var(--area)}
+.btn.ghost{background:rgba(255,255,255,.16);border-color:transparent;color:#fff}
+.btn.ghost:hover{background:rgba(255,255,255,.26)}
+.btn:disabled{opacity:.6;cursor:default}
+
+/* ---------- PILL (filtro/aba interativa; estado .on) ---------- */
+/* cor: --c (abas de área) → --g (grupos do Painel Família) → --area (padrão) */
+.pill,.area-tab,.chip-f,.ff-chip,.lv-tab{
+  --pill-c:var(--c,var(--g,var(--area)));
+  display:inline-flex;align-items:center;gap:6px;padding:6px 13px;
+  border:1px solid var(--line);border-radius:var(--radius-full);
+  background:var(--card);color:var(--muted);font:inherit;font-size:.82rem;
+  font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:background var(--t-fast),border-color var(--t-fast),
+             color var(--t-fast),box-shadow var(--t-fast)}
+.pill:hover,.area-tab:hover,.chip-f:hover,.ff-chip:hover,.lv-tab:hover{
+  border-color:var(--pill-c);color:var(--pill-c)}
+.pill.on,.area-tab.on,.chip-f.on,.ff-chip.on,.lv-tab.on{
+  background:var(--pill-c);border-color:var(--pill-c);color:#fff;
+  box-shadow:0 2px 6px color-mix(in srgb,var(--pill-c) 35%,transparent)}
+
+/* ---------- BADGE (selo estático, não clicável) ---------- */
+.badge,.tag,.badge-novo,.soon-tag,.lv-chip,.lv-badge,.st{
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:var(--radius-full);padding:2px 9px;
+  font-size:.68rem;font-weight:600;line-height:1.5;white-space:nowrap}
+
+/* ---------- MODAL (movido do base.css) ---------- */
+.overlay{position:fixed;inset:0;background:var(--overlay);display:flex;
+  align-items:flex-start;justify-content:center;padding-top:12vh;z-index:var(--z-overlay)}
+.modal{width:min(560px,92vw);background:var(--card);border-radius:16px;
+  box-shadow:0 24px 60px rgba(0,0,0,.3);overflow:hidden}
+.modal .mh{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:600;
+  display:flex;align-items:center;gap:8px}
+.modal .mb{padding:14px 18px}
+.modal input,.modal textarea{width:100%}
+.modal--inbox{width:min(480px,92vw)}
+
+/* ---------- ESTADOS ---------- */
+/* esqueleto de carregamento (adoção na F9); shimmer respeita reduced-motion
+   pelo bloco global do base.css */
+.skeleton{position:relative;overflow:hidden;min-height:14px;
+  background:var(--hover);border-radius:var(--radius-sm)}
+.skeleton::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,
+             color-mix(in srgb,var(--ink) 7%,transparent),transparent);
+  animation:skeleton-shimmer 1.4s infinite}
+@keyframes skeleton-shimmer{100%{transform:translateX(100%)}}
+
+.skeleton-lista{display:flex;flex-direction:column;gap:10px;margin:6px 0}
+.skeleton.h40{height:40px}   /* linha de lista */
+.skeleton.h76{height:76px}   /* card do Início */
+
+/* vazio bem desenhado: ícone + frase + CTA (adoção na F9) */
+.estado-vazio{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:var(--sp-2);padding:var(--sp-6) var(--sp-5);text-align:center;color:var(--muted);
+  background:var(--card);border:1px dashed var(--line-2);border-radius:var(--radius)}
+.estado-vazio .ic{font-size:2rem;opacity:.6}
+.estado-vazio b{color:var(--ink-2);font-size:.95rem}
+
+/* números tabulares que nunca quebram linha (R$, datas em célula) */
+.num{white-space:nowrap;font-variant-numeric:tabular-nums}
+/* célula/cabeçalho alinhado à direita (era style="text-align:right" espalhado) */
+.ta-r{text-align:right}
+
+/* ---------- ÍCONE LUCIDE (F4) ---------- */
+/* sprite vendorizado em assets/vendor/lucide/ (gerado por scripts/gerar_sprite_lucide.py);
+   herda cor (currentColor) e escala com a fonte do contexto onde está */
+.lc{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.16em;flex:none}
+.lc-spin{animation:lc-spin 1s linear infinite}
+@keyframes lc-spin{to{transform:rotate(360deg)}}
