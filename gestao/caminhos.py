@@ -143,16 +143,30 @@ def ministerio_dir() -> Path:
     return raiz_drive() / _ASSETS_LEGADO   # assets ainda no Drive (só o db migrou na F4)
 
 
+def _maquina_local() -> Path:
+    """Pasta '0. Máquina' local do ecossistema Igreja (louvor.db + logo + saída de PNG)."""
+    return vilela_local() / _ECO / "0. Máquina"
+
+
 def saida_imagens() -> Path:
+    """Saída dos PNGs da escala — LOCAL (fora do Drive, sem churn de sync). Cai no
+    Drive só se o home local ainda não existir (pré-migração)."""
+    maq = _maquina_local()
+    if maq.is_dir():
+        return maq / "Escalas geradas"
     return ministerio_dir() / _SAIDA_IMG
 
 
 def achar_logo() -> Path | None:
+    # 1) logo migrado p/ o home local (0. Máquina) — independe do Drive.
+    local = _maquina_local() / _LOGO_NOME
+    if local.exists():
+        return local
+    # 2) fallback: procura na biblioteca de 1.1 GB do ministério no Drive.
     base = ministerio_dir()
-    if not base.exists():
-        return None
-    for achado in base.rglob(_LOGO_NOME):
-        return achado
+    if base.exists():
+        for achado in base.rglob(_LOGO_NOME):
+            return achado
     return None
 
 
