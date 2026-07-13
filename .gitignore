@@ -1,6 +1,6 @@
 # Arquivos de Ambiente
 .env
-src/config/db_credentials.php
+site/src/config/db_credentials.php
 
 # Uploads do usuário
 uploads/
