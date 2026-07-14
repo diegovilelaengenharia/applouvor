@@ -39,3 +39,8 @@ graphify-out/
 MAPA.md
 **/MAPA.md
 
+
+# Padrao da casa (fechamento 2026-07-14)
+*.db-shm
+*.db-wal
+.pytest_cache/
