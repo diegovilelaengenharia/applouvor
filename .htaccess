@@ -1,0 +1,19 @@
+# .htaccess — raiz do repo (FASE 00, ciclo v7, 2026-07-16)
+#
+# Por que isto existe aqui: o deploy real de produção é o webhook nativo da Hostinger
+# (GitHub → webhooks.hostinger.com, configurado em 2026-02, anterior a este ciclo — ver
+# .governanca/fases/FASE-00-PLANO.md §"Achado crítico"). Ele clona o REPO INTEIRO para
+# /domains/vilela.eng.br/public_html/applouvor/ a cada push. Como o subdomínio
+# louvor.vilela.eng.br serve exatamente dessa pasta, este arquivo:
+#   1. bloqueia acesso direto às pastas internas (governança, app do líder, histórico git);
+#   2. reescreve tudo o mais para dentro de site/, que é o PWA público de verdade.
+#
+# NUNCA remover sem colocar um equivalente no lugar — sem isto, .governanca/, gestao/, docs/
+# ficam publicamente acessíveis (já aconteceu, ver LICOES.md da FASE 00).
+
+RewriteEngine On
+
+RewriteRule ^(\.git|\.governanca|\.claude|\.github|gestao|governanca|docs|vendor)(/.*)?$ - [F,L]
+
+RewriteCond %{REQUEST_URI} !^/site/
+RewriteRule ^(.*)$ site/$1 [L]

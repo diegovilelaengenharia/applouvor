@@ -13,9 +13,12 @@ description: >
 Skill **local do `applouvor`**, no lado **`gestao/`** (o lado do líder). Modo-vida 🟢. O Diego é
 **líder de louvor** na PIB (ver memória `perfil-igreja-diego`).
 
-⚠️ **Fronteira do repo (não errar):** `applouvor\site\` é o **PWA público** — todo push que toca
-`site/**` **DEPLOYA em produção** (`louvor.vilela.eng.br`, GitHub Actions → FTPS Hostinger).
-`applouvor\gestao\` (onde esta skill trabalha) **não deploya**. Nunca misture os dois num commit.
+⚠️ **Fronteira do repo (não errar):** `applouvor\site\` é o **PWA público**, servido em
+`louvor.vilela.eng.br`. **Todo push em `main` deploya** (webhook nativo Hostinger, sem filtro de
+path — descoberto na FASE 00, 2026-07-16: mesmo commit só em `gestao/` republica o repo
+inteiro, protegido por `.htaccess` na raiz). `applouvor\gestao\` não é servido na web, mas
+**vai junto** no clone a cada push. Nunca misture os dois num commit mesmo assim (legibilidade
+do histórico + o fallback manual `deploy.yml` ainda filtra por `site/**`).
 
 ## SSOT do louvor
 - **Banco único:** `C:\vilela\Vilela Igreja\0. Máquina\louvor.db` — centro de comando do ministério.

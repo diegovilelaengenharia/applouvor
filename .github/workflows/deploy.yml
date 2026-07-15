@@ -1,13 +1,19 @@
-name: Deploy App Louvor para Hostinger via FTP
+name: Deploy App Louvor para Hostinger via FTP (manual, fallback)
+
+# FASE 00 (ciclo v7), 2026-07-16: achado crítico — existe um WEBHOOK nativo da Hostinger
+# (GitHub → webhooks.hostinger.com/deploy/..., configurado em 2026-02-11, anterior a este
+# ciclo) que clona o repo inteiro em CADA push para /domains/vilela.eng.br/public_html/
+# applouvor/ — é essa pasta que o subdomínio louvor.vilela.eng.br realmente serve (não a
+# pasta que este workflow sobe por FTP). Esse webhook é agora o mecanismo OFICIAL de deploy
+# (mais simples: zero credencial no CI, já funcionava desde antes do ciclo v6 sem que
+# ninguém soubesse). Proteção de pastas internas + roteamento pra site/ ficam no `.htaccess`
+# da RAIZ do repo (não em site/.htaccess), porque é a raiz que o webhook publica.
+#
+# Este workflow FTP fica só como fallback manual (workflow_dispatch) — não dispara mais
+# sozinho no push, pra não competir com o webhook. Ver .governanca/fases/FASE-00-PLANO.md
+# §"Achado crítico" e LICOES.md pra o histórico completo da investigação.
 
 on:
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - 'site/**'
-      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 jobs:
@@ -19,12 +25,9 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      # FASE 00 (ciclo v7): credenciais de banco NÃO viajam mais pelo pipeline. O PHP em
-      # produção lê DB_HOST/DB_NAME/DB_USER/DB_PASS via getenv(), cadastradas direto no painel
-      # Hostinger (PHP > Variáveis de Ambiente). Isto substitui as duas etapas antigas deste
-      # workflow (injeção em config.php via CI + upload paralelo de db_credentials.php por
-      # FTPS em Python) — eram o contorno que sustentou 10 commits fix:/temp:/diag: no ciclo v6
-      # e nunca deu estável. Ver .governanca/fases/FASE-00-PLANO.md e HANDOFF.md.
+      # Credenciais de banco NÃO viajam pelo pipeline. O PHP em produção lê
+      # DB_HOST/DB_NAME/DB_USER/DB_PASS via getenv(), lidas de um .env colocado manualmente
+      # no servidor (este plano de hospedagem não tem variável de ambiente no painel).
       - name: Deploy via FTP para Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

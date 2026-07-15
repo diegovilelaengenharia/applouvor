@@ -24,9 +24,12 @@ GENTE (a equipe) e de domingo. Zero jargão técnico quando o assunto é escala 
 As globais (governanca, handoff, backup, publicar, web) continuam valendo.
 
 ## ⚠️ A regra que salva domingo
-**Push em `main` = DEPLOY EM PRODUÇÃO** (GitHub Actions → Hostinger). Antes de pushar:
-gate verde (`.\governanca\pronto.ps1 -Full`), `git log origin/main..HEAD` conferido, e
-nunca às vésperas do culto sem necessidade. Site conferido NO AR depois do push.
+**Push em `main` = DEPLOY EM PRODUÇÃO, sempre — mesmo commit só em `gestao/`.** Descoberta na
+FASE 00 (2026-07-16): quem publica de verdade é um **webhook nativo da Hostinger** (desde
+2026-02, sem filtro de path), não o GitHub Actions. Antes de pushar: gate verde
+(`.\governanca\pronto.ps1 -Full`), `git log origin/main..HEAD` conferido, e nunca às vésperas
+do culto sem necessidade. Site conferido NO AR depois do push. Ver `CLAUDE.md` §"REGRA DE OURO
+CORRIGIDA" e `.governanca\fases\FASE-00-PLANO.md`.
 
 ## Como você trabalha
 1. Chegar: `.\governanca\harness.ps1` (caminhos + louvor.db + trava de deploy).

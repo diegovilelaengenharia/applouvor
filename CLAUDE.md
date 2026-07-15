@@ -2,23 +2,35 @@
 
 Orientação de raiz. O repo tem **dois lados** e confundi-los custa um deploy acidental em produção.
 
+> ## 🔴 REGRA DE OURO CORRIGIDA (FASE 00, 2026-07-16) — leia antes de qualquer push
+> **TODO push em `main` publica em produção — não só o que toca `site/**`.** Descoberto na
+> FASE 00: existe um **webhook nativo da Hostinger** (GitHub → `webhooks.hostinger.com`,
+> configurado em 2026-02-11, **anterior** ao `deploy.yml`/GitHub Actions) que clona o **repo
+> inteiro** a cada push — sem filtro de path — para a pasta que o domínio
+> `louvor.vilela.eng.br` **realmente** serve. A crença antiga ("commit só em `gestao/` não
+> dispara deploy") valia só para o GitHub Actions; o webhook sempre rodou por baixo, o tempo
+> todo, sem que ninguém soubesse. Proteção contra exposição de `.governanca/`/`gestao/`/etc.
+> está no `.htaccess` da RAIZ do repo (não em `site/.htaccess`) — **nunca remover sem
+> equivalente no lugar**. Detalhes: `.governanca/fases/FASE-00-PLANO.md` §"Achado crítico".
+
 | Lado | O que é | Deploy? |
 |---|---|---|
-| `site/` | **PWA público** (PHP, MVC front-controller) — a escala vista pela equipe, em `louvor.vilela.eng.br` | **SIM** — push que toca `site/**` vai para produção |
-| `gestao/` | **App do líder** (FastAPI, **porta 8020**) — escala, jejum, repertório, imagem semanal. É onde o Diego trabalha | **NÃO** |
+| `site/` | **PWA público** (PHP, MVC front-controller) — a escala vista pela equipe, em `louvor.vilela.eng.br` | Servido daqui (via `.htaccess` da raiz) |
+| `gestao/` | **App do líder** (FastAPI, **porta 8020**) — escala, jejum, repertório, imagem semanal. É onde o Diego trabalha | Não é servido na web, mas **vai junto** no clone do webhook a cada push (mitigado pelo `.htaccess` da raiz, que bloqueia acesso direto) |
 
-> ⚠️ **Nunca misture os dois num commit.** O `deploy.yml` filtra por `paths: ['site/**', ...]` — foi
-> assim, no mesmo commit, que a F1 da cirurgia blindou o deploy (teste negativo provado: commit só em
-> `gestao/` **não** dispara Actions).
+> ⚠️ **Ainda assim, não misture os dois num commit** — mantém o histórico legível e o
+> `deploy.yml` (agora só `workflow_dispatch`, fallback manual via FTP) continua filtrando por
+> `site/**` para esse caso de uso manual.
 
 ## `site/` — o PWA público
 - `index.php` + `router.php` / `src/Router.php` — front controller (toda requisição entra aqui).
 - `src/Controllers/` (26) — ex.: `AgendaController`, `AutoScheduleController` (escala automática),
   `AvisoController`, `DashboardController`. Estendem `Controller`.
 - `src/Models/` (13) — acesso a dados; `src/Views/` (55) — telas; `src/helpers/`, `src/classes/`.
-- `src/config/db_credentials.php` — credenciais (geradas no deploy pelos Secrets; **fora do git**).
-- Deploy: push em `main` → GitHub Actions → **FTPS Hostinger**. O `deploy.yml` exclui `CLAUDE.md`,
-  `README.md`, `tests/`, `.claude/` — dev docs não vão para produção.
+- `src/.env` — credenciais de produção (fora do git, colocadas manualmente no servidor via File
+  Manager — este plano de hospedagem não tem variável de ambiente no painel).
+- Deploy: push em `main` → webhook nativo Hostinger (automático, oficial) → repo inteiro clonado,
+  `.htaccess` da raiz roteia para `site/`. `deploy.yml`/GitHub Actions é só fallback manual.
 
 ## `gestao/` — o app do líder (onde o trabalho acontece)
 ```powershell
