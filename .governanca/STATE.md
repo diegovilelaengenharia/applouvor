@@ -13,7 +13,32 @@ progress:
   percent: 99
 ---
 
-# Estado do Projeto — APP Louvor Novíssimo
+# Estado do Projeto — APP Louvor
+
+> ## 🔄 RECONSTRUÇÃO 2026-07 (ciclo v7)
+> O ciclo v6 ("Novíssimo") está **arquivado** — histórico completo de TODAS as tentativas
+> (v1→v6) centralizado e auditado em **`c:\vilela\applouvor-historico\`** (LEIA-ME + MANIFESTO).
+> O novo ciclo segue a skill global **`vilela-gsd`** (uma fase por vez, gate entre fases),
+> começando por **`fases/FASE-00-PLANO.md`** (fundação de infra — smoke test de DB em produção
+> ANTES de qualquer tela). Mantidos: repo GitHub, domínio `louvor.vilela.eng.br`, `gestao/`
+> (app do líder 8020, funcional). Tudo abaixo desta linha é o retrato do ciclo v6.
+>
+> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 00 — código local pronto, aguardando o Diego.**
+> `site/` resetado para esqueleto mínimo (código novo, não copiado do legado — as 53 telas MVC
+> antigas foram removidas do working tree; seguem recuperáveis via `git show 67775ef:site/...`
+> e em `applouvor-historico/`). `deploy.yml` simplificado (sem as duas etapas de contorno de
+> credencial do ciclo v6). Lint PHP 5/5 OK; `diag.php` testado localmente em 2 cenários (sem
+> env vars → erro claro em JSON; com env vars simuladas apontando pra host inexistente → erro
+> limpo em JSON, sem crash, sem vazar segredo). **Nada foi commitado além do working tree local
+> ainda** — ver CHANGELOG para os commits reais. **Falta, e só o Diego faz:** (1) cadastrar
+> `DB_HOST`/`DB_NAME`/`DB_USER`/`DB_PASS` no painel Hostinger (PHP > Variáveis de Ambiente);
+> (2) autorizar o push (regra dura: push em `main` = deploy em produção de uma igreja). Depois
+> do push: conferir `https://louvor.vilela.eng.br/diag.php` no ar e fazer um segundo push
+> trivial de controle (critério 4 da fase). Detalhes completos: `.governanca/HANDOFF.md`.
+
+---
+
+# [Arquivo — ciclo v6] Estado do Projeto — APP Louvor Novíssimo
 
 ## Referência do Projeto
 

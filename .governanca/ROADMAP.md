@@ -1,4 +1,15 @@
-# Roadmap: APP Louvor Novíssimo
+# Roadmap: APP Louvor
+
+> ## 🔄 RECONSTRUÇÃO 2026-07 (ciclo v7)
+> Novo ciclo pela skill **`vilela-gsd`**. Fase atual: **FASE 00 — Fundação de infra**
+> (`fases/FASE-00-PLANO.md`). Fases futuras existem só como títulos até a anterior fechar.
+> A **visão de produto abaixo continua válida** (decisões travadas 2026-06-05: superar o
+> LouveApp em cifras/palco/inteligência, sem SaaS pago) — o que muda é o RITMO: infra primeiro,
+> uma fase por vez, verificação por execução. Milestones v1.0–v5.0 abaixo = referência do ciclo v6.
+
+---
+
+# [Arquivo — ciclo v6] Roadmap: APP Louvor Novíssimo
 
 ## Visão de Produto
 

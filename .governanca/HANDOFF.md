@@ -3,6 +3,38 @@
 
 ---
 
+## 🔄 FASE 00 (ciclo v7, 2026-07-16) — leia isto primeiro
+
+O conteúdo abaixo desta seção descreve a arquitetura MVC do **ciclo v6**, que foi removida do
+`site/` (working tree) nesta rodada — ela serve só de CONSULTA para a Fase 01 (decisões de
+produto, design system, passo a passo de construir tela). O `site/` hoje é um esqueleto mínimo:
+`index.php`, `src/config/config.php`, `diag.php`, `.htaccess`, `.env.example`. Nada de produto
+ainda. Ver `.governanca/fases/FASE-00-PLANO.md` para o objetivo e critérios da fase.
+
+**O que só o Diego pode fazer agora (o agente não tem acesso ao painel Hostinger):**
+
+1. **Cadastrar 4 variáveis de ambiente no painel Hostinger** (hPanel → site
+   `louvor.vilela.eng.br` → PHP → Variáveis de Ambiente, ou caminho equivalente do plano):
+   - `DB_HOST` — ex.: `srv1074.hstgr.io` (host do MySQL da Hostinger)
+   - `DB_NAME` — ex.: `u884436813_applouvor`
+   - `DB_USER` — ex.: `u884436813_admin`
+   - `DB_PASS` — a senha real do usuário MySQL
+   (Os valores de exemplo acima vieram do `config.php` antigo do ciclo v6 — confirme os
+   valores certos no painel Hostinger/phpMyAdmin antes de cadastrar.)
+   Não há mais VAPID keys nem nenhuma outra env var exigida por este esqueleto mínimo — quando
+   a Fase 01 trouxer Web Push de volta, `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` voltam a esta
+   lista.
+2. **Autorizar o push.** Regra dura do método (`vilela-gsd` + `vilela-publicar`): push em
+   `main` = deploy real em `louvor.vilela.eng.br`. O agente deixou tudo commitado localmente e
+   parou antes do push, propositalmente.
+3. **Depois do push:** conferir `https://louvor.vilela.eng.br/diag.php` no ar — deve responder
+   `{"db":"OK", ...}`. Se responder erro, a mensagem (JSON) diz exatamente qual variável falta
+   ou qual foi o erro do MySQL — sem expor a senha.
+4. **Segundo push de controle** (critério 4 da fase): qualquer push trivial subsequente em
+   `site/**` não pode quebrar o verde — prova que o caminho é estável, não sorte de um deploy.
+
+---
+
 ## O que é este projeto
 
 **APP Louvor Novíssimo** — PWA para o ministério de louvor da PIB Oliveira.

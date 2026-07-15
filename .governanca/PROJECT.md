@@ -1,4 +1,11 @@
-# APP Louvor Novíssimo
+# APP Louvor
+
+> ## 🔄 RECONSTRUÇÃO 2026-07 (ciclo v7)
+> Histórico v1→v6 centralizado em `c:\vilela\applouvor-historico\`. Novo ciclo: skill
+> **`vilela-gsd`**, fase atual `fases/FASE-00-PLANO.md`. As **Decisões Chave abaixo seguem
+> travadas** (norte LouveApp, ChordPro próprio, stage mode, sem SaaS pago, PHP puro na
+> Hostinger). Decisões NOVAS do ciclo v7 (escopo do reset, arquitetura de dados) serão
+> registradas aqui na FASE 00.
 
 ## O que é isto
 Aplicativo web móvel (PWA) projetado para a gestão e comunicação interna do Ministério de Louvor da Primeira Igreja Batista em Oliveira/MG. O aplicativo atende a dois públicos: os líderes (painel administrativo de escalas, membros e repertório) e os músicos (acesso a cifras, devocionais, escalas e avisos).
