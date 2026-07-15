@@ -34,7 +34,51 @@
   real que uma leitura de código não pegaria sozinha (o fatal error só aparece em execução).
 
 **Pendência explícita (não é dívida silenciosa — está aqui e no HANDOFF.md):**
-- Cadastrar `DB_HOST`/`DB_NAME`/`DB_USER`/`DB_PASS` no painel Hostinger — só o Diego.
-- Autorizar o push — só o Diego (regra dura do método).
-- Depois do push: conferir `diag.php` no ar + segundo push de controle — fecha os critérios
-  3 e 4 da fase, hoje em aberto.
+- ~~Cadastrar env vars no painel Hostinger~~ — não existe essa opção neste plano (só
+  Versão/Extensões/Opções de PHP). Resolvido via reset de senha do MySQL + `.env` colocado
+  direto no servidor pelo File Manager (fora do git).
+- ~~Autorizar o push~~ — feito ("quero que você faça tudo por mim", 2026-07-15). `diag.php`
+  verde em produção confirmado no navegador.
+- **Nova pendência, mais séria que a original:** decidir entre os dois mecanismos de deploy
+  concorrentes (GitHub Actions FTP vs. GIT nativo da Hostinger) — ver `FASE-00-PLANO.md`
+  §"Achado crítico". Envolve deletar/recriar o subdomínio (DNS/SSL); não é algo pra decidir
+  ou executar sozinho.
+
+## Retro adicional — o quase-incidente e o achado de segurança (mesma fase, mesma sessão)
+
+**O que travou (de verdade, e feio):**
+- O smoke test deu 403/404 mesmo com deploy verde no Actions. Causa raiz **não era o código
+  nem as credenciais** — era o **document root do subdomínio apontando pra pasta errada**
+  (`applouvor/`, o checkout inteiro via GIT nativo da Hostinger, não `applouvor/site/` via
+  FTP). Isso não estava em NENHUM documento de governança anterior — nem o `PLANO-FUTURO-
+  RECONSTRUCAO.md` original, nem o HANDOFF.md do ciclo v6, mencionavam essa segunda via de
+  deploy. Só apareceu inspecionando o painel manualmente (hPanel → Subdomínios).
+- **Consequência real, não hipotética:** por uns minutos, `.governanca/HANDOFF.md` (doc
+  interno) ficou publicamente acessível pela web. Não era dado de membro/PII, mas era
+  informação interna do projeto exposta por falta de proteção numa pasta que ninguém sabia
+  que estava sendo servida.
+- **Quase-incidente à parte:** ao tentar abrir a edição do subdomínio pra corrigir o document
+  root, o único botão de "Ações" na tabela do hPanel era **remover o subdomínio** (não
+  editar) — cliquei nele achando que abriria edição, veio um modal de confirmação "Deletar
+  Subdomínio" (que apagaria registros DNS/e-mail). Cancelado a tempo, nada foi deletado. Lição:
+  em painéis de terceiros nunca vistos antes, **snapshot antes de clicar em botão de ação
+  sem rótulo visível**, especialmente em listas com 1 botão só por linha.
+
+**Que regra/checagem evitaria retrabalho (regras NOVAS, para a skill e pra qualquer projeto
+com deploy em hosting compartilhado de terceiros):**
+1. **Antes de declarar uma fase de infra "verde", confirmar o document root real do domínio/
+   subdomínio no painel de hospedagem** — não assumir que ele aponta pra onde o pipeline de CI
+   sobe os arquivos. Isso vale pra qualquer host compartilhado (cPanel/hPanel/Plesk): a pasta
+   configurada no painel é a fonte da verdade, não o `server-dir` do workflow.
+2. **Verificar se existe mais de um mecanismo de deploy ativo** (ex.: integração Git nativa do
+   host + CI externo) antes de mexer no pipeline — dois deploys pra lugares diferentes é uma
+   categoria de bug de infra tão real quanto credencial errada, e mais traiçoeira (cada um
+   "funciona" isoladamente, só o roteamento é que está errado).
+3. **Em painel de terceiros sem familiaridade prévia, tirar snapshot da UI antes de clicar em
+   qualquer botão de ação (ícone sem texto, botão "danger"/vermelho) — não inferir pela posição.**
+4. **Pasta servida publicamente por engano = tratar como incidente, não como bug de rotina:**
+   mitigar IMEDIATAMENTE (mesmo sem pedir permissão passo a passo — o tempo de exposição importa
+   mais que o processo), depois SIM parar pra decisão humana sobre a correção definitiva.
+
+→ Regras 1, 2 e 3 promovidas para `~/.claude/skills/vilela-gsd/SKILL.md` (seção "Aprendizados
+incorporados") por serem transversais a qualquer projeto com deploy em hosting de terceiros.

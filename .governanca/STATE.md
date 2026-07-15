@@ -23,18 +23,17 @@ progress:
 > ANTES de qualquer tela). Mantidos: repo GitHub, domínio `louvor.vilela.eng.br`, `gestao/`
 > (app do líder 8020, funcional). Tudo abaixo desta linha é o retrato do ciclo v6.
 >
-> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 00 — código local pronto, aguardando o Diego.**
-> `site/` resetado para esqueleto mínimo (código novo, não copiado do legado — as 53 telas MVC
-> antigas foram removidas do working tree; seguem recuperáveis via `git show 67775ef:site/...`
-> e em `applouvor-historico/`). `deploy.yml` simplificado (sem as duas etapas de contorno de
-> credencial do ciclo v6). Lint PHP 5/5 OK; `diag.php` testado localmente em 2 cenários (sem
-> env vars → erro claro em JSON; com env vars simuladas apontando pra host inexistente → erro
-> limpo em JSON, sem crash, sem vazar segredo). **Nada foi commitado além do working tree local
-> ainda** — ver CHANGELOG para os commits reais. **Falta, e só o Diego faz:** (1) cadastrar
-> `DB_HOST`/`DB_NAME`/`DB_USER`/`DB_PASS` no painel Hostinger (PHP > Variáveis de Ambiente);
-> (2) autorizar o push (regra dura: push em `main` = deploy em produção de uma igreja). Depois
-> do push: conferir `https://louvor.vilela.eng.br/diag.php` no ar e fazer um segundo push
-> trivial de controle (critério 4 da fase). Detalhes completos: `.governanca/HANDOFF.md`.
+> **▶️ POSIÇÃO ATUAL (2026-07-15 noite): FASE 00 — VERDE em produção, com dívida técnica
+> conhecida e documentada.** `site/` resetado (código novo), `deploy.yml` simplificado, push
+> autorizado e feito pelo Diego. `https://louvor.vilela.eng.br/diag.php` responde
+> `{"db":"OK",...}`. **Achado no caminho:** o subdomínio estava configurado (hPanel) para
+> servir de uma pasta diferente da que o GitHub Actions publica — um segundo mecanismo de
+> deploy (GIT nativo da Hostinger) clona o repo inteiro em paralelo, e por alguns minutos
+> `.governanca/HANDOFF.md` ficou publicamente acessível. Mitigado com um `.htaccess` de
+> emergência direto no servidor (fora do git, não confiável a longo prazo). **Decisão pendente
+> do Diego:** qual dos 2 mecanismos de deploy vira o oficial — ver
+> `.governanca/fases/FASE-00-PLANO.md` §"Achado crítico" para as opções. Só então a fase fecha
+> de vez e a FASE 01 (primeira tela) começa.
 
 ---
 
