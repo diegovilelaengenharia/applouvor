@@ -97,5 +97,5 @@ define('CHURCH_SERVICE_TIMES', 'Domingos às 09h | 19h');
 define('CHURCH_INSTAGRAM', 'https://www.instagram.com/piboliveiramg/');
 define('CHURCH_FACEBOOK', 'https://www.facebook.com/piboliveiramg');
 
-define('APP_VERSION', '7.0.0-fase00');
+define('APP_VERSION', '7.1.0-fase01');
 define('APP_COPYRIGHT', '© ' . date('Y') . ' Louvor PIB Oliveira');

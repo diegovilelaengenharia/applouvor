@@ -23,16 +23,18 @@ progress:
 > ANTES de qualquer tela). Mantidos: repo GitHub, domínio `louvor.vilela.eng.br`, `gestao/`
 > (app do líder 8020, funcional). Tudo abaixo desta linha é o retrato do ciclo v6.
 >
-> **▶️ POSIÇÃO ATUAL (2026-07-15 noite): FASE 00 FECHADA. ✅** `site/` resetado (código novo),
-> infra de deploy corrigida de forma permanente, `https://louvor.vilela.eng.br/diag.php`
-> responde `{"db":"OK",...}`. **Achado importante no caminho:** existe desde 2026-02-11 (antes
-> do ciclo v6!) um webhook nativo da Hostinger que publica o repo inteiro em TODO push, sem
-> filtro de path — era ele, não o GitHub Actions, quem sempre serviu produção. Isso explica boa
-> parte da dor do ciclo v6 (lutaram com o mecanismo errado). Corrigido de vez: `.htaccess` de
-> proteção movido pra raiz do repo (versionado, sobrevive a qualquer push), `deploy.yml` virou
-> fallback manual, regra de ouro corrigida em `CLAUDE.md`/agente/skill ("todo push deploya, não
-> só o que toca `site/`"). Detalhes completos: `.governanca/fases/FASE-00-PLANO.md`.
-> **Próximo passo:** DISCUTIR a FASE 01 (primeira tela) com o `ministro`.
+> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 01 EXECUTADA, aguardando push.** Fundação MVC
+> reconstruída do zero em `site/`: autoloader PSR-4 próprio, `App\Router`, `Controller`/`Model`
+> base, rota de prova `GET /` (não toca banco) → view nova. Verificado localmente (XAMPP): lint
+> 11/11, `GET /` 200, `GET /diag.php` sem regressão, 404 tratado. **Falta:** OK explícito do
+> Diego pro push (push = deploy produção) + confirmar `diag.php`/`/` verdes em
+> `louvor.vilela.eng.br` depois. Detalhes: `.governanca/fases/FASE-01-PLANO.md`.
+>
+> FASE 00 (fechada 2026-07-15): infra de deploy corrigida de forma permanente — existia desde
+> 2026-02-11 um webhook nativo da Hostinger que publica o repo inteiro em TODO push, sem filtro
+> de path (era ele, não o GitHub Actions, quem sempre serviu produção — explica boa parte da dor
+> do ciclo v6). `.htaccess` de proteção movido pra raiz do repo (versionado), `deploy.yml` virou
+> fallback manual. Detalhes: `.governanca/fases/FASE-00-PLANO.md`.
 
 ---
 

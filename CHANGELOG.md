@@ -2,7 +2,23 @@
 
 Formato: `## AAAA-MM-DD` + itens `feat/fix/docs/chore`. Linha nova NO TOPO.
 
-## 2026-07-16
+## 2026-07-16 (FASE 01)
+- feat(site): FASE 01 (ciclo v7) — fundação MVC reconstruída do zero (código novo, não
+  copiado do legado v6): autoloader PSR-4 próprio (`src/autoload.php`, sem composer/vendor —
+  o deploy não roda build), `App\Router` com params via regex e 404 tratado, `Controller`/
+  `Model` base (`render/json/redirect`, `all/find/where`), `PageController::home()` +
+  view `app/home.php` como rota de prova (não toca banco).
+- feat(site): `src/config/db.php` isola a conexão PDO (separado de `config.php`, que o
+  `diag.php` continua usando sozinho para o smoke test de credenciais).
+- chore(site): `index.php` vira ponte simples para `router.php`; `.htaccess` ganha a regra de
+  rewrite do front controller (`RewriteCond !-f !-d` → `router.php?route=$1`), somada às regras
+  de segurança da FASE 00.
+- Verificado localmente (XAMPP): `php -l` limpo em 11/11 arquivos (1 bug achado e corrigido —
+  `*/` literal dentro de um comentário fechava o bloco cedo); `GET /` → 200 view nova; `GET
+  /diag.php` → `{"db":"OK"}` sem regressão; rota inexistente → 404 tratado. Push de controle em
+  produção pendente de OK do Diego.
+
+## 2026-07-16 (FASE 00)
 - chore(site)!: FASE 00 (ciclo v7) — `site/` resetado para esqueleto mínimo de infra, código
   NOVO (não copiado do legado). Removidas as 53 telas MVC do ciclo v6 (Controllers/Models/
   Views/assets/database/router.php/composer.json) — recuperáveis via git history
