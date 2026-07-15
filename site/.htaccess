@@ -6,9 +6,16 @@ Options -Indexes
 ServerSignature Off
 
 # Nunca servir arquivos sensíveis, mesmo que alguém os suba por engano.
+# Sintaxe Apache 2.4 (Require) com fallback 2.2 (Order/Deny) via <IfModule>, para não
+# depender de qual MPM/mod_access está ativo no host.
 <FilesMatch "\.(env|sql|log|bak|backup|dump)$">
-    Order Allow,Deny
-    Deny from all
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 # PHP/HTML: nunca cachear (conteúdo dinâmico).
