@@ -23,12 +23,15 @@ progress:
 > ANTES de qualquer tela). Mantidos: repo GitHub, domínio `louvor.vilela.eng.br`, `gestao/`
 > (app do líder 8020, funcional). Tudo abaixo desta linha é o retrato do ciclo v6.
 >
-> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 01 EXECUTADA, aguardando push.** Fundação MVC
-> reconstruída do zero em `site/`: autoloader PSR-4 próprio, `App\Router`, `Controller`/`Model`
-> base, rota de prova `GET /` (não toca banco) → view nova. Verificado localmente (XAMPP): lint
-> 11/11, `GET /` 200, `GET /diag.php` sem regressão, 404 tratado. **Falta:** OK explícito do
-> Diego pro push (push = deploy produção) + confirmar `diag.php`/`/` verdes em
-> `louvor.vilela.eng.br` depois. Detalhes: `.governanca/fases/FASE-01-PLANO.md`.
+> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 01 EXECUTADA e commitada (`f5baf2f`), push feito
+> (autorizado pelo Diego) — mas 🔴 BLOQUEADA na verificação em produção.** Fundação MVC
+> reconstruída do zero em `site/` (autoloader, Router, Controller/Model base) — 100% verde
+> localmente (XAMPP: lint, `GET /`, `GET /diag.php`, 404). Webhook Hostinger confirmou entrega
+> `200 OK`, mas 9+ minutos depois `/router.php` (arquivo novo) ainda 404 e `/` segue servindo o
+> HTML antigo da FASE 00 — o deploy não propagou, mesmo com o webhook "recebido". Sem acesso ao
+> painel Hostinger para diagnosticar mais fundo. **Próximo passo: Diego checar hPanel →
+> Avançado → GIT (status/log do último deploy).** Detalhes: `.governanca/fases/FASE-01-PLANO.md`
+> §"Achado durante a verificação".
 >
 > FASE 00 (fechada 2026-07-15): infra de deploy corrigida de forma permanente — existia desde
 > 2026-02-11 um webhook nativo da Hostinger que publica o repo inteiro em TODO push, sem filtro

@@ -45,8 +45,29 @@ qualquer tela de produto (escalas, repertório, etc.), `gestao/**`.
 | Servidor local (`php -S`, MySQL do XAMPP ligado) → `GET /` | 200, HTML da view `app/home.php` | ✅ 200, view nova renderizada |
 | Servidor local → `GET /diag.php` | Continua `{"db":"OK"}` (não regrediu) | ✅ `{"db":"OK","app_env":"local",...}` |
 | Servidor local → rota inexistente (`?route=/rota-inexistente`) | 404 tratado (sem fatal error cru) | ✅ `404 — rota não encontrada` |
-| Push de controle → `https://louvor.vilela.eng.br/diag.php` | `{"db":"OK",...}` | ⬜ pendente — aguardando OK do Diego pro push |
-| Push de controle → `https://louvor.vilela.eng.br/` | 200, view nova (não mais o texto estático da FASE 00) | ⬜ pendente — aguardando OK do Diego pro push |
+| Push de controle → `https://louvor.vilela.eng.br/diag.php` | `{"db":"OK",...}` | ✅ continua `{"db":"OK",...}` (não prova a fase, arquivo não mudou neste commit) |
+| Push de controle → `https://louvor.vilela.eng.br/` | 200, view nova (não mais o texto estático da FASE 00) | 🔴 **NÃO bateu** — ver "Achado FASE 01" abaixo |
+
+## 🔴 Achado durante a verificação (2026-07-16, pós-push)
+
+Push feito (commit `f5baf2f`, autorizado pelo Diego). Webhook Hostinger confirmou entrega
+`200 OK` em `2026-07-16T23:30:50Z` (`gh api .../hooks/595788026/deliveries`). Mas **9+ minutos
+depois**, `https://louvor.vilela.eng.br/router.php` (arquivo NOVO desta fase, não pode ter
+versão "antiga") ainda responde **404** ("This Page Does Not Exist" — página estática da
+Hostinger), e `/` continua servindo o HTML antigo da FASE 00 ("Em reconstrução... Fundação de
+infra em validação"). Ou seja: **o deploy não propagou**, mesmo com o webhook tendo aceito a
+entrega — reforça a regra dura #7 (webhook 200 = recebido, não = publicado).
+
+Repo é pequeno (26M .git, 8682 objetos) — não é questão de clone lento. O fallback FTP
+(`deploy.yml`) também não resolve sozinho: ele sobe pra
+`/domains/louvor.vilela.eng.br/public_html/`, que a FASE 00 já identificou como pasta ÓRFÃ (o
+subdomínio serve de `/domains/vilela.eng.br/public_html/applouvor/`, alimentada só pelo
+webhook). Sem acesso ao painel Hostinger, não dá pra diagnosticar mais fundo daqui.
+
+**Pendência explícita:** Diego precisa checar no hPanel (Avançado → GIT) o status/log do
+último deploy do webhook — se falhou, travou, ou está numa fila. FASE 01 fica **executada e
+commitada, mas NÃO fechada** até `/router.php` responder (não mais 404) e `/` mostrar a view
+nova em produção.
 
 ⚠️ Checagens fixas deste repo (lições incorporadas):
 - [x] Diff não mistura `site/**` e `gestao/**` no mesmo commit.
