@@ -1,17 +1,18 @@
 name: Deploy App Louvor para Hostinger via FTP (manual, fallback)
 
-# FASE 00 (ciclo v7), 2026-07-16: achado crítico — existe um WEBHOOK nativo da Hostinger
-# (GitHub → webhooks.hostinger.com/deploy/..., configurado em 2026-02-11, anterior a este
-# ciclo) que clona o repo inteiro em CADA push para /domains/vilela.eng.br/public_html/
-# applouvor/ — é essa pasta que o subdomínio louvor.vilela.eng.br realmente serve (não a
-# pasta que este workflow sobe por FTP). Esse webhook é agora o mecanismo OFICIAL de deploy
-# (mais simples: zero credencial no CI, já funcionava desde antes do ciclo v6 sem que
-# ninguém soubesse). Proteção de pastas internas + roteamento pra site/ ficam no `.htaccess`
-# da RAIZ do repo (não em site/.htaccess), porque é a raiz que o webhook publica.
+# FASE 01 (ciclo v7), 2026-07-16: achado crítico #2 — o webhook nativo da Hostinger
+# (GitHub → webhooks.hostinger.com/deploy/...) confirma entrega 200 a cada push, mas PAROU
+# de aplicar deploys de verdade (motivo provável: Hostinger migrou pra um produto novo
+# "Git Auto Deployments" no hPanel e o webhook antigo virou vestigial — só faz ACK, não clona
+# mais nada). Confirmado: depois do push da FASE 01, `applouvor/site/` em produção continuou
+# com o esqueleto da FASE 00 (sem router.php etc.), mesmo com o webhook "OK".
 #
-# Este workflow FTP fica só como fallback manual (workflow_dispatch) — não dispara mais
-# sozinho no push, pra não competir com o webhook. Ver .governanca/fases/FASE-00-PLANO.md
-# §"Achado crítico" e LICOES.md pra o histórico completo da investigação.
+# server-dir corrigido para o caminho REAL que o subdomínio louvor.vilela.eng.br serve
+# (achado da FASE 00): /domains/vilela.eng.br/public_html/applouvor/site/ — NÃO a pasta órfã
+# antiga (/domains/louvor.vilela.eng.br/public_html/). Este workflow FTP volta a ser o
+# mecanismo confiável (o mesmo padrão que o vilela-site usa com sucesso) — continua manual
+# (workflow_dispatch) até o Diego decidir se quer voltar o gatilho automático no push.
+# Ver .governanca/fases/FASE-01-PLANO.md §"Achado durante a verificação".
 
 on:
   workflow_dispatch:
@@ -36,7 +37,7 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           protocol: ftps
           port: 21
-          server-dir: /domains/louvor.vilela.eng.br/public_html/
+          server-dir: /domains/vilela.eng.br/public_html/applouvor/site/
           local-dir: ./site/
           exclude: |
             **/.git*
