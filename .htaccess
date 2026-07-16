@@ -13,6 +13,14 @@
 
 RewriteEngine On
 
+# FASE 01 (2026-07-16): esta pasta (applouvor/) mora fisicamente dentro do public_html de
+# vilela.eng.br (achado da FASE 00) — então é alcançável tanto pelo subdomínio oficial quanto
+# por vilela.eng.br/applouvor/. O redirect equivalente no .htaccess do vilela-site NÃO
+# funciona (o Apache/LiteSpeed entra direto nesta pasta antes de aplicar a regra do pai), então
+# o redirect fica aqui, condicionado ao Host — só afeta acesso via domínio principal.
+RewriteCond %{HTTP_HOST} ^vilela\.eng\.br$ [NC]
+RewriteRule ^(.*)$ https://louvor.vilela.eng.br/$1 [R=301,L]
+
 RewriteRule ^(\.git|\.governanca|\.claude|\.github|gestao|governanca|docs|vendor)(/.*)?$ - [F,L]
 
 RewriteCond %{REQUEST_URI} !^/site/
