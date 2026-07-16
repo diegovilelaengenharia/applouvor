@@ -26,12 +26,14 @@ progress:
 > **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 01 FECHADA. ✅** Fundação MVC reconstruída do zero em
 > `site/` (autoloader PSR-4, Router, Controller/Model base) — verde local e em produção
 > (`louvor.vilela.eng.br`: `/router.php` 200, `/` mostra a view nova, `/diag.php` `{"db":"OK"}`,
-> 404 tratado). Achado grande no caminho: o webhook da FASE 00 parou de aplicar deploys de
-> verdade (só ACK, não clona mais) — trocado pelo fallback FTP (`deploy.yml`, `server-dir`
-> corrigido pro caminho real). Incidente cross-project no caminho: uma integração "Git Auto
-> Deployments" do hPanel, mal configurada (`applouvor` → raiz de `vilela.eng.br`), apagou
-> arquivos do `vilela-site`; corrigido (arquivos restaurados + redeploy do vilela-site) e
-> registrado em memória (`hosting-vilela-eng-br-multiplos-projetos.md`). Detalhes completos:
+> 404 tratado). Document root do subdomínio migrado pra `applouvor/site` (arquitetura limpa —
+> não mora mais "dentro" da árvore do vilela-site). Achados grandes no caminho: (1) o webhook
+> da FASE 00 parou de aplicar deploys de verdade (só ACK) — trocado pelo fallback FTP; (2)
+> incidente cross-project: uma integração "Git Auto Deployments" do hPanel, mal configurada
+> (`applouvor` → raiz de `vilela.eng.br`), apagou arquivos do `vilela-site` — corrigido e
+> registrado em memória (`hosting-vilela-eng-br-multiplos-projetos.md`); (3) recriar o
+> subdomínio invalidou a senha do MySQL e sobrescreveu `index.php`/`.htaccess` da raiz de
+> `site/` com uma versão antiga — ambos corrigidos. Detalhes completos:
 > `.governanca/fases/FASE-01-PLANO.md`.
 >
 > **Próximo passo:** DISCUTIR a FASE 02 com o Diego.

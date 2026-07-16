@@ -30,6 +30,14 @@ Formato: `## AAAA-MM-DD` + itens `feat/fix/docs/chore`. Linha nova NO TOPO.
   deploy oficial dele (FTPS) disparado pra repor os arquivos. Registrado em memória
   (`hosting-vilela-eng-br-multiplos-projetos.md`) pra não repetir.
 - **FASE 01 FECHADA** — todos os critérios de sucesso verificados em produção.
+- fix(infra): limpeza da arquitetura do subdomínio — document root de `louvor.vilela.eng.br`
+  migrado de `applouvor/` para `applouvor/site/` (apagar+recriar via hPanel, único caminho
+  disponível). Dois efeitos colaterais da própria Hostinger corrigidos no caminho: senha do
+  MySQL (`u884436813_admin`) invalidada ao recriar o subdomínio (resetada via hPanel,
+  dados preservados) e `index.php`/`.htaccess`/`config.php` da raiz de `site/` revertidos pra
+  versão antiga + `default.php` genérico injetado (re-sincronizados do git, `default.php`
+  removido). Redirect `vilela.eng.br/applouvor/*` → subdomínio movido pro `.htaccess` do
+  próprio `applouvor` (o do vilela-site nunca funcionou — pasta física intercepta antes).
 
 ## 2026-07-16 (FASE 00)
 - chore(site)!: FASE 00 (ciclo v7) — `site/` resetado para esqueleto mínimo de infra, código

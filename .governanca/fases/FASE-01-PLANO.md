@@ -102,9 +102,38 @@ rota inexistente → 404 tratado · `vilela.eng.br/` 200 (landing real) · `/sob
 renderiza, assets carregam) · `vilela.eng.br/applouvor/` → 301 pro subdomínio ·
 `vilela.eng.br/.git/config` → 403 (protegido).
 
-**FASE 01 FECHADA.** Pendência de baixo risco, adiada conscientemente (igual FASE 00): a pasta
-`applouvor/` continua fisicamente dentro do `public_html` de `vilela.eng.br` — resolver de vez
-exigiria trocar o document root do subdomínio no hPanel (mexer em DNS/subdomínio).
+## ✅ Limpeza da arquitetura do subdomínio (2026-07-16, mesma noite, a pedido do Diego)
+
+Diego pediu para resolver a pendência acima ("conserte"). Document root do subdomínio
+`louvor.vilela.eng.br` trocado de `.../public_html/applouvor` para
+`.../public_html/applouvor/site` via hPanel → Domínios → Subdomínios (apagar + recriar com
+"Pasta personalizada" — não existe edição in-line, só recriar; DNS é externo a Hostinger, não
+foi afetado).
+
+**Três achados no caminho, todos resolvidos:**
+1. **MySQL invalidou a senha de `u884436813_admin`** ao recriar o subdomínio (confirmado via
+   phpMyAdmin: `Access denied ... using password: YES` mesmo com a senha certa — não era bug
+   de ambiente/PHP, era o grant mesmo). Resolvido igual à FASE 00: hPanel → Bancos de dados →
+   Gerenciamento → preencher banco (`applouvor`) + usuário (`admin`) + senha nova → "Criar"
+   **preserva os dados existentes** (não recria do zero) e apenas restabelece a credencial.
+   `.env` de produção atualizado com a senha nova.
+2. **Recriar o subdomínio com "Pasta personalizada" sobrescreveu `index.php`/`.htaccess` da
+   raiz de `site/` com uma versão antiga** (voltou ao esqueleto da FASE 00) e **injetou um
+   `default.php` genérico da Hostinger** (16 KB, "Página padrão") — efeito colateral não
+   documentado da própria Hostinger ao provisionar um novo webspace. `src/` (subpastas) não foi
+   afetado. Corrigido: conteúdo correto do git re-sincronizado manualmente (`index.php`,
+   `.htaccess`, `config.php`) + `default.php` apagado. **Lição para o futuro:** depois de
+   criar/recriar qualquer subdomínio com pasta personalizada na Hostinger, sempre conferir se
+   os arquivos da pasta continuam os certos — o provisionamento pode sobrescrever a raiz.
+3. **O redirect de `vilela.eng.br/applouvor/*` pro subdomínio** (regra no `.htaccess` do
+   vilela-site) nunca funcionou — a pasta física intercepta antes. Movido pro `.htaccess` do
+   próprio `applouvor`, condicionado a `Host: vilela.eng.br`. Verificado: 301 funcionando.
+
+**Verificado por execução (todos ✅, pós-limpeza):** `/` mostra a view certa (versão
+`7.1.0-fase01`) · `/diag.php` `{"db":"OK"}` · 404 tratado · `/default.php` → 404 (removido) ·
+`vilela.eng.br/applouvor/` → 301 · `vilela.eng.br/` · `/area-cliente/` funcionando.
+
+**FASE 01 FECHADA — arquitetura limpa, sem pendências.**
 
 ⚠️ Checagens fixas deste repo (lições incorporadas):
 - [x] Diff não mistura `site/**` e `gestao/**` no mesmo commit.
