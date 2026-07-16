@@ -15,8 +15,21 @@ Formato: `## AAAA-MM-DD` + itens `feat/fix/docs/chore`. Linha nova NO TOPO.
   de segurança da FASE 00.
 - Verificado localmente (XAMPP): `php -l` limpo em 11/11 arquivos (1 bug achado e corrigido —
   `*/` literal dentro de um comentário fechava o bloco cedo); `GET /` → 200 view nova; `GET
-  /diag.php` → `{"db":"OK"}` sem regressão; rota inexistente → 404 tratado. Push de controle em
-  produção pendente de OK do Diego.
+  /diag.php` → `{"db":"OK"}` sem regressão; rota inexistente → 404 tratado.
+- fix(ci): achado — o webhook Hostinger da FASE 00 parou de aplicar deploys de verdade (só ACK
+  200, não clona mais nada). `deploy.yml` corrigido: `server-dir` agora aponta pro caminho real
+  (`/domains/vilela.eng.br/public_html/applouvor/site/`) em vez da pasta órfã antiga. Disparado
+  manualmente — verde em produção.
+- fix(infra): `vilela.eng.br/applouvor/` servia o app direto em vez de redirecionar pro
+  subdomínio (pasta física intercepta a regra do vilela-site). Redirect condicionado a
+  `Host: vilela.eng.br` movido pro `.htaccess` do próprio `applouvor` — verificado (301).
+- **Incidente cross-project (resolvido no caminho):** uma integração "Git Auto Deployments" do
+  hPanel, mal configurada (`applouvor` → raiz de `vilela.eng.br`), apagou arquivos reais do
+  `vilela-site` (`index.html`, `sobre.html`, `assets/` etc.). Corrigido: pastas do `applouvor`
+  removidas da raiz de `vilela.eng.br`, `.htaccess`/`.gitignore` do vilela-site restaurados,
+  deploy oficial dele (FTPS) disparado pra repor os arquivos. Registrado em memória
+  (`hosting-vilela-eng-br-multiplos-projetos.md`) pra não repetir.
+- **FASE 01 FECHADA** — todos os critérios de sucesso verificados em produção.
 
 ## 2026-07-16 (FASE 00)
 - chore(site)!: FASE 00 (ciclo v7) — `site/` resetado para esqueleto mínimo de infra, código

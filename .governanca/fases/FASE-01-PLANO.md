@@ -64,10 +64,47 @@ Repo é pequeno (26M .git, 8682 objetos) — não é questão de clone lento. O 
 subdomínio serve de `/domains/vilela.eng.br/public_html/applouvor/`, alimentada só pelo
 webhook). Sem acesso ao painel Hostinger, não dá pra diagnosticar mais fundo daqui.
 
-**Pendência explícita:** Diego precisa checar no hPanel (Avançado → GIT) o status/log do
-último deploy do webhook — se falhou, travou, ou está numa fila. FASE 01 fica **executada e
-commitada, mas NÃO fechada** até `/router.php` responder (não mais 404) e `/` mostrar a view
-nova em produção.
+## ✅ RESOLVIDO (2026-07-16, mesma noite)
+
+Causa raiz encontrada com acesso ao hPanel (Diego autorizou): existia uma integração nativa
+**"Git Auto Deployments"** do hPanel (produto novo da Hostinger, diferente do webhook antigo
+da FASE 00) conectando o repo `applouvor` **direto na raiz do `public_html` de
+`vilela.eng.br`** — errado, nunca deveria existir assim. Um clique nela pra tentar forçar o
+deploy **apagou os arquivos reais do `vilela-site`** (`index.html`, `sobre.html`, `assets/`
+etc. — só `area-cliente/` sobreviveu) e sobrescreveu `.htaccess`/`.gitignore` com as versões
+do `applouvor`. Incidente cross-project registrado na memória
+`hosting-vilela-eng-br-multiplos-projetos.md`.
+
+**Correção aplicada:**
+1. Removidas do `public_html` de `vilela.eng.br` as pastas/arquivos do `applouvor` que
+   vazaram pra lá (`.git`, `.claude`, `.github`, `.governanca`, `docs`, `gestao`, `governanca`,
+   `site`, `CLAUDE.md`, `CHANGELOG.md`) — sem tocar `applouvor/` (pasta legítima, é o que o
+   subdomínio serve) nem `area-cliente/`.
+2. `.htaccess`/`.gitignore` do `vilela-site` restaurados (conteúdo do git) e o deploy oficial
+   dele (GitHub Actions → FTPS) disparado — repôs `index.html`/`sobre.html`/`assets/` etc.
+3. Integração "Git Auto Deployments" ficou desconectada sozinha (perdeu o rastro ao apagar o
+   `.git` que ela tinha clonado ali) — não precisou desconectar manualmente.
+4. **Causa do `/router.php` 404:** confirmado que o webhook antigo da FASE 00 parou de aplicar
+   deploys de verdade (só faz ACK 200, não clona mais nada — provável migração silenciosa da
+   Hostinger pro produto novo acima). `deploy.yml` corrigido: `server-dir` agora aponta pro
+   caminho real (`/domains/vilela.eng.br/public_html/applouvor/site/`, achado da FASE 00) em
+   vez da pasta órfã antiga. Disparado manualmente (`workflow_dispatch`) — **verde**.
+5. Achado extra: `vilela.eng.br/applouvor/` servia o app diretamente em vez de redirecionar
+   pro subdomínio (a pasta física intercepta antes da regra do `vilela-site`). Corrigido: o
+   redirect (condicionado a `Host: vilela.eng.br`) agora vive no `.htaccess` do próprio
+   `applouvor`, sincronizado em produção (a raiz do repo não é coberta pelo FTP-Deploy-Action,
+   que só sobe `site/` — gap documentado, sync manual até o pipeline cobrir a raiz também).
+
+**Verificado por execução (todos ✅):**
+`/router.php` 200 · `/` mostra a view nova (FASE 01) · `/diag.php` `{"db":"OK"}` ·
+rota inexistente → 404 tratado · `vilela.eng.br/` 200 (landing real) · `/sobre.html` 200 ·
+`/contato/` 200 (redirect stub, é o comportamento real do repo) · `/area-cliente/` 200 (login
+renderiza, assets carregam) · `vilela.eng.br/applouvor/` → 301 pro subdomínio ·
+`vilela.eng.br/.git/config` → 403 (protegido).
+
+**FASE 01 FECHADA.** Pendência de baixo risco, adiada conscientemente (igual FASE 00): a pasta
+`applouvor/` continua fisicamente dentro do `public_html` de `vilela.eng.br` — resolver de vez
+exigiria trocar o document root do subdomínio no hPanel (mexer em DNS/subdomínio).
 
 ⚠️ Checagens fixas deste repo (lições incorporadas):
 - [x] Diff não mistura `site/**` e `gestao/**` no mesmo commit.

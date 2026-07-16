@@ -23,15 +23,18 @@ progress:
 > ANTES de qualquer tela). Mantidos: repo GitHub, domínio `louvor.vilela.eng.br`, `gestao/`
 > (app do líder 8020, funcional). Tudo abaixo desta linha é o retrato do ciclo v6.
 >
-> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 01 EXECUTADA e commitada (`f5baf2f`), push feito
-> (autorizado pelo Diego) — mas 🔴 BLOQUEADA na verificação em produção.** Fundação MVC
-> reconstruída do zero em `site/` (autoloader, Router, Controller/Model base) — 100% verde
-> localmente (XAMPP: lint, `GET /`, `GET /diag.php`, 404). Webhook Hostinger confirmou entrega
-> `200 OK`, mas 9+ minutos depois `/router.php` (arquivo novo) ainda 404 e `/` segue servindo o
-> HTML antigo da FASE 00 — o deploy não propagou, mesmo com o webhook "recebido". Sem acesso ao
-> painel Hostinger para diagnosticar mais fundo. **Próximo passo: Diego checar hPanel →
-> Avançado → GIT (status/log do último deploy).** Detalhes: `.governanca/fases/FASE-01-PLANO.md`
-> §"Achado durante a verificação".
+> **▶️ POSIÇÃO ATUAL (2026-07-16): FASE 01 FECHADA. ✅** Fundação MVC reconstruída do zero em
+> `site/` (autoloader PSR-4, Router, Controller/Model base) — verde local e em produção
+> (`louvor.vilela.eng.br`: `/router.php` 200, `/` mostra a view nova, `/diag.php` `{"db":"OK"}`,
+> 404 tratado). Achado grande no caminho: o webhook da FASE 00 parou de aplicar deploys de
+> verdade (só ACK, não clona mais) — trocado pelo fallback FTP (`deploy.yml`, `server-dir`
+> corrigido pro caminho real). Incidente cross-project no caminho: uma integração "Git Auto
+> Deployments" do hPanel, mal configurada (`applouvor` → raiz de `vilela.eng.br`), apagou
+> arquivos do `vilela-site`; corrigido (arquivos restaurados + redeploy do vilela-site) e
+> registrado em memória (`hosting-vilela-eng-br-multiplos-projetos.md`). Detalhes completos:
+> `.governanca/fases/FASE-01-PLANO.md`.
+>
+> **Próximo passo:** DISCUTIR a FASE 02 com o Diego.
 >
 > FASE 00 (fechada 2026-07-15): infra de deploy corrigida de forma permanente — existia desde
 > 2026-02-11 um webhook nativo da Hostinger que publica o repo inteiro em TODO push, sem filtro
